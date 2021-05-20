@@ -10,6 +10,12 @@ function createWindow() {
     },
   });
 
+  if (process.env.NODE_ENV === "development") {
+    require("electron-reload")(__dirname, {
+      electron: path.join(__dirname, "node_modules", ".bin", "electron"),
+    });
+  }
+
   win.loadFile("index.html");
 }
 
