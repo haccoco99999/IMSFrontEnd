@@ -27,3 +27,9 @@
 11. `npm install --save-dev @electron-forge/cli` </br>
     `npx electron-forge import` </br>
 12. Khoi dong projet, chay `npm run watch` de chay compile xong chay `npm start`
+
+
+#Install khi clone
+1. ```npm install``` </br>
+2. ```npm run watch``` </br>
+3. ```npm start``` </br>
