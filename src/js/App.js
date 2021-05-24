@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 
-import AccountManager from "./AccountManager/AccountManager";
+import AccountManagerView from "./AccountManager/AccountManagerView";
 
 class App extends Component {
   render() {
     return (
       <div>
-        <AccountManager />
+        <AccountManagerView />
       </div>
     );
   }

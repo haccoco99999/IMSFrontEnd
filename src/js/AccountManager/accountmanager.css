@@ -12,3 +12,201 @@
   width: 755px;
   height: 620px;
 }
+
+.button-options {
+  width: 170px;
+  color: black;
+  
+}
+.button-options-account {
+  border-right: none !important;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  
+ 
+}
+
+.button-options-role {
+  border-left: none !important;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  background-color: white;
+}
+
+
+
+.btntest{
+  width: 80px;
+  height: 40px;
+  margin: 15px;
+}
+.button-options--add {
+  height: 30px;
+}
+
+.add,
+.add:hover {
+  font-weight: bold;
+  color: #4caf50;
+}
+.filter .filter:hover {
+  font-weight: bold;
+  color: gray;
+}
+
+.search-field {
+  width: 650px;
+  height: 45px;
+}
+
+.table-acc-status-active {
+  color:#4caf50
+}
+.table-acc-status-deactive {
+  color: red
+}
+.table-role-name {
+  color: #00419b;
+}
+
+.addaccountmodal-body {
+  background-color: rgb(245, 245, 245);
+}
+
+.addaccountmodal-done {
+  background-color: rgb(0, 86, 129);
+  color: white;
+}
+
+.searchaccount {
+  height: 40px;
+  width: 660px;
+}
+.searchfield-borderless {
+  border-left: none;
+  border-radius: 0px 10px 10px 0px !important;
+}
+
+.span-searchiconslot {
+  background-color: white !important;
+  border-right: none !important;
+  border-radius: 10px 0px 0px 10px !important;
+}
+
+.btn-toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.65);
+  background-color: transparent;
+  border: 0;
+}
+.btn-toggle:hover,
+.btn-toggle:focus {
+  color: rgba(0, 0, 0, 0.85);
+  background-color: #d2f4ea;
+}
+
+.btn-toggle::after {
+  width: 1.25em;
+  line-height: 0;
+  content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+  transition: transform 0.35s ease;
+  transform-origin: 0.5em 50%;
+}
+
+.btn-toggle[aria-expanded="true"] {
+  color: rgba(0, 0, 0, 0.85);
+}
+.btn-toggle[aria-expanded="true"]::after {
+  transform: rotate(90deg);
+}
+
+.btn-toggle-nav a {
+  display: inline-flex;
+  padding: 0.1875rem 0.5rem;
+  margin-top: 0.125rem;
+  margin-left: 1.25rem;
+  text-decoration: none;
+}
+.btn-toggle-nav a:hover,
+.btn-toggle-nav a:focus {
+  background-color: #d2f4ea;
+}
+
+.role-manager--btnback::before{
+  content: "<";
+
+}
+
+/* ################# */
+
+/* .modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 1040 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: #000 !important;
+  opacity: 0.5 !important;
+}
+
+.modal-wrapper {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 1050 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  outline: 0 !important;
+}
+
+.modal-popup {
+  z-index: 100 !important;
+  background: white !important;
+  position: relative !important;
+  margin: 1.75rem auto !important;
+  border-radius: 3px !important;
+  max-width: 500px !important;
+  padding: 2rem !important;
+}
+
+.modal-header {
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+.modal-close-button {
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  color: #000 !important;
+  opacity: 0.3 !important;
+  cursor: pointer !important;
+  border: none !important;
+} */
+
+/* button {
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 3px;
+  padding: 0.3rem 1rem;
+  margin-left: 0.5rem;
+}
+
+.button-default {
+  background: #247ba0;
+  color: #fff;
+} */
+
+/* .form-control-borderless:hover,
+.form-control-borderless:active,
+.form-control-borderless:focus {
+  outline: none;
+  box-shadow: none;
+} */
