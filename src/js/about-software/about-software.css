@@ -1,0 +1,54 @@
+.background-about-software{
+    background: #042c40 !important;
+    
+}
+.background-about-software p, .background-about-software h4{
+    color: white;
+}
+.background-about-software .text h2 {
+    position: absolute;
+    top: 5%;
+    color: white;
+}
+
+.about{
+    width: 946px;
+    height: 600px;
+}
+.about-contain{
+    position: absolute;
+    height: 600px;
+    margin: 81px 0 auto;
+}
+.about-left {
+    position: absolute;
+    padding-right: 38px;
+    width: 236px;
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+}
+.about-left-logo{
+    width: 136px;
+    
+}
+.about-left p{
+        margin-bottom: 0;
+        font-size: 10px;
+}
+
+.about-right {
+    padding: 20px;
+    transform: translateX(32%);
+    position: absolute;
+    width: 709px;
+    border-left: 1px solid;
+}
+.about-right p{
+    margin-bottom: 0;
+    font-size: smaller;
+    font-weight: 200;
+}
+.btn-customize{
+    background: #585858 !important;
+}

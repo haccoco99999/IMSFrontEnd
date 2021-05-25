@@ -1,0 +1,92 @@
+.container-account{
+    position: absolute;
+    top: 20%;
+    height: 450px;
+    width: 574px;
+    background-color: #04202e;
+    padding: 27px;
+    border-radius: 26px;
+}
+/* .container-avatar{
+    height: 125px;
+    width: 100%;
+} */
+.background-about-account{
+    background: #042c40 !important;
+}
+/* .background-about-account .text {
+    padding-left: 6%;
+} */
+.background-about-account .text h2 {
+    position: absolute;
+    top: 5%;
+    color: white;
+}
+
+.avatar-img{
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    float: left;
+}
+.avatar-info{
+    margin-left: 2%;
+    margin-top: 3%;
+    float: left;
+}
+.avatar-info p{
+    color: white;
+}
+.avatar-info p:nth-child(1){
+    font-size: 11px;
+    margin-bottom: 0;
+}
+.avatar-info p:nth-child(2){
+    font-size: 15px;
+}
+.name-avatar-account > p{
+    float: right;
+    margin-top: 6%;
+   color: #024567;
+    font-size: 13px;
+}
+
+.name-avatar-account{
+    height: 80px;
+    
+}
+.container-edit-account{
+    position: relative;
+    margin-top: 20px;
+    border-radius: 26px;
+    height: 296px;
+    background-color: #042c40;
+    padding: 21px;
+}
+.form-info {
+
+    height: 44px;
+    margin: 14px 0px;
+}
+.form-info label{
+    vertical-align: top;
+    font-size: 16px;
+    color: #748a96;
+    font-weight: 500;
+}
+
+.form-info p{
+    margin-top: -20px;
+    font-size: 16px;
+    margin-bottom: 0;
+    color: white;
+    font-weight: 100;
+}
+.form-info button{
+    position: absolute;
+    left: 85%;
+    transform: translateY(-43px);
+    background-color: #585858;
+    
+}
+
