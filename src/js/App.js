@@ -9,8 +9,9 @@ import StockTake from './stock-take/stock-take'
 import Report from './report/report'
 import Product from './product/product'
 import Supplier from './supplier/supplier'
+import Notification from './notification/notification'
 import ManageAccount from './manage-account/manage-account'
-
+import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 class App extends Component {
   constructor(props) {
@@ -55,7 +56,7 @@ class App extends Component {
     return (
       <div>
         <div className={"sidebar " + this.state.active}>
-          <div className={"logo_content hide-"+ this.state.statusSetting}>
+          <div className={"logo_content hide-" + this.state.statusSetting}>
             <div className="logo">
 
               <div className="logo_name">
@@ -65,22 +66,22 @@ class App extends Component {
             <i className={"bx " + this.state.hide + this.state.isShowing} id="btn" onClick={this.toggleActive} />
           </div>
           <div className="profile_content">
-            <div className={"profile hide-"+ this.state.statusSetting}>
+            <div className={"profile hide-" + this.state.statusSetting}>
               <div className="profile_details">
-                
+
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe8gF9Vvg_EI7UURdrGjFUKYQG74jZK_zPBxDLhlPqTm8rzyrhX8EeCNlPSdTlZru1oYU&usqp=CAU" alt="" />
                 <div className="name_job" onClick={this.toggleAbout}>
-                  <div className="name">Hung Phan</div>
-                  <div className="job">Manager</div>
+                  <div className="name">{this.props.client.fullname}</div>
+                  <div className="job">{this.props.client.userRole}</div>
                 </div>
               </div>
               <i className="bx menu-icon-notification-logout"><img src="src\js\images\alarm.png" /></i>
             </div>
-            <div className={"profile hide-"+ !this.state.statusSetting} >
-            <div className="profile_details">
-              <p onClick={this.toggleAbout}> &#60; Back</p>
-            </div>
-          
+            <div className={"profile hide-" + !this.state.statusSetting} >
+              <div className="profile_details">
+                <p onClick={this.toggleAbout}> &#60; Back</p>
+              </div>
+
             </div>
           </div>
           <ul className="nav_list">
@@ -88,19 +89,26 @@ class App extends Component {
             <nav className={"hide-" + !this.state.statusSetting}>
               <li>
                 <Link to="/homepage/about-my-account"  >
-                  
+
                   <span className="links_name">My Account</span>
                 </Link>
-              
-              </li>
 
+              </li>
+              <li>
+                <Link to="/homepage/notification" >
+
+                  <span className="links_name">Notification</span>
+                </Link>
+
+              </li>
               <li>
                 <Link to="/homepage/about-software" >
-                 
+
                   <span className="links_name">About</span>
                 </Link>
-             
+
               </li>
+
             </nav>
 
             <nav className={"hide-" + this.state.statusSetting}>
@@ -173,21 +181,28 @@ class App extends Component {
             </div>
           </div>
         </div>
+
         <Switch>
-              <Route path="/homepage/dashboard"><Dashboard /></Route>
-              <Route path="/homepage/purchase"><Purchase /></Route>
-              <Route path="/homepage/good-issue"><Issue /></Route>
-              <Route path="/homepage/stock-take"><StockTake /></Route>
-              <Route path="/homepage/report"><Report /></Route>
-              <Route path="/homepage/product"><Product /></Route>
-              <Route path="/homepage/supplier"><Supplier /></Route>
-              <Route path="/homepage/manage-account"><ManageAccount /></Route>
-              <Route path="/homepage/about-my-account"><AboutAccount /></Route>
-              <Route path="/homepage/about-software"><AboutSoftware /></Route>
-            </Switch>
-  
+          <Route path="/homepage/dashboard"><Dashboard /></Route>
+          <Route path="/homepage/purchase"><Purchase /></Route>
+          <Route path="/homepage/good-issue"><Issue /></Route>
+          <Route path="/homepage/stock-take"><StockTake /></Route>
+          <Route path="/homepage/report"><Report /></Route>
+          <Route path="/homepage/product"><Product /></Route>
+          <Route path="/homepage/supplier"><Supplier /></Route>
+          <Route path="/homepage/manage-account"><ManageAccount /></Route>
+          <Route path="/homepage/about-my-account"><AboutAccount /></Route>
+          <Route path="/homepage/about-software"><AboutSoftware /></Route>
+          <Route path="/homepage/notification"><Notification /></Route>
+        </Switch>
+
       </div>
     )
   }
 }
-export default App
+const mapStateToProps = state => ({
+  client: state.client,
+})
+
+const connected = connect(mapStateToProps)(App)
+export default connected

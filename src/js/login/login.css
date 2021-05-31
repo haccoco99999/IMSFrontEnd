@@ -4,7 +4,7 @@
     user-select: none;
 }
 
-.main-container {
+/* .main-container {
     width: 100%;
     height: 100vh;
 }
@@ -161,13 +161,13 @@
     border: 0px ;
     background: #ffb81d;
 }
-
+ */
 
 
 /* ################MODAL */
 
 
-/* .container-login{
+.container-login{
     position: relative;
     height: 100vh;
     width: 100%;
@@ -184,11 +184,16 @@
     height: 100%;
 }
 .right-side{
-    transform: translate(153%, 23%);
+    transform: translate(126%, 23%);
     position: absolute;
     height: 500px;
     padding: 0;
-    width: 360px;
+    width: 440px;
+    
+}
+.right-side h2{
+    font-size: 32px;
+
     
 }
 .logo-inventory{
@@ -206,35 +211,100 @@
     bottom: 0;
 }
 .input-login{
-   
-    width: 308px;
-
+    padding-left: 65px  !important;
+    width: 308px !important;
+    font-style: italic;
 }
 
 
 .error-login{
     margin: 0;
-    font-size: 11px;
+    font-size: 12px;
     height: 37px;
     width: 308px;
-    padding: 10px;
+    padding: 8px !important;
+    opacity: 0;
+}
+.error-login-opacity, .banned{
+    opacity: 1 !important;
 }
 
 .right-side p{
     margin:0;
 }
 .btn-signin{
-    margin-top: 24px;
-    background: #ffb81d;
+    margin-top: 0px;
+    background: #ffb81d !important;
     width: 103px;
     height: 39px;
-    border-radius: 50px;
-    border: 0px;
+    border-radius: 50px !important;
+    border: 0px !important;
     }
 
 .lb-reset-password{
-    margin-left: 123px;
+    margin-left: 104px;
     color: #53a3ad;
 }
+.icon-contain-login{
+    
+    width: 45px;
+    text-align: center;
+    position: absolute;
+    border-right: 1px solid #ced4da;
+    top: 24px;
+    height: 38px;
 
-   */
+}
+
+.icon-input-login{
+    width: 20px;
+    margin-top: 7px !important;
+}
+.login-form-group{
+    margin-bottom: 20px;
+    position: relative;
+}
+.login-form-group .status-valid-email-true,.login-form-group .status-valid-password-true{
+    color: green !important;
+}
+.login-form-group .status-valid-email-false,.login-form-group .status-valid-password-false{
+    color: red !important;
+}
+
+
+
+/* ####### */
+  
+@media only screen and (min-width: 1200px){
+    .input-login {
+        padding-left: 65px !important;
+        width: 440px !important;
+        /* height: 68px; */
+        font-style: italic
+    }
+    .error-login {
+        margin: 0;
+        font-size: 16px;
+        height: 37px;
+        width: 440px;
+        padding: 8px !important;
+    }
+    .lb-reset-password {
+        margin-left: 236px;
+        color: #53a3ad;
+    }
+    
+}
+@media only screen and (min-width: 1600px){
+    .right-side {
+        transform: translate(185%, 56%);
+        position: absolute;
+        height: 500px;
+        padding: 0;
+        width: 440px;
+    }
+    .lb-reset-password {
+        margin-left: 236px;
+        color: #53a3ad;
+    }
+}

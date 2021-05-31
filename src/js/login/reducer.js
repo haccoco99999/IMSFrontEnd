@@ -8,7 +8,7 @@ import {
 const initalState = {
     requesting: false,
     successful: false,
-    messages: [],
+    messages: "",
     errors: [],
 }
 
@@ -20,32 +20,33 @@ const reducer = function loginReducer(state = initalState, action) {
                 requesting: true,
                 successful: false,
                 messages: [],
-                errors: [],
+                errors: "",
             }
         case LOGIN_SUCCESS:
-            console.log("thanh cong");
+           
             return {
                 requesting: false,
                 successful: true,
                 messages: [],
-                errors: [],
+                errors: "",
             }
         case LOGIN_BANNED:
             
             return {
-                errors: [],
+                errors: "banned",
                 messages: ["TÀI KHOẢN BỊ KHÓA, LIÊN HỆ VỚI QUẢN LÝ"],
                 requesting: false,
                 successful: false,
             }
         case LOGIN_ERROR:
-            
+            // console.log(action.error.toString())
+            let errorMessages
+             if(action.error.toString() === "Error: Unauthorized"){
+                errorMessages= "Username or password is incorrect!!!"
+             }
             return {
-                errors: state.errors.concat([{
-                    body: action.error.toString(),
-                    time: new Date(),
-                }]),
-                messages: [],
+                errors: "error-login-opacity",
+                messages: [errorMessages],
                 requesting: false,
                 successful: false,
             }

@@ -1,0 +1,20 @@
+#carouselExampleIndicators{
+    height: 155px;
+}
+.carousel-inner{
+    height: 100%;
+}
+.carousel-item{
+    height: 155px !important;
+}
+.box-order{
+    
+    padding: 10px;
+    height: 155px;
+    border: 1px solid black;
+    border-radius: 15px;
+}
+.box-order p{
+    font-size: 15px;
+    margin-bottom: 0;
+}

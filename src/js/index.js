@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-
+import 'bootstrap/dist/css/bootstrap.css'
+import sages  from './about-account/sagas'
 import Login from './login/login'
 import createSagaMiddleware from 'redux-saga'
 import IndexReducer from './index-reducer'
@@ -11,7 +12,9 @@ import { Provider } from 'react-redux'
 import LoginSaga from './login/sagas'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import {checkHomePageAuthorization} from './auth/check-auth'
+
 const sagaMiddleware = createSagaMiddleware();
+
 
 const composeSetup = process.env.NODE_ENV !== 'production' && typeof window === 'object' &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
@@ -22,7 +25,7 @@ const store = createStore(
   composeSetup(applyMiddleware(sagaMiddleware)), // allows redux devtools to watch sagas
 )
 
-sagaMiddleware.run(LoginSaga);
+sagaMiddleware.run(IndexSagas);
 
 ReactDOM.render(
   <React.StrictMode>

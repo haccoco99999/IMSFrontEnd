@@ -1,0 +1,29 @@
+.purchase-container{
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid gray
+}
+.table-purchase{
+    font-size: 15px;
+}
+.table-purchse{
+    width: 100%;
+    padding: 50px;
+}
+.search-purchase{
+    position: relative;
+    margin-bottom: 25px;
+}
+.search-purchase img{
+    left: 10px;
+    width: 25px;
+    top: 10px;
+    height: 25px;
+    position: absolute;
+    filter: invert(55%) sepia(0%) saturate(0%) hue-rotate(333deg) brightness(91%) contrast(88%);
+}
+.search-purchase input{
+    padding-left: 50px;
+    height: 50px;
+}

@@ -90,3 +90,78 @@
     
 }
 
+.modal-customize-about-true{
+    background-color: #00000075;
+    display: block !important;
+    
+}
+.customize-model-content{
+    height: 620px !important;
+}
+.customize-model-content p{
+    text-align: center;
+    font-size: 15px;
+}
+.customize-model-content h3{
+    text-align: center;
+    
+}
+.customize-model-content label{
+    font-size: 15px;
+    
+}
+.customize-model-content input{
+    height: 50px;
+    
+}
+.customize-model-content .form-group{
+    margin-bottom: 15px;
+    
+}
+.input-edit-profile{
+    margin-top: -14px;
+    font-size: 14px;
+    margin-bottom: 0;
+    display: block;
+    border: 0;
+    height: 26px;
+    width: 300px;
+    color: white;
+    background-color: #ffffff00;
+    font-weight: 100;
+    
+
+}
+.edit-fulname-true{
+    pointer-events: none;
+}
+.edit-phone-number-true{
+    pointer-events: none;
+}
+.edit-date-of-birth-true{
+    pointer-events: none;
+}
+.edit-profile{
+    margin: 0;
+    margin-right: 16px;
+    float: right;
+    font-size: 13px;
+    color: white;
+}
+.edit-profile-false{
+    pointer-events: none;
+}
+.valid-password-false,.valid-confirm-password-false{
+    color: red !important;
+    font-size: 10px;
+}
+.valid-password-true,.valid-confirm-password-true{
+    color: green !important;
+    font-size: 10px;
+}
+.password-not-found{
+    font-size: 11px;
+    padding: 10px !important; 
+    height: 37px;
+    margin: 0;
+}

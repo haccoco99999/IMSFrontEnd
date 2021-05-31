@@ -1,0 +1,14 @@
+.modal-error-true{
+    display: block !important;
+    background: #00000099 !important;
+    font-size: 20px;
+}
+.modal-error-dialog-true{
+    justify-content: center !important;
+}
+.modal-footer-error-true{
+    justify-content: center !important;
+}
+.model-content-error-true{
+    width: 260px !important;
+}

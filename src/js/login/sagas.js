@@ -25,7 +25,7 @@ import {
 
 
  //const loginUrl = `http://localhost:3002/api/Clients/login`
- const loginUrl = `https://imspublicapi.conveyor.cloud/api/authentication`
+  const loginUrl = `https://imspublicapi.conveyor.cloud/api/authentication`
 
 function loginApi (email, password) {  
     
@@ -57,27 +57,23 @@ function* logout () {
 }
 
 function* loginFlow (email, password) {  
-  let token
+  let json
   try {
     
-    token = yield call(loginApi, email, password)
-    if(token.result){
-      yield put(setClient(token))
+    json = yield call(loginApi, email, password)
+    if(json.result){
+      yield put(setClient(json))
 
     
       yield put({ type: LOGIN_SUCCESS })
       
       
-      localStorage.setItem('token', JSON.stringify(token))
+      localStorage.setItem('token', JSON.stringify(json))
     }
     else{
       yield put({type: LOGIN_BANNED})
     }
-
-
-   
-    
-    
+  
   } catch (error) {
     
     yield put({ type: LOGIN_ERROR, error })
@@ -89,12 +85,12 @@ function* loginFlow (email, password) {
   }
 
   // return the token for health and wealth
-  return token
+  return json
 }
 
 
 function* loginWatcher () {  
-
+ 
   while (true) {
  
     const { email, password } = yield take(LOGIN_REQUESTING)

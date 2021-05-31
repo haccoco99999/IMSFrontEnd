@@ -1,0 +1,28 @@
+.notification-container{
+    margin-left: 50px;
+    font-size: 15px;
+    margin-top: 120px;
+    color: white;
+   
+}
+.notification-container ul li {
+    list-style-type: none; 
+    margin: 20px 0;
+    
+}
+.notification-container ul li img{
+    width: 35px;
+    
+}
+.notification-container ul li span{
+    margin-left: 30px;
+    
+}
+.home-notification h2{
+    position: absolute;
+    top: 5%;
+    color: white;
+}
+.home-notification {
+   background-color: #042c40;
+}
