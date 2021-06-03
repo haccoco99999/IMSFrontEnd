@@ -25,7 +25,7 @@ import {
 
 
  //const loginUrl = `http://localhost:3002/api/Clients/login`
-  const loginUrl = `https://imspublicapi.conveyor.cloud/api/authentication`
+  const loginUrl = `https://imspublicapi.herokuapp.com/api/authentication`
 
 function loginApi (email, password) {  
     

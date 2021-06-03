@@ -22,7 +22,7 @@ const initialState = {
           fullname:action.respone_login.userInfo.fullname,
           phoneNumber:action.respone_login.userInfo.phoneNumber,
           address:action.respone_login.userInfo.address,
-          dateOfBirth:action.respone_login.userInfo.dateOfBirth,
+          dateOfBirth:action.respone_login.userInfo.dateOfBirthNormalizedString,
           isActive:action.respone_login.userInfo.isActive,
           userRole:action.respone_login.userRole,
         }

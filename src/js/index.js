@@ -2,6 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.css'
+
+import {
+  Collapse,
+  Popover,
+  Toast,
+  Tooltip,
+  Alert,
+  Modal,
+  Dropdown,
+} from "bootstrap";
 import sages  from './about-account/sagas'
 import Login from './login/login'
 import createSagaMiddleware from 'redux-saga'

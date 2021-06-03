@@ -5,6 +5,7 @@ module.exports = {
   entry: "./src/js/index.js",
   devtool: "inline-source-map",
   target: "electron-renderer",
+  node: {global: true},
   module: {
     rules: [
       {
@@ -38,6 +39,8 @@ module.exports = {
           "sass-loader",
         ],
       },
+      {  test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: ["url-loader"]}
     ],
   },
   resolve: {

@@ -6,7 +6,7 @@ import{
     UPDATE_PROFILE_ERROR
 } from './contants'
 import {updateClient} from '../user/actions'
-const updateUrl="https://imspublicapi.conveyor.cloud/api/accountedit"
+const updateUrl="https://imspublicapi.herokuapp.com/api/accountedit"
 
 function updateApi(dataUpdate,token){
     console.log(JSON.stringify(dataUpdate))

@@ -8,8 +8,22 @@
 .notification-container ul li {
     list-style-type: none; 
     margin: 20px 0;
+    background: #06405d;
+    height: 60px;
+    line-height: 50px;
+    padding-left: 30px;
+    max-width: 652px;
     
 }
+.notification-container ul li:hover {
+    box-shadow: inset 0px 0px 11px 4px #437994;
+}
+
+
+
+
+    
+
 .notification-container ul li img{
     width: 35px;
     

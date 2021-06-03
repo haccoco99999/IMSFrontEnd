@@ -1,6 +1,8 @@
 import React from 'react';
 import 'bootstrap/js/dist/carousel'
 import './create-purchase-order.css'
+import TextEditor from '../text-editor-compoent/text-editor-compoent';
+
 class CreatePurchaseOrder extends React.Component {
 
 
@@ -9,6 +11,7 @@ class CreatePurchaseOrder extends React.Component {
 
         return (
             <div>
+                 <div className="menu-back-create-purchase-order"><h4>Back</h4></div>
                 <div className="name-oder-edit" >
                     <button type="button" name="" id="" class="btn btn-primary">Submit</button>
                     <h3>No.SGH12006</h3>
@@ -30,7 +33,7 @@ class CreatePurchaseOrder extends React.Component {
                                 <th scope="row">1</th>
                                 <td>Mark</td>
                                 <td>Otto</td>
-                                <td>@mdo</td>
+                                <td><span className="edit-quanity">-</span> 14215 <span className="edit-quanity">+</span> </td>
                             </tr>
                             <tr>
                                 <th scope="row">2</th>
@@ -46,6 +49,8 @@ class CreatePurchaseOrder extends React.Component {
                         </tbody>
                     </table>
                 </div>
+
+              <div className="text-edit-container">  <TextEditor/></div>
             </div>
 
         );

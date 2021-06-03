@@ -2,7 +2,9 @@
     min-width: 768px;
     max-width: 1100px;
     display: inline-block;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
+    padding: 0 40px;
+    padding-right: 155px;
 }
 .name-oder-edit button{
     float: right;
@@ -17,8 +19,19 @@
 
 .detail-edit-container{
     font-size: 15px;
-    padding: 15px;
+    padding: 40px;
     
     
     
+}
+.text-edit-container{
+    padding: 40px;
+}
+.menu-back-create-purchase-order h4{
+    padding: 0 40px;
+    font-weight: 100;
+    margin: 20px 0;
+}
+.edit-quanity{
+    font-size: 15px;
 }

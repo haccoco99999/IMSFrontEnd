@@ -13,6 +13,7 @@ import Notification from './notification/notification'
 import ManageAccount from './manage-account/manage-account'
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
+import NotificationBell from './notification-component/notification-component';
 class App extends Component {
   constructor(props) {
     super(props)
@@ -22,13 +23,20 @@ class App extends Component {
       active: "",
       status: true,
       statusSetting: false,
+      statusBell: false,
     }
     this.toggleActive = this.toggleActive.bind(this)
     this.toggleAbout = this.toggleAbout.bind(this)
+    this.toggleBell = this.toggleBell.bind(this)
   }
   toggleAbout() {
     this.setState({
       statusSetting: !this.state.statusSetting
+    })
+  }
+  toggleBell() {
+    this.setState({
+      statusBell: !this.state.statusBell
     })
   }
 
@@ -55,7 +63,10 @@ class App extends Component {
 
     return (
       <div>
+        {this.state.statusBell?<NotificationBell active={this.state.active}/>: null}
+        
         <div className={"sidebar " + this.state.active}>
+        
           <div className={"logo_content hide-" + this.state.statusSetting}>
             <div className="logo">
 
@@ -75,7 +86,11 @@ class App extends Component {
                   <div className="job">{this.props.client.userRole}</div>
                 </div>
               </div>
-              <i className="bx menu-icon-notification-logout"><img src="src\js\images\alarm.png" /></i>
+              <i className="bx menu-icon-notification-logout" onClick={this.toggleBell}>
+                <img src="src\js\images\alarm.png" />
+                <span className="badge badge-customize">3</span>
+                
+              </i>
             </div>
             <div className={"profile hide-" + !this.state.statusSetting} >
               <div className="profile_details">

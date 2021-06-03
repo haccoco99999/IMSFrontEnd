@@ -27,7 +27,7 @@ const reducer = function updateReducer(state = initalState, action){
             return  {
                 requesting: false,
                 successful: true,
-                messages: "",
+                messages: "Update Success",
                 errors: "",               
             }
         case UPDATE_PROFILE_ERROR:

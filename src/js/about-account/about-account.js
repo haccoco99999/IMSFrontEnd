@@ -146,6 +146,8 @@ class Account extends React.Component {
                     {/* ############################ */}
                     <div>
                         <ErrorMessages error={this.props.updateProfile.errors} />
+                        <ErrorMessages error={this.props.updateProfile.messages} />
+                        
                         <div className={"modal  modal-customize-about-" + this.state.status_modal} id="exampleModalCenter" tabIndex={-1} aria-labelledby="exampleModalCenterTitle" aria-modal="true" role="dialog">
                             <div className="modal-dialog modal-dialog-centered">
                                 <div className="modal-content customize-model-content">
@@ -224,7 +226,7 @@ class Account extends React.Component {
                                 </div>
                                 <div class="form-info">
                                     <label>Date of birth</label>
-                                    <input type="text" name="dateOfBirth" value={this.state.isEdit ? this.state.dateOfBirth : this.props.client.dateOfBirth} onChange={(event) => this.onChangeValue(event)} className={"input-edit-profile edit-profile-" + this.state.isEdit} />
+                                    <input type="date" name="dateOfBirth" value={this.state.isEdit ? this.state.dateOfBirth : this.props.client.dateOfBirth} onChange={(event) => this.onChangeValue(event)} className={"input-edit-profile edit-profile-" + this.state.isEdit} />
 
 
                                 </div>

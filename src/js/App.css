@@ -1,11 +1,18 @@
-/* Google Font CDN Link */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+@font-face {
+  font-family: san-fransisco ;
+  src: url('../js/San-Francisco-Pro-Fonts-master/SF-Pro-Display-Regular.otf');
+}
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins" , sans-serif;
+  font-family: san-fransisco;
+  
 }
+
+
+
 body{
   position: relative;
   min-height: 100vh;
@@ -239,7 +246,16 @@ body{
   background: #05212f;
 }
 .menu-icon-notification-logout img{
-    width: 18px;
+    width: 23px;
+}
+.badge-customize{
+  position: absolute;
+  top: 21px;
+  font-size: 9px !important;
+  left: 26px;
+  
+  background: red;
+  border-radius: 50% !important;
 }
 .sidebar.active .profile .menu-icon-notification-logout{
   
@@ -253,19 +269,19 @@ body{
   height: 100%;
   width: calc(100% - 78px);
   left: 78px;
-  background: #E4E9F7;
+  background: white;
   /* box-shadow: 0 5px 10px rgba(0,0,0,0.2px); */
   transition: all 0.5s ease;
 }
 .sidebar.active ~ .home_content{
   z-index: 100;
 }
-.home_content .text{
+/* .home_content .text{
   font-size: 25px;
   font-weight: 500;
   color: #1d1b31;
   margin: 12px;
-}
+} */
 .sidebar.active ~ .home_content{
   width: calc(100% - 240px);
   left: 240px;
