@@ -77,28 +77,3 @@ export default class AccountManagerContent extends Component {
     );
   }
 }
-
-{
-  /* <div>
-          <a class="btn btn-default me-md-2 add" onClick={() => this.toggle()}>
-            <AddModal
-              isShowing={this.state.isShowing}
-              hide={this.state.toggle}
-            />{" "}
-            *
-            <svg
-              class="svg-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="#4caf50"
-              class="bi bi-plus-lg"
-              viewBox="0 0 20 20"
-            >
-              <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"></path>
-            </svg>
-            Add
-          </a>
-
-        {/* <RoleManager /> */
-}

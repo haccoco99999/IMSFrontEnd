@@ -1,0 +1,44 @@
+.wrapper{
+    background-color: #f5f5f5;
+    width: 805px;
+    height: 750px;
+    display: block;
+    justify-content: center;
+  }
+  
+  .wrapper-content{
+    width:758px;
+    height:590px;
+    background-color: #fff;
+  }
+  
+  .add,
+  .add:hover {
+    font-weight: bold;
+    color: #4caf50;
+  }
+  .filter .filter:hover {
+    font-weight: bold;
+    color: gray;
+  }
+  
+  .searchaccount {
+    height: 40px;
+   width: 550px;
+  }
+  .searchfield-borderless {
+    border-left: none !important;
+    border-radius: 0px 10px 10px 0px !important;
+  }
+  
+  .span-searchiconslot {
+    background-color: white !important;
+    border-right: none !important;
+    border-radius: 10px 0px 0px 10px !important;
+  }
+  
+  
+  .wrapper-table{
+    width: 660px;
+  }
+  
