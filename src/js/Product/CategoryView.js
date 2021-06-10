@@ -1,13 +1,14 @@
 import React from "react";
 
+import CreateNewCategory from './CreateNewCategory'
 export default function CategoryView() {
   return (
     <>
       <div className="ms-5">
         <a
           class="btn btn-default me-md-2 add"
-          // data-bs-target="#AddAccountModal"
-          // data-bs-toggle="modal"
+          data-bs-target="#NewCategoryModal"
+          data-bs-toggle="modal"
         >
           {/* <AddAccountModal isShowing={isShowing} hide={toggle} /> */}
           <svg
@@ -57,6 +58,7 @@ export default function CategoryView() {
           </table>
         </div>
       </div>
+      <CreateNewCategory/>
     </>
   );
 }

@@ -20,45 +20,48 @@ export default function CreateNewSupplier() {
 
       <div className="d-flex flex-column align-items-center wrapper-spacetop">
         <div className="wrapper_create d-flex justify-content-center mt-3 shadow ">
-          <form>
+          <form className="ms-4 me-4">
             {/* seatrch */}
-            <div class="row g-3 align-items-center mt-3">
-              <div class="col-auto">
-                <div class=" searchaccount">
-                  <div class="input-group input-group-sm mb-3 ">
-                    <div class="input-group-prepend ">
-                      <span
-                        class="input-group-text span-searchiconslot  border-dark"
-                        id="inputGroup-sizing-sm"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          fill="currentColor"
-                          class="bi bi-search"
-                          viewBox="0 0 16 16"
+            {/* <div class="wrapper-table"> */}
+              <div class="row g-3 align-items-center mt-3">
+                <div class="col searchaccount">
+                  <div class=" ">  
+                    <div class="input-group input-group-sm mb-3 ">
+                      <div class="input-group-prepend ">
+                        <span
+                          class="input-group-text span-searchiconslot  border-dark"
+                          id="inputGroup-sizing-sm"
                         >
-                          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                        </svg>
-                      </span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            fill="currentColor"
+                            class="bi bi-search"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                          </svg>
+                        </span>
+                      </div>
+
+                      <input
+                        type="text"
+                        class="form-control searchfield-borderless  border-dark"
+                        aria-label="Small"
+                        aria-describedby="inputGroup-sizing-sm"
+                        placeholder="Search by Product ID, Name"
+                      />
                     </div>
-
-                    <input
-                      type="text"
-                      class="form-control searchfield-borderless  border-dark"
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                      placeholder="Search by Email, Account ID, Name"
-                    />
                   </div>
-               </div>
+                </div>
+                <div class="col-auto">
+                  <button class="btn btn-default btn-outline-dark">
+                    Add multiple
+                  </button>
+                </div>
               </div>
-              <div class="col-auto">
-               <button class="btn btn-default btn-outline-dark">Add multiple</button>
-              </div>
-            </div>
-
+            {/* </div> */}
 
             {/* table */}
             <div className="d-flex justify-content-center">
@@ -67,10 +70,10 @@ export default function CreateNewSupplier() {
                   <thead>
                     <tr>
                       <th scope="col">Product ID</th>
-                      <th scope="col">Product Name By</th>
+                      <th scope="col">Product Name </th>
                       <th scope="col">Quantity</th>
                       <th scope="col">Note </th>
-                      <th scope="col"> </th>
+                      {/* <th scope="col"> </th> */}
                     </tr>
                   </thead>
                   <tbody>

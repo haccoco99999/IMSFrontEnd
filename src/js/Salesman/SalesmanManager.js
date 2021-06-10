@@ -6,7 +6,7 @@ import Create from "./CreateNewPurchaseRequisition.js";
 
 export default function SalesmanManager() {
   return (
-    //<Create/>
+    // <Create/>
     <div className="wrapper">
       <h1>Purchase Requisition</h1>
       <div className="d-flex justify-content-center">

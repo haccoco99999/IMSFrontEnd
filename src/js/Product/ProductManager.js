@@ -21,51 +21,51 @@ export default function ProductManager() {
     }
 
   return (
-  //   <CreateProduct/>
-    <div className="wrapper">
-      <h1>Product Manager</h1>
-      <div className="d-flex justify-content-center">
-        <div className="wrapper-content">
-          <div class="d-flex justify-content-center" onChange={onChangeValue}>
-          <input
-            type="radio"
-            class="btn-check"
-            name="choose-to-view"
-            id="success-outlined"
-            autocomplete="off"
-            value="product"
-            checked={isChecked}
-          />
-          <label
-            class=" shadow btn btn-outline-warning button-options button-options-account border border-dark"
-            for="success-outlined"
-          >
-            Product
-          </label>
+    <CreateProduct/>
+    // <div className="wrapper">
+    //   <h1>Product Manager</h1>
+    //   <div className="d-flex justify-content-center">
+    //     <div className="wrapper-content">
+    //       <div class="d-flex justify-content-center" onChange={onChangeValue}>
+    //       <input
+    //         type="radio"
+    //         class="btn-check"
+    //         name="choose-to-view"
+    //         id="success-outlined"
+    //         autocomplete="off"
+    //         value="product"
+    //         checked={isChecked}
+    //       />
+    //       <label
+    //         class=" shadow btn btn-outline-warning button-options button-options-account border border-dark"
+    //         for="success-outlined"
+    //       >
+    //         Product
+    //       </label>
 
-          <input
-            type="radio"
-            class="btn-check"
-            name="choose-to-view"
-            id="danger-outlined"
-            autocomplete="off"
-            value="category"
-          />
-          <label
-            class=" shadow btn btn-outline-warning button-options button-options-role border border-dark"
-            for="danger-outlined"
-          >
-            Category
-          </label>
-          </div>
+    //       <input
+    //         type="radio"
+    //         class="btn-check"
+    //         name="choose-to-view"
+    //         id="danger-outlined"
+    //         autocomplete="off"
+    //         value="category"
+    //       />
+    //       <label
+    //         class=" shadow btn btn-outline-warning button-options button-options-role border border-dark"
+    //         for="danger-outlined"
+    //       >
+    //         Category
+    //       </label>
+    //       </div>
 
-          {isProductView ? <ProductView/> : <CategoryView/>}
-
-
-        </div>
-      </div>
+    //       {isProductView ? <ProductView/> : <CategoryView/>}
 
 
-    </div>
+    //     </div>
+    //   </div>
+
+
+    // </div>
   );
 }
