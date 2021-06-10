@@ -20,7 +20,7 @@
 .detail-edit-container{
     font-size: 15px;
     padding: 40px;
-    
+    padding-bottom: 0;
     
     
 }
@@ -34,4 +34,8 @@
 }
 .edit-quanity{
     font-size: 15px;
+}
+.mail-detail, .add-product{
+    padding-left: 40px;
+    color: green;
 }

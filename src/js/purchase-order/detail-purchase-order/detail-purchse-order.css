@@ -21,14 +21,15 @@
     flex-direction: column;
 }
 .info-create{
-    max-width: 400px;
+    max-width: 600px;
     
 }    
 .info-create  > p{
+    width: 300px;
     float: left;
 }    
 .info-create-detail{
-    float: right;
+    float: left;
 }
 .info-date{
     width: 540px;

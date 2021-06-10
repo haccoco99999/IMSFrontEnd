@@ -9,8 +9,8 @@ import {updateClient} from '../user/actions'
 const updateUrl="https://imspublicapi.herokuapp.com/api/accountedit"
 
 function updateApi(dataUpdate,token){
-    console.log(JSON.stringify(dataUpdate))
-    console.log(token)
+    // console.log(JSON.stringify(dataUpdate))
+    // console.log(token)
     return fetch(updateUrl, {
         method: 'PUT',
         headers:{

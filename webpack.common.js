@@ -40,7 +40,15 @@ module.exports = {
         ],
       },
       {  test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: ["url-loader"]}
+        use: ["url-loader"]},
+        {
+          test: /\.(png|jpe?g|gif|svg)$/i,
+          use: [
+            {
+              loader: 'file-loader',
+            },
+          ],
+        },
     ],
   },
   resolve: {

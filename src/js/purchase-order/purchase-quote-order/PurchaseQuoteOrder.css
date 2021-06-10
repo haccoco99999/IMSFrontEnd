@@ -1,0 +1,43 @@
+.purchase-quote-order{
+    margin-top: 20px;
+}
+.option-purchase{
+    font-size: 16px;
+   
+    height: 45px;
+
+}
+.option-purchase ul li{
+    float:  left;
+    list-style-type: none;
+    padding-right: 30px;
+}
+.option-purchase ul li img{
+    width: 25px;
+}
+.title-purchase-quote-order{
+    padding-bottom: 8px;
+    border-bottom: 1px solid;
+    padding-left: 17px;
+    width: 300px;
+    margin-bottom: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title-purchase-quote-order span{
+    font-size: 26px;
+    font-weight: 600;
+}
+.title-purchase-quote-order div{
+    width: 33px;
+    height: 33px;
+    background: white;
+    border-radius: 50%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border: 1px solid;
+}
