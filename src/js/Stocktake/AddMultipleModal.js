@@ -23,7 +23,89 @@ export default function AddMultipleModal() {
                 aria-label="Close"
               ></button>
             </div>
-            <div className="modal-body"></div>
+            <div className="modal-body">
+              {/* todo:Check 1 */}
+              <div class="form-check ">
+                <input
+                  class="form-check-input "
+                  type="checkbox"
+                  value=""
+                  id="flexCheckDefault"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapsediv1"
+                />
+                <label class="form-check-label  btn-toggle" for="flexCheckDefault">
+                  Dell Ultrasharp
+                </label>
+              </div>
+              <div id="collapsediv1" class="collapse">
+                <div class="d-flex justify-content-center">
+                  <div class="form-check d-inline">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="test1"
+                    />
+                    <label class="form-check-label" for="test1">
+                      View product
+                    </label>
+                  </div>
+
+                  <div class="form-check d-inline">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="test2"
+                    />
+                    <label class="form-check-label" for="flexCheckDefatest2ult">
+                      Create new product
+                    </label>
+                  </div>
+                  <div class="form-check d-inline">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="test2"
+                    />
+                    <label class="form-check-label" for="flexCheckDefatest2ult">
+                      Update product
+                    </label>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                  <div class="form-check d-inline">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="test1"
+                    />
+                    <label class="form-check-label" for="test1">
+                      Delete product
+                    </label>
+                  </div>
+
+                  <div class="form-check d-inline">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="test2"
+                    />
+                    <label class="form-check-label" for="flexCheckDefatest2ult">
+                      Print product
+                    </label>
+                  </div>
+
+                  {/*empty*/}
+                  <div class=" d-inline"></div>
+                </div>
+              </div>
+            </div>
             <div className="modal-footer">
               <button
                 type="button"
