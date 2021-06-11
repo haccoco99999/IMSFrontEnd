@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
-import AddAccountModal from "./AddAccountModal";
-import FilterModal from "./FilterModal";
-import AccountDetailsModal from "./AccountDetailsModal";
+import AddAccountModal from "./create-account";
+import FilterModal from "./filter";
+import AccountDetailsModal from "./account-details";
 
 function AccountManager() {
   return (
@@ -13,7 +13,6 @@ function AccountManager() {
           data-bs-target="#AddAccountModal"
           data-bs-toggle="modal"
         >
-          {/* <AddAccountModal isShowing={isShowing} hide={toggle} /> */}
           <svg
             class="svg-icon"
             xmlns="http://www.w3.org/2000/svg"
@@ -50,7 +49,7 @@ function AccountManager() {
         </a>
       </div>
 
-      <div class="d-flex justify-content-center">
+      {/* <div class="d-flex justify-content-center">
         <div class=" searchaccount">
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend ">
@@ -120,11 +119,11 @@ function AccountManager() {
             <td class="table-role-name">Salesman</td>
           </tr>
         </tbody>
-      </table>
+      </table> */}
 
       <AddAccountModal />
       <FilterModal />
-      <AccountDetailsModal/>
+      <AccountDetailsModal />
     </>
   );
 }

@@ -209,3 +209,65 @@
   outline: none;
   box-shadow: none;
 } */
+
+
+/* todo: padding man hinh  */
+
+.wrapper {
+  padding: 0 30px !important;
+}
+
+/* todo: container chua noi dung  */
+.wrapper-content {
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid gray;
+}
+
+/* todo: chi khi empty list */
+.wrapper-empty {
+  background-color: #f5f5f5 !important;
+  border: 0px !important;
+}
+/* todo: title tren dau  */
+
+.title-heading span {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.title-heading {
+  padding-bottom: 8px;
+  border-bottom: 1px solid;
+  padding-left: 17px;
+  width: 300px;
+  margin-bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* todo: cac nut options  */
+.button-options-products {
+  width: 170px;
+  color: black;
+}
+.button-options--account {
+  /* border-right: 0px !important; */
+  border-top-left-radius: 50px !important;
+  border-bottom-left-radius: 50px !important;
+}
+
+.button-options--role {
+  /* border-left: 0px !important; */
+  border-top-right-radius: 50px !important;
+  border-bottom-right-radius: 50px !important;
+  /* background-color: white; */
+}
+
+/* todo: nut done trong modal */
+.button-save--modal {
+    background-color: rgb(0, 86, 129) !important;
+    /* color: white  ; */
+}

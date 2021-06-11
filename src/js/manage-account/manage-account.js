@@ -1,21 +1,67 @@
-import React from 'react'
-import AccountManagerContent from "./AccountManagerContent";
+import React, { useState } from "react";
+import AccountManager from "./account-manager";
+import RoleManager from "./role-manager";
 
 import "./accountmanager.css";
 export default function () {
+  const [isChecked, setIsChecked] = useState(true);
+  const [isAccountView, setIsAccountView] = useState(true);
+
+  const onChangeValue = (event) => {
+    if (event.target.value == "account") {
+      setIsAccountView(true);
+    } else {
+      setIsAccountView(false);
+    }
+    // todo: giai quyet duplicate cua react
+    // this.setState({ checked: !this.state.checked });
+    setIsChecked(!isChecked);
+  };
+
   return (
-    <div className="home_content manager-background">
-      <div className="text">
-        {/* ############################ */}
+    <div className="home_content wrapper">
+      {/* title */}
+      <div className="title-heading mt-2">
+        <span>Account Manager</span>
+      </div>
 
-        
-          <h1>Account Manager</h1>
-          <AccountManagerContent />
-          {/* <RoleManager /> */}
-        
+      {/* content block */}
+      <div className="wrapper-content shadow">
+        {/* button options  */}
+        <div className="d-flex justify-content-center" onChange={onChangeValue}>
+          <input
+            type="radio"
+            class="btn-check"
+            name="choose-to-view"
+            id="success-outlined"
+            autocomplete="off"
+            value="account"
+            checked={isChecked}
+          />
+          <label
+            class=" text-dark border-end-0 shadow btn btn-outline-warning button-options-products button-options--account border border-dark"
+            for="success-outlined"
+          >
+            Account
+          </label>
 
+          <input
+            type="radio"
+            class="btn-check"
+            name="choose-to-view"
+            id="danger-outlined"
+            autocomplete="off"
+            value="role"
+          />
+          <label
+            class=" text-dark border-start-0 shadow btn btn-outline-warning button-options-products button-options--role border border-dark"
+            for="danger-outlined"
+          >
+            Role
+          </label>
+        </div>
 
-        {/* ################################# */}
+        {isAccountView ? <AccountManager /> : <RoleManager />}
       </div>
     </div>
   );
