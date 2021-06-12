@@ -1,10 +1,16 @@
 import React from 'react'
 
-import './good-receipt.css'
-export default function () {
+export default function (){
     return (
-        <div>
-            
+        <div className="home_content">
+        <div className="text">
+          {/* ############################ */}
+
+
+
+
+          {/* ################################# */}
         </div>
-    )
+      </div>
+    );
 }

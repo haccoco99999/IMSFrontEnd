@@ -4,6 +4,7 @@ import AboutAccount from './about-account/about-account'
 import AboutSoftware from './about-software/about-software'
 import Dashboard from './dashboard/dashboard'
 import Purchase from './purchase-order/purchase-order'
+import GoodReceipt from './good-receipt/good-receipt'
 import Issue from './good-issue/good-issue'
 import StockTake from './stock-take/stock-take'
 import Report from './report/report'
@@ -145,6 +146,13 @@ class App extends Component {
                 <span className="tooltip">Purchase</span>
               </li>
               <li>
+                <Link to="/homepage/good-recipt" >
+                  <i className="bx"><img src="src\js\images\import-2.png" /></i>
+                  <span className="links_name">Good Recipt</span>
+                </Link>
+                <span className="tooltip">Good Recipt</span>
+              </li>
+              <li>
                 <Link to="/homepage/good-issue" >
                   <i className="bx"><img src="src\js\images\box-2.png" /></i>
                   <span className="links_name">Good issue</span>
@@ -200,6 +208,7 @@ class App extends Component {
         <Switch>
           <Route path="/homepage/dashboard"><Dashboard /></Route>
           <Route path="/homepage/purchase"><Purchase /></Route>
+          <Route path="/homepage/good-recipt"><GoodReceipt /></Route>
           <Route path="/homepage/good-issue"><Issue /></Route>
           <Route path="/homepage/stock-take"><StockTake /></Route>
           <Route path="/homepage/report"><Report /></Route>
