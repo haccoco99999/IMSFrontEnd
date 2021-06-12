@@ -1,0 +1,118 @@
+/* todo: padding man hinh  */
+
+.wrapper {
+  padding: 0 30px !important;
+}
+
+/* todo: container chua noi dung  */
+.wrapper-content {
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid gray;
+}
+
+/* todo: chi khi empty list */
+.wrapper-empty {
+  background-color: #f5f5f5 !important;
+  border: 0px !important;
+}
+/* todo: title tren dau  */
+
+.title-heading span {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.title-heading {
+  padding-bottom: 8px;
+  border-bottom: 1px solid;
+  padding-left: 17px;
+  width: 300px;
+  margin-bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* todo: add va filter  */
+.add,
+.add:hover {
+  /* font-weight: bold !important; */
+  color: #4caf50 !important;
+}
+.filter .filter:hover {
+  /* font-weight: bold; */
+  color: gray !important;
+}
+
+/* todo: ô search  */
+.search-field {
+  position: relative;
+  margin-bottom: 25px;
+}
+.search-field img {
+  left: 10px;
+  width: 25px;
+  top: 10px;
+  height: 25px;
+  position: absolute;
+  filter: invert(55%) sepia(0%) saturate(0%) hue-rotate(333deg) brightness(91%)
+    contrast(88%);
+}
+.search-field input {
+  padding-left: 50px;
+  height: 50px;
+}
+
+/* todo: tab tren dau  */
+.tab-fixed {
+  background-color: white;
+  height: 95px;
+  margin-left: 80px !important;
+}
+.tab-fixed div {
+  margin-right: 50px;
+}
+
+.tab-fixed--details {
+  background-color: #f5f5f5 !important;
+  
+}
+
+.button--create-goodIssue{
+    height: 40px;
+    width: 225px;
+}
+/* todo: size button trong tab tren dau  */
+.button-tab {
+  width: 115px;
+  height: 40px;
+}
+
+.button-tab--adjust {
+  height: 40px;
+  width: 160px;
+}
+
+/* todo: mau id  */
+.id-color {
+  color: #4a94fc !important;
+}
+
+/* todo: cach xa task heading  */
+.space-top {
+  margin-top: 110px;
+}
+
+/* todo: logo khi empty */
+.image-empty {
+  width: 140px;
+  height: 140px;
+}
+
+/* todo: nut done trong modal */
+.button-save--modal {
+  background-color: rgb(0, 86, 129) !important;
+  /* color: white  ; */
+}
