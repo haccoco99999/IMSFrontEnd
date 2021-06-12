@@ -2,6 +2,7 @@ import React from 'react'
 import './Table-Purchase-Order.css'
 import searchPurchaseOrder from './action'
 import { connect } from 'react-redux'
+import {Route, withRouter, Switch } from 'react-router-dom'
 
 class TablePurchase extends React.Component {
     constructor(props) {
@@ -10,6 +11,7 @@ class TablePurchase extends React.Component {
             keySearch: ''
         }
         this.onChangeInput = this.onChangeInput.bind(this)
+        this. onClickToDetailPurchaseOrder = this. onClickToDetailPurchaseOrder.bind(this)
     }
     onChangeInput = (event) => {
         this.setState({
@@ -21,10 +23,13 @@ class TablePurchase extends React.Component {
 
         this.props.searchPurchaseOrder(this.state.keySearch)
     }
-    onClickToDetailPurchaseOrder(){
-        console.log("okkk")
+    onClickToDetailPurchaseOrder(orderID){
+        this.props.history.push("/homepage/purchase/DetailPurchaseOrder",{orderID });
     }
     render() {
+        const {
+            listColumn,
+        } = this.props
         return (
             <div className="purchase-container">
                 <div class="form-group search-purchase">
@@ -36,6 +41,7 @@ class TablePurchase extends React.Component {
                 <table class="table table-hover table-purchase">
                     <thead>
                         <tr>
+                        {/* {listColumn.map(x => <h1>x</h1>)} */}
                             <th scope="col"><input type="checkbox" /></th>
                             <th scope="col">OrderID</th>
                             <th scope="col">Confirm by</th>
@@ -47,7 +53,7 @@ class TablePurchase extends React.Component {
                     </thead>
                     <tbody>
                         {this.props.searchPurchaseOrderReducer.listPurchaseOrder.map(purchaseOrder => (
-                        <tr onClick={this.onClickToDetailPurchaseOrder}>
+                        <tr onClick={() =>this.onClickToDetailPurchaseOrder(purchaseOrder.purchaseOrderNumber)}>
                             <th scope="row"><input type="checkbox" /></th>
                             <td>{purchaseOrder.purchaseOrderNumber}</td>
                             <td>{purchaseOrder.confirmedByName}</td>
@@ -71,4 +77,4 @@ const mapStateToProps = state => ({
 })
 
 const connected = connect(mapStateToProps, { searchPurchaseOrder })(TablePurchase)
-export default connected
+export default withRouter(connected)

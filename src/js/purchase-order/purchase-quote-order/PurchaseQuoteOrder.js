@@ -5,9 +5,9 @@ import './PurchaseQuoteOrder.css'
 import TablePurchase from './Table-Purchase-Order'
 import 'bootstrap/js/dist/modal'
 import AddjustDisplayTableModal from '../adjust-display-table/AddjustDisplayTableModal'
-
+import {useState, useEffect} from 'react'
 export default function PurchaseQuoteOrder() {
-
+    let[listColumn, setListColumn] = useState(["OrderID", "Confirm by", "Status", "Total Price", "Delivery date", "Create date"])
     return (
         <div className="purchase-quote-order">
             <div className="title-purchase-quote-order">
@@ -35,7 +35,7 @@ export default function PurchaseQuoteOrder() {
             </div>
             <FilterModal />
             <AddjustDisplayTableModal />
-            <TablePurchase />
+            <TablePurchase listColumn = {listColumn} />
         </div>
     )
 
