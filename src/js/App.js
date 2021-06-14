@@ -12,6 +12,7 @@ import Product from './product/product'
 import Supplier from './supplier/supplier'
 import Notification from './notification/notification'
 import ManageAccount from './manage-account/manage-account'
+import SaleManPage from './sale-man/sale-man'
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import NotificationBell from './notification-component/notification-component';
@@ -195,6 +196,13 @@ class App extends Component {
                 </Link>
                 <span className="tooltip">Account</span>
               </li>
+              <li>
+                <Link to="/homepage/sale-man" >
+                  <i className="bx"><img src="src\js\images\user-2.png" /></i>
+                  <span className="links_name">Sale man</span>
+                </Link>
+                <span className="tooltip">Sale man</span>
+              </li>
             </nav>
           </ul>
           <div className="profile_content logout_content">
@@ -217,6 +225,7 @@ class App extends Component {
           <Route path="/homepage/manage-account"><ManageAccount /></Route>
           <Route path="/homepage/about-my-account"><AboutAccount /></Route>
           <Route path="/homepage/about-software"><AboutSoftware /></Route>
+          <Route path="/homepage/sale-man"><SaleManPage /></Route>
           <Route path="/homepage/notification"><Notification /></Route>
         </Switch>
 
