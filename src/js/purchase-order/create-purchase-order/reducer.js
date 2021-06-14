@@ -1,5 +1,5 @@
 import purchaseOrder from '../purchase-order'
-import {GET_DETAIL_PURCHASE_ORDER,GET_DETAIL_PURCHASE_ORDER_SUCCESS,GET_DETAIL_PURCHASE_ORDER_ERROR} from './contants'
+import {GET_DETAIL_PURCHASE_ORDER,GET_DETAIL_PURCHASE_ORDER_SUCCESS,GET_DETAIL_PURCHASE_ORDER_ERROR, CONFIRM_PURCHASE_ORDER} from './contants'
 
 
 const initalState = {
@@ -8,12 +8,12 @@ const initalState = {
     messages: "",
     errors: "",
     detailPurchaseOrder:{
-        transaction:{},
+      
         supplier:{},
         transaction:{
             createdBy:{}
         },
-        purchaseOrderProduct:{}
+        purchaseOrderProduct:[]
     }
 }
 const reducer = function getDetailPurchaseOrderReducer(state = initalState, action){
@@ -44,6 +44,15 @@ const reducer = function getDetailPurchaseOrderReducer(state = initalState, acti
                 successful: false,
                 messages: "",
                 errors: "error",
+               
+            }
+        case CONFIRM_PURCHASE_ORDER:
+            return{
+                ...state,
+                requesting: true,
+                successful: false,
+                messages: "",
+                errors: "",
                
             }
         default: 

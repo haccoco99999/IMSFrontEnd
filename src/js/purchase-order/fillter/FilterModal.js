@@ -26,38 +26,32 @@ export default function FilterModal() {
               <form>
 
                 {/* select option */}
-                <div class="mb-3">
-                  <label for="role" class="col-form-label">
+                <div className="mb-3">
+                  <label htmlFor="role" className="col-form-label">
                     Select your options
                   </label>
-
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                  >
+                  <select className="form-select" aria-label="Default select example">
                     <option selected>- No. Selected -</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option value={1}>One</option>
+                    <option value={2}>Two</option>
+                    <option value={3}>Three</option>
                   </select>
                 </div>
+
 
                 {/* select supplier name  */}
-                <div class="mb-3">
-                  <label for="role" class="col-form-label">
+                <div className="mb-3">
+                  <label htmlFor="role" className="col-form-label">
                     Supplier Name
                   </label>
-
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                  >
+                  <select className="form-select" aria-label="Default select example">
                     <option selected>- No. Selected -</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option value={1}>One</option>
+                    <option value={2}>Two</option>
+                    <option value={3}>Three</option>
                   </select>
                 </div>
+
 
                 {/* create date  */}
                 <div>
@@ -79,7 +73,7 @@ export default function FilterModal() {
                         type="date"
                         id="fromTime"
                         class="form-control"
-                        //aria-describedby="passwordHelpInline"
+                      //aria-describedby="passwordHelpInline"
                       />
                     </div>
                     <div class="col">
@@ -90,7 +84,7 @@ export default function FilterModal() {
                         type="date"
                         id="toTime"
                         class="form-control"
-                        // aria-describedby="passwordHelpInline"
+                      // aria-describedby="passwordHelpInline"
                       />
                     </div>
                   </div>
@@ -147,24 +141,24 @@ export default function FilterModal() {
                 </div>
                 {/* add  */}
                 <a
-              class="btn btn-default me-md-2 add"
-              // data-bs-target="#"
-              // data-bs-toggle="modal"
-            >
-              {/* <AddAccountModal isShowing={isShowing} hide={toggle} /> */}
-              <svg
-                class="svg-icon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                fill="#4caf50"
-                class="bi bi-plus-lg"
-                viewBox="0 0 20 20"
-              >
-                <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"></path>
-              </svg>
-               Add
-            </a>
+                  class="btn btn-default me-md-2 add"
+                // data-bs-target="#"
+                // data-bs-toggle="modal"
+                >
+                  {/* <AddAccountModal isShowing={isShowing} hide={toggle} /> */}
+                  <svg
+                    class="svg-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    fill="#4caf50"
+                    class="bi bi-plus-lg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"></path>
+                  </svg>
+                  Add
+                </a>
               </form>
             </div>
             <div className="modal-footer">

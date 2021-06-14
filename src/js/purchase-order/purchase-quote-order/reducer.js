@@ -19,13 +19,13 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
                 listPurchaseOrder: []
             }
         case SEARCH_PURCHASE_ORDER_SEARCH:
-           console.log(action.json.purchaseOrderSearchIndices)
+           console.log(action.json.paging.resultList)
             return{
                 requesting: false,
                 successful: true,
                 messages: "",
                 errors: "",
-                listPurchaseOrder: action.json.purchaseOrderSearchIndices
+                listPurchaseOrder: action.json.paging.resultList
             }
         case SEARCH_PURCHASE_ORDER_ERROR:
             return{
@@ -35,6 +35,7 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
                 errors: "error",
                 listPurchaseOrder: []
             }
+        
         default: 
             return state
     }

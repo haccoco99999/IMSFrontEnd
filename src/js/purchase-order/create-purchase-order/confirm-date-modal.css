@@ -1,0 +1,16 @@
+.model-confirm-date{
+    display: block !important;
+    background-color: #0000007d !important;
+}
+.modal-dialog-confirm-date{
+    max-width: 600px !important;
+}
+.modal-content-confirm-date{
+    height: 450px;
+    border-radius: 15px !important;
+}
+.btn-cancel-preview{
+    background: white !important;
+    color: black !important;
+    border: 0 !important;
+}

@@ -2,122 +2,147 @@ import React from 'react'
 import TablePurchase from '../purchase-quote-order/Table-Purchase-Order'
 import './CreatePurchaseOrder.css';
 import TextEditor from '../../text-editor-compoent/text-editor-compoent';
-import getDetailPurchaseOrder from './action'
+import {getDetailPurchaseOrder, confirmDetailPurchaseOrder} from './action'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import NavigationBar from '../../navigation-bar-component/NavigationBar';
+import InfoDetailReceipt from '../../info-detail-receipt/InfoDetailReceipt';
+import ListProductsTable from '../../list-products-table/ListProductsTable';
+import ConfirmDateModal from './ConfirmDateModal';
 class CreatePurchaseOrder extends React.Component {
     constructor(props) {
         super(props)
         this.props.getDetailPurchaseOrder(this.props.location.state.orderID)
+        this.state={
+            isConfirm: false,
+            showEdit: true,
+            showConfirm: true,
+            showCancel: false,
+            showSave: false,
+
+        }
+    
+    }
+    goBackClick() {
+        this.props.history.go(-1)
+    }
+    cancelClick() {
+        this.setState({
+            isConfirm: !this.state.isConfirm
+
+        })
+    }
+    cancelEditClick(){
+        this.setState({
+            showEdit:!this.state.showEdit,
+            showConfirm:!this.state.showConfirm,
+            showCancel:!this.state.showCancel,
+            showSave:!this.state.showSave,
+        })
+    }
+    saveEditClick(){
+        this.setState({
+            showEdit:!this.state.showEdit,
+            showConfirm:!this.state.showConfirm,
+            showCancel:!this.state.showCancel,
+            showSave:!this.state.showSave,
+        })
+    }
+    editClick(){
+        this.setState({
+            showEdit:!this.state.showEdit,
+            showConfirm:!this.state.showConfirm,
+            showCancel:!this.state.showCancel,
+            showSave:!this.state.showSave,
+        })
+    }
+    confirmClick() {
+        
+        this.setState({
+            isConfirm:!this.state.isConfirm
+        })
+    }
+    sendConfirmClick() {
+            this.props.confirmDetailPurchaseOrder("bac")
+        
     }
     render() {
         const {
-            getDetailPurchaseReducer:{
+            getDetailPurchaseReducer: {
                 requesting,
                 successful,
                 messages,
                 errors,
                 detailPurchaseOrder,
-            } 
+            }
         } = this.props
+        const listButton = [
+            
+
+            {
+                isShow: this.state.showEdit,
+                title: "Edit",
+                action: () => this.editClick(),
+                style: {
+                    "background-color": "#f9c421"
+                }
+            },
+            {
+                isShow:this.state.showCancel,
+                title: "Cancel",
+                action: () => this.cancelEditClick(),
+                style: {
+                    background: "red"
+                }
+            },
+            {
+                isShow:this.state.showSave,
+                title: "Save",
+                action: () => this.saveEditClick(),
+                style: {
+                    background: "#4ca962"
+                }
+            },
+            {
+                isShow: this.state.showConfirm,
+                title: "Confirm for manager",
+                action: () => this.confirmClick(),
+                style: {
+                    background: "#4e9ae8"
+                }
+            }
+        ]
+
         return (
             <div>
-                <div className="name-oder" >
-                    <button type="button" name="" id="" class="btn btn-primary">Create Price quote request</button>
-                    <h3>No.</h3>
-                    <p>Warning</p>
-                </div>
-                <div className="info-purchase-order">
-
-
-                    {/* 
-                    <div className="info-create">
-                        <p>Order ID: <select class="form-select select-order-id form-select-sm" aria-label=".form-select-sm example">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select></p>
-                        <p>Create Date: <span></span></p>
-
-
-                    </div>
-                    <div className="info-create">
-                        <p>Create by: <span></span></p>
-                        <div className="info-create-detail">
-                            <p>Email : <span></span></p>
-                            <p>Phone No: <span></span></p>
-                        </div>
-
-                    </div>
-
-                    <div className="info-create">
-                        <p>Supplier: <select class="form-select select-order-id form-select-sm" aria-label=".form-select-sm example">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select></p>
-                        
-
-
-                    </div> */}
-
-                    <div className="info-create">
-                        <p>Create by: <span>{detailPurchaseOrder.transaction.createdBy.fullname}</span></p>
-                        <div className="info-create-detail">
-                            <p>Email : <span>{detailPurchaseOrder.transaction.createdBy.email}</span></p>
-                            <p>Phone No: <span>{detailPurchaseOrder.transaction.createdBy.phoneNumber}</span></p>
-                        </div>
-
-                    </div>
-                    <div className="info-create">
-                        <p>Supplier: <span>{detailPurchaseOrder.supplier.supplierName}</span></p>
-                        <div className="info-create-detail">
-                            <p>Email : <span>{detailPurchaseOrder.supplier.email}</span></p>
-                            <p>Phone No: <span>{detailPurchaseOrder.supplier.phoneNumber}</span></p>
-                        </div>
-
-                    </div>
-                    <div className="info-date">
-                        {/* <p>Create Date <span>{detailPurchaseOrder.transaction.createdDate.split("T")[0]}</span></p> */}
-                      
-
-                    </div>
-
-
-                </div>
-                <TablePurchase />
+               
+                <NavigationBar actionGoBack={() => this.goBackClick()}
+                    titleBar="hunghanhphuc"
+                    listButton={listButton}
+                />
+                <InfoDetailReceipt
+                    createdBy={detailPurchaseOrder.transaction.createdBy}
+                    supplier={detailPurchaseOrder.supplier }
+                    date={
+                        {
+                            createDate: "10/20/2016",
+                            deadline: "20/28/200",
+                           
+                        }
+                    }
+                />
+           
+             
+                
+                <ListProductsTable listColumn={["Product No", "Product Name", "Unit", "Quantity", "Unit Price", "Ammount"]} listData={detailPurchaseOrder.purchaseOrderProduct} />
                 {/* <div className="mail-detail collapse show" data-bs-target="#TextEditor1"
                 id="TextEditor1" data-bs-toggle="collapse"><p>Mail detail</p></div>
                 
              <TextEditor changeMailContent={(event) =>changeMailContent(event)} mailDescription={""} />
             */}
 
-                {/* <div className="detail-purchase-container" >
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Product No.</th>
-                                <th scope="col">Product Name</th>
-                                <th scope="col">Unit</th>
-                                <th scope="col">Quanity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {listProductQuoteOrder.map((product, index) =>
-                                <tr>
-
-                                    <th scope="row">{index + 1}</th>
-                                    <td>{product.productVariant.name}</td>
-                                    <td>{product.unit}</td>
-                                    <td>{product.quantity}</td>
-                                </tr>)}
-
-
-                        </tbody>
-                    </table>
-                </div> */}
+           
+                <ConfirmDateModal confirmClick={() => this.sendConfirmClick()} cancelConfirmClick={() =>this.cancelClick()} isConfirm={this.state.isConfirm}/>
             </div>
         )
     }
@@ -127,5 +152,5 @@ const mapStateToProps = state => ({
 
     getDetailPurchaseReducer: state.getDetailPurchaseReducer
 })
-const connected = connect(mapStateToProps, { getDetailPurchaseOrder })(CreatePurchaseOrder)
+const connected = connect(mapStateToProps, { getDetailPurchaseOrder, confirmDetailPurchaseOrder })(CreatePurchaseOrder)
 export default withRouter(connected)
