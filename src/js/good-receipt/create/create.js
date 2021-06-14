@@ -1,22 +1,38 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
-import "./goodreceipt.css";
+//css
+import "../goodreceipt.css";
+
+//component
+// import NavigationBar from "../../navigation-bar-component/NavigationBar";
 
 export default function () {
+  let history = useHistory();
+
+  function goBackClick() {
+    history.goBack();
+  }
+
   return (
-    <div className="home_content ">
+    <div>
       {/* todo: task heading */}
       {/* todo: gop chung 2 page voi 2 nut khâc nhau  */}
       <div className=" tab-fixed container-fluid  fixed-top">
         {/* todo: task heading */}
         <div className=" tab-fixed container-fluid  fixed-top">
           <div className=" d-flex mb-3 justify-content-end mt-4 ">
-            <h2>Back</h2>
+            {/* testing */}
+            <a className="me-2" onClick={goBackClick}>
+              <h3>Back</h3>
+            </a>
+            {/* title */}
             <h2 className="id-color fw-bold me-auto">Create Goods Receipt</h2>
+            {/* list button */}
             <div>
               <button className="btn btn-danger me-3 button-tab">Cancel</button>
 
-              <button className="btn btn-primary button-tab me-3 text-white">
+              <button className="btn btn-primary me-3 text-white button-tab ">
                 Save
               </button>
             </div>
@@ -32,8 +48,12 @@ export default function () {
                 <label for="search" class="form-label">
                   Purchase Order ID
                 </label>
-                <select class="form-select" aria-label="Default select example">
-                  <option selected disabled>
+                <select
+                  defaultValue={"DEFAULT"}
+                  class="form-select"
+                  aria-label="Default select example"
+                >
+                  <option value="DEFAULT" disabled>
                     Select Order ID
                   </option>
                   <option value="1">One</option>
@@ -56,9 +76,6 @@ export default function () {
             </form>
           </div>
         </div>
-
-
-
       </div>
     </div>
   );

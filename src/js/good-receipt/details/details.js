@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./goodreceipt.css";
+import "../goodreceipt.css";
 export default function details() {
   return (
     <div className="home_content ">

@@ -8,6 +8,7 @@ import detailPriceQuote from './purchase-order/detail-purchase-order/reducer'
 import sendMailReducer from './purchase-order/create-price-quote/reducer'
 import searchPurchaseOrderReducer from './purchase-order/purchase-quote-order/reducer'
 // import updateProfile from './about-account/reducer'
+import getGoodsReceiptReducer from './good-receipt/manager/reducer'
 const IndexReducer = combineReducers({
     login,
     client,
@@ -17,7 +18,7 @@ const IndexReducer = combineReducers({
     detailPriceQuote,
     sendMailReducer,
     searchPurchaseOrderReducer,
-    
+    getGoodsReceiptReducer,
    
 })
 
