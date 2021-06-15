@@ -1,4 +1,8 @@
-import { SEARCH_GOODS_RECEIPT, SEARCH_GOODS_RECEIPT_ERROR } from "./constant";
+import {
+  SEARCH_GOODS_RECEIPT,
+  SEARCH_GOODS_RECEIPT_ERROR,
+  SEARCH_GOODS_RECEIPT_SUCCESS,
+} from "./constant";
 
 const initialState = {
   requesting: false,
@@ -11,13 +15,20 @@ const initialState = {
 const reducer = function GoodsReceiptReducer(state = initialState, action) {
   switch (action.type) {
     case SEARCH_GOODS_RECEIPT:
-        console.log("Action",action.json)
+      return {
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: "",
+        listGoodsReceipt: [],
+      };
+    case SEARCH_GOODS_RECEIPT_SUCCESS:
       return {
         requesting: false,
         successful: true,
         messages: "",
         errors: "",
-        listGoodsReceipt: action.json,
+        listGoodsReceipt: action.json.paging.resultList,
       };
     case SEARCH_GOODS_RECEIPT_ERROR:
       return {

@@ -2,7 +2,7 @@ import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 
 // component
 import handleApiErrors from "../../auth/api-errors";
-import { SEARCH_GOODS_RECEIPT, SEARCH_GOODS_RECEIPT_ERROR } from "./constant";
+import { SEARCH_GOODS_RECEIPT, SEARCH_GOODS_RECEIPT_ERROR, SEARCH_GOODS_RECEIPT_SUCCESS } from "./constant";
 
 const baseUrl =
   "https://imspublicapi.herokuapp.com/api/goodsreceipt/all&page=1&size=5";
@@ -30,11 +30,12 @@ function searchGoodsReceipt() {
     });
 }
 
-function* GetFlow() {
+function* getFlow(action) {
   try {
     let json = yield call(searchGoodsReceipt);
     // console.log("KET QUA:", json);
-    yield put({ type: SEARCH_GOODS_RECEIPT, json });
+    
+    yield put({ type: SEARCH_GOODS_RECEIPT_SUCCESS, json });
   } catch (error) {
     console.log("SEARCH_GOODS_RECEIPT_ERROR", error);
     yield put({ type: SEARCH_GOODS_RECEIPT_ERROR });
@@ -42,7 +43,7 @@ function* GetFlow() {
 }
 
 function* watcher() {
-  yield takeEvery(SEARCH_GOODS_RECEIPT, GetFlow);
+  yield takeEvery(SEARCH_GOODS_RECEIPT, getFlow);
 }
 
 export default watcher;

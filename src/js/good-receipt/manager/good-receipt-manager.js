@@ -14,7 +14,8 @@ export default function GoodsReceipt() {
   //let location = useLocation();
   let dispatch = useDispatch();
 
-  let list_goods_receipt = useSelector((state) => state.listGoodsReceipt);
+  let list_goods_receipt = useSelector((state) => state.getGoodsReceiptReducer.listGoodsReceipt);
+ 
   const [listValueColumn, setListValueColumn] = useState({
     purchaseOrderId: true,
     createdDate: true,
@@ -22,6 +23,7 @@ export default function GoodsReceipt() {
     createdBy: true,
     id: true,
   });
+
   const [listEditHeader, setListEditHeader] = useState({
     id: "Goods Receipt ID",
   });
