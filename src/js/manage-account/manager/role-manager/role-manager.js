@@ -1,6 +1,7 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
-import "./accountmanager.css";
+import "../../accountmanager.css";
 export default function () {
   return (
     <>

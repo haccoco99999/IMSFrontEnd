@@ -1,8 +1,12 @@
-import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery } from "redux-saga/effects";
 
 // component
 import handleApiErrors from "../../auth/api-errors";
-import { SEARCH_GOODS_RECEIPT, SEARCH_GOODS_RECEIPT_ERROR, SEARCH_GOODS_RECEIPT_SUCCESS } from "./constant";
+import {
+  SEARCH_GOODS_RECEIPT,
+  SEARCH_GOODS_RECEIPT_ERROR,
+  SEARCH_GOODS_RECEIPT_SUCCESS,
+} from "./constant";
 
 const baseUrl =
   "https://imspublicapi.herokuapp.com/api/goodsreceipt/all&page=1&size=5";
@@ -22,19 +26,16 @@ function searchGoodsReceipt() {
     credentials: "include",
   })
     .then((response) => handleApiErrors(response))
-    .then(response => response.json())
-    .then(json => json)
-    .catch((error) => {
-      //
-      console.log("Loi error get ", error);
-    });
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {});
 }
 
 function* getFlow(action) {
   try {
     let json = yield call(searchGoodsReceipt);
     // console.log("KET QUA:", json);
-    
+
     yield put({ type: SEARCH_GOODS_RECEIPT_SUCCESS, json });
   } catch (error) {
     console.log("SEARCH_GOODS_RECEIPT_ERROR", error);

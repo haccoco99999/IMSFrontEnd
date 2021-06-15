@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./goodissue.css";
+import "../goodissue.css";
 export default function printer() {
   return (
     <div>

@@ -110,3 +110,7 @@
   background-color: rgb(0, 86, 129) !important;
   /* color: white  ; */
 }
+/* todo: tao space top khi dung single page  */
+.space-top-heading{
+  margin-top: 20px;
+}

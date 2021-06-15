@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./goodissue.css";
+import "../goodissue.css";
 import PrinterModal from "./printer";
 export default function progressing() {
   return (

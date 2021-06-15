@@ -1,13 +1,20 @@
 import React from "react";
+import {useHistory} from "react-router-dom";
 
-import "../product.css";
-import Filter from "../filter";
+import "../../product.css";
+
+import Filter from "../../filter";
 export default function () {
+  let history = useHistory()
+  function pushAddPage(){
+    history.push('/homepage/product/create')
+}
   return (
     <div>
       <div className="ms-5">
         <a
           class="btn btn-default me-md-2 add"
+          onClick={pushAddPage}
           // data-bs-target="#"
           // data-bs-toggle="modal"
         >

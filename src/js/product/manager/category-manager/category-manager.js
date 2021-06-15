@@ -1,7 +1,11 @@
 import React from "react";
 
-import "../product.css";
+//css
+import "../../product.css";
+
+//components
 import NewCategory from "./create-new-category";
+
 export default function () {
   return (
     <div>

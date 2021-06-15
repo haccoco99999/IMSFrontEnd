@@ -4,6 +4,7 @@
   padding: 0 30px !important;
 }
 
+
 /* todo: container chua noi dung  */
 .wrapper-content {
   padding: 20px;
@@ -105,4 +106,9 @@
 .button-save--modal {
   background-color: rgb(0, 86, 129) !important;
   /* color: white  ; */
+}
+
+/* todo: tao space top khi dung single page  */
+.space-top-heading{
+  margin-top: 20px;
 }

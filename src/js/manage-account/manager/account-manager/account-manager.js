@@ -1,8 +1,12 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 
-import AddAccountModal from "./create-account";
+//css
+import "../../accountmanager.css";
+
+//component
+import AddAccountModal from "../../create/account/create-account";
 import FilterModal from "./filter";
-import AccountDetailsModal from "./account-details";
+import AccountDetailsModal from "../../details/account/account-details";
 
 function AccountManager() {
   return (
@@ -120,8 +124,8 @@ function AccountManager() {
           </tr>
         </tbody>
       </table> */}
-
       <AddAccountModal />
+
       <FilterModal />
       <AccountDetailsModal />
     </>

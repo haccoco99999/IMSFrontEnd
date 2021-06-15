@@ -1,67 +1,25 @@
 import React, { useState } from "react";
-import AccountManager from "./account-manager";
-import RoleManager from "./role-manager";
-
+import { Route, Switch } from "react-router-dom";
+//css
 import "./accountmanager.css";
+
+//component
+import Manager from "./manager/manager";
 export default function () {
-  const [isChecked, setIsChecked] = useState(true);
-  const [isAccountView, setIsAccountView] = useState(true);
-
-  const onChangeValue = (event) => {
-    if (event.target.value == "account") {
-      setIsAccountView(true);
-    } else {
-      setIsAccountView(false);
-    }
-    // todo: giai quyet duplicate cua react
-    // this.setState({ checked: !this.state.checked });
-    setIsChecked(!isChecked);
-  };
-
   return (
     <div className="home_content wrapper">
-      {/* title */}
-      <div className="title-heading mt-2">
-        <span>Account Manager</span>
-      </div>
+      <div className="text">
+        {/* ############################ */}
+        <Switch>
+          <Route exact path="/homepage/manage-account">
+            <Manager />
+          </Route>
+          {/* <Route path="/homepage/sale-man/create-purchase-requisition">
+            <Create />
+          </Route> */}
+        </Switch>
 
-      {/* content block */}
-      <div className="wrapper-content shadow">
-        {/* button options  */}
-        <div className="d-flex justify-content-center" onChange={onChangeValue}>
-          <input
-            type="radio"
-            class="btn-check"
-            name="choose-to-view"
-            id="success-outlined"
-            autocomplete="off"
-            value="account"
-            checked={isChecked}
-          />
-          <label
-            class=" text-dark border-end-0 shadow btn btn-outline-warning button-options-products button-options--account border border-dark"
-            for="success-outlined"
-          >
-            Account
-          </label>
-
-          <input
-            type="radio"
-            class="btn-check"
-            name="choose-to-view"
-            id="danger-outlined"
-            autocomplete="off"
-            value="role"
-          />
-          <label
-            class=" text-dark border-start-0 shadow btn btn-outline-warning button-options-products button-options--role border border-dark"
-            for="danger-outlined"
-          >
-            Role
-          </label>
-        </div>
-
-        {isAccountView ? <AccountManager /> : <RoleManager />}
+        {/* ################################# */}
       </div>
     </div>
   );

@@ -1,18 +1,28 @@
 import React from "react";
-
-import "./stocktake.css";
+import {useHistory} from "react-router-dom";
+//css
+import "../stocktake.css";
+//components
 import AddMultiple from "./add-multiple";
 
 export default function create() {
+  let history = useHistory();
+
+  function goBackClick() {
+    history.goBack();
+  }
+
   return (
-    <div className="home_content">
+    <div >
       {/* todo: task heading */}
       {/* todo: gop chung 2 page voi 2 nut khâc nhau  */}
       <div className=" tab-fixed container-fluid  fixed-top">
         {/* todo: task heading */}
         <div className=" tab-fixed container-fluid  fixed-top">
           <div className=" d-flex mb-3 justify-content-end mt-4 ">
-            <h2>Back</h2>
+          <a className="me-2" onClick={goBackClick}>
+              <h3>Back</h3>
+            </a>
             <h2 className="id-color fw-bold me-auto">Create  Stock take</h2>
             <div>
               <button className="btn btn-default button-tab">Cancel</button>

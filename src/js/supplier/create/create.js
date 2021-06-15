@@ -1,18 +1,31 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
-import "./supplier.css";
+//css
+import "../supplier.css";
 
 export default function () {
+  let history = useHistory();
+
+  function goBackClick() {
+    history.goBack();
+  }
   return (
-    <div className="home_content overflow-scroll">
+    <div className=" home_content overflow-scroll">
       {/* todo: task heading */}
       <div className=" tab-fixed container-fluid  fixed-top">
         <div className=" d-flex mb-3 justify-content-end mt-4 ">
-          <h2>Back</h2>
+          <a className="me-2" onClick={goBackClick}>
+            <h3>Back</h3>
+          </a>
           <h2 className="id-color fw-bold me-auto">Create new supplier</h2>
           <div>
-            <button className="btn btn-danger button-tab button me-3">Cancel</button>
-            <button className="btn btn-primary button-tab button me-3">Save</button>
+            <button className="btn btn-danger button-tab button me-3">
+              Cancel
+            </button>
+            <button className="btn btn-primary button-tab button me-3">
+              Save
+            </button>
           </div>
         </div>
       </div>

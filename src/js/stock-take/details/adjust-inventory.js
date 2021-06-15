@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./stocktake.css";
+import "../stocktake.css";
 export default function () {
   return (
     <div>
