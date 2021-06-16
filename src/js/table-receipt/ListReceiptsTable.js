@@ -4,6 +4,7 @@ import './list-receipts-table.css'
 export default function ListReceiptTable(props) {
         const x= "purchaseOrderNumber"
         let arrayHeaders=[]
+        let indexHeaders=props.listData[0] ==null? []: indexHeaders=  Object.entries(props.listData[0]).map(item => item[0])
         function toSentence(words){
           
             var result = words.replace(/([A-Z])/g, " $1");
@@ -11,7 +12,7 @@ export default function ListReceiptTable(props) {
             return finalResult;
         }
               function editHeader(header){
-                  var editedHeader= header
+                  var editedHeader = header
             Object.entries(props.listHeaderEdit).map(titleHeader=>{
                 
                 if(header === titleHeader[0]){
@@ -28,7 +29,7 @@ export default function ListReceiptTable(props) {
             <input name="keySearch"  type="text" className="form-control" placeholder="Search by Order ID or Supplier Name" />
 
         </div>
-
+            
         <table className="table table-hover receipt-table">
             <thead>
                 <tr>
@@ -45,11 +46,20 @@ export default function ListReceiptTable(props) {
                 {props.listData != null ? props.listData.map((purchaseOrder, index) => (
                     <tr key={index} onClick={() =>props.onRowClick(purchaseOrder)}>
                         {/* {console.log(Object.keys(purchaseOrder))} */}
-                    { Object.entries(purchaseOrder).map(item=>{
+                    {/* { Object.entries(purchaseOrder).map(item=>{
                         if(arrayHeaders.includes(item[0])){
                            return <td>{item[1]}</td>
                         }
-                    })}
+                        
+                    })} */}
+                    
+
+                     {arrayHeaders.map(header =>{
+                        // indexHeaders.indexOf(header) lay thu tu trong list
+                        return <td>{ Object.entries(purchaseOrder)[Object.entries(purchaseOrder).map(item => item[0]).indexOf(header)][1]}</td>
+                     })}
+
+                
                         {/* <th scope="row"><input type="checkbox" /></th> */}
                         {/* <td>{purchaseOrder.purchaseOrderNumber}</td>
                         <td>{purchaseOrder.confirmedByName}</td>

@@ -10,7 +10,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 class TextEditor extends React.Component{
     constructor(props){
         super(props)
-        const html = this.props.mailDescription;
+        const html = "this.props.mailDescription";
         const contentBlock = htmlToDraft(html)
         if(contentBlock){
             
@@ -20,23 +20,19 @@ class TextEditor extends React.Component{
                 editorState,
             }
             
-            console.log(this.state.editorState.getCurrentContent())
+            // console.log(this.state.editorState.getCurrentContent())
         }
         this.onEditorStateChange = this.onEditorStateChange.bind(this)
        
     }
     onEditorStateChange(editorState){
+        
+        this.props.getEditorState(editorState)
         this.setState({
             editorState,
         })
     }
-    componentWillReceiveProps(){
-        if(!this.props.controlPurchaseQuotePage.isClickToPreviewPriceQuote){
-            
-            this.props.changeMailContent(this.state.editorState)
-        }
-    }
-    // draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
+    
     render(){
         const { editorState } = this.state;
         return(
@@ -73,9 +69,7 @@ class TextEditor extends React.Component{
    
 }
 
-const mapStateToProps = state => ({
-    controlPurchaseQuotePage: state.controlPurchaseQuotePage,
-})
 
-const connected = connect(mapStateToProps)(TextEditor)
-export default connected
+
+
+export default TextEditor

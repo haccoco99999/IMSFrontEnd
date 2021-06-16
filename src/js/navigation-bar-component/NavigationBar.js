@@ -1,7 +1,8 @@
 import React from 'react'
 import './navigation-bar.css'
 export default function NavigationBar(props) {
-
+ 
+   
     return (
         <div className="navigation-bar" >
             <div className="navigation-bar-left">
@@ -10,14 +11,17 @@ export default function NavigationBar(props) {
             </div>
             <div className="navigation-bar-right">
                 {props.listButton.map(button => {
-                    console.log(button.isShow ==false)
+                    if(button == null){
+                        return ""
+                    }
+                    let classButton = button.class == null? "btn-primary": button.class
                     if(button.isShow == false){
                       
                        return ""
                     }
                     else{
                        
-                        return <button onClick={button.action} type="button" style={button.style} class="navigation-bar-right-button btn btn-primary">{button.title}</button> 
+                        return <button onClick={button.action} type="button" style={button.style} class={"navigation-bar-right-button btn "  + classButton }>{button.title}</button> 
                     }
                 })}
      

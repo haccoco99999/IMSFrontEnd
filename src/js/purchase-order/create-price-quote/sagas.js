@@ -12,8 +12,7 @@ function sendEmailQuote(priceQuote){
             
             "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzI4NzExMSwiZXhwIjoxNjIzODkxOTExLCJpYXQiOjE2MjMyODcxMTF9.vJFm2zhnE5JHwVXIRuU0_MHrZAwlvHttaTUDKksT4Wc",
             // "Content-Type": "multipart/form-data; boundary=------WebKitFormBoundaryVrJDc11fejgsDoAs",
-            "Origin": "",
-            "boundary":"l3iPy71otz"
+            
         },
         body: priceQuote,
         credentials: "include",

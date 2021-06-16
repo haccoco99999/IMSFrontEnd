@@ -2,6 +2,7 @@ import React from "react";
 import "./fillter.css";
 
 export default function FilterModal() {
+  
   return (
     <div>
       <div

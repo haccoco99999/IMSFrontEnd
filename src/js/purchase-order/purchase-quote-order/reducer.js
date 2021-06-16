@@ -1,4 +1,5 @@
-import {SEARCH_PURCHASE_ORDER_SEARCH,SEARCH_PURCHASE_ORDER_ERROR,SEARCH_PURCHASE_ORDER} from './contants'
+import {GET_PRICE_QUOTE_REQUESTING , GET_PRICE_QUOTE_SUCCESS, GET_PRICE_QUOTE_ERROR,
+    SEARCH_PURCHASE_ORDER_SEARCH,SEARCH_PURCHASE_ORDER_ERROR,SEARCH_PURCHASE_ORDER} from './contants'
 
 
 const initalState = {
@@ -6,12 +7,14 @@ const initalState = {
     successful: false,
     messages: "",
     errors: "",
-    listPurchaseOrder: []
+    listPurchaseOrder: [],
+    listQuote:[]
 }
 const reducer = function searchPurchaseOrderReducer(state = initalState, action){
     switch(action.type){
         case SEARCH_PURCHASE_ORDER:
             return{
+                ...state,
                 requesting: true,
                 successful: false,
                 messages: "",
@@ -19,8 +22,8 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
                 listPurchaseOrder: []
             }
         case SEARCH_PURCHASE_ORDER_SEARCH:
-           console.log(action.json.paging.resultList)
             return{
+                ...state,
                 requesting: false,
                 successful: true,
                 messages: "",
@@ -29,12 +32,42 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
             }
         case SEARCH_PURCHASE_ORDER_ERROR:
             return{
+                ...state,
                 requesting: false,
                 successful: false,
                 messages: "",
                 errors: "error",
                 listPurchaseOrder: []
             }
+            case GET_PRICE_QUOTE_REQUESTING:
+             
+                return{
+                    ...state,
+                    requesting: true,
+                    successful: false,
+                    messages: "",
+                    errors: "",
+                    listQuote: []
+                }
+            case GET_PRICE_QUOTE_SUCCESS:
+                
+                return{
+                    ...state,
+                    requesting: false,
+                    successful: true,
+                    messages: "",
+                    errors: "",
+                    listQuote: action.json.paging.resultList
+                }
+            case GET_PRICE_QUOTE_ERROR:
+                return{
+                    ...state,
+                    requesting: false,
+                    successful: false,
+                    messages: "",
+                    errors: "",
+                    listQuote: [] 
+                }
         
         default: 
             return state

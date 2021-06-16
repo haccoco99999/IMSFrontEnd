@@ -1,5 +1,5 @@
 import React from 'react'
-import Gallery from '../../Gallery/Gallery'
+
 import FilterModal from '../fillter/FilterModal'
 import './PurchaseQuoteOrder.css'
 import TablePurchase from './Table-Purchase-Order'
@@ -9,59 +9,94 @@ import AddjustDisplayTableModal from '../adjust-display-table/AddjustDisplayTabl
 import { useState, useEffect } from 'react'
 import ListReceiptTable from '../../table-receipt/ListReceiptsTable'
 import { withRouter } from 'react-router-dom'
-import searchPurchaseOrder from './action'
+import {getListQuote ,searchPurchaseOrder} from './action'
+import "react-multi-carousel/lib/styles.css";
+import Gallery from '../../Gallery/Gallery'
 class PurchaseQuoteOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            listColumn: {
-                purchaseOrderNumber: true,
+            listDraftColumn: {
+                id: true,
                 supplierName: true,
                 supplierId: false,
                 supplierPhone: false,
                 supplierEmail: false,
                 createdByName: true,
                 canceledByName: false,
-                confirmedByName: false,
+                confirmedByName: true,
                 status: true,
                 totalPrice: true,
                 costFee: false,
                 deliveryDate: true,
                 confirmedDate: false,
                 createdDate: false,
-                id: false,
+                suggest: false,
             },
-            listHeaderEdit:{
-                purchaseOrderNumber:"OrderId",
-                supplierName:"Supplier",
-                confirmedByName:"Confirm by"
+            listColumn: {
+                id: true,
+                supplierName: true,
+                supplierId: false,
+                supplierPhone: false,
+                supplierEmail: false,
+                createdByName: true,
+                canceledByName: false,
+                confirmedByName: true,
+                status: true,
+                totalPrice: true,
+                costFee: false,
+                deliveryDate: true,
+                confirmedDate: false,
+                createdDate: false,
+                suggest: false,
+
+
+            },
+            listHeaderEdit: {
+                id: "Order Id"
             }
         }
         this.onClickToDetailPurchaseOrder = this.onClickToDetailPurchaseOrder.bind(this)
         this.props.searchPurchaseOrder("sss")
+        this.props.getListQuote();
     }
     onClickToDetailPurchaseOrder(row) {
-
-        this.props.history.push("/homepage/purchase/DetailPurchaseOrder", { orderID: "1254" });
+        console.log(row)
+        this.props.history.push("/homepage/purchase/DetailPurchaseOrder", { orderID: row.id, status: row.status });
         // console.log(orderID)
     }
-    nextPagingClick(){
+    nextPagingClick() {
         console.log("forward")
     }
-    backPagingClick(){
+    backPagingClick() {
         console.log("backWard")
+    }
+    submitDisplay() {
+        this.setState({
+            listColumn: {
+                ...this.state.listDraftColumn
+            }
+        })
+    }
+    setCheckBoxClick(event) {
+        this.setState({
+            listDraftColumn: {
+                ...this.state.listDraftColumn,
+                [event.target.name]: event.target.checked
+            }
+        })
     }
 
     render() {
-     
+       
         return (
             <div className="purchase-quote-order">
                 <div className="title-purchase-quote-order">
                     <span>Purchase requistion</span>
                     <div>6</div>
                 </div>
-                {/* <Gallery /> */}
 
+                <Gallery listData={this.props.searchPurchaseOrderReducer.listQuote}/>
                 <div className="title-purchase-quote-order">
                     <span>Purchase order</span>
 
@@ -80,17 +115,20 @@ class PurchaseQuoteOrder extends React.Component {
                     </ul>
                 </div>
                 <FilterModal />
-                <AddjustDisplayTableModal />
+                <AddjustDisplayTableModal
+                    submitDisplay={(e) => this.submitDisplay(e)}
+                    setCheckBoxClick={(e) => this.setCheckBoxClick(e)}
+                    listColumnDisplay={this.state.listDraftColumn} />
                 {/* <TablePurchase listColumn = {this.state.listColumn} listData={this.props.searchPurchaseOrderReducer.listPurchaseOrder} onRowClick={this.onClickToDetailPurchaseOrder}/> */}
                 <ListReceiptTable
                     listHeaderEdit={this.state.listHeaderEdit}
                     listColumn={this.state.listColumn}
                     listData={this.props.searchPurchaseOrderReducer.listPurchaseOrder}
                     onRowClick={this.onClickToDetailPurchaseOrder}
-                    backPagingClick = {this.backPagingClick}
-                    nextPagingClick = {this.nextPagingClick}
-                    />
-                    
+                    backPagingClick={this.backPagingClick}
+                    nextPagingClick={this.nextPagingClick}
+                />
+
             </div>
         )
     }
@@ -98,7 +136,8 @@ class PurchaseQuoteOrder extends React.Component {
 }
 const mapStateToProps = state => ({
     searchPurchaseOrderReducer: state.searchPurchaseOrderReducer
+
 })
 
-const connected = connect(mapStateToProps, { searchPurchaseOrder })(PurchaseQuoteOrder)
+const connected = connect(mapStateToProps, {getListQuote, searchPurchaseOrder })(PurchaseQuoteOrder)
 export default withRouter(connected)
