@@ -1,9 +1,10 @@
 import { call, put, takeEvery } from "@redux-saga/core/effects"
 import { GET_PRICE_QUOTE_ERROR,GET_PRICE_QUOTE_SUCCESS,GET_PRICE_QUOTE_REQUESTING,SEARCH_PURCHASE_ORDER_SEARCH,SEARCH_PURCHASE_ORDER_ERROR,SEARCH_PURCHASE_ORDER} from './contants'
 import handleApiErrors from '../../auth/api-errors'
-function searchPurchaseOrder(keySearch){
-    const updateUrl="https://imspublicapi.herokuapp.com/api/purchaseorder/all&status=2&page=1&size=5"
-
+function searchPurchaseOrder(action){
+    const updateUrl=`https://imspublicapi.herokuapp.com/api/purchaseorder/${action.searchQuery}&status=${action.status}&page=${action.currentPage}&size=${action.sizePerPage}`
+ 
+    
     return fetch(updateUrl, {
         
         method: 'GET',
@@ -42,7 +43,7 @@ function getListPriceQuoteAPI(){
 function* searchPurchaseOrderFlow(action){
     
     try{
-      let  json= yield call(searchPurchaseOrder,action.keySearch)
+      let  json= yield call(searchPurchaseOrder,action)
       
         yield put({type:SEARCH_PURCHASE_ORDER_SEARCH, json})
     }catch(error){
@@ -64,6 +65,7 @@ function* getListPriceQuoteFlow(action){
     }
 }
 function* updateWatcher(){
+    
     yield takeEvery (SEARCH_PURCHASE_ORDER, searchPurchaseOrderFlow)
     yield takeEvery (GET_PRICE_QUOTE_REQUESTING, getListPriceQuoteFlow)
 } 

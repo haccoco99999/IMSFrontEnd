@@ -8,7 +8,11 @@ const initalState = {
     messages: "",
     errors: "",
     listPurchaseOrder: [],
-    listQuote:[]
+    listQuote:[],
+    currentPage: 0,
+    pageCount: 0,
+    sizePerPage: 0,
+    rowCountTotal: 0,
 }
 const reducer = function searchPurchaseOrderReducer(state = initalState, action){
     switch(action.type){
@@ -28,7 +32,11 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
                 successful: true,
                 messages: "",
                 errors: "",
-                listPurchaseOrder: action.json.paging.resultList
+                listPurchaseOrder: action.json.paging.resultList,
+                currentPage: action.json.paging.currentPage,
+                pageCount: action.json.paging.pageCount,
+                sizePerPage: action.json.paging.sizePerPage,
+                rowCountTotal: action.json.paging.rowCountTotal,
             }
         case SEARCH_PURCHASE_ORDER_ERROR:
             return{

@@ -16,6 +16,10 @@ class PurchaseQuoteOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            searchQuery: "all",
+            status: 2, 
+            currentPage:1, 
+            sizePerPage:8,
             listDraftColumn: {
                 id: true,
                 supplierName: true,
@@ -57,7 +61,14 @@ class PurchaseQuoteOrder extends React.Component {
             }
         }
         this.onClickToDetailPurchaseOrder = this.onClickToDetailPurchaseOrder.bind(this)
-        this.props.searchPurchaseOrder("sss")
+        this.onClickToDetailQuoteOrder = this.onClickToDetailQuoteOrder.bind(this)
+        this.nextPagingClick = this.nextPagingClick.bind(this)
+        this.backPagingClick = this.backPagingClick.bind(this)
+        this.props.searchPurchaseOrder({searchQuery: this.state.searchQuery,
+        status: this.state.status, 
+        currentPage: this.state.currentPage, 
+        sizePerPage:8,
+        })
         this.props.getListQuote();
     }
     onClickToDetailPurchaseOrder(row) {
@@ -65,11 +76,30 @@ class PurchaseQuoteOrder extends React.Component {
         this.props.history.push("/homepage/purchase/DetailPurchaseOrder", { orderID: row.id, status: row.status });
         // console.log(orderID)
     }
+    onClickToDetailQuoteOrder(row) {
+        console.log(row)
+        this.props.history.push("/homepage/purchase/DetailPurchaseOrder", { orderID: row.id, status: row.status });
+        // console.log(orderID)
+    }
     nextPagingClick() {
-        console.log("forward")
+        this.setState({
+            currentPage: this.state.currentPage +1
+        })
+        this.props.searchPurchaseOrder({searchQuery: this.state.searchQuery,
+            status: this.state.status, 
+            currentPage: this.state.currentPage+1, 
+            sizePerPage:8,
+            })
     }
     backPagingClick() {
-        console.log("backWard")
+        this.setState({
+            currentPage: this.state.currentPage -1
+        })
+        this.props.searchPurchaseOrder({searchQuery: this.state.searchQuery,
+            status: this.state.status, 
+            currentPage: this.state.currentPage-1, 
+            sizePerPage:8,
+            })
     }
     submitDisplay() {
         this.setState({
@@ -87,6 +117,7 @@ class PurchaseQuoteOrder extends React.Component {
         })
     }
 
+
     render() {
        
         return (
@@ -96,7 +127,9 @@ class PurchaseQuoteOrder extends React.Component {
                     <div>6</div>
                 </div>
 
-                <Gallery listData={this.props.searchPurchaseOrderReducer.listQuote}/>
+                <Gallery 
+                clickQuote = {this.onClickToDetailQuoteOrder}
+                listData={this.props.searchPurchaseOrderReducer.listQuote}/>
                 <div className="title-purchase-quote-order">
                     <span>Purchase order</span>
 
@@ -121,6 +154,9 @@ class PurchaseQuoteOrder extends React.Component {
                     listColumnDisplay={this.state.listDraftColumn} />
                 {/* <TablePurchase listColumn = {this.state.listColumn} listData={this.props.searchPurchaseOrderReducer.listPurchaseOrder} onRowClick={this.onClickToDetailPurchaseOrder}/> */}
                 <ListReceiptTable
+                    sizePerPage={this.state.sizePerPage}
+                    currentPage={this.state.currentPage}
+                    pageCount={this.props.searchPurchaseOrderReducer.pageCount}
                     listHeaderEdit={this.state.listHeaderEdit}
                     listColumn={this.state.listColumn}
                     listData={this.props.searchPurchaseOrderReducer.listPurchaseOrder}

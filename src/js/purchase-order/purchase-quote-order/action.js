@@ -1,9 +1,12 @@
 import {GET_PRICE_QUOTE_REQUESTING, GET_DETAIL_QUOTE_PRODUCT_SUCCESS,SEARCH_PURCHASE_ORDER_ERROR,SEARCH_PURCHASE_ORDER} from './contants'
-export   function searchPurchaseOrder(keySearch){
+export   function searchPurchaseOrder({searchQuery,status, currentPage, sizePerPage}){
     
     return {
         type: SEARCH_PURCHASE_ORDER,
-        keySearch,
+        searchQuery,
+        status, 
+        currentPage, 
+        sizePerPage,
     }
 }
 

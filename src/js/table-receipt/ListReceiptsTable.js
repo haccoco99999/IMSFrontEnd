@@ -29,7 +29,7 @@ export default function ListReceiptTable(props) {
             <input name="keySearch"  type="text" className="form-control" placeholder="Search by Order ID or Supplier Name" />
 
         </div>
-            
+            <div className="table-container">
         <table className="table table-hover receipt-table">
             <thead>
                 <tr>
@@ -69,13 +69,14 @@ export default function ListReceiptTable(props) {
                         <td>{purchaseOrder.createdDate.split("T")[0]}</td> */}
 
                     </tr>)) : <tr>No data</tr>}
-
+                    {props.listData != null && props.listData.length<props.sizePerPage?Array(props.sizePerPage-props.listData.length).map(()=> <tr></tr>):"" }
             </tbody>
         </table>
+        </div>
         <div className="paging-container">
-            <div><span>Show status 1 of 2 Row</span></div>
+            <div><span>Showing result {props.currentPage} - {props.pageCount} out of {props.currentPage}</span></div>
             <div className="button-paging">
-            <img onClick={() => props.backPagingClick()} src="..\src\js\images\left-arrow.svg" />
+            <img onClick={() => props.backPagingClick()} src="..\src\js\images\left-arrow.svg" /> {props.currentPage}
             <img onClick={() => props.nextPagingClick()} src="..\src\js\images\right-arrow.svg" />
              </div>
         </div>

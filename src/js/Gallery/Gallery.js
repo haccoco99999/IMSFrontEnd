@@ -39,7 +39,7 @@ class Gallery extends React.Component {
                     responsive={responsive}>
                     {this.props.listData.map((quote, index) =>
                         <div className=" container-box-order" >
-                            <div className="box-order" onMouseUp={() => this.clickQuote(quote.priceQuoteOrderNumber)}>
+                            <div className="box-order" onClick={(e) => this.props.clickQuote(quote)}>
                                 <h3 className="priceQuoteOrderNumber">No.{quote.id}</h3>
                                 <p>Deadline:  <span>{quote.deliveryDate.split("T")[0]}</span></p>
                                 <p>Create by: {quote.createdDate.split("T")[0]}</p>
