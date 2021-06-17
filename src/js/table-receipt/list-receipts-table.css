@@ -9,6 +9,10 @@
     width: 100%;
     padding: 50px;
 }
+.table-container{
+    display: block;
+    overflow-x: auto;
+}
 .button-paging {
     width: 50px;
     display: flex;

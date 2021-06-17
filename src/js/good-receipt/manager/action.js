@@ -1,6 +1,6 @@
-import { SEARCH_GOODS_RECEIPT_ERROR, SEARCH_GOODS_RECEIPT } from "./constant";
+import {SEARCH_GOODS_RECEIPT } from "./constant";
 
-export default function searchGoodsReceipt() {
+export default function action() {
   
   return {
     type: SEARCH_GOODS_RECEIPT,

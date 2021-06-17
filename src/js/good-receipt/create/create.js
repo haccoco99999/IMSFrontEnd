@@ -1,18 +1,72 @@
-import React from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 //css
 import "../goodreceipt.css";
-
-//component
 // import NavigationBar from "../../navigation-bar-component/NavigationBar";
 
+//component
+import Table from "../../table-receipt/ListReceiptsTable";
+import { getConfirmedPOAction, getConfirmedPODetailsAction } from "./action";
+
+const formReducer = (state, event) => {
+  return {
+    ...state,
+    [event.name]: event.value,
+  };
+};
+
 export default function () {
+  const [formData, setFormData] = useReducer(formReducer, {});
+  const [isChange, setIsChange] = useState(false);
+
   let history = useHistory();
+  let dispatch = useDispatch();
+
+  const list_ConfirmPurchaseOrderID = useSelector(
+    (state) =>
+      state.getAllConfirmedPurchaseOrderReducer.listConfirmedPurchaseOrder
+  );
+
+  const list_BuyingProduct = useSelector(
+    (state) =>
+      state.getAllConfirmedPurchaseOrderReducer.listProducts
+        .purchaseOrderProduct
+  );
+  console.log("list_BuyingProduct", list_BuyingProduct);
+
+  const [listValueColumn, setListValueColumn] = useState({
+    id: true,
+    name: true,
+    orderQuantity: true,
+  });
+
+  const [listEditHeader, setListEditHeader] = useState({
+    // id: "Goods Receipt ID",
+  });
 
   function goBackClick() {
     history.goBack();
   }
+
+  const handleChangeValue = (event) => {
+    event.preventDefault();
+    setIsChange(true);
+    setFormData({
+      name: event.target.name,
+      value: event.target.value,
+    });
+    dispatch(getConfirmedPODetailsAction({ id: event.target.value }));
+  };
+
+  const suppliers = list_ConfirmPurchaseOrderID
+    .filter((item) => item.id === formData.orderid)
+    .shift();
+
+  useEffect(() => {
+    dispatch(getConfirmedPOAction());
+  }, []);
 
   return (
     <div>
@@ -49,32 +103,52 @@ export default function () {
                   Purchase Order ID
                 </label>
                 <select
-                  defaultValue={"DEFAULT"}
+                  name="orderid"
+                  value={formData.orderid || ""}
                   class="form-select"
                   aria-label="Default select example"
+                  onChange={handleChangeValue}
                 >
-                  <option value="DEFAULT" disabled>
+                  <option value="" disabled>
                     Select Order ID
                   </option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  {/* <option value="1">One</option> */}
+                  {list_ConfirmPurchaseOrderID.map((purchaseOrder) => (
+                    <option value={purchaseOrder.id}>{purchaseOrder.id}</option>
+                  ))}
                 </select>
               </div>
               {/* Details  */}
               <div className="mt-3">
-                <p>
-                  <strong>Supplier:</strong> TNHH ABC
-                </p>
-                <p>
-                  <strong>Email:</strong> THNHHABC@gmail.com
-                </p>
-                <p>
-                  <strong>Phone No:</strong> 0909. 004. 002{" "}
-                </p>
+                {isChange && (
+                  <>
+                    <p>
+                      <strong>Supplier:</strong> {suppliers.supplierName}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {suppliers.supplierEmail}
+                    </p>
+                    <p>
+                      <strong>Phone No:</strong> {suppliers.supplierPhone}
+                    </p>
+                  </>
+                )}
               </div>
             </form>
           </div>
+
+          {isChange && (
+           <div className="mt-3">
+              <Table
+              listHeaderEdit={listEditHeader}
+              listColumn={listValueColumn}
+              listData={list_BuyingProduct}
+              // onRowClick={}
+              // backPagingClick={}
+              // nextPagingClick={}
+            />
+           </div>
+          )}
         </div>
       </div>
     </div>

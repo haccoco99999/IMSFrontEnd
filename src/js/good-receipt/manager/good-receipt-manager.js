@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 // css
 import "../goodreceipt.css";
@@ -14,8 +14,10 @@ export default function GoodsReceipt() {
   //let location = useLocation();
   let dispatch = useDispatch();
 
-  let list_goods_receipt = useSelector((state) => state.getGoodsReceiptReducer.listGoodsReceipt);
- 
+  let list_goods_receipt = useSelector(
+    (state) => state.getGoodsReceiptReducer.listGoodsReceipt
+  );
+
   const [listValueColumn, setListValueColumn] = useState({
     purchaseOrderId: true,
     createdDate: true,
@@ -41,7 +43,7 @@ export default function GoodsReceipt() {
   // }
 
   function nextPagingClick() {
-    console.log("GOodsReceiptList", list_goods_receipt);
+    
     console.log("forward");
   }
   function backPagingClick() {

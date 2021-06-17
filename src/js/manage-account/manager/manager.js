@@ -23,7 +23,7 @@ export default function manager() {
   };
 
   
-  function pushAddRolePage() {}
+  
   return (
     <div className="space-top-heading">
       {/* title */}
