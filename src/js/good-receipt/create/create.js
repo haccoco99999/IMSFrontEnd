@@ -8,7 +8,11 @@ import "../goodreceipt.css";
 
 //component
 import Table from "../../table-receipt/ListReceiptsTable";
-import { getConfirmedPOAction, getConfirmedPODetailsAction } from "./action";
+import {
+  getConfirmedPOAction,
+  getConfirmedPODetailsAction,
+  setCreateingGRRequestAction,
+} from "./action";
 
 const formReducer = (state, event) => {
   return {
@@ -20,6 +24,17 @@ const formReducer = (state, event) => {
 export default function () {
   const [formData, setFormData] = useReducer(formReducer, {});
   const [isChange, setIsChange] = useState(false);
+
+  const [fakeData, setFakeData] = useState({
+    purchaseOrderNumber: "POK6GM0KJC",
+    updateItems: [
+      {
+        productVariantId: "44319",
+        quantityReceived: 18,
+      },
+      { productVariantId: "44687", quantityReceived: 25 },
+    ],
+  });
 
   let history = useHistory();
   let dispatch = useDispatch();
@@ -48,6 +63,10 @@ export default function () {
 
   function goBackClick() {
     history.goBack();
+  }
+
+  function saveGoodsReceipt() {
+    dispatch(setCreateingGRRequestAction({data:fakeData}));
   }
 
   const handleChangeValue = (event) => {
@@ -86,7 +105,10 @@ export default function () {
             <div>
               <button className="btn btn-danger me-3 button-tab">Cancel</button>
 
-              <button className="btn btn-primary me-3 text-white button-tab ">
+              <button
+                onClick={saveGoodsReceipt}
+                className="btn btn-primary me-3 text-white button-tab "
+              >
                 Save
               </button>
             </div>
@@ -138,16 +160,16 @@ export default function () {
           </div>
 
           {isChange && (
-           <div className="mt-3">
+            <div className="mt-3">
               <Table
-              listHeaderEdit={listEditHeader}
-              listColumn={listValueColumn}
-              listData={list_BuyingProduct}
-              // onRowClick={}
-              // backPagingClick={}
-              // nextPagingClick={}
-            />
-           </div>
+                listHeaderEdit={listEditHeader}
+                listColumn={listValueColumn}
+                listData={list_BuyingProduct}
+                // onRowClick={}
+                // backPagingClick={}
+                // nextPagingClick={}
+              />
+            </div>
           )}
         </div>
       </div>

@@ -8,6 +8,11 @@ import {
   GET_DETAILS_PO_REQUEST,
   GET_DETAILS_PO_RESPONSE,
   GET_DETAILS_PO_ERROR,
+
+  //SAVE
+  SEND_CREATING_GOODS_RECEIPT_REQUEST,
+  SEND_CREATING_GOODS_RECEIPT_RESPONSE,
+  SEND_CREATING_GOODS_RECEIPT_ERROR,
 } from "./constant";
 
 const initialState = {
@@ -60,11 +65,6 @@ export default function reducer(state = initialState, action) {
       };
 
     case GET_DETAILS_PO_RESPONSE:
-      // console.log(
-      //   "GET_DETAILS_PO_RESPONSE",
-      //   action.json.purchaseOrder.purchaseOrderProduct
-      // );
-
       let cleanJson = { ...action.json.purchaseOrder };
 
       action.json.purchaseOrder.purchaseOrderProduct =
@@ -92,6 +92,24 @@ export default function reducer(state = initialState, action) {
         messages: "",
         errors: "",
         listProducts: [],
+      };
+
+    case SEND_CREATING_GOODS_RECEIPT_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: "",
+      };
+
+    case SEND_CREATING_GOODS_RECEIPT_ERROR:
+      return {
+        ...state,
+        requesting: false,
+        successful: false,
+        messages: "",
+        errors: "",
       };
 
     default:

@@ -1,6 +1,7 @@
 import {
   GET_CONFIRMED_PURCHASE_ORDER_REQUEST,
   GET_DETAILS_PO_REQUEST,
+  SEND_CREATING_GOODS_RECEIPT_REQUEST,
 } from "./constant";
 
 export function getConfirmedPOAction() {
@@ -14,4 +15,8 @@ export function getConfirmedPODetailsAction({ id }) {
     type: GET_DETAILS_PO_REQUEST,
     id,
   };
+}
+
+export function setCreateingGRRequestAction( {data} ) {
+  return { type: SEND_CREATING_GOODS_RECEIPT_REQUEST, data };
 }

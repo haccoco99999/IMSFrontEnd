@@ -5,8 +5,6 @@ export default function ListReceiptTable(props) {
   const x = "purchaseOrderNumber";
   let arrayHeaders = [];
 
-  console.log("hung 1 lan", props.listData);
-
   let indexHeaders = props.listData != null ? 
     props.listData[0] == null
       ? []
