@@ -4,9 +4,8 @@ import {
   GET_ALL_ROLE_REQUEST,
   GET_ALL_ROLE_RESPONSE,
   GET_ALL_ROLE_ERROR,
-} from "../../constains";
+} from "../../constants";
 import handleApiErrors from "../../../auth/api-errors";
-
 
 const getAllRoleUrl = "https://imspublicapi.herokuapp.com/api/getroles";
 
@@ -16,7 +15,7 @@ function getAllRole() {
     headers: {
       Authorization:
         "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkwMTJlNGRlLTJiZmMtNGRmOC05ODU5LTYwZjEwNDk2NTcyNyIsIm5iZiI6MTYyMzg0MzE2NCwiZXhwIjoxNjI0NDQ3OTY0LCJpYXQiOjE2MjM4NDMxNjR9.xu_UPSKwIMBryuoq8hv-mcYRzG7AdjqcwFmK6fLKtkw",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyMzk2MDEzOSwiZXhwIjoxNjI0NTY0OTM5LCJpYXQiOjE2MjM5NjAxMzl9.RZiTcJ-QV0XBtSkgfT2R2Nvv4HaKrqFps5qtmTry5VU",
       "Content-Type": "application/json",
       Origin: "",
     },

@@ -2,7 +2,7 @@ import {
   GET_ALL_ROLE_REQUEST,
   GET_ALL_ROLE_RESPONSE,
   GET_ALL_ROLE_ERROR,
-} from "../../constains";
+} from "../../constants";
 
 const initalState = {
   requesting: false,

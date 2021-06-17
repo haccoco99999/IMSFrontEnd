@@ -1,4 +1,4 @@
-import { GET_ALL_ROLE_REQUEST } from "../../constains";
+import { GET_ALL_ROLE_REQUEST } from "../../constants";
 
 export default function () {
   return {

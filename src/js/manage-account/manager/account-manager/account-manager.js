@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
+import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 //css
 import "../../accountmanager.css";
@@ -7,8 +9,33 @@ import "../../accountmanager.css";
 import AddAccountModal from "../../create/account/create-account";
 import FilterModal from "./filter";
 import AccountDetailsModal from "../../details/account/account-details";
+import Action from './action'
+
 
 function AccountManager() {
+  let history = useHistory();
+  let dispatch = useDispatch();
+
+
+  const listAccounts = useSelector(state => state.imsUser) 
+
+  const [listValueColumn, setListValueColumn] = useState({
+    email: true,
+  
+    fullname: true,
+    phoneNumber:true,
+
+  });
+
+  const [listEditHeader, setListEditHeader] = useState({
+    // id: "Goods Receipt ID",
+  });
+
+
+  console.log(listAccounts)
+  useEffect(() => {
+    dispatch(Action())
+  },[])
   return (
     <>
       <div>

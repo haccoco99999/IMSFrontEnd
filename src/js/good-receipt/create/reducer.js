@@ -103,6 +103,15 @@ export default function reducer(state = initialState, action) {
         errors: "",
       };
 
+    case SEND_CREATING_GOODS_RECEIPT_RESPONSE:
+      return {
+        ...state,
+        requesting: false,
+        successful: true,
+        messages: "200",
+        errors: "",
+      };
+
     case SEND_CREATING_GOODS_RECEIPT_ERROR:
       return {
         ...state,

@@ -7,6 +7,7 @@ import searchPurchaseOrder from "./purchase-order/purchase-quote-order/sagas";
 import getGoodsReceipt from "./good-receipt/manager/sagas";
 import getAllRole from "./manage-account/manager/role-manager/sagas";
 import getAllConfirmedPurchaseOrder from "./good-receipt/create/sagas";
+import getAllAccounts from "./manage-account/manager/account-manager/sagas";
 import { all } from "@redux-saga/core/effects";
 export default function* IndexSaga() {
   yield all([
@@ -19,5 +20,6 @@ export default function* IndexSaga() {
     getGoodsReceipt(),
     getAllRole(),
     getAllConfirmedPurchaseOrder(),
+    getAllAccounts(),
   ]);
 }

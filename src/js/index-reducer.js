@@ -11,6 +11,7 @@ import searchPurchaseOrderReducer from "./purchase-order/purchase-quote-order/re
 import getAllRoleReducer from "./manage-account/manager/role-manager/reducer";
 import getAllConfirmedPurchaseOrderReducer from "./good-receipt/create/reducer";
 import getGoodsReceiptReducer from "./good-receipt/manager/reducer";
+import getAllAccountsReducer from './manage-account/manager/account-manager/reducer';
 const IndexReducer = combineReducers({
   login,
   client,
@@ -22,7 +23,7 @@ const IndexReducer = combineReducers({
   searchPurchaseOrderReducer,
   getGoodsReceiptReducer,
   getAllRoleReducer,
-  getAllConfirmedPurchaseOrderReducer,
+  getAllConfirmedPurchaseOrderReducer,getAllAccountsReducer,
 });
 
 export default IndexReducer;
