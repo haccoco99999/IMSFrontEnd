@@ -49,7 +49,7 @@ export default function () {
       state.getAllConfirmedPurchaseOrderReducer.listProducts
         .purchaseOrderProduct
   );
-  console.log("list_BuyingProduct", list_BuyingProduct);
+  // console.log("list_BuyingProduct", list_BuyingProduct);
 
   const [listValueColumn, setListValueColumn] = useState({
     id: true,
@@ -66,7 +66,7 @@ export default function () {
   }
 
   function saveGoodsReceipt() {
-    dispatch(setCreateingGRRequestAction({data:fakeData}));
+    dispatch(setCreateingGRRequestAction({ data: fakeData }));
   }
 
   const handleChangeValue = (event) => {
@@ -79,6 +79,8 @@ export default function () {
     dispatch(getConfirmedPODetailsAction({ id: event.target.value }));
   };
 
+
+  //filter
   const suppliers = list_ConfirmPurchaseOrderID
     .filter((item) => item.id === formData.orderid)
     .shift();
@@ -134,7 +136,7 @@ export default function () {
                   <option value="" disabled>
                     Select Order ID
                   </option>
-                  {/* <option value="1">One</option> */}
+
                   {list_ConfirmPurchaseOrderID.map((purchaseOrder) => (
                     <option value={purchaseOrder.id}>{purchaseOrder.id}</option>
                   ))}

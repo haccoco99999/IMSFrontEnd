@@ -1,12 +1,34 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 //css
 import "../../product.css";
 
 //components
 import NewCategory from "./create-new-category";
+import {GetAllCategoryAction} from "./action";
+import Table from "../../../table-receipt/ListReceiptsTable";
 
 export default function () {
+  let dispatch = useDispatch();
+
+  const list_Categories = useSelector(
+    (state) => state.getAllCategoriesReducer.listCategories
+  );
+
+  const [listValueColumn, setListValueColumn] = useState({
+    id: true,
+    categoryName: true,
+    categoryDescription: true,
+  });
+
+  const [listEditHeader, setListEditHeader] = useState({
+    categoryName: "Name",
+    categoryDescription: "Description",
+  });
+  useEffect(() => {
+    dispatch(GetAllCategoryAction());
+  }, []);
+
   return (
     <div>
       <NewCategory />
@@ -29,6 +51,15 @@ export default function () {
           Create new Category
         </a>
       </div>
+
+        <div className="mt-3">
+          <Table
+            listHeaderEdit={listEditHeader}
+            listColumn={listValueColumn}
+            listData={list_Categories}
+          />
+        </div>
+
 
       {/* <div className="d-flex justify-content-center">
         <div className="wrapper-table">

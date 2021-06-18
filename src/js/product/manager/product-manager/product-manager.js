@@ -1,14 +1,44 @@
-import React from "react";
-import {useHistory} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
+//css
 import "../../product.css";
 
+//components
 import Filter from "../../filter";
+import Action from "./action";
+import Table from "../../../table-receipt/ListReceiptsTable";
+
 export default function () {
-  let history = useHistory()
-  function pushAddPage(){
-    history.push('/homepage/product/create')
-}
+  let history = useHistory();
+  let dispatch = useDispatch();
+  const list_Products = useSelector(
+    (state) => state.getAllProductsReducer.listProducts
+  );
+
+  useEffect(() => {
+    dispatch(Action());
+  }, []);
+
+  const [listValueColumn, setListValueColumn] = useState({
+    productId: true,
+    name: true,
+    catagory: true,
+    quantity: true,
+    modifiedDate: true,
+  });
+
+  const [listEditHeader, setListEditHeader] = useState({
+    productId: "Product ID",
+    name: "Product Name",
+    modifiedDate: "Modified Date",
+    catagory: "Category",
+  });
+
+  function pushAddPage() {
+    history.push("/homepage/product/create");
+  }
   return (
     <div>
       <div className="ms-5">
@@ -75,6 +105,15 @@ export default function () {
           Filter
         </a>
       </div>
+
+      <div className="mt-3">
+        <Table
+          listHeaderEdit={listEditHeader}
+          listColumn={listValueColumn}
+          listData={list_Products}
+        />
+      </div>
+
       <Filter />
     </div>
   );
