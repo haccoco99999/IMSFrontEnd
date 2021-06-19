@@ -49,6 +49,10 @@ export default function () {
       state.getAllConfirmedPurchaseOrderReducer.listProducts
         .purchaseOrderProduct
   );
+
+  const message = useSelector(
+    (state) => state.getAllConfirmedPurchaseOrderReducer.messages
+  );
   // console.log("list_BuyingProduct", list_BuyingProduct);
 
   const [listValueColumn, setListValueColumn] = useState({
@@ -79,7 +83,6 @@ export default function () {
     dispatch(getConfirmedPODetailsAction({ id: event.target.value }));
   };
 
-
   //filter
   const suppliers = list_ConfirmPurchaseOrderID
     .filter((item) => item.id === formData.orderid)
@@ -87,6 +90,11 @@ export default function () {
 
   useEffect(() => {
     dispatch(getConfirmedPOAction());
+
+    if (message === "200")
+      return () => {
+        history.push("/homepage/good-receipt");
+      };
   }, []);
 
   return (
