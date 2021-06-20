@@ -9,6 +9,16 @@ export   function searchPurchaseOrder({searchQuery,status, currentPage, sizePerP
         sizePerPage,
     }
 }
+export   function getListPurchseOrder({searchQuery,status, currentPage, sizePerPage}){
+    
+    return {
+        type: SEARCH_PURCHASE_ORDER,
+        searchQuery,
+        status, 
+        currentPage, 
+        sizePerPage,
+    }
+}
 
 export  function getListQuote(){
     

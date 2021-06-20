@@ -1,0 +1,14 @@
+.modal-true{
+    display: block !important;
+    background: #00000099 !important;
+    font-size: 20px;
+}
+.modal-dialog-true{
+    justify-content: center !important;
+}
+.modal-footer-true{
+    justify-content: center !important;
+}
+.model-content-true{
+    width: 260px !important;
+}

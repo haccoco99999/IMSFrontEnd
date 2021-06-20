@@ -9,17 +9,12 @@ const initalState = {
     messages: "",
     errors: "",
     detailPurchaseOrder:{
-      
+        
         supplier:{},
         transaction:{
             createdBy:{}
         },
-        purchaseOrderProduct:[
-            {
-                
-              
-            }
-        ]
+        purchaseOrderProduct:null
     }
 }
 const reducer = function getDetailPurchaseOrderReducer(state = initalState, action){

@@ -3,18 +3,49 @@ import { GET_PRICE_QUOTE_ERROR,GET_PRICE_QUOTE_SUCCESS,GET_PRICE_QUOTE_REQUESTIN
 import handleApiErrors from '../../auth/api-errors'
 function searchPurchaseOrder(action){
     const updateUrl=`https://imspublicapi.herokuapp.com/api/purchaseorder/${action.searchQuery}&status=${action.status}&page=${action.currentPage}&size=${action.sizePerPage}`
- 
+        const fillter= {
+            
+                currentPage: action.currentPage,
+                sizePerPage: action.sizePerPage,
+                poSearchFilter: {
+                  status: action.status,
+                 
+                }
+              
+        }
+    
+    return fetch("https://imspublicapi.herokuapp.com/api/purchaseorder/all", {
+        
+        method: 'POST',
+        headers:{
+            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyNDAyNDc1OCwiZXhwIjoxNjI0NjI5NTU4LCJpYXQiOjE2MjQwMjQ3NTh9.c0auWdYxi8qB5V2Nk7des10p9PV3Qb2SzRG4oRTfpjo",
+            "Content-Type": "application/json",
+            "Origin": ""
+        },
+        credentials: "include",
+        body: JSON.stringify(fillter)
+    })
+    .then(response => handleApiErrors(response))
+    .then(response => response.json())
+    .then(json => json)
+    .catch((error) => {throw error})
+}
+function searchPurchaseOrderkeyword(action){
+    const updateUrl=`https://imspublicapi.herokuapp.com/api/purchaseorder/search/${action.searchQuery}&status=-99&page=${action.currentPage}&size=${action.sizePerPage}`
+     
+              
+        
     
     return fetch(updateUrl, {
         
         method: 'GET',
         headers:{
-            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzU0NjI4MSwiZXhwIjoxNjI0MTUxMDgxLCJpYXQiOjE2MjM1NDYyODF9.m13k9zu5PBwB92rbqUdOBl7Mlb4jnmzPucrBPXUMafU",
+            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyNDAyNDc1OCwiZXhwIjoxNjI0NjI5NTU4LCJpYXQiOjE2MjQwMjQ3NTh9.c0auWdYxi8qB5V2Nk7des10p9PV3Qb2SzRG4oRTfpjo",
             "Content-Type": "application/json",
             "Origin": ""
         },
         credentials: "include",
-        
+       
     })
     .then(response => handleApiErrors(response))
     .then(response => response.json())
@@ -22,18 +53,29 @@ function searchPurchaseOrder(action){
     .catch((error) => {throw error})
 }
 function getListPriceQuoteAPI(){
-    const updateUrl="https://imspublicapi.herokuapp.com/api/purchaseorder/all&status=1&page=1&size=5"
+    const fillter= {
+            
+        currentPage: 1,
+        sizePerPage: 99,
+        poSearchFilter: {
+          status: 1,
+         
+        }
+      
+}
+
+    const updateUrl="https://imspublicapi.herokuapp.com/api/purchaseorder/all"
 
     return fetch(updateUrl, {
         
-        method: 'GET',
+        method: 'POST',
         headers:{
-            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzU0NjI4MSwiZXhwIjoxNjI0MTUxMDgxLCJpYXQiOjE2MjM1NDYyODF9.m13k9zu5PBwB92rbqUdOBl7Mlb4jnmzPucrBPXUMafU",
+            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyNDAyNDc1OCwiZXhwIjoxNjI0NjI5NTU4LCJpYXQiOjE2MjQwMjQ3NTh9.c0auWdYxi8qB5V2Nk7des10p9PV3Qb2SzRG4oRTfpjo",
             "Content-Type": "application/json",
             "Origin": ""
         },
         credentials: "include",
-        
+        body:JSON.stringify(fillter)
     })
     .then(response => handleApiErrors(response))
     .then(response => response.json())
@@ -44,7 +86,7 @@ function* searchPurchaseOrderFlow(action){
     
     try{
       let  json= yield call(searchPurchaseOrder,action)
-      
+        console.log(json)
         yield put({type:SEARCH_PURCHASE_ORDER_SEARCH, json})
     }catch(error){
        console.log(error)

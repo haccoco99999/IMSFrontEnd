@@ -9,13 +9,13 @@ import {
 } from './contants'
 
 import handleApiErrors from '../../auth/api-errors'
-
+let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyMzk5MDE0NCwiZXhwIjoxNjI0NTk0OTQ0LCJpYXQiOjE2MjM5OTAxNDR9.FUFJu7BGnJISrJ-N_aYrB9yWsSdREP1TePeYDHtwdZo"
 function getPurchaseOderAPI(orderId) {
     const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/number/"
     return fetch(updateUrl + orderId, {
         method: 'GET',
         headers: {
-            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzU0NjI4MSwiZXhwIjoxNjI0MTUxMDgxLCJpYXQiOjE2MjM1NDYyODF9.m13k9zu5PBwB92rbqUdOBl7Mlb4jnmzPucrBPXUMafU",
+            "Authorization": "Bearer " + token,
             "Content-Type": "application/json",
             "Origin": ""
         },
@@ -32,7 +32,7 @@ function sendConfirmForManagerAPI(orderId) {
     return fetch(updateUrl, {
         method: 'POST',
         headers: {
-            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzc1MTU3MCwiZXhwIjoxNjI0MzU2MzcwLCJpYXQiOjE2MjM3NTE1NzB9.Nytx8CZvhohyk5meCGUvcOah2qjopsJNTlU1sm_KK18",
+            "Authorization": "Bearer " + token,
             "Content-Type": "application/json",
             "Origin": ""
         },
@@ -45,12 +45,12 @@ function sendConfirmForManagerAPI(orderId) {
         .catch((error) => { throw error })
 }
 function confirmByManagerAPI(orderId) {
-    console.log("API " + orderId )
+    
     const updateUrl = "https://imspublicapi.herokuapp.com/api/po/confirm/"+ orderId
     return fetch(updateUrl, {
         method: 'POST',
         headers: {
-            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzc1MTU3MCwiZXhwIjoxNjI0MzU2MzcwLCJpYXQiOjE2MjM3NTE1NzB9.Nytx8CZvhohyk5meCGUvcOah2qjopsJNTlU1sm_KK18",
+            "Authorization": "Bearer " + token,
             "Content-Type": "application/json",
             "Origin": ""
         },
@@ -63,12 +63,12 @@ function confirmByManagerAPI(orderId) {
         .catch((error) => { throw error })
 }
 function updateProductPurchaseOrderAPI(orderId) {
-        console.log()
+       
     const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/update"
     return fetch(updateUrl, {
         method: 'PUT',
         headers: {
-            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzc1MTU3MCwiZXhwIjoxNjI0MzU2MzcwLCJpYXQiOjE2MjM3NTE1NzB9.Nytx8CZvhohyk5meCGUvcOah2qjopsJNTlU1sm_KK18",
+            "Authorization": "Bearer " + token,
             "Content-Type": "application/json-patch+json",
             "Origin": ""
         },
@@ -77,18 +77,18 @@ function updateProductPurchaseOrderAPI(orderId) {
 
     })
         .then(response => handleApiErrors(response))
-        .then(response => response)
-        
+        .then(response => response.json())
+        .then(json => json)
         .catch((error) => { throw error })
 }
 function* getDetailPurchaseOrderFlow(action) {
 
     try {
         let json = yield call(getPurchaseOderAPI, action.orderID)
-        console.log(json)
+       
         yield put({ type: GET_DETAIL_PURCHASE_ORDER_SUCCESS, json })
     } catch (error) {
-        console.log(error)
+      
         yield put({ type: GET_DETAIL_PURCHASE_ORDER_ERROR })
     }
 
@@ -97,13 +97,13 @@ function* confirmPurchaseOrderFlow(action) {
 
     try {
 
-        console.log("ok da confirm" + action.orderID)
+       
           let  json= yield call(sendConfirmForManagerAPI,action.orderID)
-          console.log(json)
+         
         //     console.log(json)
         //     yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
     } catch (error) {
-        console.log(error)
+        
         yield put({ type: GET_DETAIL_PURCHASE_ORDER_ERROR })
     }
 
@@ -112,12 +112,12 @@ function* saveProductsPurchaseOrderFlow(action) {
 
     try {
 
-        console.log("ok da confirm" + JSON.stringify(action.orderID))
+       
           let  json= yield call(updateProductPurchaseOrderAPI,action.orderID)
-            console.log(json)
-        //     yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
+            
+            yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
     } catch (error) {
-        console.log(error)
+    
         yield put({ type: GET_DETAIL_PURCHASE_ORDER_ERROR })
     }
 
@@ -126,12 +126,12 @@ function* sendConfirmByManager(action) {
 
     try {
 
-        console.log("ok da confirm" + action.orderID)
+       
           let  json= yield call(confirmByManagerAPI,action.orderID)
-            console.log(json)
+          
         //     yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
     } catch (error) {
-        console.log(error)
+     
         yield put({ type: GET_DETAIL_PURCHASE_ORDER_ERROR })
     }
 

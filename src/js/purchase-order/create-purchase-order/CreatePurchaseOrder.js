@@ -11,19 +11,48 @@ import ListProductsTable from '../../list-products-table/ListProductsTable';
 import ConfirmDateModal from './ConfirmDateModal';
 import PreviewSendMail from './preview-quote-request';
 import sendMailPriceQuote from '../create-price-quote/action';
-
+import PurchaseQuoteOrder from '../purchase-quote-order/PurchaseQuoteOrder';
+import ConfirmationPopup from './ConfirmationPopup';
 class CreatePurchaseOrder extends React.Component {
     constructor(props) {
         super(props)
         this.props.getDetailPurchaseOrder(this.props.location.state.orderID)
         let defaultState = {
+            isCancelTask: true,
             isPreview: false,
             editorState: {},
             orderID: this.props.location.state.orderID,
             status: this.props.location.state.status,
+            isSave: false,
 
-            purchaseOrderProductDraftData: null,
-            purchaseOrderProduct:[]
+            purchaseOrderProduct: null,
+
+            listColumn: [
+
+                {
+                    name: "Product Name",
+
+                },
+                {
+                    unit: "Unit",
+                },
+                {
+                    orderQuantity: "Quantity",
+                    input: true,
+                   
+                },
+                {
+                    price: "Unit Price",
+                    input: true,
+                  
+                },
+                {
+                    totalAmount: "Amount"
+                }
+
+            ]
+
+
         }
         let secondState = this.getStateShowButton(this.props.location.state.status)
 
@@ -33,14 +62,19 @@ class CreatePurchaseOrder extends React.Component {
             ...secondState,
 
         }
-        this.inputChangeProduct = this.inputChangeProduct.bind(this)
+
 
     }
-    UNSAFE_componentWillReceiveProps() {
-        this.setState({
-            purchaseOrderProduct: this.props.getDetailPurchaseReducer.detailPurchaseOrder.purchaseOrderProduct
+    componentWillReceiveProps(nextProps) {
+        const  purchaseOrderProduct  = this.props.getDetailPurchaseReducer.detailPurchaseOrder.purchaseOrderProduct
+       
+        if (nextProps.getDetailPurchaseReducer != purchaseOrderProduct)
+  
+            this.setState({
 
-        })
+                purchaseOrderProduct: nextProps.getDetailPurchaseReducer.detailPurchaseOrder.purchaseOrderProduct
+
+            })
     }
 
     getStateShowButton(status) {
@@ -80,7 +114,7 @@ class CreatePurchaseOrder extends React.Component {
     checkStatusButton(words) {
 
         var arrayButton = this.checkStatusPurchaseOrder()
-       
+
         return arrayButton.includes(words)
 
     }
@@ -103,6 +137,9 @@ class CreatePurchaseOrder extends React.Component {
     cancelEditClick() {
         if (this.state.status === "PQCreated") {
             this.setState({
+
+                purchaseOrderProduct: this.props.getDetailPurchaseReducer.detailPurchaseOrder.purchaseOrderProduct,
+
                 isShowEdit: !this.state.isShowEdit,
                 isShowPreview: !this.state.isShowPreview,
                 isShowCancel: !this.state.isShowCancel,
@@ -111,6 +148,8 @@ class CreatePurchaseOrder extends React.Component {
         }
         else if (this.state.status === "PQSent") {
             this.setState({
+
+                purchaseOrderProduct: this.props.getDetailPurchaseReducer.detailPurchaseOrder.purchaseOrderProduct,
                 isShowEdit: !this.state.isShowEdit,
                 isConfirmToManager: !this.state.isConfirmToManager,
                 isShowCancel: !this.state.isShowCancel,
@@ -119,28 +158,38 @@ class CreatePurchaseOrder extends React.Component {
         }
 
     }
+    //sự kiện thấy đổi state khi click vào Save Button
     saveEditClick() {
-       const dataUpdate  = {
-        purchaseOrderNumber : this.state.orderID,
-            supplierId : this.props.getDetailPurchaseReducer.detailPurchaseOrder.supplier.id,
+        this.setState({
+            isSave: !this.state.isSave
+        })
+    }
+    saveEditFlow(listProducts) {
+        const dataUpdate = {
+            purchaseOrderNumber: this.state.orderID,
+            supplierId: this.props.getDetailPurchaseReducer.detailPurchaseOrder.supplier.id,
             orderItemInfos:
-                this.state.purchaseOrderProductDraftData.map(product =>{
-                    return{ productVariantId :product.productVariantId,
-                    orderQuantity :product.orderQuantity,
-                    unit: product.unit,
-                    price : product.price ,
-                    discountAmount : product.discountAmount,
-                    totalAmount : product.totalAmount,
-                }
+                listProducts.map(product => {
+                    return {
+                        productVariantId: product.productVariantId,
+                        orderQuantity: product.orderQuantity,
+                        unit: product.unit,
+                        price: product.price,
+                        discountAmount: product.discountAmount,
+                        totalAmount: product.totalAmount,
+                    }
                 })
-            
+
         }
-        
+
         this.props.saveProductsPurchaseOrder(dataUpdate)
+
+       
+
         if (this.state.status === "PQCreated") {
             this.setState({
-                purchaseOrderProduct: this.state.purchaseOrderProductDraftData,
-                purchaseOrderProductDraftData: null,
+
+                isSave: !this.state.isSave,
                 isShowEdit: !this.state.isShowEdit,
                 isShowPreview: !this.state.isShowPreview,
                 isShowCancel: !this.state.isShowCancel,
@@ -149,6 +198,8 @@ class CreatePurchaseOrder extends React.Component {
         }
         else if (this.state.status === "PQSent") {
             this.setState({
+
+                isSave: !this.state.isSave,
                 isShowEdit: !this.state.isShowEdit,
                 isConfirmToManager: !this.state.isConfirmToManager,
                 isShowCancel: !this.state.isShowCancel,
@@ -158,11 +209,11 @@ class CreatePurchaseOrder extends React.Component {
 
     }
     editClick() {
-        
+
 
         if (this.state.status === "PQCreated") {
             this.setState({
-                purchaseOrderProductDraftData: this.props.getDetailPurchaseReducer.detailPurchaseOrder.purchaseOrderProduct,
+
                 isShowEdit: !this.state.isShowEdit,
                 isShowPreview: !this.state.isShowPreview,
                 isShowCancel: !this.state.isShowCancel,
@@ -177,7 +228,7 @@ class CreatePurchaseOrder extends React.Component {
                 isShowSave: !this.state.isShowSave,
             })
         }
-     
+
 
 
     }
@@ -208,14 +259,14 @@ class CreatePurchaseOrder extends React.Component {
         })
     }
     confirmClick() {
-       this.props.confirmPurchaseORderByManager(this.state.orderID)
+        this.props.confirmPurchaseORderByManager(this.state.orderID)
     }
     sendConfirmClick() {
         this.props.confirmDetailPurchaseOrder(this.state.orderID)
 
     }
     sendMailClick() {
-        console.log("000000")
+     
         const formData = new FormData();
         formData.append('OrderNumber', this.state.orderID)
         formData.append('To', 'hungppse130422@fpt.edu.vn')
@@ -232,14 +283,14 @@ class CreatePurchaseOrder extends React.Component {
             editorState: data
         })
     }
-    inputChangeProduct(index, event){
-        
-        let tempt = [...this.state.purchaseOrderProductDraftData]
-        tempt[index][event.target.name] = event.target.value
+    onChangeValueProduct = (event) => {
+        console.log(event.target.value)
         this.setState({
-            purchaseOrderProductDraftData: tempt
+            purchaseOrderProduct: this.state.purchaseOrderProduct.map((element, index) => index == event.target.id ? { ...element, [event.target.name]: event.target.value } : element)
         })
+
     }
+
 
     render() {
 
@@ -322,7 +373,7 @@ class CreatePurchaseOrder extends React.Component {
 
         return (
             <div>
-              
+
                 <NavigationBar actionGoBack={() => this.goBackClick()}
                     titleBar="hunghanhphuc"
                     listButton={listButton}
@@ -340,13 +391,20 @@ class CreatePurchaseOrder extends React.Component {
                 />
 
 
+                  {console.log(this.state.purchaseOrderProduct)}
+                <ListProductsTable
+                    onChangeValueProduct={this.onChangeValueProduct}
+                    disabled={this.state.isShowEdit}
+                    listColumn={this.state.listColumn}
+                    listData={this.state.purchaseOrderProduct} />
 
-                <ListProductsTable 
-                inputChangeProduct={this.inputChangeProduct}
-                draftData={this.state.purchaseOrderProductDraftData}
-                
-                listColumn={["Product No", "Product Name", "Unit", "Quantity", "Unit Price", "Ammount"]} 
-                listData={this.state.purchaseOrderProduct} />
+
+
+                {/* <ConfirmationPopup/> */}
+
+
+
+
                 {this.state.status == "PQCreated" ? <TextEditor getEditorState={(event) => this.getEditorState(event)} /> : ""}
                 {/* <div className="mail-detail collapse show" data-bs-target="#TextEditor1"
                 id="TextEditor1" data-bs-toggle="collapse"><p>Mail detail</p></div>
@@ -370,5 +428,5 @@ const mapStateToProps = state => ({
 
     getDetailPurchaseReducer: state.getDetailPurchaseReducer
 })
-const connected = connect(mapStateToProps, {saveProductsPurchaseOrder, getDetailPurchaseOrder, confirmDetailPurchaseOrder,sendMailPriceQuote, confirmPurchaseORderByManager })(CreatePurchaseOrder)
+const connected = connect(mapStateToProps, { saveProductsPurchaseOrder, getDetailPurchaseOrder, confirmDetailPurchaseOrder, sendMailPriceQuote, confirmPurchaseORderByManager })(CreatePurchaseOrder)
 export default withRouter(connected)

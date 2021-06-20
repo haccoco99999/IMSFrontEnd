@@ -64,6 +64,7 @@ class PurchaseQuoteOrder extends React.Component {
         this.onClickToDetailQuoteOrder = this.onClickToDetailQuoteOrder.bind(this)
         this.nextPagingClick = this.nextPagingClick.bind(this)
         this.backPagingClick = this.backPagingClick.bind(this)
+        this.clickToSearchOrder = this.clickToSearchOrder.bind(this)
         this.props.searchPurchaseOrder({searchQuery: this.state.searchQuery,
         status: this.state.status, 
         currentPage: this.state.currentPage, 
@@ -116,6 +117,21 @@ class PurchaseQuoteOrder extends React.Component {
             }
         })
     }
+    clickToSearchOrder(keySearch){
+       
+        this.props.searchPurchaseOrder({ 
+            searchQuery: keySearch,
+            status: 3, 
+            currentPage:1, 
+            sizePerPage:8,
+            })
+       this.setState({
+        searchQuery: keySearch,
+        status: -99, 
+        currentPage:1, 
+        sizePerPage:8,
+       })
+    }
 
 
     render() {
@@ -145,7 +161,11 @@ class PurchaseQuoteOrder extends React.Component {
                         <li class="btn btn-default filter"
                             data-bs-target="#FilterModal"
                             data-bs-toggle="modal" ><img src="..\src\js\images\filter.svg" /> <span>Filter</span> </li>
+
+                    
                     </ul>
+
+               
                 </div>
                 <FilterModal />
                 <AddjustDisplayTableModal
@@ -154,6 +174,7 @@ class PurchaseQuoteOrder extends React.Component {
                     listColumnDisplay={this.state.listDraftColumn} />
                 {/* <TablePurchase listColumn = {this.state.listColumn} listData={this.props.searchPurchaseOrderReducer.listPurchaseOrder} onRowClick={this.onClickToDetailPurchaseOrder}/> */}
                 <ListReceiptTable
+                    clickToSearch={this.clickToSearchOrder}
                     sizePerPage={this.state.sizePerPage}
                     currentPage={this.state.currentPage}
                     pageCount={this.props.searchPurchaseOrderReducer.pageCount}

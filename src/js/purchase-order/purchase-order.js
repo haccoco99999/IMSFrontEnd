@@ -5,6 +5,7 @@ import CreatePriceQuote from './create-price-quote/Create-Purchase-Order'
 import {Route, withRouter, Switch } from 'react-router-dom'
 import CreatePurchaseOrder from './create-purchase-order/CreatePurchaseOrder'
 import PurchaseQuoteOrder from './purchase-quote-order/PurchaseQuoteOrder'
+import DetailPuchaseOrder from './create-purchase-order/DetailPuchaseOrder'
 import { connect } from 'react-redux'
 //create purchae da ton tai do dat sai ten
 class Purchase extends React.Component {
