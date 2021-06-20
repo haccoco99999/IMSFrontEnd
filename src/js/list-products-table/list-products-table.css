@@ -1,0 +1,41 @@
+.list-receipt-table-container{
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid gray
+}
+.table-customize{
+    font-size: 15px;
+    width: 100%;
+    padding: 50px;
+}
+
+/* .search-purchase{
+    position: relative;
+    margin-bottom: 25px;
+}
+.search-purchase img{
+    left: 10px;
+    width: 25px;
+    top: 10px;
+    height: 25px;
+    position: absolute;
+    filter: invert(55%) sepia(0%) saturate(0%) hue-rotate(333deg) brightness(91%) contrast(88%);
+}
+.search-purchase input{
+    padding-left: 50px;
+    height: 50px;
+} */
+.input-table{
+    height: 35px;
+    border: 0;
+    outline: none;
+    border-bottom: 1px solid;
+    background: white;
+}
+.table-customize input:disabled {
+    height: 35px;
+    border: 0;
+    outline: none;
+    border-bottom: 0;
+  }

@@ -95,7 +95,7 @@ export default function () {
       return () => {
         history.push("/homepage/good-receipt");
       };
-  }, []);
+  }, [message]);
 
   return (
     <div>
