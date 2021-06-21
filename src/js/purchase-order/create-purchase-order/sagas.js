@@ -5,11 +5,14 @@ import {
     GET_DETAIL_PURCHASE_ORDER_ERROR,
     SEND_CONFIRM_PURCHASE_ORDER,
     SAVE_PRODUCTS_PURCHASE_ORDER,
-    CONFIRM_PURCHASE_ORDER_BY_MAMAGER
+    CONFIRM_PURCHASE_ORDER_BY_MAMAGER,
+    GET_PRODUCT_PURCHASE_ORDER_ERROR,
+    GET_PRODUCT_PURCHASE_ORDER_SUCCESS,
+    GET_PRODUCT_PURCHASE_ORDER
 } from './contants'
 
 import handleApiErrors from '../../auth/api-errors'
-let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyMzk5MDE0NCwiZXhwIjoxNjI0NTk0OTQ0LCJpYXQiOjE2MjM5OTAxNDR9.FUFJu7BGnJISrJ-N_aYrB9yWsSdREP1TePeYDHtwdZo"
+let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDE3NDUzNywiZXhwIjoxNjI0MzQ3MzM3LCJpYXQiOjE2MjQxNzQ1Mzd9.rKQllv-JADJYAYcBoIkGxRnSwgMKknKk1xlZTJwxXmc"
 function getPurchaseOderAPI(orderId) {
     const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/number/"
     return fetch(updateUrl + orderId, {
@@ -23,6 +26,23 @@ function getPurchaseOderAPI(orderId) {
 
     })
         .then(response => handleApiErrors(response))
+        .then(response => response.json())
+        .then(json => json)
+        .catch((error) => { throw error })
+}
+function getProductPurchaser(productId) {
+    const updateUrl = `https://imspublicapi.herokuapp.com/api/product/search/${productId}&page=1&size=10`
+   return fetch(updateUrl, {
+        method: 'GET',
+        headers: {
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/json",
+            "Origin": ""
+        },
+        credentials: "include",
+
+    })
+
         .then(response => response.json())
         .then(json => json)
         .catch((error) => { throw error })
@@ -108,6 +128,21 @@ function* confirmPurchaseOrderFlow(action) {
     }
 
 }
+function* getProductPurchaseOrderFlow(action) {
+
+    try {
+
+       
+          let  json= yield call(getProductPurchaser,action.productId)
+            console.log(json)
+       
+            yield put({type:GET_PRODUCT_PURCHASE_ORDER_SUCCESS, json})
+    } catch (error) {
+        
+        yield put({ type: GET_PRODUCT_PURCHASE_ORDER_ERROR })
+    }
+
+}
 function* saveProductsPurchaseOrderFlow(action) {
 
     try {
@@ -142,6 +177,7 @@ function* updateWatcher() {
     yield takeEvery(SEND_CONFIRM_PURCHASE_ORDER, confirmPurchaseOrderFlow)
     yield takeEvery(SAVE_PRODUCTS_PURCHASE_ORDER, saveProductsPurchaseOrderFlow)
     yield takeEvery(CONFIRM_PURCHASE_ORDER_BY_MAMAGER, sendConfirmByManager)
+    yield takeEvery(GET_PRODUCT_PURCHASE_ORDER, getProductPurchaseOrderFlow)
 
 
 }

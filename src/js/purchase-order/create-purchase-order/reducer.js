@@ -1,6 +1,10 @@
-import purchaseOrder from '../purchase-order'
-import {GET_DETAIL_PURCHASE_ORDER,GET_DETAIL_PURCHASE_ORDER_SUCCESS,GET_DETAIL_PURCHASE_ORDER_ERROR,
-    SEND_CONFIRM_PURCHASE_ORDER, SAVE_PRODUCTS_PURCHASE_ORDER,CONFIRM_PURCHASE_ORDER_BY_MAMAGER} from './contants'
+
+import {
+    GET_DETAIL_PURCHASE_ORDER, GET_DETAIL_PURCHASE_ORDER_SUCCESS, GET_DETAIL_PURCHASE_ORDER_ERROR,
+    SEND_CONFIRM_PURCHASE_ORDER, SAVE_PRODUCTS_PURCHASE_ORDER, CONFIRM_PURCHASE_ORDER_BY_MAMAGER,
+    GET_PRODUCT_PURCHASE_ORDER, GET_PRODUCT_PURCHASE_ORDER_SUCCESS, GET_PRODUCT_PURCHASE_ORDER_ERROR,
+    SET_DEFAULT_PRODUCT_PURCHASE_ORDER
+} from './contants'
 
 
 const initalState = {
@@ -8,84 +12,149 @@ const initalState = {
     successful: false,
     messages: "",
     errors: "",
-    detailPurchaseOrder:{
-        
-        supplier:{},
-        transaction:{
-            createdBy:{}
+    detailPurchaseOrder: {
+
+        supplier: {},
+        transaction: {
+            createdBy: {}
         },
-        purchaseOrderProduct:null
+        purchaseOrderProduct: null
     }
 }
-const reducer = function getDetailPurchaseOrderReducer(state = initalState, action){
-    switch(action.type){
+export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(state = initalState, action) {
+    switch (action.type) {
         case GET_DETAIL_PURCHASE_ORDER:
-            return{
+            return {
                 ...state,
                 requesting: true,
                 successful: false,
                 messages: "",
                 errors: "",
-                
+
             }
         case GET_DETAIL_PURCHASE_ORDER_SUCCESS:
-           let clearJson = {...action.json.purchaseOrder}
-         
-           action.json.purchaseOrder.purchaseOrderProduct=  clearJson.purchaseOrderProduct.map(product => {
-              
-               product.name = product.productVariant.name
-                product.productVariant.variantValues.map(variant=>  product.name+=" " +variant.attribute)
+            let clearJson = { ...action.json.purchaseOrder }
+
+            action.json.purchaseOrder.purchaseOrderProduct = clearJson.purchaseOrderProduct.map(product => {
+
+                product.name = product.productVariant.name
+                product.productVariant.variantValues.map(variant => product.name += " " + variant.attribute)
                 delete product["productVariant"]
-               return product
-           })
-          
-            return{
+                return product
+            })
+
+            return {
                 ...state,
                 requesting: false,
                 successful: true,
                 messages: "",
                 errors: "",
                 detailPurchaseOrder: action.json.purchaseOrder,
-               
+
             }
         case GET_DETAIL_PURCHASE_ORDER_ERROR:
-            return{
+            return {
                 ...state,
                 requesting: false,
                 successful: false,
                 messages: "",
                 errors: "error",
-               
+
             }
         case SEND_CONFIRM_PURCHASE_ORDER:
-            return{
+            return {
                 ...state,
                 requesting: true,
                 successful: false,
                 messages: "",
                 errors: "",
-               
+
             }
         case CONFIRM_PURCHASE_ORDER_BY_MAMAGER:
-            return{
+            return {
                 ...state,
                 requesting: true,
                 successful: false,
                 messages: "",
                 errors: "",
-               
+
             }
         case SAVE_PRODUCTS_PURCHASE_ORDER:
-            return{
+            return {
                 ...state,
                 requesting: true,
                 successful: false,
                 messages: "",
                 errors: "",
-               
+
             }
-        default: 
+        default:
             return state
     }
 }
-export default reducer
+
+const productState = {
+    requesting: false,
+    successful: false,
+    messages: "",
+    errors: "",
+    product: {}
+}
+
+export const productPurchaseOrderReducer = function productPurchaseOrderReducer(state = productState, action) {
+    switch (action.type) {
+        case GET_PRODUCT_PURCHASE_ORDER:
+            return {
+
+                requesting: true,
+                successful: false,
+                messages: "",
+                errors: "",
+
+            }
+        case GET_PRODUCT_PURCHASE_ORDER_SUCCESS:
+            let product = {
+                id: action.json.paging.resultList[0].productId,
+                orderId: "",
+                productVariantId: action.json.paging.resultList[0].id,
+                orderQuantity: 0,
+                unit: action.json.paging.resultList[0].unit,
+                price: 0,
+                discountAmount: 0,
+                totalAmount: 0,
+                name: action.json.paging.resultList[0].name,
+            }
+
+            return {
+
+                requesting: false,
+                successful: true,
+                messages: "",
+                errors: "",
+                product: product,
+
+            }
+        case GET_PRODUCT_PURCHASE_ORDER_ERROR:
+            return {
+
+                requesting: false,
+                successful: false,
+                messages: "",
+                errors: "error",
+
+            }
+        case SET_DEFAULT_PRODUCT_PURCHASE_ORDER:
+            return {
+
+                requesting: false,
+                successful: false,
+                messages: "",
+                errors: "",
+                product: {}
+            }
+
+        default:
+            return state
+    }
+}
+

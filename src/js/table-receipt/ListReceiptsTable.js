@@ -14,7 +14,7 @@ export default function ListReceiptTable(props) {
         setKeySearch(
             event.target.value
         )
-        console.log(keySearch)
+       
     }
     function toSentence(words) {
 
@@ -112,15 +112,15 @@ export default function ListReceiptTable(props) {
       }
     
       const handleOnFocus = (item) => {
-        console.log("foucus")
+        console.log("focus")
       }
 
     return (
         <div className="list-receipt-table-container">
             <div className="form-group search-purchase">
-                <img onClick={() => props.clickToSearch(keySearch)} src="..\src\js\images\search.svg" alt="icon-search" />
-                {/* <input name="keySearch" type="text" value={keySearch} className="form-control" onChange={(e) => inputChangeSearch(e)} placeholder="Search by Order ID or Supplier Name" /> */}
-                <ReactSearchAutocomplete
+                <img onClick={props.clickToSearch} src="..\src\js\images\search.svg" alt="icon-search" />
+                <input name="searchQuery" type="text" value={props.keySearch} onChange={props.setKeySearch} className="form-control"  placeholder="Search by Order ID or Supplier Name" />
+                {/* <ReactSearchAutocomplete
                     inputDebounce = {500}
                     items={listItemSearch}
                     onSearch={handleOnSearch}
@@ -128,7 +128,7 @@ export default function ListReceiptTable(props) {
                     onSelect={handleOnSelect}
                     onFocus={handleOnFocus}
                     autoFocus
-                />
+                /> */}
             </div>
             <div className="table-container">
                 <table className="table table-hover receipt-table">

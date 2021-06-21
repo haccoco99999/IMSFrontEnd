@@ -30,13 +30,22 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
                 listPurchaseOrder: []
             }
         case SEARCH_PURCHASE_ORDER_SEARCH:
+            let listPurchaseOrder = action.json.paging.resultList.map(item => {
+                return {
+                    ...item,
+                    deliveryDate: item.deliveryDate.split("T")[0],
+                    confirmedDate:item.confirmedDate.split("T")[0],
+                    createdDate:item.createdDate.split("T")[0],
+                    modifiedDate:item.modifiedDate.split("T")[0],
+                }
+             })
             return {
                 ...state,
                 requesting: false,
                 successful: true,
                 messages: "",
                 errors: "",
-                listPurchaseOrder: action.json.paging.resultList,
+                listPurchaseOrder: listPurchaseOrder,
                 currentPage: action.json.paging.currentPage,
                 pageCount: action.json.paging.pageCount,
                 sizePerPage: action.json.paging.sizePerPage,

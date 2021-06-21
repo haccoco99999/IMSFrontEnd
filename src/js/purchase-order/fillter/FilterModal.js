@@ -1,7 +1,7 @@
 import React from "react";
 import "./fillter.css";
 
-export default function FilterModal() {
+export default function FilterModal(props) {
   
   return (
     <div>
@@ -29,30 +29,23 @@ export default function FilterModal() {
                 {/* select option */}
                 <div className="mb-3">
                   <label htmlFor="role" className="col-form-label">
-                    Select your options
+                    Status:
                   </label>
-                  <select className="form-select" aria-label="Default select example">
+                  <select type="number" name="status" onChange={props.selectStatus} className="form-select" aria-label="Default select example">
                     <option selected>- No. Selected -</option>
-                    <option value={1}>One</option>
-                    <option value={2}>Two</option>
-                    <option value={3}>Three</option>
+                    <option value={1}>PQCreated </option>
+                    <option value={2}>PQSent </option>
+                    <option value={3}>POCreated </option>
+                    <option value={4}>POConfirm </option>
+                    <option value={6}>Done  </option>
+                    <option value={-1}>PQCanceled</option>
+                    <option value={-2}>RequisitionCanceled</option>
+                    <option value={-3}>POCanceled</option>
                   </select>
                 </div>
 
 
-                {/* select supplier name  */}
-                <div className="mb-3">
-                  <label htmlFor="role" className="col-form-label">
-                    Supplier Name
-                  </label>
-                  <select className="form-select" aria-label="Default select example">
-                    <option selected>- No. Selected -</option>
-                    <option value={1}>One</option>
-                    <option value={2}>Two</option>
-                    <option value={3}>Three</option>
-                  </select>
-                </div>
-
+               
 
                 {/* create date  */}
                 <div>
@@ -71,6 +64,8 @@ export default function FilterModal() {
                     
                   </label>{" "} */}
                       <input
+                      onChange={props.selectStatus}
+                        name="fromCreatedDate"
                         type="date"
                         id="fromTime"
                         class="form-control"
@@ -82,7 +77,48 @@ export default function FilterModal() {
                     Phone No.
                   </label>{" "} */}
                       <input
+                      onChange={props.selectStatus}
+                        name="toCreatedDate"
                         type="date"
+                        id="toTime"
+                        class="form-control"
+                      // aria-describedby="passwordHelpInline"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="mb-3">
+                    {/* <label for="address" class="col-form-label">
+                    Create Date
+                  </label>
+                  <input type="date" class="form-control" id="address" /> */}
+                  </div>
+                  <div class="row g-3 align-items-center">
+                    <label for="role" class="col-form-label">
+                      Range Price:
+                    </label>
+                    <div class="col">
+                      {/* <label for="inputEmail" class="col-form-label">
+                    
+                  </label>{" "} */}
+                      <input
+                      onChange={props.selectStatus}
+                        name="fromTotalOrderPrice"
+                        type="number"
+                        id="fromTime"
+                        class="form-control"
+                      //aria-describedby="passwordHelpInline"
+                      />
+                    </div>
+                    <div class="col">
+                      {/* <label for="inputphoneno" class="col-form-label">
+                    Phone No.
+                  </label>{" "} */}
+                      <input
+                      onChange={props.selectStatus}
+                        name="toTotalOrderPrice"
+                        type="number"
                         id="toTime"
                         class="form-control"
                       // aria-describedby="passwordHelpInline"

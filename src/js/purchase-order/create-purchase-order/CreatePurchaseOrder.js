@@ -2,7 +2,7 @@ import React from 'react'
 import TablePurchase from '../purchase-quote-order/Table-Purchase-Order'
 import './CreatePurchaseOrder.css';
 import TextEditor from '../../text-editor-compoent/text-editor-compoent';
-import { getDetailPurchaseOrder, confirmDetailPurchaseOrder, confirmPurchaseORderByManager, saveProductsPurchaseOrder } from './action'
+import { getDetailPurchaseOrder, setDefailtProductPurchaseOrder, confirmDetailPurchaseOrder, confirmPurchaseORderByManager, saveProductsPurchaseOrder, getProductPurchaseOrder } from './action'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import NavigationBar from '../../navigation-bar-component/NavigationBar';
@@ -13,6 +13,8 @@ import PreviewSendMail from './preview-quote-request';
 import sendMailPriceQuote from '../create-price-quote/action';
 import PurchaseQuoteOrder from '../purchase-quote-order/PurchaseQuoteOrder';
 import ConfirmationPopup from './ConfirmationPopup';
+import { productPurchaseOrderReducer } from './reducer';
+import SearchComponent from '../../search-component/SearchComponent';
 class CreatePurchaseOrder extends React.Component {
     constructor(props) {
         super(props)
@@ -35,16 +37,17 @@ class CreatePurchaseOrder extends React.Component {
                 },
                 {
                     unit: "Unit",
+                    input: true,
                 },
                 {
                     orderQuantity: "Quantity",
                     input: true,
-                   
+
                 },
                 {
                     price: "Unit Price",
                     input: true,
-                  
+
                 },
                 {
                     totalAmount: "Amount"
@@ -62,19 +65,26 @@ class CreatePurchaseOrder extends React.Component {
             ...secondState,
 
         }
-
+        this.clickToAddProduct = this.clickToAddProduct.bind(this)
 
     }
     componentWillReceiveProps(nextProps) {
-        const  purchaseOrderProduct  = this.props.getDetailPurchaseReducer.detailPurchaseOrder.purchaseOrderProduct
-       
+        const purchaseOrderProduct = this.props.getDetailPurchaseReducer
+
         if (nextProps.getDetailPurchaseReducer != purchaseOrderProduct)
-  
+
             this.setState({
 
                 purchaseOrderProduct: nextProps.getDetailPurchaseReducer.detailPurchaseOrder.purchaseOrderProduct
 
             })
+        if (nextProps.productPurchaseOrderReducer.successful) {
+            this.setState({
+                purchaseOrderProduct: [...this.state.purchaseOrderProduct, nextProps.productPurchaseOrderReducer.product]
+            })
+            this.props.setDefailtProductPurchaseOrder()
+
+        }
     }
 
     getStateShowButton(status) {
@@ -159,12 +169,8 @@ class CreatePurchaseOrder extends React.Component {
 
     }
     //sự kiện thấy đổi state khi click vào Save Button
-    saveEditClick() {
-        this.setState({
-            isSave: !this.state.isSave
-        })
-    }
-    saveEditFlow(listProducts) {
+
+    saveEditClick(listProducts) {
         const dataUpdate = {
             purchaseOrderNumber: this.state.orderID,
             supplierId: this.props.getDetailPurchaseReducer.detailPurchaseOrder.supplier.id,
@@ -184,7 +190,7 @@ class CreatePurchaseOrder extends React.Component {
 
         this.props.saveProductsPurchaseOrder(dataUpdate)
 
-       
+
 
         if (this.state.status === "PQCreated") {
             this.setState({
@@ -266,7 +272,7 @@ class CreatePurchaseOrder extends React.Component {
 
     }
     sendMailClick() {
-     
+
         const formData = new FormData();
         formData.append('OrderNumber', this.state.orderID)
         formData.append('To', 'hungppse130422@fpt.edu.vn')
@@ -289,6 +295,28 @@ class CreatePurchaseOrder extends React.Component {
             purchaseOrderProduct: this.state.purchaseOrderProduct.map((element, index) => index == event.target.id ? { ...element, [event.target.name]: event.target.value } : element)
         })
 
+    }
+
+    addProductPurchaseOrder() {
+        this.props.getProductPurchaseOrder("MO569812R")
+    }
+    clickToAddProduct(productRaw) {
+       
+       let product = {
+            id: productRaw.productId,
+            orderId: "",
+            productVariantId: productRaw.id,
+            orderQuantity: 0,
+            unit: productRaw.unit,
+            price: 0,
+            discountAmount: 0,
+            totalAmount: 0,
+            name: productRaw.name,
+        }
+        console.log(product)
+        this.setState({
+            purchaseOrderProduct: [...this.state.purchaseOrderProduct, product]
+        })
     }
 
 
@@ -326,7 +354,7 @@ class CreatePurchaseOrder extends React.Component {
             this.checkStatusButton("SAVE") ? {
                 isShow: this.state.isShowSave,
                 title: "Save",
-                action: () => this.saveEditClick(),
+                action: () => this.saveEditClick(this.state.purchaseOrderProduct),
                 style: {
                     background: "#4ca962"
                 }
@@ -334,7 +362,7 @@ class CreatePurchaseOrder extends React.Component {
             this.checkStatusButton("CONFIRM_TO_MANAGER") ? {
                 isShow: this.state.isConfirmToManager,
                 title: "Confirm for manager",
-                action: () => this.confirmClick(),
+                action: () => this.sendConfirmClick(),
                 style: {
                     background: "#4e9ae8"
                 }
@@ -390,9 +418,10 @@ class CreatePurchaseOrder extends React.Component {
                     }
                 />
 
-
-                  {console.log(this.state.purchaseOrderProduct)}
+                    <SearchComponent    clickToAddProduct={this.clickToAddProduct}/>
+                {console.log(this.state.purchaseOrderProduct)}
                 <ListProductsTable
+                    clickToAddProduct={this.clickToAddProduct}
                     onChangeValueProduct={this.onChangeValueProduct}
                     disabled={this.state.isShowEdit}
                     listColumn={this.state.listColumn}
@@ -402,8 +431,12 @@ class CreatePurchaseOrder extends React.Component {
 
                 {/* <ConfirmationPopup/> */}
 
-
-
+                {/* <input  list="citynames"/>
+                <datalist id="citynames">
+                   <div>Hello</div>
+                    
+                </datalist>
+                <button onClick={() => this.addProductPurchaseOrder()} >Add Product</button> */}
 
                 {this.state.status == "PQCreated" ? <TextEditor getEditorState={(event) => this.getEditorState(event)} /> : ""}
                 {/* <div className="mail-detail collapse show" data-bs-target="#TextEditor1"
@@ -413,7 +446,7 @@ class CreatePurchaseOrder extends React.Component {
             */}
 
 
-                <ConfirmDateModal confirmClick={() => this.sendConfirmClick()} cancelConfirmClick={() => this.cancelClick()} isConfirm={this.state.isConfirm} />
+                <ConfirmDateModal confirmClick={() => this.confirmClick()} cancelConfirmClick={() => this.cancelClick()} isConfirm={this.state.isConfirm} />
                 <PreviewSendMail cancelClickPreview={() => this.cancelClickPreview()}
                     statusSendMail={this.state.isPreview}
                     editorState={this.state.editorState}
@@ -426,7 +459,8 @@ class CreatePurchaseOrder extends React.Component {
 
 const mapStateToProps = state => ({
 
-    getDetailPurchaseReducer: state.getDetailPurchaseReducer
+    getDetailPurchaseReducer: state.getDetailPurchaseReducer,
+    productPurchaseOrderReducer: state.productPurchaseOrderReducer
 })
-const connected = connect(mapStateToProps, { saveProductsPurchaseOrder, getDetailPurchaseOrder, confirmDetailPurchaseOrder, sendMailPriceQuote, confirmPurchaseORderByManager })(CreatePurchaseOrder)
+const connected = connect(mapStateToProps, { setDefailtProductPurchaseOrder, getProductPurchaseOrder, saveProductsPurchaseOrder, getDetailPurchaseOrder, confirmDetailPurchaseOrder, sendMailPriceQuote, confirmPurchaseORderByManager })(CreatePurchaseOrder)
 export default withRouter(connected)

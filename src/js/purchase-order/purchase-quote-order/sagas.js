@@ -3,27 +3,24 @@ import { GET_PRICE_QUOTE_ERROR,GET_PRICE_QUOTE_SUCCESS,GET_PRICE_QUOTE_REQUESTIN
 import handleApiErrors from '../../auth/api-errors'
 function searchPurchaseOrder(action){
     const updateUrl=`https://imspublicapi.herokuapp.com/api/purchaseorder/${action.searchQuery}&status=${action.status}&page=${action.currentPage}&size=${action.sizePerPage}`
-        const fillter= {
-            
-                currentPage: action.currentPage,
-                sizePerPage: action.sizePerPage,
-                poSearchFilter: {
-                  status: action.status,
+        // const fillter= {
+                
+
                  
-                }
+        //         }
               
-        }
-    
-    return fetch("https://imspublicapi.herokuapp.com/api/purchaseorder/all", {
+        // }
+        console.log(action.filter)
+    return fetch("https://imspublicapi.herokuapp.com/api/purchaseorder/search", {
         
         method: 'POST',
         headers:{
-            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyNDAyNDc1OCwiZXhwIjoxNjI0NjI5NTU4LCJpYXQiOjE2MjQwMjQ3NTh9.c0auWdYxi8qB5V2Nk7des10p9PV3Qb2SzRG4oRTfpjo",
+            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDE3NDUzNywiZXhwIjoxNjI0MzQ3MzM3LCJpYXQiOjE2MjQxNzQ1Mzd9.rKQllv-JADJYAYcBoIkGxRnSwgMKknKk1xlZTJwxXmc",
             "Content-Type": "application/json",
             "Origin": ""
         },
         credentials: "include",
-        body: JSON.stringify(fillter)
+        body: JSON.stringify(action.filter)
     })
     .then(response => handleApiErrors(response))
     .then(response => response.json())
@@ -40,7 +37,7 @@ function searchPurchaseOrderkeyword(action){
         
         method: 'GET',
         headers:{
-            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyNDAyNDc1OCwiZXhwIjoxNjI0NjI5NTU4LCJpYXQiOjE2MjQwMjQ3NTh9.c0auWdYxi8qB5V2Nk7des10p9PV3Qb2SzRG4oRTfpjo",
+            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDE3NDUzNywiZXhwIjoxNjI0MzQ3MzM3LCJpYXQiOjE2MjQxNzQ1Mzd9.rKQllv-JADJYAYcBoIkGxRnSwgMKknKk1xlZTJwxXmc",
             "Content-Type": "application/json",
             "Origin": ""
         },
@@ -70,7 +67,7 @@ function getListPriceQuoteAPI(){
         
         method: 'POST',
         headers:{
-            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyNDAyNDc1OCwiZXhwIjoxNjI0NjI5NTU4LCJpYXQiOjE2MjQwMjQ3NTh9.c0auWdYxi8qB5V2Nk7des10p9PV3Qb2SzRG4oRTfpjo",
+            "Authorization": "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDE3NDUzNywiZXhwIjoxNjI0MzQ3MzM3LCJpYXQiOjE2MjQxNzQ1Mzd9.rKQllv-JADJYAYcBoIkGxRnSwgMKknKk1xlZTJwxXmc",
             "Content-Type": "application/json",
             "Origin": ""
         },
@@ -86,7 +83,7 @@ function* searchPurchaseOrderFlow(action){
     
     try{
       let  json= yield call(searchPurchaseOrder,action)
-        console.log(json)
+      
         yield put({type:SEARCH_PURCHASE_ORDER_SEARCH, json})
     }catch(error){
        console.log(error)
@@ -100,7 +97,7 @@ function* getListPriceQuoteFlow(action){
     
     try{
         json = yield call(getListPriceQuoteAPI)
-       console.log(json)
+      
         yield put({ type: GET_PRICE_QUOTE_SUCCESS, json })
     }catch(error){
         yield put({type:GET_PRICE_QUOTE_ERROR, error})
