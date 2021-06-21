@@ -29,6 +29,8 @@ export default function () {
           <Route path="/homepage/good-receipt/create-goods-receipt">
             <Create />
           </Route>
+
+          <Route path="/homepage/good-receipt/details"><Details/></Route>
         </Switch>
 
         {/* ################################# */}

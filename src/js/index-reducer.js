@@ -14,6 +14,9 @@ import getGoodsReceiptReducer from "./good-receipt/manager/reducer";
 import getAllAccountsReducer from "./manage-account/manager/account-manager/reducer";
 import getAllCategoriesReducer from "./product/manager/category-manager/reducer";
 import getAllProductsReducer from "./product/manager/product-manager/reducer";
+import getGoodsReceiptDetailsReducer from "./good-receipt/details/reducer";
+import getAllPurchaseRequisitionReducer from "./sale-man/manager/reducer";
+import getDetailsPurchaseRequisitionReducer from "./sale-man/details/reducer";
 const IndexReducer = combineReducers({
   login,
   client,
@@ -29,6 +32,9 @@ const IndexReducer = combineReducers({
   getAllAccountsReducer,
   getAllCategoriesReducer,
   getAllProductsReducer,
+  getGoodsReceiptDetailsReducer,
+  getAllPurchaseRequisitionReducer,
+  getDetailsPurchaseRequisitionReducer,
 });
 
 export default IndexReducer;

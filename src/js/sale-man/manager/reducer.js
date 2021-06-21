@@ -1,8 +1,8 @@
 import {
-  SEARCH_GOODS_RECEIPT,
-  SEARCH_GOODS_RECEIPT_ERROR,
-  SEARCH_GOODS_RECEIPT_SUCCESS,
-} from "./constant";
+  GET_ALL_PR_REQUEST,
+  GET_ALL_PR_RESPONSE,
+  GET_ALL_PR_ERROR,
+} from "./constants";
 
 const initialState = {
   requesting: false,
@@ -13,45 +13,54 @@ const initialState = {
   pageCount: 0,
   sizePerPage: 0,
   rowCountTotal: 0,
-  listGoodsReceipt: [],
+  listPurchaseRequisition: []
 };
 
-const reducer = function GoodsReceiptReducer(state = initialState, action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case SEARCH_GOODS_RECEIPT:
+    case GET_ALL_PR_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
         errors: "",
-        listGoodsReceipt: [],
+        listPurchaseRequisition: [],
+
       };
-    case SEARCH_GOODS_RECEIPT_SUCCESS:
+
+    case GET_ALL_PR_RESPONSE:
+        let listPurchaseOrder = action.json.paging.resultList.map(item => {
+            return {
+                ...item, deliveryDate: item.deliveryDate.split("T")[0],
+                createdDate:item.createdDate.split("T")[0],
+                modifiedDate:item.modifiedDate.split("T")[0],
+            }
+         })
       return {
         ...state,
         requesting: false,
         successful: true,
         messages: "",
         errors: "",
-        listGoodsReceipt: action.json.paging.resultList,
         currentPage: action.json.paging.currentPage,
         pageCount: action.json.paging.pageCount,
         sizePerPage: action.json.paging.sizePerPage,
         rowCountTotal: action.json.paging.rowCountTotal,
+        listPurchaseRequisition: listPurchaseOrder
       };
-    case SEARCH_GOODS_RECEIPT_ERROR:
+
+    case GET_ALL_PR_ERROR:
       return {
         ...state,
         requesting: false,
         successful: false,
         messages: "",
-        errors: "error",
-        listGoodsReceipt: [],
+        errors: "",
+        listPurchaseRequisition: [],
       };
+
     default:
       return state;
   }
-};
-
-export default reducer;
+}

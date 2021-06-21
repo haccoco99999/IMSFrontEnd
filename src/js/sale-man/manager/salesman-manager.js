@@ -1,15 +1,67 @@
-import React from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 //css
 import "../sale-man.css";
 
+//components
+import { getAllPRAction } from "./action";
+import ListReceiptTable from "../../table-receipt/ListReceiptsTable";
+
 export default function () {
   let history = useHistory();
+  let dispatch = useDispatch();
+
+  const [listValueColumn, setListValueColumn] = useState({
+    id: true,
+    status: true,
+    createdByName: true,
+    createdDate: true,
+    modifiedDate: true,
+  });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(5);
+
+  const [listEditHeader, setListEditHeader] = useState({
+    id: "Purchase Requisition ID",
+    createdByName: "Created by",
+  });
+
+  const { listData, pageCount } = useSelector((state) => ({
+    listData: state.getAllPurchaseRequisitionReducer.listPurchaseRequisition,
+    pageCount: state.getAllPurchaseRequisitionReducer.pageCount,
+  }));
 
   function pushAddPage() {
     history.push("/homepage/sale-man/create-purchase-requisition");
   }
+
+  function nextPagingClick() {
+    console.log("forward");
+    setCurrentPage(currentPage + 1);
+  }
+  function backPagingClick() {
+    console.log("backWard");
+    setCurrentPage(currentPage - 1);
+  }
+
+  function onClickToDetails(row) {
+    history.push("/homepage/sale-man/details", {
+      purchaseRequisitionId: row.id,
+      
+    });
+  }
+
+  useEffect(() => {
+    dispatch(
+      getAllPRAction({
+        currentPage: currentPage,
+        sizePerPage: sizePerPage,
+      })
+    );
+  }, [currentPage, sizePerPage]);
 
   return (
     <div className="space-top-heading">
@@ -84,6 +136,20 @@ export default function () {
             </svg>
             Filter
           </a>
+        </div>
+
+        <div className="mt-3">
+          <ListReceiptTable
+            listHeaderEdit={listEditHeader}
+            listColumn={listValueColumn}
+            listData={listData}
+            backPagingClick={backPagingClick}
+            nextPagingClick={nextPagingClick}
+            sizePerPage={sizePerPage}
+            currentPage={currentPage}
+            pageCount={pageCount}
+             onRowClick={onClickToDetails}
+          />
         </div>
       </div>
     </div>

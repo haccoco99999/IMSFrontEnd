@@ -7,7 +7,7 @@ import "../goodreceipt.css";
 // import NavigationBar from "../../navigation-bar-component/NavigationBar";
 
 //component
-import Table from "../../table-receipt/ListReceiptsTable";
+import Table from "../../list-products-table/ListProductsTable";
 import {
   getConfirmedPOAction,
   getConfirmedPODetailsAction,
@@ -22,44 +22,60 @@ const formReducer = (state, event) => {
 };
 
 export default function () {
-  const [formData, setFormData] = useReducer(formReducer, {});
-  const [isChange, setIsChange] = useState(false);
-
-  const [fakeData, setFakeData] = useState({
-    purchaseOrderNumber: "POK6GM0KJC",
-    updateItems: [
-      {
-        productVariantId: "44319",
-        quantityReceived: 18,
-      },
-      { productVariantId: "44687", quantityReceived: 25 },
-    ],
-  });
-
   let history = useHistory();
   let dispatch = useDispatch();
+
+  const [formData, setFormData] = useReducer(formReducer, {});
+  const [isChange, setIsChange] = useState(false);
+  const [storageLocation, setStorageLocation] = useState("");
+
+  // const [purchasedOrderGoodsReceive, setPurchasedOrderGoodsReceive] = useState(
+  //   []
+  // );
+
+  // const [fakeData, setFakeData] = useState({
+  //   purchaseOrderNumber: formData.orderid,
+  //   storageLocation: storageLocation,
+  //   updateItems: list_BuyingProduct
+  // });
+
+
 
   const list_ConfirmPurchaseOrderID = useSelector(
     (state) =>
       state.getAllConfirmedPurchaseOrderReducer.listConfirmedPurchaseOrder
   );
 
-  const list_BuyingProduct = useSelector(
+  const list_BuyingProductStore = useSelector(
     (state) =>
       state.getAllConfirmedPurchaseOrderReducer.listProducts
         .purchaseOrderProduct
   );
+
+  const [list_BuyingProduct, setList_BuyingProduct] = useState(null);
+
+  useEffect(() => {
+    setList_BuyingProduct(list_BuyingProductStore);
+  }, [list_BuyingProductStore]);
+  console.log(list_BuyingProduct);
 
   const message = useSelector(
     (state) => state.getAllConfirmedPurchaseOrderReducer.messages
   );
   // console.log("list_BuyingProduct", list_BuyingProduct);
 
-  const [listValueColumn, setListValueColumn] = useState({
-    id: true,
-    name: true,
-    orderQuantity: true,
-  });
+  const [listValueColumn, setListValueColumn] = useState([
+    {
+      productVariantId: "ID",
+    },
+    {
+      name: "Product Name",
+    },
+    {
+      orderQuantity: "Quantity",
+      input: true,
+    },
+  ]);
 
   const [listEditHeader, setListEditHeader] = useState({
     // id: "Goods Receipt ID",
@@ -69,8 +85,31 @@ export default function () {
     history.goBack();
   }
 
+  function onChangeValueProduct(event) {
+    console.log(event.target.id + " ");
+    setList_BuyingProduct((state) =>
+      state.map((element, index) =>
+        index == event.target.id
+          ? { ...element, [event.target.name]: event.target.value }
+          : element
+      )
+    );
+    console.log(event.target.value);
+  }
+
   function saveGoodsReceipt() {
-    dispatch(setCreateingGRRequestAction({ data: fakeData }));
+    const Data = {
+      purchaseOrderNumber: formData.orderid,
+      storageLocation: storageLocation,
+      updateItems: list_BuyingProduct.map((product) => {
+        return {
+          productVariantId: product.productVariantId,
+          quantityReceived: product.orderQuantity,
+        };
+      }),
+    };
+
+    dispatch(setCreateingGRRequestAction({ data: Data }));
   }
 
   const handleChangeValue = (event) => {
@@ -91,10 +130,12 @@ export default function () {
   useEffect(() => {
     dispatch(getConfirmedPOAction());
 
-    if (message === "200")
-      return () => {
-        history.push("/homepage/good-receipt");
-      };
+    if (message !== "") {
+      history.push("/homepage/good-receipt/details", {
+        goodsreceiptId: message,
+        fromPage: "CreatePage",
+      });
+    }
   }, [message]);
 
   return (
@@ -175,6 +216,11 @@ export default function () {
                 listHeaderEdit={listEditHeader}
                 listColumn={listValueColumn}
                 listData={list_BuyingProduct}
+                // disabled={false}
+                onChangeValueProduct={onChangeValueProduct}
+                //       disabled={this.state.isShowEdit}
+
+                // onChangeValueProduct={this.onChangeValueProduct}
                 // onRowClick={}
                 // backPagingClick={}
                 // nextPagingClick={}

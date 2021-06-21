@@ -8,14 +8,18 @@ import {
   SEARCH_GOODS_RECEIPT_SUCCESS,
 } from "./constant";
 
-const baseUrl =
-  "https://imspublicapi.herokuapp.com/api/goodsreceipt/all&page=1&size=5";
-const getListGoodReceiptUrl = baseUrl + "/api/goodsreceipt/all&?page=1&size=5";
-const token = "";
+const baseUrl = "https://imspublicapi.herokuapp.com/api/goodsreceipt/all";
 
-function searchGoodsReceipt() {
+function searchGoodsReceipt(action) {
+  console.log(action);
+  const body = {
+    currentPage: action.currentPage,
+    sizePerPage: action.sizePerPage,
+    roSearchFilter: {},
+  };
+
   return fetch(baseUrl, {
-    method: "GET",
+    method: "POST",
     headers: {
       Authorization:
         "Bearer " +
@@ -24,6 +28,7 @@ function searchGoodsReceipt() {
       Origin: "",
     },
     credentials: "include",
+    body: JSON.stringify(body),
   })
     .then((response) => handleApiErrors(response))
     .then((response) => response.json())
@@ -33,7 +38,7 @@ function searchGoodsReceipt() {
 
 function* getFlow(action) {
   try {
-    let json = yield call(searchGoodsReceipt);
+    let json = yield call(searchGoodsReceipt, action);
     // console.log("KET QUA:", json);
 
     yield put({ type: SEARCH_GOODS_RECEIPT_SUCCESS, json });

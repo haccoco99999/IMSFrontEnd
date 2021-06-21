@@ -21,7 +21,9 @@ const initialState = {
   messages: "",
   errors: "",
   listConfirmedPurchaseOrder: [],
-  listProducts: [],
+  listProducts: {
+    purchaseOrderProduct: null,
+  },
 };
 
 export default function reducer(state = initialState, action) {
@@ -61,7 +63,6 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-        listProducts: [],
       };
 
     case GET_DETAILS_PO_RESPONSE:
@@ -70,6 +71,7 @@ export default function reducer(state = initialState, action) {
       action.json.purchaseOrder.purchaseOrderProduct =
         cleanJson.purchaseOrderProduct.map((product) => {
           product.name = product.productVariant.name;
+          product.sku = product.productVariant.sku;
           delete product["productVariant"];
           return product;
         });
@@ -104,11 +106,12 @@ export default function reducer(state = initialState, action) {
       };
 
     case SEND_CREATING_GOODS_RECEIPT_RESPONSE:
+      console.log(action.json.createdGoodsReceiptId)
       return {
         ...state,
         requesting: false,
         successful: true,
-        messages: "200",
+        messages: action.json.createdGoodsReceiptId,
         errors: "",
       };
 

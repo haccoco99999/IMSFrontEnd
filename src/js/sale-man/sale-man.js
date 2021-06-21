@@ -7,7 +7,7 @@ import "./sale-man.css";
 //components
 import Manager from "./manager/salesman-manager";
 import Create from "./create/create-purchase-requisition";
-
+import Details from "./details/details";
 export default function () {
   return (
     <div className="home_content wrapper">
@@ -19,6 +19,9 @@ export default function () {
           </Route>
           <Route path="/homepage/sale-man/create-purchase-requisition">
             <Create />
+          </Route>
+          <Route path="/homepage/sale-man/details">
+            <Details />
           </Route>
         </Switch>
 

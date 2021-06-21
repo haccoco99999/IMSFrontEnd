@@ -107,6 +107,7 @@ export default function ListProductsTable(props) {
                     return (
                       <td>
                         <input
+                          id={index}
                           className="input-table"
                           disabled={props.disabled}
                           name={header[0]}

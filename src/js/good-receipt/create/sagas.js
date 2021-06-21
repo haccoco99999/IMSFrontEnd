@@ -19,7 +19,7 @@ import handleApiErrors from "../../auth/api-errors";
 
 //api
 const getListPurchaseOrderUrl =
-  "https://imspublicapi.herokuapp.com/api/purchaseorder/all&status=4&page=1&size=1000";
+  "https://imspublicapi.herokuapp.com/api/purchaseorder/all";
 
 const get_details_confirmed_po =
   "https://imspublicapi.herokuapp.com/api/purchaseorder/number/";
@@ -29,20 +29,29 @@ const set_receiving_purchase_order_quantity =
 
 function getListPurchaseOrder() {
   return fetch(getListPurchaseOrderUrl, {
-    method: "GET",
+    method: "POST",
     headers: {
       Authorization:
         "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDE3NDUzNywiZXhwIjoxNjI0MzQ3MzM3LCJpYXQiOjE2MjQxNzQ1Mzd9.rKQllv-JADJYAYcBoIkGxRnSwgMKknKk1xlZTJwxXmc",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzU0NjI4MSwiZXhwIjoxNjI0MTUxMDgxLCJpYXQiOjE2MjM1NDYyODF9.m13k9zu5PBwB92rbqUdOBl7Mlb4jnmzPucrBPXUMafU",
       "Content-Type": "application/json",
       Origin: "",
     },
     credentials: "include",
+    body: JSON.stringify({
+      currentPage: 0,
+      sizePerPage: 0,
+      poSearchFilter: {
+        status: 4,
+      },
+    }),
   })
     .then((response) => handleApiErrors(response))
     .then((response) => response.json())
     .then((json) => json)
-    .catch((error) => {});
+    .catch((error) => {
+      throw error;
+    });
 }
 
 function getDetailsPO(action) {
@@ -51,7 +60,7 @@ function getDetailsPO(action) {
     headers: {
       Authorization:
         "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDE3NDUzNywiZXhwIjoxNjI0MzQ3MzM3LCJpYXQiOjE2MjQxNzQ1Mzd9.rKQllv-JADJYAYcBoIkGxRnSwgMKknKk1xlZTJwxXmc",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzU0NjI4MSwiZXhwIjoxNjI0MTUxMDgxLCJpYXQiOjE2MjM1NDYyODF9.m13k9zu5PBwB92rbqUdOBl7Mlb4jnmzPucrBPXUMafU",
       "Content-Type": "application/json",
       Origin: "",
     },
@@ -60,7 +69,9 @@ function getDetailsPO(action) {
     .then((response) => handleApiErrors(response))
     .then((response) => response.json())
     .then((json) => json)
-    .catch((error) => {});
+    .catch((error) => {
+      throw error;
+    });
 }
 
 function setReceivingPurchaseOrderQuantity(action) {
@@ -70,7 +81,7 @@ function setReceivingPurchaseOrderQuantity(action) {
     headers: {
       Authorization:
         "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDE3NDUzNywiZXhwIjoxNjI0MzQ3MzM3LCJpYXQiOjE2MjQxNzQ1Mzd9.rKQllv-JADJYAYcBoIkGxRnSwgMKknKk1xlZTJwxXmc",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzU0NjI4MSwiZXhwIjoxNjI0MTUxMDgxLCJpYXQiOjE2MjM1NDYyODF9.m13k9zu5PBwB92rbqUdOBl7Mlb4jnmzPucrBPXUMafU",
       "Content-Type": "application/json",
       Origin: "",
     },
@@ -80,7 +91,9 @@ function setReceivingPurchaseOrderQuantity(action) {
     .then((response) => handleApiErrors(response))
     .then((response) => response.json())
     .then((json) => json)
-    .catch((error) => {});
+    .catch((error) => {
+      throw error;
+    });
 }
 
 function* getListPurchaseOrderFlow() {
@@ -105,7 +118,7 @@ function* getDetailsPOFlow(action) {
 function* setReceivingPurchaseOrderQuantityFlow(action) {
   try {
     let json = yield call(setReceivingPurchaseOrderQuantity, action);
-
+    console.log(json);
     yield put({ type: SEND_CREATING_GOODS_RECEIPT_RESPONSE, json });
   } catch (error) {
     yield put({ type: SEND_CREATING_GOODS_RECEIPT_ERROR });

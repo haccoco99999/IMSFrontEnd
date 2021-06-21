@@ -7,16 +7,30 @@ import "./good-receipt-manager.css";
 
 //component
 import ListReceiptTable from "../../table-receipt/ListReceiptsTable";
-import searchGoodsReceipt from "./action";
+import { searchGoodsReceiptAction } from "./action";
 
 export default function GoodsReceipt() {
   let history = useHistory();
-  //let location = useLocation();
   let dispatch = useDispatch();
 
   let list_goods_receipt = useSelector(
     (state) => state.getGoodsReceiptReducer.listGoodsReceipt
   );
+
+  let pageCount = useSelector(
+    (state) => state.getGoodsReceiptReducer.pageCount
+  );
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(5);
+
+  // const [listValueColumn, setListValueColumn] = useState([
+  //   { purchaseOrderId: "Purchase Order ID" },
+  //   { createdDate: "Create Date" },
+  //   { supplierName: "Supplier Name" },
+  //   { createdBy: "Created By" },
+  //   { id: "Goods Receipt ID" },
+  // ]);
 
   const [listValueColumn, setListValueColumn] = useState({
     purchaseOrderId: true,
@@ -31,23 +45,30 @@ export default function GoodsReceipt() {
   });
 
   useEffect(() => {
-    dispatch(searchGoodsReceipt());
-  }, []);
+    console.log("CurrentPage", currentPage);
+    dispatch(
+      searchGoodsReceiptAction({
+        currentPage: currentPage,
+        sizePerPage: sizePerPage,
+      })
+    );
+  }, [currentPage, sizePerPage]);
 
   function handleClick() {
     history.push("/homepage/good-receipt/create-goods-receipt");
   }
 
-  // function goBackClick() {
-  //   history.goBack();
-  // }
-
   function nextPagingClick() {
-    
     console.log("forward");
+    setCurrentPage(currentPage + 1);
   }
   function backPagingClick() {
     console.log("backWard");
+    setCurrentPage(currentPage - 1);
+  }
+
+  function onClickToDetails(row) {
+    history.push("/homepage/good-receipt/details", { goodsreceiptId: row.id, fromPage:"ManagerPage" });
   }
 
   return (
@@ -123,7 +144,7 @@ export default function GoodsReceipt() {
             Filter
           </a>
         </div>
-        {/* console.log("GOodsReceiptList", list_goods_receipt); */}
+
         <div className="mt-3">
           <ListReceiptTable
             listHeaderEdit={listEditHeader}
@@ -132,6 +153,10 @@ export default function GoodsReceipt() {
             // onRowClick={}
             backPagingClick={backPagingClick}
             nextPagingClick={nextPagingClick}
+            sizePerPage={sizePerPage}
+            currentPage={currentPage}
+            pageCount={pageCount}
+            onRowClick={onClickToDetails}
           />
         </div>
       </div>
