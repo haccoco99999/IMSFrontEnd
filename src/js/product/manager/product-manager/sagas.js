@@ -10,7 +10,7 @@ import {
 import handleApiErrors from "../../../auth/api-errors";
 
 const getAllProductsURL =
-  "https://imspublicapi.herokuapp.com/api/product/search/all&page=1&size=5";
+  "https://imspublicapi.herokuapp.com/api/product/category?CurrentPage=1&SizePerPage=5";
 
 function getAllProducts() {
   return fetch(getAllProductsURL, {
@@ -18,7 +18,7 @@ function getAllProducts() {
     headers: {
       Authorization:
         "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyMzk2MDEzOSwiZXhwIjoxNjI0NTY0OTM5LCJpYXQiOjE2MjM5NjAxMzl9.RZiTcJ-QV0XBtSkgfT2R2Nvv4HaKrqFps5qtmTry5VU",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyNDU0NzQzMSwiZXhwIjoxNjI0NzIwMjMxLCJpYXQiOjE2MjQ1NDc0MzF9.3WQh0R850BrprGEoaulVtsilSkLA0BEqndgm_aVo7xo",
       "Content-Type": "application/json",
       Origin: "",
     },
@@ -28,7 +28,7 @@ function getAllProducts() {
     .then((response) => response.json())
     .then((json) => json)
     .catch((error) => {
-      // console.error(error);
+      throw error
     });
 }
 

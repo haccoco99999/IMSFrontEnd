@@ -5,12 +5,17 @@ import { useHistory, useLocation } from "react-router-dom";
 import "../sale-man.css";
 
 import Table from "../../list-products-table/ListProductsTable";
-import { getPRDetailsAction } from "./action";
+import { getPRDetailsAction, submitAction } from "./action";
 
 export default function details() {
   let history = useHistory();
   let dispatch = useDispatch();
   let location = useLocation();
+  const [isFromManagerPage, setIsFromManagerPage] = useState(true);
+
+  const message = useSelector(
+    (state) => state.getDetailsPurchaseRequisitionReducer.messages
+  );
 
   const [listValueColumn, setListColumn] = useState([
     {
@@ -41,7 +46,7 @@ export default function details() {
     })
   );
 
-  const [cleanJson, setCleanJson] = useState();
+  const [cleanJson, setCleanJson] = useState([]);
 
   const [returnData, setReturnData] = useState(false);
 
@@ -49,22 +54,53 @@ export default function details() {
     history.goBack();
   }
 
+  function goToManagerPage() {
+    history.push("/homepage/sale-man/");
+  }
+
+  function onSubmitClick(event) {
+    event.preventDefault();
+    dispatch(submitAction({ id: location.state.purchaseRequisitionId }));
+  }
+
   useEffect(() => {
     dispatch(getPRDetailsAction({ id: location.state.purchaseRequisitionId }));
+    // check tu page nao toi
+
+    if (location.state.fromPage !== "ManagerPage") {
+      setIsFromManagerPage(false);
+    }
   }, []);
 
   useEffect(() => {
     if (listGetProducts !== null) {
-      setCleanJson(
-        listGetProducts.map((product) => {
-          product.name = product.productVariant.name;
-          delete product["productVariant"];
-          return product;
-        })
-      );
+      if (listGetProducts !== []) {
+        setCleanJson(
+          listGetProducts.map((product) => {
+            product.name = product.productVariant.name;
+            delete product["productVariant"];
+            return product;
+          })
+        );
+      }
+
       setReturnData(true);
     }
   }, [listGetProducts]);
+
+  useEffect(() => {
+    console.log("okkkkkkk");
+    if (message === "Submit Success") {
+      dispatch(
+        getPRDetailsAction({ id: location.state.purchaseRequisitionId })
+      );
+      // history.push("/homepage/sale-man/details", {
+      //   fromPage: "DetailsPage",
+      //   purchaseRequisitionId: location.state.purchaseRequisitionId,
+      // });
+    }
+  }, [message]);
+
   console.log("LIST", cleanJson);
 
   return (
@@ -75,15 +111,34 @@ export default function details() {
         {/* todo: task heading */}
         <div className=" tab-fixed container-fluid  fixed-top">
           <div className=" d-flex mb-3 justify-content-end mt-4 ">
-            <a className="me-2" onClick={goBackClick}>
-              <h3>Back</h3>
-            </a>
+            {isFromManagerPage ? (
+              <a className="me-2" onClick={goBackClick}>
+                <h3>Back</h3>
+              </a>
+            ) : (
+              <a className="me-2" onClick={goToManagerPage}>
+                <h3>ManagerPage</h3>
+              </a>
+            )}
+
             <div class="me-auto">
               <h2 class="id-color fw-bold">
                 {location.state.purchaseRequisitionId}
               </h2>
               <div class="form-text id-color">{status}</div>
             </div>
+            {status !== "0" && (
+              <div>
+                <button
+                  type="button"
+                  onClick={onSubmitClick}
+                  className="btn btn-primary me-3 text-white button-tab "
+                >
+                  Submit
+                </button>
+              </div>
+            )}
+
             {/* <div>
           <button className="btn btn-danger button-tab me-3 text-white">
             Reject
@@ -96,6 +151,7 @@ export default function details() {
           >
             Adjust Inventory
           </button>
+
         </div> */}
           </div>
         </div>
@@ -130,12 +186,9 @@ export default function details() {
             </div>
           </div>
         </div>
-
-        {returnData && (
-          <div className="wrapper-content shadow mt-3">
-            <Table listColumn={listValueColumn} listData={cleanJson} />
-          </div>
-        )}
+        <div className="wrapper-content shadow mt-3">
+          <Table listColumn={listValueColumn} listData={cleanJson} />
+        </div>
       </div>
     </div>
   );

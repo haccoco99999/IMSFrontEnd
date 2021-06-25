@@ -5,7 +5,7 @@ import "../../product.css";
 
 //components
 import NewCategory from "./create-new-category";
-import {GetAllCategoryAction} from "./action";
+import { GetAllCategoryAction } from "./action";
 import Table from "../../../table-receipt/ListReceiptsTable";
 
 export default function () {
@@ -52,14 +52,13 @@ export default function () {
         </a>
       </div>
 
-        <div className="mt-3">
-          <Table
-            listHeaderEdit={listEditHeader}
-            listColumn={listValueColumn}
-            listData={list_Categories}
-          />
-        </div>
-
+      <div className="mt-3">
+        <Table
+          listHeaderEdit={listEditHeader}
+          listColumn={listValueColumn}
+          listData={list_Categories}
+        />
+      </div>
 
       {/* <div className="d-flex justify-content-center">
         <div className="wrapper-table">

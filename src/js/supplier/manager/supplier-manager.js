@@ -1,13 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 //css
 import "../supplier.css";
+//component
+import ListReceiptTable from "../../table-receipt/ListReceiptsTable";
+import { getAllSuppliersAction } from "./action";
+
 export default function () {
   let history = useHistory();
+  let dispatch = useDispatch();
+  
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(5);
+
+  const [listValueColumn, setListValueColumn] = useState({
+    supplierName: true,
+    email: true,
+    phoneNumber: true,
+  });
+
+  const [listEditHeader, setListEditHeader] = useState({
+    // id: "Goods Receipt ID",
+  });
+
+  const { listData, pageCount } = useSelector((state) => ({
+    listData: state.getAllSuppliersReducer.listSuppliers,
+    pageCount: state.getAllSuppliersReducer.pageCount,
+  }));
 
   function pushAddPage() {
     history.push("/homepage/supplier/create");
   }
+
+  function nextPagingClick() {
+    console.log("forward");
+    setCurrentPage(currentPage + 1);
+  }
+
+  function backPagingClick() {
+    console.log("backWard");
+    setCurrentPage(currentPage - 1);
+  }
+  function onClickToDetails(row) {
+    history.push("/homepage/supplier/details", {
+      supplierName: row.supplierName,
+    });
+  }
+
+  useEffect(() => {
+    dispatch(
+      getAllSuppliersAction({
+        currentPage: currentPage,
+        sizePerPage: sizePerPage,
+      })
+    );
+  }, [currentPage, sizePerPage]);
 
   return (
     <div className="space-top-heading">
@@ -82,6 +131,19 @@ export default function () {
             </svg>
             Filter
           </a>
+        </div>
+        <div className="mt-3">
+          <ListReceiptTable
+            listHeaderEdit={listEditHeader}
+            listColumn={listValueColumn}
+            listData={listData}
+            backPagingClick={backPagingClick}
+            nextPagingClick={nextPagingClick}
+            sizePerPage={sizePerPage}
+            currentPage={currentPage}
+            pageCount={pageCount}
+            onRowClick={onClickToDetails}
+          />
         </div>
       </div>
     </div>

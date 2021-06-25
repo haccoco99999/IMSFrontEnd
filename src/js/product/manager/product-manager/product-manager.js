@@ -17,9 +17,9 @@ export default function () {
     (state) => state.getAllProductsReducer.listProducts
   );
 
-  useEffect(() => {
-    dispatch(Action());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(Action());
+  // }, []);
 
   const [listValueColumn, setListValueColumn] = useState({
     productId: true,

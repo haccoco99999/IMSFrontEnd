@@ -12,7 +12,11 @@ import getAllProducts from "./product/manager/product-manager/sagas";
 import getAllCategories from "./product/manager/category-manager/sagas";
 import getGoodsReceiptDetails from "./good-receipt/details/sagas";
 import getAllPurchaseRequisition from "./sale-man/manager/sagas";
-import getDetailsPurchaseRequisition from "./sale-man/details/sagas"
+import getDetailsPurchaseRequisition from "./sale-man/details/sagas";
+import getAllSuppliers from "./supplier/manager/sagas";
+import getDetailsSupplier from "./supplier/details/sagas";
+import getCreatedFormPurchaseRequisition from "./sale-man/create/sagas";
+import createProduct from "./product/create/sagas"
 import { all } from "@redux-saga/core/effects";
 export default function* IndexSaga() {
   yield all([
@@ -29,6 +33,10 @@ export default function* IndexSaga() {
     getAllCategories(),
     getAllProducts(),
     getGoodsReceiptDetails(),
-    getAllPurchaseRequisition(),getDetailsPurchaseRequisition()
+    getAllPurchaseRequisition(),
+    getDetailsPurchaseRequisition(),
+    getAllSuppliers(),
+    getDetailsSupplier(),
+    getCreatedFormPurchaseRequisition(),createProduct()
   ]);
 }

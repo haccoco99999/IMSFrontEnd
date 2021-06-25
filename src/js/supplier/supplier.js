@@ -6,7 +6,7 @@ import "./supplier.css";
 
 //component
 import Empty from "./empty";
-// import Details from "./details";
+import Details from "./details/supplier-details";
 import Create from "./create/create";
 import Manager from "./manager/supplier-manager";
 export default function () {
@@ -22,6 +22,10 @@ export default function () {
           </Route>
           <Route path="/homepage/supplier/create">
             <Create />
+          </Route>
+
+          <Route path="/homepage/supplier/details">
+            <Details />
           </Route>
         </Switch>
 

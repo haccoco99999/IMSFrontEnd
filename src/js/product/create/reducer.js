@@ -1,10 +1,10 @@
 import {
-  GET_DETAILS_PR_REQUEST,
-  GET_DETAILS_PR_RESPONSE,
-  GET_DETAILS_PR_ERROR,
-  SUBMIT_REQUEST,
-  SUBMIT_RESPONSE,
-  SUBMIT_ERROR,
+  CREATE_PRODUCT_REQUEST,
+  CREATE_PRODUCT_RESPONSE,
+  CREATE_PRODUCT_ERROR,
+  GET_ALL_CATEGORY_CREATED_RESPONSE,
+  GET_ALL_CATEGORY_CREATED_REQUEST,
+  GET_ALL_CATEGORY_CREATED_ERROR,
 } from "./constants";
 
 const initialState = {
@@ -12,20 +12,12 @@ const initialState = {
   successful: false,
   messages: "",
   errors: "",
-
-  purchaseRequisitionDetails: {
-    supplier: {},
-    purchaseOrderProduct: null,
-    transaction: {
-      createdBy: {},
-      createdDate: "",
-    },
-  },
+  listCategories: [],
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case GET_DETAILS_PR_REQUEST:
+    case CREATE_PRODUCT_REQUEST:
       return {
         ...state,
         requesting: true,
@@ -34,17 +26,16 @@ export default function reducer(state = initialState, action) {
         errors: "",
       };
 
-    case GET_DETAILS_PR_RESPONSE:
+    case CREATE_PRODUCT_RESPONSE:
       return {
         ...state,
         requesting: false,
         successful: true,
         messages: "",
         errors: "",
-        purchaseRequisitionDetails: action.json.purchaseOrder,
       };
 
-    case GET_DETAILS_PR_ERROR:
+    case CREATE_PRODUCT_ERROR:
       return {
         ...state,
         requesting: false,
@@ -53,29 +44,34 @@ export default function reducer(state = initialState, action) {
         errors: "",
       };
 
-    case SUBMIT_REQUEST:
+    case GET_ALL_CATEGORY_CREATED_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
         errors: "",
+        listCategories: [],
       };
-    case SUBMIT_RESPONSE:
+
+    case GET_ALL_CATEGORY_CREATED_RESPONSE:
       return {
         ...state,
         requesting: false,
         successful: true,
-        messages: "Submit Success",
+        messages: "",
         errors: "",
+        listCategories: action.json.categories,
       };
-    case SUBMIT_ERROR:
+
+    case GET_ALL_CATEGORY_CREATED_ERROR:
       return {
         ...state,
         requesting: false,
         successful: false,
         messages: "",
         errors: "",
+        listCategories: [],
       };
 
     default:

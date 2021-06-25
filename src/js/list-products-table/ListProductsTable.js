@@ -62,7 +62,7 @@ export default function ListProductsTable(props) {
 
   return (
     <div className="list-receipt-table-container">
-      <div class="form-group search-purchase">
+      {/* <div class="form-group search-purchase">
         <img src="..\src\js\images\search.svg" alt="icon-search" />
         <input
           name="keySearch"
@@ -70,7 +70,7 @@ export default function ListProductsTable(props) {
           class="form-control"
           placeholder="Search by Order ID or Supplier Name"
         />
-      </div>
+      </div> */}
 
       <table class="table table-hover table-customize">
         <thead>

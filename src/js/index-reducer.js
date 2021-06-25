@@ -17,6 +17,10 @@ import getAllProductsReducer from "./product/manager/product-manager/reducer";
 import getGoodsReceiptDetailsReducer from "./good-receipt/details/reducer";
 import getAllPurchaseRequisitionReducer from "./sale-man/manager/reducer";
 import getDetailsPurchaseRequisitionReducer from "./sale-man/details/reducer";
+import getAllSuppliersReducer from "./supplier/manager/reducer";
+import getDetailsSupplierReducer from "./supplier/details/reducer";
+import getCreatedFormPurchaseRequisitionReducer from "./sale-man/create/reducer";
+import createProductReducer from './product/create/reducer';
 const IndexReducer = combineReducers({
   login,
   client,
@@ -35,6 +39,10 @@ const IndexReducer = combineReducers({
   getGoodsReceiptDetailsReducer,
   getAllPurchaseRequisitionReducer,
   getDetailsPurchaseRequisitionReducer,
+  getAllSuppliersReducer,
+  getDetailsSupplierReducer,
+  getCreatedFormPurchaseRequisitionReducer,
+  createProductReducer
 });
 
 export default IndexReducer;

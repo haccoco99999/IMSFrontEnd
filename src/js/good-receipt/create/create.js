@@ -29,18 +29,7 @@ export default function () {
   const [isChange, setIsChange] = useState(false);
   const [storageLocation, setStorageLocation] = useState("");
 
-  // const [purchasedOrderGoodsReceive, setPurchasedOrderGoodsReceive] = useState(
-  //   []
-  // );
-
-  // const [fakeData, setFakeData] = useState({
-  //   purchaseOrderNumber: formData.orderid,
-  //   storageLocation: storageLocation,
-  //   updateItems: list_BuyingProduct
-  // });
-
-
-
+ 
   const list_ConfirmPurchaseOrderID = useSelector(
     (state) =>
       state.getAllConfirmedPurchaseOrderReducer.listConfirmedPurchaseOrder

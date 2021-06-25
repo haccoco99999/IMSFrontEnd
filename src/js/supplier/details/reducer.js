@@ -1,51 +1,49 @@
 import {
-  GET_ALL_PRODUCTS_REQUEST,
-  GET_ALL_PRODUCTS_RESPONSE,
-  GET_ALL_PRODUCTS_ERROR,
-} from "../../constants";
+  GET_DETAILS_SUPPLIER_REQUEST,
+  GET_DETAILS_SUPPLIER_RESPONSE,
+  GET_DETAILS_SUPPLIER_ERROR,
+} from "./constants";
 
 const initialState = {
   requesting: false,
   successful: false,
   messages: "",
   errors: "",
-  listProducts: [],
+  supplierDetails: {},
 };
 
-export default function reducer(state = initialState, action) {
+const reducer = function GoodsReceiptReducer(state = initialState, action) {
   switch (action.type) {
-    case GET_ALL_PRODUCTS_REQUEST:
+    case GET_DETAILS_SUPPLIER_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
         errors: "",
-       
+        supplierDetails: {},
       };
-
-    case GET_ALL_PRODUCTS_RESPONSE:
-      console.log(action.json)
+    case GET_DETAILS_SUPPLIER_RESPONSE:
       return {
         ...state,
         requesting: false,
         successful: true,
         messages: "",
         errors: "",
-        listProducts: action.json.paging.resultList,
+        supplierDetails: action.json.paging.resultList[0],
       };
-
-    case GET_ALL_PRODUCTS_ERROR:
+    case GET_DETAILS_SUPPLIER_ERROR:
       return {
         ...state,
-
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
-        
+        errors: "error",
+        supplierDetails: {},
       };
     default:
       return state;
   }
-}
+};
+
+export default reducer;

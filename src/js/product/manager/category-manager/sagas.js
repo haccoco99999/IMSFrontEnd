@@ -5,77 +5,49 @@ import {
   GET_ALL_CATEGORY_REQUEST,
   GET_ALL_CATEGORY_RESPONSE,
   GET_ALL_CATEGORY_ERROR,
-  GET_ALL_CATEGORY_CREATE_PAGE_REQUEST,
-  GET_ALL_CATEGORY_CREATE_PAGE_RESPONSE,
 } from "../../constants";
 
 import handleApiErrors from "../../../auth/api-errors";
 
 const getAllCategoryURL =
-  "https://imspublicapi.herokuapp.com/api/product/category/page=1&size=5";
+  "https://imspublicapi.herokuapp.com/api/product/category?CurrentPage=1&SizePerPage=5";
 
 const getAllCategoryCreatedPageURL =
-  "https://imspublicapi.herokuapp.com/api/product/category/page=1&size=1000";
+  "https://imspublicapi.herokuapp.com/api/product/category?CurrentPage=1&SizePerPage=1000";
 
-function getAllCategory() {
-  return fetch(getAllCategoryURL, {
-    method: "GET",
-    headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyMzk2MDEzOSwiZXhwIjoxNjI0NTY0OTM5LCJpYXQiOjE2MjM5NjAxMzl9.RZiTcJ-QV0XBtSkgfT2R2Nvv4HaKrqFps5qtmTry5VU",
-      "Content-Type": "application/json",
-      Origin: "",
-    },
-    credentials: "include",
-  })
-    .then((response) => handleApiErrors(response))
-    .then((response) => response.json())
-    .then((json) => json)
-    .catch((error) => {
-      // console.error(error);
-    });
-}
-
-function getAllCategoryCreatedPage() {
-  return fetch(getAllCategoryCreatedPageURL, {
-    method: "GET",
-    headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyMzk2MDEzOSwiZXhwIjoxNjI0NTY0OTM5LCJpYXQiOjE2MjM5NjAxMzl9.RZiTcJ-QV0XBtSkgfT2R2Nvv4HaKrqFps5qtmTry5VU",
-      "Content-Type": "application/json",
-      Origin: "",
-    },
-    credentials: "include",
-  })
-    .then((response) => handleApiErrors(response))
-    .then((response) => response.json())
-    .then((json) => json)
-    .catch((error) => {
-      // console.error(error);
-    });
-}
-
-function* getFlow(action) {
-  try {
-    
-      let json = yield call(getAllCategory);
-      // console.log("JSON", json);
-      yield put({ type: GET_ALL_CATEGORY_RESPONSE, json });
-  
-  } catch (error) {
-    console.log(error);
-    yield put({ type: GET_ALL_CATEGORY_ERROR });
+function getAllCategory(action) {
+  var url;
+  console.log(action.page);
+  if (action.page == "manager") {
+    url = getAllCategoryURL;
+  } else {
+    url = getAllCategoryCreatedPageURL;
   }
+  return fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization:
+        "Bearer " +
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyNDU0NzQzMSwiZXhwIjoxNjI0NzIwMjMxLCJpYXQiOjE2MjQ1NDc0MzF9.3WQh0R850BrprGEoaulVtsilSkLA0BEqndgm_aVo7xo",
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      // console.error(error);
+      throw error;
+    });
 }
 
-
-function* getCreateCategoryFlow(){
+function* getAllCategoryFlow(action) {
   try {
-    let json = yield call(getAllCategoryCreatedPage);
-      // console.log("JSON", json);
-      yield put({ type: GET_ALL_CATEGORY_CREATE_PAGE_RESPONSE, json });
+    let json = yield call(getAllCategory, action);
+    // console.log("JSON", json);
+    yield put({ type: GET_ALL_CATEGORY_RESPONSE, json });
   } catch (error) {
     console.log(error);
     yield put({ type: GET_ALL_CATEGORY_ERROR });
@@ -83,8 +55,7 @@ function* getCreateCategoryFlow(){
 }
 
 function* watcher() {
-  yield takeEvery(GET_ALL_CATEGORY_REQUEST, getFlow);
-  yield takeEvery(GET_ALL_CATEGORY_CREATE_PAGE_REQUEST,getCreateCategoryFlow)
+  yield takeEvery(GET_ALL_CATEGORY_REQUEST, getAllCategoryFlow);
 }
 
 export default watcher;

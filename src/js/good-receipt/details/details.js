@@ -78,6 +78,10 @@ export default function details() {
     history.push("/homepage/good-receipt/");
   }
 
+  // function onClickSubmit(){
+  //   history.push('')
+  // }
+
   return (
     <div>
       {/* todo: task heading */}
@@ -89,15 +93,9 @@ export default function details() {
           <div className=" d-flex  mb-3 justify-content-start mt-4 ">
             {/* testing */}
 
-            {isFromManagerPage ? (
-              <a className="me-2" onClick={goBackClick}>
-                <h3>Back</h3>
-              </a>
-            ) : (
-              <a className="me-2" onClick={goToManagerPage}>
-                <h3>HomePage</h3>
-              </a>
-            )}
+            <a className="me-2" onClick={goBackClick}>
+              <h3>Back</h3>
+            </a>
           </div>
         </div>
       </div>

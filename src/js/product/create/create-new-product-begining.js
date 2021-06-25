@@ -6,11 +6,10 @@ import { useSelector, useDispatch } from "react-redux";
 import "../product.css";
 
 //components
-import CreateNoVariants from "./create-no-variants/create-no-variants";
-import CreateWithVariants from "./create-with-variants/create-with-variants";
 
 //Category
-import { GetAllCategoryCreatePageAction } from "../manager/category-manager/action";
+//import { GetAllCategoryAction } from "../manager/category-manager/action";
+import { getCategoriesAllAction } from "./action";
 
 const formReducer = (state, event) => {
   return {
@@ -20,50 +19,90 @@ const formReducer = (state, event) => {
 };
 
 export default function () {
-  const [formData, setFormData] = useReducer(formReducer, {});
-
-  const [categorySelected, setCategorySelected] = useState({});
-  const [isVariant, setIsVariant] = useState(false);
-
-  const { isDefaultPage, setIsDefaultPage } = useState(true);
-
   let history = useHistory();
   let dispatch = useDispatch();
 
-  const list_Categories = useSelector(
-    (state) => state.getAllCategoriesReducer.listCategories
+  const [formData, setFormData] = useReducer(formReducer, {});
+  const [categorySelected, setCategorySelected] = useState({});
+  const [isVariant, setIsVariant] = useState(false);
+  const [variantValues, setVariantValues] = useState([{}]);
+
+  const onChangeValue = (event) => {
+    setVariantValues(
+      variantValues.map((element, index) =>
+        index == event.target.id
+          ? {
+              ...element,
+              [event.target.name]: event.target.value,
+            }
+          : element
+      )
+    );
+  };
+
+  const listCategoriesStore = useSelector(
+    (state) => state.createProductReducer.listCategories
   );
 
-  function goBackClick(event) {
-    //event.preventDefault();
-
+  function goBackClick() {
     history.goBack();
   }
 
-  function onClickAddValueButton(event) {
-    //event.preventDefault();
-
-    //test thoi nhe
-    setIsDefaultPage(false);
-    //etIsVariant(true);
+  function onClickContinue() {
+    if (isVariant) {
+      history.push("/homepage/product/create/variants", {
+        formData: formData,
+        categorySelected: categorySelected,
+        variantValues: variantValues,
+      });
+    } else
+      history.push("/homepage/product/create/novariants", {
+        formData: formData,
+        categorySelected: categorySelected,
+      });
   }
 
   const handleChangeValue = (event) => {
     event.preventDefault();
-    // setIsChange(true);
+
     setFormData({
       name: event.target.name,
       value: event.target.value,
     });
-    // dispatch(getConfirmedPODetailsAction({ id: event.target.value }));
+  };
+
+  const handleChangeCategory = (e) => {
+    // event.preventDefault();
+    const index = e.target.selectedIndex;
+    const el = e.target.childNodes[index];
+
+    // console.log(event.target.id);
+    setCategorySelected({
+      id: el.getAttribute("id"),
+      name: el.getAttribute("value"),
+    });
+    console.log(categorySelected);
+  };
+
+  const onChangeFormVariants = (event) => {
+    setIsVariant(!isVariant);
+    // console.log([...Array(count)]);
+  };
+
+  function addAttribute() {
+    setVariantValues((state) => [...state, { attribute: "", value: "" }]);
+  }
+
+  const deleteVarriant = (index) => {
+    console.log(index);
+    setVariantValues((state) => state.filter((_, i) => i !== index));
   };
 
   useEffect(() => {
-    dispatch(GetAllCategoryCreatePageAction());
+    dispatch(getCategoriesAllAction());
   }, []);
 
   return (
-    // <CreateWithVariants />
     <div className="home_content ">
       {/* todo: task heading */}
       <div className=" tab-fixed container-fluid  fixed-top">
@@ -74,273 +113,198 @@ export default function () {
           </a>
           <h2 className="id-color fw-bold me-auto">Create new Product</h2>
           <div>
-            <button className="btn btn-default button-tab">Cancel</button>
-            <button className="btn btn-primary button-tab me-3 text-white">
-              Save
-            </button>
-            <button className="btn btn-warning button-tab me-3 text-white">
-              Add Value
+            <button
+              type="button"
+              className="btn btn-warning button-tab me-3 text-white"
+              onClick={onClickContinue}
+            >
+              Continue
             </button>
           </div>
         </div>
       </div>
-      {/* content */}
 
-        <div className="wrapper space-top">
-          {/* content 1 */}
-          <div className="wrapper-content shadow">
-            <div className="title-heading mt-2">
-              <span>Product Details</span>
-            </div>
-            <form>
-              <div class="mb-3">
-                <div class="row g-3 align-items-center">
-                  <div class="col">
-                    <label for="name" class="col-form-label">
-                      Product Name
-                    </label>{" "}
-                    <input
-                      type="text"
-                      id="name"
-                      class="form-control"
-                      placeholder="Write product name here"
-                      name="name"
-                      value={formData.name || ""}
-                      onChange={handleChangeValue}
-                      //aria-describedby="passwordHelpInline"
-                    />
-                  </div>
-                  <div class="col-auto">
-                    <label for="barcode" class="col-form-label">
-                      Barcode
-                    </label>{" "}
-                    <input
-                      name="barcode"
-                      value={formData.barcode || ""}
-                      onChange={handleChangeValue}
-                      type="tel"
-                      id="barcode"
-                      class="form-control"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <div class="row g-3 align-items-center">
-                  <div class="col">
-                    <label for="category" class="col-form-label">
-                      Category
-                    </label>{" "}
-                    <select
-                      name="categoryID"
-                      class="form-select"
-                      aria-label="Default select example"
-                      value={formData.categoryID || ""}
-                      onChange={handleChangeValue}
-                    >
-                      <option value="" disabled>
-                        -- No Selected --
-                      </option>
-
-                      {list_Categories.map((category) => {
-                        setCategorySelected({
-                          id: category.id,
-                          name: category.categoryName,
-                        });
-                        <option value={category.id}>
-                          {category.categoryName}
-                        </option>;
-                      })}
-
-                      {/* <option>
-                      <a
-                        class="btn btn-default me-md-2 add"
-                        // data-bs-target="#NewCategoryModal"
-                        // data-bs-toggle="modal"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
-                          fill="currentColor"
-                          class="bi bi-plus-lg"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
-                        </svg>
-                        Add new attribute
-                      </a>
-                    </option> */}
-                    </select>
-                  </div>
-                  <div class="col-auto">
-                    <label for="brand" class="col-form-label">
-                      Brand
-                    </label>{" "}
-                    <input
-                      name="brand"
-                      type="string"
-                      id="brand"
-                      class="form-control"
-                      value={formData.brand || ""}
-                      onChange={handleChangeValue}
-                      // aria-describedby="passwordHelpInline"
-                    />
-                  </div>
-                  <div class="col-auto">
-                    <label for="unit" class="col-form-label">
-                      Unit
-                    </label>{" "}
-                    <input
-                      name="unit"
-                      type="number"
-                      id="unit"
-                      class="form-control"
-                      value={formData.unit || ""}
-                      onChange={handleChangeValue}
-                    />
-                  </div>
-                </div>
-              </div>
-            </form>
+      <div className="wrapper space-top">
+        {/* content 1 */}
+        <div className="wrapper-content shadow">
+          <div className="title-heading mt-2">
+            <span>Product Details</span>
           </div>
-
-          {/* content 2 */}
-          <div className="wrapper-content shadow mt-3">
-            <form>
-              <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="variants" />
-                <label class="form-check-label" for="variants">
-                  Products has many attributes.
-                </label>
-                <div id="checkBoxHelp" class="form-text">
-                  Product variants are used to manage products having different
-                  variants like size, color,...
-                </div>
-              </div>
-
-              {/* <div class="mb-3">
+          <form>
+            <div class="mb-3">
               <div class="row g-3 align-items-center">
-                <div class="col-auto">
-                  <label for="attribute" class="col-form-label">
-                    Attribute
+                <div class="col">
+                  <label for="name" class="col-form-label">
+                    Product Name
                   </label>{" "}
                   <input
                     type="text"
-                    id="attribute"
+                    id="name"
                     class="form-control"
-                    placeholder="Ex: Size, Color, Storage,etc"
-                    //aria-describedby="passwordHelpInline"
-                  />
-                </div>
-                <div class="col">
-                  <label for="value" class="col-form-label">
-                    Value
-                  </label>{" "}
-                  <input
-                    type="tel"
-                    id="value"
-                    class="form-control"
-                    placeholder="Ex: S, M, L, Pink, etc"
-
-                    // aria-describedby="passwordHelpInline"
+                    placeholder="Write product name here"
+                    name="name"
+                    value={formData.name || ""}
+                    onChange={handleChangeValue}
                   />
                 </div>
               </div>
             </div>
+
             <div class="mb-3">
-              <a
-                class="btn btn-default me-md-2 add"
-                // data-bs-target="#NewCategoryModal"
-                // data-bs-toggle="modal"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  class="bi bi-plus-lg"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
-                </svg>
-                Add new attribute
-              </a>
-            </div> */}
-            </form>
-          </div>
+              <div class="row g-3 align-items-center">
+                <div class="col">
+                  <label for="category" class="col-form-label">
+                    Category
+                  </label>{" "}
+                  <select
+                    name="categoryID"
+                    class="form-select"
+                    aria-label="Default select example"
+                    defaultValue=""
+                    onChange={handleChangeCategory}
+                  >
+                    <option value="" disabled>
+                      -- No Selected --
+                    </option>
+
+                    {listCategoriesStore.map((category) => (
+                      <option id={category.id} value={category.categoryName}>
+                        {category.categoryName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div class="col-auto">
+                  <label for="brand" class="col-form-label">
+                    Brand
+                  </label>{" "}
+                  <input
+                    name="brand"
+                    type="string"
+                    id="brand"
+                    class="form-control"
+                    value={formData.brand || ""}
+                    onChange={handleChangeValue}
+                  />
+                </div>
+                <div class="col-auto">
+                  <label for="unit" class="col-form-label">
+                    Unit
+                  </label>{" "}
+                  <input
+                    name="unit"
+                    type="text"
+                    id="unit"
+                    class="form-control"
+                    value={formData.unit || ""}
+                    onChange={handleChangeValue}
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
- 
+        {/* content 2 */}
+        <div className="wrapper-content shadow mt-3">
+          <form>
+            <div class="mb-3 form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="variants"
+                defaultChecked={isVariant}
+                onClick={onChangeFormVariants}
+              />
+              <label class="form-check-label" for="variants">
+                Products has many attributes.
+              </label>
+              <div id="checkBoxHelp" class="form-text">
+                Product variants are used to manage products having different
+                variants like size, color,...
+              </div>
+            </div>
+
+            {isVariant && (
+              <>
+                <div class="mb-3">
+                  <a
+                    class="btn btn-default me-md-2 add"
+                    // data-bs-target="#NewCategoryModal"
+                    // data-bs-toggle="modal"
+                    onClick={() => addAttribute()}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      fill="currentColor"
+                      class="bi bi-plus-lg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
+                    </svg>
+                    Add new attribute
+                  </a>
+                </div>
+
+                <ComponentsCheckVariant
+                  dataAtrribute={variantValues}
+                  onChangeValue={onChangeValue}
+                  deleteVarriant={deleteVarriant}
+                />
+              </>
+            )}
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
 
-// function NoVariants(props) {
-//   const [formData, setFormData] = useReducer(formReducer, {});
+function ComponentsCheckVariant(props) {
+  return (
+    <>
+      {props.dataAtrribute.map((element, index) => (
+        <div class="mb-3">
+          <form>
+            <div class="row g-3 align-items-center">
+              <p onClick={() => props.deleteVarriant(index)}>Delete</p>
+              <div class="col-auto">
+                <label for="attribute" class="col-form-label">
+                  Attribute
+                </label>{" "}
+                <input
+                  type="text"
+                  id={index}
+                  name="attribute"
+                  class="form-control"
+                  value={element.attribute}
+                  placeholder="Ex: Size, Color, Storage,etc"
+                  onChange={props.onChangeValue}
+                />
+              </div>
+              <div class="col">
+                <label for="value" class="col-form-label">
+                  Value
+                </label>{" "}
+                <input
+                  name="value"
+                  type="tel"
+                  id={index}
+                  value={element.value}
+                  class="form-control"
+                  placeholder="Ex: S, M, L, Pink, etc"
+                  onChange={props.onChangeValue}
+                />
+              </div>
+            </div>
+          </form>
+        </div>
+      ))}
+    </>
+  );
+}
 
-//   return (
-//     <div className="wrapper space-top">
-//       {/* show product details */}
-//       {/* <h2 className="id-color fw-bold mb-3">Dell monitor 27" U2720DE</h2> */}
-//       <div class="d-flex justify-content-around  mb-3">
-//         <div>
-//           <h5>Product Name</h5>
-//           <h5 className="id-color">{formData.name}</h5>
-//         </div>
-//         <div>
-//           <h5>Barcode</h5>
-//           <h5 className="id-color"> {formData.barcode}</h5>
-//         </div>
-//         <div>
-//           <h5>Category</h5>
-//           <h5 className="id-color">{formData.categoryID}</h5>
-//         </div>
-//         <div>
-//           <h5>Brand</h5>
-//           <h5 className="id-color">{formData.brand}</h5>
-//         </div>
-//       </div>
-
-//       {/* content  */}
-
-//       <div className="wrapper-content shadow">
-//         <form>
-//           <div class="mb-3">
-//             <label for="sku" class="col-form-label">
-//               SKU
-//             </label>{" "}
-//             <input type="text" id="sku" class="form-control" />
-//           </div>
-//           <div class="mb-3">
-//             <div class="row g-3 align-items-center">
-//               <div class="col">
-//                 <label for="salesprice" class="col-form-label">
-//                   Salesprice
-//                 </label>{" "}
-//                 <input type="text" id="salesprice" class="form-control" />
-//               </div>
-//               <div class="col">
-//                 <label for="quantity" class="col-form-label">
-//                   Quantity
-//                 </label>{" "}
-//                 <input type="text" id="quantity" class="form-control" />
-//               </div>
-//               <div class="mb-3">
-//                 <label for="salesprice" class="col-form-label">
-//                   Location
-//                 </label>{" "}
-//                 <textarea
-//                   class="form-control"
-//                   id="salesprice"
-//                   rows="3"
-//                   placeholder="Write product location here"
-//                 ></textarea>
-//               </div>
-//             </div>
-//           </div>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
+// {/* content3 */}
+// <div className="wrapper-content shadow mt-3"></div>
+// </div> */}

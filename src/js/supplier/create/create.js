@@ -11,7 +11,7 @@ export default function () {
     history.goBack();
   }
   return (
-    <div className=" home_content overflow-scroll">
+    <div>
       {/* todo: task heading */}
       <div className=" tab-fixed container-fluid  fixed-top">
         <div className=" d-flex mb-3 justify-content-end mt-4 ">
