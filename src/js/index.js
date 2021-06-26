@@ -43,9 +43,8 @@ ReactDOM.render(
     <Provider store={store}>
       <Router>
         
-        {/* <Route path="/login" component={Login}></Route>
-        {checkHomePageAuthorization(store) ?<Redirect to="/homepage"/>: <Redirect to="/Login"/>} */}
-        <Redirect to="/homepage"/>
+      <Route path="/login" component={Login}></Route>
+        {checkHomePageAuthorization(store) ?<Redirect to="/homepage"/>: <Redirect to="/Login"/>}
         <Route path="/homepage" component={App}>
           
         </Route>

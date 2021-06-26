@@ -1,7 +1,7 @@
 import { CLIENT_SET, CLIENT_UNSET, CLIENT_UPDATE } from './constants'
 
 const initialState = {  
-    id: null,
+   
     token:null,
     email:null,
     fullname:null,
@@ -10,21 +10,23 @@ const initialState = {
     dateOfBirth:null,
     isActive:null,
     userRole:null,
+    pageAuthorized:[],
   }
 
   const reducer = function clientReducer (state = initialState, action) {  
     switch (action.type) {
       case CLIENT_SET:
-        console.log(action.respone_login.userInfo.email)
+        
         return {
           token: action.respone_login.token,
-          email: action.respone_login.userInfo.email,
-          fullname:action.respone_login.userInfo.fullname,
-          phoneNumber:action.respone_login.userInfo.phoneNumber,
-          address:action.respone_login.userInfo.address,
-          dateOfBirth:action.respone_login.userInfo.dateOfBirthNormalizedString,
-          isActive:action.respone_login.userInfo.isActive,
+          email: action.respone_login.applicationUser.email,
+          fullname:action.respone_login.applicationUser.fullname,
+          phoneNumber:action.respone_login.applicationUser.phoneNumber,
+          address:action.respone_login.applicationUser.address,
+          dateOfBirth:action.respone_login.applicationUser.dateOfBirthNormalizedString,
+          isActive:action.respone_login.applicationUser.isActive,
           userRole:action.respone_login.userRole,
+          pageAuthorized:action.respone_login.pageAuthorized,
         }
       case CLIENT_UPDATE:
         
@@ -37,7 +39,7 @@ const initialState = {
   
       case CLIENT_UNSET:
         return {
-          id: null,
+         
           token:null,
           email:null,
           fullname:null,
@@ -46,6 +48,7 @@ const initialState = {
           dateOfBirth:null,
           isActive:null,
           userRole:null,
+          pageAuthorized:[],
         }
   
       default:
