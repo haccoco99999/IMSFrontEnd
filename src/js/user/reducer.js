@@ -3,9 +3,12 @@ import { CLIENT_SET, CLIENT_UNSET, CLIENT_UPDATE } from './constants'
 const initialState = {  
    
     token:null,
+    isNotAllowed: null,
     email:null,
+    emailConfirmed: null,
     fullname:null,
     phoneNumber:null,
+    accessFailedCount:null,
     address:null,
     dateOfBirth:null,
     isActive:null,
@@ -19,9 +22,12 @@ const initialState = {
         
         return {
           token: action.respone_login.token,
+          isNotAllowed: action.respone_login.isNotAllowed,
           email: action.respone_login.applicationUser.email,
+          emailConfirmed: action.respone_login.applicationUser.emailConfirmed,
           fullname:action.respone_login.applicationUser.fullname,
           phoneNumber:action.respone_login.applicationUser.phoneNumber,
+          accessFailedCount:action.respone_login.applicationUser.accessFailedCount,
           address:action.respone_login.applicationUser.address,
           dateOfBirth:action.respone_login.applicationUser.dateOfBirthNormalizedString,
           isActive:action.respone_login.applicationUser.isActive,
@@ -39,11 +45,13 @@ const initialState = {
   
       case CLIENT_UNSET:
         return {
-         
           token:null,
+          isNotAllowed: null,
           email:null,
+          emailConfirmed: null,
           fullname:null,
           phoneNumber:null,
+          accessFailedCount:null,
           address:null,
           dateOfBirth:null,
           isActive:null,
