@@ -4,15 +4,15 @@ import handleApiErrors from "../../auth/api-errors";
 import { GET_SP_REQUEST, GET_SP_RESPONSE, GET_SP_ERROR } from "./constants";
 
 const getAllSuppliersURL =
-  "https://imspublicapi.herokuapp.com/api/suppliers/all";
+  "https://imspublicapi.herokuapp.com/api/suppliers/search?CurrentPage=1&SizePerPage=5";
 
 function getAllSuppliers(action) {
   return fetch(getAllSuppliersURL, {
-    method: "POST",
+    method: "GET",
     headers: {
       Authorization:
         "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzU0NjI4MSwiZXhwIjoxNjI0MTUxMDgxLCJpYXQiOjE2MjM1NDYyODF9.m13k9zu5PBwB92rbqUdOBl7Mlb4jnmzPucrBPXUMafU",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyMzk2MDEzOSwiZXhwIjoxNjI0NTY0OTM5LCJpYXQiOjE2MjM5NjAxMzl9.RZiTcJ-QV0XBtSkgfT2R2Nvv4HaKrqFps5qtmTry5VU",
       "Content-Type": "application/json",
       Origin: "",
     },

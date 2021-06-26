@@ -13,13 +13,15 @@ export default function () {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  let list_roles = useSelector((state) => state.getAllRoleReducer.listRoles);
-  console.log(list_roles);
+  let listRoles = useSelector((state) => state.getAllRoleReducer.listRoles);
+  console.log(listRoles);
   const [listValueColumn, setListValueColumn] = useState({
-    Roles: true,
+    name: true,
     // Description: true,
   });
-  const [listHeaderEdit, setListEditHeader] = useState({});
+  const [listHeaderEdit, setListEditHeader] = useState({
+    name:'Role Name'
+  });
 
   useEffect(() => {
     dispatch(RoleManagerAction());
@@ -53,7 +55,7 @@ export default function () {
 
       <Table
         listColumn={listValueColumn}
-        listData={list_roles}
+        listData={listRoles}
         listHeaderEdit={listHeaderEdit}
         // backPagingClick={}  nextPagingClick={}
       />

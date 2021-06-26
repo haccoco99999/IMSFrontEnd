@@ -1,41 +1,38 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 //css
 import "../../accountmanager.css";
+import Action from "./action";
 
 //component
 import AddAccountModal from "../../create/account/create-account";
 import FilterModal from "./filter";
 import AccountDetailsModal from "../../details/account/account-details";
-import Action from './action'
-
+import Table from "../../../table-receipt/ListReceiptsTable";
 
 function AccountManager() {
   let history = useHistory();
   let dispatch = useDispatch();
 
-
-  const listAccounts = useSelector(state => state.imsUser) 
+  const listAccounts = useSelector((state) => state.imsUser);
 
   const [listValueColumn, setListValueColumn] = useState({
     email: true,
-  
     fullname: true,
-    phoneNumber:true,
+    isActive:true,
+    phoneNumber: true,
 
   });
 
   const [listEditHeader, setListEditHeader] = useState({
-    // id: "Goods Receipt ID",
+    isActive: "Status",
   });
 
-
-  console.log(listAccounts)
   useEffect(() => {
-    dispatch(Action())
-  },[])
+    dispatch(Action());
+  }, []);
   return (
     <>
       <div>
@@ -79,78 +76,14 @@ function AccountManager() {
           Filter
         </a>
       </div>
+      {/* <div className="mt-3">
+        <Table
+          listHeaderEdit={listEditHeader}
+          listColumn={listValueColumn}
+          listData={listAccounts}
+        />
+      </div> */}
 
-      {/* <div class="d-flex justify-content-center">
-        <div class=" searchaccount">
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend ">
-              <span
-                class="input-group-text span-searchiconslot "
-                id="inputGroup-sizing-sm"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  fill="currentColor"
-                  class="bi bi-search"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                </svg>
-              </span>
-            </div>
-
-            <input
-              type="text"
-              class="form-control searchfield-borderless"
-              aria-label="Small"
-              aria-describedby="inputGroup-sizing-sm"
-              placeholder="Search by Email, Account ID, Name"
-            />
-          </div>
-        </div>
-      </div>
-
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Email Address</th>
-            <th scope="col">Full Name</th>
-            <th scope="col">Status</th>
-            <th scope="col">Phone No</th>
-            <th scope="col">Role</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Tammmmse130115@fpt.vn</td>
-            <td class=" d-flex justify-content-start">
-              <a class="btn btndefault"
-              data-bs-target="#AccountDetailsModal"
-              data-bs-toggle="modal"
-              
-              >Mao Nguyễn Minh Tâm</a>
-            </td>
-            <td class="table-acc-status-active">Active</td>
-            <td>0909000002</td>
-            <td class="table-role-name">Stockkeeper</td>
-          </tr>
-          <tr>
-            <td>Hungppse130005@fpt.vn</td>
-            <td>
-              <a class="btn btndefault"
-              data-bs-target="#AccountDetailsModal"
-              data-bs-toggle="modal"
-              
-              >Phan Phú Hưng</a>
-            </td>
-            <td class="table-acc-status-deactive">Deactive</td>
-            <td>0909000003</td>
-            <td class="table-role-name">Salesman</td>
-          </tr>
-        </tbody>
-      </table> */}
       <AddAccountModal />
 
       <FilterModal />
