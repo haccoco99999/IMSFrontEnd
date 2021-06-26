@@ -50,7 +50,6 @@ export default function () {
   function onClickToDetails(row) {
     history.push("/homepage/sale-man/details", {
       purchaseRequisitionId: row.id,
-      
     });
   }
 
@@ -148,7 +147,7 @@ export default function () {
             sizePerPage={sizePerPage}
             currentPage={currentPage}
             pageCount={pageCount}
-             onRowClick={onClickToDetails}
+            onRowClick={onClickToDetails}
           />
         </div>
       </div>

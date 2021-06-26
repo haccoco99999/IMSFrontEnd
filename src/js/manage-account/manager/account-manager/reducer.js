@@ -1,5 +1,3 @@
-import {} from "../../constants";
-
 import {
   GET_ALL_ACCOUNT_REQUEST,
   GET_ALL_ACCOUNT_RESPONSE,
@@ -11,6 +9,10 @@ const initialState = {
   successful: false,
   messages: "",
   errors: "",
+  currentPage: 0,
+  pageCount: 0,
+  sizePerPage: 0,
+  rowCountTotal: 0,
   listAccounts: [],
 };
 
@@ -30,7 +32,11 @@ export default function reducer(state = initialState, action) {
         successful: true,
         messages: "",
         errors: "",
-        listAccounts: action.json.imsUser,
+        currentPage: action.json.paging.currentPage,
+        pageCount: action.json.paging.pageCount,
+        sizePerPage: action.json.paging.sizePerPage,
+        rowCountTotal: action.json.paging.rowCountTotal,
+        listAccounts: action.json.paging.resultList,
       };
     case GET_ALL_ACCOUNT_ERROR:
       return {

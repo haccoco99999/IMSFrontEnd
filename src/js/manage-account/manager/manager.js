@@ -11,6 +11,8 @@ export default function manager() {
   const [isChecked, setIsChecked] = useState(true);
   const [isAccountView, setIsAccountView] = useState(true);
 
+  
+
   const onChangeValue = (event) => {
     if (event.target.value == "account") {
       setIsAccountView(true);

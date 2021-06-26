@@ -9,6 +9,10 @@ const initalState = {
   success: false,
   messages: "",
   errors: "",
+  currentPage: 0,
+  pageCount: 0,
+  sizePerPage: 0,
+  rowCountTotal: 0,
   listRoles: [],
 };
 
@@ -23,13 +27,16 @@ const reducer = function RoleManagerReducer(state = initalState, action) {
         listRoles: [],
       };
     case GET_ALL_ROLE_RESPONSE:
-      console.log("GET_ALL_ROLE_RESPONSE", action.json);
       return {
         requesting: false,
         successful: true,
         messages: "",
         errors: "",
-        listRoles: action.json.roles,
+        currentPage: action.json.paging.currentPage,
+        pageCount: action.json.paging.pageCount,
+        sizePerPage: action.json.paging.sizePerPage,
+        rowCountTotal: action.json.paging.rowCountTotal,
+        listRoles: action.json.paging.resultList,
       };
     case GET_ALL_ROLE_ERROR:
       return {
@@ -37,7 +44,7 @@ const reducer = function RoleManagerReducer(state = initalState, action) {
         successful: false,
         messages: "",
         errors: "error",
-        listGoodsReceipt: [],
+        listRoles: [],
       };
     default:
       return state;

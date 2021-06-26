@@ -16,23 +16,69 @@ function AccountManager() {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  const listAccounts = useSelector((state) => state.imsUser);
+  const { data, token, pageCount } = useSelector((state) => ({
+    data: state.getAllAccountsReducer.listAccounts,
+    token: state.client.token,
+    pageCount: state.getAllAccountsReducer.pageCount,
+  }));
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(5);
 
   const [listValueColumn, setListValueColumn] = useState({
     email: true,
     fullname: true,
-    isActive:true,
+    isActive: true,
     phoneNumber: true,
-
+    userRole: true,
   });
 
   const [listEditHeader, setListEditHeader] = useState({
     isActive: "Status",
   });
+  const [listAccounts, setListAccounts] = useState([]);
+
+  function nextPagingClick() {
+    console.log("forward");
+    setCurrentPage(currentPage + 1);
+  }
+
+  function backPagingClick() {
+    console.log("backWard");
+    setCurrentPage(currentPage - 1);
+  }
+
+  function onClickToDetails(row) {
+    history.push("/homepage/sale-man/details", {
+      purchaseRequisitionId: row.id,
+    });
+  }
+  useEffect(() => {
+    dispatch(
+      Action({
+        currentPage: currentPage,
+        sizePerPage: sizePerPage,
+        token: token,
+      })
+    );
+  }, []);
 
   useEffect(() => {
-    dispatch(Action());
+    setListAccounts(
+      data.map((item) => {
+        item.id = item.imsUser.id;
+        item.email = item.imsUser.email;
+        item.phoneNumber = item.imsUser.phoneNumber;
+        item.fullname = item.imsUser.fullname;
+        item.isActive = "";
+        if (item.imsUser.isActive) item.isActive = "Active";
+        else item.isActive = "Deactive";
+        delete item["imsUser"];
+        return item;
+      })
+    );
   }, []);
+
+  console.log(listAccounts);
   return (
     <>
       <div>
@@ -76,13 +122,20 @@ function AccountManager() {
           Filter
         </a>
       </div>
-      {/* <div className="mt-3">
-        <Table
-          listHeaderEdit={listEditHeader}
-          listColumn={listValueColumn}
-          listData={listAccounts}
-        />
-      </div> */}
+     
+        <div className="mt-3">
+          <Table
+            listHeaderEdit={listEditHeader}
+            listColumn={listValueColumn}
+            listData={listAccounts}
+            pageCount={pageCount}
+            sizePerPage={sizePerPage}
+            currentPage={currentPage}
+            backPagingClick={backPagingClick}
+            nextPagingClick={nextPagingClick}
+          />
+        </div>
+    
 
       <AddAccountModal />
 

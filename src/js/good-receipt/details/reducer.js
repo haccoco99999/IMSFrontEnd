@@ -30,7 +30,6 @@ export default function reducer(state = initialState, action) {
       };
 
     case GET_GR_DETAILS_RESPONSE:
-      console.log(action.json.receiveingOrder);
       return {
         ...state,
         requesting: false,

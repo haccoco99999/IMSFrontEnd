@@ -13,18 +13,41 @@ export default function () {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  let listRoles = useSelector((state) => state.getAllRoleReducer.listRoles);
+  let { listRoles, token, pageCount } = useSelector((state) => ({
+    listRoles: state.getAllRoleReducer.listRoles,
+    token: state.client.token,
+    pageCount: state.getAllRoleReducer.pageCount,
+  }));
   console.log(listRoles);
   const [listValueColumn, setListValueColumn] = useState({
     name: true,
     // Description: true,
   });
   const [listHeaderEdit, setListEditHeader] = useState({
-    name:'Role Name'
+    name: "Role Name",
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(5);
+
+  function nextPagingClick() {
+    console.log("forward");
+    setCurrentPage(currentPage + 1);
+  }
+
+  function backPagingClick() {
+    console.log("backWard");
+    setCurrentPage(currentPage - 1);
+  }
+
   useEffect(() => {
-    dispatch(RoleManagerAction());
+    dispatch(
+      RoleManagerAction({
+        currentPage: currentPage,
+        sizePerPage: sizePerPage,
+        token: token,
+      })
+    );
   }, []);
 
   function pushAddRolePage() {
@@ -57,10 +80,12 @@ export default function () {
         listColumn={listValueColumn}
         listData={listRoles}
         listHeaderEdit={listHeaderEdit}
-        // backPagingClick={}  nextPagingClick={}
+        pageCount={pageCount}
+        sizePerPage={sizePerPage}
+        currentPage={currentPage}
+        backPagingClick={backPagingClick}
+        nextPagingClick={nextPagingClick}
       />
-
-      
     </>
   );
 }

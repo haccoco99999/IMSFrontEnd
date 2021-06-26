@@ -13,7 +13,7 @@ const getAllPurchaseRequisitionURL =
 
 function getAllPurchaseRequisition(action) {
   return fetch(getAllPurchaseRequisitionURL, {
-    method: "POST",
+    method: "GET",
     headers: {
       Authorization:
         "Bearer " +

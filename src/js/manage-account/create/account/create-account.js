@@ -1,7 +1,64 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
+import React, { useState, useEffect, useReducer } from "react";
+import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
+import RoleManagerAction from "../../manager/role-manager/action";
+
+const formReducer = (state, event) => {
+  return {
+    ...state,
+    [event.name]: event.value,
+  };
+};
 
 function AddAccountModal() {
+  let dispatch = useDispatch();
+  let history = useHistory();
+
+  const [formData, setFormData] = useReducer(formReducer, {});
+  const [categorySelected, setCategorySelected] = useState({});
+
+  const handleChangeValue = (event) => {
+    event.preventDefault();
+
+    setFormData({
+      name: event.target.name,
+      value: event.target.value,
+    });
+  };
+
+  let { listRoles, token } = useSelector((state) => ({
+    listRoles: state.getAllRoleReducer.listRoles,
+    token: state.client.token,
+  }));
+
+  const handleChangeCategory = (e) => {
+    // event.preventDefault();
+    const index = e.target.selectedIndex;
+    const el = e.target.childNodes[index];
+
+    // console.log(event.target.id);
+    setCategorySelected({
+      id: el.getAttribute("id"),
+      name: el.getAttribute("value"),
+    });
+    console.log(categorySelected);
+  };
+
+  function onSaveClick(event) {
+    
+  }
+
+  useEffect(() => {
+    dispatch(
+      RoleManagerAction({
+        currentPage: 0,
+        sizePerPage: 0,
+        token: token,
+      })
+    );
+  }, []);
+
   return (
     <div>
       <div
@@ -25,28 +82,52 @@ function AddAccountModal() {
             <div className="modal-body addaccountmodal-body">
               <form>
                 <div class="mb-3">
-                  <label for="remail-address" class="col-form-label">
+                  <label for="email" class="col-form-label">
                     Email Address
                   </label>
-                  <input type="text" class="form-control" id="email-address" />
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="email"
+                    value={formData.email || ""}
+                    onChange={handleChangeValue}
+                  />
                 </div>
                 <div class="mb-3">
                   <label for="full-name" class="col-form-label">
                     Full Name
                   </label>
-                  <input type="text" class="form-control" id="full-name" />
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="fullname"
+                    value={formData.fullname || ""}
+                    onChange={handleChangeValue}
+                  />
                 </div>
                 <div class="mb-3">
                   <label for="phone-no" class="col-form-label">
                     Phone No
                   </label>
-                  <input type="text" class="form-control" id="phone-no" />
+                  <input
+                    type="tel"
+                    class="form-control"
+                    name="phone"
+                    value={formData.phone || ""}
+                    onChange={handleChangeValue}
+                  />
                 </div>
                 <div class="mb-3">
                   <label for="address" class="col-form-label">
                     Address
                   </label>
-                  <input type="text" class="form-control" id="address" />
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="address"
+                    value={formData.address || ""}
+                    onChange={handleChangeValue}
+                  />
                 </div>
                 <div class="mb-3">
                   <label for="role" class="col-form-label">
@@ -56,13 +137,18 @@ function AddAccountModal() {
                   <select
                     class="form-select"
                     aria-label="Default select example"
+                    defaultValue=""
+                    onChange={handleChangeCategory}
                   >
-                    <option selected disabled>
-                      Select Role
+                    <option value="" disabled>
+                      -- No Selected --
                     </option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+
+                    {listRoles.map((role) => (
+                      <option id={role.id} value={role.name}>
+                        {role.name}{" "}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </form>
