@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import RoleManagerAction from "../../manager/role-manager/action";
+import {CreateAccountAction} from "./action";
 
 const formReducer = (state, event) => {
   return {
@@ -46,7 +47,18 @@ function AddAccountModal() {
   };
 
   function onSaveClick(event) {
-    
+    const data = {
+      username: formData.fullname,
+      password: "test@12345Abc",
+      email: formData.email,
+      roleName: categorySelected.name,
+      fullName: formData.fullname,
+      phoneNumber: formData.phone,
+      address: formData.address,
+      dateOfBirth: "2021-06-26T19:13:19.555Z",
+    };
+    dispatch(CreateAccountAction({data:data, token: token }));
+    // console.log('Hello')
   }
 
   useEffect(() => {
@@ -164,6 +176,7 @@ function AddAccountModal() {
               <button
                 type="button"
                 className="btn btn-default addaccountmodal-done "
+                onClick={onSaveClick}
               >
                 Done
               </button>

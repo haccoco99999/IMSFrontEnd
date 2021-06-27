@@ -40,6 +40,10 @@ export default function () {
     setCurrentPage(currentPage - 1);
   }
 
+  function goCreatePage() {
+    history.push("/homepage/manage-account/create-role");
+  }
+
   useEffect(() => {
     dispatch(
       RoleManagerAction({
@@ -58,6 +62,7 @@ export default function () {
       <div>
         <a
           className="btn btn-default me-md-2 add"
+          onClick={goCreatePage}
           // data-bs-target="#AddAccountModal"
           // data-bs-toggle="modal"
         >

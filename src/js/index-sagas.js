@@ -16,7 +16,8 @@ import getDetailsPurchaseRequisition from "./sale-man/details/sagas";
 import getAllSuppliers from "./supplier/manager/sagas";
 import getDetailsSupplier from "./supplier/details/sagas";
 import getCreatedFormPurchaseRequisition from "./sale-man/create/sagas";
-import createProduct from "./product/create/sagas"
+import createProduct from "./product/create/sagas";
+import createAccount from "./manage-account/create/account/sagas";
 import { all } from "@redux-saga/core/effects";
 export default function* IndexSaga() {
   yield all([
@@ -37,6 +38,8 @@ export default function* IndexSaga() {
     getDetailsPurchaseRequisition(),
     getAllSuppliers(),
     getDetailsSupplier(),
-    getCreatedFormPurchaseRequisition(),createProduct()
+    getCreatedFormPurchaseRequisition(),
+    createProduct(),
+    createAccount(),
   ]);
 }

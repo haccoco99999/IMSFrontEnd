@@ -76,9 +76,9 @@ function AccountManager() {
         return item;
       })
     );
-  }, []);
+  }, [data]);
 
-  console.log(listAccounts);
+  // console.log(listAccounts);
   return (
     <>
       <div>
@@ -122,20 +122,19 @@ function AccountManager() {
           Filter
         </a>
       </div>
-     
-        <div className="mt-3">
-          <Table
-            listHeaderEdit={listEditHeader}
-            listColumn={listValueColumn}
-            listData={listAccounts}
-            pageCount={pageCount}
-            sizePerPage={sizePerPage}
-            currentPage={currentPage}
-            backPagingClick={backPagingClick}
-            nextPagingClick={nextPagingClick}
-          />
-        </div>
-    
+
+      <div className="mt-3">
+        <Table
+          listHeaderEdit={listEditHeader}
+          listColumn={listValueColumn}
+          listData={listAccounts}
+          pageCount={pageCount}
+          sizePerPage={sizePerPage}
+          currentPage={currentPage}
+          backPagingClick={backPagingClick}
+          nextPagingClick={nextPagingClick}
+        />
+      </div>
 
       <AddAccountModal />
 
