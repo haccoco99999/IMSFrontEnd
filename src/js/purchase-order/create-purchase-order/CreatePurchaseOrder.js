@@ -2,7 +2,13 @@ import React from 'react'
 import TablePurchase from '../purchase-quote-order/Table-Purchase-Order'
 import './CreatePurchaseOrder.css';
 import TextEditor from '../../text-editor-compoent/text-editor-compoent';
-import { getDetailPurchaseOrder, setDefailtProductPurchaseOrder, confirmDetailPurchaseOrder, confirmPurchaseORderByManager, saveProductsPurchaseOrder, getProductPurchaseOrder } from './action'
+import { getDetailPurchaseOrder,
+     setDefailtProductPurchaseOrder, 
+     confirmDetailPurchaseOrder, 
+     confirmPurchaseORderByManager,
+      saveProductsPurchaseOrder,
+       getProductPurchaseOrder,
+    ignorePurchaseOrderConfirm } from './action'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import NavigationBar from '../../navigation-bar-component/NavigationBar';
@@ -15,6 +21,7 @@ import PurchaseQuoteOrder from '../purchase-quote-order/PurchaseQuoteOrder';
 import ConfirmationPopup from './ConfirmationPopup';
 import { productPurchaseOrderReducer } from './reducer';
 import SearchComponent from '../../search-component/SearchComponent';
+import ToastMessage from './ToastMessage';
 class CreatePurchaseOrder extends React.Component {
     constructor(props) {
         super(props)
@@ -22,6 +29,7 @@ class CreatePurchaseOrder extends React.Component {
         let defaultState = {
             isCancelTask: true,
             isPreview: false,
+           
             editorState: {},
             orderID: this.props.location.state.orderID,
             status: this.props.location.state.status,
@@ -37,7 +45,7 @@ class CreatePurchaseOrder extends React.Component {
                 },
                 {
                     unit: "Unit",
-                    input: true,
+
                 },
                 {
                     orderQuantity: "Quantity",
@@ -66,7 +74,8 @@ class CreatePurchaseOrder extends React.Component {
 
         }
         this.clickToAddProduct = this.clickToAddProduct.bind(this)
-
+        this.clickDeleteProduct = this.clickDeleteProduct.bind(this)
+        this.ignorePurchaseOrder = this.ignorePurchaseOrder.bind(this)
     }
     componentWillReceiveProps(nextProps) {
         const purchaseOrderProduct = this.props.getDetailPurchaseReducer
@@ -108,13 +117,14 @@ class CreatePurchaseOrder extends React.Component {
         }
         else if (status === "POCreated") {
             return {
-
+                isShowEdit: true,
                 isShowCancel: true,
                 isConfirmByManager: true,
             }
         }
         else if (status === "POConfirm") {
             return {
+                isShowEdit: false,
                 isCreateGoodReceipt: true
 
             }
@@ -247,6 +257,11 @@ class CreatePurchaseOrder extends React.Component {
 
         })
     }
+    ignorePurchaseOrder(){
+        
+        this.props.ignorePurchaseOrderConfirm(this.state.orderID)
+        this.goBackClick();
+    }
 
     cancelClickPreview() {
         this.setState({
@@ -257,6 +272,7 @@ class CreatePurchaseOrder extends React.Component {
         this.setState({
             isPreview: !this.state.isPreview
         })
+      
     }
 
     confirmClickByManager() {
@@ -266,9 +282,11 @@ class CreatePurchaseOrder extends React.Component {
     }
     confirmClick() {
         this.props.confirmPurchaseORderByManager(this.state.orderID)
+        this.goBackClick()
     }
     sendConfirmClick() {
         this.props.confirmDetailPurchaseOrder(this.state.orderID)
+        this.goBackClick()
 
     }
     sendMailClick() {
@@ -280,7 +298,7 @@ class CreatePurchaseOrder extends React.Component {
         formData.append('Subject', 'Gui MAil')
 
         this.props.sendMailPriceQuote({ priceQuote: formData })
-
+        this.goBackClick()
 
 
     }
@@ -292,7 +310,13 @@ class CreatePurchaseOrder extends React.Component {
     onChangeValueProduct = (event) => {
         console.log(event.target.value)
         this.setState({
-            purchaseOrderProduct: this.state.purchaseOrderProduct.map((element, index) => index == event.target.id ? { ...element, [event.target.name]: event.target.value } : element)
+            purchaseOrderProduct: this.state.purchaseOrderProduct.map((element, index) =>
+                index == event.target.id ?
+                    {
+                        ...element, [event.target.name]: event.target.value,
+                        totalAmount: ([event.target.name] === "orderQuantity" ? event.target.value * element.price : event.target.value * element.orderQuantity)
+                    }
+                    : element)
         })
 
     }
@@ -301,16 +325,16 @@ class CreatePurchaseOrder extends React.Component {
         this.props.getProductPurchaseOrder("MO569812R")
     }
     clickToAddProduct(productRaw) {
-       
-       let product = {
+
+        let product = {
             id: productRaw.productId,
             orderId: "",
             productVariantId: productRaw.id,
-            orderQuantity: 0,
+            orderQuantity: 1,
             unit: productRaw.unit,
-            price: 0,
+            price: productRaw.price,
             discountAmount: 0,
-            totalAmount: 0,
+            totalAmount: productRaw.price * 1,
             name: productRaw.name,
         }
         console.log(product)
@@ -318,6 +342,14 @@ class CreatePurchaseOrder extends React.Component {
             purchaseOrderProduct: [...this.state.purchaseOrderProduct, product]
         })
     }
+    clickDeleteProduct(id) {
+
+        this.setState({
+            purchaseOrderProduct: this.state.purchaseOrderProduct.filter((element, index) => element.productVariantId !== id)
+        })
+
+    }
+    
 
 
     render() {
@@ -345,8 +377,8 @@ class CreatePurchaseOrder extends React.Component {
             } : null,
             this.checkStatusButton("CANCEL") ? {
                 isShow: this.state.isShowCancel,
-                title: "Cancel",
-                action: () => this.cancelEditClick(),
+                title: (this.state.status ==="POCreated"? "Ignore": "Cancel"),
+                action:  (this.state.status ==="POCreated"? () => this.ignorePurchaseOrder(): () => this.cancelEditClick()) ,
                 style: {
                     background: "red"
                 }
@@ -361,7 +393,7 @@ class CreatePurchaseOrder extends React.Component {
             } : null,
             this.checkStatusButton("CONFIRM_TO_MANAGER") ? {
                 isShow: this.state.isConfirmToManager,
-                title: "Confirm for manager",
+                title: "Create Purchase Order",
                 action: () => this.sendConfirmClick(),
                 style: {
                     background: "#4e9ae8"
@@ -369,7 +401,7 @@ class CreatePurchaseOrder extends React.Component {
             } : null,
             this.checkStatusButton("CONFIRM_BY_MANAGER") ? {
                 isShow: this.state.isConfirmByManager,
-                title: "Confirm By manager",
+                title: "Confirm",
                 action: () => this.confirmClickByManager(),
                 style: {
                     background: "#4e9ae8"
@@ -389,7 +421,7 @@ class CreatePurchaseOrder extends React.Component {
             } : null,
             this.checkStatusButton("CREATE_GOOD_RECEIPT") ? {
                 isShow: this.state.isCreateGoodReceipt,
-                title: "Preview Mail To Send",
+                title: "Create Good Receipt",
                 action: () => this.clickPreview(),
                 style: {
                     background: "#4e9ae8"
@@ -417,19 +449,20 @@ class CreatePurchaseOrder extends React.Component {
                         }
                     }
                 />
-
-                    <SearchComponent    clickToAddProduct={this.clickToAddProduct}/>
+                {console.log(this.state.isShowEdit)}
+                {!this.state.isShowEdit === true ? <SearchComponent clickToAddProduct={this.clickToAddProduct} /> : ""}
                 {console.log(this.state.purchaseOrderProduct)}
                 <ListProductsTable
+                    clickDeleteProduct={this.clickDeleteProduct}
                     clickToAddProduct={this.clickToAddProduct}
                     onChangeValueProduct={this.onChangeValueProduct}
                     disabled={this.state.isShowEdit}
                     listColumn={this.state.listColumn}
                     listData={this.state.purchaseOrderProduct} />
 
-
-
-                {/* <ConfirmationPopup/> */}
+                {/* <ToastMessage /> */}
+{/* 
+                <ConfirmationPopup/> */}
 
                 {/* <input  list="citynames"/>
                 <datalist id="citynames">
@@ -462,5 +495,13 @@ const mapStateToProps = state => ({
     getDetailPurchaseReducer: state.getDetailPurchaseReducer,
     productPurchaseOrderReducer: state.productPurchaseOrderReducer
 })
-const connected = connect(mapStateToProps, { setDefailtProductPurchaseOrder, getProductPurchaseOrder, saveProductsPurchaseOrder, getDetailPurchaseOrder, confirmDetailPurchaseOrder, sendMailPriceQuote, confirmPurchaseORderByManager })(CreatePurchaseOrder)
+const connected = connect(mapStateToProps, { 
+    ignorePurchaseOrderConfirm, 
+    setDefailtProductPurchaseOrder,
+     getProductPurchaseOrder, 
+     saveProductsPurchaseOrder,
+      getDetailPurchaseOrder, 
+      confirmDetailPurchaseOrder, 
+      sendMailPriceQuote,
+       confirmPurchaseORderByManager })(CreatePurchaseOrder)
 export default withRouter(connected)

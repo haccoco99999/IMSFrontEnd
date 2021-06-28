@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import AboutAccount from './about-account/about-account'
+import ProfileClient from './about-account/ProfileClient'
 import AboutSoftware from './about-software/about-software'
 import Dashboard from './dashboard/dashboard'
 import Purchase from './purchase-order/purchase-order'
@@ -215,7 +216,7 @@ class App extends Component {
           <Route path="/homepage/product"><Product /></Route>
           <Route path="/homepage/supplier"><Supplier /></Route>
           <Route path="/homepage/manage-account"><ManageAccount /></Route>
-          <Route path="/homepage/about-my-account"><AboutAccount /></Route>
+          <Route path="/homepage/about-my-account"><ProfileClient /></Route>
           <Route path="/homepage/about-software"><AboutSoftware /></Route>
           <Route path="/homepage/notification"><Notification /></Route>
         </Switch>

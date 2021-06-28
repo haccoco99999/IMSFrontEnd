@@ -31,7 +31,8 @@
     border: 0;
     outline: none;
     border-bottom: 1px solid;
-    background: white;
+    background: none;
+    
 }
 .table-customize input:disabled {
     height: 35px;

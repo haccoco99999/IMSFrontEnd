@@ -32,7 +32,7 @@ export default function FilterModal(props) {
                     Status:
                   </label>
                   <select type="number" name="status" onChange={props.selectStatus} className="form-select" aria-label="Default select example">
-                    <option selected>- No. Selected -</option>
+                    <option value={-99} selected>- No. Selected -</option>
                     <option value={1}>PQCreated </option>
                     <option value={2}>PQSent </option>
                     <option value={3}>POCreated </option>

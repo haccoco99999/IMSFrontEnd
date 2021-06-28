@@ -69,8 +69,12 @@ export default function ListProductsTable(props) {
                                     return <td>{Object.entries(product)[Object.entries(product).map(item => item[0]).indexOf(header[0])][1]} </td>
                                 }
 
+
                             })
-                        }</tr>
+                           
+                        }
+                        {!props.disabled? <td style={{color:"red"}} onClick={() =>props.clickDeleteProduct(product.productVariantId)}>Delete</td>: ""} 
+                        </tr>
                 ) : <tr>No data</tr>
 
 

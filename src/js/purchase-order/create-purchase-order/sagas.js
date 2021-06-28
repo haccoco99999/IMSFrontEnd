@@ -8,7 +8,9 @@ import {
     CONFIRM_PURCHASE_ORDER_BY_MAMAGER,
     GET_PRODUCT_PURCHASE_ORDER_ERROR,
     GET_PRODUCT_PURCHASE_ORDER_SUCCESS,
-    GET_PRODUCT_PURCHASE_ORDER
+    GET_PRODUCT_PURCHASE_ORDER,
+    INGORE_PURCHASE_ORDER_CONFIRM,
+    INGORE_PURCHASE_ORDER_CONFIRM_ERROR,
 } from './contants'
 
 import handleApiErrors from '../../auth/api-errors'
@@ -51,6 +53,23 @@ function sendConfirmForManagerAPI(orderId) {
     const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/create/"+ orderId
     return fetch(updateUrl, {
         method: 'POST',
+        headers: {
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/json",
+            "Origin": ""
+        },
+        credentials: "include",
+
+    })
+        .then(response => handleApiErrors(response))
+        .then(response => response.json())
+        .then(json => json)
+        .catch((error) => { throw error })
+}
+function ignorePurchaseOrderConfirmAPI(orderId) {
+    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/cancel/"+ orderId
+    return fetch(updateUrl, {
+        method: 'PUT',
         headers: {
             "Authorization": "Bearer " + token,
             "Content-Type": "application/json",
@@ -171,6 +190,20 @@ function* sendConfirmByManager(action) {
     }
 
 }
+function* ignorePurchaseOrderConfirmFlow(action) {
+
+    try {
+
+      
+          let  json= yield call(ignorePurchaseOrderConfirmAPI,action.orderID)
+          console.log(json)
+        //     yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
+    } catch (error) {
+     
+        yield put({ type: GET_DETAIL_PURCHASE_ORDER_ERROR })
+    }
+
+}
 function* updateWatcher() {
 
     yield takeEvery(GET_DETAIL_PURCHASE_ORDER, getDetailPurchaseOrderFlow)
@@ -178,6 +211,7 @@ function* updateWatcher() {
     yield takeEvery(SAVE_PRODUCTS_PURCHASE_ORDER, saveProductsPurchaseOrderFlow)
     yield takeEvery(CONFIRM_PURCHASE_ORDER_BY_MAMAGER, sendConfirmByManager)
     yield takeEvery(GET_PRODUCT_PURCHASE_ORDER, getProductPurchaseOrderFlow)
+    yield takeEvery(INGORE_PURCHASE_ORDER_CONFIRM, ignorePurchaseOrderConfirmFlow)
 
 
 }
