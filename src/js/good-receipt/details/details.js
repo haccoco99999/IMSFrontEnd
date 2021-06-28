@@ -18,7 +18,7 @@ export default function details() {
 
   const [listValueColumn, setListColumn] = useState([
     {
-      id: "id",
+      id: "Product ID",
     },
     {
       productVariantName: "Name",
@@ -41,6 +41,7 @@ export default function details() {
     goodsreceiptId,
     purchaseOrderId,
     createDate,
+    token,
   } = useSelector((state) => ({
     list_Products:
       state.getGoodsReceiptDetailsReducer.receivingOrder.receivedOrderItems,
@@ -51,14 +52,15 @@ export default function details() {
     createDate:
       state.getGoodsReceiptDetailsReducer.receivingOrder.transaction
         .createdDate,
+    token: state.client.token,
   }));
 
   console.log(suppliers);
 
   useEffect(() => {
-    console.log("goodsreceipt id", location.state.goodsreceiptId);
-
-    dispatch(GetDetailsAction({ id: location.state.goodsreceiptId }));
+    dispatch(
+      GetDetailsAction({ id: location.state.goodsreceiptId, token: token })
+    );
 
     // check khi true false
     setReturnData(true);
@@ -78,24 +80,24 @@ export default function details() {
     history.push("/homepage/good-receipt/");
   }
 
-  // function onClickSubmit(){
-  //   history.push('')
-  // }
-
   return (
     <div>
-      {/* todo: task heading */}
-      {/* todo: gop chung 2 page voi 2 nut khâc nhau  */}
+
       <div className=" tab-fixed container-fluid  fixed-top">
         {/* todo: task heading */}
         <div className=" tab-fixed tab-fixed--details container-fluid  fixed-top">
-          {}
           <div className=" d-flex  mb-3 justify-content-start mt-4 ">
-            {/* testing */}
+            {isFromManagerPage ? (
+              <a className="me-2" onClick={goBackClick}>
+                <h3>Back</h3>
+              </a>
+            ) : (
+              <a className="me-2" onClick={goToManagerPage}>
+                <h3>Home Page</h3>
+              </a>
+            )}
 
-            <a className="me-2" onClick={goBackClick}>
-              <h3>Back</h3>
-            </a>
+          
           </div>
         </div>
       </div>

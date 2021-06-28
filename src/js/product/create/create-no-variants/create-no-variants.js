@@ -24,8 +24,9 @@ export default function () {
   const dataLastPage = location.state.formData;
   const selectedCategory = location.state.categorySelected;
 
-  // console.log("1:", location.state.formData);
-  // console.log("2", location.state.categorySelected);
+  const { token } = useSelector((state) => ({
+    token: state.client.token,
+  }));
 
   const handleChangeValue = (event) => {
     event.preventDefault();
@@ -40,8 +41,7 @@ export default function () {
     history.goBack();
   }
 
-  function onClickSave() {}
-  {
+  function onClickSave() {
     const data = {
       name: dataLastPage.name,
       brandName: dataLastPage.brand,
@@ -50,23 +50,18 @@ export default function () {
       categoryId: selectedCategory.id,
       productVariants: [
         {
-          name: "",
+          name: dataLastPage.name,
           price: formData.salesprice,
           sku: formData.sku,
-          unit: "",
+          unit: formData.unit,
           storageQuantity: dataLastPage.quantity,
-          storageLocation: "",
-          variantValues: [
-            // {
-            //   attribute: "string",
-            //   value: "string",
-            // },
-          ],
+          storageLocation: 0,
         },
       ],
     };
 
     console.log(JSON.stringify(data));
+    dispatch(createProduct({ data: data, token: token }));
   }
 
   //   todo: gop chung 2 bang , sau do tach ra
@@ -152,7 +147,7 @@ export default function () {
               <div class="row g-3 align-items-center">
                 <div class="col">
                   <label for="salesprice" class="col-form-label">
-                   Sales Price
+                    Sales Price
                   </label>{" "}
                   <input
                     name="salesprice"

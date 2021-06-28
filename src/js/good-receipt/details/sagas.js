@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import handleApiErrors from '../../auth/api-errors'
+import handleApiErrors from "../../auth/api-errors";
 import {
   GET_GR_DETAILS_REQUEST,
   GET_GR_DETAILS_RESPONSE,
@@ -13,9 +13,7 @@ function getGoodsReceiptDetails(action) {
   return fetch(getGoodsReceiptDetailsURL + action.id, {
     method: "GET",
     headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzU0NjI4MSwiZXhwIjoxNjI0MTUxMDgxLCJpYXQiOjE2MjM1NDYyODF9.m13k9zu5PBwB92rbqUdOBl7Mlb4jnmzPucrBPXUMafU",
+      Authorization: "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },

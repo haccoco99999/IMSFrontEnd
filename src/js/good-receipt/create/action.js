@@ -4,19 +4,19 @@ import {
   SEND_CREATING_GOODS_RECEIPT_REQUEST,
 } from "./constant";
 
-export function getConfirmedPOAction() {
+export function getConfirmedPOAction(token) {
   return {
-    type: GET_CONFIRMED_PURCHASE_ORDER_REQUEST,
+    type: GET_CONFIRMED_PURCHASE_ORDER_REQUEST,token
   };
 }
 
-export function getConfirmedPODetailsAction({ id }) {
+export function getConfirmedPODetailsAction({ id, token }) {
   return {
     type: GET_DETAILS_PO_REQUEST,
-    id,
+    id,token
   };
 }
 
-export function setCreateingGRRequestAction( {data} ) {
-  return { type: SEND_CREATING_GOODS_RECEIPT_REQUEST, data };
+export function setCreateingGRRequestAction({ data,token }) {
+  return { type: SEND_CREATING_GOODS_RECEIPT_REQUEST, data,token };
 }

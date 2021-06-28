@@ -18,8 +18,6 @@ import {
 import handleApiErrors from "../../auth/api-errors";
 
 //api
-const getListPurchaseOrderUrl =
-  "https://imspublicapi.herokuapp.com/api/purchaseorder/all";
 
 const get_details_confirmed_po =
   "https://imspublicapi.herokuapp.com/api/purchaseorder/number/";
@@ -27,24 +25,17 @@ const get_details_confirmed_po =
 const set_receiving_purchase_order_quantity =
   "https://imspublicapi.herokuapp.com/api/goodsreceipt/update";
 
-function getListPurchaseOrder() {
-  return fetch(getListPurchaseOrderUrl, {
-    method: "POST",
+function getListConfirmedPurchaseOrder(action) {
+  const url = `http://imspublicapi.herokuapp.com/api/purchaseorder/search?CurrentPage=0&SizePerPage=0&FromStatus=4&ToStatus=4`;
+
+  return fetch(url, {
+    method: "GET",
     headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzU0NjI4MSwiZXhwIjoxNjI0MTUxMDgxLCJpYXQiOjE2MjM1NDYyODF9.m13k9zu5PBwB92rbqUdOBl7Mlb4jnmzPucrBPXUMafU",
+      Authorization: "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },
     credentials: "include",
-    body: JSON.stringify({
-      currentPage: 0,
-      sizePerPage: 0,
-      poSearchFilter: {
-        status: 4,
-      },
-    }),
   })
     .then((response) => handleApiErrors(response))
     .then((response) => response.json())
@@ -58,9 +49,7 @@ function getDetailsPO(action) {
   return fetch(get_details_confirmed_po + action.id, {
     method: "GET",
     headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzU0NjI4MSwiZXhwIjoxNjI0MTUxMDgxLCJpYXQiOjE2MjM1NDYyODF9.m13k9zu5PBwB92rbqUdOBl7Mlb4jnmzPucrBPXUMafU",
+      Authorization: "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },
@@ -79,9 +68,7 @@ function setReceivingPurchaseOrderQuantity(action) {
   return fetch(set_receiving_purchase_order_quantity, {
     method: "PUT",
     headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzU0NjI4MSwiZXhwIjoxNjI0MTUxMDgxLCJpYXQiOjE2MjM1NDYyODF9.m13k9zu5PBwB92rbqUdOBl7Mlb4jnmzPucrBPXUMafU",
+      Authorization: "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },
@@ -96,9 +83,9 @@ function setReceivingPurchaseOrderQuantity(action) {
     });
 }
 
-function* getListPurchaseOrderFlow() {
+function* getListPurchaseOrderFlow(action) {
   try {
-    let json = yield call(getListPurchaseOrder);
+    let json = yield call(getListConfirmedPurchaseOrder, action);
 
     yield put({ type: GET_CONFIRMED_PURCHASE_ORDER_RESPONSE, json });
   } catch (error) {

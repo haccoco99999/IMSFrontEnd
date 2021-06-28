@@ -8,32 +8,25 @@ import {
   SEARCH_GOODS_RECEIPT_SUCCESS,
 } from "./constant";
 
-const baseUrl = "https://imspublicapi.herokuapp.com/api/goodsreceipt/all";
-
 function searchGoodsReceipt(action) {
-  console.log(action);
-  const body = {
-    currentPage: action.currentPage,
-    sizePerPage: action.sizePerPage,
-    roSearchFilter: {},
-  };
+  const url = `http://imspublicapi.herokuapp.com/api/goodsreceipt/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
 
-  return fetch(baseUrl, {
-    method: "POST",
+  return fetch(url, {
+    method: "GET",
     headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDE3NDUzNywiZXhwIjoxNjI0MzQ3MzM3LCJpYXQiOjE2MjQxNzQ1Mzd9.rKQllv-JADJYAYcBoIkGxRnSwgMKknKk1xlZTJwxXmc",
+      Authorization: "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },
     credentials: "include",
-    body: JSON.stringify(body),
+    
   })
     .then((response) => handleApiErrors(response))
     .then((response) => response.json())
     .then((json) => json)
-    .catch((error) => {});
+    .catch((error) => {
+      throw error;
+    });
 }
 
 function* getFlow(action) {

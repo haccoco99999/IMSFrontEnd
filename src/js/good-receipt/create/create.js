@@ -29,24 +29,32 @@ export default function () {
   const [isChange, setIsChange] = useState(false);
   const [storageLocation, setStorageLocation] = useState("");
 
- 
-  const list_ConfirmPurchaseOrderID = useSelector(
-    (state) =>
-      state.getAllConfirmedPurchaseOrderReducer.listConfirmedPurchaseOrder
-  );
+  // const list_ConfirmPurchaseOrderID = useSelector(
+  //   (state) =>
+  //     state.getAllConfirmedPurchaseOrderReducer.listConfirmedPurchaseOrder
+  // );
 
-  const list_BuyingProductStore = useSelector(
-    (state) =>
-      state.getAllConfirmedPurchaseOrderReducer.listProducts
-        .purchaseOrderProduct
-  );
+  // const list_BuyingProductStore = useSelector(
+  //   (state) =>
+  //     state.getAllConfirmedPurchaseOrderReducer.listProducts
+  //       .purchaseOrderProduct
+  // );
+
+  const { list_ConfirmPurchaseOrderID, list_BuyingProductStore, token } =
+    useSelector((state) => ({
+      token: state.client.token,
+      list_ConfirmPurchaseOrderID:
+        state.getAllConfirmedPurchaseOrderReducer.listConfirmedPurchaseOrder,
+      list_BuyingProductStore:
+        state.getAllConfirmedPurchaseOrderReducer.listProducts
+          .purchaseOrderProduct,
+    }));
 
   const [list_BuyingProduct, setList_BuyingProduct] = useState(null);
 
   useEffect(() => {
     setList_BuyingProduct(list_BuyingProductStore);
   }, [list_BuyingProductStore]);
-  console.log(list_BuyingProduct);
 
   const message = useSelector(
     (state) => state.getAllConfirmedPurchaseOrderReducer.messages
@@ -98,7 +106,7 @@ export default function () {
       }),
     };
 
-    dispatch(setCreateingGRRequestAction({ data: Data }));
+    dispatch(setCreateingGRRequestAction({ data: Data, token: token }));
   }
 
   const handleChangeValue = (event) => {
@@ -108,7 +116,9 @@ export default function () {
       name: event.target.name,
       value: event.target.value,
     });
-    dispatch(getConfirmedPODetailsAction({ id: event.target.value }));
+    dispatch(
+      getConfirmedPODetailsAction({ id: event.target.value, token: token })
+    );
   };
 
   //filter
@@ -117,7 +127,7 @@ export default function () {
     .shift();
 
   useEffect(() => {
-    dispatch(getConfirmedPOAction());
+    dispatch(getConfirmedPOAction({ token: token }));
 
     if (message !== "") {
       history.push("/homepage/good-receipt/details", {

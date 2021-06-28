@@ -13,13 +13,19 @@ export default function GoodsReceipt() {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  let list_goods_receipt = useSelector(
-    (state) => state.getGoodsReceiptReducer.listGoodsReceipt
-  );
+  // let list_goods_receipt = useSelector(
+  //   (state) => state.getGoodsReceiptReducer.listGoodsReceipt
+  // );
 
-  let pageCount = useSelector(
-    (state) => state.getGoodsReceiptReducer.pageCount
-  );
+  // let pageCount = useSelector(
+  //   (state) => state.getGoodsReceiptReducer.pageCount
+  // );
+
+  const { list_goods_receipt, pageCount, token } = useSelector((state) => ({
+    list_goods_receipt: state.getGoodsReceiptReducer.listGoodsReceipt,
+    pageCount: state.getGoodsReceiptReducer.pageCount,
+    token: state.client.token,
+  }));
 
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
@@ -50,6 +56,7 @@ export default function GoodsReceipt() {
       searchGoodsReceiptAction({
         currentPage: currentPage,
         sizePerPage: sizePerPage,
+        token: token,
       })
     );
   }, [currentPage, sizePerPage]);
@@ -68,7 +75,10 @@ export default function GoodsReceipt() {
   }
 
   function onClickToDetails(row) {
-    history.push("/homepage/good-receipt/details", { goodsreceiptId: row.id, fromPage:"ManagerPage" });
+    history.push("/homepage/good-receipt/details", {
+      goodsreceiptId: row.id,
+      fromPage: "ManagerPage",
+    });
   }
 
   return (

@@ -31,7 +31,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         requesting: false,
         successful: true,
-        messages: "",
+        messages: action.json.createdProductId,
         errors: "",
       };
 
