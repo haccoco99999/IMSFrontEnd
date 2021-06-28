@@ -8,6 +8,9 @@ import {
   SUBMIT_REQUEST,
   SUBMIT_RESPONSE,
   SUBMIT_ERROR,
+  UPDATE_PR_REQUEST,
+  UPDATE_PR_ERROR,
+  UPDATE_PR_RESPONSE,
 } from "./constants";
 
 const getDetailsPRURL =
@@ -19,9 +22,7 @@ function getDetailsPR(action) {
   return fetch(getDetailsPRURL + action.id, {
     method: "GET",
     headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDE3NDUzNywiZXhwIjoxNjI0MzQ3MzM3LCJpYXQiOjE2MjQxNzQ1Mzd9.rKQllv-JADJYAYcBoIkGxRnSwgMKknKk1xlZTJwxXmc",
+      Authorization: "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },
@@ -39,13 +40,11 @@ function submitPR(action) {
   const data = {
     id: action.id,
   };
-  console.log("huy cho dien");
+
   return fetch(submitPRURL, {
     method: "POST",
     headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDE3NDUzNywiZXhwIjoxNjI0MzQ3MzM3LCJpYXQiOjE2MjQxNzQ1Mzd9.rKQllv-JADJYAYcBoIkGxRnSwgMKknKk1xlZTJwxXmc",
+      Authorization: "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },
@@ -54,7 +53,26 @@ function submitPR(action) {
   })
     .then((response) => handleApiErrors(response))
     .then((response) => response)
+    
+    .catch((error) => {
+      throw error;
+    });
+}
 
+function updatePR(action) {
+  const url = "http://imspublicapi.herokuapp.com/api/requisition/update";
+  return fetch(url, {
+    method: "PUT",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+    body: JSON.stringify(action.data),
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json)
     .catch((error) => {
       throw error;
     });
@@ -81,9 +99,20 @@ function* submitPRFlow(action) {
   }
 }
 
+function* updatePRFlow(action) {
+  try {
+    let json = yield call(updatePR, action);
+    yield put({ type: UPDATE_PR_RESPONSE, json });
+  } catch (error) {
+    console.log("updatePRFlow", error);
+    yield put({ type: UPDATE_PR_ERROR });
+  }
+}
+
 function* watcher() {
   yield takeEvery(GET_DETAILS_PR_REQUEST, getDetailsPRFlow);
   yield takeEvery(SUBMIT_REQUEST, submitPRFlow);
+  yield takeEvery(UPDATE_PR_REQUEST, updatePRFlow);
 }
 
 export default watcher;

@@ -7,17 +7,14 @@ import {
 
 import handleApiErrors from "../../auth/api-errors";
 
-const createPRURL = "https://imspublicapi.herokuapp.com/api/requisition/update";
-
 function createPurchaseRequisition(action) {
-  console.log(JSON.stringify(action.data));
+  const createPRURL =
+    "https://imspublicapi.herokuapp.com/api/requisition/create";
 
   return fetch(createPRURL, {
-    method: "PUT",
+    method: "POST",
     headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDQyMzUxNywiZXhwIjoxNjI0NTk2MzE3LCJpYXQiOjE2MjQ0MjM1MTd9.rKbu5lAjeSK3eMARoQgcT4TFNStoHXsvH3tXdN_b5H4",
+      Authorization: "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },
@@ -38,7 +35,7 @@ function* createPurchaseRequisitionFlow(action) {
 
     yield put({ type: CREATE_PR_RESPONSE, json });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     yield put({ type: CREATE_PR_ERROR });
   }
 }

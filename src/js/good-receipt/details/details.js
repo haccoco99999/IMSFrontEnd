@@ -96,7 +96,7 @@ export default function details() {
                 <h3>Home Page</h3>
               </a>
             )}
-
+  
           
           </div>
         </div>

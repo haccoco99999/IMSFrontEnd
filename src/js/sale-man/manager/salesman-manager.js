@@ -29,9 +29,10 @@ export default function () {
     createdByName: "Created by",
   });
 
-  const { listData, pageCount } = useSelector((state) => ({
+  const { listData, pageCount, token } = useSelector((state) => ({
     listData: state.getAllPurchaseRequisitionReducer.listPurchaseRequisition,
     pageCount: state.getAllPurchaseRequisitionReducer.pageCount,
+    token: state.client.token,
   }));
 
   function pushAddPage() {
@@ -58,6 +59,7 @@ export default function () {
       getAllPRAction({
         currentPage: currentPage,
         sizePerPage: sizePerPage,
+        token: token,
       })
     );
   }, [currentPage, sizePerPage]);

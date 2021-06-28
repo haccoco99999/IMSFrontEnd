@@ -8,7 +8,7 @@ import "../sale-man.css";
 //components
 import SearchComponent from "../../search-component/SearchComponent";
 import ListProductsTable from "../../list-products-table/ListProductsTable";
-import { createPRAction } from "./action";
+import { createPRAction, clearMessageAction } from "./action";
 
 export default function () {
   let history = useHistory();
@@ -37,9 +37,10 @@ export default function () {
     },
   ]);
 
-  const message = useSelector(
-    (state) => state.getCreatedFormPurchaseRequisitionReducer.messages
-  );
+  const { message, token } = useSelector((state) => ({
+    message: state.getCreatedFormPurchaseRequisitionReducer.messages,
+    token: state.client.token,
+  }));
 
   function goBackClick() {
     history.goBack();
@@ -97,11 +98,12 @@ export default function () {
         };
       }),
     };
-    dispatch(createPRAction({ data: data }));
+    dispatch(createPRAction({ data: data, token: token }));
   }
 
   useEffect(() => {
     if (message !== "") {
+      dispatch(clearMessageAction());
       // console.log("ID:", message);
       history.push("/homepage/sale-man/details", {
         fromPage: "CreatePage",
@@ -134,10 +136,6 @@ export default function () {
                 onClick={onSaveClick}
               >
                 Save
-              </button>
-
-              <button className="btn btn-primary me-3 text-white button-tab ">
-                Submit
               </button>
             </div>
           </div>

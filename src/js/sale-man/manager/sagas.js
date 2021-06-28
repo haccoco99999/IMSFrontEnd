@@ -8,28 +8,21 @@ import {
   GET_ALL_PR_ERROR,
 } from "./constants";
 
-const getAllPurchaseRequisitionURL =
-  "https://imspublicapi.herokuapp.com/api/purchaseorder/search";
+
 
 function getAllPurchaseRequisition(action) {
+  const getAllPurchaseRequisitionURL =
+  `http://imspublicapi.herokuapp.com/api/purchaseorder/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`
+
   return fetch(getAllPurchaseRequisitionURL, {
     method: "GET",
     headers: {
       Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzU0NjI4MSwiZXhwIjoxNjI0MTUxMDgxLCJpYXQiOjE2MjM1NDYyODF9.m13k9zu5PBwB92rbqUdOBl7Mlb4jnmzPucrBPXUMafU",
+        "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },
     credentials: "include",
-    body: JSON.stringify({
-      searchQuery: "",
-      currentPage: action.currentPage,
-      sizePerPage: action.sizePerPage,
-      poSearchFilter: {
-        status: -99,
-      },
-    }),
   })
     .then((response) => handleApiErrors(response))
     .then((response) => response.json())

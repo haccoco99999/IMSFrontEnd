@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import "./list-products-table.css";
 import { useState } from "react";
 export default function ListProductsTable(props) {
+  
   // function onChangeInput(index, event) {
 
   //     setlistProduct(
@@ -136,6 +137,18 @@ export default function ListProductsTable(props) {
                     );
                   }
                 })}
+                {!props.disabled ? (
+                  <td
+                    style={{ color: "red" }}
+                    onClick={() =>
+                      props.clickDeleteProduct(product.productVariantId)
+                    }
+                  >
+                    Delete
+                  </td>
+                ) : (
+                  ""
+                )}{" "}
               </tr>
             ))
           ) : (

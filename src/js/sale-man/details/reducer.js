@@ -5,6 +5,10 @@ import {
   SUBMIT_REQUEST,
   SUBMIT_RESPONSE,
   SUBMIT_ERROR,
+  UPDATE_PR_REQUEST,
+  UPDATE_PR_ERROR,
+  UPDATE_PR_RESPONSE,
+  CLEAR_MESSAGE,
 } from "./constants";
 
 const initialState = {
@@ -78,6 +82,39 @@ export default function reducer(state = initialState, action) {
         errors: "",
       };
 
+    case UPDATE_PR_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: "",
+      };
+    case UPDATE_PR_RESPONSE:
+      return {
+        ...state,
+        requesting: false,
+        successful: true,
+        messages: "Update Success",
+        errors: "",
+      };
+    case UPDATE_PR_ERROR:
+      return {
+        ...state,
+        requesting: false,
+        successful: false,
+        messages: "",
+        errors: "",
+      };
+
+    case CLEAR_MESSAGE:
+      return {
+        ...state,
+        requesting: false,
+        successful: true,
+        messages: "",
+        errors: "",
+      };
     default:
       return state;
   }

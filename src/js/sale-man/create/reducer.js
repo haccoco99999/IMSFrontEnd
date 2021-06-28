@@ -2,6 +2,7 @@ import {
   CREATE_PR_REQUEST,
   CREATE_PR_RESPONSE,
   CREATE_PR_ERROR,
+  CLEAR_MESSAGE,
 } from "./constants";
 
 const initialState = {
@@ -29,6 +30,14 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: action.json.createdRequisitionId,
+        errors: "",
+      };
+    case CLEAR_MESSAGE:
+      return {
+        ...state,
+        requesting: false,
+        successful: true,
+        messages: "",
         errors: "",
       };
 

@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-
+import moment from "moment";
+//css
 import "../sale-man.css";
-
+//components
 import Table from "../../list-products-table/ListProductsTable";
-import { getPRDetailsAction, submitAction } from "./action";
+import { getPRDetailsAction, submitAction, updateAction } from "./action";
+import SearchComponent from "../../search-component/SearchComponent";
 
 export default function details() {
   let history = useHistory();
   let dispatch = useDispatch();
   let location = useLocation();
   const [isFromManagerPage, setIsFromManagerPage] = useState(true);
+  const [isEditDisabled, setIsEditDisabled] = useState(true);
+  const [deadline, setDeadline] = useState("");
+  const [isCancel, setIsCancel] = useState(false);
 
   const message = useSelector(
     (state) => state.getDetailsPurchaseRequisitionReducer.messages
   );
+
+  const [cleanListProducts, setCleanListProducts] = useState([]);
+  const [listProductReset, setListProductReset] = useState(cleanListProducts);
 
   const [listValueColumn, setListColumn] = useState([
     {
@@ -26,29 +34,35 @@ export default function details() {
     },
     {
       orderQuantity: "Order Quantity",
+      input: true,
     },
   ]);
 
-  const { status, createdBy, createDate, listGetProducts } = useSelector(
-    (state) => ({
-      status:
-        state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
-          .purchaseOrderStatus,
-      createdBy:
-        state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
-          .transaction.createdBy.userName,
-      createDate:
-        state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
-          .transaction.createdDate,
-      listGetProducts:
-        state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
-          .purchaseOrderProduct,
-    })
-  );
-
-  const [cleanJson, setCleanJson] = useState([]);
-
-  const [returnData, setReturnData] = useState(false);
+  const {
+    status,
+    createdBy,
+    createDate,
+    listGetProductsStore,
+    token,
+    deadlineStore,
+  } = useSelector((state) => ({
+    status:
+      state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
+        .purchaseOrderStatus,
+    createdBy:
+      state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
+        .transaction.createdBy.userName,
+    createDate:
+      state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
+        .transaction.createdDate,
+    listGetProductsStore:
+      state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
+        .purchaseOrderProduct,
+    token: state.client.token,
+    deadlineStore:
+      state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
+        .deadline,
+  }));
 
   function goBackClick() {
     history.goBack();
@@ -60,11 +74,89 @@ export default function details() {
 
   function onSubmitClick(event) {
     event.preventDefault();
-    dispatch(submitAction({ id: location.state.purchaseRequisitionId }));
+    dispatch(
+      submitAction({ id: location.state.purchaseRequisitionId, token: token })
+    );
   }
 
+  function onEditClick() {
+    setIsEditDisabled(!isEditDisabled);
+    setDeadline(deadlineStore);
+  }
+
+  function onCancelClick() {
+    setIsEditDisabled(!isEditDisabled);
+    setIsCancel(true);
+    setCleanListProducts(listGetProductsStore);
+    setDeadline(deadlineStore);
+    setIsCancel(!isCancel);
+  }
+
+  function clickToAddProduct(productRaw) {
+    let product = {
+      id: productRaw.productId,
+      orderId: "",
+      productVariantId: productRaw.id,
+      orderQuantity: 1,
+      unit: productRaw.unit,
+      price: productRaw.price,
+      discountAmount: 0,
+      totalAmount: productRaw.price * 1,
+      name: productRaw.name,
+    };
+    setCleanListProducts([...cleanListProducts, product]);
+  }
+  function clickDeleteProduct(id) {
+    setCleanListProducts(
+      cleanListProducts.filter((element) => element.productVariantId !== id)
+    );
+  }
+  function onChangeDeadline(event) {
+    setDeadline(moment.utc(event.target.value).format());
+  }
+
+  function onclickUpdate() {
+    const data = {
+      requisitionId: location.state.purchaseRequisitionId,
+      deadline: deadline,
+      orderItems: cleanListProducts.map((product) => {
+        return {
+          productVariantId: product.productVariantId,
+          orderQuantity: product.orderQuantity,
+          unit: product.unit,
+          price: product.price,
+          discountAmount: product.discountAmount,
+          totalAmount: product.totalAmount,
+        };
+      }),
+    };
+
+    dispatch(updateAction({ data: data, token: token }));
+  }
+
+  function onChangeValueProduct(event) {
+    setCleanListProducts(
+      cleanListProducts.map((element, index) =>
+        index == event.target.id
+          ? {
+              ...element,
+              [event.target.name]: event.target.value,
+              totalAmount:
+                [event.target.name] === "orderQuantity"
+                  ? event.target.value * element.price
+                  : event.target.value * element.orderQuantity,
+            }
+          : element
+      )
+    );
+  }
   useEffect(() => {
-    dispatch(getPRDetailsAction({ id: location.state.purchaseRequisitionId }));
+    dispatch(
+      getPRDetailsAction({
+        id: location.state.purchaseRequisitionId,
+        token: token,
+      })
+    );
     // check tu page nao toi
 
     if (location.state.fromPage !== "ManagerPage") {
@@ -73,35 +165,36 @@ export default function details() {
   }, []);
 
   useEffect(() => {
-    if (listGetProducts !== null) {
-      if (listGetProducts !== []) {
-        setCleanJson(
-          listGetProducts.map((product) => {
+    if (listGetProductsStore !== null) {
+      if (listGetProductsStore !== []) {
+        setCleanListProducts(
+          listGetProductsStore.map((product) => {
             product.name = product.productVariant.name;
             delete product["productVariant"];
             return product;
           })
         );
       }
-
-      setReturnData(true);
     }
-  }, [listGetProducts]);
+  }, [listGetProductsStore]);
 
   useEffect(() => {
-    console.log("okkkkkkk");
     if (message === "Submit Success") {
       dispatch(
-        getPRDetailsAction({ id: location.state.purchaseRequisitionId })
+        getPRDetailsAction({
+          id: location.state.purchaseRequisitionId,
+          token: token,
+        })
       );
-      // history.push("/homepage/sale-man/details", {
-      //   fromPage: "DetailsPage",
-      //   purchaseRequisitionId: location.state.purchaseRequisitionId,
-      // });
+    } else if (message === "Update Success") {
+      dispatch(
+        getPRDetailsAction({
+          id: location.state.purchaseRequisitionId,
+          token: token,
+        })
+      );
     }
   }, [message]);
-
-  console.log("LIST", cleanJson);
 
   return (
     <div>
@@ -127,32 +220,47 @@ export default function details() {
               </h2>
               <div class="form-text id-color">{status}</div>
             </div>
-            {status !== "0" && (
+            {status === 0 && (
               <div>
-                <button
-                  type="button"
-                  onClick={onSubmitClick}
-                  className="btn btn-primary me-3 text-white button-tab "
-                >
-                  Submit
-                </button>
+                {isEditDisabled ? (
+                  <>
+                    {" "}
+                    <button
+                      type="button"
+                      className="btn btn-warning button-tab me-3 text-white"
+                      onClick={onEditClick}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={onSubmitClick}
+                      className="btn btn-primary me-3 text-white button-tab "
+                    >
+                      Submit
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    <button
+                      type="button"
+                      className="btn btn-danger button-tab me-3 text-white"
+                      onClick={onCancelClick}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={onclickUpdate}
+                      className="btn btn-primary me-3 text-white button-tab "
+                    >
+                      Update
+                    </button>
+                  </>
+                )}
               </div>
             )}
-
-            {/* <div>
-          <button className="btn btn-danger button-tab me-3 text-white">
-            Reject
-          </button>
-          <button
-            type="button"
-            data-bs-target="#AdjustInventoryModal"
-            data-bs-toggle="modal"
-            className="btn btn-primary button-tab--adjust me-3 text-white"
-          >
-            Adjust Inventory
-          </button>
-
-        </div> */}
           </div>
         </div>
       </div>
@@ -187,7 +295,38 @@ export default function details() {
           </div>
         </div>
         <div className="wrapper-content shadow mt-3">
-          <Table listColumn={listValueColumn} listData={cleanJson} />
+          {!isEditDisabled && (
+            <>
+              <div className="mt-2">
+                <label for="deadline" class="form-label">
+                  Deadline
+                </label>
+                <input
+                  type="datetime-local"
+                  name="deadline"
+                  defaultValue={deadline}
+                  class="form-control"
+                  onChange={onChangeDeadline}
+                />
+              </div>
+              <div className="mt-2">
+                <label for="deadline" class="form-label">
+                  Search
+                </label>
+                <SearchComponent clickToAddProduct={clickToAddProduct} />
+              </div>
+            </>
+          )}
+          <div className="mt-2">
+            <Table
+              clickToAddProduct={clickToAddProduct}
+              listColumn={listValueColumn}
+              listData={cleanListProducts}
+              disabled={isEditDisabled}
+              clickDeleteProduct={clickDeleteProduct}
+              onChangeValueProduct={onChangeValueProduct}
+            />
+          </div>
         </div>
       </div>
     </div>
