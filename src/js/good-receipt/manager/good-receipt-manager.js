@@ -13,13 +13,6 @@ export default function GoodsReceipt() {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  // let list_goods_receipt = useSelector(
-  //   (state) => state.getGoodsReceiptReducer.listGoodsReceipt
-  // );
-
-  // let pageCount = useSelector(
-  //   (state) => state.getGoodsReceiptReducer.pageCount
-  // );
 
   const { list_goods_receipt, pageCount, token } = useSelector((state) => ({
     list_goods_receipt: state.getGoodsReceiptReducer.listGoodsReceipt,
@@ -160,7 +153,6 @@ export default function GoodsReceipt() {
             listHeaderEdit={listEditHeader}
             listColumn={listValueColumn}
             listData={list_goods_receipt}
-            // onRowClick={}
             backPagingClick={backPagingClick}
             nextPagingClick={nextPagingClick}
             sizePerPage={sizePerPage}

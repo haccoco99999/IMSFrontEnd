@@ -3,7 +3,9 @@ import { useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import "../../product.css";
+//components
 import { createProduct } from "../action";
+import Table from '../../../list-products-table/ListProductsTable'
 
 const formReducer = (state, event) => {
   return {
@@ -42,19 +44,33 @@ export default function () {
     history.goBack();
   }
 
-  // function addAttribute() {
-  //   setVariantValues((state) => [
-  //     ...state,
-  //     {
-  //       sku: formrData.sku,
-  //       price: formData.price,
-  //       storageQuantity: formData.quantity,
-  //     },
-  //   ]);
-  // }
-
   function onClickSave() {
     console.log(variantValues);
+    const data = {
+      name: dataLastPage.name,
+      brandName: dataLastPage.brand,
+      categoryId: selectedCategory.id,
+      isVariantType: true,
+      productVariants: [
+        // {
+        //   name: "VariantTypeName-Attribute1-Attribute2",
+        //   price: 20,
+        //   barcode: "string",
+        //   sku: "dwdawdawdaw",
+        //   unit: "string",
+        //   storageQuantity: 30,
+        // },
+        // {
+        //   name: "VariantTypeName-Attribute1-Attribute2",
+        //   price: 30,
+        //   barcode: "string",
+        //   sku: "dwdawdawdaw",
+        //   unit: "string",
+        //   storageQuantity: 20,
+        // },
+      ],
+    };
+    dispatch(createProduct({ data: data, token: token }));
   }
 
   useEffect(() => {
@@ -104,160 +120,10 @@ export default function () {
           </div>
         </div>
 
-        {/* <div className="wrapper-content shadow">
-          <h4></h4>
-          <form>
-            <div class="mb-3">
-              <div class="row g-3 align-items-center">
-                <div class="col">
-                  <label for="sku" class="col-form-label">
-                    SKU
-                  </label>{" "}
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Write product name here"
-                    name="sku"
-                    //     value={formData.name || ""}
-                    //        onChange={handleChangeValue}
-                    //aria-describedby="passwordHelpInline"
-                  />
-                </div>
-                <div class="col">
-                  <label for="barcode" class="col-form-label">
-                    Barcode (optional)
-                  </label>{" "}
-                  <input
-                    name="barcode"
-                    //   value={formData.barcode || ""}
-                    //  onChange={handleChangeValue}
-                    type="tel"
-                    id="barcode"
-                    class="form-control"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <div class="row g-3 align-items-center">
-                <div class="col">
-                  <label for="salesprice" class="col-form-label">
-                    Sales price
-                  </label>{" "}
-                  <input
-                    type="number"
-                    id="salesprice"
-                    class="form-control"
-                    placeholder="Write product name here"
-                    name="name"
-                    //   value={formData.name || ""}
-                    //   onChange={handleChangeValue}
-                    //aria-describedby="passwordHelpInline"
-                  />
-                </div>
-                <div class="col">
-                  <label for="barcode" class="col-form-label">
-                    Quantity
-                  </label>{" "}
-                  <input
-                    name="quantity"
-                    //        value={formData.barcode || ""}
-                    //         onChange={handleChangeValue}
-                    type="tel"
-                    class="form-control"
-                  />
-                </div>
-              </div>
-            </div>
-          </form>
-        </div> */}
-        <ComponentsDetailsVariants
-          dataAtrribute={variantValues}
-          onChangeValue={onChangeValue}
-          productName={dataLastPage.name}
+        <div className="wrapper-content shadow">
           
-        />
+        </div>
       </div>
     </div>
-  );
-}
-
-function ComponentsDetailsVariants(props) {
-  return (
-    <>
-      {props.dataAtrribute.map((element, index) => (
-        <div className="wrapper-content shadow mt-3">
-          <h4 className="id-color">
-            <span>{}</span>
-          </h4>
-          <form>
-            <div class="mb-3">
-              <div class="row g-3 align-items-center">
-                <div class="col">
-                  <label for="sku" class="col-form-label">
-                    SKU
-                  </label>{" "}
-                  <input
-                    id={index}
-                    type="text"
-                    class="form-control"
-                    placeholder="Write product name here"
-                    name="sku"
-                    value={element.sku}
-                    onChange={props.onChangeValue}
-                  />
-                </div>
-                <div class="col">
-                  <label for="barcode" class="col-form-label">
-                    Barcode (optional)
-                  </label>{" "}
-                  <input
-                    id={index}
-                    name="barcode"
-                    value={element.barcode}
-                    onChange={props.onChangeValue}
-                    type="tel"
-                   
-                    class="form-control"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <div class="row g-3 align-items-center">
-                <div class="col">
-                  <label for="salesprice" class="col-form-label">
-                    Sales price
-                  </label>{" "}
-                  <input
-                    id={index}
-                    type="number"
-                    class="form-control"
-                    name="salesprice"
-                    value={element.salesprice}
-                    onChange={props.onChangeValue}
-                  />
-                </div>
-                <div class="col">
-                  <label for="barcode" class="col-form-label">
-                    Quantity
-                  </label>{" "}
-                  <input
-                    id={index}
-                    name="quantity"
-                    type="number"
-                    class="form-control"
-                    value={element.quantity}
-                    onChange={props.onChangeValue}
-                  />
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      ))}
-    </>
   );
 }

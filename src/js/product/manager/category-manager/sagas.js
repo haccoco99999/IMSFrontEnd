@@ -9,26 +9,20 @@ import {
 
 import handleApiErrors from "../../../auth/api-errors";
 
-const getAllCategoryURL =
-  "https://imspublicapi.herokuapp.com/api/product/category?CurrentPage=1&SizePerPage=5";
-
-const getAllCategoryCreatedPageURL =
-  "https://imspublicapi.herokuapp.com/api/product/category?CurrentPage=1&SizePerPage=1000";
 
 function getAllCategory(action) {
   var url;
   console.log(action.page);
   if (action.page == "manager") {
-    url = getAllCategoryURL;
+    url = `https://imspublicapi.herokuapp.com/api/product/category?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
   } else {
-    url = getAllCategoryCreatedPageURL;
+    url = "https://imspublicapi.herokuapp.com/api/product/category?CurrentPage=1&SizePerPage=1000";
   }
   return fetch(url, {
     method: "GET",
     headers: {
       Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyNDU0NzQzMSwiZXhwIjoxNjI0NzIwMjMxLCJpYXQiOjE2MjQ1NDc0MzF9.3WQh0R850BrprGEoaulVtsilSkLA0BEqndgm_aVo7xo",
+        "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },
@@ -38,7 +32,6 @@ function getAllCategory(action) {
     .then((response) => response.json())
     .then((json) => json)
     .catch((error) => {
-      // console.error(error);
       throw error;
     });
 }

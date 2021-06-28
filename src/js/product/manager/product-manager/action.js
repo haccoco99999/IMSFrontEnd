@@ -1,11 +1,10 @@
-import {
-  GET_ALL_PRODUCTS_REQUEST,
-} from "../../constants";
+import { GET_ALL_PRODUCTS_REQUEST } from "../../constants";
 
-
-
-export default function action() {
-    return {
-        type: GET_ALL_PRODUCTS_REQUEST
-    }
+export function getAllProductAction({token, currentPage, sizePerPage}) {
+  return {
+    type: GET_ALL_PRODUCTS_REQUEST,
+    token,
+    currentPage,
+    sizePerPage,
+  };
 }

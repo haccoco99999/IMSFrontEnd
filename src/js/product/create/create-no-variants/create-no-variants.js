@@ -45,9 +45,8 @@ export default function () {
     const data = {
       name: dataLastPage.name,
       brandName: dataLastPage.brand,
-      barcode: formData.barcode,
-      unit: formData.unit,
       categoryId: selectedCategory.id,
+      isVariantType: false,
       productVariants: [
         {
           name: dataLastPage.name,
@@ -55,7 +54,6 @@ export default function () {
           sku: formData.sku,
           unit: formData.unit,
           storageQuantity: dataLastPage.quantity,
-          storageLocation: 0,
         },
       ],
     };
@@ -127,7 +125,7 @@ export default function () {
                     //aria-describedby="passwordHelpInline"
                   />
                 </div>
-                <div class="col">
+                {/* <div class="col">
                   <label for="barcode" class="col-form-label">
                     Barcode (optional)
                   </label>{" "}
@@ -139,7 +137,7 @@ export default function () {
                     id="barcode"
                     class="form-control"
                   />
-                </div>
+                </div> */}
               </div>
             </div>
 

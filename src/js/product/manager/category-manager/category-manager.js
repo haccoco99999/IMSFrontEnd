@@ -11,9 +11,14 @@ import Table from "../../../table-receipt/ListReceiptsTable";
 export default function () {
   let dispatch = useDispatch();
 
-  const list_Categories = useSelector(
-    (state) => state.getAllCategoriesReducer.listCategories
-  );
+  const { list_Categories, token, pageCount } = useSelector((state) => ({
+    list_Categories: state.getAllCategoriesReducer.listCategories,
+    token: state.client.token,
+    pageCount: state.getGoodsReceiptReducer.pageCount,
+  }));
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(5);
 
   const [listValueColumn, setListValueColumn] = useState({
     id: true,
@@ -25,9 +30,25 @@ export default function () {
     categoryName: "Name",
     categoryDescription: "Description",
   });
+
+  function nextPagingClick() {
+    console.log("forward");
+    setCurrentPage(currentPage + 1);
+  }
+  function backPagingClick() {
+    console.log("backWard");
+    setCurrentPage(currentPage - 1);
+  }
+
   useEffect(() => {
-    dispatch(GetAllCategoryAction());
-  }, []);
+    dispatch(
+      GetAllCategoryAction({
+        currentPage: currentPage,
+        sizePerPage: sizePerPage,
+        token: token,
+      })
+    );
+  }, [currentPage, sizePerPage]);
 
   return (
     <div>
@@ -57,42 +78,13 @@ export default function () {
           listHeaderEdit={listEditHeader}
           listColumn={listValueColumn}
           listData={list_Categories}
+          backPagingClick={backPagingClick}
+          nextPagingClick={nextPagingClick}
+          sizePerPage={sizePerPage}
+          currentPage={currentPage}
+          pageCount={pageCount}
         />
       </div>
-
-      {/* <div className="d-flex justify-content-center">
-        <div className="wrapper-table">
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">Category Name</th>
-                <th scope="col" colspan="3">
-                  Description
-                </th>
-                <th scope="col">Last Update</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr>
-                <td class="table-role-name ">Accountant</td>
-                <td colspan="3"></td>
-                <td>05/17/2021</td>
-              </tr>
-              <tr>
-                <td class="table-role-name ">Stockkeeper</td>
-                <td colspan="3"></td>
-                <td>05/17/2021</td>
-              </tr>
-              <tr>
-                <td class="table-role-name ">Salesman</td>
-                <td colspan="3"></td>
-                <td>05/17/2021</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div> */}
     </div>
   );
 }

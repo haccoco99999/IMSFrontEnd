@@ -9,6 +9,10 @@ const initialState = {
   successful: false,
   messages: "",
   errors: "",
+  currentPage: 0,
+  pageCount: 0,
+  sizePerPage: 0,
+  rowCountTotal: 0,
   listCategories: [],
 };
 
@@ -30,6 +34,10 @@ export default function reducer(state = initialState, action) {
         successful: true,
         messages: "",
         errors: "",
+        currentPage: action.json.paging.currentPage,
+        pageCount: action.json.paging.pageCount,
+        sizePerPage: action.json.paging.sizePerPage,
+        rowCountTotal: action.json.paging.rowCountTotal,
         listCategories: action.json.categories,
       };
 

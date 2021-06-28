@@ -7,19 +7,21 @@ import "../../product.css";
 
 //components
 import Filter from "../../filter";
-import Action from "./action";
+import {getAllProductAction} from "./action";
 import Table from "../../../table-receipt/ListReceiptsTable";
 
 export default function () {
   let history = useHistory();
   let dispatch = useDispatch();
-  const list_Products = useSelector(
-    (state) => state.getAllProductsReducer.listProducts
-  );
 
-  // useEffect(() => {
-  //   dispatch(Action());
-  // }, []);
+  const { list_Products, token, pageCount } = useSelector((state) => ({
+    token: state.client.token,
+    list_Products: state.getAllProductsReducer.listProducts,
+    pageCount: state.getAllProductsReducer.pageCount,
+  }));
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(5);
 
   const [listValueColumn, setListValueColumn] = useState({
     productId: true,
@@ -39,6 +41,27 @@ export default function () {
   function pushAddPage() {
     history.push("/homepage/product/create");
   }
+  function nextPagingClick() {
+    console.log("forward");
+    setCurrentPage(currentPage + 1);
+  }
+  function backPagingClick() {
+    console.log("backWard");
+    setCurrentPage(currentPage - 1);
+  }
+
+  useEffect(() => {
+    console.log("CurrentPage", currentPage);
+    
+    dispatch(
+      getAllProductAction({
+        currentPage: currentPage,
+        sizePerPage: sizePerPage,
+        token: token,
+      })
+    );
+  }, [currentPage, sizePerPage]);
+
   return (
     <div>
       <div className="ms-5">
@@ -111,6 +134,11 @@ export default function () {
           listHeaderEdit={listEditHeader}
           listColumn={listValueColumn}
           listData={list_Products}
+          backPagingClick={backPagingClick}
+          nextPagingClick={nextPagingClick}
+          sizePerPage={sizePerPage}
+          currentPage={currentPage}
+          pageCount={pageCount}
         />
       </div>
 

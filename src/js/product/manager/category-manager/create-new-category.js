@@ -1,6 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import "../../product.css";
+
+import { CreateCategoryAction } from "./action";
+
 export default function () {
+  let dispatch = useDispatch();
+
+  const { token } = useSelector((state) => ({
+    token: state.client.token,
+  }));
+
+  function onClickCreate() {
+    const data = {};
+    dispatch(CreateCategoryAction({ data: data, token: token }));
+  }
+
+  
+
   return (
     <div>
       <div
