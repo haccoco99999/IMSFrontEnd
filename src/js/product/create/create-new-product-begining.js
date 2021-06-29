@@ -94,7 +94,6 @@ export default function () {
   }
 
   const deleteVarriant = (index) => {
-    console.log(index);
     setVariantValues((state) => state.filter((_, i) => i !== index));
   };
 

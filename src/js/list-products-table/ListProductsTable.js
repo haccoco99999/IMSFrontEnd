@@ -141,7 +141,7 @@ export default function ListProductsTable(props) {
                   <td
                     style={{ color: "red" }}
                     onClick={() =>
-                      props.clickDeleteProduct(product.productVariantId)
+                      props.clickDeleteProduct(index)
                     }
                   >
                     Delete

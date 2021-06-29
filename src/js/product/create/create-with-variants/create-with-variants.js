@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "../../product.css";
 //components
 import { createProduct } from "../action";
-import Table from '../../../list-products-table/ListProductsTable'
+import Table from "../../../list-products-table/ListProductsTable";
 
 const formReducer = (state, event) => {
   return {
@@ -18,27 +18,74 @@ export default function () {
   let location = useLocation();
   let dispatch = useDispatch();
   const [formData, setFormData] = useReducer(formReducer, {});
-  const [variantValues, setVariantValues] = useState([{}]);
+  const [variantValues, setVariantValues] = useState([]);
+
+  const [listValueColumn, setListValueColumn] = useState([
+    {
+      name: "Variants Name",
+      input: true,
+    },
+    {
+      sku: "SKU",
+      input: true,
+    },
+    {
+      barcode: "Barcode",
+      input: true,
+    },
+
+    {
+      unit: "Unit",
+    },
+    {
+      storageQuantity: "Quantity",
+      input: true,
+    },
+    {
+      price: "Price",
+      input: true,
+    },
+  ]);
+
+  const [listData, setListData] = useState([]);
 
   const dataLastPage = location.state.formData;
   const selectedCategory = location.state.categorySelected;
 
-  const onChangeValue = (event) => {
+  function onChangeValueVariants(event) {
     setVariantValues(
       variantValues.map((element, index) =>
         index == event.target.id
           ? {
               ...element,
               [event.target.name]: event.target.value,
+              // totalAmount:
+              //   [event.target.name] === "storageQuantity"
+              //     ? event.target.value * element.price
+              //     : event.target.value * element.storageQuantity,
             }
           : element
       )
     );
-  };
+  }
 
-  console.log(dataLastPage);
-  console.log(selectedCategory);
-  console.log(variantValues);
+  function clickToAddVariants(row) {
+    let productVariants = {
+      name: "",
+      price: 0,
+      barcode: "",
+      sku: "",
+      unit:dataLastPage.unit ,
+      storageQuantity: 0,
+    };
+    setVariantValues([...variantValues, productVariants]);
+  }
+
+  function clickDeleteVariant(id) {
+    setVariantValues(
+      variantValues.filter((_,index) => index !== id)
+    );
+  }
 
   function goBackClick() {
     history.goBack();
@@ -51,31 +98,15 @@ export default function () {
       brandName: dataLastPage.brand,
       categoryId: selectedCategory.id,
       isVariantType: true,
-      productVariants: [
-        // {
-        //   name: "VariantTypeName-Attribute1-Attribute2",
-        //   price: 20,
-        //   barcode: "string",
-        //   sku: "dwdawdawdaw",
-        //   unit: "string",
-        //   storageQuantity: 30,
-        // },
-        // {
-        //   name: "VariantTypeName-Attribute1-Attribute2",
-        //   price: 30,
-        //   barcode: "string",
-        //   sku: "dwdawdawdaw",
-        //   unit: "string",
-        //   storageQuantity: 20,
-        // },
-      ],
+      productVariants: variantValues,
     };
-    dispatch(createProduct({ data: data, token: token }));
+    console.log(JSON.stringify(data));
+    //dispatch(createProduct({ data: data, token: token }));
   }
 
-  useEffect(() => {
-    setVariantValues(location.state.variantValues);
-  }, []);
+  // useEffect(() => {
+  //   setVariantValues(location.state.variantValues);
+  // }, []);
   return (
     //   todo: gop chung 2 bang , sau do tach ra
     <div className="home_content overflow-scroll ">
@@ -121,7 +152,16 @@ export default function () {
         </div>
 
         <div className="wrapper-content shadow">
-          
+          <button onClick={clickToAddVariants} className="btn btn-primary">
+            Add
+          </button>
+          <Table
+            listColumn={listValueColumn}
+            listData={variantValues}
+            clickToAddProduct={clickToAddVariants}
+            onChangeValueProduct={onChangeValueVariants}
+            clickDeleteProduct={clickDeleteVariant}
+          />
         </div>
       </div>
     </div>

@@ -36,7 +36,8 @@ export default function ProductDetails() {
           )}
         </div>
       </div>
-      <div className="wrap"></div>
+       {/* content */}
+       <div className="wrapper space-top"></div>
     </>
   );
 }
