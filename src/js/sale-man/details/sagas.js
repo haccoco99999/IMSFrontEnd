@@ -11,6 +11,9 @@ import {
   UPDATE_PR_REQUEST,
   UPDATE_PR_ERROR,
   UPDATE_PR_RESPONSE,
+  DELETE_PR_REQUEST,
+  DELETE_PR_RESPONSE,
+  DELETE_PR_ERROR,
 } from "./constants";
 
 const getDetailsPRURL =
@@ -53,7 +56,7 @@ function submitPR(action) {
   })
     .then((response) => handleApiErrors(response))
     .then((response) => response)
-    
+
     .catch((error) => {
       throw error;
     });
@@ -73,6 +76,25 @@ function updatePR(action) {
   })
     .then((response) => handleApiErrors(response))
     .then((response) => response.json)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+function deletePR(action) {
+  const url = `http://imspublicapi.herokuapp.com/api/purchaseorder/cancel/${action.id}`;
+
+  return fetch(url, {
+    method: "PUT",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response)
     .catch((error) => {
       throw error;
     });
@@ -109,10 +131,21 @@ function* updatePRFlow(action) {
   }
 }
 
+function* deletePRFlow(action) {
+  try {
+    let json = yield call(deletePR,action)
+    yield put({type:DELETE_PR_RESPONSE,json})
+  } catch (error) {
+    console.log(error)
+    yield put({ type:DELETE_PR_ERROR})
+  }
+}
+
 function* watcher() {
   yield takeEvery(GET_DETAILS_PR_REQUEST, getDetailsPRFlow);
   yield takeEvery(SUBMIT_REQUEST, submitPRFlow);
   yield takeEvery(UPDATE_PR_REQUEST, updatePRFlow);
+  yield takeEvery(DELETE_PR_REQUEST,deletePRFlow)
 }
 
 export default watcher;

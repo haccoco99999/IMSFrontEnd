@@ -16,6 +16,7 @@ export default function () {
   const [sizePerPage, setSizePerPage] = useState(5);
 
   const [listValueColumn, setListValueColumn] = useState({
+    id:false,
     supplierName: true,
     email: true,
     phoneNumber: true,
@@ -25,9 +26,10 @@ export default function () {
     // id: "Goods Receipt ID",
   });
 
-  const { listData, pageCount } = useSelector((state) => ({
+  const { listData, pageCount,token } = useSelector((state) => ({
     listData: state.getAllSuppliersReducer.listSuppliers,
     pageCount: state.getAllSuppliersReducer.pageCount,
+    token: state.client.token,
   }));
 
   function pushAddPage() {
@@ -45,7 +47,7 @@ export default function () {
   }
   function onClickToDetails(row) {
     history.push("/homepage/supplier/details", {
-      supplierName: row.supplierName,
+      supplierId: row.id,
     });
   }
 
@@ -54,6 +56,7 @@ export default function () {
       getAllSuppliersAction({
         currentPage: currentPage,
         sizePerPage: sizePerPage,
+        token: token
       })
     );
   }, [currentPage, sizePerPage]);

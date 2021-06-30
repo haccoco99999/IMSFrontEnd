@@ -3,24 +3,17 @@ import handleApiErrors from "../../auth/api-errors";
 
 import { GET_SP_REQUEST, GET_SP_RESPONSE, GET_SP_ERROR } from "./constants";
 
-const getAllSuppliersURL =
-  "https://imspublicapi.herokuapp.com/api/suppliers/search?CurrentPage=1&SizePerPage=5";
-
 function getAllSuppliers(action) {
+  const getAllSuppliersURL = `http://imspublicapi.herokuapp.com/api/suppliers/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+
   return fetch(getAllSuppliersURL, {
     method: "GET",
     headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyMzk2MDEzOSwiZXhwIjoxNjI0NTY0OTM5LCJpYXQiOjE2MjM5NjAxMzl9.RZiTcJ-QV0XBtSkgfT2R2Nvv4HaKrqFps5qtmTry5VU",
+      Authorization: "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },
     credentials: "include",
-    body: JSON.stringify({
-      currentPage: action.currentPage,
-      sizePerPage: action.sizePerPage,
-    }),
   })
     .then((response) => handleApiErrors(response))
     .then((response) => response.json())
@@ -36,6 +29,7 @@ function* getAllSuppliersFlow(action) {
 
     yield put({ type: GET_SP_RESPONSE, json });
   } catch (error) {
+    console.log(error);
     yield put({ type: GET_SP_ERROR });
   }
 }

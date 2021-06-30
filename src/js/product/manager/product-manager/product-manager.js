@@ -7,7 +7,7 @@ import "../../product.css";
 
 //components
 import Filter from "../../filter";
-import {getAllProductAction} from "./action";
+import { getAllProductAction } from "./action";
 import Table from "../../../table-receipt/ListReceiptsTable";
 
 export default function () {
@@ -26,7 +26,7 @@ export default function () {
   const [listValueColumn, setListValueColumn] = useState({
     productId: true,
     name: true,
-    catagory: true,
+    category: true,
     quantity: true,
     modifiedDate: true,
   });
@@ -50,9 +50,16 @@ export default function () {
     setCurrentPage(currentPage - 1);
   }
 
+  function onClickToDetails(row) {
+    history.push("/homepage/product/details", {
+      productId: row.productId,
+      fromPage: "ManagerPage",
+    });
+  }
+
   useEffect(() => {
     console.log("CurrentPage", currentPage);
-    
+
     dispatch(
       getAllProductAction({
         currentPage: currentPage,
@@ -139,6 +146,7 @@ export default function () {
           sizePerPage={sizePerPage}
           currentPage={currentPage}
           pageCount={pageCount}
+          onRowClick={onClickToDetails}
         />
       </div>
 

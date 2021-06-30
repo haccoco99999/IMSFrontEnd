@@ -6,7 +6,12 @@ import moment from "moment";
 import "../sale-man.css";
 //components
 import Table from "../../list-products-table/ListProductsTable";
-import { getPRDetailsAction, submitAction, updateAction } from "./action";
+import {
+  getPRDetailsAction,
+  submitAction,
+  updateAction,
+  deletePRAction,
+} from "./action";
 import SearchComponent from "../../search-component/SearchComponent";
 
 export default function details() {
@@ -35,6 +40,9 @@ export default function details() {
     {
       orderQuantity: "Order Quantity",
       input: true,
+    },
+    {
+      price: "Price",
     },
   ]);
 
@@ -90,6 +98,12 @@ export default function details() {
     setCleanListProducts(listGetProductsStore);
     setDeadline(deadlineStore);
     setIsCancel(!isCancel);
+  }
+
+  function onDeletePRClick() {
+    dispatch(
+      deletePRAction({ id: location.state.purchaseRequisitionId, token: token })
+    );
   }
 
   function clickToAddProduct(productRaw) {
@@ -193,6 +207,11 @@ export default function details() {
           token: token,
         })
       );
+    } else if (message === "Delete Success") {
+      getPRDetailsAction({
+        id: location.state.purchaseRequisitionId,
+        token: token,
+      });
     }
   }, [message]);
 
@@ -224,7 +243,13 @@ export default function details() {
               <div>
                 {isEditDisabled ? (
                   <>
-                    {" "}
+                    <button
+                      type="button"
+                      className="btn btn-danger button-tab me-3 text-white"
+                      onClick={onDeletePRClick}
+                    >
+                      Delete
+                    </button>
                     <button
                       type="button"
                       className="btn btn-warning button-tab me-3 text-white"
@@ -245,7 +270,7 @@ export default function details() {
                     {" "}
                     <button
                       type="button"
-                      className="btn btn-danger button-tab me-3 text-white"
+                      className="btn btn-secondary button-tab me-3 text-white"
                       onClick={onCancelClick}
                     >
                       Cancel

@@ -10,7 +10,7 @@ import Manager from "./manager/manager";
 import Create from "./create/create-new-product-begining";
 import Variants from "./create/create-with-variants/create-with-variants";
 import NoVariants from "./create/create-no-variants/create-no-variants";
-
+import ProductDetails from "./details/product-details";
 // test
 //import CreateBeginT from './product-manager/create-new-product-beggining'
 
@@ -32,6 +32,9 @@ export default function () {
           </Route>
           <Route path="/homepage/product/create/variants">
             <Variants />
+          </Route>
+          <Route path="/homepage/product/details">
+            <ProductDetails/>
           </Route>
         </Switch>
 
