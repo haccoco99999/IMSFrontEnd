@@ -8,12 +8,17 @@ import "../sale-man.css";
 //components
 import SearchComponent from "../../search-component/SearchComponent";
 import ListProductsTable from "../../list-products-table/ListProductsTable";
-import { createPRAction, clearMessageAction } from "./action";
+import {
+  createPRAction,
+  clearMessageAction,
+  getALlSuppliersAction,
+} from "./action";
 
 export default function () {
   let history = useHistory();
   let dispatch = useDispatch();
 
+  const [supplierSelected, setSupplierSelected] = useState({});
   const [purchaseOrderProduct, setPurchaseOrderProduct] = useState([]);
   const [deadline, setDeadline] = useState("");
   const [listColumn, setListColumn] = useState([
@@ -37,11 +42,23 @@ export default function () {
     },
   ]);
 
-  const { message, token } = useSelector((state) => ({
+  const { message, token, listSuppliers } = useSelector((state) => ({
     message: state.getCreatedFormPurchaseRequisitionReducer.messages,
     token: state.client.token,
+    listSuppliers: state.getCreatedFormPurchaseRequisitionReducer.listSuppliers,
   }));
 
+  const handleChangeSuppliers = (e) => {
+    const index = e.target.selectedIndex;
+    const el = e.target.childNodes[index];
+
+    // console.log(event.target.id);
+    setSupplierSelected({
+      id: el.getAttribute("id"),
+      name: el.getAttribute("value"),
+    });
+    console.log(supplierSelected);
+  };
   function goBackClick() {
     history.goBack();
   }
@@ -86,6 +103,7 @@ export default function () {
 
   function onSaveClick() {
     const data = {
+      supplierId: "50715",
       deadline: deadline,
       orderItems: purchaseOrderProduct.map((product) => {
         return {
@@ -98,6 +116,7 @@ export default function () {
         };
       }),
     };
+    console.log(data);
     dispatch(createPRAction({ data: data, token: token }));
   }
 
@@ -112,7 +131,9 @@ export default function () {
     }
   }, [message]);
 
-  // useEffect();
+  // useEffect(() => {
+  //   dispatch(getALlSuppliersAction({ token: token }));
+  // }, []);
 
   return (
     <div>
@@ -163,6 +184,17 @@ export default function () {
             onChange={onChangeDeadline}
           />
         </div>
+        {/* <div className="mt-3">
+          <label for="supplier" class="form-label">
+            Supplier
+          </label>
+          <select  name="supplierID"
+                    class="form-select"
+                    aria-label="Default select example"
+                    defaultValue="">
+<
+          </select>
+        </div> */}
 
         <div className="mt-3">
           <label class="form-label" value="">

@@ -131,6 +131,7 @@ export default function details() {
 
   function onclickUpdate() {
     const data = {
+      supplierId: "50715",
       requisitionId: location.state.purchaseRequisitionId,
       deadline: deadline,
       orderItems: cleanListProducts.map((product) => {
@@ -208,12 +209,15 @@ export default function details() {
         })
       );
     } else if (message === "Delete Success") {
-      getPRDetailsAction({
-        id: location.state.purchaseRequisitionId,
-        token: token,
-      });
+      dispatch(
+        getPRDetailsAction({
+          id: location.state.purchaseRequisitionId,
+          token: token,
+        })
+      );
     }
   }, [message]);
+  console.log(typeof deadlineStore);
 
   return (
     <div>
@@ -309,6 +313,10 @@ export default function details() {
               <p>
                 <strong>Create date:</strong>
                 {createDate.split("T")[0]}
+              </p>
+              <p>
+                <strong>Deadline:</strong>
+                {deadlineStore.split("T")[0]}
               </p>
               {/* <p>
                     <strong>Submit date:</strong> 05/12/2021

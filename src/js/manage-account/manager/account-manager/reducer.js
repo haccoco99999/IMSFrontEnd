@@ -27,6 +27,18 @@ export default function reducer(state = initialState, action) {
         listAccounts: [],
       };
     case GET_ALL_ACCOUNT_RESPONSE:
+      let clearJson = [...action.json.paging.resultList];
+      action.json.paging.resultList = clearJson.map((item) => {
+        item.id = item.imsUser.id;
+        item.email = item.imsUser.email;
+        item.phoneNumber = item.imsUser.phoneNumber;
+        item.fullname = item.imsUser.fullname;
+        item.isActive = "";
+        if (item.imsUser.isActive) item.isActive = "Active";
+        else item.isActive = "Deactive";
+        delete item["imsUser"];
+        return item;
+      });
       return {
         requesting: false,
         successful: true,

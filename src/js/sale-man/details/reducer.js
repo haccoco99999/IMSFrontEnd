@@ -27,6 +27,7 @@ const initialState = {
       createdBy: {},
       createdDate: "",
     },
+    deadline: "",
   },
 };
 
@@ -108,7 +109,8 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-      }; case DELETE_PR_REQUEST:
+      };
+    case DELETE_PR_REQUEST:
       return {
         ...state,
         requesting: true,

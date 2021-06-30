@@ -25,11 +25,19 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-        listProducts:[]
+        listProducts: [],
       };
 
     case GET_ALL_PRODUCTS_RESPONSE:
-      console.log(action.json);
+      let clearJson = [...action.json.paging.resultList];
+      console.log(clearJson);
+      action.json.paging.resultList = clearJson.map((product) => {
+        delete product["suggest"];
+        delete product["variantIds"];
+        return product;
+      });
+      console.log(action.json.paging.resultList);
+
       return {
         ...state,
         requesting: false,
@@ -49,7 +57,8 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",listProducts:[]
+        errors: "",
+        listProducts: [],
       };
     default:
       return state;

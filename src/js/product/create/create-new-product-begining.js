@@ -72,7 +72,7 @@ export default function () {
   };
 
   const handleChangeCategory = (e) => {
-    // event.preventDefault();
+    
     const index = e.target.selectedIndex;
     const el = e.target.childNodes[index];
 

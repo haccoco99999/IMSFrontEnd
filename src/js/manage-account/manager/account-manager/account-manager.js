@@ -35,7 +35,7 @@ function AccountManager() {
   const [listEditHeader, setListEditHeader] = useState({
     isActive: "Status",
   });
-  const [listAccounts, setListAccounts] = useState([]);
+
 
   function nextPagingClick() {
     console.log("forward");
@@ -62,21 +62,22 @@ function AccountManager() {
     );
   }, []);
 
-  useEffect(() => {
-    setListAccounts(
-      data.map((item) => {
-        item.id = item.imsUser.id;
-        item.email = item.imsUser.email;
-        item.phoneNumber = item.imsUser.phoneNumber;
-        item.fullname = item.imsUser.fullname;
-        item.isActive = "";
-        if (item.imsUser.isActive) item.isActive = "Active";
-        else item.isActive = "Deactive";
-        delete item["imsUser"];
-        return item;
-      })
-    );
-  }, [data]);
+
+  // useEffect(() => {
+  //   setListAccounts(
+  //     data.map((item) => {
+  //       item.id = item.imsUser.id;
+  //       item.email = item.imsUser.email;
+  //       item.phoneNumber = item.imsUser.phoneNumber;
+  //       item.fullname = item.imsUser.fullname;
+  //       item.isActive = "";
+  //       if (item.imsUser.isActive) item.isActive = "Active";
+  //       else item.isActive = "Deactive";
+  //       delete item["imsUser"];
+  //       return item;
+  //     })
+  //   );
+  // }, []);
 
   // console.log(listAccounts);
   return (
@@ -127,7 +128,7 @@ function AccountManager() {
         <Table
           listHeaderEdit={listEditHeader}
           listColumn={listValueColumn}
-          listData={listAccounts}
+          listData={data}
           pageCount={pageCount}
           sizePerPage={sizePerPage}
           currentPage={currentPage}

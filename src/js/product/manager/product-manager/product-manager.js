@@ -27,7 +27,7 @@ export default function () {
     productId: true,
     name: true,
     category: true,
-    quantity: true,
+    createDate: true,
     modifiedDate: true,
   });
 
@@ -36,6 +36,7 @@ export default function () {
     name: "Product Name",
     modifiedDate: "Modified Date",
     catagory: "Category",
+    createDate: "Create Date",
   });
 
   function pushAddPage() {

@@ -133,11 +133,12 @@ function* updatePRFlow(action) {
 
 function* deletePRFlow(action) {
   try {
-    let json = yield call(deletePR,action)
-    yield put({type:DELETE_PR_RESPONSE,json})
+    let json = yield call(deletePR, action);
+    console.log("delete", json);
+    yield put({ type: DELETE_PR_RESPONSE, json });
   } catch (error) {
-    console.log(error)
-    yield put({ type:DELETE_PR_ERROR})
+    console.log(error);
+    yield put({ type: DELETE_PR_ERROR });
   }
 }
 
@@ -145,7 +146,7 @@ function* watcher() {
   yield takeEvery(GET_DETAILS_PR_REQUEST, getDetailsPRFlow);
   yield takeEvery(SUBMIT_REQUEST, submitPRFlow);
   yield takeEvery(UPDATE_PR_REQUEST, updatePRFlow);
-  yield takeEvery(DELETE_PR_REQUEST,deletePRFlow)
+  yield takeEvery(DELETE_PR_REQUEST, deletePRFlow);
 }
 
 export default watcher;

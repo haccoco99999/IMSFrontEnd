@@ -29,17 +29,6 @@ export default function () {
   const [isChange, setIsChange] = useState(false);
   const [storageLocation, setStorageLocation] = useState("");
 
-  // const list_ConfirmPurchaseOrderID = useSelector(
-  //   (state) =>
-  //     state.getAllConfirmedPurchaseOrderReducer.listConfirmedPurchaseOrder
-  // );
-
-  // const list_BuyingProductStore = useSelector(
-  //   (state) =>
-  //     state.getAllConfirmedPurchaseOrderReducer.listProducts
-  //       .purchaseOrderProduct
-  // );
-
   const { list_ConfirmPurchaseOrderID, list_BuyingProductStore, token } =
     useSelector((state) => ({
       token: state.client.token,

@@ -1,10 +1,17 @@
-import { CREATE_PR_REQUEST,CLEAR_MESSAGE } from "./constants";
+import {
+  CREATE_PR_REQUEST,
+  CLEAR_MESSAGE,
+  GET_ALL_SUPPLIER_REQUEST,
+} from "./constants";
 
-export function createPRAction({ data,token }) {
-  return { type: CREATE_PR_REQUEST,data,token};
+export function createPRAction({ data, token }) {
+  return { type: CREATE_PR_REQUEST, data, token };
 }
 
-export function clearMessageAction(){
-return { type: CLEAR_MESSAGE}
+export function getALlSuppliersAction({ token }) {
+  return { type: GET_ALL_SUPPLIER_REQUEST, token };
 }
 
+export function clearMessageAction() {
+  return { type: CLEAR_MESSAGE };
+}
