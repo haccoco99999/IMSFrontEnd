@@ -33,7 +33,7 @@ export default function reducer(state = initialState, action) {
       console.log(clearJson);
       action.json.paging.resultList = clearJson.map((product) => {
         delete product["suggest"];
-        delete product["variantIds"];
+        delete product["variants"];
         return product;
       });
       console.log(action.json.paging.resultList);

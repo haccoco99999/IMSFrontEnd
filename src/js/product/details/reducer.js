@@ -12,7 +12,9 @@ const initialState = {
   successful: false,
   messages: "",
   errors: "",
-  productDetails: {},
+  productDetails: {
+    productVariants:null
+  },
 };
 
 export default function reducer(state = initialState, action) {
@@ -24,7 +26,7 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-        productDetails: {},
+       
       };
     case GET_DETAILS_PRODUCT_RESPONSE:
       console.log(action.json);

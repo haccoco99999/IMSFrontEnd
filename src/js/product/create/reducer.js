@@ -51,7 +51,7 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-        listCategories: [],
+        
       };
 
     case GET_ALL_CATEGORY_CREATED_RESPONSE:
@@ -61,7 +61,7 @@ export default function reducer(state = initialState, action) {
         successful: true,
         messages: "",
         errors: "",
-        listCategories: action.json.categories,
+        listCategories: action.json.paging.resultList,
       };
 
     case GET_ALL_CATEGORY_CREATED_ERROR:

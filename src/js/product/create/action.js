@@ -7,6 +7,6 @@ export function createProduct({ data, token }) {
   return { type: CREATE_PRODUCT_REQUEST, data, token };
 }
 
-export function getCategoriesAllAction() {
-  return { type: GET_ALL_CATEGORY_CREATED_REQUEST };
+export function getCategoriesAllAction({token}) {
+  return { type: GET_ALL_CATEGORY_CREATED_REQUEST,token };
 }

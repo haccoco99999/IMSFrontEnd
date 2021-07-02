@@ -6,21 +6,49 @@ import { useHistory, useLocation } from "react-router-dom";
 import "../product.css";
 //components
 import { getDetailsProductAction, updateProductAction } from "./action";
+import ListProductsTable from "../../list-products-table/ListProductsTable";
 
 export default function ProductDetails() {
   let history = useHistory();
   let location = useLocation();
   let dispatch = useDispatch();
+  const { productDetailsStore, messages, token, listVariantsStores } =
+    useSelector((state) => ({
+      token: state.client.token,
+      productDetailsStore: state.getDetailsProductReducer.productDetails,
+      message: state.getDetailsProductReducer.messages,
+      listVariantsStores:
+        state.getDetailsProductReducer.productDetails.productVariants,
+    }));
 
   const [isFromManagerPage, setIsFromManagerPage] = useState(true);
+  const [isReturnData, setIsReturnData] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [productDetails, setProductDetails] = useState({});
+  const [listVariants, setListVariants] = useState(listVariantsStores);
 
-  const { productDetailsStore, messages, token } = useSelector((state) => ({
-    token: state.client.token,
-    productDetailsStore: state.getDetailsProductReducer.productDetails,
-    message: state.getDetailsProductReducer.messages,
-  }));
+  const [listColumn, setListColumn] = useState([
+    { id: "Variant ID" },
+    {
+      name: "Name",
+    },
+    { sku: "SKU" },
+    {
+      unit: "Unit",
+      //input: true,
+    },
+    {
+      storageQuantity: "Quantity",
+      input: true,
+    },
+    {
+      price: "Unit Price",
+      input: true,
+    },
+    // {
+    //   totalAmount: "Amount",
+    // },
+  ]);
 
   function onClickEdit() {
     setIsDisabled(false);
@@ -43,8 +71,18 @@ export default function ProductDetails() {
   }, []);
 
   useEffect(() => {
-    if (productDetailsStore !== {}) setProductDetails(productDetailsStore);
+    if (productDetailsStore !== {}) {
+      setProductDetails(productDetailsStore);
+    }
   }, [productDetailsStore]);
+
+  useEffect(() => {
+    if (listVariantsStores !== null) {
+      setIsReturnData(true);
+
+      setListVariants(listVariantsStores);
+    }
+  }, [listVariantsStores]);
 
   return (
     <>
@@ -138,7 +176,7 @@ export default function ProductDetails() {
               <p>
                 <strong>Brand:</strong>{" "}
                 {isDisabled ? (
-                  productDetails.brandName
+                  productDetails.brand
                 ) : (
                   <input
                     type="text"
@@ -168,28 +206,14 @@ export default function ProductDetails() {
           {/* Show info */}
 
           <div className="row g-3 justify-content-between me-3">
-            <div className="col-4">
-              <p>
-                <strong>Created by:</strong> Huy Nguyen
-              </p>
-              <p>
-                <strong>Submitted by:</strong> Huy Nguyen{" "}
-              </p>
-              <p>
-                <strong>Adjusted by:</strong> Mr. Hung
-              </p>
-            </div>
-            <div className="col-4">
-              <p>
-                <strong>Create date:</strong> 05/12/2021
-              </p>
-              <p>
-                <strong>Submit date:</strong> 05/12/2021
-              </p>
-              <p>
-                <strong>Adjust date:</strong> 05/21/2021
-              </p>
-            </div>
+            {isReturnData && (
+              <ListProductsTable
+                // clickToAddProduct={clickToAddProduct}
+                // onChangeValueProduct={onChangeValueProduct}
+                listColumn={listColumn}
+                listData={listVariants}
+              />
+            )}
           </div>
         </div>
       </div>

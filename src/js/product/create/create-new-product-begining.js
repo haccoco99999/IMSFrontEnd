@@ -40,11 +40,12 @@ export default function () {
     );
   };
 
-  const listCategoriesStore = useSelector(
-    (state) => state.createProductReducer.listCategories
-  );
+  const { listCategoriesStore,token } = useSelector((state) => ({
+    listCategoriesStore: state.createProductReducer.listCategories,
+    token: state.client.token,
+  }));
 
-  function goBackClick() {
+  function goBackClick() { 
     history.goBack();
   }
 
@@ -72,7 +73,6 @@ export default function () {
   };
 
   const handleChangeCategory = (e) => {
-    
     const index = e.target.selectedIndex;
     const el = e.target.childNodes[index];
 
@@ -86,7 +86,7 @@ export default function () {
 
   const onChangeFormVariants = (event) => {
     setIsVariant(!isVariant);
-    // console.log([...Array(count)]);
+    
   };
 
   function addAttribute() {
@@ -98,7 +98,7 @@ export default function () {
   };
 
   useEffect(() => {
-    dispatch(getCategoriesAllAction());
+    dispatch(getCategoriesAllAction({ token: token }));
   }, []);
 
   return (
@@ -166,7 +166,7 @@ export default function () {
                       -- No Selected --
                     </option>
 
-                    {listCategoriesStore.map((category) => (
+                    {listCategoriesStore.map((category) => (  
                       <option id={category.id} value={category.categoryName}>
                         {category.categoryName}
                       </option>
@@ -223,7 +223,7 @@ export default function () {
               </div>
             </div>
 
-            {isVariant && (
+            {/* {isVariant && (
               <>
                 <div class="mb-3">
                   <a
@@ -252,7 +252,7 @@ export default function () {
                   deleteVarriant={deleteVarriant}
                 />
               </>
-            )}
+            )} */}
           </form>
         </div>
       </div>
@@ -260,49 +260,49 @@ export default function () {
   );
 }
 
-function ComponentsCheckVariant(props) {
-  return (
-    <>
-      {props.dataAtrribute.map((element, index) => (
-        <div class="mb-3">
-          <form>
-            <div class="row g-3 align-items-center">
-              <p onClick={() => props.deleteVarriant(index)}>Delete</p>
-              <div class="col-auto">
-                <label for="attribute" class="col-form-label">
-                  Attribute
-                </label>{" "}
-                <input
-                  type="text"
-                  id={index}
-                  name="attribute"
-                  class="form-control"
-                  value={element.attribute}
-                  placeholder="Ex: Size, Color, Storage,etc"
-                  onChange={props.onChangeValue}
-                />
-              </div>
-              <div class="col">
-                <label for="value" class="col-form-label">
-                  Value
-                </label>{" "}
-                <input
-                  name="value"
-                  type="tel"
-                  id={index}
-                  value={element.value}
-                  class="form-control"
-                  placeholder="Ex: S, M, L, Pink, etc"
-                  onChange={props.onChangeValue}
-                />
-              </div>
-            </div>
-          </form>
-        </div>
-      ))}
-    </>
-  );
-}
+// function ComponentsCheckVariant(props) {
+//   return (
+//     <>
+//       {props.dataAtrribute.map((element, index) => (
+//         <div class="mb-3">
+//           <form>
+//             <div class="row g-3 align-items-center">
+//               <p onClick={() => props.deleteVarriant(index)}>Delete</p>
+//               <div class="col-auto">
+//                 <label for="attribute" class="col-form-label">
+//                   Attribute
+//                 </label>{" "}
+//                 <input
+//                   type="text"
+//                   id={index}
+//                   name="attribute"
+//                   class="form-control"
+//                   value={element.attribute}
+//                   placeholder="Ex: Size, Color, Storage,etc"
+//                   onChange={props.onChangeValue}
+//                 />
+//               </div>
+//               <div class="col">
+//                 <label for="value" class="col-form-label">
+//                   Value
+//                 </label>{" "}
+//                 <input
+//                   name="value"
+//                   type="tel"
+//                   id={index}
+//                   value={element.value}
+//                   class="form-control"
+//                   placeholder="Ex: S, M, L, Pink, etc"
+//                   onChange={props.onChangeValue}
+//                 />
+//               </div>
+//             </div>
+//           </form>
+//         </div>
+//       ))}
+//     </>
+//   );
+// }
 
 // {/* content3 */}
 // <div className="wrapper-content shadow mt-3"></div>

@@ -26,17 +26,13 @@ export default function () {
   const [listValueColumn, setListValueColumn] = useState({
     productId: true,
     name: true,
-    category: true,
-    createDate: true,
-    modifiedDate: true,
+    category: true,brand:true
   });
 
   const [listEditHeader, setListEditHeader] = useState({
     productId: "Product ID",
     name: "Product Name",
-    modifiedDate: "Modified Date",
-    catagory: "Category",
-    createDate: "Create Date",
+    category: "Category",brand:"Brand"
   });
 
   function pushAddPage() {

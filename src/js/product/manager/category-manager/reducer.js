@@ -28,6 +28,7 @@ export default function reducer(state = initialState, action) {
       };
 
     case GET_ALL_CATEGORY_RESPONSE:
+      console.log(action.json)
       return {
         ...state,
         requesting: false,
@@ -38,7 +39,7 @@ export default function reducer(state = initialState, action) {
         pageCount: action.json.paging.pageCount,
         sizePerPage: action.json.paging.sizePerPage,
         rowCountTotal: action.json.paging.rowCountTotal,
-        listCategories: action.json.categories,
+        listCategories: action.json.paging.resultList,
       };
 
     case GET_ALL_CATEGORY_ERROR:
@@ -48,6 +49,7 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
+        listCategories: [],
       };
 
     default:

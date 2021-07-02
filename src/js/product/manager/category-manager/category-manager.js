@@ -1,15 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useReducer } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Modal } from "bootstrap";
 //css
 import "../../product.css";
 
 //components
-import NewCategory from "./create-new-category";
 import { GetAllCategoryAction } from "./action";
 import Table from "../../../table-receipt/ListReceiptsTable";
 
 export default function () {
   let dispatch = useDispatch();
+  //modal
+  const modalRef = useRef();
+  const showModal = () => {
+    const modalEle = modalRef.current;
+    const bsModal = new Modal(modalEle, {
+      backdrop: "static",
+      keyboard: false,
+    });
+    bsModal.show();
+  };
+  const hideModal = () => {
+    const modalEle = modalRef.current;
+    const bsModal = Modal.getInstance(modalEle);
+    bsModal.hide();
+
+    //reset
+    if (!isCreate) setIsCreate(true);
+
+    setCategoryData({
+      id: "",
+      categoryName: "",
+      categoryDescription: "",
+      transactionId: "",
+    });
+  };
+
+  const [categoryData, setCategoryData] = useState({
+    id: "",
+    categoryName: "",
+    categoryDescription: "",
+    transactionId: "",
+  });
 
   const { list_Categories, token, pageCount } = useSelector((state) => ({
     list_Categories: state.getAllCategoriesReducer.listCategories,
@@ -20,15 +52,19 @@ export default function () {
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
 
+  const [isCreate, setIsCreate] = useState(true);
+
   const [listValueColumn, setListValueColumn] = useState({
     id: true,
     categoryName: true,
     categoryDescription: true,
+    transactionId: false,
   });
 
   const [listEditHeader, setListEditHeader] = useState({
     categoryName: "Name",
     categoryDescription: "Description",
+    id: "Category ID",
   });
 
   function nextPagingClick() {
@@ -38,6 +74,24 @@ export default function () {
   function backPagingClick() {
     console.log("backWard");
     setCurrentPage(currentPage - 1);
+  }
+
+  function onRowClick(row) {
+    setCategoryData({
+      id: row.id,
+      categoryName: row.categoryName,
+      categoryDescription: row.categoryDescription,
+      transactionId: row.transactionId,
+    });
+    setIsCreate(false);
+    showModal();
+  }
+
+  function onChangeValue(event) {
+    setCategoryData({
+      ...categoryData,
+      [event.target.name]: event.target.value,
+    });
   }
 
   useEffect(() => {
@@ -52,12 +106,20 @@ export default function () {
 
   return (
     <div>
-      <NewCategory />
+      <ModalFunction
+        modalRef={modalRef}
+        hideModal={hideModal}
+        isCreate={isCreate}
+        categoryData={categoryData}
+        onChangeValue={onChangeValue}
+      />
+
       <div className="ms-5">
         <a
           class="btn btn-default me-md-2 add"
-          data-bs-target="#NewCategoryModal"
-          data-bs-toggle="modal"
+          // data-bs-target="#NewCategoryModal"
+          // data-bs-toggle="modal"
+          onClick={showModal}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +145,159 @@ export default function () {
           sizePerPage={sizePerPage}
           currentPage={currentPage}
           pageCount={pageCount}
+          onRowClick={onRowClick}
         />
+      </div>
+    </div>
+  );
+}
+
+function ModalFunction(props) {
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [categorySelected, setCategorySelected] = useState({});
+
+  function onCancelClick() {
+    setCategorySelected(props.categoryData);
+  }
+
+  function onClickEdit() {
+    setIsDisabled(!isDisabled);
+  }
+
+  function onSaveClick() {
+    console.log(categorySelected);
+  }
+
+  function onChangeValue(event) {
+    setCategorySelected({
+      ...categorySelected,
+      [event.target.name]: event.target.value,
+    });
+  }
+
+  useEffect(() => {
+    if (props.isCreate)
+      setCategorySelected({ categoryName: "", categoryDescription: "" });
+    else setCategorySelected(props.categoryData);
+  }, [props.categoryData, props.isCreate]);
+
+  return (
+    <div className="modal fade" ref={props.modalRef} tabIndex="-1">
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            {props.isCreate ? (
+              <h5 className="modal-title">Create</h5>
+            ) : (
+              <h5 className="modal-title">Details</h5>
+            )}
+
+            <button
+              type="button"
+              className="btn-close"
+              // data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+
+          <div className="modal-body">
+            <div class="mb-3">
+              <label for="Category" class="form-label">
+                Category Name
+              </label>
+              {props.isCreate ? (
+                <input
+                  type="text"
+                  class="form-control"
+                  name="categoryName"
+                  value={categorySelected.categoryName}
+                  onChange={onChangeValue}
+                />
+              ) : (
+                <input
+                  type="text"
+                  class="form-control"
+                  name="categoryName"
+                  disabled={isDisabled}
+                  value={categorySelected.categoryName}
+                  onChange={onChangeValue}
+                />
+              )}
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label">
+                Description
+              </label>
+              {props.isCreate ? (
+                <textarea
+                  class="form-control"
+                  name="categoryDescription"
+                  rows="3"
+                  value={categorySelected.categoryDescription}
+                  onChange={onChangeValue}
+                ></textarea>
+              ) : (
+                <textarea
+                  class="form-control"
+                  name="categoryDescription"
+                  rows="3"
+                  value={categorySelected.categoryDescription}
+                  disabled={isDisabled}
+                  onChange={onChangeValue}
+                ></textarea>
+              )}
+            </div>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-default"
+              // data-bs-dismiss="modal"
+              onClick={props.hideModal}
+            >
+              Close
+            </button>
+            {props.isCreate ? (
+              <button
+                type="button"
+                className=" text-white btn btn-default button-save--modal "
+                onClick={onSaveClick}
+              >
+                Save
+              </button>
+            ) : (
+              <>
+                {" "}
+                {isDisabled ? (
+                  <button
+                    type="button"
+                    className=" text-white btn btn-default button-save--modal "
+                    onClick={onClickEdit}
+                  >
+                    Edit
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className=" text-white btn btn-default button-save--modal "
+                      onClick={onCancelClick}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      className=" text-white btn btn-default button-save--modal "
+                      onClick={onSaveClick}
+                    >
+                      Save
+                    </button>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

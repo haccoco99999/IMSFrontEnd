@@ -9,20 +9,13 @@ import {
 
 import handleApiErrors from "../../../auth/api-errors";
 
-
 function getAllCategory(action) {
-  var url;
-  console.log(action.page);
-  if (action.page == "manager") {
-    url = `https://imspublicapi.herokuapp.com/api/product/category?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
-  } else {
-    url = "https://imspublicapi.herokuapp.com/api/product/category?CurrentPage=1&SizePerPage=1000";
-  }
+ const url = `http://imspublicapi.herokuapp.com/api/category?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+
   return fetch(url, {
     method: "GET",
     headers: {
-      Authorization:
-        "Bearer " + action.token,
+      Authorization: "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },

@@ -10,13 +10,10 @@ import {
 
 import handleApiErrors from "../../auth/api-errors";
 
-const createProductURL =
-  "https://imspublicapi.herokuapp.com/api/product/create";
-
-const getAllCategoryCreatedPageURL =
-  "https://imspublicapi.herokuapp.com/api/product/category?CurrentPage=1&SizePerPage=1000";
-
 function createProduct(action) {
+  const createProductURL =
+    "https://imspublicapi.herokuapp.com/api/product/create";
+
   return fetch(createProductURL, {
     method: "POST",
     headers: {
@@ -35,13 +32,13 @@ function createProduct(action) {
     });
 }
 
-function getAllCategoryCreatedPage() {
+function getAllCategoryCreatedPage(action) {
+  const getAllCategoryCreatedPageURL =
+    "http://imspublicapi.herokuapp.com/api/category?CurrentPage=0&SizePerPage=0";
   return fetch(getAllCategoryCreatedPageURL, {
     method: "GET",
     headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyNDU0NzQzMSwiZXhwIjoxNjI0NzIwMjMxLCJpYXQiOjE2MjQ1NDc0MzF9.3WQh0R850BrprGEoaulVtsilSkLA0BEqndgm_aVo7xo",
+      Authorization: "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },
@@ -65,9 +62,9 @@ function* createProductFlow(action) {
   }
 }
 
-function* getAllCategoryCreatedPageFlow() {
+function* getAllCategoryCreatedPageFlow(action) {
   try {
-    let json = yield call(getAllCategoryCreatedPage);
+    let json = yield call(getAllCategoryCreatedPage,action);
     console.log(json);
 
     yield put({ type: GET_ALL_CATEGORY_CREATED_RESPONSE, json });
