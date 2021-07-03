@@ -200,7 +200,7 @@ export default function () {
               <span>Address</span>
             </div>
             <input
-              type="tel"
+              type="text"
               name="address"
               class="form-control"
               value={supplier.address}

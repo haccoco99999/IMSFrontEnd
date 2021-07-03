@@ -13,7 +13,7 @@ const initialState = {
   pageCount: 0,
   sizePerPage: 0,
   rowCountTotal: 0,
-  listProducts: [],
+  listProducts:[]
 };
 
 export default function reducer(state = initialState, action) {
@@ -25,17 +25,17 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-        listProducts: [],
+       
       };
 
     case GET_ALL_PRODUCTS_RESPONSE:
-      let clearJson = [...action.json.paging.resultList];
-      console.log(clearJson);
-      action.json.paging.resultList = clearJson.map((product) => {
-        delete product["suggest"];
-        delete product["variants"];
-        return product;
-      });
+      // let clearJson = [...action.json.paging.resultList];
+      // console.log(clearJson);
+      // action.json.paging.resultList = clearJson.map((product) => {
+      //   delete product["suggest"];
+      //   delete product["variantIds"];
+      //   return product;
+      // });
       console.log(action.json.paging.resultList);
 
       return {
@@ -58,7 +58,7 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-        listProducts: [],
+        product: [],
       };
     default:
       return state;

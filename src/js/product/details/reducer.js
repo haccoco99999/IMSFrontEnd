@@ -13,6 +13,7 @@ const initialState = {
   messages: "",
   errors: "",
   productDetails: {
+    brand:null,
     productVariants:null
   },
 };

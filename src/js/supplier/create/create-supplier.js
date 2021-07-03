@@ -1,15 +1,46 @@
-import React from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 //css
 import "../supplier.css";
 
+import { createSupplierAction } from "./action";
+
+const formReducer = (state, event) => {
+  return {
+    ...state,
+    [event.name]: event.value,
+  };
+};
 export default function () {
   let history = useHistory();
+  let dispatch = useDispatch();
+
+  const [formData, setFormData] = useReducer(formReducer, {});
 
   function goBackClick() {
     history.goBack();
   }
+
+  function onSaveClick() {
+    const data = {
+      supplierName: "string",
+      description: "string",
+      address: "string",
+      salePersonName: "string",
+      phoneNumber: "string",
+      email: "string",
+    };
+  }
+
+  const handleChangeValue = (event) => {
+    event.preventDefault();
+    setFormData({
+      name: event.target.name,
+      value: event.target.value,
+    });
+  };
   return (
     <div>
       {/* todo: task heading */}
@@ -44,7 +75,25 @@ export default function () {
               <label for="search" class="form-label">
                 Supplier Name
               </label>
-              <input type="text" class="form-control" id="search" />
+              <input
+                type="text"
+                class="form-control"
+                id="search"
+                name="name"
+                value={formData.name || ""}
+              />
+            </div>
+            <div className="mt-3">
+              <label for="search" class="form-label">
+                Seller Name
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="search"
+                name="sellername"
+                value={formData.sellername || ""}
+              />
             </div>
             {/* Email &&  Phone No  */}
             <div className="mt-3">
@@ -57,7 +106,8 @@ export default function () {
                     type="text"
                     id="inputEmail"
                     class="form-control"
-                    //aria-describedby="passwordHelpInline"
+                    name="email"
+                    value={formData.email || ""}
                   />
                 </div>
                 <div class="col">
@@ -68,6 +118,8 @@ export default function () {
                     type="tel"
                     id="inputphoneno"
                     class="form-control"
+                    name="phone"
+                    value={formData.phone || ""}
                     // aria-describedby="passwordHelpInline"
                   />
                 </div>
@@ -75,12 +127,12 @@ export default function () {
             </div>
 
             {/* Note  */}
-            <div class="mb-3 mt-3">
+            {/* <div class="mb-3 mt-3">
               <label for="note" class="form-label">
                 Note
               </label>
               <textarea class="form-control" id="note" rows="3"></textarea>
-            </div>
+            </div> */}
           </form>
         </div>
 
@@ -89,36 +141,16 @@ export default function () {
           <div className="title-heading mt-2">
             <span>Address</span>
           </div>
-          <form>
-            <div class="row g-3 align-items-center">
-              <div class="col">
-                <label for="inputEmail" class="col-form-label">
-                  City
-                </label>{" "}
-                <select class="form-select" aria-label="Default select example">
-                  <option selected disabled>
-                    Select Role
-                  </option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-              <div class="col">
-                <label for="inputphoneno" class="col-form-label">
-                  District
-                </label>{" "}
-                <select class="form-select" aria-label="Default select example">
-                  <option selected disabled>
-                    Select Role
-                  </option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-            </div>
-          </form>
+          <input
+            type="text"
+            name="address"
+            class="form-control"
+            value={formData.address || ""}
+            // value={supplier.address}
+            // disabled={isDisabled}
+            // readOnly={isDisabled}
+            // onChange={onChangeValue}
+          />
         </div>
       </div>
     </div>

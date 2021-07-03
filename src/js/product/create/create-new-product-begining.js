@@ -27,18 +27,18 @@ export default function () {
   const [isVariant, setIsVariant] = useState(false);
   const [variantValues, setVariantValues] = useState([{}]);
 
-  const onChangeValue = (event) => {
-    setVariantValues(
-      variantValues.map((element, index) =>
-        index == event.target.id
-          ? {
-              ...element,
-              [event.target.name]: event.target.value,
-            }
-          : element
-      )
-    );
-  };
+  // const onChangeValue = (event) => {
+  //   setVariantValues(
+  //     variantValues.map((element, index) =>
+  //       index == event.target.id
+  //         ? {
+  //             ...element,
+  //             [event.target.name]: event.target.value,
+  //           }
+  //         : element
+  //     )
+  //   );
+  // };
 
   const { listCategoriesStore,token } = useSelector((state) => ({
     listCategoriesStore: state.createProductReducer.listCategories,

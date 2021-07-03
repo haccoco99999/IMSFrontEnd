@@ -14,9 +14,9 @@ export default function () {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  const { list_Products, token, pageCount } = useSelector((state) => ({
+  const { listProducstStore, token, pageCount } = useSelector((state) => ({
     token: state.client.token,
-    list_Products: state.getAllProductsReducer.listProducts,
+    listProducstStore: state.getAllProductsReducer.listProducts,
     pageCount: state.getAllProductsReducer.pageCount,
   }));
 
@@ -137,7 +137,7 @@ export default function () {
         <Table
           listHeaderEdit={listEditHeader}
           listColumn={listValueColumn}
-          listData={list_Products}
+          listData={listProducstStore}
           backPagingClick={backPagingClick}
           nextPagingClick={nextPagingClick}
           sizePerPage={sizePerPage}

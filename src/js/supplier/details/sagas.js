@@ -46,7 +46,8 @@ function updateSupplier(action) {
     body: JSON.stringify(action.data),
   })
     .then((response) => handleApiErrors(response))
-    .then((response) => response)
+    .then((response) => response.json())
+    .then((json) => json)
     .catch((error) => {
       throw error;
     });

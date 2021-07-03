@@ -60,17 +60,9 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-        listSuppliers: [],
+       
       };
     case GET_ALL_SUPPLIER_RESPONSE:
-      let clearJson = [...action.json.paging.resultList];
-      console.log(clearJson);
-      action.json.paging.resultList = clearJson.map((item) => {
-        delete item["modifiedBy"];
-        delete item["confirmedBy"];
-        delete item["transaction"];
-        return item;
-      });
       return {
         ...state,
         requesting: false,

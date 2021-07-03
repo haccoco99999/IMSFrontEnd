@@ -5,7 +5,11 @@ import { Modal } from "bootstrap";
 import "../../product.css";
 
 //components
-import { GetAllCategoryAction } from "./action";
+import {
+  GetAllCategoryAction,
+  CreateCategoryAction,
+  UpdateCategoryAction,
+} from "./action";
 import Table from "../../../table-receipt/ListReceiptsTable";
 
 export default function () {
@@ -43,11 +47,14 @@ export default function () {
     transactionId: "",
   });
 
-  const { list_Categories, token, pageCount } = useSelector((state) => ({
-    list_Categories: state.getAllCategoriesReducer.listCategories,
-    token: state.client.token,
-    pageCount: state.getGoodsReceiptReducer.pageCount,
-  }));
+  const { list_Categories, token, pageCount, messages } = useSelector(
+    (state) => ({
+      list_Categories: state.getAllCategoriesReducer.listCategories,
+      token: state.client.token,
+      pageCount: state.getAllCategoriesReducer.pageCount,
+      messages: state.getAllCategoriesReducer.messages,
+    })
+  );
 
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
@@ -104,6 +111,12 @@ export default function () {
     );
   }, [currentPage, sizePerPage]);
 
+  useEffect(() => {
+    if (messages === "Create Success") {
+      console.log("Create Suceess");
+    } else if (messages === "Update Success") console.log("Update Suceess");
+  }, [messages]);
+
   return (
     <div>
       <ModalFunction
@@ -112,6 +125,8 @@ export default function () {
         isCreate={isCreate}
         categoryData={categoryData}
         onChangeValue={onChangeValue}
+        token={token}
+        messaages={messages}
       />
 
       <div className="ms-5">
@@ -153,11 +168,14 @@ export default function () {
 }
 
 function ModalFunction(props) {
+  let dispatch = useDispatch();
+
   const [isDisabled, setIsDisabled] = useState(true);
   const [categorySelected, setCategorySelected] = useState({});
 
   function onCancelClick() {
     setCategorySelected(props.categoryData);
+    setIsDisabled(!isDisabled);
   }
 
   function onClickEdit() {
@@ -166,6 +184,28 @@ function ModalFunction(props) {
 
   function onSaveClick() {
     console.log(categorySelected);
+
+    if (props.isCreate)
+      dispatch(
+        CreateCategoryAction({ token: props.token, data: categorySelected })
+      );
+    else {
+      const dataUpdate = {
+        categoryId: categorySelected.id,
+        categoryName: categorySelected.categoryName,
+        categoryDescription: categorySelected.categoryDescription,
+      };
+      dispatch(
+        UpdateCategoryAction({ token: props.token, data: dataUpdate })
+      );
+    }
+  }
+
+  function onCloseClick() {
+    if (!isDisabled) {
+      setIsDisabled(true);
+    }
+    props.hideModal();
   }
 
   function onChangeValue(event) {
@@ -253,7 +293,7 @@ function ModalFunction(props) {
               type="button"
               className="btn btn-default"
               // data-bs-dismiss="modal"
-              onClick={props.hideModal}
+              onClick={onCloseClick}
             >
               Close
             </button>
@@ -283,7 +323,7 @@ function ModalFunction(props) {
                       className=" text-white btn btn-default button-save--modal "
                       onClick={onCancelClick}
                     >
-                      Cancel
+                      Rede
                     </button>
                     <button
                       type="button"

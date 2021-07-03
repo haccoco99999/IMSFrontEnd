@@ -6,12 +6,13 @@ import { useHistory, useLocation } from "react-router-dom";
 import "../product.css";
 //components
 import { getDetailsProductAction, updateProductAction } from "./action";
-import ListProductsTable from "../../list-products-table/ListProductsTable";
+import ListProductsTable from "../../table-receipt/ListReceiptsTable";
 
 export default function ProductDetails() {
   let history = useHistory();
   let location = useLocation();
   let dispatch = useDispatch();
+
   const { productDetailsStore, messages, token, listVariantsStores } =
     useSelector((state) => ({
       token: state.client.token,
@@ -19,36 +20,32 @@ export default function ProductDetails() {
       message: state.getDetailsProductReducer.messages,
       listVariantsStores:
         state.getDetailsProductReducer.productDetails.productVariants,
+      // brandStore: state.getDetailsProductReducer.product.brand,
     }));
-
+  console.log(productDetailsStore);
+  console.log(productDetailsStore.brand);
+  console.log(listVariantsStores);
   const [isFromManagerPage, setIsFromManagerPage] = useState(true);
+  const [listVariants, setListVariants] = useState([]);
   const [isReturnData, setIsReturnData] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [productDetails, setProductDetails] = useState({});
-  const [listVariants, setListVariants] = useState(listVariantsStores);
+  // const [listVariants, setListVariants] = useState([]);
 
-  const [listColumn, setListColumn] = useState([
-    { id: "Variant ID" },
-    {
-      name: "Name",
-    },
-    { sku: "SKU" },
-    {
-      unit: "Unit",
-      //input: true,
-    },
-    {
-      storageQuantity: "Quantity",
-      input: true,
-    },
-    {
-      price: "Unit Price",
-      input: true,
-    },
-    // {
-    //   totalAmount: "Amount",
-    // },
-  ]);
+  const [listColumn, setListColumn] = useState({
+    id: true,
+    name: true,
+    sku: true,
+    barcode: true,
+    unit: true,
+    storageQuantity: true,
+    price: true,
+    cost: true,
+  });
+
+  const [listEditHeader, setListEditHeader] = useState({
+    id: "VariantID",
+  });
 
   function onClickEdit() {
     setIsDisabled(false);
@@ -63,7 +60,11 @@ export default function ProductDetails() {
   function goToManagerPage() {
     history.push("/homepage/product");
   }
-
+  function onClickToDetails(row) {
+    history.push("/homepage/product/details/variant", {
+      variantId: row.id,
+    });
+  }
   useEffect(() => {
     dispatch(
       getDetailsProductAction({ id: location.state.productId, token: token })
@@ -79,11 +80,16 @@ export default function ProductDetails() {
   useEffect(() => {
     if (listVariantsStores !== null) {
       setIsReturnData(true);
-
       setListVariants(listVariantsStores);
+      setListVariants(
+        listVariants.map((variant) => {
+          delete variant["packages"];
+          return variant;
+        })
+      );
     }
   }, [listVariantsStores]);
-
+  console.log(listVariants);
   return (
     <>
       <div className=" tab-fixed container-fluid  fixed-top">
@@ -174,24 +180,24 @@ export default function ProductDetails() {
             </div>
             <div className="col-4">
               <p>
-                <strong>Brand:</strong>{" "}
-                {isDisabled ? (
-                  productDetails.brand
+                <strong>Brand:</strong>
+                {/* {isDisabled ? (
+                  productDetails.brand.brandName
                 ) : (
                   <input
                     type="text"
                     className="form-control"
-                    value={productDetails.brandName}
+                    value={productDetails.brand.brandName}
                   />
-                )}
+                )} */}
               </p>
               <p>
-                <strong>Category:</strong> {productDetails.categoryId}
+                <strong>Category:</strong> {productDetails.category}
               </p>
               {!productDetails.isVariantType && (
                 <>
                   <p>
-                    <strong>SKU:</strong> 05/21/2021
+                    <strong>SKU:</strong>
                   </p>
                   <p>
                     <strong>Price:</strong>
@@ -206,12 +212,16 @@ export default function ProductDetails() {
           {/* Show info */}
 
           <div className="row g-3 justify-content-between me-3">
+            <label for="supplierName" class="form-label">
+              List variants
+            </label>
             {isReturnData && (
               <ListProductsTable
-                // clickToAddProduct={clickToAddProduct}
+                // clickToAddProduct={listVariantsStores}
                 // onChangeValueProduct={onChangeValueProduct}
+                listHeaderEdit={listEditHeader}
                 listColumn={listColumn}
-                listData={listVariants}
+                listData={listVariantsStores}
               />
             )}
           </div>

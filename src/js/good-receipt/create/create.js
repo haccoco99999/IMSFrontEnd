@@ -27,7 +27,7 @@ export default function () {
 
   const [formData, setFormData] = useReducer(formReducer, {});
   const [isChange, setIsChange] = useState(false);
-  const [storageLocation, setStorageLocation] = useState("");
+  // const [storageLocation, setStorageLocation] = useState("");
 
   const { list_ConfirmPurchaseOrderID, list_BuyingProductStore, token } =
     useSelector((state) => ({
@@ -86,7 +86,7 @@ export default function () {
   function saveGoodsReceipt() {
     const Data = {
       purchaseOrderNumber: formData.orderid,
-      storageLocation: storageLocation,
+      storageLocation: formData.storageLocation,
       updateItems: list_BuyingProduct.map((product) => {
         return {
           productVariantId: product.productVariantId,
@@ -199,21 +199,30 @@ export default function () {
           </div>
 
           {isChange && (
-            <div className="mt-3">
-              <Table
-                listHeaderEdit={listEditHeader}
-                listColumn={listValueColumn}
-                listData={list_BuyingProduct}
-                // disabled={false}
-                onChangeValueProduct={onChangeValueProduct}
-                //       disabled={this.state.isShowEdit}
-
-                // onChangeValueProduct={this.onChangeValueProduct}
-                // onRowClick={}
-                // backPagingClick={}
-                // nextPagingClick={}
-              />
-            </div>
+            <>
+              <div className="mt-3">
+                <label class="form-label" value="">
+                  Storage Location
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="storageLocation"
+                  value={formData.storageLocation || ""}
+                />
+              </div>
+              <div className="mt-3">
+                <label class="form-label" value="">
+                  Products
+                </label>
+                <Table
+                  listHeaderEdit={listEditHeader}
+                  listColumn={listValueColumn}
+                  listData={list_BuyingProduct}
+                  onChangeValueProduct={onChangeValueProduct}
+                />
+              </div>
+            </>
           )}
         </div>
       </div>

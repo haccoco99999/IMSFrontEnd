@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -7,22 +7,29 @@ import "../../product.css";
 import { createProduct } from "../action";
 import Table from "../../../list-products-table/ListProductsTable";
 
-const formReducer = (state, event) => {
-  return {
-    ...state,
-    [event.name]: event.value,
-  };
-};
 export default function () {
   let history = useHistory();
   let location = useLocation();
   let dispatch = useDispatch();
-  const [formData, setFormData] = useReducer(formReducer, {});
+
+  const { token, messages } = useSelector((state) => ({
+    token: state.client.token,
+    messages: state.createProductReducer.messages,
+  }));
+
   const [variantValues, setVariantValues] = useState([]);
 
   const [listValueColumn, setListValueColumn] = useState([
     {
       name: "Variants Name",
+      input: true,
+    },
+    {
+      price: "Price",
+      input: true,
+    },
+    {
+      salePrice: "Saleprice",
       input: true,
     },
     {
@@ -33,21 +40,7 @@ export default function () {
       barcode: "Barcode",
       input: true,
     },
-
-    {
-      unit: "Unit",
-    },
-    {
-      storageQuantity: "Quantity",
-      input: true,
-    },
-    {
-      price: "Price",
-      input: true,
-    },
   ]);
-
-  const [listData, setListData] = useState([]);
 
   const dataLastPage = location.state.formData;
   const selectedCategory = location.state.categorySelected;
@@ -59,10 +52,6 @@ export default function () {
           ? {
               ...element,
               [event.target.name]: event.target.value,
-              // totalAmount:
-              //   [event.target.name] === "storageQuantity"
-              //     ? event.target.value * element.price
-              //     : event.target.value * element.storageQuantity,
             }
           : element
       )
@@ -73,18 +62,16 @@ export default function () {
     let productVariants = {
       name: "",
       price: 0,
+      salePrice: 0,
       barcode: "",
       sku: "",
-      unit:dataLastPage.unit ,
-      storageQuantity: 0,
+      unit: dataLastPage.unit,
     };
     setVariantValues([...variantValues, productVariants]);
   }
 
   function clickDeleteVariant(id) {
-    setVariantValues(
-      variantValues.filter((_,index) => index !== id)
-    );
+    setVariantValues(variantValues.filter((_, index) => index !== id));
   }
 
   function goBackClick() {
@@ -101,12 +88,15 @@ export default function () {
       productVariants: variantValues,
     };
     console.log(JSON.stringify(data));
-    //dispatch(createProduct({ data: data, token: token }));
+    dispatch(createProduct({ data: data, token: token }));
   }
+  useEffect(() => {
+    if (messages !== "")
+      history.push("/homepage/product/details", {
+        productId: messages,
+      });
+  }, [messages]);
 
-  // useEffect(() => {
-  //   setVariantValues(location.state.variantValues);
-  // }, []);
   return (
     //   todo: gop chung 2 bang , sau do tach ra
     <div className="home_content overflow-scroll ">
@@ -137,10 +127,6 @@ export default function () {
         {/* show product details */}
         <h2 className="id-color fw-bold mb-3">{dataLastPage.name}</h2>
         <div class="d-flex justify-content-around  mb-3">
-          {/* <div>
-            <h5>Product ID</h5>
-            <h5 className="id-color">282170181</h5>
-          </div> */}
           <div>
             <h5>Category</h5>
             <h5 className="id-color">{selectedCategory.name}</h5>

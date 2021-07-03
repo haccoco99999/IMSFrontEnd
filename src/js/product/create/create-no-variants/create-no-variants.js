@@ -24,8 +24,9 @@ export default function () {
   const dataLastPage = location.state.formData;
   const selectedCategory = location.state.categorySelected;
 
-  const { token } = useSelector((state) => ({
+  const { token, messages } = useSelector((state) => ({
     token: state.client.token,
+    messages: state.createProductReducer.messages,
   }));
 
   const handleChangeValue = (event) => {
@@ -50,10 +51,11 @@ export default function () {
       productVariants: [
         {
           name: dataLastPage.name,
-          price: formData.salesprice,
+          price: formData.price,
+          salePrice: formData.salesprice,
+          barcode: formData.barcode,
           sku: formData.sku,
           unit: formData.unit,
-          storageQuantity: dataLastPage.quantity,
         },
       ],
     };
@@ -61,7 +63,12 @@ export default function () {
     console.log(JSON.stringify(data));
     dispatch(createProduct({ data: data, token: token }));
   }
-
+  useEffect(() => {
+    if (messages !== "")
+      history.push("/homepage/product/details", {
+        productId: messages,
+      });
+  }, [messages]);
   //   todo: gop chung 2 bang , sau do tach ra
   return (
     <div className="home_content ">
@@ -122,10 +129,9 @@ export default function () {
                     name="sku"
                     value={formData.sku || ""}
                     onChange={handleChangeValue}
-                    //aria-describedby="passwordHelpInline"
                   />
                 </div>
-                {/* <div class="col">
+                <div class="col">
                   <label for="barcode" class="col-form-label">
                     Barcode (optional)
                   </label>{" "}
@@ -137,7 +143,7 @@ export default function () {
                     id="barcode"
                     class="form-control"
                   />
-                </div> */}
+                </div>
               </div>
             </div>
 
@@ -145,11 +151,11 @@ export default function () {
               <div class="row g-3 align-items-center">
                 <div class="col">
                   <label for="salesprice" class="col-form-label">
-                    Sales Price
+                    Price
                   </label>{" "}
                   <input
-                    name="salesprice"
-                    value={formData.salesprice || ""}
+                    name="price"
+                    value={formData.price || ""}
                     onChange={handleChangeValue}
                     type="number"
                     class="form-control"
@@ -157,11 +163,11 @@ export default function () {
                 </div>
                 <div class="col">
                   <label for="quantity" class="col-form-label">
-                    Quantity
+                    Sale Price
                   </label>{" "}
                   <input
-                    name="quantity"
-                    value={formData.quantity || ""}
+                    name="saleprice"
+                    value={formData.saleprice || ""}
                     onChange={handleChangeValue}
                     type="number"
                     class="form-control"

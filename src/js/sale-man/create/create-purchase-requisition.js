@@ -103,7 +103,7 @@ export default function () {
 
   function onSaveClick() {
     const data = {
-      supplierId: "50715",
+      supplierId: supplierSelected.id,
       deadline: deadline,
       orderItems: purchaseOrderProduct.map((product) => {
         return {
@@ -131,9 +131,9 @@ export default function () {
     }
   }, [message]);
 
-  // useEffect(() => {
-  //   dispatch(getALlSuppliersAction({ token: token }));
-  // }, []);
+  useEffect(() => {
+    dispatch(getALlSuppliersAction({ token: token }));
+  }, []);
 
   return (
     <div>
@@ -184,17 +184,28 @@ export default function () {
             onChange={onChangeDeadline}
           />
         </div>
-        {/* <div className="mt-3">
+        <div className="mt-3">
           <label for="supplier" class="form-label">
             Supplier
           </label>
-          <select  name="supplierID"
-                    class="form-select"
-                    aria-label="Default select example"
-                    defaultValue="">
-<
+          <select
+            name="categoryID"
+            class="form-select"
+            aria-label="Default select example"
+            defaultValue=""
+            onChange={handleChangeSuppliers}
+          >
+            <option value="" disabled>
+              -- No Selected --
+            </option>
+
+            {listSuppliers.map((supplier) => (
+              <option id={supplier.id} value={supplier.supplierName}>
+                {supplier.supplierName}
+              </option>
+            ))}
           </select>
-        </div> */}
+        </div>
 
         <div className="mt-3">
           <label class="form-label" value="">
