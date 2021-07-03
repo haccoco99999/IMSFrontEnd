@@ -65,6 +65,7 @@ export default function ProductDetails() {
       variantId: row.id,
     });
   }
+
   useEffect(() => {
     dispatch(
       getDetailsProductAction({ id: location.state.productId, token: token })
@@ -222,6 +223,7 @@ export default function ProductDetails() {
                 listHeaderEdit={listEditHeader}
                 listColumn={listColumn}
                 listData={listVariantsStores}
+                onRowClick={onClickToDetails}
               />
             )}
           </div>

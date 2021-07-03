@@ -11,7 +11,7 @@ const initialState = {
   errors: "",
 };
 
-export default function reducer(state = initialState, action) {
+const reducer = function createSupplierReducer(state = initialState, action) {
   switch (action.type) {
     case CREAT_SUPPLIER_REQUEST:
       return {
@@ -26,13 +26,13 @@ export default function reducer(state = initialState, action) {
         ...state,
         requesting: false,
         successful: true,
-        messages: "Created Success",
+        messages: action.json.modifiedSupplierId,
         errors: "",
       };
     case CREAT_SUPPLIER_ERROR:
       return {
         ...state,
-        requesting: true,
+        requesting: false,
         successful: false,
         messages: "",
         errors: "",
@@ -41,3 +41,4 @@ export default function reducer(state = initialState, action) {
       return state;
   }
 }
+export default reducer;

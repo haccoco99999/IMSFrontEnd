@@ -20,7 +20,8 @@ function createSupplier(action) {
     body: JSON.stringify(action.data),
   })
     .then((response) => handleApiErrors(response))
-    .then((response) => response)
+    .then((response) => response.json())
+    .then((json) => json)
     .catch((error) => {
       throw error;
     });
@@ -31,11 +32,12 @@ function* createSupplierFlow(action) {
     let json = yield call(createSupplier, action);
     yield put({ type: CREAT_SUPPLIER_RESPONSE, json });
   } catch (error) {
+    console.log(error)
     yield put({ type: CREAT_SUPPLIER_ERROR });
   }
 }
 
 function* watcher() {
-  yield takeEvery * (CREAT_SUPPLIER_REQUEST, createSupplierFlow);
+  yield takeEvery(CREAT_SUPPLIER_REQUEST, createSupplierFlow);
 }
 export default watcher;

@@ -61,7 +61,7 @@ const reducer = function GoodsReceiptReducer(state = initialState, action) {
         ...state,
         requesting: false,
         successful: true,
-        messages: "Update Success",
+        messages: action.json.modifiedSupplierId,
         errors: "",
       };
     case UPDATE_SUPPLIER_ERROR:

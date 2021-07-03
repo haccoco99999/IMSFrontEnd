@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 //css
 import "./goodissue.css";
 //components
-import Manager from "./manager/manager"
+import Manager from "./manager/good-issue-manager"
 export default function () {
   return (
 

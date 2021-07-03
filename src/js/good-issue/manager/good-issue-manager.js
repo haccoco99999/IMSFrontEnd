@@ -2,7 +2,7 @@ import React from "react";
 
 import "../goodissue.css";
 
-import Progress from "../progress/progressing";
+import Progress from "../progress/good-issue-progressing";
 
 export default function manager() {
   return (

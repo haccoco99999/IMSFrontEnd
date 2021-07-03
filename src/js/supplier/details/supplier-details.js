@@ -39,9 +39,16 @@ export default function () {
   }
   function onClickSave() {
     const data = {
-      supplierId: location.state.supplierId,
-      supplier: supplier,
+      supplierId: supplier.id,
+      supplierName: supplier.supplierName,
+      description: supplier.description,
+      address: supplier.address,
+      salePersonName: supplier.salePersonName,
+      phoneNumber: supplier.phoneNumber,
+      email: supplier.email,
     };
+  
+    console.log(data);
     dispatch(updateDetailsSupplierAction({ data: data, token: token }));
   }
   function onClickDelete() {
@@ -70,8 +77,9 @@ export default function () {
   }, [supplierStore]);
 
   useEffect(() => {
-    if (messages === "Delete Success") {
-      history.push("/homepage/supplier");
+    if (messages !== "");
+    {
+      dispatch(getDetailsSupplierAction({ id: messages, token: token }));
     }
   }, [messages]);
 

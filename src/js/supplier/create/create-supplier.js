@@ -18,20 +18,26 @@ export default function () {
   let dispatch = useDispatch();
 
   const [formData, setFormData] = useReducer(formReducer, {});
-
+  const { token, messages } = useSelector((state) => ({
+    token: state.client.token,
+    messages: state.createSupplierReducer.messages,
+  }));
   function goBackClick() {
     history.goBack();
   }
 
   function onSaveClick() {
     const data = {
-      supplierName: "string",
-      description: "string",
-      address: "string",
-      salePersonName: "string",
-      phoneNumber: "string",
-      email: "string",
+      supplierName: formData.name,
+      description: formData.description,
+      address: formData.address,
+      salePersonName: formData.sellername,
+      phoneNumber: formData.phone,
+      email: formData.email,
     };
+    console.log(data);
+
+    dispatch(createSupplierAction({ token: token, data: data }));
   }
 
   const handleChangeValue = (event) => {
@@ -41,6 +47,13 @@ export default function () {
       value: event.target.value,
     });
   };
+
+  useEffect(() => {
+    if (messages !== "") {
+      history.push("/homepage/supplier/details", { supplierId: messages });
+    }
+  }, [messages]);
+
   return (
     <div>
       {/* todo: task heading */}
@@ -54,7 +67,10 @@ export default function () {
             <button className="btn btn-danger button-tab button me-3">
               Cancel
             </button>
-            <button className="btn btn-primary button-tab button me-3">
+            <button
+              className="btn btn-primary button-tab button me-3"
+              onClick={onSaveClick}
+            >
               Save
             </button>
           </div>
@@ -78,9 +94,9 @@ export default function () {
               <input
                 type="text"
                 class="form-control"
-                id="search"
                 name="name"
                 value={formData.name || ""}
+                onChange={handleChangeValue}
               />
             </div>
             <div className="mt-3">
@@ -90,9 +106,9 @@ export default function () {
               <input
                 type="text"
                 class="form-control"
-                id="search"
                 name="sellername"
                 value={formData.sellername || ""}
+                onChange={handleChangeValue}
               />
             </div>
             {/* Email &&  Phone No  */}
@@ -104,10 +120,10 @@ export default function () {
                   </label>{" "}
                   <input
                     type="text"
-                    id="inputEmail"
                     class="form-control"
                     name="email"
                     value={formData.email || ""}
+                    onChange={handleChangeValue}
                   />
                 </div>
                 <div class="col">
@@ -116,10 +132,10 @@ export default function () {
                   </label>{" "}
                   <input
                     type="tel"
-                    id="inputphoneno"
                     class="form-control"
                     name="phone"
                     value={formData.phone || ""}
+                    onChange={handleChangeValue}
                     // aria-describedby="passwordHelpInline"
                   />
                 </div>
@@ -127,12 +143,18 @@ export default function () {
             </div>
 
             {/* Note  */}
-            {/* <div class="mb-3 mt-3">
-              <label for="note" class="form-label">
-                Note
+            <div class="mb-3 mt-3">
+              <label for="description" class="form-label">
+                Description
               </label>
-              <textarea class="form-control" id="note" rows="3"></textarea>
-            </div> */}
+              <textarea
+                class="form-control"
+                name="description"
+                rows="2"
+                value={formData.description || ""}
+                onChange={handleChangeValue}
+              ></textarea>
+            </div>
           </form>
         </div>
 
@@ -146,10 +168,7 @@ export default function () {
             name="address"
             class="form-control"
             value={formData.address || ""}
-            // value={supplier.address}
-            // disabled={isDisabled}
-            // readOnly={isDisabled}
-            // onChange={onChangeValue}
+            onChange={handleChangeValue}
           />
         </div>
       </div>

@@ -199,7 +199,7 @@ export default function () {
           </div>
 
           {isChange && (
-            <>
+            <div className="shadow wrapper-content">
               <div className="mt-3">
                 <label class="form-label" value="">
                   Storage Location
@@ -222,7 +222,7 @@ export default function () {
                   onChangeValueProduct={onChangeValueProduct}
                 />
               </div>
-            </>
+            </div>
           )}
         </div>
       </div>

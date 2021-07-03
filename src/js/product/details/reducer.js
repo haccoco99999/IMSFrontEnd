@@ -5,6 +5,9 @@ import {
   UPDATE_PRODUCT_REQUEST,
   UPDATE_PRODUCT_RESPONSE,
   UPDATE_PRODUCT_ERROR,
+  GET_DETAILS_VARIANT_REQUEST,
+  GET_DETAILS_VARIANT_RESPONSE,
+  GET_DETAILS_VARIANT_ERROR,
 } from "./constants";
 
 const initialState = {
@@ -13,8 +16,11 @@ const initialState = {
   messages: "",
   errors: "",
   productDetails: {
-    brand:null,
-    productVariants:null
+    brand: null,
+    productVariants: null,
+  },
+  productVariant: {
+    packages: null,
   },
 };
 
@@ -27,7 +33,6 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-       
       };
     case GET_DETAILS_PRODUCT_RESPONSE:
       console.log(action.json);
@@ -64,6 +69,31 @@ export default function reducer(state = initialState, action) {
         errors: "",
       };
     case UPDATE_PRODUCT_ERROR:
+      return {
+        ...state,
+        requesting: false,
+        successful: false,
+        messages: "",
+        errors: "",
+      };
+    case GET_DETAILS_VARIANT_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: "",
+      };
+    case GET_DETAILS_VARIANT_RESPONSE:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: "",
+        productVariant: action.json.productVariant,
+      };
+    case GET_DETAILS_VARIANT_ERROR:
       return {
         ...state,
         requesting: false,

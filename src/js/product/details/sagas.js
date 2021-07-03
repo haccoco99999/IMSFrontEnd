@@ -51,8 +51,8 @@ function updateProduct(action) {
     });
 }
 
-function getDetailsVariant(action){
-  const url = `http://imspublicapi.herokuapp.com/api/product/${action.id}`;
+function getDetailsVariant(action) {
+  const url = `http://imspublicapi.herokuapp.com/api/productvariant/${action.id}`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -88,9 +88,19 @@ function* updateProductFlow(action) {
   }
 }
 
+function* getDetailstVariantFlow(action) {
+  try {
+    let json = yield call(getDetailsVariant, action);
+    yield put({ type: GET_DETAILS_VARIANT_RESPONSE, json });
+  } catch (error) {
+    yield put({ type: GET_DETAILS_VARIANT_ERROR });
+  }
+}
+
 function* watcher() {
   yield takeEvery(UPDATE_PRODUCT_REQUEST, updateProductFlow);
   yield takeEvery(GET_DETAILS_PRODUCT_REQUEST, getDetailsProductFlow);
+  yield takeEvery(GET_DETAILS_VARIANT_REQUEST, getDetailstVariantFlow);
 }
 
 export default watcher;
