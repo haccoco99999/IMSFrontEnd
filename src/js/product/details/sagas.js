@@ -11,6 +11,9 @@ import {
   GET_DETAILS_VARIANT_REQUEST,
   GET_DETAILS_VARIANT_RESPONSE,
   GET_DETAILS_VARIANT_ERROR,
+  GET_BRAND_RESPONSE,
+  GET_BRAND_REQUEST,
+  GET_BRAND_ERROR,
 } from "./constants";
 
 function getDetailsProduct(action) {
@@ -44,8 +47,7 @@ function updateProduct(action) {
     body: JSON.stringify(action.data),
   })
     .then((response) => handleApiErrors(response))
-    .then((response) => response.json())
-    .then((json) => json)
+    .then((response) => response)
     .catch((error) => {
       throw error;
     });
@@ -53,6 +55,26 @@ function updateProduct(action) {
 
 function getDetailsVariant(action) {
   const url = `http://imspublicapi.herokuapp.com/api/productvariant/${action.id}`;
+  return fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+function getAllBrand(action) {
+  const url =
+    "http://imspublicapi.herokuapp.com/api/product/brands?CurrentPage=0&SizePerPage=0";
   return fetch(url, {
     method: "GET",
     headers: {
@@ -97,10 +119,20 @@ function* getDetailstVariantFlow(action) {
   }
 }
 
+function* getAllBrandFlow(action) {
+  try {
+    let json = yield call(getAllBrand,action)
+    yield put({ type: GET_BRAND_RESPONSE,json }); 
+  } catch (error) {
+    yield put({ type:GET_BRAND_ERROR})
+  }
+}
+
 function* watcher() {
   yield takeEvery(UPDATE_PRODUCT_REQUEST, updateProductFlow);
   yield takeEvery(GET_DETAILS_PRODUCT_REQUEST, getDetailsProductFlow);
   yield takeEvery(GET_DETAILS_VARIANT_REQUEST, getDetailstVariantFlow);
+  yield takeEvery(GET_BRAND_REQUEST,getAllBrandFlow)
 }
 
 export default watcher;

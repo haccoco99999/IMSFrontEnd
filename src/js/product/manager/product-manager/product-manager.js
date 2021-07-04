@@ -50,7 +50,7 @@ export default function () {
   function onClickToDetails(row) {
     history.push("/homepage/product/details", {
       productId: row.productId,
-      fromPage: "ManagerPage",
+      // fromPage: "ManagerPage",
     });
   }
 

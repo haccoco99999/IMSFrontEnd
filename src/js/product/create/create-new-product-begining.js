@@ -8,7 +8,6 @@ import "../product.css";
 //components
 
 //Category
-//import { GetAllCategoryAction } from "../manager/category-manager/action";
 import { getCategoriesAllAction } from "./action";
 
 const formReducer = (state, event) => {

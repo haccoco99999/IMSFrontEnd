@@ -102,7 +102,7 @@ export default function ListProductsTable(props) {
               //     <td>{item.totalAmount}</td>
 
               // </tr>
-              <tr>
+              <tr onClick={() => props.onRowClick(product)}>
                 {arrayHeaders.map((header) => {
                   if (header.includes("input")) {
                     return (
