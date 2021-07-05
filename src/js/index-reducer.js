@@ -25,6 +25,8 @@ import createAccountReducer from "./manage-account/create/account/reducer";
 import getDetailsProductReducer from "./product/details/reducer";
 import createSupplierReducer from "./supplier/create/reducer";
 import getAllGoodIssueReducer from "./good-issue/manager/reducer";
+import getAllStocktakeReducer from "./stock-take/manager/reducer";
+import getDetailsStocktakeReducer from "./stock-take/details/reducer";
 const IndexReducer = combineReducers({
   login,
   client,
@@ -51,6 +53,7 @@ const IndexReducer = combineReducers({
   getDetailsProductReducer,
   createSupplierReducer,
   getAllGoodIssueReducer,
+  getAllStocktakeReducer,getDetailsStocktakeReducer
 });
 
 export default IndexReducer;

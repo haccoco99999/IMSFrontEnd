@@ -1,19 +1,67 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 //css
 import "../stocktake.css";
 
 //components
-import Details from '../details/details'
+// import Details from "../details/details";
+import { getAllStocktakeAction } from "./action";
+import Table from "../../table-receipt/ListReceiptsTable";
 
 export default function () {
   let history = useHistory();
+  let dispatch = useDispatch();
+
+  const { listStocktakeStore, pageCount, token } = useSelector((state) => ({
+    listStocktakeStore: state.getAllStocktakeReducer.listStocktakes,
+    pageCount: state.getAllStocktakeReducer.pageCount,
+    token: state.client.token,
+  }));
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(5);
+
+  const [listValueColumn, setListValueColumn] = useState({
+    id: true,
+    status: true,
+    createdByName: true,
+    createdDate: true,
+    modifiedDate: true,
+  });
+  const [listEditHeader, setListEditHeader] = useState({
+    id: "Stocktake ID",
+    createdByName: "Created by",
+  });
 
   function pushAddPage() {
     history.push("/homepage/stock-take/create");
   }
 
+  function nextPagingClick() {
+    console.log("forward");
+    setCurrentPage(currentPage + 1);
+  }
+  function backPagingClick() {
+    console.log("backWard");
+    setCurrentPage(currentPage - 1);
+  }
+
+  function onClickToDetails(row) {
+    history.push("/homepage/stock-take/details", {
+      stocktakeId: row.id,
+    });
+  }
+  useEffect(() => {
+    dispatch(
+      getAllStocktakeAction({
+        currentPage: currentPage,
+        sizePerPage: sizePerPage,
+        token: token,
+      })
+    );
+  }, [currentPage, sizePerPage]);
   return (
     <div className="space-top-heading">
       {/* title */}
@@ -86,6 +134,19 @@ export default function () {
             </svg>
             Filter
           </a>
+        </div>
+        <div className="mt-3">
+          <Table
+            listHeaderEdit={listEditHeader}
+            listColumn={listValueColumn}
+            listData={listStocktakeStore}
+            backPagingClick={backPagingClick}
+            nextPagingClick={nextPagingClick}
+            sizePerPage={sizePerPage}
+            currentPage={currentPage}
+            pageCount={pageCount}
+            onRowClick={onClickToDetails}
+          />
         </div>
       </div>{" "}
     </div>

@@ -1,17 +1,38 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect, useReducer } from "react";
+import { useHistory,useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 //css
 import "../stocktake.css";
 //components
 import AdjustInventory from "./adjust-inventory";
+import { getDetailsStockTakeAction } from "./action";
+import TableProduct from '../../list-products-table/ListProductsTable'
 
 export default function details() {
   let history = useHistory();
+  let dispatch = useDispatch();
+  let location = useLocation();
 
+  const { token, listCheckItemsStore, stocktakeDetailsStore } = useSelector(
+    (state) => ({
+      token: state.client.token,
+      listCheckItemsStore:
+        state.getDetailsStocktakeReducer.goodIssue.checkItems,
+      stocktakeDetailsStore: state.getDetailsStocktakeReducer.goodIssue,
+    })
+  );
   function goBackClick() {
     history.goBack();
   }
 
+  useEffect(() => {
+    dispatch(
+      getDetailsStockTakeAction({
+        id: location.state.stocktakeId,
+        token: token,
+      })
+    );
+  }, []);
   return (
     <div>
       {/* todo: task heading */}
@@ -24,7 +45,7 @@ export default function details() {
               <h3>Back</h3>
             </a>
             <div class="me-auto">
-              <h2 class="id-color fw-bold">272005181</h2>
+              <h2 class="id-color fw-bold">{stocktakeDetailsStore.id}</h2>
               <div class="form-text id-color">Stock take complete</div>
             </div>
             <div>
@@ -48,7 +69,7 @@ export default function details() {
         <div className="wrapper-content shadow">
           {/* Show info */}
 
-          <div className="row g-3 justify-content-between me-3">
+          {/* <div className="row g-3 justify-content-between me-3">
             <div className="col-4">
               <p>
                 <strong>Created by:</strong> Huy Nguyen
@@ -71,6 +92,9 @@ export default function details() {
                 <strong>Adjust date:</strong> 05/21/2021
               </p>
             </div>
+          </div> */}
+          <div className="mt-3">
+
           </div>
         </div>
       </div>

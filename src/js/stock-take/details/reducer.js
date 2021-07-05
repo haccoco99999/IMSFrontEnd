@@ -1,7 +1,7 @@
 import {
-  GET_ALL_STOCKTAKE_REQUEST,
-  GET_ALL_STOCKTAKE_RESPONSE,
-  GET_ALL_STOCKTAKE_ERROR,
+    GET_DETAILS_STOCKTAKE_REQUEST,
+    GET_DETAILS_STOCKTAKE_RESPONSE,
+    GET_DETAILS_STOCKTAKE_ERROR,
 } from "./constants";
 
 const initialState = {
@@ -9,16 +9,14 @@ const initialState = {
   successful: false,
   messages: "",
   errors: "",
-  currentPage: 0,
-  pageCount: 0,
-  sizePerPage: 0,
-  rowCountTotal: 0,
-  listStocktakes: [],
+  goodIssue: {
+    checkItems: null,
+  },
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case GET_ALL_STOCKTAKE_REQUEST:
+    case GET_DETAILS_STOCKTAKE_REQUEST:
       return {
         ...state,
         requesting: true,
@@ -26,26 +24,23 @@ export default function reducer(state = initialState, action) {
         messages: "",
         errors: "",
       };
-    case GET_ALL_STOCKTAKE_RESPONSE:
+    case GET_DETAILS_STOCKTAKE_RESPONSE:
       return {
         ...state,
         requesting: false,
         successful: true,
         messages: "",
         errors: "",
-        currentPage: action.json.paging.currentPage,
-        pageCount: action.json.paging.pageCount,
-        sizePerPage: action.json.paging.sizePerPage,
-        rowCountTotal: action.json.paging.rowCountTotal,
-        listStocktakes: action.json.paging.resultList,
+        goodIssue: action.json.singleResult,
       };
-    case GET_ALL_STOCKTAKE_ERROR:
+    case GET_DETAILS_STOCKTAKE_ERROR:
       return {
         ...state,
         requesting: false,
-        successful: false,
+        successful: true,
         messages: "",
         errors: "",
+        goodIssue: {},
       };
     default:
       return state;
