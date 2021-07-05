@@ -1,10 +1,47 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+//css
 import "../goodissue.css";
-
+//components
+import { getAllGoodIssueAction } from "./action";
 import Progress from "../progress/good-issue-progressing";
+import Table from "../../table-receipt/ListReceiptsTable";
 
 export default function manager() {
+  let history = useHistory();
+  let dispatch = useDispatch();
+
+  const [listValueColumn, setListValueColumn] = useState({
+    id: true,
+    goodsIssueRequestNumber: true,
+    status: true,
+    deliveryDate: true,
+  });
+
+  const [listEditHeader, setListEditHeader] = useState({
+    id: "Good Issue ID",
+    goodsIssueRequestNumber: "Request Number",
+  });
+  const { listGoodIssuesStore, token } = useSelector((state) => ({
+    listGoodIssuesStore: state.getAllGoodIssueReducer.listGoodIssues,
+    token: state.client.token,
+    pageCount: state.getAllGoodIssueReducer.pageCount,
+  }));
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(5);
+
+  useEffect(() => {
+    dispatch(
+      getAllGoodIssueAction({
+        token: token,
+        currentPage: currentPage,
+        sizePerPage: sizePerPage,
+      })
+    );
+  }, []);
+
   return (
     <div className="space-top-heading">
       {/* title */}
@@ -58,6 +95,19 @@ export default function manager() {
             Filter
           </a>
         </div>
+      </div>
+      <div className="mt-3">
+        <Table
+          listHeaderEdit={listEditHeader}
+          listColumn={listValueColumn}
+          listData={listGoodIssuesStore}
+          backPagingClick={backPagingClick}
+          nextPagingClick={nextPagingClick}
+          sizePerPage={sizePerPage}
+          currentPage={currentPage}
+          pageCount={pageCount}
+          // onRowClick={onClickToDetails}
+        />
       </div>
       {/* <Filter /> */}
     </div>

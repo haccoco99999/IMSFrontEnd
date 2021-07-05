@@ -24,6 +24,7 @@ import createProductReducer from "./product/create/reducer";
 import createAccountReducer from "./manage-account/create/account/reducer";
 import getDetailsProductReducer from "./product/details/reducer";
 import createSupplierReducer from "./supplier/create/reducer";
+import getAllGoodIssueReducer from "./good-issue/manager/reducer";
 const IndexReducer = combineReducers({
   login,
   client,
@@ -49,6 +50,7 @@ const IndexReducer = combineReducers({
   createAccountReducer,
   getDetailsProductReducer,
   createSupplierReducer,
+  getAllGoodIssueReducer,
 });
 
 export default IndexReducer;
