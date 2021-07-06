@@ -14,6 +14,9 @@ import {
   GET_BRAND_RESPONSE,
   GET_BRAND_REQUEST,
   GET_BRAND_ERROR,
+  GET_DETAILS_PACKAGE_REQUEST,
+  GET_DETAILS_PACKAGE_RESPONSE,
+  GET_DETAILS_PACKAGE_ERROR,
 } from "./constants";
 
 function getDetailsProduct(action) {
@@ -92,6 +95,24 @@ function getAllBrand(action) {
     });
 }
 
+function getDetailsPackage(action) {
+  const url = `http://imspublicapi.herokuapp.com/api/package/${action.id}`;
+  return fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
 function* getDetailsProductFlow(action) {
   try {
     let json = yield call(getDetailsProduct, action);
@@ -121,10 +142,19 @@ function* getDetailstVariantFlow(action) {
 
 function* getAllBrandFlow(action) {
   try {
-    let json = yield call(getAllBrand,action)
-    yield put({ type: GET_BRAND_RESPONSE,json }); 
+    let json = yield call(getAllBrand, action);
+    yield put({ type: GET_BRAND_RESPONSE, json });
   } catch (error) {
-    yield put({ type:GET_BRAND_ERROR})
+    yield put({ type: GET_BRAND_ERROR });
+  }
+}
+
+function* getDetailsPackageFlow(action){
+  try {
+    let json = yield call(getDetailsPackage, action);
+    yield put({ type: GET_DETAILS_PACKAGE_RESPONSE,json})
+  } catch (error) {
+    yield put({ type:GET_DETAILS_PACKAGE_ERROR})
   }
 }
 
@@ -132,7 +162,8 @@ function* watcher() {
   yield takeEvery(UPDATE_PRODUCT_REQUEST, updateProductFlow);
   yield takeEvery(GET_DETAILS_PRODUCT_REQUEST, getDetailsProductFlow);
   yield takeEvery(GET_DETAILS_VARIANT_REQUEST, getDetailstVariantFlow);
-  yield takeEvery(GET_BRAND_REQUEST,getAllBrandFlow)
+  yield takeEvery(GET_BRAND_REQUEST, getAllBrandFlow);
+  yield takeEvery(GET_DETAILS_PACKAGE_REQUEST,getDetailsPackageFlow)
 }
 
 export default watcher;

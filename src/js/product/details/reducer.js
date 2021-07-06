@@ -11,6 +11,9 @@ import {
   GET_BRAND_RESPONSE,
   GET_BRAND_REQUEST,
   GET_BRAND_ERROR,
+  GET_DETAILS_PACKAGE_REQUEST,
+  GET_DETAILS_PACKAGE_RESPONSE,
+  GET_DETAILS_PACKAGE_ERROR,
 } from "./constants";
 
 const initialState = {
@@ -26,6 +29,14 @@ const initialState = {
     packages: null,
   },
   listBrand: [],
+  package: {
+    productVariant: {},
+    supplier: {},
+    goodsReceiptOrder: {
+      receivedDate: "",
+    },
+    importedDate: "",
+  },
 };
 
 export default function reducer(state = initialState, action) {
@@ -37,6 +48,7 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
+        productDetails: {},
       };
     case GET_DETAILS_PRODUCT_RESPONSE:
       console.log(action.json);
@@ -113,7 +125,6 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-
       };
     case GET_BRAND_RESPONSE:
       return {
@@ -132,6 +143,32 @@ export default function reducer(state = initialState, action) {
         messages: "",
         errors: "",
         listBrand: [],
+      };
+    case GET_DETAILS_PACKAGE_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: "",
+      };
+    case GET_DETAILS_PACKAGE_RESPONSE:
+      return {
+        ...state,
+        requesting: false,
+        successful: true,
+        messages: "",
+        errors: "",
+        package: action.json.package,
+      };
+    case GET_DETAILS_PACKAGE_ERROR:
+      return {
+        ...state,
+        requesting: false,
+        successful: false,
+        messages: "",
+        errors: "",
+        package: {},
       };
     default:
       return state;

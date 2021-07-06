@@ -40,6 +40,12 @@ export default function VariantDetails() {
     history.goBack();
   }
 
+  function onClickToDetails(row) {
+    history.push("/homepage/product/details/package", {
+      packageId: row.id,
+    });
+  }
+
   useEffect(() => {
     dispatch(getDetailsVariant({ id: location.state.variantId, token: token }));
   }, []);
@@ -67,6 +73,7 @@ export default function VariantDetails() {
             >
               Delete
             </button> */}
+
             {isDisabled ? (
               <button
                 className="btn btn-warning button-tab text-white button me-3"
@@ -96,65 +103,107 @@ export default function VariantDetails() {
       {/* content */}
       <div className="wrapper space-top">
         <div className="wrapper-content shadow">
-          <div className="title-heading mt-2">
-            <span>Variant Details </span>
-          </div>
-          <div className="mt-3">
-            <div className="row g-3 justify-content-between me-3">
-              <div className="col-4">
-                <p>
-                  <strong>Variant ID:</strong>
-                  {variant.id}
-                </p>
-                <p>
-                  <strong>Product ID:</strong>
-                  {variant.productId}
-                </p>
-                <p>
-                  <strong>Name:</strong>
-                  {variant.name}
-                </p>
-                <p>
-                  <strong>SKU:</strong>
-                  {variant.sku}
-                </p>
-                <p>
-                  <strong>Barcode:</strong>
-                  {variant.barcode}
-                </p>
+          <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <button
+                class="nav-link active"
+                id="nav-home-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#nav-home"
+                type="button"
+                role="tab"
+                aria-controls="nav-home"
+                aria-selected="true"
+              >
+                General Information
+              </button>
+              <button
+                class="nav-link"
+                id="nav-profile-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#nav-profile"
+                type="button"
+                role="tab"
+                aria-controls="nav-profile"
+                aria-selected="false"
+              >
+                Packages
+              </button>
+            </div>
+          </nav>
+          <div class="tab-content" id="nav-tabContent">
+            <div
+              class="tab-pane fade show active"
+              id="nav-home"
+              role="tabpanel"
+              aria-labelledby="nav-home-tab"
+            >
+              <div className="wrapper-content shadow mt-3">
+                <div className="title-heading mt-2">
+                  <span>Variant Details </span>
+                </div>
+                <div className="mt-3">
+                  <div className="row g-3 justify-content-between me-3">
+                    <div className="col-4">
+                      <p>
+                        <strong>Variant ID:</strong>
+                        {variant.id}
+                      </p>
+                      <p>
+                        <strong>Product ID:</strong>
+                        {variant.productId}
+                      </p>
+                      <p>
+                        <strong>Name:</strong>
+                        {variant.name}
+                      </p>
+                      <p>
+                        <strong>SKU:</strong>
+                        {variant.sku}
+                      </p>
+                      <p>
+                        <strong>Barcode:</strong>
+                        {variant.barcode}
+                      </p>
+                    </div>
+                    <div className="col-4">
+                      <p>
+                        <strong>Quantity:</strong>
+                        {variant.storageQuantity}
+                      </p>
+                      <p>
+                        <strong>Price:</strong>
+                        {variant.price}
+                      </p>
+                      <p>
+                        <strong>Total Price:</strong>
+                        {variant.cost}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="col-4">
-                <p>
-                  <strong>Quantity:</strong>
-                  {variant.storageQuantity}
-                </p>
-                <p>
-                  <strong>Price:</strong>
-                  {variant.price}
-                </p>
-                <p>
-                  <strong>Total Price:</strong>
-                  {variant.cost}
-                </p>
-              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="nav-profile"
+              role="tabpanel"
+              aria-labelledby="nav-profile-tab"
+            >
+              {isReturnData && (
+                  <div className="mt-3">
+                    <ListPackageTable
+                      listHeaderEdit={listHeaderEdit}
+                      listColumn={listColumn}
+                      listData={listPackage}
+                      onRowClick={onClickToDetails}
+                    />
+                  </div>
+
+              )}
             </div>
           </div>
         </div>
-        {isReturnData && (
-          <div className="wrapper-content shadow">
-            <div className="title-heading mt-2">
-              <span>Package </span>
-            </div>
-            <div className="mt-3">
-              <ListPackageTable
-                listHeaderEdit={listHeaderEdit}
-                listColumn={listColumn}
-                listData={listPackage}
-                // onRowClick={onClickToDetails}
-              />
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

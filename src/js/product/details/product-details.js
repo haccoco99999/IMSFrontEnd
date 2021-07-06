@@ -98,7 +98,6 @@ export default function ProductDetails() {
         id: e.id,
         name: e.name,
         price: e.price,
-        // salePrice: e.cost,
         barcode: e.barcode,
         sku: e.sku,
         unit: e.unit,
@@ -127,6 +126,17 @@ export default function ProductDetails() {
     history.push("/homepage/product/details/variant", {
       variantId: row.id,
     });
+  }
+  function clickToAddVariants(row) {
+    let productVariants = {
+      name: "",
+      price: 0,
+      salePrice: 0,
+      barcode: "",
+      sku: "",
+      unit: dataLastPage.unit,
+    };
+    setVariantValues([...variantValues, productVariants]);
   }
 
   useEffect(() => {
@@ -159,8 +169,6 @@ export default function ProductDetails() {
     messages,
   ]);
 
-  // console.log(productBrandDetailsStore.brandName);
-  // console.log(listVariantsStores);
   return (
     <>
       <div className=" tab-fixed container-fluid  fixed-top">
@@ -176,6 +184,9 @@ export default function ProductDetails() {
             >
               Delete
             </button> */}
+            <button className="btn btn-danger button-tab text-white button me-3">
+              Add Variant
+            </button>
             {isDisabled ? (
               <button
                 className="btn btn-warning button-tab text-white button me-3"
@@ -206,130 +217,180 @@ export default function ProductDetails() {
       <div className="wrapper space-top">
         <div className="wrapper-content shadow">
           {/* Show info */}
+          <div className="title-heading mt-2">
+            <span>Productt Details Details</span>
+          </div>
 
-          <div className="row g-3 justify-content-between me-3">
-            <div className="col-4">
-              <p>
-                <strong>Product ID:</strong> {productDetails.id}
-              </p>
-              <p>
-                <strong>Name:</strong>{" "}
-                {isDisabled ? (
-                  productDetails.name
-                ) : (
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={productDetails.name}
-                  />
-                )}
-              </p>
-              {!productDetails.isVariantType && (
-                <>
-                  <p>
-                    <strong>Barcode:</strong>
-                  </p>
-                  <p>
-                    <strong>Storage Quantity:</strong>
-                  </p>
-                </>
-              )}
+          <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <button
+                class="nav-link active"
+                id="nav-home-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#nav-home"
+                type="button"
+                role="tab"
+                aria-controls="nav-home"
+                aria-selected="true"
+              >
+                General Information
+              </button>
+              <button
+                class="nav-link"
+                id="nav-profile-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#nav-profile"
+                type="button"
+                role="tab"
+                aria-controls="nav-profile"
+                aria-selected="false"
+              >
+                Variants
+              </button>
+            </div>
+          </nav>
+          <div class="tab-content" id="nav-tabContent">
+            <div
+              class="tab-pane fade show active"
+              id="nav-home"
+              role="tabpanel"
+              aria-labelledby="nav-home-tab"
+            >
+              <div className="wrapper-content shadow mt-3">
+                {/* Show info */}
 
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value={""}
-                  name="isVariantType"
-                  checked={productDetails.isVariantType}
-                  disabled={isDisabled}
-                />
-                <label class="form-check-label" for="flexCheckDefault">
-                  <strong>Products has many attribute</strong>
-                </label>
+                <div className="row g-3 justify-content-between me-3">
+                  <div className="col-4">
+                    <p>
+                      <strong>Product ID:</strong> {productDetails.id}
+                    </p>
+                    <p>
+                      <strong>Name:</strong>{" "}
+                      {isDisabled ? (
+                        productDetails.name
+                      ) : (
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={productDetails.name}
+                        />
+                      )}
+                    </p>
+                    {!productDetails.isVariantType && (
+                      <>
+                        <p>
+                          <strong>Barcode:</strong>
+                        </p>
+                        <p>
+                          <strong>Storage Quantity:</strong>
+                        </p>
+                      </>
+                    )}
+
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value={""}
+                        name="isVariantType"
+                        checked={productDetails.isVariantType}
+                        disabled={isDisabled}
+                      />
+                      <label class="form-check-label" for="flexCheckDefault">
+                        <strong>Products has many attribute</strong>
+                      </label>
+                    </div>
+                  </div>
+                  <div className="col-4">
+                    <p>
+                      <strong>Brand:</strong>
+                      {/* {isDisabled ? (
+                        brandDetails.brandName
+                      ) : (
+                        <select
+                          name="brand"
+                          class="form-select"
+                          // aria-label="Default select example"
+                          defaultValue=""
+                          onChange={handleChangeBrand}
+                        >
+                          <option value="" disabled>
+                            --No selected--
+                          </option>
+                          {listBrandStore.map((brand) => (
+                            <option id={brand.id} value={brand.brandName}>
+                              {brand.brandName}
+                            </option>
+                          ))}
+                        </select>
+                      )} */}
+                    </p>
+                    <p>
+                      <strong>Category:</strong>{" "}
+                      {isDisabled ? (
+                        productDetails.categoryId
+                      ) : (
+                        <select
+                          name="categoryID"
+                          class="form-select"
+                          // aria-label="Default select example"
+                          defaultValue=""
+                          onChange={handleChangeCategory}
+                        >
+                          <option value="" disabled>
+                            --No selected--
+                          </option>
+                          {listCategoriesStore.map((category) => (
+                            <option
+                              id={category.id}
+                              value={category.categoryName}
+                            >
+                              {category.categoryName}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    </p>
+                    {!productDetails.isVariantType && (
+                      <>
+                        <p>
+                          <strong>SKU:</strong>
+                        </p>
+                        <p>
+                          <strong>Price:</strong>
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="col-4">
-              <p>
-                <strong>Brand:</strong>
-                {isDisabled ? (
-                  brandDetails.brandName
-                ) : (
-                  <select
-                    name="brand"
-                    class="form-select"
-                    // aria-label="Default select example"
-                    defaultValue=""
-                    onChange={handleChangeBrand}
-                  >
-                    <option value="" disabled>
-                      --No selected--
-                    </option>
-                    {listBrandStore.map((brand) => (
-                      <option id={brand.id} value={brand.brandName}>
-                        {brand.brandName}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </p>
-              <p>
-                <strong>Category:</strong>{" "}
-                {isDisabled ? (
-                  productDetails.categoryId
-                ) : (
-                  <select
-                    name="categoryID"
-                    class="form-select"
-                    // aria-label="Default select example"
-                    defaultValue=""
-                    onChange={handleChangeCategory}
-                  >
-                    <option value="" disabled>
-                      --No selected--
-                    </option>
-                    {listCategoriesStore.map((category) => (
-                      <option id={category.id} value={category.categoryName}>
-                        {category.categoryName}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </p>
-              {!productDetails.isVariantType && (
-                <>
-                  <p>
-                    <strong>SKU:</strong>
-                  </p>
-                  <p>
-                    <strong>Price:</strong>
-                  </p>
-                </>
+            <div
+              class="tab-pane fade"
+              id="nav-profile"
+              role="tabpanel"
+              aria-labelledby="nav-profile-tab"
+            >
+              {productDetails.isVariantType && (
+                <div>
+                  {/* Show info */}
+                  <div className="mt-3">
+                    {isReturnData && (
+                      <ListProductsTable
+                        // clickToAddProduct={listVariantsStores}
+                        // onChangeValueProduct={onChangeValueProduct}
+                        listHeaderEdit={listEditHeader}
+                        listColumn={listColumn}
+                        listData={listVariantsStores}
+                        onRowClick={onClickToDetails}
+                      />
+                    )}
+                  </div>
+                </div>
               )}
             </div>
           </div>
         </div>
-
-        {productDetails.isVariantType && (
-          <div className="wrapper-content shadow mt-3">
-            {/* Show info */}
-            <div className="row g-3 justify-content-between me-3">
-              <label for="supplierName" class="form-label">
-                List variants
-              </label>
-              {isReturnData && (
-                <ListProductsTable
-                  // clickToAddProduct={listVariantsStores}
-                  // onChangeValueProduct={onChangeValueProduct}
-                  listHeaderEdit={listEditHeader}
-                  listColumn={listColumn}
-                  listData={listVariantsStores}
-                  onRowClick={onClickToDetails}
-                />
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
