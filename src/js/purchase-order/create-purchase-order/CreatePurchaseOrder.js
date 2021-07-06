@@ -25,6 +25,7 @@ import ToastMessage from './ToastMessage';
 class CreatePurchaseOrder extends React.Component {
     constructor(props) {
         super(props)
+  
         this.props.getDetailPurchaseOrder(this.props.location.state.orderID)
         let defaultState = {
             isCancelTask: true,
@@ -41,7 +42,7 @@ class CreatePurchaseOrder extends React.Component {
 
                 {
                     name: "Product Name",
-
+                   
                 },
                 {
                     unit: "Unit",
@@ -76,6 +77,7 @@ class CreatePurchaseOrder extends React.Component {
         this.clickToAddProduct = this.clickToAddProduct.bind(this)
         this.clickDeleteProduct = this.clickDeleteProduct.bind(this)
         this.ignorePurchaseOrder = this.ignorePurchaseOrder.bind(this)
+        this.selectProduct = this.selectProduct.bind(this)
     }
     componentWillReceiveProps(nextProps) {
         const purchaseOrderProduct = this.props.getDetailPurchaseReducer
@@ -308,7 +310,7 @@ class CreatePurchaseOrder extends React.Component {
         })
     }
     onChangeValueProduct = (event) => {
-        console.log(event.target.value)
+       
         this.setState({
             purchaseOrderProduct: this.state.purchaseOrderProduct.map((element, index) =>
                 index == event.target.id ?
@@ -327,27 +329,47 @@ class CreatePurchaseOrder extends React.Component {
     clickToAddProduct(productRaw) {
 
         let product = {
-            id: productRaw.productId,
+            id: 0,
             orderId: "",
-            productVariantId: productRaw.id,
-            orderQuantity: 1,
-            unit: productRaw.unit,
-            price: productRaw.price,
+            productVariantId: 0,
+            orderQuantity: 0,
+            unit: 0,
+            price: 0,
             discountAmount: 0,
-            totalAmount: productRaw.price * 1,
-            name: productRaw.name,
+            totalAmount: 0,
+            name: "",
         }
-        console.log(product)
+     
         this.setState({
             purchaseOrderProduct: [...this.state.purchaseOrderProduct, product]
         })
     }
-    clickDeleteProduct(id) {
+    clickDeleteProduct(index) {
 
         this.setState({
-            purchaseOrderProduct: this.state.purchaseOrderProduct.filter((element, index) => element.productVariantId !== id)
+            purchaseOrderProduct: this.state.purchaseOrderProduct.filter((_, i) => i !== index)
         })
 
+    }
+    selectProduct(item){
+        console.log(item.product)
+        console.log(item.index)
+        this.setState({
+            purchaseOrderProduct: this.state.purchaseOrderProduct.map((element, index) =>
+                index == item.index ?
+                    
+                        {   id: item.product.id,
+                            orderId: "",
+                            productVariantId: 6595,
+                            orderQuantity: item.product.quantity,
+                            unit: item.product.unit,
+                            price: item.product.price,
+                            discountAmount: 0,
+                            totalAmount: 0,
+                            name: item.product.name,}
+                    
+                    : element)
+        })
     }
     
 
@@ -449,12 +471,12 @@ class CreatePurchaseOrder extends React.Component {
                         }
                     }
                 />
-                {console.log(this.state.isShowEdit)}
+            
                 {!this.state.isShowEdit === true ? <SearchComponent clickToAddProduct={this.clickToAddProduct} /> : ""}
-                {console.log(this.state.purchaseOrderProduct)}
                 <ListProductsTable
+                selectProduct={this.selectProduct}
                     clickDeleteProduct={this.clickDeleteProduct}
-                    clickToAddProduct={this.clickToAddProduct}
+           
                     onChangeValueProduct={this.onChangeValueProduct}
                     disabled={this.state.isShowEdit}
                     listColumn={this.state.listColumn}
@@ -470,7 +492,7 @@ class CreatePurchaseOrder extends React.Component {
                     
                 </datalist>
                 <button onClick={() => this.addProductPurchaseOrder()} >Add Product</button> */}
-
+<button onClick={() => this.clickToAddProduct()} >Add Product</button>
                 {this.state.status == "PQCreated" ? <TextEditor getEditorState={(event) => this.getEditorState(event)} /> : ""}
                 {/* <div className="mail-detail collapse show" data-bs-target="#TextEditor1"
                 id="TextEditor1" data-bs-toggle="collapse"><p>Mail detail</p></div>

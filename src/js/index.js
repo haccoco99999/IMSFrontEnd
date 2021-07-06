@@ -21,6 +21,7 @@ import IndexSagas from './index-sagas'
 import { applyMiddleware, createStore, compose } from 'redux'
 import { Provider } from 'react-redux'
 import LoginSaga from './login/sagas'
+
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import {checkHomePageAuthorization} from './auth/check-auth'
 

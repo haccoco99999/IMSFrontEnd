@@ -71,7 +71,7 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
                 listQuote: []
             }
         case GET_PRICE_QUOTE_SUCCESS:
-
+            console.log(action.json.paging.resultList)
             return {
                 ...state,
                 requesting: false,

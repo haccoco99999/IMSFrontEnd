@@ -1,5 +1,4 @@
 .list-receipt-table-container{
-    padding: 20px;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 35%);
@@ -8,6 +7,7 @@
     font-size: 15px;
     width: 100%;
     padding: 50px;
+    --bs-table-striped-bg: #0d699942 !important;
 }
 .table-container{
     display: block;
@@ -25,6 +25,61 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 20px;
+}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: #0d699942;
+  }
+  thead, tbody, tfoot, tr, td, th {
+    border-color: inherit;
+    /* border-style: none !important; */
+    border-width: 0;
+    
+}
+.thead-column{
+    color: white;
+    background: #042333;
+}
+.tool-bar-table{
+    padding: 20px;
+    display: flex;
+}
+
+.search-purchase{
+    width: 300px !important;
+}
+.list-icon-tool-bar{
+    display: flex;
+    width: 300px;
+    justify-content: space-evenly;
+    
+}
+.icon-tool-bar{
+    font-size: 23px !important;
+    height: 34px;
+    width: 65px;
+    /* font-size: 20px; */
+    border-radius: 18px;
+    border: 1px solid gray;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.select-row-table{
+    width: 100px;
+
+    height: 34px;
+    border-radius: 25px;
+}
+.left-size-paging{
+    width: 350px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.select-row-table:focus{
+    outline: none;
 }
 /* .search-purchase{
     position: relative;

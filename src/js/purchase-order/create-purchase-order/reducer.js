@@ -35,11 +35,10 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
             }
         case GET_DETAIL_PURCHASE_ORDER_SUCCESS:
             let clearJson = { ...action.json.purchaseOrder }
-
+            console.log(action.json)
             action.json.purchaseOrder.purchaseOrderProduct = clearJson.purchaseOrderProduct.map(product => {
 
                 product.name = product.productVariant.name
-                product.productVariant.variantValues.map(variant => product.name += " " + variant.attribute)
                 delete product["productVariant"]
                 return product
             })

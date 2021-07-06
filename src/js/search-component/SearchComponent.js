@@ -14,7 +14,7 @@ export default function SearchComponent(props) {
 
         // }
 
-        const updateUrl = `https://imspublicapi.herokuapp.com/api/product/search/${keySearch}&page=1&size=10`
+        const updateUrl = `https://imspublicapi.herokuapp.com/api/product/search?SearchQuery=${keySearch}&CurrentPage=1&SizePerPage=10`
         let json = await fetch(updateUrl, {
             method: 'GET',
             headers: {

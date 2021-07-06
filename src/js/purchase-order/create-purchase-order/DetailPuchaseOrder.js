@@ -253,7 +253,7 @@ export default function DetailPurchase() {
             {console.log(detailPurchaseState.purchaseOrderProduct)}
              <ListProductsTable 
             
-
+                
                  onChangeValueProduct={onChangeValueProduct}
                
                 listColumn={["Product No", "Product Name", "Unit", "Quantity", "Unit Price", "Ammount"]} 
