@@ -45,7 +45,6 @@ export default function ProductDetails() {
   const [productDetails, setProductDetails] = useState({});
   const [categorySelected, setCategorySelected] = useState({});
   const [brandSelected, setBrandSelected] = useState({});
-  const [productName, setProductName] = useState("");
   const [brandDetails, setBrandDetails] = useState({});
 
   const [listColumn, setListColumn] = useState({
@@ -87,8 +86,8 @@ export default function ProductDetails() {
   };
 
   const handleChangeProductName = (e) => {
-    setProductName(e.target.value);
-    console.log("Product Name", productName);
+    setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
+    console.log(productDetails);
   };
 
   function onClickEdit() {
