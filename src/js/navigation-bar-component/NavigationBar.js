@@ -1,35 +1,34 @@
-import React from 'react'
-import './navigation-bar.css'
+import React from "react";
+import "./navigation-bar.css";
+
 export default function NavigationBar(props) {
- 
-   
-    return (
-        <div className="navigation-bar" >
-            <div className="navigation-bar-left">
-                <h3 onClick={props.actionGoBack}>&lt;</h3>
-                <h3>{props.titleBar}</h3>
-            </div>
-            <div className="navigation-bar-right">
-                {props.listButton.map(button => {
-                    if(button == null){
-                        return ""
-                    }
-                    let classButton = button.class == null? "btn-primary": button.class
-                    if(button.isShow == false){
-                      
-                       return ""
-                    }
-                    else{
-                       
-                        return <button onClick={button.action} type="button" style={button.style} class={"navigation-bar-right-button btn "  + classButton }>{button.title}</button> 
-                    }
-                })}
-     
-
-            </div>
-
-        </div>
-    );
+  return (
+    <div className="navigation-bar">
+      <div className="navigation-bar-left">
+        <h3 onClick={props.actionGoBack}>&lt;</h3>
+        <h3>{props.titleBar}</h3>
+      </div>
+      <div className="navigation-bar-right">
+        {props.listButton.map((button) => {
+          let classButton = button.class == null ? "btn-primary" : button.class;
+          if (button.isShow == false) {
+            return "";
+          } else {
+            return (
+              <button
+                onClick={button.action}
+                type="button"
+                style={button.style}
+                class={"navigation-bar-right-button btn " + classButton}
+              >
+                {button.title}
+              </button>
+            );
+          }
+        })}
+      </div>
+    </div>
+  );
 }
 
 // const listButton = [
@@ -49,6 +48,8 @@ export default function NavigationBar(props) {
 //     }
 // ]
 
-{/* <NavigationBar actionGoBack={() => this.goBackClick()}
-listButton={listButton}
-/> */}
+{
+  /* <NavigationBar actionGoBack={() => this.goBackClick()}
+        listButton={listButton}
+        /> */
+}

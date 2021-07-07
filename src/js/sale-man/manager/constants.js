@@ -1,0 +1,3 @@
+export const GET_ALL_PR_REQUEST = 'GET_ALL_PR_REQUEST';
+export const GET_ALL_PR_RESPONSE = 'GET_ALL_PR_RESPONSE';
+export const GET_ALL_PR_ERROR = 'GET_ALL_PR_ERROR';

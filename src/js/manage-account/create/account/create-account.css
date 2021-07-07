@@ -1,0 +1,29 @@
+.container-create-account{
+    background-color: white;
+    padding: 30px !important;
+}
+.avatar-upload-contain {
+    position: relative;
+    border-radius: 50% !important;
+    overflow: hidden;
+    height: 200px;
+    width: 200px;
+}
+.avatar-upload-contain:hover > .change-avatar-edit{
+    bottom: 0px;
+}
+.avatar-upload-contain img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+.change-avatar-edit{
+    transition: 1s;
+    width: 200px;
+    height: 60px;
+    background: #00000073;
+    bottom: -60px;
+    position: absolute;
+    text-align: center;
+    color: white;
+}

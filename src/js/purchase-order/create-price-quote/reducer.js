@@ -15,7 +15,7 @@ const reducer = function SendMailQuoteReducer(state = initalState, action){
                 requesting: true,
                 successful: false,
                 messages: "",
-                errors: "",
+                errors: "", 
                 
             }
         case SEND_MAIL_PRICE_QUOTE_SUCCESS:

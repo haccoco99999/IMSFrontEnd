@@ -17,12 +17,15 @@ export function DetailPurhcaseOrder(props) {
     }))
 
 
+
+
+
     useEffect(() => {
         dispatch(getDetailPriceQuote({ id: location.state.priceQuoteOrderNumber },[]));
 
     },[])
     function handleClick() {
-        history.push("/homepage/purchase/CreatePriceQuote");
+        history.push("/homepage/purchase/CreatePurchaseOrder");
     }
 
 
