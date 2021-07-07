@@ -27,7 +27,7 @@ export default function manager() {
       {" "}
       {/* title */}
       <div className="title-heading mt-2">
-        <span>Products Manager</span>
+        <span>Product Manager</span>
       </div>
       {/* content block */}
       <div className="wrapper-content shadow">

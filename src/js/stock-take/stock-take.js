@@ -6,7 +6,8 @@ import "./stocktake.css";
 //components
 import Create from "./create/stocktake-create";
 import Manager from "./manager/stoctake-manager";
-import Details from "./details/stocktake-details";
+import StocktakeDetails from "./details/stocktake-details";
+import CheckedLocationDetails from './details/stocktake-checkedlocation-details'
 export default function () {
   return (
     // <Details/>
@@ -21,8 +22,11 @@ export default function () {
           <Route path="/homepage/stock-take/create">
             <Create />
           </Route>
-          <Route path="/homepage/stock-take/details">
-            <Details />
+          <Route exact path="/homepage/stock-take/details">
+            <StocktakeDetails />
+          </Route>
+          <Route path="/homepage/stock-take/location-details">
+            <CheckedLocationDetails/>
           </Route>
         </Switch>
 

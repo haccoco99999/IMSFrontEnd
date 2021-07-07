@@ -45,6 +45,7 @@ export default function ProductDetails() {
   const [productDetails, setProductDetails] = useState({});
   const [categorySelected, setCategorySelected] = useState({});
   const [brandSelected, setBrandSelected] = useState({});
+  const [productName, setProductName] = useState("");
   const [brandDetails, setBrandDetails] = useState({});
 
   const [listColumn, setListColumn] = useState({
@@ -84,6 +85,12 @@ export default function ProductDetails() {
     });
     console.log(brandSelected);
   };
+
+  const handleChangeProductName = (e) => {
+    setProductName(e.target.value);
+    console.log("Product Name", productName);
+  };
+
   function onClickEdit() {
     setIsDisabled(false);
     dispatch(getCategoriesAllAction({ token: token }));
@@ -113,7 +120,8 @@ export default function ProductDetails() {
       productVariantsUpdate: productVariants,
     };
 
-    dispatch(updateProductAction({ token: token, data: data }));
+    console.log(data);
+    // dispatch(updateProductAction({ token: token, data: data }));
   }
   function goBackClick() {
     history.goBack();
@@ -218,7 +226,7 @@ export default function ProductDetails() {
         <div className="wrapper-content shadow">
           {/* Show info */}
           <div className="title-heading mt-2">
-            <span>Productt Details Details</span>
+            <span>Product Details</span>
           </div>
 
           <nav>
@@ -272,6 +280,7 @@ export default function ProductDetails() {
                         <input
                           type="text"
                           className="form-control"
+                          onChange={handleChangeProductName}
                           value={productDetails.name}
                         />
                       )}

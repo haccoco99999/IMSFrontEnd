@@ -97,7 +97,7 @@ function* createCategoryFlow(action) {
 function* updateCategoryFlow(action) {
   try {
     let json = yield call(updateCategory, action);
-    yield put({ type: UPDATE_CATEGORY_RESPONONSE, json });
+    yield put({ type: UPDATE_CATEGORY_RESPONSE, json });
   } catch (error) {
     yield put({ type: UPDATE_CATEGORY_ERROR });
   }

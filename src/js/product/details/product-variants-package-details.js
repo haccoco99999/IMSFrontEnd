@@ -8,7 +8,7 @@ import "../product.css";
 import ListPackageTable from "../../table-receipt/ListReceiptsTable";
 import { getDetailsPackageAction } from "./action";
 
-export default function details() {
+export default function PackageDetails() {
   let history = useHistory();
   let dispatch = useDispatch();
   let location = useLocation();

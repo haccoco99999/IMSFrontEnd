@@ -66,7 +66,7 @@ export default function () {
     <div className="space-top-heading">
       {/* title */}
       <div className="title-heading mt-2">
-        <span>Products Manager</span>
+        <span>Stocktake Manager</span>
       </div>
       {/* content block  */}
       <div className="wrapper-content shadow">

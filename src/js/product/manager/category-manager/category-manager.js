@@ -12,7 +12,7 @@ import {
 } from "./action";
 import Table from "../../../table-receipt/ListReceiptsTable";
 
-export default function () {
+export default function CategoryManager() {
   let dispatch = useDispatch();
   //modal
   const modalRef = useRef();
@@ -118,7 +118,7 @@ export default function () {
   }, [messages]);
 
   return (
-    <div>
+    <div className="wrapper-content shadow">
       <ModalFunction
         modalRef={modalRef}
         hideModal={hideModal}

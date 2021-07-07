@@ -10,7 +10,7 @@ const initialState = {
   messages: "",
   errors: "",
   goodIssue: {
-    checkItems: null,
+    groupLocations: [],
   },
 };
 
@@ -23,6 +23,7 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
+        goodIssue: {}
       };
     case GET_DETAILS_STOCKTAKE_RESPONSE:
       return {

@@ -67,7 +67,7 @@ export default function () {
   }, [currentPage, sizePerPage]);
 
   return (
-    <div>
+    <div className="wrapper-content shadow">
       <div className="ms-5">
         <a
           class="btn btn-default me-md-2 add"
