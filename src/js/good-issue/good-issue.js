@@ -3,7 +3,8 @@ import { Route, Switch } from "react-router-dom";
 //css
 import "./goodissue.css";
 //components
-import Manager from "./manager/good-issue-manager"
+import DetailGoodIssue from "./good-issue-detail/GoodIssueDetail";
+import Manager from "./manager/manager"
 export default function () {
   return (
 
@@ -15,9 +16,9 @@ export default function () {
           <Route exact path="/homepage/good-issue">
             <Manager />
           </Route>
-          {/* <Route path="/homepage/sale-man/create-purchase-requisition">
-            <Create />
-          </Route> */}
+          <Route path="/homepage/good-issue/detail">
+            <DetailGoodIssue />
+          </Route>
         </Switch>
 
         {/* ################################# */}

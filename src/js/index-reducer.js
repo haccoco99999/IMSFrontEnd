@@ -24,9 +24,22 @@ import createProductReducer from "./product/create/reducer";
 import createAccountReducer from "./manage-account/create/account/reducer";
 import getDetailsProductReducer from "./product/details/reducer";
 import createSupplierReducer from "./supplier/create/reducer";
-import getAllGoodIssueReducer from "./good-issue/manager/reducer";
+
 import getAllStocktakeReducer from "./stock-take/manager/reducer";
 import getDetailsStocktakeReducer from "./stock-take/details/reducer";
+import {
+  createUserAccountReducer,
+  getUserAccountDetail,
+  updateAccountDetail,
+} from "./manage-account/create/account/reducer";
+import {
+  createRolePermission,
+  DetailRolePermission,
+  UpdateRolePermission,
+} from "./manage-account/create/role/reducer";
+import { GetAllGoodIssues } from "./good-issue/manager/reducer";
+
+import { DetailGoodIssue } from "./good-issue/good-issue-detail/reducer";
 const IndexReducer = combineReducers({
   login,
   client,
@@ -52,8 +65,13 @@ const IndexReducer = combineReducers({
   createAccountReducer,
   getDetailsProductReducer,
   createSupplierReducer,
-  getAllGoodIssueReducer,
-  getAllStocktakeReducer,getDetailsStocktakeReducer
+  getAllStocktakeReducer,
+  getDetailsStocktakeReducer,
+  createProductReducer,
+  // createUserAccountReducer,getDetailsProductReducer,getUserAccountDetail, updateAccountDetail,
+  // createRolePermission, DetailRolePermission, UpdateRolePermission,
+  DetailGoodIssue,
+  GetAllGoodIssues,
 });
 
 export default IndexReducer;

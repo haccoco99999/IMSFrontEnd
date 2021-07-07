@@ -46,7 +46,8 @@ export default function ProductDetails() {
   const [categorySelected, setCategorySelected] = useState({});
   const [brandSelected, setBrandSelected] = useState({});
   const [brandDetails, setBrandDetails] = useState({});
-
+  const [isUpdateGeneralInformation, setIsUpdateGeneralInformation] =
+    useState(true);
   const [listColumn, setListColumn] = useState({
     id: true,
     name: true,
@@ -116,11 +117,11 @@ export default function ProductDetails() {
       brandDescription: "",
       categoryId: categorySelected.id,
       isVariantType: productDetails.isVariantType,
-      productVariantsUpdate: productVariants,
+      productVariantsUpdate: [],
     };
 
     console.log(data);
-    // dispatch(updateProductAction({ token: token, data: data }));
+    dispatch(updateProductAction({ token: token, data: data }));
   }
   function goBackClick() {
     history.goBack();
@@ -312,7 +313,7 @@ export default function ProductDetails() {
                   <div className="col-4">
                     <p>
                       <strong>Brand:</strong>
-                      {/* {isDisabled ? (
+                      {isDisabled ? (
                         brandDetails.brandName
                       ) : (
                         <select
@@ -331,7 +332,7 @@ export default function ProductDetails() {
                             </option>
                           ))}
                         </select>
-                      )} */}
+                      )}
                     </p>
                     <p>
                       <strong>Category:</strong>{" "}
@@ -385,8 +386,6 @@ export default function ProductDetails() {
                   <div className="mt-3">
                     {isReturnData && (
                       <ListProductsTable
-                        // clickToAddProduct={listVariantsStores}
-                        // onChangeValueProduct={onChangeValueProduct}
                         listHeaderEdit={listEditHeader}
                         listColumn={listColumn}
                         listData={listVariantsStores}

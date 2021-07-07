@@ -1,56 +1,82 @@
-import {
-  GET_ALL_GOOD_ISSUE_REQUEST,
-  GET_ALL_GOOD_ISSUE_RESPONSE,
-  GET_ALL_GOOD_ISSUE_ERROR,
-} from "./constants";
 
-const initialState = {
-  requesting: false,
-  successful: false,
-  messages: "",
-  errors: "",
-  currentPage: 0,
-  pageCount: 0,
-  sizePerPage: 0,
-  rowCountTotal: 0,
-  listGoodIssues: [],
-};
+import {GET_ALL_GOOD_ISSUE_ERROR,GET_ALL_GOOD_ISSUE_REQUESTING,GET_ALL_GOOD_ISSUE_SUCCESS} from './contants'
+  const initalListGoodIssuesState = {
+    requesting: false,
+    success: false,
+    messages: "",
+    errors: "",
+    infoListGoodIssue:{
+        listGoodIssue:[{
+            id:"",
+            transactionId:"",
+            goodsIssueNumber:"",
+            goodsIssueRequestNumber:"",
+            deliveryMethod:"",
+            status:"",
+            createdByName:"",
+            deliveryDate:"",
+            createdDate:"",
 
-export default function reducer(state = initialState, action) {
-  switch (action.type) {
-    case GET_ALL_GOOD_ISSUE_REQUEST:
-      return {
+        }],
+        currentPage: 0,
+        pageCount: 0,
+        sizePerPage: 0,
+        rowCountTotal: 0,
+        skipValue: 0
+
+    }
+  };
+  
+  export const GetAllGoodIssues = function getAllGoodIssues(state = initalListGoodIssuesState, action) {
+    switch (action.type) {
+      case GET_ALL_GOOD_ISSUE_REQUESTING:
+        return {
         ...state,
-        requesting: true,
-        successful: false,
-        messages: "",
-        errors: "",
-      };
-
-    case GET_ALL_GOOD_ISSUE_RESPONSE:
-      return {
-          ...state,
+          requesting: true,
+          success: false,
+          messages: "",
+          errors: "",
+         
+        };
+      case GET_ALL_GOOD_ISSUE_SUCCESS:
+        
+        return {
           requesting: false,
           successful: true,
           messages: "",
           errors: "",
-          listGoodIssues: action.json.paging.resultList,
-          currentPage: action.json.paging.currentPage,
-          pageCount: action.json.paging.pageCount,
-          sizePerPage: action.json.paging.sizePerPage,
-          rowCountTotal: action.json.paging.rowCountTotal,
-      };
-
-    case GET_ALL_GOOD_ISSUE_ERROR:
-      return {
-        ...state,
-        requesting: false,
-        successful: false,
-        messages: "",
-        errors: "",
-        listGoodIssues: [],
-      };
-    default:
-      return state;
-  }
-}
+          infoListGoodIssue:{
+            listGoodIssue:(action.json.paging.resultList.map(item => {
+                return {
+                    id: item.id,
+                    transactionId: item.transactionId,
+                    goodsIssueNumber: item.goodsIssueNumber,
+                    goodsIssueRequestNumber: item.goodsIssueRequestNumber,
+                    deliveryMethod: item.deliveryMethod,
+                    status: item.status,
+                    createdByName: item.createdByName,
+                    deliveryDate: item.deliveryDate.split("T")[0],
+                    createdDate: item.createdDate.split("T")[0],  
+                }
+            })),
+            currentPage: action.json.paging.currentPage,
+            pageCount: action.json.paging.pageCount,
+            sizePerPage: action.json.paging.sizePerPage,
+            rowCountTotal:action.json.paging.rowCountTotal,
+            skipValue: 0
+    
+        }
+        };
+      case GET_ALL_GOOD_ISSUE_ERROR:
+        return {
+            ...state,
+          requesting: false,
+          success: false,
+          messages: "",
+          errors: "",
+          
+        };
+      default:
+        return state;
+    }
+  };

@@ -10,9 +10,15 @@ import SearchComponent from "../../search-component/SearchComponent";
 export default function create() {
   let history = useHistory();
 
+  const {token} = useSelector((state) => ({
+    token: state.client.token,
+  }))
+
   function goBackClick() {
     history.goBack();
   }
+
+  
   function clickToAddProduct(productRaw) {
     let product = {
       id: productRaw.productId,
@@ -44,6 +50,7 @@ export default function create() {
       )
     );
   }
+  console.log(getAllLocation(token))
   return (
     <div>
       {/* todo: task heading */}
@@ -94,13 +101,15 @@ export default function create() {
               <div className="title-heading mt-2">
                 <span>Select your product</span>
               </div>
-              <SearchComponent clickToAddProduct={clickToAddProduct} />
+              {/* <SearchComponent clickToAddProduct={clickToAddProduct} /> */}
               <div className="mt-3"></div>
             </div>
           </div>
         </div>
       </div>
-      <AddMultiple />
+      {/* <AddMultiple /> */}
     </div>
   );
 }
+
+

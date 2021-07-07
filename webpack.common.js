@@ -1,11 +1,21 @@
 const path = require("path");
-
+// const nodeExternals = require('webpack-node-externals');
 module.exports = {
   mode: "development",
   entry: "./src/js/index.js",
   devtool: "inline-source-map",
-  target: "electron-renderer",
-  node: {global: true},
+  target: "web",
+   node: {global: true},
+//   externals: [nodeExternals({
+//     importType: 'umd'
+//  })],
+// externals:{
+//   lodash:{
+//     commonjs:'lodash',
+//    amd:'lodash',
+//    root:'_'
+//   }
+// },
   module: {
     rules: [
       {

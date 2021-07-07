@@ -1,24 +1,22 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 
-//component
-import {
-  GET_ALL_GOOD_ISSUE_REQUEST,
-  GET_ALL_GOOD_ISSUE_RESPONSE,
-  GET_ALL_GOOD_ISSUE_ERROR,
-} from "./constants";
-
 import handleApiErrors from "../../auth/api-errors";
+import {GET_ALL_GOOD_ISSUE_ERROR,GET_ALL_GOOD_ISSUE_REQUESTING,GET_ALL_GOOD_ISSUE_SUCCESS} from './contants'
 
-function getAllStocktake(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/goodsissue/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+
+
+function getAllGoodIssueAPI(action) {
+  const url = "https://imspublicapi.herokuapp.com/api/goodsissue/search?CurrentPage=1&SizePerPage=10&FromStatus=1&ToStatus=10";
+
   return fetch(url, {
     method: "GET",
     headers: {
-      Authorization: "Bearer " + action.token,
+     
       "Content-Type": "application/json",
       Origin: "",
     },
     credentials: "include",
+  
   })
     .then((response) => handleApiErrors(response))
     .then((response) => response.json())
@@ -28,18 +26,24 @@ function getAllStocktake(action) {
     });
 }
 
-function* getAllStocktakeFlow(action) {
+
+
+
+
+function* getAllGoodIssueFlow(action) {
   try {
-    let json = yield call(getAllStocktake, action);
-    yield put({ type: GET_ALL_GOOD_ISSUE_RESPONSE, json });
+    let json = yield call(getAllGoodIssueAPI, action);
+    
+    yield put({ type: GET_ALL_GOOD_ISSUE_SUCCESS, json });
   } catch (error) {
-    console.log(error);
+ 
     yield put({ type: GET_ALL_GOOD_ISSUE_ERROR });
   }
 }
 
 function* watcher() {
-  yield takeEvery(GET_ALL_GOOD_ISSUE_REQUEST, getAllStocktakeFlow);
+  yield takeEvery(GET_ALL_GOOD_ISSUE_REQUESTING, getAllGoodIssueFlow);
+
 }
 
 export default watcher;
