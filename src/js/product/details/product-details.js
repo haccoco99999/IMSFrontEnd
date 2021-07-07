@@ -29,7 +29,7 @@ export default function ProductDetails() {
   } = useSelector((state) => ({
     token: state.client.token,
     productDetailsStore: state.getDetailsProductReducer.productDetails,
-    message: state.getDetailsProductReducer.messages,
+    messages: state.getDetailsProductReducer.messages,
     listVariantsStores:
       state.getDetailsProductReducer.productDetails.productVariants,
     listCategoriesStore: state.createProductReducer.listCategories,
@@ -100,24 +100,32 @@ export default function ProductDetails() {
     setIsDisabled(true);
   }
   function onClickSave() {
-    const productVariants = listVariants.map((e) => {
-      return {
-        id: e.id,
-        name: e.name,
-        price: e.price,
-        barcode: e.barcode,
-        sku: e.sku,
-        unit: e.unit,
-      };
-    });
+    // const productVariants = listVariants.map((e) => {
+    //   return {
+    //     id: e.id,
+    //     name: e.name,
+    //     price: e.price,
+    //     barcode: e.barcode,
+    //     sku: e.sku,
+    //     unit: e.unit,
+    //   };
+    // });
+    // const data = {
+    //   id: location.state.productId,
+    //   name: productDetails.name,
+    //   brandName: brandSelected.name,
+    //   brandDescription: "",
+    //   categoryId: categorySelected.id,
+    //   isVariantType: productDetails.isVariantType,
+    //   productVariantsUpdate: [],
+    // };
+
     const data = {
       id: location.state.productId,
       name: productDetails.name,
       brandName: brandSelected.name,
       brandDescription: "",
       categoryId: categorySelected.id,
-      isVariantType: productDetails.isVariantType,
-      productVariantsUpdate: [],
     };
 
     console.log(data);
@@ -133,18 +141,16 @@ export default function ProductDetails() {
   function onClickToDetails(row) {
     history.push("/homepage/product/details/variant", {
       variantId: row.id,
+      productId: productDetails.id,
+      variantType: productDetails.isVariantType,
     });
   }
-  function clickToAddVariants(row) {
-    let productVariants = {
-      name: "",
-      price: 0,
-      salePrice: 0,
-      barcode: "",
-      sku: "",
-      unit: dataLastPage.unit,
-    };
-    setVariantValues([...variantValues, productVariants]);
+  function onClickToAddVariant() {
+    history.push("/homepage/product/details/create-variant", {
+      productId: productDetails.id,
+      variantType: productDetails.isVariantType,
+      productUnits: productDetails.unit
+    });
   }
 
   useEffect(() => {
@@ -164,7 +170,7 @@ export default function ProductDetails() {
     if (productBrandDetailsStore !== {}) {
       setBrandDetails(productBrandDetailsStore);
     }
-    if (messages === "Update Success") {
+    if (messages === "Update Product Success") {
       dispatch(
         getDetailsProductAction({ id: location.state.productId, token: token })
       );
@@ -192,7 +198,10 @@ export default function ProductDetails() {
             >
               Delete
             </button> */}
-            <button className="btn btn-danger button-tab text-white button me-3">
+            <button
+              className="btn btn-danger button-tab text-white button me-3"
+              onClick={onClickToAddVariant}
+            >
               Add Variant
             </button>
             {isDisabled ? (
@@ -279,6 +288,7 @@ export default function ProductDetails() {
                       ) : (
                         <input
                           type="text"
+                          name="name"
                           className="form-control"
                           onChange={handleChangeProductName}
                           value={productDetails.name}

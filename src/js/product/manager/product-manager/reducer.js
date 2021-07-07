@@ -2,7 +2,7 @@ import {
   GET_ALL_PRODUCTS_REQUEST,
   GET_ALL_PRODUCTS_RESPONSE,
   GET_ALL_PRODUCTS_ERROR,
-} from "../../constants";
+} from "../constants";
 
 const initialState = {
   requesting: false,

@@ -14,8 +14,7 @@ import NoVariants from "./create/create-no-variants/create-no-variants";
 import ProductDetails from "./details/product-details";
 import VariantDetails from "./details/product-variants-details";
 import PackageDetails from "./details/product-variants-package-details";
-// test
-//import CreateBeginT from './product-manager/create-new-product-beggining'
+import CreateVariant from './details/create-variant'
 
 export default function () {
   return (
@@ -45,6 +44,9 @@ export default function () {
           </Route>
           <Route path="/homepage/product/details/package">
             <PackageDetails />
+          </Route>
+          <Route path="/homepage/product/details/create-variant">
+            <CreateVariant/>
           </Route>
         </Switch>
 

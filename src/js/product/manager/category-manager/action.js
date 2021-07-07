@@ -2,7 +2,7 @@ import {
   GET_ALL_CATEGORY_REQUEST,
   CREATE_CATEGORY_REQUEST,
   UPDATE_CATEGORY_REQUEST,
-} from "../../constants";
+} from "../constants";
 
 export function GetAllCategoryAction({ currentPage, sizePerPage, token }) {
   return {

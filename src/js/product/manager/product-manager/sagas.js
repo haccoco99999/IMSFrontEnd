@@ -5,7 +5,7 @@ import {
   GET_ALL_PRODUCTS_REQUEST,
   GET_ALL_PRODUCTS_RESPONSE,
   GET_ALL_PRODUCTS_ERROR,
-} from "../../constants";
+} from "../constants";
 
 import handleApiErrors from "../../../auth/api-errors";
 

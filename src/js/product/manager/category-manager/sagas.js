@@ -11,7 +11,7 @@ import {
   UPDATE_CATEGORY_REQUEST,
   UPDATE_CATEGORY_RESPONSE,
   UPDATE_CATEGORY_ERROR,
-} from "../../constants";
+} from "../constants";
 
 import handleApiErrors from "../../../auth/api-errors";
 

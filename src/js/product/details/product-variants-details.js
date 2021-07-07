@@ -6,7 +6,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import "../product.css";
 //components
 import ListPackageTable from "../../table-receipt/ListReceiptsTable";
-import { getDetailsVariant } from "./action";
+import { getDetailsVariant, updateVariantAction } from "./action";
 
 export default function VariantDetails() {
   let history = useHistory();
@@ -22,20 +22,33 @@ export default function VariantDetails() {
     quantity: true,
     price: true,
     totalPrice: true,
-    location: true,
+    locationName: true,
+    importedDate: true,
   });
 
   const [listHeaderEdit, setListEditHeader] = useState({
     id: "Package ID",
+    importedDate: "Imported Date",
   });
 
-  const { variantStore, listPackageStore, token } = useSelector((state) => ({
-    variantStore: state.getDetailsProductReducer.productVariant,
-    listPackageStore: state.getDetailsProductReducer.productVariant.packages,
-    token: state.client.token,
-  }));
-  console.log(variantStore);
-  console.log(listPackageStore);
+  const { variantStore, listPackageStore, token, messages } = useSelector(
+    (state) => ({
+      variantStore: state.getDetailsProductReducer.productVariant,
+      listPackageStore: state.getDetailsProductReducer.productVariant.packages,
+      token: state.client.token,
+      messages: state.getDetailsProductReducer.messages,
+    })
+  );
+
+  const onChangeValue = (event) => {
+    console.log(event.target.name);
+    setVariant({
+      ...variant,
+      [event.target.name]: event.target.value,
+    });
+    // console.log("SUA:", variant);
+  };
+
   function goBackClick() {
     history.goBack();
   }
@@ -46,18 +59,62 @@ export default function VariantDetails() {
     });
   }
 
+  function onClickEdit() {
+    setIsDisabled(false);
+  }
+  function onClickCancel() {
+    setIsDisabled(true);
+  }
+  function onClickSave() {
+    const data = {
+      productId: location.state.productId,
+      isVariantType: location.state.variantType,
+      productVariantsUpdate: [
+        {
+          id: variant.id,
+          name: variant.name,
+          price: variant.price,
+          barcode: variant.barcode,
+          sku: variant.sku,
+          unit: variant.unit,
+        },
+      ],
+    };
+    console.log("DATA:", data);
+    dispatch(updateVariantAction({ token: token, data: data }));
+  }
   useEffect(() => {
     dispatch(getDetailsVariant({ id: location.state.variantId, token: token }));
   }, []);
 
   useEffect(() => {
     if (variantStore !== {}) setVariant(variantStore);
+
     if (listPackageStore !== null) {
       setIsReturnData(true);
-      setListPackage(listPackageStore);
+      setListPackage(
+        listPackageStore.map((item) => {
+          item.locationName = item.location.locationName;
+          return {
+            id: item.id,
+            quantity: item.quantity,
+            importedDate: item.importedDate,
+            locationName: item.locationName,
+            price: item.price,
+            totalPrice: item.totalPrice,
+          };
+        })
+      );
     }
   }, [variantStore, listPackageStore]);
 
+  useEffect(() => {
+    if (messages === "Update Variant success") {
+      dispatch(
+        getDetailsVariant({ id: location.state.variantId, token: token })
+      );
+    }
+  }, [messages]);
   return (
     <div className="overflow-scroll">
       <div className=" tab-fixed container-fluid  fixed-top">
@@ -77,14 +134,14 @@ export default function VariantDetails() {
             {isDisabled ? (
               <button
                 className="btn btn-warning button-tab text-white button me-3"
-                //     onClick={onClickEdit}
+                onClick={onClickEdit}
               >
                 Edit
               </button>
             ) : (
               <button
                 className="btn btn-secondary button-tab text-white button me-3"
-                //   onClick={onClickCancel}
+                onClick={onClickCancel}
               >
                 Cancel
               </button>
@@ -93,7 +150,7 @@ export default function VariantDetails() {
             <button
               className="btn btn-primary button-tab button me-3"
               disabled={isDisabled}
-              //     onClick={onClickSave}
+              onClick={onClickSave}
             >
               Save
             </button>
@@ -155,25 +212,69 @@ export default function VariantDetails() {
                       </p>
                       <p>
                         <strong>Name:</strong>
-                        {variant.name}
+                        {isDisabled ? (
+                          variant.name
+                        ) : (
+                          <input
+                            type="text"
+                            name="name"
+                            className="form-control"
+                            onChange={onChangeValue}
+                            value={variant.name}
+                          />
+                        )}
                       </p>
                       <p>
                         <strong>SKU:</strong>
-                        {variant.sku}
+                        {isDisabled ? (
+                          variant.sku
+                        ) : (
+                          <input
+                            type="text"
+                            name="sku"
+                            className="form-control"
+                            onChange={onChangeValue}
+                            value={variant.sku}
+                          />
+                        )}
                       </p>
                       <p>
                         <strong>Barcode:</strong>
-                        {variant.barcode}
+                        {isDisabled ? (
+                          variant.barcode
+                        ) : (
+                          <input
+                            type="text"
+                            name="barcode"
+                            className="form-control"
+                            onChange={onChangeValue}
+                            value={variant.barcode}
+                          />
+                        )}
                       </p>
                     </div>
                     <div className="col-4">
+                      <p>
+                        <strong>Unit:</strong>
+                        {variant.unit}
+                      </p>
                       <p>
                         <strong>Quantity:</strong>
                         {variant.storageQuantity}
                       </p>
                       <p>
                         <strong>Price:</strong>
-                        {variant.price}
+                        {isDisabled ? (
+                          variant.price
+                        ) : (
+                          <input
+                            type="text"
+                            name="price"
+                            className="form-control"
+                            onChange={onChangeValue}
+                            value={variant.price}
+                          />
+                        )}
                       </p>
                       <p>
                         <strong>Total Price:</strong>
@@ -191,15 +292,14 @@ export default function VariantDetails() {
               aria-labelledby="nav-profile-tab"
             >
               {isReturnData && (
-                  <div className="mt-3">
-                    <ListPackageTable
-                      listHeaderEdit={listHeaderEdit}
-                      listColumn={listColumn}
-                      listData={listPackage}
-                      onRowClick={onClickToDetails}
-                    />
-                  </div>
-
+                <div className="mt-3">
+                  <ListPackageTable
+                    listHeaderEdit={listHeaderEdit}
+                    listColumn={listColumn}
+                    listData={listPackage}
+                    onRowClick={onClickToDetails}
+                  />
+                </div>
               )}
             </div>
           </div>

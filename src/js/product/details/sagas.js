@@ -17,6 +17,9 @@ import {
   GET_DETAILS_PACKAGE_REQUEST,
   GET_DETAILS_PACKAGE_RESPONSE,
   GET_DETAILS_PACKAGE_ERROR,
+  UPDATE_VARIANTS_REQUEST,
+  UPDATE_VARIANTS_RESPONSE,
+  UPDATE_VARIANTS_ERROR,
 } from "./constants";
 
 function getDetailsProduct(action) {
@@ -113,6 +116,27 @@ function getDetailsPackage(action) {
       throw error;
     });
 }
+
+function updateVariant(action) {
+  const url = "http://imspublicapi.herokuapp.com/api/productvariant/update";
+  return fetch(url, {
+    method: "PUT",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+    body: JSON.stringify(action.data),
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
+
 function* getDetailsProductFlow(action) {
   try {
     let json = yield call(getDetailsProduct, action);
@@ -149,12 +173,22 @@ function* getAllBrandFlow(action) {
   }
 }
 
-function* getDetailsPackageFlow(action){
+function* getDetailsPackageFlow(action) {
   try {
     let json = yield call(getDetailsPackage, action);
-    yield put({ type: GET_DETAILS_PACKAGE_RESPONSE,json})
+    yield put({ type: GET_DETAILS_PACKAGE_RESPONSE, json });
   } catch (error) {
-    yield put({ type:GET_DETAILS_PACKAGE_ERROR})
+    yield put({ type: GET_DETAILS_PACKAGE_ERROR });
+  }
+}
+
+function* updateVariantFlow(action) {
+  try {
+    let json = yield call(updateVariant, action);
+    yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
+  } catch (error) {
+    console.log(error);
+    yield put({ type: UPDATE_VARIANTS_ERROR });
   }
 }
 
@@ -163,7 +197,8 @@ function* watcher() {
   yield takeEvery(GET_DETAILS_PRODUCT_REQUEST, getDetailsProductFlow);
   yield takeEvery(GET_DETAILS_VARIANT_REQUEST, getDetailstVariantFlow);
   yield takeEvery(GET_BRAND_REQUEST, getAllBrandFlow);
-  yield takeEvery(GET_DETAILS_PACKAGE_REQUEST,getDetailsPackageFlow)
+  yield takeEvery(GET_DETAILS_PACKAGE_REQUEST, getDetailsPackageFlow);
+  yield takeEvery(UPDATE_VARIANTS_REQUEST, updateVariantFlow);
 }
 
 export default watcher;

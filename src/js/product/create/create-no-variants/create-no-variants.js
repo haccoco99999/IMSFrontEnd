@@ -125,7 +125,7 @@ export default function () {
                   <input
                     type="text"
                     class="form-control"
-                    placeholder="Write product name here"
+                    placeholder=""
                     name="sku"
                     value={formData.sku || ""}
                     onChange={handleChangeValue}

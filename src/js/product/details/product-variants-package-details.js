@@ -19,6 +19,7 @@ export default function PackageDetails() {
     supplierDetailsStore,
     goodsReceiptDetailsStore,
     productVariantStore,
+    locationStore,
   } = useSelector((state) => ({
     token: state.client.token,
     packageDetailsStore: state.getDetailsProductReducer.package,
@@ -26,10 +27,12 @@ export default function PackageDetails() {
     goodsReceiptDetailsStore:
       state.getDetailsProductReducer.package.goodsReceiptOrder,
     productVariantStore: state.getDetailsProductReducer.package.productVariant,
+    locationStore: state.getDetailsProductReducer.package.location,
   }));
   console.log(packageDetailsStore);
   console.log(supplierDetailsStore);
   console.log(goodsReceiptDetailsStore);
+
   function goBackClick() {
     history.goBack();
   }
@@ -75,7 +78,7 @@ export default function PackageDetails() {
                 aria-controls="nav-home"
                 aria-selected="true"
               >
-                Home
+                General Information
               </button>
               <button
                 class="nav-link"
@@ -87,7 +90,19 @@ export default function PackageDetails() {
                 aria-controls="nav-profile"
                 aria-selected="false"
               >
-                Profile
+                Goods Receipt
+              </button>
+              <button
+                class="nav-link"
+                id="nav-location-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#nav-location"
+                type="button"
+                role="tab"
+                aria-controls="nav-location"
+                aria-selected="false"
+              >
+                Location
               </button>
               <button
                 class="nav-link"
@@ -99,7 +114,7 @@ export default function PackageDetails() {
                 aria-controls="nav-contact"
                 aria-selected="false"
               >
-                Contact
+                Supplier
               </button>
             </div>
           </nav>
@@ -126,9 +141,6 @@ export default function PackageDetails() {
                     <p>
                       <strong>Total Price:</strong>{" "}
                       {packageDetailsStore.totalPrice}
-                    </p>
-                    <p>
-                      <strong>Location:</strong> {packageDetailsStore.location}
                     </p>
                     <p>
                       <strong>Imported Date:</strong>{" "}
@@ -190,17 +202,6 @@ export default function PackageDetails() {
                       {goodsReceiptDetailsStore.receivedDate.split("T")[0]}
                     </p>
                   </div>
-                  {/* <div className="col-4">
-                <p>
-                  <strong>Create date:</strong> 05/12/2021
-                </p>
-                <p>
-                  <strong>Submit date:</strong> 05/12/2021
-                </p>
-                <p>
-                  <strong>Adjust date:</strong> 05/21/2021
-                </p>
-              </div> */}
                 </div>
               </div>
             </div>
@@ -221,7 +222,7 @@ export default function PackageDetails() {
                       <strong>Supplier ID:</strong> {supplierDetailsStore.id}
                     </p>
                     <p>
-                      <strong>Supplier Name:</strong>{" "}
+                      <strong>Received From:</strong>{" "}
                       {supplierDetailsStore.supplierName}
                     </p>
                     <p>
@@ -238,6 +239,35 @@ export default function PackageDetails() {
                     </p>
                     <p>
                       <strong>Address:</strong> {supplierDetailsStore.address}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="nav-location"
+              role="tabpanel"
+              aria-labelledby="nav-location-tab"
+            >
+              <div className="wrapper-content shadow mt-3">
+                <div className="title-heading mt-2">
+                  <span>Location </span>
+                </div>
+                <div className="row g-3 justify-content-between me-3">
+                  <div className="col-4">
+                    <p>
+                      <strong>Location ID:</strong>
+                      {locationStore.id}
+                    </p>
+                    <p>
+                      <strong>Location Barcode:</strong>
+                      {locationStore.locationBarcode}
+                    </p>
+                    <p>
+                      <strong>Location Name:</strong>
+                      {locationStore.locationName}
                     </p>
                   </div>
                 </div>

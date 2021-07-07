@@ -14,6 +14,9 @@ import {
   GET_DETAILS_PACKAGE_REQUEST,
   GET_DETAILS_PACKAGE_RESPONSE,
   GET_DETAILS_PACKAGE_ERROR,
+  UPDATE_VARIANTS_REQUEST,
+  UPDATE_VARIANTS_RESPONSE,
+  UPDATE_VARIANTS_ERROR,
 } from "./constants";
 
 const initialState = {
@@ -32,6 +35,7 @@ const initialState = {
   package: {
     productVariant: {},
     supplier: {},
+    location: {},
     goodsReceiptOrder: {
       receivedDate: "",
     },
@@ -82,7 +86,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         requesting: false,
         successful: true,
-        messages: "Update Success",
+        messages: "Update Product Success",
         errors: "",
       };
     case UPDATE_PRODUCT_ERROR:
@@ -169,6 +173,30 @@ export default function reducer(state = initialState, action) {
         messages: "",
         errors: "",
         package: {},
+      };
+    case UPDATE_VARIANTS_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: "",
+      };
+    case UPDATE_VARIANTS_RESPONSE:
+      return {
+        ...state,
+        requesting: false,
+        successful: true,
+        messages: "Update Variant success",
+        errors: "",
+      };
+    case UPDATE_VARIANTS_ERROR:
+      return {
+        ...state,
+        requesting: false,
+        successful: false,
+        messages: "",
+        errors: "",
       };
     default:
       return state;
