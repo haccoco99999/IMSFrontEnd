@@ -2,16 +2,16 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import handleApiErrors from "../../auth/api-errors";
 
 import {
-  CREATE_GOODISSUE_REQUEST,
-  CREATE_GOODISSUE_RESPONSE,
-  CREATE_GOODISSUE_ERROR,
+  CREATE_STOCKTAKE_REQUEST,
+  CREATE_STOCKTAKE_RESPONSE,
+  CREATE_STOCKTAKE_ERROR,
   GET_LOCATION_REQUEST,
   GET_LOCATION_RESPONSE,
   GET_LOCATION_ERROR,
 } from "./constants";
 
 function createStocktake(action) {
-  const url = "";
+  const url = "http://imspublicapi.herokuapp.com/api/stocktake/add";
   return fetch(url, {
     method: "PUT",
     headers: {
@@ -53,10 +53,10 @@ function getAllLocations(action) {
 function* createStocktakeFlow(action) {
   try {
     let json = yield call(createStocktake, action);
-    yield put({ type: CREATE_GOODISSUE_RESPONSE, json });
+    yield put({ type: CREATE_STOCKTAKE_RESPONSE, json });
   } catch (error) {
     console.log(error);
-    yield put({ type: CREATE_GOODISSUE_ERROR });
+    yield put({ type: CREATE_STOCKTAKE_ERROR });
   }
 }
 
@@ -71,7 +71,7 @@ function* getAllLocationsFlow(action){
 }
 
 function* watcher() {
-  yield takeEvery(CREATE_GOODISSUE_REQUEST, createStocktakeFlow);
+  yield takeEvery(CREATE_STOCKTAKE_REQUEST, createStocktakeFlow);
   yield takeEvery(GET_LOCATION_REQUEST,getAllLocationsFlow)
 }
 

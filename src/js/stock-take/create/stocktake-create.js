@@ -7,18 +7,37 @@ import "../stocktake.css";
 import AddMultiple from "./add-multiple";
 import TableProduct from "../../list-products-table/ListProductsTable";
 import SearchComponent from "../../search-component/SearchComponent";
+import {} from "./action";
+import {SearchToAddProduct} from '../../search-component/SearchComponentAll'
 export default function create() {
   let history = useHistory();
 
-  const {token} = useSelector((state) => ({
+  const { token } = useSelector((state) => ({
     token: state.client.token,
-  }))
+  }));
 
   function goBackClick() {
     history.goBack();
   }
 
-  
+  function onSubmitClick() {
+    const dataCreateStocktake = {
+      stockTakeGroupLocation: [
+        {
+          locationId: "string",
+          checkItems: [
+            {
+              packageId: "string",
+              actualQuantity: 0,
+              note: "string",
+            },
+          ],
+        },
+      ],
+      stockTakeId: null,
+    };
+  }
+
   function clickToAddProduct(productRaw) {
     let product = {
       id: productRaw.productId,
@@ -50,7 +69,6 @@ export default function create() {
       )
     );
   }
-  console.log(getAllLocation(token))
   return (
     <div>
       {/* todo: task heading */}
@@ -64,13 +82,10 @@ export default function create() {
             </a>
             <h2 className="id-color fw-bold me-auto">Create Stock take</h2>
             <div>
-              <button className="btn btn-default button-tab">Cancel</button>
               <button className="btn btn-primary button-tab me-3 text-white">
                 Submit
               </button>
-              <button className="btn btn-primary button-tab me-3 text-white">
-                Save
-              </button>
+             
             </div>
           </div>
         </div>
@@ -99,10 +114,11 @@ export default function create() {
 
             <div className="mt-3">
               <div className="title-heading mt-2">
-                <span>Select your product</span>
+                <span>Select Location</span>
               </div>
-              {/* <SearchComponent clickToAddProduct={clickToAddProduct} /> */}
-              <div className="mt-3"></div>
+              <div className="mt-3">
+                <SearchToAddProduct/>
+              </div>
             </div>
           </div>
         </div>
@@ -111,5 +127,3 @@ export default function create() {
     </div>
   );
 }
-
-

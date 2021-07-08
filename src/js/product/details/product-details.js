@@ -53,7 +53,7 @@ export default function ProductDetails() {
     name: true,
     sku: true,
     barcode: true,
-    unit: true,
+    // unit: true,
     storageQuantity: true,
     price: true,
     cost: true,
@@ -149,7 +149,7 @@ export default function ProductDetails() {
     history.push("/homepage/product/details/create-variant", {
       productId: productDetails.id,
       variantType: productDetails.isVariantType,
-      productUnits: productDetails.unit
+      productUnit: productDetails.unit
     });
   }
 
@@ -392,7 +392,7 @@ export default function ProductDetails() {
             >
               {productDetails.isVariantType && (
                 <div>
-                  {/* Show info */}
+
                   <div className="mt-3">
                     {isReturnData && (
                       <ListProductsTable

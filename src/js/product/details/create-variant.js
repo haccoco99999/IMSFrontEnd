@@ -49,8 +49,7 @@ export default function CreateVariant() {
           price: formData.price,
           barcode: formData.barcode,
           sku: formData.sku,
-          //   unit: location.state.productUnits,
-          unit: "unit",
+          unit: location.state.productUnit,
         },
       ],
     };
