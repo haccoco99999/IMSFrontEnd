@@ -33,11 +33,11 @@ export default function manager() {
   }, {
     dataField: 'goodsIssueNumber',
     text: 'Goods Issue Request ID',
-    // formatter: (cell, row) =>{
-    //   return(
-    //     <SearchTest/>
-    //   )
-    // }
+    formatter: (cell, row) =>{
+      return(
+        <SearchTest/>
+      )
+    }
   }, 
   {
     dataField: 'status',

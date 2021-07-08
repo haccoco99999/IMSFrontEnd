@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './list-receipts-table.css'
-import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+// import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import { useDispatch } from 'react-redux'
 
 export default function ListReceiptTable(props) {

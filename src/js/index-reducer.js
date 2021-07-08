@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import client from "./user/reducer";
 import login from "./login/reducer";
 import updateProfile from "./about-account/reducer";
-import listPriceQuote from "./Gallery/reducer";
+// import listPriceQuote from "./Gallery/reducer";
 import controlPurchaseQuotePage from "./purchase-order/reducer";
 import detailPriceQuote from "./purchase-order/detail-purchase-order/reducer";
 import sendMailReducer from "./purchase-order/create-price-quote/reducer";
@@ -26,11 +26,12 @@ import { createRolePermission,DetailRolePermission , UpdateRolePermission } from
 import getDetailsProductReducer from "./product/details/reducer";
 import { GetAllGoodIssues } from "./good-issue/manager/reducer";
 import{ DetailGoodIssue} from "./good-issue/good-issue-detail/reducer";
+import { getDetailPurchaseReducer,productPurchaseOrderReducer } from "./purchase-order/create-purchase-order/reducer";
 const IndexReducer = combineReducers({
   login,
   client,
   updateProfile,
-  listPriceQuote,
+
   controlPurchaseQuotePage,
   detailPriceQuote,
   sendMailReducer,
@@ -52,6 +53,9 @@ const IndexReducer = combineReducers({
   createRolePermission, DetailRolePermission, UpdateRolePermission,
   DetailGoodIssue,
   GetAllGoodIssues,
+  getDetailPurchaseReducer,
+  productPurchaseOrderReducer,
+
 });
 
 export default IndexReducer;

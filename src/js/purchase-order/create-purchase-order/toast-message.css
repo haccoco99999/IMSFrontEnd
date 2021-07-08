@@ -1,0 +1,29 @@
+.toast-customize-dialog{
+    
+    width: 150px !important;
+   
+}
+.toast-container{
+    background-color: #0000009c !important;
+    height: 150px;
+    color: white;
+}
+.toast-message-body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.toast-message-body i {
+    font-size: 35px;
+}
+
+.bx-loader-alt{
+    animation: bx-loader-alt 1.5s linear infinite; 
+  }
+  @keyframes bx-loader-alt{
+    to{ transform: rotate(360deg); }
+  }
+  

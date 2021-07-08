@@ -2,7 +2,8 @@ import React from 'react'
 import './Table-Purchase-Order.css'
 import searchPurchaseOrder from './action'
 import { connect } from 'react-redux'
-
+import { Route, withRouter, Switch } from 'react-router-dom'
+// import Autocomplete from 'react-autocomplete';
 class TablePurchase extends React.Component {
     constructor(props) {
         super(props)
@@ -10,6 +11,7 @@ class TablePurchase extends React.Component {
             keySearch: ''
         }
         this.onChangeInput = this.onChangeInput.bind(this)
+        // this. onClickToDetailPurchaseOrder = this. onClickToDetailPurchaseOrder.bind(this)
     }
     onChangeInput = (event) => {
         this.setState({
@@ -21,10 +23,12 @@ class TablePurchase extends React.Component {
 
         this.props.searchPurchaseOrder(this.state.keySearch)
     }
-    onClickToDetailPurchaseOrder(){
-        console.log("okkk")
-    }
+
     render() {
+        const {
+            listColumn,
+            listData,
+        } = this.props
         return (
             <div className="purchase-container">
                 <div class="form-group search-purchase">
@@ -33,30 +37,54 @@ class TablePurchase extends React.Component {
 
                 </div>
 
+
+                {/* <Autocomplete
+                    getItemValue={(item) => item.label}
+                    items={[
+                        { label: 'apple' },
+                        { label: 'banana' },
+                        { label: 'pear' }
+                    ]}
+                    renderMenu={item => (
+                        <div className="dropdown">
+                          {item}
+                        </div>
+                      )}
+                    renderItem={(item, isHighlighted) =>
+                        <div style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
+                            {item.label}
+                        </div>
+                    }
+                    value={this.state.keySearch}
+                    onChange={(event, keySearch) => this.setState({keySearch: keySearch})}
+                    onSelect={(keySearch) => value = keySearch}
+                /> */}
+
                 <table class="table table-hover table-purchase">
                     <thead>
                         <tr>
-                            <th scope="col"><input type="checkbox" /></th>
-                            <th scope="col">OrderID</th>
+                            {listColumn != null ? listColumn.map(column => <th scope="col">{column}</th>) : ""}
+                            {/* <th scope="col"><input type="checkbox" /></th> */}
+                            {/* <th scope="col">OrderID</th>
                             <th scope="col">Confirm by</th>
                             <th scope="col">Status</th>
                             <th scope="col">Total Price</th>
                             <th scope="col">Delivery date</th>
-                            <th scope="col">Create date</th>
+                            <th scope="col">Create date</th> */}
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.searchPurchaseOrderReducer.listPurchaseOrder.map(purchaseOrder => (
-                        <tr onClick={this.onClickToDetailPurchaseOrder}>
-                            <th scope="row"><input type="checkbox" /></th>
-                            <td>{purchaseOrder.purchaseOrderNumber}</td>
-                            <td>{purchaseOrder.confirmedByName}</td>
-                            <td>{purchaseOrder.status}</td>
-                            <td>{purchaseOrder.totalPrice}</td>
-                            <td>{purchaseOrder.deliveryDate.split("T")[0]}</td>
-                            <td>{purchaseOrder.createdDate.split("T")[0]}</td>
-                      
-                        </tr>))}
+                        {listData != null ? listData.map(purchaseOrder => (
+                            <tr onClick={() => this.props.onRowClick(purchaseOrder.purchaseOrderNumber)}>
+                                {/* <th scope="row"><input type="checkbox" /></th> */}
+                                <td>{purchaseOrder.purchaseOrderNumber}</td>
+                                <td>{purchaseOrder.confirmedByName}</td>
+                                <td>{purchaseOrder.status}</td>
+                                <td>{purchaseOrder.totalPrice}</td>
+                                <td>{purchaseOrder.deliveryDate.split("T")[0]}</td>
+                                <td>{purchaseOrder.createdDate.split("T")[0]}</td>
+
+                            </tr>)) : <tr>No data</tr>}
 
                     </tbody>
                 </table>
@@ -67,8 +95,8 @@ class TablePurchase extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    searchPurchaseOrderReducer: state.searchPurchaseOrderReducer
+
 })
 
 const connected = connect(mapStateToProps, { searchPurchaseOrder })(TablePurchase)
-export default connected
+export default withRouter(connected)

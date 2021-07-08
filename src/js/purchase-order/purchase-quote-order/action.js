@@ -1,8 +1,26 @@
-import {GET_DETAIL_QUOTE_PRODUCT_SUCCESS,SEARCH_PURCHASE_ORDER_ERROR,SEARCH_PURCHASE_ORDER} from './contants'
-export default function searchPurchaseOrder(keySearch){
+import {GET_PRICE_QUOTE_REQUESTING, GET_DETAIL_QUOTE_PRODUCT_SUCCESS,SEARCH_PURCHASE_ORDER_ERROR,SEARCH_PURCHASE_ORDER} from './contants'
+export   function searchPurchaseOrder(filter){
+       
+    return {
+        type: SEARCH_PURCHASE_ORDER,
+        filter,
+    }
+}
+export   function getListPurchseOrder({searchQuery,status, currentPage, sizePerPage}){
     
     return {
         type: SEARCH_PURCHASE_ORDER,
-        keySearch,
+        searchQuery,
+        status, 
+        currentPage, 
+        sizePerPage,
     }
+}
+
+export  function getListQuote(){
+    
+    return {
+        type: GET_PRICE_QUOTE_REQUESTING,
+
+ }
 }

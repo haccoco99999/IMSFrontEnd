@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 
-export default function AddjustDisplayTableModal() {
+export default function AddjustDisplayTableModal(props) {
+  // let[listCheckBox, setListCheckBox] = useState()
+  // function setCheckBoxClick( event){
+  //   setListCheckBox(
+  //     ...listCheckBox
+  //   )
+  // }
   return (
     <div>
       <div
@@ -21,85 +27,19 @@ export default function AddjustDisplayTableModal() {
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
-            </div> 
+            </div>
             <div className="modal-body">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="checkSupplierID"
-                />
-                <label class="form-check-label" for="checkSupplierID">
-                  Supplier ID
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="checkSupplierName"
-                />
-                <label class="form-check-label" for="checkSupplierName">
-                  Supplier Name
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="checkEmail"
-                />
-                <label class="form-check-label" for="checkEmail">
-                  Email
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="checkCity"
-                />
-                <label class="form-check-label" for="checkCity">
-                  City
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="checkPhone"
-                />
-                <label class="form-check-label" for="checkPhone">
-                  Phone No.
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="checkCreatedBy"
-                />
-                <label class="form-check-label" for="checkCreatedBy">
-                  Created By
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="checkCreateDate"
-                />
-                <label class="form-check-label" for="checkCreateDate">
-                  Create Date
-                </label>
-              </div>
+              {/* Lap column */}
+              {Object.entries(props.listColumnDisplay).map(item =>
+                <div class="form-check">
+                  <input name={item[0]} checked={item[1]}  onChange={(event) =>props.setCheckBoxClick(event)} class="form-check-input" type="checkbox" value="" id="checkCreateDate" />
+                  <label class="form-check-label" for="checkCreateDate">
+                    {item[0]}
+                  </label>
+                </div>
+              )}
+
+              {/* ket thuc */}
             </div>
             <div className="modal-footer">
               <button
@@ -109,7 +49,7 @@ export default function AddjustDisplayTableModal() {
               >
                 Cancel
               </button>
-              <button
+              <button onClick={(e) =>props.submitDisplay(e)}
                 type="button"
                 className="btn btn-default addaccountmodal-done "
               >
