@@ -1,59 +1,69 @@
 import React, { useEffect, useState } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { useHistory, useLocation, withRouter } from 'react-router-dom'
-import { getDetailPurchaseOrder,ignorePurchaseOrderConfirm, confirmDetailPurchaseOrder, confirmPurchaseORderByManager, saveProductsPurchaseOrder } from './action'
+import { getDetailPurchaseOrder, ignorePurchaseOrderConfirm, confirmDetailPurchaseOrder, confirmPurchaseORderByManager, saveProductsPurchaseOrder } from './action'
 import NavigationBar from '../../navigation-bar-component/NavigationBar';
 import InfoDetailReceipt from '../../info-detail-receipt/InfoDetailReceipt';
 import ListProductsTable from '../../list-products-table/ListProductsTable';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ConfirmDateModal from './ConfirmDateModal';
-import { SearchToAddProduct } from '../../search-component/SearchComponentAll';
+import './PriceQuote.css'
+import { SearchToAddProduct, SeachSupplier } from '../../search-component/SearchComponentAll';
+import MergePriceQuote from './MergePriceQuoteComponent';
+import FormAddProductModal from './FormAddProductModal';
 export default function PurchaseOrderConfirm() {
     let dispatch = useDispatch()
     let history = useHistory()
     let location = useLocation()
     let [eventPage, setEventPage] = useState({
-        isConform: false
-
-
+        isConform: false,
+        isShowMergePage: false
+        
     })
-    // const listColumn = [
-
-    //     {
-    //         name: "Product Name",
-
-    //     },
-    //     {
-    //         unit: "Unit",
-
-    //     },
-    //     {
-    //         orderQuantity: "Quantity",
-    //         input: true,
-
-    //     },
-    //     {
-    //         price: "Unit Price",
-    //         input: true,
-
-    //     },
-    //     {
-    //         totalAmount: "Amount"
-    //     }
-
-    // ]
-    function selectProduct(infoProduct){
+   
+    function selectProduct(infoProduct) {
         alert(infoProduct)
+    }
+    function changeProduct(status, rownIndex, name) {
+        console.log(status)
+        console.log(rownIndex)
+        console.log(name)
+        setListProductPurchaseOrder(
+            listProductPurchaseOrder.map((element, index) =>
+                index == rownIndex ?
+                    {
+                        ...element, [name]: status,
+
+                    }
+                    : {
+                        ...element, [name]: false,
+
+                    })
+        )
     }
     const columns = [
         {
             dataField: 'sku',
             text: 'SKU',
-            formatter: (cell, row, rowIndex, extraData) =>{
-                return (
-                    <SearchToAddProduct selectProduct={selectProduct}/>
-                )
+            formatter: (cell, row, rowIndex, extraData) => {
+
+                console.log(row.productVariantId)
+                if (row.productVariantId !== "") {
+                    return (
+                        <div>
+                            <p>{row.sku} </p>
+                            <span onClick={() => changeProduct(!row.changeProduct, rowIndex, "changeProduct")} >Change Product </span>
+                            {row.changeProduct === true ? <SearchToAddProduct selectProduct={selectProduct} /> : ""}
+                        </div>
+
+
+                    )
+                }
+
+                return <SearchToAddProduct selectProduct={selectProduct} />
+
+
             }
         },
         {
@@ -63,16 +73,22 @@ export default function PurchaseOrderConfirm() {
         {
             dataField: 'orderQuantity',
             text: 'Quantity',
+            formatter: (cell, row, rowIndex, extraData) => {
+                return (
+                    <input className="form-control" value={row.orderQuantity} />
+                )
+            }
         },
         {
-            dataField: 'price',
-            text: 'Price',
+            dataField: 'action',
+            text: 'action',
+            // formatter: (cell, row, rowIndex, extraData) => {
+            //     return (
+            //         <input className="form-control" value={row.orderQuantity} />
+            //     )
+            // }
         },
 
-        {
-            dataField: 'totalAmount',
-            text: 'Total Price',
-        }
 
 
 
@@ -81,6 +97,16 @@ export default function PurchaseOrderConfirm() {
     let purchaseOrderDataGlobal = useSelector(state => state.getDetailPurchaseReducer.detailPurchaseOrder)
     let [detailPurchaseState, setDetailPurchaseState] = useState(purchaseOrderDataGlobal)
     let [listProductPurchaseOrder, setListProductPurchaseOrder] = useState(purchaseOrderDataGlobal.purchaseOrderProduct)
+    let [supplier, setSupplier] = useState({
+        address: "",
+        description: "",
+        email: "",
+        id: "",
+        phoneNumber: "",
+        salePersonName: "",
+        supplierName: "",
+        transactionId: ""
+    })
     useEffect(() => {
         dispatch(getDetailPurchaseOrder(location.state.orderID))
     }, [])
@@ -114,10 +140,46 @@ export default function PurchaseOrderConfirm() {
                 "background-color": "#4e9ae8"
             }
         },
-     ]
-
-
-   function confirmClickByManager() {
+    ]
+        
+    function mergePriceQuote(listDataPriceQuote){
+        
+     let listPriceQuote  = listDataPriceQuote.filter(priceQuote=> priceQuote.isChecked)
+     let listProductPurchaseOrderMerge = listPriceQuote.map(priceQuote => priceQuote.listProductOrder)
+     let temp = [...listProductPurchaseOrder]
+      console.log(listProductPurchaseOrderMerge)
+     let allProductMerge = listProductPurchaseOrderMerge.map(arrayProduct=>{
+         arrayProduct.map(product =>{
+             let count = 0
+            // if(productExist(product.productVariantId, temp, count)){
+            //     console.log(count)
+            // }
+            if(temp.some(function(p, index){
+                count = index
+                return p.productVariantId === product.productVariantId
+            })){
+             temp[count].orderQuantity = temp[count].orderQuantity + product.orderQuantity
+            }
+            else{
+                temp.push(product)
+            }
+         
+           
+         })
+     })
+     console.log(temp)
+     setListProductPurchaseOrder((state)=>
+         [...temp]
+     )
+      
+    }
+    // function productExist(productVariantId, arr, count){
+    //     return arr.some(function(product, index){
+    //         console.log(index)
+    //         return product.productVariantId === productVariantId
+    //     })
+    // }
+    function confirmClickByManager() {
         setEventPage({
             isConfirm: true
         })
@@ -128,13 +190,13 @@ export default function PurchaseOrderConfirm() {
             isConfirm: false
         })
     }
-    function IgnorePurchase(){
+    function IgnorePurchase() {
         dispatch(ignorePurchaseOrderConfirm(location.state.orderID))
     }
-   function confirmClick(){
-    dispatch(confirmPurchaseORderByManager(location.state.orderID))
-   }
-    
+    function confirmClick() {
+        dispatch(confirmPurchaseORderByManager(location.state.orderID))
+    }
+
 
     const onChangeValueProduct = (event) => {
 
@@ -149,20 +211,33 @@ export default function PurchaseOrderConfirm() {
         )
 
     }
-    function addRowProduct(){
-        let newProduct={
+    function addRowProduct() {
+        let newProduct = {
+            changeProduct: false,
             id: "",
             orderId: "",
-            productVariantId:"",
+            productVariantId: "",
             orderQuantity: 0,
-            unit:"",
+            unit: "",
             price: 0,
             discountAmount: 0,
             totalAmount: 0,
             name: "",
-            sku:"",
+            sku: "",
         }
-        setListProductPurchaseOrder((state) =>[...state,newProduct] )
+        setListProductPurchaseOrder((state) => [...state, newProduct])
+    }
+    function openModalMergePriceQuote() {
+
+    }
+    function getDataSupplier(supplier) {
+        console.log(supplier)
+        setSupplier(supplier)
+    }
+    function clickSetEventMergePriceQuote(){
+        setEventPage((state) =>{
+           return{ ...state, isShowMergePage: !state.isShowMergePage }
+        })
     }
     return (
         <div>
@@ -181,12 +256,27 @@ export default function PurchaseOrderConfirm() {
                     }
                 }
             />
-            {console.log(detailPurchaseState.purchaseOrderProduct)}
-                    <button onClick={addRowProduct}>Add Product</button>
 
+            <div className="list-receipt-table-container price-quote-info-supplier">
+                <div className="info-supplier-email-name">
+                    <p>Suppli <SeachSupplier getDataSupplier={getDataSupplier} /> </p>
+                    <p> Email: {supplier.email} </p>
+                </div>
+                <div className="info-supplier-phone-address">
+                    <p>  Phone No: {supplier.phoneNumber}</p>
+                    <p>  Address: {supplier.address}</p>
+                </div>
+            </div>
+            {console.log(detailPurchaseState.purchaseOrderProduct)}
+            <button onClick={addRowProduct}>Add Product</button>
+            <button onClick={clickSetEventMergePriceQuote} >Merge Price Quote</button>
+            <p class="btn btn-default fw-bold filter"
+                data-bs-target="#FilterModal"
+                data-bs-toggle="modal"
+                >Merge</p>
             <div className="list-receipt-table-container">
                 <div className="tool-bar-table">
-                 
+
                     <div className="list-icon-tool-bar">
                         <div className="icon-tool-bar"><i class='bx bx-rotate-right'></i></div>
                         <div className="icon-tool-bar"><i class='bx bx-filter'></i></div>
@@ -209,10 +299,17 @@ export default function PurchaseOrderConfirm() {
                         headerClasses="table-header-receipt"
                     />
                 </div>
-               
+
+
             </div>
 
 
+
+            <MergePriceQuote 
+             clickSetEventMergePriceQuote={clickSetEventMergePriceQuote}
+              isShowMergePage={eventPage.isShowMergePage}
+              mergePriceQuote={mergePriceQuote}
+              />
             {/* <ListProductsTable
                 // selectProduct={this.selectProduct}
                 //     clickDeleteProduct={this.clickDeleteProduct}

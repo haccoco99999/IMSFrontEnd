@@ -264,6 +264,8 @@ body{
   background: none
 }
 .home_content{
+  overflow-y:auto;
+  
   position: absolute;
   height: 100%;
   width: calc(100% - 78px);

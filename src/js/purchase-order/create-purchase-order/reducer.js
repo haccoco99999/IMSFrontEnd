@@ -22,6 +22,7 @@ const initalState = {
             createdBy: {}
         },
         purchaseOrderProduct: [{
+            changeProduct: false,
             id: "",
             orderId: "",
             productVariantId:"",
@@ -67,6 +68,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                     purchaseOrderProduct: action.json.purchaseOrder.purchaseOrderProduct.map(product =>{
                      
                         return {
+                            changeProduct: false,
                             id: product.id,
                             orderId: product.orderId,
                             productVariantId: product.productVariantId,

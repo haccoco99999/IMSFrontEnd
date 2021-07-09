@@ -48,6 +48,54 @@ export  function SearchToAddProduct() {
         )}
     />)
 }
+export  function SeachSupplier(props) {
+
+
+    const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/suppliers/search';
+
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [options, setOptions] = useState([]);
+    const handleSearch = (query) => {
+        setIsLoading(true);
+
+        fetch(`${SEARCH_URI}?SearchQuery=${query}&CurrentPage=1&SizePerPage=20`)
+            .then((resp) => resp.json())
+            .then(( json ) => {
+               
+                const options = json.paging.resultList.map((i) => ({
+                    supplier: i,
+                    supplierName: i.supplierName,
+                    phoneNumber: i.phoneNumber,
+                    id: i.id,
+                }));
+
+                setOptions(options);
+                setIsLoading(false);
+            });
+    };
+    const filterBy = () => true;
+
+
+    return (<AsyncTypeahead
+        filterBy={filterBy}
+        id="async-example"
+        isLoading={isLoading}
+        labelKey="supplierName"
+        minLength={1}
+        onSearch={handleSearch}
+        options={options}
+        placeholder="Search for a Github user..."
+        renderMenuItemChildren={(option) => (
+            <div onClick={() => props.getDataSupplier(option.supplier)} key={option.supplier} key={option.id}>
+               
+                <p>{option.supplierName}</p>
+                <span>{option.phoneNumber}</span>
+                
+            </div>
+        )}
+    />)
+}
 export  function Search() {
 
 
