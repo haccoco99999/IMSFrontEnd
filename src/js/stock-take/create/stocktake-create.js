@@ -1,23 +1,61 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useRef } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { Modal } from "bootstrap";
+
 //css
 import "../stocktake.css";
 //components
+import ListLocationsModal from "./search-location-modal";
 import AddMultiple from "./add-multiple";
 import TableProduct from "../../list-products-table/ListProductsTable";
 import SearchComponent from "../../search-component/SearchComponent";
-import {} from "./action";
-import {SearchToAddProduct} from '../../search-component/SearchComponentAll'
+import { getAllLocationsAction } from "./action";
+import { SearchToAddProduct } from "../../search-component/SearchComponentAll";
 export default function create() {
   let history = useHistory();
+  let dispatch = useDispatch();
 
-  const { token } = useSelector((state) => ({
+  const [loading,setLoading] = useState(false)
+  const [selectedLocation, setSelectedLocation] = useState({
+    id: "",
+    locationName: "",
+    locationBarcode: "",
+  });
+  //modal declare
+  const modalRef = useRef();
+  const showModal = () => {
+    const modalEle = modalRef.current;
+    const bsModal = new Modal(modalEle, {
+      backdrop: "static",
+      keyboard: false,
+    });
+    bsModal.show();
+  };
+  const hideModal = () => {
+    const modalEle = modalRef.current;
+    const bsModal = Modal.getInstance(modalEle);
+    bsModal.hide();
+  };
+  const { token, listProductsStore } = useSelector((state) => ({
     token: state.client.token,
+    listProductsStore: state.createStocktakeReducer.listLocations,
   }));
 
   function goBackClick() {
     history.goBack();
+  }
+
+  function handleOnSelect(row, isSelect) {
+    if (isSelect) {
+      console.log(row.id);
+      console.log(row.locationName);
+      setSelectedLocation({
+        id: row.id,
+        locationName: row.locationName,
+        locationBarcode: row.locationBarcode,
+      });
+    }
   }
 
   function onSubmitClick() {
@@ -69,6 +107,17 @@ export default function create() {
       )
     );
   }
+
+  function onSelectLocationClick(){
+    hideModal()
+    console.log("Data dang search:",selectedLocation)
+    
+  }
+
+  useEffect(() => {
+    dispatch(getAllLocationsAction({ token: token }));
+  }, []);
+  // console.log(listProductsStore);
   return (
     <div>
       {/* todo: task heading */}
@@ -85,7 +134,6 @@ export default function create() {
               <button className="btn btn-primary button-tab me-3 text-white">
                 Submit
               </button>
-             
             </div>
           </div>
         </div>
@@ -93,37 +141,35 @@ export default function create() {
         {/* content */}
         <div className="wrapper space-top">
           <div className="shadow wrapper-content">
-            {/* <div class="row g-3 align-items-center mt-3">
-                
-                <div className="col">
-
-                </div>
-
-               
-                <div class="col-auto">
-                  <button
-                    type="button"
-                    class="btn btn-default btn-outline-dark"
-                    data-bs-target="#AddMultipleModal"
-                    data-bs-toggle="modal"
-                  >
-                    Add multiple
-                  </button>
-                </div>
-              </div> */}
-
+  
             <div className="mt-3">
               <div className="title-heading mt-2">
                 <span>Select Location</span>
               </div>
               <div className="mt-3">
-                <SearchToAddProduct/>
+                {/* <SearchToAddProduct /> */}
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  // data-bs-target="#ListLocationstModal"
+                  // data-bs-toggle="modal"
+                  onClick={showModal}
+                >
+                  Search More...
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
       {/* <AddMultiple /> */}
+      <ListLocationsModal
+        modalRef={modalRef}
+        hideModal={hideModal}
+        listLocations={listProductsStore}
+        handleOnSelect={handleOnSelect}
+        onSelectLocationClick={onSelectLocationClick}
+      />
     </div>
   );
 }

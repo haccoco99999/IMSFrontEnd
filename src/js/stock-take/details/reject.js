@@ -1,20 +1,21 @@
 import React from "react";
 
 import "../stocktake.css";
-export default function AdjustInventoryModal() {
+
+export default function RejectModal() {
   return (
     <div>
       <div
         className="modal"
         tabIndex="-1"
-        id="AdjustInventoryModal"
+        id="RejectModal"
         data-bs-keyboard="false"
         data-bs-backdrop="static"
       >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Adjust inventory </h5>
+              <h5 className="modal-title">Reject </h5>
               <button
                 type="button"
                 className="btn-close"
@@ -23,30 +24,18 @@ export default function AdjustInventoryModal() {
               ></button>
             </div>
             <div className="modal-body">
-              <p>
-                Inventory balance will change the amount of inventory in the
-                system with the following products
-              </p>
-              <div>
-                <table class="table">
-                  <thead>
-                    <th>Product</th> <th>Quantity</th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Dell monitor 24" U2419H - Black</td>
-                      <td>60</td>
-                    </tr>
-                    <tr>
-                      <td>Dell monitor 24" U2419H - Black</td>
-                      <td>60</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <p>
-                <strong>Are you sure you want to adjust the stock?</strong>
-              </p>
+              <form>
+                <div class="mb-3">
+                  <label for="exampleFormControlTextarea1" class="form-label">
+                    Description
+                  </label>
+                  <textarea
+                    class="form-control"
+                    id="exampleFormControlTextarea1"
+                    rows="3"
+                  ></textarea>
+                </div>
+              </form>
             </div>
             <div className="modal-footer">
               <button

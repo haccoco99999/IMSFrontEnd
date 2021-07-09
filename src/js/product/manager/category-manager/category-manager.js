@@ -323,7 +323,7 @@ function ModalFunction(props) {
                       className=" text-white btn btn-default button-save--modal "
                       onClick={onCancelClick}
                     >
-                      Rede
+                      Revert
                     </button>
                     <button
                       type="button"

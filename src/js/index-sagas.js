@@ -25,7 +25,7 @@ import getAllStocktake from "./stock-take/manager/sagas";
 import getDetailsStocktake from "./stock-take/details/sagas";
 import GetDetailGoodIssueSaga from "./good-issue/good-issue-detail/sagas";
 import listGoodIssueSaga from "./good-issue/manager/sagas";
-
+import createStocktake from "./stock-take/create/sagas";
 import { all } from "@redux-saga/core/effects";
 export default function* IndexSaga() {
   yield all([
@@ -52,6 +52,8 @@ export default function* IndexSaga() {
     getDetailsProduct(),
     createSupplier(),
     getAllGoodIssue(),
-    getAllStocktake(),getDetailsStocktake()
+    getAllStocktake(),
+    getDetailsStocktake(),
+    createStocktake(),
   ]);
 }

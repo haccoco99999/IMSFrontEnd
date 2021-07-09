@@ -62,7 +62,7 @@ function* createStocktakeFlow(action) {
 
 function* getAllLocationsFlow(action){
   try {
-    let json = yield call(createStocktake, action);
+    let json = yield call(getAllLocations, action);
     yield put({ type: GET_LOCATION_RESPONSE, json });
   } catch (error) {
     console.log(error);

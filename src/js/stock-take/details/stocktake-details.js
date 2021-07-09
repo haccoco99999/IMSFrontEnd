@@ -5,15 +5,16 @@ import { useSelector, useDispatch } from "react-redux";
 import "../stocktake.css";
 //components
 import AdjustInventory from "./adjust-inventory";
+import Reject from "./reject";
 import { getDetailsStockTakeAction } from "./action";
-import Table from '../../table-receipt/ListReceiptsTable'
+import Table from "../../table-receipt/ListReceiptsTable";
 
 export default function StocktakeDetails() {
   let history = useHistory();
   let dispatch = useDispatch();
   let location = useLocation();
 
-  const [cleanJsonListLocation, setCleanJsonListLocation] = useState([])
+  const [cleanJsonListLocation, setCleanJsonListLocation] = useState([]);
 
   const { token, groupLocationStore, stocktakeDetailsStore } = useSelector(
     (state) => ({
@@ -25,20 +26,17 @@ export default function StocktakeDetails() {
   );
   console.log(groupLocationStore);
 
-
   const [listValueColumn, setListValueColumn] = useState({
     locationId: true,
     locationBarcode: true,
     locationName: true,
-    countCheckedItems:true,
-    checkItems:false
+    countCheckedItems: true,
+    checkItems: false,
   });
   const [listEditHeader, setListEditHeader] = useState({
-  
     locationName: "Name",
-    countCheckedItems:"Checked Items"
+    countCheckedItems: "Checked Items",
   });
-
 
   function goBackClick() {
     history.goBack();
@@ -48,7 +46,7 @@ export default function StocktakeDetails() {
     history.push("/homepage/stock-take/location-details", {
       locationId: row.locationId,
       locationName: row.locationName,
-      locationBarcode:row.locationBarcode,
+      locationBarcode: row.locationBarcode,
       checkItems: row.checkItems,
     });
   }
@@ -63,28 +61,28 @@ export default function StocktakeDetails() {
   }, []);
 
   useEffect(() => {
-    if(groupLocationStore !== undefined)
-    {
-      if(groupLocationStore===[])
-        setCleanJsonListLocation(groupLocationStore)
-      else{
-        setCleanJsonListLocation(groupLocationStore.map((element)=>{
-          element.countCheckedItems =element.checkItems.length
-          return{
-            id: element.id,
-            locationId: element.locationId,
-            locationBarcode: element.location.locationBarcode,
-            locationName: element.location.locationBarcode,
-            countCheckedItems:  element.countCheckedItems,
-            checkItems: element.checkItems
-          }
-        }))
+    if (groupLocationStore !== undefined) {
+      if (groupLocationStore === [])
+        setCleanJsonListLocation(groupLocationStore);
+      else {
+        setCleanJsonListLocation(
+          groupLocationStore.map((element) => {
+            element.countCheckedItems = element.checkItems.length;
+            return {
+              id: element.id,
+              locationId: element.locationId,
+              locationBarcode: element.location.locationBarcode,
+              locationName: element.location.locationBarcode,
+              countCheckedItems: element.countCheckedItems,
+              checkItems: element.checkItems,
+            };
+          })
+        );
       }
     }
+  }, [groupLocationStore]);
 
-  },[groupLocationStore])
-
-  console.log(cleanJsonListLocation)
+  console.log(cleanJsonListLocation);
   return (
     <div>
       {/* todo: task heading */}
@@ -103,17 +101,41 @@ export default function StocktakeDetails() {
               </div>
             </div>
             <div>
-              <button className="btn btn-danger button-tab me-3 text-white">
-                Reject
-              </button>
-              <button
-                type="button"
-                data-bs-target="#AdjustInventoryModal"
-                data-bs-toggle="modal"
-                className="btn btn-primary button-tab--adjust me-3 text-white"
-              >
-                Adjust Inventory
-              </button>
+              {stocktakeDetailsStore.stockTakeOrderType === 0 && (
+                <>
+                  <button className="btn btn-danger button-tab me-3 text-white">
+                    Delete
+                  </button>
+                  <button
+                    type="button"
+                    // data-bs-target="#AdjustInventoryModal"
+                    // data-bs-toggle="modal"
+                    className="btn btn-primary button-tab--adjust me-3 text-white"
+                  >
+                    Submit
+                  </button>
+                </>
+              )}
+              {stocktakeDetailsStore.stockTakeOrderType === 2 && (
+                <>
+                  <button
+                    type="button"
+                    data-bs-target="#RejectModal"
+                    data-bs-toggle="modal"
+                    className="btn btn-danger button-tab me-3 text-white"
+                  >
+                    Reject
+                  </button>
+                  <button
+                    type="button"
+                    data-bs-target="#AdjustInventoryModal"
+                    data-bs-toggle="modal"
+                    className="btn btn-primary button-tab--adjust me-3 text-white"
+                  >
+                    Adjust Inventory
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -142,8 +164,7 @@ export default function StocktakeDetails() {
 
           <div className="mt-3">
             <h2 class="id-color fw-bold">List Locations</h2>
-            <div className="mt-3">
-            </div>
+            <div className="mt-3"></div>
           </div>
           <div className="mt-3">
             <Table
@@ -156,6 +177,7 @@ export default function StocktakeDetails() {
         </div>
       </div>
       <AdjustInventory />
+      <Reject />
     </div>
   );
 }
@@ -272,4 +294,3 @@ export default function StocktakeDetails() {
 //     </>
 //   );
 // }
-

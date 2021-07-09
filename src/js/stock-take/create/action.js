@@ -1,7 +1,11 @@
-import { CREATE_STOCKTAKE_REQUEST } from "./constants";
+import { GET_LOCATION_REQUEST } from "./constants";
 
-export function createGoodIssueRequest({token,data})
-{
-    return {type:CREATE_GOODISSUE_REQUEST,token}
+
+
+export function getAllLocationsAction({token}){
+    return { type:GET_LOCATION_REQUEST,token}
 }
 
+export function getListPackageActon({token,id}){
+    
+}

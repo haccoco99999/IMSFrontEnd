@@ -65,6 +65,7 @@ export default function CheckedLocationsDetails() {
             </a>
             <h2 className="id-color fw-bold me-auto"> Stock take details</h2>
             <div>
+              
               <button className="btn btn-default button-tab">Cancel</button>
               <button className="btn btn-primary button-tab me-3 text-white">
                 Submit
