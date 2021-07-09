@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Typeahead, AsyncTypeahead } from 'react-bootstrap-typeahead';
 
-export  function SearchToAddProduct() {
+export  function SearchToAddProduct(props) {
 
 
     const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/productvariant/search';
@@ -19,7 +19,8 @@ export  function SearchToAddProduct() {
                 const options = items.paging.resultList.map((i) => ({
                     name: i.name,
                     sku: i.sku,
-                    filter: i.sku + " " + i.name
+                    filter: i.sku + " " + i.name,
+                    product: i,
                 }));
 
                 setOptions(options);
@@ -38,8 +39,8 @@ export  function SearchToAddProduct() {
         onSearch={handleSearch}
         options={options}
         placeholder="Search for a Github user..."
-        renderMenuItemChildren={(option, props) => (
-            <div onClick={() => console.log(option.id)} key={option.id}>
+        renderMenuItemChildren={(option) => (
+            <div onClick={() => props.getInfoProduct(option.product)} key={option.id}>
                
                 <p>{option.name}</p>
                 <p>{option.sku}</p>

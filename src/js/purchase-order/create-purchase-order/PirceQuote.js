@@ -18,17 +18,19 @@ export default function PurchaseOrderConfirm() {
     let location = useLocation()
     let [eventPage, setEventPage] = useState({
         isConform: false,
-        isShowMergePage: false
-        
+        isShowMergePage: false,
+        isShowAddProductPage: false,
+        isShowEdit: true,
+        isCreatePO: true,
+        isShowCancel: false,
+        isShowSave: false,
     })
    
     function selectProduct(infoProduct) {
         alert(infoProduct)
     }
     function changeProduct(status, rownIndex, name) {
-        console.log(status)
-        console.log(rownIndex)
-        console.log(name)
+   
         setListProductPurchaseOrder(
             listProductPurchaseOrder.map((element, index) =>
                 index == rownIndex ?
@@ -46,25 +48,25 @@ export default function PurchaseOrderConfirm() {
         {
             dataField: 'sku',
             text: 'SKU',
-            formatter: (cell, row, rowIndex, extraData) => {
+            // formatter: (cell, row, rowIndex, extraData) => {
 
-                console.log(row.productVariantId)
-                if (row.productVariantId !== "") {
-                    return (
-                        <div>
-                            <p>{row.sku} </p>
-                            <span onClick={() => changeProduct(!row.changeProduct, rowIndex, "changeProduct")} >Change Product </span>
-                            {row.changeProduct === true ? <SearchToAddProduct selectProduct={selectProduct} /> : ""}
-                        </div>
-
-
-                    )
-                }
-
-                return <SearchToAddProduct selectProduct={selectProduct} />
+            //     console.log(row.productVariantId)
+            //     if (row.productVariantId !== "") {
+            //         return (
+            //             <div>
+            //                 <p>{row.sku} </p>
+            //                 <span onClick={() => changeProduct(!row.changeProduct, rowIndex, "changeProduct")} >Change Product </span>
+            //                 {row.changeProduct === true ? <SearchToAddProduct selectProduct={selectProduct} /> : ""}
+            //             </div>
 
 
-            }
+            //         )
+            //     }
+
+            //     return <SearchToAddProduct selectProduct={selectProduct} />
+
+
+            // }
         },
         {
             dataField: 'name',
@@ -82,11 +84,7 @@ export default function PurchaseOrderConfirm() {
         {
             dataField: 'action',
             text: 'action',
-            // formatter: (cell, row, rowIndex, extraData) => {
-            //     return (
-            //         <input className="form-control" value={row.orderQuantity} />
-            //     )
-            // }
+         
         },
 
 
@@ -121,39 +119,85 @@ export default function PurchaseOrderConfirm() {
         )
     }, [purchaseOrderDataGlobal])
 
-    console.log(listProductPurchaseOrder)
+ 
+    function editClick() {
+        setEventPage({
+            isShowEdit: false,
+            isCreatePO: false,
+            isShowCancel: true,
+            isShowSave: true,
+            
+        })
+    }
+    function cancelEditClick() {
+        setEventPage({
+            isShowEdit: true,
+            isCreatePO: true,
+            isShowCancel: false,
+            isShowSave: false,
+            
+        })
+    }
+    function saveEditClick() {
+        setEventPage({
+            isShowEdit: true,
+            isCreatePO: true,
+            isShowCancel: false,
+            isShowSave: false,
+            
+        })
+    }
     const listButton = [
+
+
         {
-            isShow: true,
-            title: "Ignore",
-            action: () => IgnorePurchase(),
+            isShow: eventPage.isShowEdit,
+            title: "Edit",
+            action: () => editClick(),
+            style: {
+                "background-color": "#f9c421"
+            }
+        },
+        {
+            isShow: eventPage.isShowCancel,
+            title: "Cancel",
+            action: () => cancelEditClick(),
             style: {
                 background: "red"
             }
         },
-
         {
-            isShow: true,
-            title: "Confirm",
-            action: () => editClick(),
+            isShow: eventPage.isShowSave,
+            title: "Save",
+            action: () => saveEditClick(),
             style: {
-                "background-color": "#4e9ae8"
+                background: "#4ca962"
             }
         },
+
+
+        {
+            isShow: eventPage.isCreatePO,
+            title: "Create Purchase Order",
+            action: () => clickToCreate(),
+            style: {
+                background: "#4e9ae8"
+            },
+
+
+        },
     ]
-        
     function mergePriceQuote(listDataPriceQuote){
         
      let listPriceQuote  = listDataPriceQuote.filter(priceQuote=> priceQuote.isChecked)
      let listProductPurchaseOrderMerge = listPriceQuote.map(priceQuote => priceQuote.listProductOrder)
      let temp = [...listProductPurchaseOrder]
       console.log(listProductPurchaseOrderMerge)
-     let allProductMerge = listProductPurchaseOrderMerge.map(arrayProduct=>{
+      //Merge phiếu
+     listProductPurchaseOrderMerge.map(arrayProduct=>{
          arrayProduct.map(product =>{
              let count = 0
-            // if(productExist(product.productVariantId, temp, count)){
-            //     console.log(count)
-            // }
+           
             if(temp.some(function(p, index){
                 count = index
                 return p.productVariantId === product.productVariantId
@@ -239,6 +283,15 @@ export default function PurchaseOrderConfirm() {
            return{ ...state, isShowMergePage: !state.isShowMergePage }
         })
     }
+    function clickSetShowAddProductPage(){
+        setEventPage((state) =>{
+           return{ ...state, isShowAddProductPage: !state.isShowAddProductPage }
+        })
+    }
+    function clickToAddProduct(product){
+        // console.log(product)
+        setListProductPurchaseOrder((state) =>[...state, product])
+    }
     return (
         <div>
             <NavigationBar actionGoBack={() => goBackClick()}
@@ -268,7 +321,8 @@ export default function PurchaseOrderConfirm() {
                 </div>
             </div>
             {console.log(detailPurchaseState.purchaseOrderProduct)}
-            <button onClick={addRowProduct}>Add Product</button>
+            {/* <button onClick={addRowProduct}>Add Product</button> */}
+            <button onClick={clickSetShowAddProductPage}>Add Product</button>
             <button onClick={clickSetEventMergePriceQuote} >Merge Price Quote</button>
             <p class="btn btn-default fw-bold filter"
                 data-bs-target="#FilterModal"
@@ -302,7 +356,12 @@ export default function PurchaseOrderConfirm() {
 
 
             </div>
-
+                <FormAddProductModal 
+                clickSetShowAddProductPage={clickSetShowAddProductPage}
+                isShowAddProductPage={eventPage.isShowAddProductPage}
+                clickToAddProduct = {clickToAddProduct}
+                
+                />
 
 
             <MergePriceQuote 
