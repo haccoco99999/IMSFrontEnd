@@ -25,7 +25,11 @@ export default function PurchaseOrderConfirm() {
         isShowCancel: false,
         isShowSave: false,
     })
-   
+    const [test, setTest] = useState("abc")
+    function  changeTest(e){
+      
+        setTest(e.target.value)
+    }
     function selectProduct(infoProduct) {
         alert(infoProduct)
     }
@@ -44,6 +48,7 @@ export default function PurchaseOrderConfirm() {
                     })
         )
     }
+    
     const columns = [
         {
             dataField: 'sku',
@@ -77,14 +82,16 @@ export default function PurchaseOrderConfirm() {
             text: 'Quantity',
             formatter: (cell, row, rowIndex, extraData) => {
                 return (
-                    <input className="form-control" value={row.orderQuantity} />
+                    <input onChange={(e) =>onChangeValueProduct(e, row.productVariantId)} name="orderQuantity" className="form-control" value={row.orderQuantity} />
                 )
             }
         },
         {
             dataField: 'action',
             text: 'action',
-         
+            formatter:(row) =>{
+                return <input value={test} onChange={(e) => changeTest(e)}/>
+            }
         },
 
 
@@ -242,16 +249,17 @@ export default function PurchaseOrderConfirm() {
     }
 
 
-    const onChangeValueProduct = (event) => {
-
+    const onChangeValueProduct = (event, productVariantId) => {
+        console.log(event.target.name)
+        console.log(event.target.value)
         setListProductPurchaseOrder(
-            listProductPurchaseOrder.map((element, index) =>
-                index == event.target.id ?
+            listProductPurchaseOrder.map((element) =>{
+            return    element.productVariantId === productVariantId ?
                     {
                         ...element, [event.target.name]: event.target.value,
-                        totalAmount: ([event.target.name] === "orderQuantity" ? event.target.value * element.price : event.target.value * element.orderQuantity)
+                      
                     }
-                    : element)
+                    : element})
         )
 
     }
@@ -294,6 +302,7 @@ export default function PurchaseOrderConfirm() {
     }
     return (
         <div>
+          
             <NavigationBar actionGoBack={() => goBackClick()}
                 titleBar="NO10235"
                 listButton={listButton}
@@ -320,7 +329,7 @@ export default function PurchaseOrderConfirm() {
                     <p>  Address: {supplier.address}</p>
                 </div>
             </div>
-            {console.log(detailPurchaseState.purchaseOrderProduct)}
+            {console.log(listProductPurchaseOrder)}
             {/* <button onClick={addRowProduct}>Add Product</button> */}
             <button onClick={clickSetShowAddProductPage}>Add Product</button>
             <button onClick={clickSetEventMergePriceQuote} >Merge Price Quote</button>
@@ -363,7 +372,7 @@ export default function PurchaseOrderConfirm() {
                 
                 />
 
-
+<input value={test} onChange={(e) => changeTest(e)}/>
             <MergePriceQuote 
              clickSetEventMergePriceQuote={clickSetEventMergePriceQuote}
               isShowMergePage={eventPage.isShowMergePage}

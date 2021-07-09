@@ -26,41 +26,34 @@ export default function manager() {
     )
   }, [goodIssueStore])
   console.log(listGoodIssues)
-  const columns = [{
-    dataField: 'id',
-    text: 'Goods Issue ID'
-    
-  }, {
-    dataField: 'goodsIssueNumber',
-    text: 'Goods Issue Request ID',
-    formatter: (cell, row) =>{
-      return(
-        <SearchTest/>
-      )
-    }
-  }, 
-  {
-    dataField: 'status',
-    text: 'Status'
-  },
-  {
-    dataField: 'createdByName',
-    text: 'Create By'
-  },
-  {
-    dataField: 'deliveryDate',
-    text: 'Delivery Date'
-  },
-  {
-    dataField: 'createdDate',
-    text: 'Create Date'
-  },
-  {
-    dataField: 'deliveryMethod',
-    text: 'Delivery Method'
-  }
+  const columns = [
+    {
+      dataField: 'goodsIssueNumber',
+      text: 'Goods Issue Request ID',
 
-];
+    },
+    {
+      dataField: 'status',
+      text: 'Status'
+    },
+    {
+      dataField: 'createdByName',
+      text: 'Create By'
+    },
+    {
+      dataField: 'deliveryDate',
+      text: 'Delivery Date'
+    },
+    {
+      dataField: 'createdDate',
+      text: 'Create Date'
+    },
+    {
+      dataField: 'deliveryMethod',
+      text: 'Delivery Method'
+    }
+
+  ];
   const products = [
     {
       id: 1,
@@ -81,8 +74,8 @@ export default function manager() {
 
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
-      history.push("/homepage/good-issue/detail", {id: row.id})
-     
+      history.push("/homepage/good-issue/detail", { id: row.id, status: row.status })
+
     },
     // onMouseEnter: (e, row, rowIndex) => {
     //   console.log(`enter on row with index: ${rowIndex}`);
@@ -184,24 +177,7 @@ export default function manager() {
             hiddenRows={hiddenRowKeys}
             headerClasses="table-header-receipt"
           />
-          <ToolkitProvider
-            keyField="id"
-            data={products}
-            columns={columns}
-            columnToggle
-          >
-            {
-              props => (
-                <div>
-                  <ToggleList {...props.columnToggleProps} />
-                  <hr />
-                  <BootstrapTable
-                    {...props.baseProps}
-                  />
-                </div>
-              )
-            }
-          </ToolkitProvider>
+
           {/* end table */}
         </div>
       </div>

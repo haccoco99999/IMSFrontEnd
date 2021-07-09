@@ -17,6 +17,7 @@ const initalGoodIssueDetailState = {
   messages: "",
   errors: "",
   infoGoodIssueDetail:{
+    id: "",
     customerName:"",
     customerPhoneNumber:"",
     deliveryDate:"",
@@ -60,6 +61,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
         messages: "",
         errors: "",
         infoGoodIssueDetail:{
+          id: action.json.goodsIssueOrder.id,
           customerName:action.json.goodsIssueOrder.customerName,
           customerPhoneNumber:action.json.goodsIssueOrder.customerPhoneNumber,
           deliveryDate:action.json.goodsIssueOrder.deliveryDate,
@@ -108,7 +110,7 @@ const initalGoodIssueState = {
 
 export const CreateGoodIssue = function createGoodIssue(state = initalGoodIssueState, action) {
   switch (action.type) {
-    case GET_GOOD_ISSUE_DETAIL_REQUEST:
+    case CREATE_GOOD_ISSUEL_REQUEST:
       return {
       ...state,
         requesting: true,
@@ -117,7 +119,7 @@ export const CreateGoodIssue = function createGoodIssue(state = initalGoodIssueS
         errors: "",
        
       };
-    case GET_GOOD_ISSUE_DETAIL_SUCCESS:
+    case CREATE_GOOD_ISSUE_SUCCESS:
       
       return {
         requesting: false,
@@ -126,7 +128,7 @@ export const CreateGoodIssue = function createGoodIssue(state = initalGoodIssueS
         errors: "",
         
       };
-    case GET_GOOD_ISSUE_DETAIL_ERROR:
+    case CREATE_GOOD_ISSUE_ERROR:
       return {
           ...state,
         requesting: false,

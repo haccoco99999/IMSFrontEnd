@@ -25,19 +25,7 @@ export default function InfoDetailReceipt(props) {
            
 
         </div>
-        {/* <div className="info-create">
-            <p>Supplier: <span>Huýupplier</span></p>
-            <div className="info-create-detail">
-                <p>Email : <span>HuyBeo@gmail.com</span></p>
-                <p>Phone No: <span>111111-111</span></p>
-            </div>
-
-        </div> */}
-        {/* <div className="info-date">
-            <p>Create Date <span>10/2/2020</span></p>
-
-
-        </div> */}
+     
     </div>)
 }
 

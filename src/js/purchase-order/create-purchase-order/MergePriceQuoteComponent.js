@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './MergePriceQuote.css'
 
 export default function MergePriceQuote(props) {
-
+  if (props.isShowMergePage) {
   const [listPriceQuote, setListPriceQuote] = useState([])
 
   async function getPriceQuoteAPI() {
@@ -91,7 +91,7 @@ export default function MergePriceQuote(props) {
 
   console.log(listPriceQuote)
 
-  if (props.isShowMergePage) {
+
     return (
       <div>
         <div className="modal  modal-merge-pirce-quote"   >
