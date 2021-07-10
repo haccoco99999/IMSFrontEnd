@@ -15,60 +15,194 @@ export default function DetailRole() {
     token: state.client.token,
     detailRolePermission: state.DetailRolePermission
   }))
-  const [listPermissionState, setListPermissionState] = useState({})
 
-  const handleChangePermission = (event, parentName) => {
-    console.log("event.target.checked ")
-    if (parentName === undefined) {
-      if (event.target.checked === true) {
-        setListPermissionState(state => ({
-          ...state, [event.target.name]: []
-        }))
-      }
-      else {
+  const permissions = [
+    { name: "Create", isChecked: false },
+    { name: "Read", isChecked: false },
+    { name: "Update", isChecked: false },
+    { name: "Delete", isChecked: false },
+    { name: "Approve", isChecked: false },
+    { name: "Reject", isChecked: false }
+  ]
+  const pagePermissions = [
+    {
+      isCheck: false,
 
-        setListPermissionState(prevState => {
-          const state = { ...prevState };
-          delete state[event.target.name]
-          return state;
-        })
+      name: "StockTakeOrder",
+      listPermission: [
+        ...permissions
+      ],
+    }, {
+      isCheck: false,
+
+      name: "GoodsIssue",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "UserDetail",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "RolePermissionUpdate",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Product",
+
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+
+      isCheck: false,
+
+      name: "PriceQuoteOrder",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "PurchaseOrder",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Requisition",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Supplier",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "GoodsReceipt",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Transaction",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Registration",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Category",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Report",
+      listPermission: [
+        ...permissions
+      ]
+    },
+  ]
+
+
+  const [listPermissionState, setListPermissionState] = useState([...pagePermissions])
+
+  const handleChangePermissionAll = (event) => {
+
+    setListPermissionState([...listPermissionState.map((item) => item.name === event.target.name ?
+      {
+        ...item, isCheck: event.target.checked,
+        listPermission: item.listPermission.map(permission => ({ ...permission, isChecked: event.target.checked }))
       }
-    }
-    else {
-     
-      if (event.target.checked === true) {
-        setListPermissionState(state => ({
-          ...state, [parentName]: [...state[parentName], event.target.name]
-        }))
-      }
-      else {
-        setListPermissionState(state => ({
-          ...state, [parentName]: state[parentName].filter(item => item !== event.target.name)
-        }))
-      }
-    }
+
+
+      : item)])
+    console.log("set roi nha")
+
   };
+
+  const handleChangePermission = (event, parentName, index) => {
+
+    let temp = [...listPermissionState.map((item) => item.name === parentName ?
+      {
+        ...item,
+        listPermission: item.listPermission.map(permission => permission.name === event.target.name ? { ...permission, isChecked: event.target.checked } : permission)
+      }
+      : item)]
+
+    //Check all
+    let isCheckedParent = false
+    temp[index].listPermission.forEach(permission => {
+      if (permission.isChecked) {
+        isCheckedParent = true
+      }
+
+    })
+    temp[index].isCheck = isCheckedParent
+    setListPermissionState([
+      ...temp]
+    )
+
+
+  };
+  console.log(listPermissionState)
   const [infoRole, setInfoRole] = useState({
     roleId: "",
     roleName: ""
   })
 
-  console.log(listPermissionState)
+
 
 
   useEffect(() => {
     dispatch(getRoldeDetail({ roleId: location.state.roleId, token: token }))
   }, [])
 
-  useEffect(() => {
-    setListPermissionState(
-      detailRolePermission.detailRole.pagePermissions
-    )
-    setInfoRole({
-      roleId: detailRolePermission.detailRole.roleId,
-      roleName: detailRolePermission.detailRole.roleName
-    })
-  }, [detailRolePermission])
+  // useEffect(() => {
+  //   setListPermissionState(
+  //     detailRolePermission.detailRole.pagePermissions
+  //   )
+  //   setInfoRole({
+  //     roleId: detailRolePermission.detailRole.roleId,
+  //     roleName: detailRolePermission.detailRole.roleName
+  //   })
+  // }, [detailRolePermission])
 
   function goBackClick() {
     history.goBack();
@@ -77,13 +211,27 @@ export default function DetailRole() {
 
 
   function onSaveClick() {
+    let cleanPermission = {}
+    
+    listPermissionState.forEach(item => {
+      if (item.isCheck) {
+        let listPermission = []
+        item.listPermission.map(permission => {
+
+          if (permission.isChecked) {
+            listPermission.push(permission.name)
+          }
+        })
+        cleanPermission[item.name]= listPermission
+      }
+    })
     const data = {
       roleId: infoRole.roleId,
       roleName: infoRole.roleName,
-      pageClaimDictionary: listPermissionState
+      pageClaimDictionary: cleanPermission
     }
     console.log(data)
-    dispatch(updateRoleDetail({data:data, token:token}))
+    dispatch(updateRoleDetail({ data: data, token: token }))
   }
   // const nodes = [{
   //   value: 'mars',
@@ -93,70 +241,19 @@ export default function DetailRole() {
   //     { value: 'deimos', label: 'Deimos' },
   //   ],
   // }];
-  const permissions = [
-    "Create",
-    "Read",
-    "Update",
-    "Delete",
-    "Approve",
-    "Reject"
-  ]
-  const pagePermissions = Object.entries({
-    StockTakeOrder: [
-      ...permissions
-    ],
-    GoodsIssue: [
-      ...permissions
-    ],
-    UserDetail: [
-      ...permissions
-    ],
-    RolePermissionUpdate: [
-      ...permissions
-    ],
-    Product: [
-      ...permissions
-    ],
-    PriceQuoteOrder: [
-      ...permissions
-    ],
-    PurchaseOrder: [
-      ...permissions
-    ],
-    Requisition: [
-      ...permissions
-    ],
-    Supplier: [
-      ...permissions
-    ],
-    GoodsReceipt: [
-      ...permissions
-    ],
-    Transaction: [
-      ...permissions
-    ],
-    Registration: [
-      ...permissions
-    ],
-    Category: [
-      ...permissions
-    ],
-    Report: [
-      ...permissions
-    ],
-  })
-  function checkRolePermission(permissionPage, permission) {
-    
-    if (listPermissionState[permissionPage] !== undefined) {
-      if(permission !== undefined){
-      return listPermissionState[permissionPage].includes(permission)
-      }
-      else{
-        return true
-      }
-    }
-    return false
-  }
+
+  // function checkRolePermission(permissionPage, permission) {
+
+  //   if (listPermissionState[permissionPage] !== undefined) {
+  //     if (permission !== undefined) {
+  //       return listPermissionState[permissionPage].includes(permission)
+  //     }
+  //     else {
+  //       return true
+  //     }
+  //   }
+  //   return false
+  // }
   // console.log(pagePermissions)
   // console.log(Object.assign({}, pagePermissions))
 
@@ -208,21 +305,14 @@ export default function DetailRole() {
                 />
               </div>
             </div>
-            <div class="d-flex  justify-content-center">
-              <div class="flex-fill">
-                <label for="exampleFormControlInput1" class="form-label">
-                  Note
-                </label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-              </div>
-            </div>
+
           </form>
         </div>
 
         {/* content 2 */}
         <div className="wrapper-content shadow mt-3">
           {/* check1 */}
-          {pagePermissions.map((items, index) => {
+          {listPermissionState.map((items, index) => {
             return (
               <div>
                 <div class="form-check" data-bs-toggle="collapse"
@@ -230,28 +320,29 @@ export default function DetailRole() {
                   <input
                     class="form-check-input"
                     type="checkbox"
-                    name={items[0]}
-                    checked={checkRolePermission(items[0], undefined)}
+                    name={items.name}
+                    checked={items.isCheck}
 
-                    onChange={e => handleChangePermission(e)}
+                    onChange={e => handleChangePermissionAll(e)}
                   // checked={formData["productPermission"] || false}
                   />
-                  <label class="form-check-label">{items[0]}</label>
+                  <label class="form-check-label">{items.name}</label>
                 </div>
                 <div id={"collapsediv" + index} class="collapse">
-                  {items[1].map((childItem, idx) => {
+                  {items.listPermission.map((childItem, idx) => {
+
                     return (
                       <div class="d-flex justify-content-center">
                         {/* {console.log(checkRolePermission(items[0], childItem))} */}
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name={childItem}
-                       
-                          checked={checkRolePermission(items[0], childItem)}
-                          onChange={e => handleChangePermission(e, items[0])}
+                          name={childItem.name}
+                          checked={childItem.isChecked}
+                          // checked={checkRolePermission(items[0], childItem)}
+                          onChange={e => handleChangePermission(e, items.name, index)}
                         />
-                        <label class="form-check-label">{childItem}</label>
+                        <label class="form-check-label">{childItem.name}</label>
 
                       </div>
                     )

@@ -128,7 +128,7 @@ export default function CreateAccount() {
     <p><label for="filexx" >Upload Image</label></p> */}
       {/* <p><img id="output" width="200" /></p> */}
 
-      <NavigationBar listButton={listButton} actionGoBack={ClickGoBack}/>
+      <Na vigationBar listButton={listButton} actionGoBack={ClickGoBack}/>
       <div className="container container-create-account">
         <div class="avatar-upload-contain">
           <img id="output-avatar" src="https://i.stack.imgur.com/l60Hf.png" class="img-fluid img-thumbnail " alt="..." />
