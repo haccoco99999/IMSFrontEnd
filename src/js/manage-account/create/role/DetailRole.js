@@ -194,15 +194,16 @@ export default function DetailRole() {
     dispatch(getRoldeDetail({ roleId: location.state.roleId, token: token }))
   }, [])
 
-  // useEffect(() => {
-  //   setListPermissionState(
-  //     detailRolePermission.detailRole.pagePermissions
-  //   )
-  //   setInfoRole({
-  //     roleId: detailRolePermission.detailRole.roleId,
-  //     roleName: detailRolePermission.detailRole.roleName
-  //   })
-  // }, [detailRolePermission])
+  useEffect(() => {
+    console.log( detailRolePermission.detailRole.pagePermissions)
+    // setListPermissionState(
+     
+    // )
+    setInfoRole({
+      roleId: detailRolePermission.detailRole.roleId,
+      roleName: detailRolePermission.detailRole.roleName
+    })
+  }, [detailRolePermission])
 
   function goBackClick() {
     history.goBack();
