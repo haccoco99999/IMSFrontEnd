@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useReducer } from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import React from "react";
+
 import Table from "react-bootstrap-table-next";
 import ToolkitProvider, {
   Search,
@@ -41,18 +40,6 @@ export default function ListLocationsModal(props) {
   const afterSearch = (newResult) => {
     console.log(newResult);
   };
-
-  // function handleOnSelect(row, isSelect) {
-  //   if (isSelect) {
-  //     console.log(row.id);
-  //     console.log(row.locationName);
-  //     // setSelectedLocation({
-  //     //   id: row.id,
-  //     //   locationName: row.locationName,
-  //     //   locationBarcode: row.locationBarcode,
-  //     // });
-  //   }
-  // }
 
   return (
     <div>

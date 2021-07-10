@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery,takeLatest } from "redux-saga/effects";
 import handleApiErrors from "../../auth/api-errors";
 
 import {
@@ -8,6 +8,9 @@ import {
   GET_LOCATION_REQUEST,
   GET_LOCATION_RESPONSE,
   GET_LOCATION_ERROR,
+  GET_PACKAGE_REQUEST,
+  GET_PACKAGE_RESPONSE,
+  GET_PACKAGE_ERROR,
 } from "./constants";
 
 function createStocktake(action) {
@@ -31,8 +34,9 @@ function createStocktake(action) {
 }
 
 function getAllLocations(action) {
-  const url="http://imspublicapi.herokuapp.com/api/package?CurrentPage=0&SizePerPage=0&IsLocationOnly=true"
-  return fetch(url,{
+  const url =
+    "http://imspublicapi.herokuapp.com/api/package?CurrentPage=0&SizePerPage=0&IsLocationOnly=true";
+  return fetch(url, {
     method: "GET",
     headers: {
       Authorization: "Bearer " + action.token,
@@ -49,7 +53,24 @@ function getAllLocations(action) {
     });
 }
 
-
+function getPackages(action) {
+  const url = `http://imspublicapi.herokuapp.com/api/package?SearchQuery=${action.id}&CurrentPage=0&SizePerPage=0&IsLocationOnly=false`;;
+  return fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
 function* createStocktakeFlow(action) {
   try {
     let json = yield call(createStocktake, action);
@@ -60,7 +81,7 @@ function* createStocktakeFlow(action) {
   }
 }
 
-function* getAllLocationsFlow(action){
+function* getAllLocationsFlow(action) {
   try {
     let json = yield call(getAllLocations, action);
     yield put({ type: GET_LOCATION_RESPONSE, json });
@@ -69,10 +90,19 @@ function* getAllLocationsFlow(action){
     yield put({ type: GET_LOCATION_ERROR });
   }
 }
-
+function* getPackagesFlow(action) {
+  try {
+    let json = yield call(getPackages,action)
+    yield put({ type:GET_PACKAGE_RESPONSE,json})
+  } catch (error) {
+    console.log(error)
+    yield put({ type: GET_PACKAGE_ERROR})
+  }
+}
 function* watcher() {
   yield takeEvery(CREATE_STOCKTAKE_REQUEST, createStocktakeFlow);
-  yield takeEvery(GET_LOCATION_REQUEST,getAllLocationsFlow)
+  yield takeEvery(GET_LOCATION_REQUEST, getAllLocationsFlow);
+  yield takeLatest(GET_PACKAGE_REQUEST,getPackagesFlow)
 }
 
 export default watcher;

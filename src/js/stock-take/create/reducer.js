@@ -5,6 +5,9 @@ import {
   GET_LOCATION_REQUEST,
   GET_LOCATION_RESPONSE,
   GET_LOCATION_ERROR,
+  GET_PACKAGE_REQUEST,
+  GET_PACKAGE_RESPONSE,
+  GET_PACKAGE_ERROR,
 } from "./constants";
 
 const initalState = {
@@ -13,6 +16,7 @@ const initalState = {
   messages: "",
   errors: "",
   listLocations: [],
+  listPackages: [],
 };
 
 export default function reducer(state = initalState, action) {
@@ -42,6 +46,32 @@ export default function reducer(state = initalState, action) {
         messages: "",
         errors: "",
         listLocations: [],
+      };
+    case GET_PACKAGE_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: "",
+        listPackages:[]
+      };
+    case GET_PACKAGE_RESPONSE:
+      return {
+        ...state,
+        requesting: false,
+        successful: true,
+        messages: "",
+        errors: "",
+        listPackages: action.json.paging.resultList,
+      };
+    case GET_PACKAGE_ERROR:
+      return {
+        ...state,
+        requesting: false,
+        successful: false,
+        messages: "",
+        errors: "",listPackages:[]
       };
     default:
       return state;
