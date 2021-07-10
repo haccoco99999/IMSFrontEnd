@@ -21,6 +21,9 @@ export default function () {
           <Route path="/homepage/manage-account/create-role">
             <CreateRole />
           </Route>
+          <Route path="/homepage/manage-account/create-account">
+            <CreateAccount />
+          </Route>
           <Route path="/homepage/manage-account/detail-role">
             <EditRole />
           </Route>

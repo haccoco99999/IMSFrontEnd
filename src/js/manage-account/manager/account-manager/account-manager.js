@@ -85,14 +85,13 @@ function AccountManager() {
   function onRowClick(row){
     history.push("/homepage/manage-account/edit-user-account");
   }
+  function redirectCreateAccount(){
+    history.push("/homepage/manage-account/create-account");
+  }
   return (
     <>
       <div>
-        <a
-          class="btn btn-default me-md-2 add"
-          data-bs-target="#AddAccountModal"
-          data-bs-toggle="modal"
-        >
+        <a onClick={() => redirectCreateAccount()}>
           <svg
             class="svg-icon"
             xmlns="http://www.w3.org/2000/svg"
