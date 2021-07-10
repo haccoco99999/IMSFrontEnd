@@ -195,10 +195,9 @@ export default function DetailRole() {
   }, [])
 
   useEffect(() => {
-    console.log( detailRolePermission.detailRole.pagePermissions)
-    // setListPermissionState(
-     
-    // )
+    setListPermissionState(
+      detailRolePermission.detailRole.pagePermissions
+    )
     setInfoRole({
       roleId: detailRolePermission.detailRole.roleId,
       roleName: detailRolePermission.detailRole.roleName
@@ -316,8 +315,7 @@ export default function DetailRole() {
           {listPermissionState.map((items, index) => {
             return (
               <div>
-                <div class="form-check" data-bs-toggle="collapse"
-                  data-bs-target={"#collapsediv" + index}>
+                <div class="form-check" >
                   <input
                     class="form-check-input"
                     type="checkbox"
@@ -327,7 +325,8 @@ export default function DetailRole() {
                     onChange={e => handleChangePermissionAll(e)}
                   // checked={formData["productPermission"] || false}
                   />
-                  <label class="form-check-label">{items.name}</label>
+                  <label class="form-check-label" data-bs-toggle="collapse"
+                  data-bs-target={"#collapsediv" + index}>{items.name}</label>
                 </div>
                 <div id={"collapsediv" + index} class="collapse">
                   {items.listPermission.map((childItem, idx) => {

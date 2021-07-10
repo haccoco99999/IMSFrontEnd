@@ -195,15 +195,21 @@ export const DetailRolePermission = function getDetailRolePermission(state = ini
       };
     case GET_DETAIL_ROLE_SUCCESS:
       // let a;
-      // for (const [key, value] of Object.entries(action.json.pagePermissions)) {
-      //   a= state.pagePermissions.map(item => item.name === key ? {
-      //     ...item, isCheck: true, listPermission: value.map(namePermission => {
-      //       item.listPermission.map(permission => permission.name === namePermission ? { ...permission, isChecked: true } : permission)
-      //     })
-      //   } : item
+    //  Object.entries(action.json.pagePermissions).map( object =>
+    //     a= state.pagePermissions.map(item => item.name === object[0] ? {
+    //       ...item, isCheck: true, listPermission: object[1].map(namePermission => {
+    //         item.listPermission.map(permission => permission.name === namePermission ? { ...permission, isChecked: true } : permission)
+    //       })
+    //     } : item
 
-      //   )
-      // }
+    //     )
+    //  )
+
+
+   
+
+        
+     
       // console.log(a)
       return {
 
@@ -214,7 +220,36 @@ export const DetailRolePermission = function getDetailRolePermission(state = ini
         detailRole: {
           roleId: action.json.role.id,
           roleName: action.json.role.name,
-          pagePermissions: action.json.pagePermissions
+          pagePermissions:   state.detailRole.pagePermissions.map(item => {
+            let itemTemp
+           Object.entries(action.json.pagePermissions).forEach(object =>{
+             console.log(object[0] === item.name)
+               if(item.name ===  object[0]){
+               
+                 itemTemp ={
+                   ...item, isCheck: true,
+                   listPermission:   item.listPermission.map(permission =>{
+                     let arrayTemp
+                     object[1].forEach(permissionName =>{
+                       if(permissionName === permission.name){
+                         arrayTemp =  {...permission, isChecked:true}
+                         return
+                       }
+                       arrayTemp = permission
+                       return
+                     })
+                     return arrayTemp
+                   })
+                 }
+                 return
+               }
+               else{
+                 itemTemp = item
+                 return
+               }
+             })
+             return itemTemp
+           })
         }
       };
     case GET_DETAIL_ROLE_ERROR:
