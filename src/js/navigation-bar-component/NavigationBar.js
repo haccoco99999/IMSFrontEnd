@@ -6,7 +6,10 @@ export default function NavigationBar(props) {
     <div className="navigation-bar">
       <div className="navigation-bar-left">
         <h3 onClick={props.actionGoBack}>&lt;</h3>
-        <h3>{props.titleBar}</h3>
+        <div className="container-title-bar">
+          <h3 >{props.titleBar}</h3>
+          <span>{props.status}</span>
+          </div>
       </div>
       <div className="navigation-bar-right">
         {props.listButton.map((button) => {

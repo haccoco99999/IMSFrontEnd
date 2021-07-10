@@ -144,6 +144,9 @@ export default function DetailGoodIssue() {
         ),
         showExpandColumn: true
     };
+    function backPage(){
+        history.go(-1)
+    }
     return (
 
 
@@ -179,13 +182,17 @@ export default function DetailGoodIssue() {
 
             </div>
          
-            <NavigationBar listButton={listButton} />
+            <NavigationBar listButton={listButton}
+            titleBar={GoodIssueDetail.infoGoodIssueDetail.id}
+            actionGoBack={backPage} 
+            status={location.state.status}/>
             <div className="container-good-issue-detail">
             <BootstrapTable
                 keyField='sku'
                 data={listGoodIssueProducts}
                 columns={columns}
                 expandRow={expandRow}
+                headerClasses="table-header-receipt"
             />
             </div>
             {/* <BootstrapTable classes="foo"

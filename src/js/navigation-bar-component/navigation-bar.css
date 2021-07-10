@@ -29,3 +29,11 @@
     min-width: 80px;
     border: 0 !important;
 }
+
+.container-title-bar{
+    margin-left: 20px;
+    color: rgb(67, 114, 201);
+}
+.container-title-bar h3{
+    margin-bottom: 0 !important;
+}
