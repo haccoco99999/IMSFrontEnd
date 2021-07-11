@@ -186,12 +186,16 @@ export const DetailRolePermission = function getDetailRolePermission(state = ini
   switch (action.type) {
     case GET_DETAIL_ROLE_REQUESTING:
       return {
-        ...state,
+        
         requesting: true,
         success: false,
         messages: "",
         errors: "",
-
+        detailRole: {
+          roleId: "",
+          roleName: "",
+          pagePermissions: pagePermissions
+        }
       };
     case GET_DETAIL_ROLE_SUCCESS:
       // let a;
@@ -204,9 +208,7 @@ export const DetailRolePermission = function getDetailRolePermission(state = ini
 
     //     )
     //  )
-
-
-   
+  
 
         
      
@@ -222,32 +224,34 @@ export const DetailRolePermission = function getDetailRolePermission(state = ini
           roleName: action.json.role.name,
           pagePermissions:   state.detailRole.pagePermissions.map(item => {
             let itemTemp
-           Object.entries(action.json.pagePermissions).forEach(object =>{
-             console.log(object[0] === item.name)
+           Object.entries(action.json.pagePermissions).every(object =>{
+             
                if(item.name ===  object[0]){
-               
+                
                  itemTemp ={
                    ...item, isCheck: true,
                    listPermission:   item.listPermission.map(permission =>{
                      let arrayTemp
-                     object[1].forEach(permissionName =>{
+                     object[1].every(permissionName =>{
                        if(permissionName === permission.name){
                          arrayTemp =  {...permission, isChecked:true}
-                         return
+                         return false
                        }
                        arrayTemp = permission
-                       return
+                       return true
                      })
                      return arrayTemp
                    })
                  }
-                 return
+                 return false
+        
                }
                else{
                  itemTemp = item
-                 return
+                 return true
                }
              })
+            
              return itemTemp
            })
         }

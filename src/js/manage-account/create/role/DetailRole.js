@@ -141,7 +141,7 @@ export default function DetailRole() {
   ]
 
 
-  const [listPermissionState, setListPermissionState] = useState([...pagePermissions])
+  const [listPermissionState, setListPermissionState] = useState(detailRolePermission.detailRole.pagePermissions)
 
   const handleChangePermissionAll = (event) => {
 
@@ -153,7 +153,7 @@ export default function DetailRole() {
 
 
       : item)])
-    console.log("set roi nha")
+
 
   };
 
@@ -230,7 +230,7 @@ export default function DetailRole() {
       roleName: infoRole.roleName,
       pageClaimDictionary: cleanPermission
     }
-    console.log(data)
+    // console.log(data)
     dispatch(updateRoleDetail({ data: data, token: token }))
   }
   // const nodes = [{
