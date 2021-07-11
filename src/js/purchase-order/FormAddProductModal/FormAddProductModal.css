@@ -1,0 +1,14 @@
+.modal-merge-pirce-quote{
+    background: #00000052 !important;
+    display: block !important;
+}
+.modal-dialog-merge-pirce-quote{
+    width: 500px !important;
+    
+}
+.modal-content-merge-pirce-quote{
+    height: 600px  !important;
+}
+.modal-body-merge-price-quote{
+    overflow:auto !important;
+}

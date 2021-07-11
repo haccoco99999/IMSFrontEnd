@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './create-account.css'
 import { getUserAccountDetail, updateUserAccountDetail } from './action';
 import RoleManagerAction from "../../manager/role-manager/action";
@@ -24,7 +24,12 @@ export default function EditUserAccount() {
   function createAccountInfo(event) {
 
   }
-
+  const confirmPassword = useRef()
+  const newPassword = useRef()
+  const [isvalidPassword, setIsvalidPassword] = useState({
+    isValidNewPassword: null,
+    isConfirmPassword: null
+  })
   let { listRoles, token,infoDetailAccount } = useSelector((state) => ({
     listRoles: state.getAllRoleReducer.listRoles,
     token: state.client.token,
@@ -34,7 +39,7 @@ export default function EditUserAccount() {
     infoDetailAccount
   )
   function onchangeInputInfoAccount(event) {
-   
+    console.log(event.target.name ," ", event.target.value)
     setInfoAccountState(state => ({
       ...state, [event.target.name]: event.target.value
     }))
@@ -108,10 +113,57 @@ export default function EditUserAccount() {
         background: "#4e9ae8"
     }
   },  ]
+  
+  function checkValidPassword(password) {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)
+  }
+  function onChangePassword() {
+    let isvalidPassword = {
+      isValidNewPassword: null,
+      isConfirmPassword: null,
+    }
+
+
+    if (checkValidPassword(newPassword.current.value)) {
+
+      isvalidPassword.isValidNewPassword = true
+
+    }
+    else {
+
+      if (newPassword.current.value === "") {
+        isvalidPassword.isValidNewPassword = null
+
+      }
+      else {
+        isvalidPassword.isValidNewPassword = false
+      }
+
+    }
+
+    if (confirmPassword.current.value === newPassword.current.value && confirmPassword.current.value !== "") {
+      isvalidPassword.isConfirmPassword = true
+
+    }
+    else {
+
+      if (confirmPassword.current.value === "") {
+        isvalidPassword.isConfirmPassword = null
+
+      }
+      else {
+        isvalidPassword.isConfirmPassword = false
+      }
+
+
+    }
+    setIsvalidPassword(isvalidPassword)
+  }
+
   // console.log(listRoles)
   return (
-    <div className="home_content">
-      <div className="text">
+ 
+      <div >
         {/* ############################ */}
         {/* <input  type="text" accept="image/*" name="image" id="fileaaa" onchange={changeUploadAvatar} /> */}
       
@@ -163,29 +215,31 @@ export default function EditUserAccount() {
           </div>
           <div class="form-group">
             <label for="">Select Role</label>
-            <select value="1" onChange={onchangeInputInfoAccount}   class="form-control" name="roleName" id="">
-              <option value="" disabled selected>  -- No Selected --  </option>
+        
+            <select value={infoAccountState.roleID} onChange={onchangeInputInfoAccount}   class="form-control" name="roleID" id="">
+              
               {listRoles.map((item, index) => {
-                return (<option value={item.id}>{item.name}</option>)
+                return (<option value={item.id}>{item.name} </option>)
               })}
             </select>
           </div>
+          
         </div>
 
         <h3>Set password </h3>
         <div className="container container-create-account">
-          <div class="form-group">
-            <label for="">Password:</label>
-            <input type="text"
-              class="form-control" aria-describedby="helpId" placeholder="" />
+        <div class="form-group">
+          <label for="">Password:</label>
+          <input type="text" ref={newPassword} onChange={onChangePassword}
+            class="form-control" name="" id="" aria-describedby="helpId" placeholder="" />
 
-          </div>
-          <div class="form-group">
-            <label for="">Confirm apssword:</label>
-            <input type="text"
-              class="form-control" aria-describedby="helpId" placeholder="" />
+        </div>
+        <div class="form-group">
+          <label for="">Confirm apssword:</label>
+          <input type="text" ref={confirmPassword} onChange={onChangePassword}
+            class="form-control" name="" id="" aria-describedby="helpId" placeholder="" />
 
-          </div>
+        </div>
 
 
         </div>
@@ -193,6 +247,6 @@ export default function EditUserAccount() {
 
         {/* ################################# */}
       </div>
-    </div>
+
   );
 }

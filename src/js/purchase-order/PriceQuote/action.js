@@ -1,8 +1,7 @@
 import {GET_DETAIL_PURCHASE_ORDER, 
     SEND_CONFIRM_PURCHASE_ORDER, 
     CONFIRM_PURCHASE_ORDER_BY_MAMAGER,
-    SAVE_PRODUCTS_PURCHASE_ORDER, GET_PRODUCT_PURCHASE_ORDER,SET_DEFAULT_PRODUCT_PURCHASE_ORDER, INGORE_PURCHASE_ORDER_CONFIRM,
-    EDIT_PRICE_QUOTE_REQUEST
+    SAVE_PRODUCTS_PURCHASE_ORDER, GET_PRODUCT_PURCHASE_ORDER,SET_DEFAULT_PRODUCT_PURCHASE_ORDER, INGORE_PURCHASE_ORDER_CONFIRM
  } from './contants'
 export  function getDetailPurchaseOrder(orderID){
    
@@ -46,16 +45,6 @@ export function ignorePurchaseOrderConfirm(orderID){
     return {
         type: INGORE_PURCHASE_ORDER_CONFIRM,
         orderID,
-      
-    }
-}
-
-export function editPriceQuote({data, token}){
-    
-    return {
-        type: EDIT_PRICE_QUOTE_REQUEST,
-        data,
-        token
       
     }
 }

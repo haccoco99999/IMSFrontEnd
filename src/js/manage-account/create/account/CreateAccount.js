@@ -73,6 +73,7 @@ export default function CreateAccount() {
   }));
   const dispatch = useDispatch()
   function onchangeInputInfoAccount(event) {
+    
     setInfoAccountState(state => ({
       ...state, [event.target.name]: event.target.value
     }))
@@ -81,7 +82,7 @@ export default function CreateAccount() {
 
 
   function createAccountInfo(event) {
-    if(isvalidPassword.newPassword && isvalidPassword.confirmPassword){
+    if(isvalidPassword.isValidNewPassword && isvalidPassword.isConfirmPassword){
     dispatch(CreateAccountAction({ data: infoAccountState, token: token }));
     }
     else{

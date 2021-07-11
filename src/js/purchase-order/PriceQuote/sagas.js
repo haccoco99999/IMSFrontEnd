@@ -11,9 +11,6 @@ import {
     GET_PRODUCT_PURCHASE_ORDER,
     INGORE_PURCHASE_ORDER_CONFIRM,
     INGORE_PURCHASE_ORDER_CONFIRM_ERROR,
-    EDIT_PRICE_QUOTE_REQUEST,
-    EDIT_PRICE_QUOTE_SUCCESS,
-    EDIT_PRICE_QUOTE_ERROR,
 } from './contants'
 
 import handleApiErrors from '../../auth/api-errors'
@@ -64,23 +61,6 @@ function sendConfirmForManagerAPI(orderId) {
         },
         credentials: "include",
 
-    })
-        .then(response => handleApiErrors(response))
-        .then(response => response.json())
-        .then(json => json)
-        .catch((error) => { throw error })
-}
-function editPriceQuoteAPI(action) {
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/pricequote/edit"
-    return fetch(updateUrl, {
-        method: 'PUT',
-        headers: {
-            "Authorization": "Bearer " + action.token,
-            "Content-Type": "application/json",
-            "Origin": ""
-        },
-        credentials: "include",
-        body: JSON.stringify(action.data)
     })
         .then(response => handleApiErrors(response))
         .then(response => response.json())
@@ -150,18 +130,6 @@ function* getDetailPurchaseOrderFlow(action) {
     } catch (error) {
       
         yield put({ type: GET_DETAIL_PURCHASE_ORDER_ERROR })
-    }
-
-}
-function* editPriceQuoteFlow(action) {
-    
-    try {
-        let json = yield call(editPriceQuoteAPI, action)
-        console.log(json)
-        yield put({ type: EDIT_PRICE_QUOTE_SUCCESS, json })
-    } catch (error) {
-      
-        yield put({ type: EDIT_PRICE_QUOTE_ERROR })
     }
 
 }
@@ -244,7 +212,6 @@ function* updateWatcher() {
     yield takeEvery(CONFIRM_PURCHASE_ORDER_BY_MAMAGER, sendConfirmByManager)
     yield takeEvery(GET_PRODUCT_PURCHASE_ORDER, getProductPurchaseOrderFlow)
     yield takeEvery(INGORE_PURCHASE_ORDER_CONFIRM, ignorePurchaseOrderConfirmFlow)
-    yield takeEvery(EDIT_PRICE_QUOTE_REQUEST, editPriceQuoteFlow)
 
 
 }

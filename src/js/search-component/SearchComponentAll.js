@@ -49,6 +49,7 @@ export  function SearchToAddProduct(props) {
         )}
     />)
 }
+
 export  function SeachSupplier(props) {
 
 
@@ -56,7 +57,12 @@ export  function SeachSupplier(props) {
 
 
     const [isLoading, setIsLoading] = useState(false);
-    const [options, setOptions] = useState([]);
+    const [options, setOptions] = useState([{ 
+        supplier: "1231",
+        supplierName: "aaa",
+        phoneNumber: "ádfas",
+        id: "Aaa",
+    }]);
     const handleSearch = (query) => {
         setIsLoading(true);
 
@@ -79,6 +85,7 @@ export  function SeachSupplier(props) {
 
 
     return (<AsyncTypeahead
+        defaultSelected={options.slice(0, 1)}
         filterBy={filterBy}
         id="async-example"
         isLoading={isLoading}

@@ -26,7 +26,7 @@ import { createRolePermission,DetailRolePermission , UpdateRolePermission } from
 import getDetailsProductReducer from "./product/details/reducer";
 import { GetAllGoodIssues } from "./good-issue/manager/reducer";
 import{ DetailGoodIssue, CreateGoodIssue , UpadateGoodIssue} from "./good-issue/good-issue-detail/reducer";
-import { getDetailPurchaseReducer,productPurchaseOrderReducer } from "./purchase-order/create-purchase-order/reducer";
+import { getDetailPurchaseReducer,productPurchaseOrderReducer, editPriceQuoteReducer } from "./purchase-order/create-purchase-order/reducer";
 const IndexReducer = combineReducers({
   login,
   client,
@@ -57,6 +57,7 @@ const IndexReducer = combineReducers({
   productPurchaseOrderReducer,
   CreateGoodIssue,
   UpadateGoodIssue,
+  editPriceQuoteReducer
 
 });
 

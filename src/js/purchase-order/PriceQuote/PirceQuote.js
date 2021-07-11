@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { useHistory, useLocation, withRouter } from 'react-router-dom'
-import { getDetailPurchaseOrder, ignorePurchaseOrderConfirm, confirmDetailPurchaseOrder, confirmPurchaseORderByManager, saveProductsPurchaseOrder, editPriceQuote } from './action'
+import { getDetailPurchaseOrder, ignorePurchaseOrderConfirm, confirmDetailPurchaseOrder, confirmPurchaseORderByManager, saveProductsPurchaseOrder } from './action'
 import NavigationBar from '../../navigation-bar-component/NavigationBar';
 import InfoDetailReceipt from '../../info-detail-receipt/InfoDetailReceipt';
 import ListProductsTable from '../../list-products-table/ListProductsTable';
@@ -99,10 +99,7 @@ export default function PurchaseOrderConfirm() {
 
     ];
 
-    const {purchaseOrderDataGlobal, token} = useSelector(state => ({
-        purchaseOrderDataGlobal :state.getDetailPurchaseReducer.detailPurchaseOrder,
-        token: state.client.token,
-    }))
+    const purchaseOrderDataGlobal = useSelector(state => state.getDetailPurchaseReducer.detailPurchaseOrder)
     const [detailPurchaseState, setDetailPurchaseState] = useState(purchaseOrderDataGlobal)
     const [listProductPurchaseOrder, setListProductPurchaseOrder] = useState(purchaseOrderDataGlobal.purchaseOrderProduct)
     const [supplier, setSupplier] = useState({
@@ -182,7 +179,7 @@ export default function PurchaseOrderConfirm() {
                 }
             })
         }
-        dispatch(editPriceQuote({data:data, token: token }))
+
         console.log(data)
         setEventPage({
             isShowEdit: true,

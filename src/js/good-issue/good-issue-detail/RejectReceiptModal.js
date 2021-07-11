@@ -33,7 +33,7 @@ export default function RejectReceiptModal(props){
                 </button>
                 <button
                   type="button"
-             
+                  onClick={() => props.clickToClose(data)}
                   className="btn btn-default text-white button-save--modal " >
                   Done
                 </button>
