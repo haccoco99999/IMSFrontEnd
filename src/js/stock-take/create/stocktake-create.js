@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer, useRef } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Modal } from "bootstrap";
+import { Modal, Toast } from "bootstrap";
 import Table from "react-bootstrap-table-next";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import paginationFactory from "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
@@ -10,12 +10,27 @@ import paginationFactory from "react-bootstrap-table2-paginator/dist/react-boots
 import "../stocktake.css";
 //components
 import ListLocationsModal from "./search-location-modal";
-import { getAllLocationsAction, getListPackageAction,createStocktkaeAction } from "./action";
-import SpinnerComponent from "./spinner-components";
+import {
+  getAllLocationsAction,
+  getListPackageAction,
+  createStocktkaeAction,
+} from "./action";
+import SpinnerComponent from "../components/spinner-component";
+import ToastComponent from "../components/toast-component";
 
 export default function create() {
   let history = useHistory();
   let dispatch = useDispatch();
+
+  //todo: state store
+  const { token, listProductsStore, listPackagesStore, messages } = useSelector(
+    (state) => ({
+      token: state.client.token,
+      listProductsStore: state.createStocktakeReducer.listLocations,
+      listPackagesStore: state.createStocktakeReducer.listPackages,
+      messages: state.createStocktakeReducer.messages,
+    })
+  );
 
   const [isLoading, setIsLoading] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState({
@@ -168,15 +183,6 @@ export default function create() {
   //   onSelect: onSelectCheckBoxClick,
   // };
 
-  //todo: state store
-  const { token, listProductsStore, listPackagesStore } = useSelector(
-    (state) => ({
-      token: state.client.token,
-      listProductsStore: state.createStocktakeReducer.listLocations,
-      listPackagesStore: state.createStocktakeReducer.listPackages,
-    })
-  );
-
   function goBackClick() {
     history.goBack();
   }
@@ -211,6 +217,7 @@ export default function create() {
     };
 
     console.log("Data output:", data);
+    dispatch(createStocktkaeAction({ token: token, data: data }));
   }
 
   function onSelectLocationClick() {
@@ -236,6 +243,23 @@ export default function create() {
     }
   }, [listPackagesStore]);
   console.log(listPackagesStore);
+  useEffect(() => {
+    if (messages !== "") console.log(messages);
+  }, [messages]);
+  //todo: toast
+  const toastRef = useRef();
+  const showToast = () => {
+    const toastEle = toastRef.current;
+    const bsToast = new Toast(toastEle, {
+      autohide: false,
+    });
+    bsToast.show();
+  };
+  const hideToast = () => {
+    const toastEle = toastRef.current;
+    const bsToast = Toast.getInstance(toastEle);
+    bsToast.hide();
+  };
 
   return (
     <div>
@@ -278,6 +302,13 @@ export default function create() {
                 >
                   Search More...
                 </button>
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={showToast}
+                >
+                  Toast
+                </button>
               </div>
             </div>
           </div>
@@ -292,7 +323,7 @@ export default function create() {
                 </button>
                 <button
                   className="btn btn-secondary"
-                  // onClick={clickDeleteCheckItems}
+                  onClick={clickDeleteCheckItems}
                 >
                   Discard
                 </button>
@@ -321,6 +352,8 @@ export default function create() {
         handleOnSelect={handleOnSelect}
         onSelectLocationClick={onSelectLocationClick}
       />
+
+      <ToastComponent toastRef={toastRef} hideToast={hideToast} />
     </div>
   );
 }

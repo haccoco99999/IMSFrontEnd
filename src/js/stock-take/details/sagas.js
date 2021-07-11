@@ -96,7 +96,7 @@ function rejectStocktake(action) {
 }
 
 function updateStocktake(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/stocktake/updatesingle";
+  const url = "http://imspublicapi.herokuapp.com/api/stocktake/add";
   return fetch(url, {
     method: "PUT",
     headers: {

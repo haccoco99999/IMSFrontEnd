@@ -54,7 +54,7 @@ export default function reducer(state = initalState, action) {
         successful: false,
         messages: "",
         errors: "",
-        listPackages:[]
+        listPackages: [],
       };
     case GET_PACKAGE_RESPONSE:
       return {
@@ -71,7 +71,32 @@ export default function reducer(state = initalState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",listPackages:[]
+        errors: "",
+        listPackages: [],
+      };
+    case CREATE_STOCKTAKE_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: "",
+      };
+    case CREATE_STOCKTAKE_RESPONSE:
+      return {
+        ...state,
+        requesting: false,
+        successful: true,
+        messages: action.json.stockTakeOrderId,
+        errors: "",
+      };
+    case CREATE_STOCKTAKE_ERROR:
+      return {
+        ...state,
+        requesting: false,
+        successful: false,
+        messages: "",
+        errors: "",
       };
     default:
       return state;

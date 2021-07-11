@@ -1,12 +1,4 @@
-import {
-  call,
-  put,
-  takeEvery,
-  delay,
-  throttle,
-  debounce,
-  takeLatest,
-} from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import handleApiErrors from "../../auth/api-errors";
 
 //components
@@ -34,7 +26,6 @@ function getAllStocktake(action) {
       throw error;
     });
 }
-
 function* getAllStocktakeFlow(action) {
   try {
     let json = yield call(getAllStocktake, action);
@@ -45,9 +36,11 @@ function* getAllStocktakeFlow(action) {
   }
 }
 
+
 function* watcher() {
   // yield debounce(500,GET_ALL_STOCKTAKE_REQUEST, getAllStocktakeFlow);
   yield takeLatest(GET_ALL_STOCKTAKE_REQUEST, getAllStocktakeFlow);
+  
 }
 
 export default watcher;

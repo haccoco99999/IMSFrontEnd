@@ -6,7 +6,7 @@ import "../stocktake.css";
 //components
 import AdjustInventory from "./adjust-inventory";
 import Reject from "./reject";
-import { getDetailsStockTakeAction } from "./action";
+import { getDetailsStockTakeAction, submitAction } from "./action";
 import Table from "../../table-receipt/ListReceiptsTable";
 
 export default function StocktakeDetails() {
@@ -16,14 +16,14 @@ export default function StocktakeDetails() {
 
   const [cleanJsonListLocation, setCleanJsonListLocation] = useState([]);
 
-  const { token, groupLocationStore, stocktakeDetailsStore } = useSelector(
-    (state) => ({
+  const { token, groupLocationStore, stocktakeDetailsStore, messages } =
+    useSelector((state) => ({
       token: state.client.token,
       groupLocationStore:
         state.getDetailsStocktakeReducer.goodIssue.groupLocations,
       stocktakeDetailsStore: state.getDetailsStocktakeReducer.goodIssue,
-    })
-  );
+      messages: state.getDetailsStocktakeReducer.messages,
+    }));
   console.log(groupLocationStore);
 
   const [listValueColumn, setListValueColumn] = useState({
@@ -49,6 +49,44 @@ export default function StocktakeDetails() {
       locationBarcode: row.locationBarcode,
       checkItems: row.checkItems,
     });
+  }
+
+  function onSubmitClick() {
+    const data = {
+      id: location.state.stocktakeId,
+    };
+    dispatch(submitAction({ token: token, data: data }));
+  }
+
+  function onRejectClick() {
+    const data = {
+      stockTakeId: location.state.stocktakeId,
+      cancelReason: "",
+    };
+  }
+
+  function onAdjustInventoryClick() {
+    const data = {
+      stockTakeId: "string",
+    };
+  }
+
+  function onSaveClick() {
+    const data = {
+      stockTakeGroupLocation: [
+        {
+          locationId: "string",
+          checkItems: [
+            {
+              packageId: "string",
+              actualQuantity: 0,
+              note: "string",
+            },
+          ],
+        },
+      ],
+      stockTakeId: "string",
+    };
   }
 
   useEffect(() => {
@@ -82,6 +120,10 @@ export default function StocktakeDetails() {
     }
   }, [groupLocationStore]);
 
+  useEffect(() => {
+    if (messages === "Submit success") console.log("Submit Success");
+  }, [messages]);
+
   console.log(cleanJsonListLocation);
   return (
     <div>
@@ -111,12 +153,13 @@ export default function StocktakeDetails() {
                     // data-bs-target="#AdjustInventoryModal"
                     // data-bs-toggle="modal"
                     className="btn btn-primary button-tab--adjust me-3 text-white"
+                    onClick={onSubmitClick}
                   >
                     Submit
                   </button>
                 </>
               )}
-              {stocktakeDetailsStore.stockTakeOrderType === 2 && (
+              {stocktakeDetailsStore.stockTakeOrderType === 1 && (
                 <>
                   <button
                     type="button"

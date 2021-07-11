@@ -84,8 +84,8 @@ export default function reducer(state = initialState, action) {
     case SUBMIT_REQUEST:
       return {
         ...state,
-        requesting: false,
-        successful: true,
+        requesting: true,
+        successful: false,
         messages: "",
         errors: "",
 
@@ -95,7 +95,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         requesting: false,
         successful: true,
-        messages: "",
+        messages: "Submit success",
         errors: "",
 
       };
@@ -103,7 +103,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         requesting: false,
-        successful: true,
+        successful: false,
         messages: "",
         errors: "",
 
