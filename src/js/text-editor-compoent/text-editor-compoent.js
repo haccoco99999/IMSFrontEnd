@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -10,7 +9,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 class TextEditor extends React.Component{
     constructor(props){
         super(props)
-        const html = this.props.mailDescription;
+        const html = "this.props.mailDescription";
         const contentBlock = htmlToDraft(html)
         if(contentBlock){
             
@@ -20,21 +19,23 @@ class TextEditor extends React.Component{
                 editorState,
             }
             
-            console.log(this.state.editorState.getCurrentContent())
+            // console.log(this.state.editorState.getCurrentContent())
         }
         this.onEditorStateChange = this.onEditorStateChange.bind(this)
        
     }
     onEditorStateChange(editorState){
+      
+        this.props.changeMailContent(editorState)
         this.setState({
             editorState,
         })
     }
     componentWillReceiveProps(){
-        if(!this.props.controlPurchaseQuotePage.isClickToPreviewPriceQuote){
+        // if(!this.props.controlPurchaseQuotePage.isClickToPreviewPriceQuote){
             
-            this.props.changeMailContent(this.state.editorState)
-        }
+        //     this.props.changeMailContent(this.state.editorState)
+        // }
     }
     // draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
     render(){

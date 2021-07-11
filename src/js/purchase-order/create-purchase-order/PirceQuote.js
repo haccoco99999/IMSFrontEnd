@@ -12,11 +12,13 @@ import './PriceQuote.css'
 import { SearchToAddProduct, SeachSupplier } from '../../search-component/SearchComponentAll';
 import MergePriceQuote from './MergePriceQuoteComponent';
 import FormAddProductModal from './FormAddProductModal';
+import TextEditor from '../../text-editor-compoent/text-editor-compoent';
+import PreviewSendMail from './preview-quote-request';
 export default function PurchaseOrderConfirm() {
     let dispatch = useDispatch()
     let history = useHistory()
     let location = useLocation()
-    let [eventPage, setEventPage] = useState({
+    const [eventPage, setEventPage] = useState({
         isConform: false,
         isShowMergePage: false,
         isShowAddProductPage: false,
@@ -24,7 +26,9 @@ export default function PurchaseOrderConfirm() {
         isCreatePO: true,
         isShowCancel: false,
         isShowSave: false,
+        isPreview: false,
     })
+    const [editorState, setEditorState] = useState({});
     const [test, setTest] = useState("abc")
     function changeTest(e) {
 
@@ -48,6 +52,7 @@ export default function PurchaseOrderConfirm() {
                     })
         )
     }
+
 
     const columns = [
         {
@@ -99,8 +104,8 @@ export default function PurchaseOrderConfirm() {
 
     ];
 
-    const {purchaseOrderDataGlobal, token} = useSelector(state => ({
-        purchaseOrderDataGlobal :state.getDetailPurchaseReducer.detailPurchaseOrder,
+    const { purchaseOrderDataGlobal, token } = useSelector(state => ({
+        purchaseOrderDataGlobal: state.getDetailPurchaseReducer.detailPurchaseOrder,
         token: state.client.token,
     }))
     const [detailPurchaseState, setDetailPurchaseState] = useState(purchaseOrderDataGlobal)
@@ -146,14 +151,16 @@ export default function PurchaseOrderConfirm() {
         setListProductPurchaseOrder(
             purchaseOrderDataGlobal.purchaseOrderProduct
         )
-        setSupplier({   address: "",
-        description: "",
-        email: "",
-        id: "",
-        phoneNumber: "",
-        salePersonName: "",
-        supplierName: "",
-        transactionId: ""})
+        setSupplier({
+            address: "",
+            description: "",
+            email: "",
+            id: "",
+            phoneNumber: "",
+            salePersonName: "",
+            supplierName: "",
+            transactionId: ""
+        })
         setEventPage({
             isShowEdit: true,
             isCreatePO: true,
@@ -167,7 +174,7 @@ export default function PurchaseOrderConfirm() {
             purchaseOrderNumber: purchaseOrderDataGlobal.orderId,
             supplierId: supplier.id,
             mergedRequisitionIds: [
-               
+
             ],
             deadline: "2021-07-11T05:37:29.052Z",
             mailDescription: "bla bla bl a bl balbsldbfalsbdflasbdfl",
@@ -182,7 +189,7 @@ export default function PurchaseOrderConfirm() {
                 }
             })
         }
-        dispatch(editPriceQuote({data:data, token: token }))
+        dispatch(editPriceQuote({ data: data, token: token }))
         console.log(data)
         setEventPage({
             isShowEdit: true,
@@ -191,6 +198,11 @@ export default function PurchaseOrderConfirm() {
             isShowSave: false,
 
         })
+    }
+    function clickToCreatePurchaseOrder() {
+        setEventPage((state) => ({
+            ...state, isPreview: true
+        }))
     }
     const listButton = [
 
@@ -224,7 +236,7 @@ export default function PurchaseOrderConfirm() {
         {
             isShow: eventPage.isCreatePO,
             title: "Create Purchase Order",
-            action: () => clickToCreate(),
+            action: () => clickToCreatePurchaseOrder(),
             style: {
                 background: "#4e9ae8"
             },
@@ -339,6 +351,40 @@ export default function PurchaseOrderConfirm() {
         // console.log(product)
         setListProductPurchaseOrder((state) => [...state, product])
     }
+  function  sendMailClick() {
+
+        // const formData = new FormData();
+        // formData.append('OrderNumber', this.state.orderID)
+        // formData.append('To', 'hungppse130422@fpt.edu.vn')
+        // formData.append('Content', "<p>Hello<p>")
+        // formData.append('Subject', 'Gui MAil')
+
+        // this.props.sendMailPriceQuote({ priceQuote: formData })
+        // this.goBackClick()
+
+
+    }
+    function changeMailContent(editorState){
+        
+        setEditorState({
+            editorState: editorState
+        })
+    }
+    function clostPreviewSendMail(isSendMail){
+        if(isSendMail){
+                    const formData = new FormData();
+        formData.append('OrderNumber', this.state.orderID)
+        formData.append('To', 'hungppse130422@fpt.edu.vn')
+        formData.append('Content', "<p>Hello<p>")
+        formData.append('Subject', 'Gui MAil')
+
+        // this.props.sendMailPriceQuote({ priceQuote: formData })
+        // this.goBackClick()
+        }
+        setEventPage((state) =>({
+            ...state, isPreview:false
+        }))
+    }
     return (
         <div>
 
@@ -416,6 +462,14 @@ export default function PurchaseOrderConfirm() {
                 clickSetEventMergePriceQuote={clickSetEventMergePriceQuote}
                 isShowMergePage={eventPage.isShowMergePage}
                 mergePriceQuote={mergePriceQuote}
+            />
+             {<TextEditor changeMailContent={changeMailContent}/>}
+
+
+            <PreviewSendMail clostPreviewSendMail={() => this.clostPreviewSendMail()}
+                statusSendMail={eventPage.isPreview}
+                editorState={editorState.editorState}
+                clostPreviewSendMail={clostPreviewSendMail}
             />
             {/* <ListProductsTable
                 // selectProduct={this.selectProduct}
