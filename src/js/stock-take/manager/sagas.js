@@ -7,9 +7,11 @@ import {
   GET_ALL_STOCKTAKE_RESPONSE,
   GET_ALL_STOCKTAKE_ERROR,
 } from "./constants";
+const baseUrl = process.env.REACT_APP_API
 
 function getAllStocktake(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/stocktake/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+  console.log(baseUrl);
+  const url = `${baseUrl}/stocktake/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -36,11 +38,9 @@ function* getAllStocktakeFlow(action) {
   }
 }
 
-
 function* watcher() {
   // yield debounce(500,GET_ALL_STOCKTAKE_REQUEST, getAllStocktakeFlow);
   yield takeLatest(GET_ALL_STOCKTAKE_REQUEST, getAllStocktakeFlow);
-  
 }
 
 export default watcher;
