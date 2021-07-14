@@ -1,25 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "../stocktake.css";
 
-export default function RejectModal() {
+export default function RejectModal(props) {
+  const [reason, setReason] = useState("");
+  function onCancelClick() {
+    setReason("");
+    props.hideModal();
+  }
+  function onClickConfirm() {
+    console.log(reason);
+    props.onRejectClick(reason);
+  }
   return (
     <div>
       <div
-        className="modal"
+        className="modal fade"
         tabIndex="-1"
         id="RejectModal"
         data-bs-keyboard="false"
         data-bs-backdrop="static"
+        ref={props.modalRef}
       >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Reject </h5>
+              <h5 className="modal-title fw-bold">Reject </h5>
               <button
                 type="button"
                 className="btn-close"
-                data-bs-dismiss="modal"
+                onClick={props.hideModal}
+                // data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
@@ -27,12 +38,14 @@ export default function RejectModal() {
               <form>
                 <div class="mb-3">
                   <label for="exampleFormControlTextarea1" class="form-label">
-                    Description
+                    Reason
                   </label>
                   <textarea
                     class="form-control"
                     id="exampleFormControlTextarea1"
                     rows="3"
+                    value={reason}
+                    onChange={(e) => setReason(e.target.value)}
                   ></textarea>
                 </div>
               </form>
@@ -41,15 +54,17 @@ export default function RejectModal() {
               <button
                 type="button"
                 className="btn btn-default"
-                data-bs-dismiss="modal"
+                // data-bs-dismiss="modal"
+                onClick={onCancelClick}
               >
-                No
+                Cancel
               </button>
               <button
                 type="button"
                 className="btn btn-default button-save--modal text-white"
+                onClick={onClickConfirm}
               >
-                Yes
+                Confirm
               </button>
             </div>
           </div>

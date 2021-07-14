@@ -149,7 +149,7 @@ export default function ProductDetails() {
     history.push("/homepage/product/details/create-variant", {
       productId: productDetails.id,
       variantType: productDetails.isVariantType,
-      productUnit: productDetails.unit
+      productUnit: productDetails.unit,
     });
   }
 
@@ -370,13 +370,19 @@ export default function ProductDetails() {
                         </select>
                       )}
                     </p>
-                    {!productDetails.isVariantType && (
+                    {!productDetails.isVariantType && isReturnData && (
                       <>
                         <p>
                           <strong>SKU:</strong>
+                          {listVariants[0].sku}
+                        </p>
+                        <p>
+                          <strong>Barcode:</strong>
+                          {listVariants[0].barcode}
                         </p>
                         <p>
                           <strong>Price:</strong>
+                          {listVariants[0].price}
                         </p>
                       </>
                     )}
@@ -392,7 +398,6 @@ export default function ProductDetails() {
             >
               {productDetails.isVariantType && (
                 <div>
-
                   <div className="mt-3">
                     {isReturnData && (
                       <ListProductsTable

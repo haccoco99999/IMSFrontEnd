@@ -112,3 +112,24 @@
 .space-top-heading{
   margin-top: 20px;
 }
+
+.left-size-paging{
+  width: 350px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.paging-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.button-paging {
+  width: 50px;
+  display: flex;
+  justify-content: space-around;
+}
+.button-paging img{
+  width: 15px;
+}

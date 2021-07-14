@@ -1,4 +1,4 @@
-import { call, put, takeEvery,takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import handleApiErrors from "../../auth/api-errors";
 
 import {
@@ -165,10 +165,10 @@ function* updateStocktakeFlow(action) {
 }
 
 function* watcher() {
-  yield takeLatest(GET_DETAILS_STOCKTAKE_REQUEST, getDetailsStocktakeFlow);
-  yield takeEvery(REJECT_STOCKTAKE_REQUEST, rejectStocktakeFlow);
-  yield takeEvery(ADJUST_REQUEST, adjustStocktakeFlow);
-  yield takeEvery(SUBMIT_REQUEST, submitStocktakeFlow);
-  yield takeEvery(UPDATE_STOCKTAKE_REQUEST, updateStocktakeFlow);
+  yield takeEvery(GET_DETAILS_STOCKTAKE_REQUEST, getDetailsStocktakeFlow);
+  yield takeLatest(REJECT_STOCKTAKE_REQUEST, rejectStocktakeFlow);
+  yield takeLatest(ADJUST_REQUEST, adjustStocktakeFlow);
+  yield takeLatest(SUBMIT_REQUEST, submitStocktakeFlow);
+  yield takeLatest(UPDATE_STOCKTAKE_REQUEST, updateStocktakeFlow);
 }
 export default watcher;

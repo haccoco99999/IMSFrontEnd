@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal, Toast } from "bootstrap";
@@ -225,13 +225,7 @@ export default function create() {
     console.log("Data dang search:", selectedLocation.id);
     dispatch(getListPackageAction({ token: token, id: selectedLocation.id }));
   }
-  function onSelectCheckBoxClick(row, isSelect, rowIndex) {
-    if (isSelect) setSelectedPackage([...selectedPackage, rowIndex]);
-    else
-      setSelectedPackage(
-        selectedPackage.filter((selected) => selected !== rowIndex)
-      );
-  }
+
   useEffect(() => {
     dispatch(getAllLocationsAction({ token: token }));
   }, []);
@@ -242,10 +236,16 @@ export default function create() {
       console.log("Check:", isLoading);
     }
   }, [listPackagesStore]);
-  console.log(listPackagesStore);
+
   useEffect(() => {
-    if (messages !== "") console.log(messages);
+    if (messages !== "") {
+      console.log(messages);
+      history.push("/homepage/stock-take/details", {
+        stocktakeId: messages,
+      });
+    }
   }, [messages]);
+
   //todo: toast
   const toastRef = useRef();
   const showToast = () => {

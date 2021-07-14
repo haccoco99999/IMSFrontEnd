@@ -77,12 +77,7 @@ export default function ListLocationsModal(props) {
                   </div>
                 )}
               </ToolkitProvider>
-              {/* <Table
-                keyField="id"
-                data={props.listLocations}
-                columns={columns}
-                selectRow={selectRow}
-              /> */}
+
             </div>
             <div className="modal-footer">
               <button

@@ -8,6 +8,7 @@ import Create from "./create/stocktake-create";
 import Manager from "./manager/stoctake-manager";
 import StocktakeDetails from "./details/stocktake-details";
 import CheckedLocationDetails from './details/stocktake-checkedlocation-details'
+import Details2 from "./details/StocktakeDetails2"
 export default function () {
   return (
     // <Details/>
@@ -23,7 +24,8 @@ export default function () {
             <Create />
           </Route>
           <Route exact path="/homepage/stock-take/details">
-            <StocktakeDetails />
+            {/* <StocktakeDetails /> */}
+            <Details2/>
           </Route>
           <Route path="/homepage/stock-take/location-details">
             <CheckedLocationDetails/>

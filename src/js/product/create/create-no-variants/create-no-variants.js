@@ -52,14 +52,15 @@ export default function () {
         {
           name: dataLastPage.name,
           price: formData.price,
-          salePrice: formData.salesprice,
+          salePrice: formData.saleprice,
           barcode: formData.barcode,
           sku: formData.sku,
-          unit: formData.unit,
+          unit: dataLastPage.unit,
         },
       ],
     };
-
+    console.log("DATA:", data);
+    console.log("UNIT:", formData.unit);
     console.log(JSON.stringify(data));
     dispatch(createProduct({ data: data, token: token }));
   }
@@ -150,7 +151,7 @@ export default function () {
             <div class="mb-3">
               <div class="row g-3 align-items-center">
                 <div class="col">
-                  <label for="salesprice" class="col-form-label">
+                  <label for="price" class="col-form-label">
                     Price
                   </label>{" "}
                   <input
@@ -162,7 +163,7 @@ export default function () {
                   />
                 </div>
                 <div class="col">
-                  <label for="quantity" class="col-form-label">
+                  <label for="saleprice" class="col-form-label">
                     Sale Price
                   </label>{" "}
                   <input

@@ -83,9 +83,9 @@ export default function CreateVariant() {
             >
               Delete
             </button> */}
-            <button className="btn btn-danger button-tab text-white button me-3">
+            {/* <button className="btn btn-danger button-tab text-white button me-3">
               Add Variant
-            </button>
+            </button> */}
 
             <button
               className="btn btn-primary button-tab button me-3"

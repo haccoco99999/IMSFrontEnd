@@ -21,8 +21,11 @@ const initialState = {
   successful: false,
   messages: "",
   errors: "",
-  goodIssue: {
+  stocktake: {
     groupLocations: [],
+    stockTakeOrderType: "",
+    id: "",
+    transaction: {},
   },
 };
 
@@ -43,7 +46,7 @@ export default function reducer(state = initialState, action) {
         successful: true,
         messages: "",
         errors: "",
-        goodIssue: action.json.singleResult,
+        stocktake: action.json.singleResult,
       };
     case GET_DETAILS_STOCKTAKE_ERROR:
       return {
@@ -52,7 +55,7 @@ export default function reducer(state = initialState, action) {
         successful: true,
         messages: "",
         errors: "",
-        goodIssue: {},
+        stocktake: {},
       };
     case REJECT_STOCKTAKE_REQUEST:
       return {
@@ -61,16 +64,14 @@ export default function reducer(state = initialState, action) {
         successful: true,
         messages: "",
         errors: "",
-    
       };
     case REJECT_STOCKTAKE_RESPONSE:
       return {
         ...state,
         requesting: false,
         successful: true,
-        messages: "",
+        messages: "Reject Success",
         errors: "",
-
       };
     case REJECT_STOCKTAKE_ERROR:
       return {
@@ -79,7 +80,6 @@ export default function reducer(state = initialState, action) {
         successful: true,
         messages: "",
         errors: "",
-
       };
     case SUBMIT_REQUEST:
       return {
@@ -88,16 +88,14 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-
       };
     case SUBMIT_RESPONSE:
       return {
         ...state,
         requesting: false,
         successful: true,
-        messages: "Submit success",
+        messages: "Submit Success",
         errors: "",
-
       };
     case SUBMIT_ERROR:
       return {
@@ -106,7 +104,6 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-
       };
     case ADJUST_REQUEST:
       return {
@@ -115,16 +112,14 @@ export default function reducer(state = initialState, action) {
         successful: true,
         messages: "",
         errors: "",
-
       };
     case ADJUST_RESPONSE:
       return {
         ...state,
         requesting: false,
         successful: true,
-        messages: "",
+        messages: "Adjust Success",
         errors: "",
-   
       };
     case ADJUST_ERROR:
       return {
@@ -133,7 +128,6 @@ export default function reducer(state = initialState, action) {
         successful: true,
         messages: "",
         errors: "",
-
       };
     case UPDATE_STOCKTAKE_REQUEST:
       return {
@@ -142,16 +136,14 @@ export default function reducer(state = initialState, action) {
         successful: true,
         messages: "",
         errors: "",
-
       };
     case UPDATE_STOCKTAKE_RESPONSE:
       return {
         ...state,
         requesting: false,
         successful: true,
-        messages: "",
+        messages: "Update Success",
         errors: "",
-
       };
     case UPDATE_STOCKTAKE_ERROR:
       return {
@@ -160,7 +152,6 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-
       };
     default:
       return state;

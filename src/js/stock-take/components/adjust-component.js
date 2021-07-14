@@ -1,7 +1,7 @@
 import React from "react";
 
 import "../stocktake.css";
-export default function AdjustInventoryModal() {
+export default function AdjustInventoryModal(props) {
   return (
     <div>
       <div
@@ -10,6 +10,7 @@ export default function AdjustInventoryModal() {
         id="AdjustInventoryModal"
         data-bs-keyboard="false"
         data-bs-backdrop="static"
+        ref={props.modalRef}
       >
         <div className="modal-dialog">
           <div className="modal-content">
@@ -20,6 +21,7 @@ export default function AdjustInventoryModal() {
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                onClick={props.hideModal}
               ></button>
             </div>
             <div className="modal-body">
@@ -27,7 +29,7 @@ export default function AdjustInventoryModal() {
                 Inventory balance will change the amount of inventory in the
                 system with the following products
               </p>
-              <div>
+              {/* <div>
                 <table class="table">
                   <thead>
                     <th>Product</th> <th>Quantity</th>
@@ -43,7 +45,7 @@ export default function AdjustInventoryModal() {
                     </tr>
                   </tbody>
                 </table>
-              </div>
+              </div> */}
               <p>
                 <strong>Are you sure you want to adjust the stock?</strong>
               </p>
@@ -52,13 +54,15 @@ export default function AdjustInventoryModal() {
               <button
                 type="button"
                 className="btn btn-default"
-                data-bs-dismiss="modal"
+                // data-bs-dismiss="modal"
+                onClick={props.hideModal}
               >
                 No
               </button>
               <button
                 type="button"
                 className="btn btn-default button-save--modal text-white"
+                onClick={props.onAdjustClick}
               >
                 Yes
               </button>
