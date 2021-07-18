@@ -5,9 +5,9 @@ import { Route, Switch } from "react-router-dom";
 import "./sale-man.css";
 
 //components
-import Manager from "./manager/salesman-manager";
-import Create from "./create/create-purchase-requisition";
-import Details from "./details/details";
+import Manager from "./manager/PurchaseRequisitionManager";
+import Create from "./create/CreatePurchaseRequisition";
+import Details from "./details/PurchaseRequisitionDetails";
 export default function () {
   return (
     <div className="home_content wrapper">

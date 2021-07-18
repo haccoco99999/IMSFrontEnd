@@ -7,6 +7,7 @@ import {
   GET_ALL_STOCKTAKE_RESPONSE,
   GET_ALL_STOCKTAKE_ERROR,
 } from "./constants";
+
 const baseUrl = process.env.REACT_APP_API
 
 function getAllStocktake(action) {

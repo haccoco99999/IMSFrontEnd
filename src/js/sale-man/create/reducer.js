@@ -1,4 +1,4 @@
-import {
+  import {
   CREATE_PR_REQUEST,
   CREATE_PR_RESPONSE,
   CREATE_PR_ERROR,

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Table from "react-bootstrap-table-next";
-import paginationFactory, {
-  PaginationProvider,
-} from "react-bootstrap-table2-paginator";
+// import paginationFactory, {
+//   PaginationProvider,
+// } from "react-bootstrap-table2-paginator";
 //css
 import "../stocktake.css";
 

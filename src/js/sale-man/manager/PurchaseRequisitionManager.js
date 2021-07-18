@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
+import BootstrapTable from "react-bootstrap-table-next";
 //css
 import "../sale-man.css";
 
 //components
 import { getAllPRAction } from "./action";
-import ListReceiptTable from "../../table-receipt/ListReceiptsTable";
+// import ListReceiptTable from "../../table-receipt/ListReceiptsTable";
+import PagingComponent from "../../product/components/paging-component";
 
 export default function () {
   let history = useHistory();
@@ -20,6 +21,30 @@ export default function () {
     createdDate: true,
     modifiedDate: true,
   });
+
+  //todo: declare  bootstrap table
+  const columns = [
+    {
+      dataField: "id",
+      text: "ID",
+    },
+    {
+      dataField: "status",
+      text: "Status",
+    },
+    {
+      dataField: "createdByName",
+      text: "Created By",
+    },
+    {
+      dataField: "createdDate",
+      text: "Create Date",
+    },
+    {
+      dataField: "modifiedDate",
+      text: "Modify Date",
+    },
+  ];
 
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
@@ -53,6 +78,14 @@ export default function () {
       purchaseRequisitionId: row.id,
     });
   }
+
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      history.push("/homepage/sale-man/details", {
+        purchaseRequisitionId: row.id,
+      });
+    },
+  };
 
   useEffect(() => {
     dispatch(
@@ -140,7 +173,7 @@ export default function () {
         </div>
 
         <div className="mt-3">
-          <ListReceiptTable
+          {/* <ListReceiptTable
             listHeaderEdit={listEditHeader}
             listColumn={listValueColumn}
             listData={listData}
@@ -150,6 +183,23 @@ export default function () {
             currentPage={currentPage}
             pageCount={pageCount}
             onRowClick={onClickToDetails}
+          /> */}
+          <BootstrapTable
+            keyField="id"
+            striped
+            hover
+            condensed
+            headerClasses="table-header-receipt"
+            noDataIndication="Table is Empty"
+            columns={columns}
+            data={listData}
+            rowEvents={rowEvents}
+          />
+          <PagingComponent
+            currentPage={currentPage}
+            pageCount={pageCount}
+            nextPagingClick={nextPagingClick}
+            backPagingClick={backPagingClick}
           />
         </div>
       </div>

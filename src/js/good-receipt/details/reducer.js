@@ -11,9 +11,9 @@ const initialState = {
   errors: "",
   receivingOrder: {
     supplier: {},
-    receivedOrderItems: null,
+    receivedOrderItems: [],
     transaction: {
-      createdDate: "",
+     transactionRecord: [{ date: "", applicationUser: {} }],
     },
   },
 };

@@ -7,6 +7,7 @@ import "../../product.css";
 
 //components
 import { createProduct } from "../action";
+import NavigationBar from "../../../components/navbar/navbar-component";
 
 const formReducer = (state, event) => {
   return {
@@ -46,6 +47,8 @@ export default function () {
     const data = {
       name: dataLastPage.name,
       brandName: dataLastPage.brand,
+      brandDescription: "",
+      unit: dataLastPage.unit,
       categoryId: selectedCategory.id,
       isVariantType: false,
       productVariants: [
@@ -55,7 +58,6 @@ export default function () {
           salePrice: formData.saleprice,
           barcode: formData.barcode,
           sku: formData.sku,
-          unit: dataLastPage.unit,
         },
       ],
     };
@@ -64,6 +66,20 @@ export default function () {
     console.log(JSON.stringify(data));
     dispatch(createProduct({ data: data, token: token }));
   }
+
+  //todo: list nav button
+  const listButton = setListButtonNav();
+  function setListButtonNav() {
+    return [
+      {
+        isShow: true,
+        title: "Save",
+        action: () => onClickSave(),
+        class: "btn-primary",
+      },
+    ];
+  }
+
   useEffect(() => {
     if (messages !== "")
       history.push("/homepage/product/details", {
@@ -72,17 +88,14 @@ export default function () {
   }, [messages]);
   //   todo: gop chung 2 bang , sau do tach ra
   return (
-    <div className="home_content ">
-      {/* todo: task heading */}
-      <div className=" tab-fixed container-fluid  fixed-top">
+    <div>
+      {/* <div className=" tab-fixed container-fluid  fixed-top">
         <div className=" d-flex mb-3 justify-content-end mt-4 ">
-          {/* testing */}
           <a className="me-2" onClick={goBackClick}>
             <h3>Back</h3>
           </a>
           <h2 className="id-color fw-bold me-auto">Create new Product</h2>
           <div>
-            {/* <button className="btn btn-default button-tab">Cancel</button> */}
 
             <button
               className="btn btn-primary button-tab me-3 text-white"
@@ -92,8 +105,13 @@ export default function () {
             </button>
           </div>
         </div>
-      </div>
-
+      </div> */}
+      <NavigationBar
+        listButton={listButton}
+        titleBar="No Variant"
+        actionGoBack={goBackClick}
+        status=""
+      />
       {/* content */}
       <div className="wrapper space-top">
         {/* show product details */}

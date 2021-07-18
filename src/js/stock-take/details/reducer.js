@@ -25,7 +25,9 @@ const initialState = {
     groupLocations: [],
     stockTakeOrderType: "",
     id: "",
-    transaction: {},
+    transaction: {
+      transactionRecord: [{ date: "", applicationUser: {} }],
+    },
   },
 };
 

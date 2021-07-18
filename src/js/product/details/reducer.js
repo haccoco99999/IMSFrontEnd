@@ -26,6 +26,7 @@ const initialState = {
   errors: "",
   productDetails: {
     brand: {},
+    category: {},
     productVariants: null,
   },
   productVariant: {

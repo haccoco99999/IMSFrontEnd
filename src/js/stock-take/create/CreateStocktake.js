@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal, Toast } from "bootstrap";
 import Table from "react-bootstrap-table-next";
@@ -17,20 +17,19 @@ import {
 } from "./action";
 import SpinnerComponent from "../components/spinner-component";
 import ToastComponent from "../components/toast-component";
-
-export default function create() {
+import NavigationBar from "../../components/navbar/navbar-component";
+export default function CreateStocktakeComponent() {
   let history = useHistory();
   let dispatch = useDispatch();
 
   //todo: state store
-  const { token, listProductsStore, listPackagesStore, messages } = useSelector(
-    (state) => ({
+  const { token, listLocationsStore, listPackagesStore, messages } =
+    useSelector((state) => ({
       token: state.client.token,
-      listProductsStore: state.createStocktakeReducer.listLocations,
+      listLocationsStore: state.createStocktakeReducer.listLocations,
       listPackagesStore: state.createStocktakeReducer.listPackages,
       messages: state.createStocktakeReducer.messages,
-    })
-  );
+    }));
 
   const [isLoading, setIsLoading] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState({
@@ -60,6 +59,7 @@ export default function create() {
     //     "-" +
     //     packageDetails.productVariantId
     // );
+
     const temp = [...listCheckedItems];
     temp[event.target.id].quantity = packageDetails.quantity;
     temp[event.target.id].id = packageDetails.id;
@@ -76,7 +76,6 @@ export default function create() {
     setListCheckedItems(
       listCheckedItems.filter((_, index) => index !== rowIndex)
     );
-    // console.log("Da xoa:",listCheckedItems)
   }
 
   function onAddCheckItemClick() {
@@ -114,23 +113,44 @@ export default function create() {
     {
       dataField: "id",
       text: "Package ID",
-      formatter: (cellContent, row, rowIndex) => (
-        <select
-          id={rowIndex}
-          class="form-select"
-          aria-label="Default select example"
-          defaultValue=""
-          onChange={onChangeSelectPackage}
-        >
-          <option value="" disabled>
-            -- No Selected --
-          </option>
+      editable: false,
+      formatter: (cellContent, row, rowIndex) => {
+        return (
+          <>
+          {/* <div>
+            Selected Package: {row.id}
+          </div> */}
+          <select
+            id={rowIndex}
+            class="form-select"
+            aria-label="Default select example"
+            defaultValue={row.id}
+            onChange={onChangeSelectPackage}
+          >
+            <option value={""} disabled>
+              Select package ID
+            </option>
 
-          {listPackagesStore.map((item) => (
-            <option value={item.id}>{item.id}</option>
-          ))}
-        </select>
-      ),
+            {listPackagesStore.map((item) => (
+              <option id={item.id} value={item.id}>
+                {item.id}
+              </option>
+            ))}
+          </select>
+          </>
+        );
+      },
+      // editable: true,
+
+      // editor: {
+      //   type: Type.SELECT,
+      //   options: listPackagesStore.map((item) => {
+      //     return {
+      //       value: item.id,
+      //       label: item.id,
+      //     };
+      //   }),
+      // },
     },
     {
       dataField: "productVariantId",
@@ -175,13 +195,18 @@ export default function create() {
     },
   ];
 
-  //todo: declare select row
-  // const selectRow = {
-  //   mode: "checkbox",
-  //   clickToSelect: true,
-  //   clickToEdit: true,
-  //   onSelect: onSelectCheckBoxClick,
-  // };
+  //todo: function nav button
+  const listButton = setListButtonNav();
+  function setListButtonNav() {
+    return [
+      {
+        isShow: true,
+        title: "Submit",
+        class: " btn-primary",
+        action: () => onClickSubmit,
+      },
+    ];
+  }
 
   function goBackClick() {
     history.goBack();
@@ -223,6 +248,17 @@ export default function create() {
   function onSelectLocationClick() {
     hideModal();
     console.log("Data dang search:", selectedLocation.id);
+    //reset
+    setIsLoading(false);
+    setListCheckedItems([
+      {
+        id: "",
+        productVariantId: "",
+        quantity: "",
+        counted: "",
+        note: "",
+      },
+    ]);
     dispatch(getListPackageAction({ token: token, id: selectedLocation.id }));
   }
 
@@ -263,11 +299,7 @@ export default function create() {
 
   return (
     <div>
-      {/* todo: task heading */}
-      {/* todo: gop chung 2 page voi 2 nut khâc nhau  */}
-      <div className=" tab-fixed container-fluid  fixed-top">
-        {/* todo: task heading */}
-        <div className=" tab-fixed container-fluid  fixed-top">
+      {/* <div className=" tab-fixed container-fluid  fixed-top">
           <div className=" d-flex mb-3 justify-content-end mt-4 ">
             <a className="me-2" onClick={goBackClick}>
               <h3>Back</h3>
@@ -282,73 +314,76 @@ export default function create() {
               </button>
             </div>
           </div>
-        </div>
-
-        {/* content */}
-        <div className="wrapper space-top">
-          <div className="shadow wrapper-content">
+        </div> */}
+      <NavigationBar
+        actionGoBack={goBackClick}
+        titleBar="Create"
+        status=""
+        listButton={listButton}
+      />
+      {/* content */}
+      <div className="wrapper space-top">
+        <div className="shadow wrapper-content">
+          <div className="mt-3">
+            <div className="title-heading mt-2">
+              <span>Select Location</span>
+            </div>
             <div className="mt-3">
-              <div className="title-heading mt-2">
-                <span>Select Location</span>
-              </div>
-              <div className="mt-3">
-                {/* <SearchToAddProduct /> */}
-                <button
-                  class="btn btn-outline-secondary"
-                  type="button"
-                  // data-bs-target="#ListLocationstModal"
-                  // data-bs-toggle="modal"
-                  onClick={showModal}
-                >
-                  Search More...
-                </button>
-                <button
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                // data-bs-target="#ListLocationstModal"
+                // data-bs-toggle="modal"
+                onClick={showModal}
+              >
+                Search More...
+              </button>
+              {/* <button
                   className="btn btn-outline-secondary"
                   type="button"
                   onClick={showToast}
                 >
                   Toast
-                </button>
-              </div>
+                </button> */}
             </div>
           </div>
-          {isLoading ? (
-            <>
-              <div className="shadow wrapper-content mt-3">
-                <button
-                  className="btn btn-secondary"
-                  onClick={onAddCheckItemClick}
-                >
-                  Add
-                </button>
-                <button
-                  className="btn btn-secondary"
-                  onClick={clickDeleteCheckItems}
-                >
-                  Discard
-                </button>
-                <Table
-                  keyField="id"
-                  data={listCheckedItems}
-                  columns={columns}
-                  cellEdit={cellEditFactory({
-                    mode: "click",
-                    blurToSave: true,
-                  })}
-                  // selectRow={selectRow}
-                />
-              </div>
-            </>
-          ) : (
-            <SpinnerComponent />
-          )}
         </div>
+        {isLoading ? (
+          <>
+            <div className="shadow wrapper-content mt-3">
+              <button
+                className="btn btn-secondary"
+                onClick={onAddCheckItemClick}
+              >
+                Add
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={clickDeleteCheckItems}
+              >
+                Discard
+              </button>
+              <Table
+                keyField="id"
+                data={listCheckedItems}
+                columns={columns}
+                cellEdit={cellEditFactory({
+                  mode: "click",
+                  blurToSave: true,
+                })}
+                // selectRow={selectRow}
+              />
+            </div>
+          </>
+        ) : (
+          <SpinnerComponent />
+        )}
       </div>
       {/* <AddMultiple /> */}
       <ListLocationsModal
         modalRef={modalRef}
         hideModal={hideModal}
-        listLocations={listProductsStore}
+        listLocations={listLocationsStore}
         handleOnSelect={handleOnSelect}
         onSelectLocationClick={onSelectLocationClick}
       />

@@ -36,7 +36,7 @@ export default function StocktakeDetailsComponent() {
     groupLocationStore,
     statusStocktakeStore,
     IDStocktakeStore,
-    transactionStore,
+    transactionRecordStore,
   } = useSelector((state) => ({
     token: state.client.token,
     messages: state.getDetailsStocktakeReducer.messages,
@@ -46,11 +46,12 @@ export default function StocktakeDetailsComponent() {
     statusStocktakeStore:
       state.getDetailsStocktakeReducer.stocktake.stockTakeOrderType,
     IDStocktakeStore: state.getDetailsStocktakeReducer.stocktake.id,
-    transactionStore: state.getDetailsStocktakeReducer.stocktake.transaction,
+    transactionStore:
+      state.getDetailsStocktakeReducer.stocktake.transaction.transactionRecord,
   }));
   console.log(stocktakeDetailsStore);
-  //   console.log(groupLocationStore[0]);
-  //   console.log(groupLocationStore[0].checkItems);
+  console.log(groupLocationStore[0]);
+  // console.log(groupLocationStore[0].checkItems);
   //todo: reject modal declare
   const modalRef = useRef();
   const showRejectModal = () => {
@@ -118,20 +119,28 @@ export default function StocktakeDetailsComponent() {
             valid: false,
             message: "Price should be numeric",
           };
+        } else {
+          // let foundElementIndex = listCompare.find(
+          //   (element) => element.packageId === oldValue.packageId
+          // );
+          // let oldActualQuantity = foundElementIndex.actualQuantity;
+          // // let oldNote = foundElementIndex.note;
+          // if (newValue !== oldActualQuantity)
+          //   foundElementIndex.isChanging = true;
+          // else {
+          //   if (oldValue.note === oldNote) foundElementIndex.isChanging = false;
+          // }
+          // setListCompare({
+          //   ...listCompare.map((item) =>
+          //     item.packageId === foundElementIndex.packageId
+          //       ? {
+          //           ...foundElementIndex,
+          //         }
+          //       : item
+          //   ),
+          // });
+          // console.log(foundElementIndex);
         }
-        // else {
-        //   const foundElementIndex = listCompare.find(
-        //     (element) => element.packageId === oldValue.packageId
-        //   );
-        //   const oldActualQuantity = foundElementIndex.actualQuantity;
-        //   const oldNote = foundElementIndex.note;
-        //   if (newValue !== oldActualQuantity)
-        //     foundElementIndex.isChanging = true;
-        //   else {
-        //     if (oldValue.note === oldNote) foundElementIndex.isChanging = false;
-        //   }
-        //   console.log(foundElementIndex);
-        // }
       },
       formatter: (cellContent, row, rowIndex) =>
         (listCheckedItems[rowIndex].actualQuantity = row.actualQuantity),
@@ -176,7 +185,9 @@ export default function StocktakeDetailsComponent() {
 
   //todo: function Nav Button
   const listButton = setListButtonNav(statusStocktakeStore);
-
+  // function clicktTest() {
+  //   console.log(listCompare);
+  // }
   function setListButtonNav(status) {
     if (status === 0) {
       return [
@@ -192,6 +203,7 @@ export default function StocktakeDetailsComponent() {
           isShow: true,
           title: "Submit",
           action: () => onSubmitClick(),
+          // action: () => clicktTest(),
           class: "btn-primary",
           // style: {},
         },
@@ -236,11 +248,11 @@ export default function StocktakeDetailsComponent() {
     const data = {
       stockTakeGroupLocation: [
         {
-          locationId: groupLocationStore[0].location.locationId,
+          locationId: groupLocationStore[0].location.id,
           checkItems: listCheckedItems.map((checkItem) => {
             return {
-              packageId: checkItem.id,
-              actualQuantity: checkItem.counted,
+              packageId: checkItem.packageId,
+              actualQuantity: checkItem.actualQuantity,
               note: checkItem.note,
             };
           }),
@@ -248,6 +260,8 @@ export default function StocktakeDetailsComponent() {
       ],
       stockTakeId: location.state.stocktakeId,
     };
+    console.log("Data Update:", data);
+    dispatch(updateAction({ token: token, data: data }));
   }
   function onRejectClick(reason) {
     hideRejectModal();
@@ -279,6 +293,7 @@ export default function StocktakeDetailsComponent() {
   }
 
   //todo: discard the input
+  //reset default
   function onDiscardClick() {
     setListCheckedItems(
       groupLocationStore[0].checkItems.map((item) => {
@@ -293,6 +308,7 @@ export default function StocktakeDetailsComponent() {
       })
     );
   }
+
   //todo: useEffect
   useEffect(() => {
     dispatch(
@@ -333,28 +349,14 @@ export default function StocktakeDetailsComponent() {
   }, [groupLocationStore]);
 
   useEffect(() => {
-    // if (listCompare.length > 0) {
-    //   const found = listCompare.find((item) => item.isChanging === true);
-    //   console.log("ISChanging",found)
-    //   if (found !== undefined) setIsChanging(true);
-    //   else setIsChanging(false);
-    // }
-    if (listCheckedItems.length > 0) {
-      for (var i = 0; i < listCheckedItems.length; i++)
-        console.log("Dang kiem tra", listCheckedItems[i].actualQuantity);
-      // console.log
-      // if (
-      //   listCheckedItems[i].actualQuantity !==
-      //     listCompare[i].actualQuantity
-      // )
-      //  { setIsChanging(true);
-
-      // }
-      // else setIsChanging(false);
+    const check = (element) => element.isChanging === true;
+    if (listCompare.length > 0) {
+      // console.log(listCompare.some(check))
+      if (listCompare.some(check)) setIsChanging(true);
+      else setIsChanging(false);
     }
-  }, [listCompare, listCheckedItems]);
-  console.log(listCheckedItems);
-  // console.log(listCompare);
+  }, [listCompare]);
+  // console.log()
   useEffect(() => {
     if (messages !== "") {
       if (
@@ -461,14 +463,28 @@ export default function StocktakeDetailsComponent() {
               <div className="wrapper-content shadow mt-3">
                 {isChanging && (
                   <>
-                    <button type="button" class="btn btn-secondary">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      onClick={onDiscardClick}
+                    >
                       Discard
                     </button>
-                    <button type="button" class="btn btn-primary">
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      onClick={onSaveClick}
+                    >
                       Save
                     </button>
                   </>
                 )}
+                {/* <button type="button" class="btn btn-secondary">
+                  Discard
+                </button>
+                <button type="button" class="btn btn-primary">
+                  Save
+                </button> */}
 
                 {isLoading && (
                   <Table
@@ -479,6 +495,60 @@ export default function StocktakeDetailsComponent() {
                     cellEdit={cellEditFactory({
                       mode: "click",
                       blurToSave: true,
+                      beforeSaveCell(oldValue, newValue, row, column, done) {
+                        let findEle = listCompare.find(
+                          (e) => e.packageId === row.packageId
+                        );
+                        if (column.dataField === "actualQuantity") {
+                          console.log("Actual quantity");
+                          let currentNote = row.note;
+                          console.log(currentNote);
+                          if (
+                            newValue !== findEle.actualQuantity ||
+                            currentNote !== findEle.note
+                          ) {
+                            setListCompare([
+                              ...listCompare,
+                              listCompare.map((e) =>
+                                e === findEle ? (e.isChanging = true) : e
+                              ),
+                            ]);
+                          } else {
+                            // if (currentNote === findEle.note)
+                            setListCompare([
+                              ...listCompare,
+                              listCompare.map((e) =>
+                                e === findEle ? (e.isChanging = false) : e
+                              ),
+                            ]);
+                          }
+                        } else if (column.dataField === "note") {
+                          console.log("Note");
+                          let currentQuantity = row.actualQuantity;
+                          if (
+                            newValue !== findEle.note ||
+                            currentQuantity !== findEle.actualQuantity
+                          )
+                            setListCompare([
+                              ...listCompare,
+                              listCompare.map((e) =>
+                                e === findEle ? (e.isChanging = true) : e
+                              ),
+                            ]);
+                          else
+                            setListCompare([
+                              ...listCompare,
+                              listCompare.map((e) =>
+                                e === findEle ? (e.isChanging = false) : e
+                              ),
+                            ]);
+                        }
+
+                        console.log(findEle);
+                        console.log(row);
+                        console.log(column);
+                        console.log(oldValue);
+                      },
                     })}
                   />
                 )}

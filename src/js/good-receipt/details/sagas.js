@@ -6,11 +6,12 @@ import {
   GET_GR_DETAILS_ERROR,
 } from "./constants";
 
-const getGoodsReceiptDetailsURL =
-  "https://imspublicapi.herokuapp.com/api/goodsreceipt/id/";
+// const getGoodsReceiptDetailsURL =
+//   "https://imspublicapi.herokuapp.com/api/goodsreceipt/id/";
 
 function getGoodsReceiptDetails(action) {
-  return fetch(getGoodsReceiptDetailsURL + action.id, {
+  const url = `${process.env.REACT_APP_API}/goodsreceipt/id/${action.id}`
+  return fetch(url, {
     method: "GET",
     headers: {
       Authorization: "Bearer " + action.token,

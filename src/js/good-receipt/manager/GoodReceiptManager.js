@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import BootstrapTable from "react-bootstrap-table-next";
 // css
 import "../goodreceipt.css";
 import "./good-receipt-manager.css";
@@ -8,14 +9,14 @@ import "./good-receipt-manager.css";
 //component
 import ListReceiptTable from "../../table-receipt/ListReceiptsTable";
 import { searchGoodsReceiptAction } from "./action";
+import PagingComponent from "../../product/components/paging-component";
 
 export default function GoodsReceipt() {
   let history = useHistory();
   let dispatch = useDispatch();
 
-
-  const { list_goods_receipt, pageCount, token } = useSelector((state) => ({
-    list_goods_receipt: state.getGoodsReceiptReducer.listGoodsReceipt,
+  const { listGoodsReceipt, pageCount, token } = useSelector((state) => ({
+    listGoodsReceipt: state.getGoodsReceiptReducer.listGoodsReceipt,
     pageCount: state.getGoodsReceiptReducer.pageCount,
     token: state.client.token,
   }));
@@ -39,9 +40,39 @@ export default function GoodsReceipt() {
     id: true,
   });
 
+  //todo: declare bootstrap table
+  const columns = [
+    {
+      dataField: "id",
+      text: "ID",
+    },
+    {
+      dataField: "purchaseOrderId",
+      text: "Purchase Order ID",
+    },
+    {
+      dataField: "createdBy",
+      text: "Created By",
+    },
+    {
+      dataField: "createdDate",
+      text: "Created Date",
+    },
+    { dataField: "modifiedDate", text: "Modified Date" },
+  ];
+
   const [listEditHeader, setListEditHeader] = useState({
     id: "Goods Receipt ID",
   });
+
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      history.push("/homepage/good-receipt/details", {
+        goodsreceiptId: row.id,
+        fromPage: "ManagerPage",
+      });
+    },
+  };
 
   useEffect(() => {
     console.log("CurrentPage", currentPage);
@@ -149,7 +180,7 @@ export default function GoodsReceipt() {
         </div>
 
         <div className="mt-3">
-          <ListReceiptTable
+          {/* <ListReceiptTable
             listHeaderEdit={listEditHeader}
             listColumn={listValueColumn}
             listData={list_goods_receipt}
@@ -159,6 +190,23 @@ export default function GoodsReceipt() {
             currentPage={currentPage}
             pageCount={pageCount}
             onRowClick={onClickToDetails}
+          /> */}
+          <BootstrapTable
+            keyField="id"
+            striped
+            hover
+            condensed
+            headerClasses="table-header-receipt"
+            noDataIndication="Table is Empty"
+            columns={columns}
+            data={listGoodsReceipt}
+            rowEvents={rowEvents}
+          />
+          <PagingComponent
+            currentPage={currentPage}
+            pageCount={pageCount}
+            nextPagingClick={nextPagingClick}
+            backPagingClick={backPagingClick}
           />
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
+import BootstrapTable from "react-bootstrap-table-next";
 //css
 import "../../product.css";
 
@@ -9,7 +9,7 @@ import "../../product.css";
 import Filter from "../../filter";
 import { getAllProductAction } from "./action";
 import Table from "../../../table-receipt/ListReceiptsTable";
-
+import PagingComponent from "../../components/paging-component";
 export default function () {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -26,15 +26,49 @@ export default function () {
   const [listValueColumn, setListValueColumn] = useState({
     productId: true,
     name: true,
-    category: true,brand:true
+    category: true,
+    brand: true,
   });
 
   const [listEditHeader, setListEditHeader] = useState({
     productId: "Product ID",
     name: "Product Name",
-    category: "Category",brand:"Brand"
+    category: "Category",
+    brand: "Brand",
   });
 
+  //todo:declare bootraps table
+  const columns = [
+    {
+      dataField: "productId",
+      text: "Product ID",
+    },
+    {
+      dataField: "name",
+      text: "Product Name",
+    },
+    {
+      dataField: "category",
+      text: "Category",
+    },
+    { dataField: "brand", text: "Brand" },
+  ];
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      history.push("/homepage/product/details", {
+        productId: row.productId,
+        // fromPage: "ManagerPage",
+      });
+    },
+  };
+
+  // function onClickToDetails(row) {
+  //   history.push("/homepage/product/details", {
+  //     productId: row.productId,
+  //     // fromPage: "ManagerPage",
+  //   });
+  // }
+  //todo: function button
   function pushAddPage() {
     history.push("/homepage/product/create");
   }
@@ -134,7 +168,7 @@ export default function () {
       </div>
 
       <div className="mt-3">
-        <Table
+        {/* <Table
           listHeaderEdit={listEditHeader}
           listColumn={listValueColumn}
           listData={listProducstStore}
@@ -144,9 +178,27 @@ export default function () {
           currentPage={currentPage}
           pageCount={pageCount}
           onRowClick={onClickToDetails}
+        /> */}
+      </div>
+      <div className="mt-3">
+        <BootstrapTable
+          keyField="productId"
+          striped
+          hover
+          condensed
+          columns={columns}
+          headerClasses="table-header-receipt"
+          noDataIndication="Table is Empty"
+          data={listProducstStore}
+          rowEvents={rowEvents}
+        />
+        <PagingComponent
+          currentPage={currentPage}
+          pageCount={pageCount}
+          nextPagingClick={nextPagingClick}
+          backPagingClick={backPagingClick}
         />
       </div>
-
       <Filter />
     </div>
   );

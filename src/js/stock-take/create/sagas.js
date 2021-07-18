@@ -35,7 +35,7 @@ function createStocktake(action) {
 
 function getAllLocations(action) {
   const url =
-    "http://imspublicapi.herokuapp.com/api/package?CurrentPage=0&SizePerPage=0&IsLocationOnly=true";
+    `${process.env.REACT_APP_API}/package?IsLocationOnly=true&CurrentPage=0&SizePerPage=0`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -54,7 +54,7 @@ function getAllLocations(action) {
 }
 
 function getPackages(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/package?SearchQuery=${action.id}&CurrentPage=0&SizePerPage=0&IsLocationOnly=false`;;
+  const url = `${process.env.REACT_APP_API}/package?SearchQuery=${action.id}&CurrentPage=0&SizePerPage=0&IsLocationOnly=false`;;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -101,7 +101,7 @@ function* getPackagesFlow(action) {
 }
 function* watcher() {
   yield takeEvery(CREATE_STOCKTAKE_REQUEST, createStocktakeFlow);
-  yield takeEvery(GET_LOCATION_REQUEST, getAllLocationsFlow);
+  yield takeLatest(GET_LOCATION_REQUEST, getAllLocationsFlow);
   yield takeLatest(GET_PACKAGE_REQUEST,getPackagesFlow)
 }
 

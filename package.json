@@ -14,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@microsoft/signalr": "^5.0.8",
     "@popperjs/core": "^2.9.2",
     "bootstrap": "^5.0.1",
     "draft-js": "^0.11.7",
@@ -22,7 +23,9 @@
     "electron-squirrel-startup": "^1.0.0",
     "file-loader": "^6.2.0",
     "html-to-draftjs": "^1.5.0",
+    "i": "^0.3.6",
     "moment": "^2.29.1",
+    "npm": "^7.20.0",
     "react": "^17.0.2",
     "react-bootstrap-sweetalert": "^5.2.0",
     "react-bootstrap-table-next": "^4.0.3",

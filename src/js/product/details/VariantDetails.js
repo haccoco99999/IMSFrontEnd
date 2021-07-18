@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-
+import BootstrapTable from "react-bootstrap-table-next";
 //css
 import "../product.css";
 //components
@@ -30,6 +30,24 @@ export default function VariantDetails() {
     id: "Package ID",
     importedDate: "Imported Date",
   });
+
+  const columns = [
+    { dataField: "id", text: "Variant ID" },
+    { dataField: "price", text: "Price" },
+    { dataField: "totalPrice", text: "Total Price" },
+    {
+      dataField: "locationName",
+      text: "Location Name",
+    },
+    { dataField: "importedDate", text: "Imported Date " },
+  ];
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      history.push("/homepage/product/details/package", {
+        packageId: row.id,
+      });
+    },
+  };
 
   const { variantStore, listPackageStore, token, messages } = useSelector(
     (state) => ({
@@ -293,11 +311,22 @@ export default function VariantDetails() {
             >
               {isReturnData && (
                 <div className="mt-3">
-                  <ListPackageTable
+                  {/* <ListPackageTable
                     listHeaderEdit={listHeaderEdit}
                     listColumn={listColumn}
                     listData={listPackage}
                     onRowClick={onClickToDetails}
+                  /> */}
+                  <BootstrapTable
+                    keyField="id"
+                    striped
+                    hover
+                    condensed
+                    columns={columns}
+                    headerClasses="table-header-receipt"
+                    noDataIndication="Table is Empty"
+                    data={listPackage}
+                    rowEvents={rowEvents}
                   />
                 </div>
               )}

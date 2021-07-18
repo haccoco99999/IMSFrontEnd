@@ -1,35 +1,16 @@
 import React from "react";
-
 import Table from "react-bootstrap-table-next";
 import ToolkitProvider, {
   Search,
 } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min";
 
-//css
-import "../stocktake.css";
-//components
-// import { getAllLocationsAction } from "./action";
-
-export default function ListLocationsModal(props) {
-  // let dispatch = useDispatch();
-
+export default function BrandModalComponent(props) {
   const { SearchBar } = Search;
-
   const columns = [
-    {
-      dataField: "id",
-      text: " ID",
-    },
-    {
-      dataField: "locationName",
-      text: "Location Name",
-    },
-    {
-      dataField: "locationBarcode",
-      text: "Location Barcode",
-    },
+    { dataField: "id", text: "ID" },
+    { dataField: "brandName", text: "Brand Name" },
+    { dataField: "brandDescription", text: "Brand Description" },
   ];
-
   const selectRow = {
     mode: "radio",
     clickToSelect: true,
@@ -40,7 +21,6 @@ export default function ListLocationsModal(props) {
   const afterSearch = (newResult) => {
     console.log(newResult);
   };
-
   return (
     <div>
       <div
@@ -54,7 +34,7 @@ export default function ListLocationsModal(props) {
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Search: Locations </h5>
+              <h5 className="modal-title">Search: Brands </h5>
               <button
                 type="button"
                 className="btn-close"
@@ -65,7 +45,7 @@ export default function ListLocationsModal(props) {
             <div className="modal-body">
               <ToolkitProvider
                 keyField="id"
-                data={props.listLocations}
+                data={props.listBrand}
                 columns={columns}
                 search={afterSearch}
               >
@@ -77,7 +57,6 @@ export default function ListLocationsModal(props) {
                   </div>
                 )}
               </ToolkitProvider>
-
             </div>
             <div className="modal-footer">
               <button

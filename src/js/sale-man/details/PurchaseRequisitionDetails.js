@@ -13,6 +13,7 @@ import {
   deletePRAction,
 } from "./action";
 import SearchComponent from "../../search-component/SearchComponent";
+import NavigationBar from "../../components/navbar/navbar-component";
 
 export default function details() {
   let history = useHistory();
@@ -22,13 +23,12 @@ export default function details() {
   const [isEditDisabled, setIsEditDisabled] = useState(true);
   const [deadline, setDeadline] = useState("");
   const [isCancel, setIsCancel] = useState(false);
-
   const message = useSelector(
     (state) => state.getDetailsPurchaseRequisitionReducer.messages
   );
 
   const [cleanListProducts, setCleanListProducts] = useState([]);
-  const [listProductReset, setListProductReset] = useState(cleanListProducts);
+  // const [listProductReset, setListProductReset] = useState(cleanListProducts);
 
   const [listValueColumn, setListColumn] = useState([
     {
@@ -48,21 +48,14 @@ export default function details() {
 
   const {
     status,
-    createdBy,
-    createDate,
     listGetProductsStore,
     token,
     deadlineStore,
+    transactionRecordStore,
   } = useSelector((state) => ({
     status:
       state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
         .purchaseOrderStatus,
-    createdBy:
-      state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
-        .transaction.createdBy.userName,
-    createDate:
-      state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
-        .transaction.createdDate,
     listGetProductsStore:
       state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
         .purchaseOrderProduct,
@@ -70,8 +63,11 @@ export default function details() {
     deadlineStore:
       state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
         .deadline,
+    transactionRecordStore:
+      state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
+        .transaction.transactionRecord,
   }));
-
+  console.log(transactionRecordStore);
   function goBackClick() {
     history.goBack();
   }
@@ -94,16 +90,18 @@ export default function details() {
 
   function onCancelClick() {
     setIsEditDisabled(!isEditDisabled);
-    setIsCancel(true);
+    // setIsCancel(true);
     setCleanListProducts(listGetProductsStore);
     setDeadline(deadlineStore);
     setIsCancel(!isCancel);
   }
 
   function onDeletePRClick() {
-    dispatch(
-      deletePRAction({ id: location.state.purchaseRequisitionId, token: token })
-    );
+    const data = {
+      id: location.state.purchaseRequisitionId,
+      cancelReason: "Delete purchase requisition status 0",
+    };
+    dispatch(deletePRAction({ data: data, token: token }));
   }
 
   function clickToAddProduct(productRaw) {
@@ -180,16 +178,25 @@ export default function details() {
   }, []);
 
   useEffect(() => {
-    if (listGetProductsStore !== null) {
-      if (listGetProductsStore !== []) {
-        setCleanListProducts(
-          listGetProductsStore.map((product) => {
-            product.name = product.productVariant.name;
-            delete product["productVariant"];
-            return product;
-          })
-        );
-      }
+    // if (listGetProductsStore !== null) {
+    //   if (listGetProductsStore !== []) {
+    //     setCleanListProducts(
+    //       listGetProductsStore.map((product) => {
+    //         product.name = product.productVariant.name;
+    //         delete product["productVariant"];
+    //         return product;
+    //       })
+    //     );
+    //   }
+    // }
+    if(listGetProductsStore.length > 0) {
+      setCleanListProducts(
+        listGetProductsStore.map((product) => {
+          product.name = product.productVariant.name;
+          delete product["productVariant"];
+          return product;
+        })
+      );
     }
   }, [listGetProductsStore]);
 
@@ -217,7 +224,6 @@ export default function details() {
       );
     }
   }, [message]);
-  console.log(typeof deadlineStore);
 
   return (
     <div>
@@ -300,7 +306,9 @@ export default function details() {
           <div className="row g-3 justify-content-between me-3">
             <div className="col-4">
               <p>
-                <strong>Created by:</strong> {createdBy}
+                <strong>Created by:</strong>
+                {/* {createdBy} */}
+                {transactionRecordStore[0].applicationUser.userName}
               </p>
               {/* <p>
                     <strong>Submitted by:</strong> Huy Nguyen{" "}
@@ -312,7 +320,8 @@ export default function details() {
             <div className="col-4">
               <p>
                 <strong>Create date:</strong>
-                {createDate.split("T")[0]}
+                {/* {createDate.split("T")[0]} */}
+                {transactionRecordStore[0].date}
               </p>
               <p>
                 <strong>Deadline:</strong>

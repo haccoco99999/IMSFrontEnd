@@ -8,8 +8,8 @@ import {
   SEARCH_GOODS_RECEIPT_SUCCESS,
 } from "./constant";
 
-function searchGoodsReceipt(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/goodsreceipt/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+function getAllhGoodsReceipt(action) {
+  const url = `${process.env.REACT_APP_API}/goodsreceipt/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
 
   return fetch(url, {
     method: "GET",
@@ -31,7 +31,7 @@ function searchGoodsReceipt(action) {
 
 function* getFlow(action) {
   try {
-    let json = yield call(searchGoodsReceipt, action);
+    let json = yield call(getAllhGoodsReceipt, action);
     // console.log("KET QUA:", json);
 
     yield put({ type: SEARCH_GOODS_RECEIPT_SUCCESS, json });

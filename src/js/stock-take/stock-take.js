@@ -4,8 +4,8 @@ import { Route, Switch } from "react-router-dom";
 import "./stocktake.css";
 
 //components
-import Create from "./create/stocktake-create";
-import Manager from "./manager/stoctake-manager";
+import Create from "./create/CreateStocktake";
+import Manager from "./manager/StocktakeManager";
 import StocktakeDetails from "./details/stocktake-details";
 import CheckedLocationDetails from './details/stocktake-checkedlocation-details'
 import Details2 from "./details/StocktakeDetails2"

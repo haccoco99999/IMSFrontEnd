@@ -13,6 +13,11 @@ import {
   SEND_CREATING_GOODS_RECEIPT_REQUEST,
   SEND_CREATING_GOODS_RECEIPT_RESPONSE,
   SEND_CREATING_GOODS_RECEIPT_ERROR,
+
+  //LOCATION
+  GET_LOCATION_REQUEST,
+  GET_LOCATION_RESPONSE,
+  GET_LOCATION_ERROR,
 } from "./constant";
 
 const initialState = {
@@ -22,8 +27,9 @@ const initialState = {
   errors: "",
   listConfirmedPurchaseOrder: [],
   listProducts: {
-    purchaseOrderProduct: null,
+    purchaseOrderProduct: [],
   },
+  listLocations: [],
 };
 
 export default function reducer(state = initialState, action) {
@@ -72,6 +78,8 @@ export default function reducer(state = initialState, action) {
         cleanJson.purchaseOrderProduct.map((product) => {
           product.name = product.productVariant.name;
           product.sku = product.productVariant.sku;
+          product.barcode = product.productVariant.barcode
+          product.productId = product.productVariant.productId
           delete product["productVariant"];
           return product;
         });
@@ -106,7 +114,7 @@ export default function reducer(state = initialState, action) {
       };
 
     case SEND_CREATING_GOODS_RECEIPT_RESPONSE:
-      console.log(action.json.createdGoodsReceiptId)
+      console.log(action.json.createdGoodsReceiptId);
       return {
         ...state,
         requesting: false,
@@ -123,7 +131,32 @@ export default function reducer(state = initialState, action) {
         messages: "",
         errors: "",
       };
-
+    case GET_LOCATION_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: "",
+      };
+    case GET_LOCATION_RESPONSE:
+      return {
+        ...state,
+        requesting: false,
+        successful: true,
+        messages: "",
+        errors: "",
+        listLocations: action.json.paging.resultList,
+      };
+    case GET_LOCATION_ERROR:
+      return {
+        ...state,
+        requesting: false,
+        successful: false,
+        messages: "",
+        errors: "",
+        listLocations: [],
+      };
     default:
       return state;
   }

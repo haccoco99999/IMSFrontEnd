@@ -6,6 +6,7 @@ import "../../product.css";
 //components
 import { createProduct } from "../action";
 import Table from "../../../list-products-table/ListProductsTable";
+import NavigationBar from "../../../components/navbar/navbar-component";
 
 export default function () {
   let history = useHistory();
@@ -65,7 +66,6 @@ export default function () {
       salePrice: 0,
       barcode: "",
       sku: "",
-      unit: dataLastPage.unit,
     };
     setVariantValues([...variantValues, productVariants]);
   }
@@ -83,13 +83,29 @@ export default function () {
     const data = {
       name: dataLastPage.name,
       brandName: dataLastPage.brand,
+      brandDescription: "",
       categoryId: selectedCategory.id,
+      unit: dataLastPage.unit,
       isVariantType: true,
       productVariants: variantValues,
     };
     console.log(JSON.stringify(data));
     dispatch(createProduct({ data: data, token: token }));
   }
+
+  //todo: list nav button
+  const listButton = setListButtonNav();
+  function setListButtonNav() {
+    return [
+      {
+        isShow: true,
+        title: "Save",
+        action: () => onClickSave(),
+        class: "btn-primary",
+      },
+    ];
+  }
+
   useEffect(() => {
     if (messages !== "")
       history.push("/homepage/product/details", {
@@ -99,11 +115,8 @@ export default function () {
 
   return (
     //   todo: gop chung 2 bang , sau do tach ra
-    <div className="home_content overflow-scroll ">
-      {/* todo: task heading */}
-      {/* todo: gop chung 2 page voi 2 nut khâc nhau  */}
-      <div className=" tab-fixed container-fluid  fixed-top">
-        {/* todo: task heading */}
+    <div>
+      {/* <div className=" tab-fixed container-fluid  fixed-top">
         <div className=" tab-fixed container-fluid  fixed-top">
           <div className=" d-flex mb-3 justify-content-end mt-4 ">
             <a className="me-2" onClick={goBackClick}>
@@ -120,8 +133,13 @@ export default function () {
             </div>
           </div>
         </div>
-      </div>
-
+      </div> */}
+      <NavigationBar
+        listButton={listButton}
+        titleBar="With Variant"
+        actionGoBack={goBackClick}
+        status=""
+      />
       {/* content */}
       <div className="wrapper space-top">
         {/* show product details */}

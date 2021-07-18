@@ -80,7 +80,7 @@ function getDetailsVariant(action) {
 
 function getAllBrand(action) {
   const url =
-    "http://imspublicapi.herokuapp.com/api/product/brands?CurrentPage=0&SizePerPage=0";
+      `${process.env.REACT_APP_API}/product/brands?CurrentPage=0&SizePerPage=0`;
   return fetch(url, {
     method: "GET",
     headers: {

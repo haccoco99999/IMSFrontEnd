@@ -8,17 +8,16 @@ import "./product.css";
 import Empty from "./empty";
 import Manager from "./manager/manager";
 import Manager2 from "./manager/manager2";
-import Create from "./create/create-new-product-begining";
-import Variants from "./create/create-with-variants/create-with-variants";
-import NoVariants from "./create/create-no-variants/create-no-variants";
-import ProductDetails from "./details/product-details";
-import VariantDetails from "./details/product-variants-details";
-import PackageDetails from "./details/product-variants-package-details";
-import CreateVariant from './details/create-variant'
+import Create from "./create/CreateNewProduct";
+import Variants from "./create/create-with-variants/CreateWithVariants";
+import NoVariants from "./create/create-no-variants/CreateNoVariants";
+import ProductDetails from "./details/ProductDetails";
+import VariantDetails from "./details/VariantDetails";
+import PackageDetails from "./details/PackageDetails";
+import CreateVariant from "./details/CreateVariant";
 
 export default function () {
   return (
-    //<CreateBeginT/>
     <div className="home_content wrapper">
       <div className="text">
         {/* ############################ */}
@@ -46,7 +45,7 @@ export default function () {
             <PackageDetails />
           </Route>
           <Route path="/homepage/product/details/create-variant">
-            <CreateVariant/>
+            <CreateVariant />
           </Route>
         </Switch>
 

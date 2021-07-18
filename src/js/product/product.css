@@ -124,3 +124,10 @@
 .space-top-heading{
   margin-top: 20px;
 }
+
+/* todo: tao scrollable dropdown  */
+.scrollable-menu {
+  height: auto;
+  max-height: 200px;
+  overflow-x: hidden;
+}

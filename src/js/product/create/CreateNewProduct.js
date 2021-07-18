@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
+import {Modal} from 'bootstrap'
 //css
 import "../product.css";
 
 //components
-
+import NavigationBar from "../../components/navbar/navbar-component";
+import BrandSelectModal from "../components/brand-component";
 //Category
 import { getCategoriesAllAction } from "./action";
-
+import { getAllBrandAction } from "../details/action";
 const formReducer = (state, event) => {
   return {
     ...state,
@@ -25,7 +26,11 @@ export default function () {
   const [categorySelected, setCategorySelected] = useState({});
   const [isVariant, setIsVariant] = useState(false);
   const [variantValues, setVariantValues] = useState([{}]);
-
+  const [selectedBrand, setSelectedBrand] = useState({
+    id: "",
+    brandName: "",
+    brandDescription: "",
+  });
   // const onChangeValue = (event) => {
   //   setVariantValues(
   //     variantValues.map((element, index) =>
@@ -39,12 +44,15 @@ export default function () {
   //   );
   // };
 
-  const { listCategoriesStore,token } = useSelector((state) => ({
-    listCategoriesStore: state.createProductReducer.listCategories,
-    token: state.client.token,
-  }));
+  const { listCategoriesStore, token, listBrandStore } = useSelector(
+    (state) => ({
+      listCategoriesStore: state.createProductReducer.listCategories,
+      token: state.client.token,
+      listBrandStore: state.getDetailsProductReducer.listBrand,
+    })
+  );
 
-  function goBackClick() { 
+  function goBackClick() {
     history.goBack();
   }
 
@@ -85,27 +93,68 @@ export default function () {
 
   const onChangeFormVariants = (event) => {
     setIsVariant(!isVariant);
-    
   };
-
-  function addAttribute() {
-    setVariantValues((state) => [...state, { attribute: "", value: "" }]);
+  //todo: declare modal select brand
+  const modalRef = useRef();
+  const showModal = () => {
+    const modalEle = modalRef.current;
+    const bsModal = new Modal(modalEle, {
+      backdrop: "static",
+      keyboard: false,
+    });
+    bsModal.show();
+  };
+  const hideModal = () => {
+    const modalEle = modalRef.current;
+    const bsModal = Modal.getInstance(modalEle);
+    bsModal.hide();
+  };
+  function handleOnSelect(row, isSelect) {
+    if (isSelect) {
+      setSelectedBrand({
+        id: row.id,
+        brandName: row.brandName,
+        brandDescription: row.brandDescription,
+      });
+    }
   }
+  function onSelectLocationClick() {
+    hideModal();
+    setFormData({
+      name: "brand",
+      value: selectedBrand.brandName,
+    });
+  }
+  // function addAttribute() {
+  //   setVariantValues((state) => [...state, { attribute: "", value: "" }]);
+  // }
 
-  const deleteVarriant = (index) => {
-    setVariantValues((state) => state.filter((_, i) => i !== index));
-  };
+  // const deleteVarriant = (index) => {
+  //   setVariantValues((state) => state.filter((_, i) => i !== index));
+  // };
+
+  //todo: list nav button
+  const listButton = setListButtonNav();
+  function setListButtonNav() {
+    return [
+      {
+        isShow: true,
+        title: "Continue",
+        action: () => onClickContinue(),
+        class: "btn-warning text-white",
+      },
+    ];
+  }
 
   useEffect(() => {
     dispatch(getCategoriesAllAction({ token: token }));
+    dispatch(getAllBrandAction({ token: token }));
   }, []);
 
   return (
-    <div className="home_content ">
-      {/* todo: task heading */}
-      <div className=" tab-fixed container-fluid  fixed-top">
+    <div>
+      {/* <div className=" tab-fixed container-fluid  fixed-top">
         <div className=" d-flex mb-3 justify-content-end mt-4 ">
-          {/* testing */}
           <a className="me-2" onClick={goBackClick}>
             <h3>Back</h3>
           </a>
@@ -120,7 +169,13 @@ export default function () {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
+      <NavigationBar
+        listButton={listButton}
+        titleBar="Create"
+        actionGoBack={goBackClick}
+        status=""
+      />
 
       <div className="wrapper space-top">
         {/* content 1 */}
@@ -129,16 +184,16 @@ export default function () {
             <span>Product Details</span>
           </div>
           <form>
-            <div class="mb-3">
-              <div class="row g-3 align-items-center">
-                <div class="col">
+            <div className="mb-3">
+              <div className="row g-3 align-items-center">
+                <div className="col">
                   <label for="name" class="col-form-label">
                     Product Name
-                  </label>{" "}
+                  </label>
                   <input
                     type="text"
                     id="name"
-                    class="form-control"
+                    className="form-control"
                     placeholder="Write product name here"
                     name="name"
                     value={formData.name || ""}
@@ -162,10 +217,10 @@ export default function () {
                     onChange={handleChangeCategory}
                   >
                     <option value="" disabled>
-                      -- No Selected --
+                      Select category
                     </option>
 
-                    {listCategoriesStore.map((category) => (  
+                    {listCategoriesStore.map((category) => (
                       <option id={category.id} value={category.categoryName}>
                         {category.categoryName}
                       </option>
@@ -176,14 +231,25 @@ export default function () {
                   <label for="brand" class="col-form-label">
                     Brand
                   </label>{" "}
-                  <input
-                    name="brand"
-                    type="string"
-                    id="brand"
-                    class="form-control"
-                    value={formData.brand || ""}
-                    onChange={handleChangeValue}
-                  />
+                  <div className="input-group mb-3">
+                    <input
+                      name="brand"
+                      type="string"
+                      id="brand"
+                      class="form-control"
+                      value={formData.brand || ""}
+                      onChange={handleChangeValue}
+                      placeholder="eg. Nike"
+                    />
+                    <button
+                      class="btn btn-outline-secondary"
+                      type="button"
+                      id="button-addon2"
+                      onClick={showModal}
+                    >
+                      Search more
+                    </button>
+                  </div>
                 </div>
                 <div class="col-auto">
                   <label for="unit" class="col-form-label">
@@ -221,6 +287,13 @@ export default function () {
                 variants like size, color,...
               </div>
             </div>
+            <BrandSelectModal
+              modalRef={modalRef}
+              hideModal={hideModal}
+              listBrand={listBrandStore}
+              handleOnSelect={handleOnSelect}
+              onSelectLocationClick={onSelectLocationClick}
+            />
 
             {/* {isVariant && (
               <>
@@ -258,51 +331,3 @@ export default function () {
     </div>
   );
 }
-
-// function ComponentsCheckVariant(props) {
-//   return (
-//     <>
-//       {props.dataAtrribute.map((element, index) => (
-//         <div class="mb-3">
-//           <form>
-//             <div class="row g-3 align-items-center">
-//               <p onClick={() => props.deleteVarriant(index)}>Delete</p>
-//               <div class="col-auto">
-//                 <label for="attribute" class="col-form-label">
-//                   Attribute
-//                 </label>{" "}
-//                 <input
-//                   type="text"
-//                   id={index}
-//                   name="attribute"
-//                   class="form-control"
-//                   value={element.attribute}
-//                   placeholder="Ex: Size, Color, Storage,etc"
-//                   onChange={props.onChangeValue}
-//                 />
-//               </div>
-//               <div class="col">
-//                 <label for="value" class="col-form-label">
-//                   Value
-//                 </label>{" "}
-//                 <input
-//                   name="value"
-//                   type="tel"
-//                   id={index}
-//                   value={element.value}
-//                   class="form-control"
-//                   placeholder="Ex: S, M, L, Pink, etc"
-//                   onChange={props.onChangeValue}
-//                 />
-//               </div>
-//             </div>
-//           </form>
-//         </div>
-//       ))}
-//     </>
-//   );
-// }
-
-// {/* content3 */}
-// <div className="wrapper-content shadow mt-3"></div>
-// </div> */}

@@ -41,7 +41,8 @@ export default function CreateVariant() {
   function onClickSave() {
     const data = {
       productId: location.state.productId,
-      isVariantType: location.state.variantType,
+      // isVariantType: location.state.variantType,
+      isVariantType:true,
       productVariantsUpdate: [
         {
           id: null,
@@ -49,7 +50,7 @@ export default function CreateVariant() {
           price: formData.price,
           barcode: formData.barcode,
           sku: formData.sku,
-          unit: location.state.productUnit,
+          // unit: location.state.productUnit,
         },
       ],
     };

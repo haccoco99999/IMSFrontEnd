@@ -22,6 +22,6 @@ export function clearMessageAction() {
   return { type: CLEAR_MESSAGE };
 }
 
-export function deletePRAction({ id, token }) {
-  return { type: DELETE_PR_REQUEST, id, token };
+export function deletePRAction({token,data }) {
+  return { type: DELETE_PR_REQUEST, data, token };
 }

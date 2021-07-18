@@ -6,13 +6,15 @@ import {
   GET_ALL_CATEGORY_CREATED_RESPONSE,
   GET_ALL_CATEGORY_CREATED_REQUEST,
   GET_ALL_CATEGORY_CREATED_ERROR,
+  // GET_BRAND_REQUEST,
+  // GET_BRAND_RESPONSE,
+  // GET_BRAND_ERROR,
 } from "./constants";
 
 import handleApiErrors from "../../auth/api-errors";
 
 function createProduct(action) {
-  const createProductURL =
-    "https://imspublicapi.herokuapp.com/api/product/create";
+  const createProductURL = `${process.env.REACT_APP_API}/product/create`;
 
   return fetch(createProductURL, {
     method: "POST",
@@ -33,9 +35,27 @@ function createProduct(action) {
 }
 
 function getAllCategoryCreatedPage(action) {
-  const getAllCategoryCreatedPageURL =
-    "http://imspublicapi.herokuapp.com/api/category?CurrentPage=0&SizePerPage=0";
+  const getAllCategoryCreatedPageURL = `${process.env.REACT_APP_API}/category?CurrentPage=0&SizePerPage=0`;
   return fetch(getAllCategoryCreatedPageURL, {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+function getAllBrand(action) {
+  const url = `${process.env.REACT_APP_API}/product/brands?CurrentPage=0&SizePerPage=0`;
+  return fetch(url, {
     method: "GET",
     headers: {
       Authorization: "Bearer " + action.token,
@@ -64,7 +84,7 @@ function* createProductFlow(action) {
 
 function* getAllCategoryCreatedPageFlow(action) {
   try {
-    let json = yield call(getAllCategoryCreatedPage,action);
+    let json = yield call(getAllCategoryCreatedPage, action);
     console.log(json);
 
     yield put({ type: GET_ALL_CATEGORY_CREATED_RESPONSE, json });

@@ -72,6 +72,8 @@ typings/
 .out
 .storybook-out
 
+#vscode
+.vscode
 # Temporary folders
 tmp/
 temp/

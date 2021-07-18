@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
+import BootstrapTable from "react-bootstrap-table-next";
 
 //css
 import "../product.css";
@@ -26,6 +27,7 @@ export default function ProductDetails() {
     listCategoriesStore,
     listBrandStore,
     productBrandDetailsStore,
+    categoryDtailsStore,
   } = useSelector((state) => ({
     token: state.client.token,
     productDetailsStore: state.getDetailsProductReducer.productDetails,
@@ -36,6 +38,7 @@ export default function ProductDetails() {
     listBrandStore: state.getDetailsProductReducer.listBrand,
     productBrandDetailsStore:
       state.getDetailsProductReducer.productDetails.brand,
+    categoryDtailsStore: state.getDetailsProductReducer.productDetails.category,
   }));
 
   const [isFromManagerPage, setIsFromManagerPage] = useState(true);
@@ -46,8 +49,10 @@ export default function ProductDetails() {
   const [categorySelected, setCategorySelected] = useState({});
   const [brandSelected, setBrandSelected] = useState({});
   const [brandDetails, setBrandDetails] = useState({});
+  const [categoryDtails, setCategoryDtails] = useState({});
   const [isUpdateGeneralInformation, setIsUpdateGeneralInformation] =
     useState(true);
+  //todo: Declare table
   const [listColumn, setListColumn] = useState({
     id: true,
     name: true,
@@ -62,11 +67,31 @@ export default function ProductDetails() {
   const [listEditHeader, setListEditHeader] = useState({
     id: "Variant ID",
   });
+
+  const columns = [
+    { dataField: "id", text: "VariantID" },
+    { dataField: "name", text: "Variant Name" },
+    { dataField: "sku", text: "SKU" },
+    { dataField: "barcode", text: "Barcode" },
+    { dataField: "storageQuantity", text: "Quantity" },
+    { dataField: "price", text: "Price" },
+    { dataField: "cost", text: "Sale Price" },
+  ];
+
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      history.push("/homepage/product/details/variant", {
+        variantId: row.id,
+        productId: productDetails.id,
+        variantType: productDetails.isVariantType,
+      });
+    },
+  };
+  //todo: function
   const handleChangeCategory = (e) => {
     const index = e.target.selectedIndex;
     const el = e.target.childNodes[index];
 
-    // console.log(event.target.id);
     setCategorySelected({
       id: el.getAttribute("id"),
       name: el.getAttribute("value"),
@@ -100,26 +125,6 @@ export default function ProductDetails() {
     setIsDisabled(true);
   }
   function onClickSave() {
-    // const productVariants = listVariants.map((e) => {
-    //   return {
-    //     id: e.id,
-    //     name: e.name,
-    //     price: e.price,
-    //     barcode: e.barcode,
-    //     sku: e.sku,
-    //     unit: e.unit,
-    //   };
-    // });
-    // const data = {
-    //   id: location.state.productId,
-    //   name: productDetails.name,
-    //   brandName: brandSelected.name,
-    //   brandDescription: "",
-    //   categoryId: categorySelected.id,
-    //   isVariantType: productDetails.isVariantType,
-    //   productVariantsUpdate: [],
-    // };
-
     const data = {
       id: location.state.productId,
       name: productDetails.name,
@@ -170,6 +175,8 @@ export default function ProductDetails() {
     if (productBrandDetailsStore !== {}) {
       setBrandDetails(productBrandDetailsStore);
     }
+    if (categoryDtailsStore !== {}) setCategoryDtails(categoryDtailsStore);
+
     if (messages === "Update Product Success") {
       dispatch(
         getDetailsProductAction({ id: location.state.productId, token: token })
@@ -181,6 +188,7 @@ export default function ProductDetails() {
     listVariantsStores,
     productBrandDetailsStore,
     messages,
+    categoryDtailsStore,
   ]);
 
   return (
@@ -298,10 +306,8 @@ export default function ProductDetails() {
                     {!productDetails.isVariantType && (
                       <>
                         <p>
-                          <strong>Barcode:</strong>
-                        </p>
-                        <p>
-                          <strong>Storage Quantity:</strong>
+                          <strong>Unit:</strong>
+                          {productDetails.unit}
                         </p>
                       </>
                     )}
@@ -334,7 +340,7 @@ export default function ProductDetails() {
                           onChange={handleChangeBrand}
                         >
                           <option value="" disabled>
-                            --No selected--
+                            Select brand
                           </option>
                           {listBrandStore.map((brand) => (
                             <option id={brand.id} value={brand.brandName}>
@@ -347,7 +353,7 @@ export default function ProductDetails() {
                     <p>
                       <strong>Category:</strong>{" "}
                       {isDisabled ? (
-                        productDetails.categoryId
+                        categoryDtails.categoryName
                       ) : (
                         <select
                           name="categoryID"
@@ -372,6 +378,10 @@ export default function ProductDetails() {
                     </p>
                     {!productDetails.isVariantType && isReturnData && (
                       <>
+                        <p>
+                          <strong>Storage Quantity:</strong>
+                          {listVariants[0].storageQuantity}
+                        </p>
                         <p>
                           <strong>SKU:</strong>
                           {listVariants[0].sku}
@@ -400,11 +410,22 @@ export default function ProductDetails() {
                 <div>
                   <div className="mt-3">
                     {isReturnData && (
-                      <ListProductsTable
-                        listHeaderEdit={listEditHeader}
-                        listColumn={listColumn}
-                        listData={listVariantsStores}
-                        onRowClick={onClickToDetails}
+                      // <ListProductsTable
+                      //   listHeaderEdit={listEditHeader}
+                      //   listColumn={listColumn}
+                      //   listData={listVariantsStores}
+                      //   onRowClick={onClickToDetails}
+                      // />
+                      <BootstrapTable
+                        keyField="id"
+                        striped
+                        hover
+                        condensed
+                        columns={columns}
+                        headerClasses="table-header-receipt"
+                        noDataIndication="Table is Empty"
+                        data={listVariantsStores}
+                        rowEvents={rowEvents}
                       />
                     )}
                   </div>

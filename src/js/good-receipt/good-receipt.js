@@ -7,9 +7,9 @@ import "./goodreceipt.css";
 // components
 import Empty from "./empty";
 import Filter from "./filter";
-import Create from "./create/create";
-import Details from "./details/details";
-import Manager from "./manager/good-receipt-manager";
+import Create from "./create/CreateGoodReceipt";
+import Details from "./details/GoodReceiptsDetails";
+import Manager from "./manager/GoodReceiptManager";
 
 export default function () {
   return (

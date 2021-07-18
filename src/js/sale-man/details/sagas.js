@@ -16,13 +16,9 @@ import {
   DELETE_PR_ERROR,
 } from "./constants";
 
-const getDetailsPRURL =
-  "https://imspublicapi.herokuapp.com/api/purchaseorder/number/";
-
-const submitPRURL = "https://imspublicapi.herokuapp.com/api/requisition/submit";
-
 function getDetailsPR(action) {
-  return fetch(getDetailsPRURL + action.id, {
+  const url = `${process.env.REACT_APP_API}/purchaseorder/number/${action.id}`
+  return fetch(url, {
     method: "GET",
     headers: {
       Authorization: "Bearer " + action.token,
@@ -43,6 +39,8 @@ function submitPR(action) {
   const data = {
     id: action.id,
   };
+  const submitPRURL =
+    `${process.env.REACT_APP_API}/requisition/submit`;
 
   return fetch(submitPRURL, {
     method: "POST",
@@ -63,7 +61,7 @@ function submitPR(action) {
 }
 
 function updatePR(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/requisition/update";
+  const url = `${process.env.REACT_APP_API}/requisition/update`;
   return fetch(url, {
     method: "PUT",
     headers: {
@@ -82,7 +80,7 @@ function updatePR(action) {
 }
 
 function deletePR(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/purchaseorder/cancel/${action.id}`;
+  const url = `${process.env.REACT_APP_API}/purchaseorder/reject`;
 
   return fetch(url, {
     method: "PUT",
@@ -92,6 +90,7 @@ function deletePR(action) {
       Origin: "",
     },
     credentials: "include",
+    body: JSON.stringify(action.data)
   })
     .then((response) => handleApiErrors(response))
     .then((response) => response)

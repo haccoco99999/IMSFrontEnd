@@ -22,10 +22,9 @@ const initialState = {
 
   purchaseRequisitionDetails: {
     supplier: {},
-    purchaseOrderProduct: null,
+    purchaseOrderProduct: [],
     transaction: {
-      createdBy: {},
-      createdDate: "",
+      transactionRecord: [{ date: "", applicationUser: {} }],
     },
     deadline: "",
   },
