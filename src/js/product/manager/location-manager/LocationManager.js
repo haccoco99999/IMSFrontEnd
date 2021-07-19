@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef, useReducer } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal } from "bootstrap";
+import BootstrapTable from "react-bootstrap-table-next";
 //css
 import "../../product.css";
 //components
-import Table from "react-bootstrap-table-next";
+
 
 export default function LocationManager() {
   const columns = [
@@ -23,6 +24,7 @@ export default function LocationManager() {
   ];
   return (
     <>
+    
       <div className="wrapper-content shadow"></div>
     </>
   );

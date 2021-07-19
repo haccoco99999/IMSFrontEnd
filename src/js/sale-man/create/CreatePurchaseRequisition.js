@@ -8,6 +8,8 @@ import "../sale-man.css";
 //components
 import SearchComponent from "../../search-component/SearchComponent";
 import ListProductsTable from "../../list-products-table/ListProductsTable";
+import NavigationBar from "../../components/navbar/navbar-component";
+
 import {
   createPRAction,
   clearMessageAction,
@@ -119,6 +121,8 @@ export default function () {
     console.log(data);
     dispatch(createPRAction({ data: data, token: token }));
   }
+
+
 
   useEffect(() => {
     if (message !== "") {

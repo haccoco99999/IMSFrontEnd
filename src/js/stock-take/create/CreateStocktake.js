@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Modal, Toast } from "bootstrap";
 import Table from "react-bootstrap-table-next";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
-import paginationFactory from "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
-
+// import paginationFactory from "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
+import Swal from "sweetalert2";
 //css
 import "../stocktake.css";
 //components
@@ -47,20 +47,12 @@ export default function CreateStocktakeComponent() {
       note: "",
     },
   ]);
-  const [selectedPackage, setSelectedPackage] = useState([]);
+  // const [selectedPackage, setSelectedPackage] = useState([]);
 
   function onChangeSelectPackage(event) {
     const packageDetails = listPackagesStore.find(
       (element) => element.id === event.target.value
     );
-    // console.log(
-    //   packageDetails.id +
-    //     "-" +
-    //     packageDetails.quantity +
-    //     "-" +
-    //     packageDetails.productVariantId
-    // );
-
     const temp = [...listCheckedItems];
     temp[event.target.id].quantity = packageDetails.quantity;
     temp[event.target.id].id = packageDetails.id;
@@ -213,8 +205,8 @@ export default function CreateStocktakeComponent() {
 
   function handleOnSelect(row, isSelect) {
     if (isSelect) {
-      console.log(row.id);
-      console.log(row.locationName);
+      // console.log(row.id);
+      // console.log(row.locationName);
       setSelectedLocation({
         id: row.id,
         locationName: row.locationName,
@@ -224,24 +216,38 @@ export default function CreateStocktakeComponent() {
   }
 
   function onClickSubmit() {
-    const data = {
-      stockTakeGroupLocation: [
-        {
-          locationId: selectedLocation.id,
-          checkItems: listCheckedItems.map((checkItem) => {
-            return {
-              packageId: checkItem.id,
-              actualQuantity: checkItem.counted,
-              note: checkItem.note,
-            };
-          }),
-        },
-      ],
-      stockTakeId: null,
-    };
+    if (checkForDuplicates(listCheckedItems, "id")) {
+      console.log("Duplicate");
 
-    console.log("Data output:", data);
-    dispatch(createStocktkaeAction({ token: token, data: data }));
+      Swal.fire({
+        title: "Error",
+        text: "There is no duplicate in the list",
+        icon: "error",
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        showConfirmButton: false,
+      });
+    } else {
+      console.log("No duplicate");
+      const data = {
+        stockTakeGroupLocation: [
+          {
+            locationId: selectedLocation.id,
+            checkItems: listCheckedItems.map((checkItem) => {
+              return {
+                packageId: checkItem.id,
+                actualQuantity: checkItem.counted,
+                note: checkItem.note,
+              };
+            }),
+          },
+        ],
+        stockTakeId: null,
+      };
+
+      console.log("Data output:", data);
+      dispatch(createStocktkaeAction({ token: token, data: data }));
+    }
   }
 
   function onSelectLocationClick() {
@@ -259,6 +265,11 @@ export default function CreateStocktakeComponent() {
       },
     ]);
     dispatch(getListPackageAction({ token: token, id: selectedLocation.id }));
+  }
+
+  //todo: check duplicate in list
+  function checkForDuplicates(array, keyName) {
+    return new Set(array.map((item) => item[keyName])).size !== array.length;
   }
 
   useEffect(() => {

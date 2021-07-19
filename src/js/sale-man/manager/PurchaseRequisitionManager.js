@@ -14,13 +14,13 @@ export default function () {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  const [listValueColumn, setListValueColumn] = useState({
-    id: true,
-    status: true,
-    createdByName: true,
-    createdDate: true,
-    modifiedDate: true,
-  });
+  // const [listValueColumn, setListValueColumn] = useState({
+  //   id: true,
+  //   status: true,
+  //   createdByName: true,
+  //   createdDate: true,
+  //   modifiedDate: true,
+  // });
 
   //todo: declare  bootstrap table
   const columns = [
@@ -49,10 +49,10 @@ export default function () {
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
 
-  const [listEditHeader, setListEditHeader] = useState({
-    id: "Purchase Requisition ID",
-    createdByName: "Created by",
-  });
+  // const [listEditHeader, setListEditHeader] = useState({
+  //   id: "Purchase Requisition ID",
+  //   createdByName: "Created by",
+  // });
 
   const { listData, pageCount, token } = useSelector((state) => ({
     listData: state.getAllPurchaseRequisitionReducer.listPurchaseRequisition,
