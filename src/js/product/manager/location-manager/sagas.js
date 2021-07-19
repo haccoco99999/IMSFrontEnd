@@ -8,7 +8,7 @@ import {
 } from "../constants";
 
 function getAllLocations(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/package?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}&IsLocationOnly=true`;
+  const url = `http://imspublicapi.herokuapp.com/api/package?IsLocationOnly=true&CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
   return fetch(url, {
     method: "GET",
     headers: {

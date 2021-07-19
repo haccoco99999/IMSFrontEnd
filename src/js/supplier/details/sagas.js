@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery,takeLatest } from "redux-saga/effects";
 import handleApiErrors from "../../auth/api-errors";
 
 import {
@@ -14,7 +14,7 @@ import {
 } from "./constants";
 
 function getDetailsSupplier(action) {
-  const getDetailsSupplierURL = `http://imspublicapi.herokuapp.com/api/suppliers/search?SearchQuery=${action.id}`;
+  const getDetailsSupplierURL = `${process.env.REACT_APP_API}/suppliers/search?SearchQuery=${action.id}`;
 
   return fetch(getDetailsSupplierURL, {
     method: "GET",
@@ -102,7 +102,7 @@ function* deleteSupplierFlow(action) {
 }
 
 function* watcher() {
-  yield takeEvery(GET_DETAILS_SUPPLIER_REQUEST, getDetailsSupplierFlow);
+  yield takeLatest(GET_DETAILS_SUPPLIER_REQUEST, getDetailsSupplierFlow);
   yield takeEvery(UPDATE_SUPPLIER_REQUEST, updateSupplierFlow);
   yield takeEvery(DELETE_SUPPLIER_REQUEST, deleteSupplierFlow);
 }

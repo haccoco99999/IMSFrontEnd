@@ -37,7 +37,7 @@ export default function RejectModal(props) {
             <div className="modal-body">
               <form>
                 <div class="mb-3">
-                  <label for="exampleFormControlTextarea1" class="form-label">
+                  <label for="exampleFormControlTextarea1" >
                     Reason
                   </label>
                   <textarea

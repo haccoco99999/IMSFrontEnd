@@ -18,6 +18,7 @@ import {
 import SpinnerComponent from "../components/spinner-component";
 import ToastComponent from "../components/toast-component";
 import NavigationBar from "../../components/navbar/navbar-component";
+
 export default function CreateStocktakeComponent() {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -117,40 +118,29 @@ export default function CreateStocktakeComponent() {
       formatter: (cellContent, row, rowIndex) => {
         return (
           <>
-          {/* <div>
+            {/* <div>
             Selected Package: {row.id}
           </div> */}
-          <select
-            id={rowIndex}
-            class="form-select"
-            aria-label="Default select example"
-            defaultValue={row.id}
-            onChange={onChangeSelectPackage}
-          >
-            <option value={""} disabled>
-              Select package ID
-            </option>
-
-            {listPackagesStore.map((item) => (
-              <option id={item.id} value={item.id}>
-                {item.id}
+            <select
+              id={rowIndex}
+              class="form-select"
+              aria-label="Default select example"
+              defaultValue={row.id}
+              onChange={onChangeSelectPackage}
+            >
+              <option value={""} disabled>
+                Select package ID
               </option>
-            ))}
-          </select>
+
+              {listPackagesStore.map((item) => (
+                <option id={item.id} value={item.id}>
+                  {item.id}
+                </option>
+              ))}
+            </select>
           </>
         );
       },
-      // editable: true,
-
-      // editor: {
-      //   type: Type.SELECT,
-      //   options: listPackagesStore.map((item) => {
-      //     return {
-      //       value: item.id,
-      //       label: item.id,
-      //     };
-      //   }),
-      // },
     },
     {
       dataField: "productVariantId",
@@ -167,8 +157,17 @@ export default function CreateStocktakeComponent() {
       dataField: "counted",
       text: "Counted",
       type: "number",
+      editable: true,
       formatter: (cellContent, row, rowIndex) =>
         (listCheckedItems[rowIndex].counted = row.counted),
+      validator: (newValue, oldValue, row) => {
+        if (isNaN(newValue)) {
+          return {
+            valid: false,
+            message: "Price should be numeric",
+          };
+        }
+      },
     },
     {
       dataField: "note",
@@ -203,7 +202,7 @@ export default function CreateStocktakeComponent() {
         isShow: true,
         title: "Submit",
         class: " btn-primary",
-        action: () => onClickSubmit,
+        action: () => onClickSubmit(),
       },
     ];
   }
@@ -299,22 +298,6 @@ export default function CreateStocktakeComponent() {
 
   return (
     <div>
-      {/* <div className=" tab-fixed container-fluid  fixed-top">
-          <div className=" d-flex mb-3 justify-content-end mt-4 ">
-            <a className="me-2" onClick={goBackClick}>
-              <h3>Back</h3>
-            </a>
-            <h2 className="id-color fw-bold me-auto">Create Stock take</h2>
-            <div>
-              <button
-                className="btn btn-primary button-tab me-3 text-white"
-                onClick={onClickSubmit}
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </div> */}
       <NavigationBar
         actionGoBack={goBackClick}
         titleBar="Create"

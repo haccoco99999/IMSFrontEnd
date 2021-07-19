@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Table from "react-bootstrap-table-next";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import { Modal } from "bootstrap";
+import Swal from "sweetalert2";
 //css
 import "../stocktake.css";
 //components
@@ -14,7 +15,7 @@ import {
   adjustAction,
   updateAction,
 } from "./action";
-import NavigationBar from "../components/navbar-component";
+import NavigationBar from "../../components/navbar/navbar-component";
 import RejectModal from "../components/reject-component";
 import AdjustModal from "../components/adjust-component";
 
@@ -28,6 +29,9 @@ export default function StocktakeDetailsComponent() {
   const [listCompare, setListCompare] = useState([]);
   const [isChanging, setIsChanging] = useState(false);
   const [titleStatus, setTitleStatus] = useState("");
+  //todo: check valid truoc khi submit
+  const [isChecking, setIsChecking] = useState(false);
+
   //todo: store state
   const {
     token,
@@ -115,31 +119,14 @@ export default function StocktakeDetailsComponent() {
       editable: true,
       validator: (newValue, oldValue, row) => {
         if (isNaN(newValue)) {
+          // setInvalidNumeric(isInvalidNumeric + 1);
+          setIsChecking(true);
           return {
             valid: false,
-            message: "Price should be numeric",
+            message: "Counted should be numeric",
           };
         } else {
-          // let foundElementIndex = listCompare.find(
-          //   (element) => element.packageId === oldValue.packageId
-          // );
-          // let oldActualQuantity = foundElementIndex.actualQuantity;
-          // // let oldNote = foundElementIndex.note;
-          // if (newValue !== oldActualQuantity)
-          //   foundElementIndex.isChanging = true;
-          // else {
-          //   if (oldValue.note === oldNote) foundElementIndex.isChanging = false;
-          // }
-          // setListCompare({
-          //   ...listCompare.map((item) =>
-          //     item.packageId === foundElementIndex.packageId
-          //       ? {
-          //           ...foundElementIndex,
-          //         }
-          //       : item
-          //   ),
-          // });
-          // console.log(foundElementIndex);
+          setIsChecking(false);
         }
       },
       formatter: (cellContent, row, rowIndex) =>
@@ -151,18 +138,6 @@ export default function StocktakeDetailsComponent() {
       editor: {
         type: Type.TEXTAREA,
       },
-      // validator: (newValue, oldValue, row) => {
-      //   const foundElementIndex = listCompare.find(
-      //     (element) => element.packageId === oldValue.packageId
-      //   );
-      //   const oldActualQuantity = foundElementIndex.actualQuantity;
-      //   const oldNote = foundElementIndex.note;
-      //   if (newValue !== oldNote) foundElementIndex.isChanging = true;
-      //   else {
-      //     if (oldValue.actualQuantity === oldActualQuantity)
-      //       foundElementIndex.isChanging = false;
-      //   }
-      // },
       formatter: (cellContent, row, rowIndex) =>
         (listCheckedItems[rowIndex].note = row.note),
     },
@@ -183,6 +158,35 @@ export default function StocktakeDetailsComponent() {
     },
   ];
 
+  const columnsNotProgressing = [
+    {
+      dataField: "packageId",
+      text: "Package Id",
+    },
+    {
+      // dataField: "package.productVariantId",
+      dataField: "variantId",
+      text: "Variant ID",
+    },
+    {
+      //   dataField: "package.productVariant.name",
+      dataField: "variantName",
+      text: "Variant Name",
+    },
+    {
+      //   dataField: "package.quantity",
+      dataField: "quantity",
+      text: "Quantity",
+    },
+    {
+      dataField: "actualQuantity",
+      text: "Counted",
+    },
+    {
+      dataField: "note",
+      text: "Note",
+    },
+  ];
   //todo: function Nav Button
   const listButton = setListButtonNav(statusStocktakeStore);
   // function clicktTest() {
@@ -195,6 +199,7 @@ export default function StocktakeDetailsComponent() {
           isShow: true,
           title: "Delete",
           action: () => onDeleteClick(),
+          // action: () => testSWAL(),
           class: "btn-danger ",
           // style: {},
         },
@@ -206,6 +211,7 @@ export default function StocktakeDetailsComponent() {
           // action: () => clicktTest(),
           class: "btn-primary",
           // style: {},
+          disabled: isChecking,
         },
       ];
     } else if (status === 2) {
@@ -271,18 +277,51 @@ export default function StocktakeDetailsComponent() {
     };
     dispatch(rejectAction({ token: token, data: data }));
   }
+  // function testSWAL() {
+
+  // }
   function onDeleteClick() {
     const data = {
       stockTakeId: location.state.stocktakeId,
-      cancelReason: "",
+      cancelReason: "Progressing cancel",
     };
-    dispatch(rejectAction({ token: token, data: data }));
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: " #3085d6",
+      confirmButtonText: "Delete",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(rejectAction({ token: token, data: data }));
+        Swal.fire("Deleted!", "Your stocktake has been deleted.", "success");
+      }
+    });
   }
   function onSubmitClick() {
     const data = {
       id: location.state.stocktakeId,
     };
-    dispatch(submitAction({ token: token, data: data }));
+
+    // Swal.fire("The Internet?", "That thing is still around?", "question");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to submit",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: " #d33",
+      confirmButtonText: "Submit",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(submitAction({ token: token, data: data }));
+        Swal.fire("Success!", "Your stocktake has been submitted.", "success");
+      }
+    });
   }
   function onAdjustClick() {
     hideAdjustModal();
@@ -486,72 +525,75 @@ export default function StocktakeDetailsComponent() {
                   Save
                 </button> */}
 
-                {isLoading && (
-                  <Table
-                    keyField="packageId"
-                    columns={columns}
-                    data={listCheckedItems}
-                    noDataIndication="Table is Empty"
-                    cellEdit={cellEditFactory({
-                      mode: "click",
-                      blurToSave: true,
-                      beforeSaveCell(oldValue, newValue, row, column, done) {
-                        let findEle = listCompare.find(
-                          (e) => e.packageId === row.packageId
-                        );
-                        if (column.dataField === "actualQuantity") {
-                          console.log("Actual quantity");
-                          let currentNote = row.note;
-                          console.log(currentNote);
-                          if (
-                            newValue !== findEle.actualQuantity ||
-                            currentNote !== findEle.note
-                          ) {
-                            setListCompare([
-                              ...listCompare,
-                              listCompare.map((e) =>
-                                e === findEle ? (e.isChanging = true) : e
-                              ),
-                            ]);
-                          } else {
-                            // if (currentNote === findEle.note)
-                            setListCompare([
-                              ...listCompare,
-                              listCompare.map((e) =>
-                                e === findEle ? (e.isChanging = false) : e
-                              ),
-                            ]);
+                {isLoading &&
+                  (statusStocktakeStore === 0 ? (
+                    <Table
+                      keyField="packageId"
+                      columns={columns}
+                      data={listCheckedItems}
+                      noDataIndication="Table is Empty"
+                      cellEdit={cellEditFactory({
+                        mode: "click",
+                        blurToSave: true,
+                        beforeSaveCell(oldValue, newValue, row, column, done) {
+                          let findEle = listCompare.find(
+                            (e) => e.packageId === row.packageId
+                          );
+                          if (column.dataField === "actualQuantity") {
+                            console.log("Actual quantity");
+                            let currentNote = row.note;
+                            console.log(currentNote);
+                            if (
+                              newValue !== findEle.actualQuantity ||
+                              currentNote !== findEle.note
+                            ) {
+                              setListCompare([
+                                ...listCompare,
+                                listCompare.map((e) =>
+                                  e === findEle ? (e.isChanging = true) : e
+                                ),
+                              ]);
+                            } else {
+                              // if (currentNote === findEle.note)
+                              setListCompare([
+                                ...listCompare,
+                                listCompare.map((e) =>
+                                  e === findEle ? (e.isChanging = false) : e
+                                ),
+                              ]);
+                            }
+                          } else if (column.dataField === "note") {
+                            console.log("Note");
+                            let currentQuantity = row.actualQuantity;
+                            if (
+                              newValue !== findEle.note ||
+                              currentQuantity !== findEle.actualQuantity
+                            )
+                              setListCompare([
+                                ...listCompare,
+                                listCompare.map((e) =>
+                                  e === findEle ? (e.isChanging = true) : e
+                                ),
+                              ]);
+                            else
+                              setListCompare([
+                                ...listCompare,
+                                listCompare.map((e) =>
+                                  e === findEle ? (e.isChanging = false) : e
+                                ),
+                              ]);
                           }
-                        } else if (column.dataField === "note") {
-                          console.log("Note");
-                          let currentQuantity = row.actualQuantity;
-                          if (
-                            newValue !== findEle.note ||
-                            currentQuantity !== findEle.actualQuantity
-                          )
-                            setListCompare([
-                              ...listCompare,
-                              listCompare.map((e) =>
-                                e === findEle ? (e.isChanging = true) : e
-                              ),
-                            ]);
-                          else
-                            setListCompare([
-                              ...listCompare,
-                              listCompare.map((e) =>
-                                e === findEle ? (e.isChanging = false) : e
-                              ),
-                            ]);
-                        }
-
-                        console.log(findEle);
-                        console.log(row);
-                        console.log(column);
-                        console.log(oldValue);
-                      },
-                    })}
-                  />
-                )}
+                        },
+                      })}
+                    />
+                  ) : (
+                    <Table
+                      keyField="packageId"
+                      columns={columnsNotProgressing}
+                      data={listCheckedItems}
+                      noDataIndication="Table is Empty"
+                    />
+                  ))}
               </div>
             </div>
           </div>

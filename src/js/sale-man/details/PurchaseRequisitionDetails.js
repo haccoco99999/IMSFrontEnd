@@ -32,10 +32,10 @@ export default function details() {
 
   const [listValueColumn, setListColumn] = useState([
     {
-      productVariantId: "Product Id",
+      productVariantId: "Variant Id",
     },
     {
-      name: "Product Name",
+      name: "Variant Name",
     },
     {
       orderQuantity: "Order Quantity",
@@ -189,7 +189,7 @@ export default function details() {
     //     );
     //   }
     // }
-    if(listGetProductsStore.length > 0) {
+    if (listGetProductsStore.length > 0) {
       setCleanListProducts(
         listGetProductsStore.map((product) => {
           product.name = product.productVariant.name;
@@ -199,7 +199,7 @@ export default function details() {
       );
     }
   }, [listGetProductsStore]);
-
+  console.log(listGetProductsStore);
   useEffect(() => {
     if (message === "Submit Success") {
       dispatch(
