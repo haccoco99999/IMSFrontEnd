@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useReducer, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {Modal} from 'bootstrap'
+import { Modal } from "bootstrap";
+import Swal from "sweetalert2";
 //css
 import "../product.css";
 
@@ -11,21 +12,24 @@ import BrandSelectModal from "../components/brand-component";
 //Category
 import { getCategoriesAllAction } from "./action";
 import { getAllBrandAction } from "../details/action";
-const formReducer = (state, event) => {
-  return {
-    ...state,
-    [event.name]: event.value,
-  };
-};
+// const formReducer = (state, event) => {
+//   return {
+//     ...state,
+//     [event.name]: event.value,
+//   };
+// };
 
-export default function () {
+export default function CreateNewProduct(props) {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  const [formData, setFormData] = useReducer(formReducer, {});
-  const [categorySelected, setCategorySelected] = useState({});
+  const [formData, setFormData] = useReducer(props.formReducer, {});
+  const [categorySelected, setCategorySelected] = useState({
+    id: "",
+    name: "",
+  });
   const [isVariant, setIsVariant] = useState(false);
-  const [variantValues, setVariantValues] = useState([{}]);
+  // const [variantValues, setVariantValues] = useState([{}]);
   const [selectedBrand, setSelectedBrand] = useState({
     id: "",
     brandName: "",
@@ -57,17 +61,46 @@ export default function () {
   }
 
   function onClickContinue() {
-    if (isVariant) {
-      history.push("/homepage/product/create/variants", {
-        formData: formData,
-        categorySelected: categorySelected,
-        variantValues: variantValues,
-      });
-    } else
-      history.push("/homepage/product/create/novariants", {
-        formData: formData,
-        categorySelected: categorySelected,
-      });
+    console.log("FormData", formData);
+    // if(checkIsEmptyForm){
+    //   console.log("empty")
+    // }else{
+    //   console.log("not empty")
+    // }
+    // if (isVariant) {
+    //   history.push("/homepage/product/create/variants", {
+    //     formData: formData,
+    //     categorySelected: categorySelected,
+    //     variantValues: variantValues,
+    //   });
+    // } else
+    //   history.push("/homepage/product/create/novariants", {
+    //     formData: formData,
+    //     categorySelected: categorySelected,
+    //   });
+    var size = Object.keys(formData).length;
+    console.log(size);
+    if (size === 0) {
+      console.log("Empty");
+      Swal.fire({
+        icon:"error",
+        title:"Empty",
+        text: "There "
+      })
+    } else if (size > 0 && size < 3) {
+      console.log("Phai dien vao day du");
+    } else {
+      console.log("enough size");
+      if (
+        formData.brand !== "" &&
+        formData.name !== "" &&
+        formData.unit !== "" &&
+        categorySelected.name !== ""
+      )
+        console.log("Good");
+      else console.log("Not good");
+      // if (formData.some(check)) console.log("Phai dien vao cho trong");
+    }
   }
 
   const handleChangeValue = (event) => {
@@ -88,7 +121,7 @@ export default function () {
       id: el.getAttribute("id"),
       name: el.getAttribute("value"),
     });
-    console.log(categorySelected);
+    // console.log(categorySelected);
   };
 
   const onChangeFormVariants = (event) => {
@@ -153,23 +186,6 @@ export default function () {
 
   return (
     <div>
-      {/* <div className=" tab-fixed container-fluid  fixed-top">
-        <div className=" d-flex mb-3 justify-content-end mt-4 ">
-          <a className="me-2" onClick={goBackClick}>
-            <h3>Back</h3>
-          </a>
-          <h2 className="id-color fw-bold me-auto">Create new Product</h2>
-          <div>
-            <button
-              type="button"
-              className="btn btn-warning button-tab me-3 text-white"
-              onClick={onClickContinue}
-            >
-              Continue
-            </button>
-          </div>
-        </div>
-      </div> */}
       <NavigationBar
         listButton={listButton}
         titleBar="Create"

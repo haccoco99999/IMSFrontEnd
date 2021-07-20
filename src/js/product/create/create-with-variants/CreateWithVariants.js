@@ -1,24 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
+import BootstrapTable from "react-bootstrap-table-next";
+import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
+//css
 import "../../product.css";
 //components
 import { createProduct } from "../action";
 import Table from "../../../list-products-table/ListProductsTable";
 import NavigationBar from "../../../components/navbar/navbar-component";
 
-export default function () {
+export default function CreateWithVariants(props) {
   let history = useHistory();
   let location = useLocation();
   let dispatch = useDispatch();
 
-  const { token, messages } = useSelector((state) => ({
-    token: state.client.token,
-    messages: state.createProductReducer.messages,
-  }));
+  // const { token, messages } = useSelector((state) => ({
+  //   token: state.client.token,
+  //   messages: state.createProductReducer.messages,
+  // }));
 
-  const [variantValues, setVariantValues] = useState([]);
+  const [variantValues, setVariantValues] = useState([
+    {
+      name: "",
+      price: 0,
+      salePrice: 0,
+      barcode: "",
+      sku: "",
+    },
+  ]);
+
+  //todo: declare bootstrap tabe
+  const columns = [
+    { dataField: "name", text: "Variant Name", editable: true },
+    { dataField: "sku", text: "SKU (Optional)", editable: true },
+    { dataField: "barcode", text: "Barcode (Optional)", editable: true },
+    { dataField: "price", text: "Price", editable: true },
+    { dataField: "salePrice", text: "Sale price", editable: true },
+  ];
 
   const [listValueColumn, setListValueColumn] = useState([
     {
@@ -43,8 +62,8 @@ export default function () {
     },
   ]);
 
-  const dataLastPage = location.state.formData;
-  const selectedCategory = location.state.categorySelected;
+  // const dataLastPage = location.state.formData;
+  // const selectedCategory = location.state.categorySelected;
 
   function onChangeValueVariants(event) {
     setVariantValues(
@@ -75,22 +94,23 @@ export default function () {
   }
 
   function goBackClick() {
-    history.goBack();
+    // history.goBack();
+    props.prevStep();
   }
 
   function onClickSave() {
-    console.log(variantValues);
-    const data = {
-      name: dataLastPage.name,
-      brandName: dataLastPage.brand,
-      brandDescription: "",
-      categoryId: selectedCategory.id,
-      unit: dataLastPage.unit,
-      isVariantType: true,
-      productVariants: variantValues,
-    };
-    console.log(JSON.stringify(data));
-    dispatch(createProduct({ data: data, token: token }));
+    // console.log(variantValues);
+    // const data = {
+    //   name: dataLastPage.name,
+    //   brandName: dataLastPage.brand,
+    //   brandDescription: "",
+    //   categoryId: selectedCategory.id,
+    //   unit: dataLastPage.unit,
+    //   isVariantType: true,
+    //   productVariants: variantValues,
+    // };
+    // console.log(JSON.stringify(data));
+    // dispatch(createProduct({ data: data, token: token }));
   }
 
   //todo: list nav button
@@ -107,33 +127,15 @@ export default function () {
   }
 
   useEffect(() => {
-    if (messages !== "")
+    if (props.messages !== "")
       history.push("/homepage/product/details", {
-        productId: messages,
+        productId: props.messages,
       });
-  }, [messages]);
+  }, [props.messages]);
 
   return (
     //   todo: gop chung 2 bang , sau do tach ra
     <div>
-      {/* <div className=" tab-fixed container-fluid  fixed-top">
-        <div className=" tab-fixed container-fluid  fixed-top">
-          <div className=" d-flex mb-3 justify-content-end mt-4 ">
-            <a className="me-2" onClick={goBackClick}>
-              <h3>Back</h3>
-            </a>
-            <h2 className="id-color fw-bold me-auto">Create new Product</h2>
-            <div>
-              <button
-                className="btn btn-primary button-tab me-3 text-white"
-                onClick={onClickSave}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      </div> */}
       <NavigationBar
         listButton={listButton}
         titleBar="With Variant"
@@ -142,8 +144,7 @@ export default function () {
       />
       {/* content */}
       <div className="wrapper space-top">
-        {/* show product details */}
-        <h2 className="id-color fw-bold mb-3">{dataLastPage.name}</h2>
+        {/* <h2 className="id-color fw-bold mb-3">{dataLastPage.name}</h2>
         <div class="d-flex justify-content-around  mb-3">
           <div>
             <h5>Category</h5>
@@ -153,18 +154,27 @@ export default function () {
             <h5>Brand</h5>
             <h5 className="id-color">{dataLastPage.brand}</h5>
           </div>
-        </div>
+        </div> */}
 
         <div className="wrapper-content shadow">
           <button onClick={clickToAddVariants} className="btn btn-primary">
             Add
           </button>
-          <Table
+          {/* <Table
             listColumn={listValueColumn}
             listData={variantValues}
             clickToAddProduct={clickToAddVariants}
             onChangeValueProduct={onChangeValueVariants}
             clickDeleteProduct={clickDeleteVariant}
+          /> */}
+          <BootstrapTable
+            keyField="name"
+            data={variantValues}
+            columns={columns}
+            cellEdit={cellEditFactory({
+              mode: "click",
+              blurToSave: true,
+            })}
           />
         </div>
       </div>

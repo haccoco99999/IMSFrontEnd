@@ -333,19 +333,32 @@ export default function StocktakeDetailsComponent() {
 
   //todo: discard the input
   //reset default
-  function onDiscardClick() {
-    setListCheckedItems(
-      groupLocationStore[0].checkItems.map((item) => {
-        return {
-          packageId: item.packageId,
-          variantId: item.package.productVariantId,
-          variantName: item.package.productVariant.name,
-          quantity: item.package.quantity,
-          actualQuantity: item.actualQuantity,
-          note: item.note,
-        };
-      })
-    );
+  function onRevertClick() {
+    Swal.fire({
+      title: "Are you sure",
+      text: "All your unsaved data will be lost!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: " #d33",
+      confirmButtonText: "Confirm",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setListCheckedItems(
+          groupLocationStore[0].checkItems.map((item) => {
+            return {
+              packageId: item.packageId,
+              variantId: item.package.productVariantId,
+              variantName: item.package.productVariant.name,
+              quantity: item.package.quantity,
+              actualQuantity: item.actualQuantity,
+              note: item.note,
+            };
+          })
+        );
+      }
+    });
   }
 
   //todo: useEffect
@@ -504,17 +517,17 @@ export default function StocktakeDetailsComponent() {
                   <>
                     <button
                       type="button"
-                      class="btn btn-secondary"
-                      onClick={onDiscardClick}
-                    >
-                      Discard
-                    </button>
-                    <button
-                      type="button"
                       class="btn btn-primary"
                       onClick={onSaveClick}
                     >
                       Save
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      onClick={onRevertClick}
+                    >
+                      Revert
                     </button>
                   </>
                 )}

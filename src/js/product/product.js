@@ -15,7 +15,8 @@ import ProductDetails from "./details/ProductDetails";
 import VariantDetails from "./details/VariantDetails";
 import PackageDetails from "./details/PackageDetails";
 import CreateVariant from "./details/CreateVariant";
-
+import CreateTest2 from "./create/CreateNewProduct2";
+import CreateProductManager from "./create/CreateProductManager"
 export default function () {
   return (
     <div className="home_content wrapper">
@@ -27,7 +28,9 @@ export default function () {
             <Manager2 />
           </Route>
           <Route exact path="/homepage/product/create">
-            <Create />
+            {/* <Create /> */}
+            {/* <CreateTest2/> */}
+            <CreateProductManager/>
           </Route>
           <Route path="/homepage/product/create/novariants">
             <NoVariants />

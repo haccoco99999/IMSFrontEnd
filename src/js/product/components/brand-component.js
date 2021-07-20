@@ -7,7 +7,7 @@ import ToolkitProvider, {
 export default function BrandModalComponent(props) {
   const { SearchBar } = Search;
   const columns = [
-    { dataField: "id", text: "ID" },
+    // { dataField: "id", text: "ID" },
     { dataField: "brandName", text: "Brand Name" },
     { dataField: "brandDescription", text: "Brand Description" },
   ];
@@ -44,7 +44,7 @@ export default function BrandModalComponent(props) {
             </div>
             <div className="modal-body">
               <ToolkitProvider
-                keyField="id"
+                keyField="brandName"
                 data={props.listBrand}
                 columns={columns}
                 search={afterSearch}

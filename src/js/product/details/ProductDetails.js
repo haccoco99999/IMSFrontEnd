@@ -50,8 +50,8 @@ export default function ProductDetails() {
   const [brandSelected, setBrandSelected] = useState({});
   const [brandDetails, setBrandDetails] = useState({});
   const [categoryDtails, setCategoryDtails] = useState({});
-  const [isUpdateGeneralInformation, setIsUpdateGeneralInformation] =
-    useState(true);
+  // const [isUpdateGeneralInformation, setIsUpdateGeneralInformation] =
+  //   useState(true);
   //todo: Declare table
   const [listColumn, setListColumn] = useState({
     id: true,

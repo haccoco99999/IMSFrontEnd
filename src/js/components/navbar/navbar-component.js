@@ -26,10 +26,11 @@ export default function NavigationBar(props) {
             return (
               <button
                 onClick={button.action}
-                type="button"
+                type={button.type || "button"}
                 style={button.style}
                 class={"navigation-bar-right-button btn " + button.class}
                 disabled={button.disabled || false}
+                form={button.form}
               >
                 {button.title}
               </button>
