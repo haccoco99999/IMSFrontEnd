@@ -1,8 +1,8 @@
 import {GET_DETAIL_PURCHASE_ORDER, 
-    SEND_CONFIRM_PURCHASE_ORDER, 
-    CONFIRM_PURCHASE_ORDER_BY_MAMAGER,
-    SAVE_PRODUCTS_PURCHASE_ORDER, GET_PRODUCT_PURCHASE_ORDER,SET_DEFAULT_PRODUCT_PURCHASE_ORDER, INGORE_PURCHASE_ORDER_CONFIRM,
-    EDIT_PRICE_QUOTE_REQUEST
+    SEND_CONFIRM_PURCHASE_ORDER_REQUEST, 
+    CONFIRM_PURCHASE_ORDER_REQUEST,
+    SAVE_PRODUCTS_PURCHASE_ORDER_REQUEST, REJECT_PURCHASE_ORDER_CONFIRM_REQUEST,
+    EDIT_PRICE_QUOTE_REQUEST,SEND_MAIL_SERVICE_REQUEST, CREATE_PRICE_QUOTE_REQUEST, CREATE_PURCHASE_ORDER_REQUEST
  } from './contants'
 export  function getDetailPurchaseOrder(orderID){
    
@@ -11,41 +11,69 @@ export  function getDetailPurchaseOrder(orderID){
         orderID,
     }
 }
+export  function createPriceQuote({data, token}){
+   
+    return {
+        type: CREATE_PRICE_QUOTE_REQUEST,
+        data,
+        token
+    }
+}
+
+export function createPurchaseOrder({data, token}){
+    return {
+        type: CREATE_PURCHASE_ORDER_REQUEST,
+        data,
+        token,
+    }
+}
+
+export  function sendMailService({data, token}){
+    
+    return{
+        type:SEND_MAIL_SERVICE_REQUEST,
+        data,
+        token,
+    }
+}
+
 export function confirmDetailPurchaseOrder(orderID){
     return {
-        type: SEND_CONFIRM_PURCHASE_ORDER,
+        type: SEND_CONFIRM_PURCHASE_ORDER_REQUEST,
         orderID,
     }
 }
-export function saveProductsPurchaseOrder(orderID){
+export function saveProductsPurchaseOrder({data, token}){
     return {
-        type: SAVE_PRODUCTS_PURCHASE_ORDER,
-        orderID,
+        type: SAVE_PRODUCTS_PURCHASE_ORDER_REQUEST,
+        data,
+        token
     }
 }
-export function confirmPurchaseORderByManager(orderID){
+export function confirmPurchaseORderByManager({data, token}){
     return {
-        type: CONFIRM_PURCHASE_ORDER_BY_MAMAGER,
-        orderID,
+        type: CONFIRM_PURCHASE_ORDER_REQUEST,
+        data,
+        token
     }
 }
-export function getProductPurchaseOrder(productId){
-    return {
-        type: GET_PRODUCT_PURCHASE_ORDER,
-        productId,
-    }
-}
-export function setDefailtProductPurchaseOrder(){
-    return {
-        type: SET_DEFAULT_PRODUCT_PURCHASE_ORDER,
+// export function getProductPurchaseOrder(productId){
+//     return {
+//         type: GET_PRODUCT_PURCHASE_ORDER,
+//         productId,
+//     }
+// }
+// export function setDefailtProductPurchaseOrder(){
+//     return {
+//         type: SET_DEFAULT_PRODUCT_PURCHASE_ORDER,
       
-    }
-}
-export function ignorePurchaseOrderConfirm(orderID){
+//     }
+// }
+export function rejectPurchaseOrderConfirm({data, token}){
     
     return {
-        type: INGORE_PURCHASE_ORDER_CONFIRM,
-        orderID,
+        type: REJECT_PURCHASE_ORDER_CONFIRM_REQUEST,
+        data,
       
     }
 }

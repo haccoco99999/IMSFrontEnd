@@ -2,7 +2,6 @@ import LoginSaga from "./login/sagas";
 import UpdateSaga from "./about-account/sagas";
 // import PriceQuoteSaga from "./Gallery/sagas";
 import DetailPriceQuote from "./purchase-order/detail-purchase-order/sagas";
-import SendMailPriceQuote from "./purchase-order/create-price-quote/sagas";
 import searchPurchaseOrder from "./purchase-order/purchase-quote-order/sagas";
 import getGoodsReceipt from "./good-receipt/manager/sagas";
 import getAllRole from "./manage-account/manager/role-manager/sagas";
@@ -30,7 +29,7 @@ export default function* IndexSaga() {
     UpdateSaga(),
     // PriceQuoteSaga(),
     DetailPriceQuote(),
-    SendMailPriceQuote(),
+  
     searchPurchaseOrder(),
     getGoodsReceipt(),
     getAllRole(),

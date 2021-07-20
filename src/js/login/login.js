@@ -30,9 +30,20 @@ class Login extends Component {
             });
             
         }
-        else if(event.target.name === "password" && this.passwordIsvalid(event.target.value)){
+        else{
+            
+            this.setState({
+                emailIsvalid : false
+            });
+        }
+         if(event.target.name === "password" && this.passwordIsvalid(event.target.value)){
             this.setState({
                 passwordIsvalid: true
+            });
+        }
+        else{
+            this.setState({
+                emailIsvalid : true
             });
         }
         

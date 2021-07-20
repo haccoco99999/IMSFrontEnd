@@ -11,15 +11,46 @@ const initalState = {
     successful: false,
     messages: "",
     errors: "",
+    
     listPurchaseOrder: [],
     listQuote: [],
-    currentPage: 0,
-    pageCount: 0,
-    sizePerPage: 0,
-    rowCountTotal: 0,
+    purchaserOrderFilter:{
+        SearchQuery:"",
+        CurrentPage: 1,
+        SizePerPage: 10,
+        FromStatus: 3,
+        ToStatus: 6,
+        // HideMerged: true
+        supplier:{
+            SupplierId:"",
+            supplierName: "",
+        },
+       
+        FromTotalOrderPrice:"",
+        ToTotalOrderPrice:"",
+        FromDeliveryDate:"",
+        ToDeliveryDate:"",
+        FromConfirmedDate:"",
+        ToConfirmedDate:"",
+        ConfirmedByName:"",
+        FromCreatedDate:"",
+        ToCreatedDate:"",
+        FromModifiedDate:"",
+        ToModifiedDate:"",
+     
+    },
+    infoTablePage:{
+        currentPage: 0,
+        pageCount: 0,
+        sizePerPage: 0,
+        rowCountTotal: 0,
+    }
+ 
 }
 const reducer = function searchPurchaseOrderReducer(state = initalState, action) {
+    console.log(action)
     switch (action.type) {
+        
         case SEARCH_PURCHASE_ORDER:
             return {
                 ...state,
@@ -27,7 +58,8 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
                 successful: false,
                 messages: "",
                 errors: "",
-                listPurchaseOrder: []
+                listPurchaseOrder: [],
+                purchaserOrderFilter : action.filter
             }
         case SEARCH_PURCHASE_ORDER_SEARCH:
             let listPurchaseOrder = action.json.paging.resultList.map(item => {
@@ -46,10 +78,13 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
                 messages: "",
                 errors: "",
                 listPurchaseOrder: listPurchaseOrder,
+                infoTablePage:{
                 currentPage: action.json.paging.currentPage,
                 pageCount: action.json.paging.pageCount,
                 sizePerPage: action.json.paging.sizePerPage,
-                rowCountTotal: action.json.paging.rowCountTotal,
+                rowCountTotal: action.json.paging.rowCountTotal
+                },
+                purchaserOrderFilter : action.json.purchaserOrderFilter
             }
         case SEARCH_PURCHASE_ORDER_ERROR:
             return {

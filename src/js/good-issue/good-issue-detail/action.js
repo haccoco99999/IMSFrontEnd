@@ -1,4 +1,4 @@
-import {GET_GOOD_ISSUE_DETAIL_REQUEST, CREATE_GOOD_ISSUEL_REQUEST, UPDATE_GOOD_ISSUEL_REQUEST} from './contants'
+import {REJECT_GOOD_ISSUE_REQUEST, GET_GOOD_ISSUE_DETAIL_REQUEST, CREATE_GOOD_ISSUEL_REQUEST, UPDATE_GOOD_ISSUEL_REQUEST} from './contants'
 
 export function getDetailGoodIssue({issueId, token }){
     return {
@@ -23,7 +23,7 @@ export function updateGoodIssue({data, token }){
 }
 export function reactjsGoodIssue({data, token }){
     return {
-        type: GET_GOOD_ISSUE_DETAIL_REQUEST,
+        type: REJECT_GOOD_ISSUE_REQUEST,
         data,
         token,
     }

@@ -6,7 +6,11 @@ export default function MergePriceQuote(props) {
   const [listPriceQuote, setListPriceQuote] = useState([])
 
   async function getPriceQuoteAPI() {
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/search?FromStatus=1&ToStatus=1"
+    let query =""
+     props.mergedRequisitionIds.forEach(element => {
+      query +="&IgnoreOrderID=" +element
+    });
+    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/search?HideMerged=true&FromStatus=0&ToStatus=0"+query
 
     let json = await fetch(updateUrl, {
 

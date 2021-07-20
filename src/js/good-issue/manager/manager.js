@@ -5,26 +5,34 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import Progress from "../progress/progressing";
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
-import { getAllGoodIssue } from './action'
+import { getAllGoodIssue ,getAllGoodIssueRequisition } from './action'
 import { useDispatch, useSelector } from "react-redux";
 import DetailGoodIssue from "../good-issue-detail/GoodIssueDetail";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import SearchTest from "./search";
 import { useHistory } from "react-router-dom";
+import Gallery from "../../Gallery/Gallery";
 export default function manager() {
 
   let history = useHistory()
-  let goodIssueStore = useSelector(state => state.GetAllGoodIssues)
+  let {goodIssueStore,goodIssueRequisition } = useSelector(state => ({goodIssueStore :state.GetAllGoodIssues,
+    goodIssueRequisition : state.getAllGoodIssuesRequisition,
+  }))
   let [listGoodIssues, setListGoodIssues] = useState([])
+  let [listGoodIssueRequisition, setListGoodIssueRequisition] = useState([])
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getAllGoodIssue(""))
+    dispatch(getAllGoodIssueRequisition())
   }, [])
   useEffect(() => {
     setListGoodIssues(
       goodIssueStore.infoListGoodIssue.listGoodIssue
     )
-  }, [goodIssueStore])
+    setListGoodIssueRequisition(
+      goodIssueRequisition.infoListGoodIssueRequisition.listGoodIssueRequisition
+    )
+  }, [goodIssueStore, goodIssueRequisition])
   console.log(listGoodIssues)
   const columns = [
     {
@@ -34,7 +42,33 @@ export default function manager() {
     },
     {
       dataField: 'status',
-      text: 'Status'
+      text: 'Status',
+      align:'center',
+      formatter: (cell, row, rowIndex, extraData) => {
+
+        if (row.status === "Packing") {
+            return <span class="badge bg-warning text-dark">Packing</span>
+
+        }
+        if (row.status === "Shipping") {
+            return <span class="badge bg-primary">Shipping</span>
+
+
+        }
+        if (row.status === "Completed") {
+            return <span class="badge bg-success">Completed</span>
+
+
+        }
+      
+        if (row.status === "Canceled") {
+            return <span class="badge bg-danger">Canceled</span>
+
+
+        }
+        return row.status
+
+    }
     },
     {
       dataField: 'createdByName',
@@ -81,11 +115,21 @@ export default function manager() {
     //   console.log(`enter on row with index: ${rowIndex}`);
     // }
   };
+  function clickGoodIssueRequisition(data){
+    history.push("/homepage/good-issue/detail", { id: data.id, status: data.status })
+  }
   const hiddenRowKeys = [-1, -3];
   const { ToggleList } = ColumnToggle;
   return (
     <div className="space-top-heading">
       {/* title */}
+      <div className="title-heading mt-2">
+        <span>Goods Issues Requisition</span>
+      </div>
+      <Gallery listData={listGoodIssueRequisition}
+      clickGoodIssueRequisition={clickGoodIssueRequisition}
+      />
+
       <div className="title-heading mt-2">
         <span>Goods Issues</span>
       </div>

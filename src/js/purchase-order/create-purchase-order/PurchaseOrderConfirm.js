@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { useHistory, useLocation, withRouter } from 'react-router-dom'
-import { getDetailPurchaseOrder, ignorePurchaseOrderConfirm, confirmDetailPurchaseOrder, confirmPurchaseORderByManager, saveProductsPurchaseOrder } from './action'
+import { getDetailPurchaseOrder, rejectPurchaseOrderConfirm, confirmDetailPurchaseOrder, confirmPurchaseORderByManager, saveProductsPurchaseOrder } from './action'
 import NavigationBar from '../../navigation-bar-component/NavigationBar';
 import InfoDetailReceipt from '../../info-detail-receipt/InfoDetailReceipt';
 import ListProductsTable from '../../list-products-table/ListProductsTable';
@@ -9,24 +9,21 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ConfirmDateModal from './ConfirmDateModal';
 import { SearchToAddProduct } from '../../search-component/SearchComponentAll';
+import RejectReceiptModal from '../../RejectReceiptModal/RejectReceiptModal';
 export default function PurchaseOrderConfirm() {
     let dispatch = useDispatch()
     let history = useHistory()
     let location = useLocation()
     let [eventPage, setEventPage] = useState({
-        isConform: false
-
+        isShowConfirm: false,
+        isShowReject : false,
 
     })
     const columns = [
         {
             dataField: 'sku',
             text: 'SKU',
-            // formatter: (cell, row, rowIndex, extraData) =>{
-            //     return (
-            //         <SearchToAddProduct/>
-            //     )
-            // }
+     
         },
         {
             dataField: 'name',
@@ -54,7 +51,7 @@ export default function PurchaseOrderConfirm() {
     let [detailPurchaseState, setDetailPurchaseState] = useState(purchaseOrderDataGlobal)
     let [listProductPurchaseOrder, setListProductPurchaseOrder] = useState(purchaseOrderDataGlobal.purchaseOrderProduct)
     useEffect(() => {
-        dispatch(getDetailPurchaseOrder(location.state.orderID))
+        dispatch(getDetailPurchaseOrder(location.state.orderId))
     }, [])
 
 
@@ -72,7 +69,7 @@ export default function PurchaseOrderConfirm() {
         {
             isShow: true,
             title: "Ignore",
-            action: () => IgnorePurchase(),
+            action: () => isShowRejectModal(),
             style: {
                 background: "red"
             }
@@ -81,7 +78,7 @@ export default function PurchaseOrderConfirm() {
         {
             isShow: true,
             title: "Confirm",
-            action: () => editClick(),
+            action: () => isShowConfirmModal(),
             style: {
                 "background-color": "#4e9ae8"
             }
@@ -89,7 +86,7 @@ export default function PurchaseOrderConfirm() {
 
     ]
 
-
+ 
     function confirmClickByManager() {
         setEventPage({
             isConfirm: true
@@ -102,10 +99,20 @@ export default function PurchaseOrderConfirm() {
         })
     }
     function IgnorePurchase() {
-        dispatch(ignorePurchaseOrderConfirm(location.state.orderID))
+        dispatch(rejectPurchaseOrderConfirm(location.state.orderId))
     }
     function confirmClick() {
-        dispatch(confirmPurchaseORderByManager(location.state.orderID))
+        dispatch(confirmPurchaseORderByManager(location.state.orderId))
+    }
+    function isShowConfirmModal(){
+        setEventPage((state) =>({
+            ...state,isShowConfirm: !state.isShowConfirm,
+        }))
+    }
+    function isShowRejectModal(){
+        setEventPage((state) =>({
+            ...state,isShowReject: !state.isShowReject,
+        }))
     }
 
 
@@ -122,6 +129,23 @@ export default function PurchaseOrderConfirm() {
         )
 
     }
+    function clickToCLoseConfirm(status){
+        if(status === true){
+
+        }
+        setEventPage((state) =>({
+            ...state,isShowConfirm: !state.isShowConfirm,
+        }))
+    }
+    function clickToCLoseReject( data){
+        if(data !== null || data !== undefined){
+            // dispatch(ignorePurchaseOrderConfirm(location.state.orderId))
+        }
+        setEventPage((state) =>({
+            ...state,isShowReject: !state.isShowReject,
+        }))
+    }
+   
     return (
         <div>
             <NavigationBar actionGoBack={() => goBackClick()}
@@ -151,7 +175,7 @@ export default function PurchaseOrderConfirm() {
             <ConfirmDateModal confirmClick={confirmClick} cancelConfirmClick={cancelClick} isConfirm={eventPage.isConfirm} /> */}
 
             <div className="list-receipt-table-container">
-                <div className="tool-bar-table">
+                {/* <div className="tool-bar-table">
 
                     <div className="list-icon-tool-bar">
                         <div className="icon-tool-bar"><i class='bx bx-rotate-right'></i></div>
@@ -160,7 +184,7 @@ export default function PurchaseOrderConfirm() {
 
                     </div>
 
-                </div>
+                </div> */}
                 <div className="table-container">
                     <BootstrapTable
                         keyField='id'
@@ -175,6 +199,8 @@ export default function PurchaseOrderConfirm() {
                         headerClasses="table-header-receipt"
                     />
                 </div>
+                <ConfirmDateModal clickToCLoseConfirm={clickToCLoseConfirm} isConfirm={eventPage.isShowConfirm} />
+                <RejectReceiptModal clickToCLoseReject={clickToCLoseReject}  isReject={eventPage.isShowReject} />
 
             </div>
 

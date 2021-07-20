@@ -26,7 +26,7 @@ const set_receiving_purchase_order_quantity =
   "https://imspublicapi.herokuapp.com/api/goodsreceipt/update";
 
 function getListConfirmedPurchaseOrder(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/purchaseorder/search?CurrentPage=0&SizePerPage=0&FromStatus=4&ToStatus=4`;
+  const url = `http://imspublicapi.herokuapp.com/api/purchaseorder/search?CurrentPage=0&SizePerPage=0&FromStatus=5&ToStatus=5`;
 
   return fetch(url, {
     method: "GET",

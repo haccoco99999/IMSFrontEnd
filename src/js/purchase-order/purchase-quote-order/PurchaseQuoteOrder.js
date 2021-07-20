@@ -13,81 +13,28 @@ import "react-multi-carousel/lib/styles.css";
 import Gallery from '../../Gallery/Gallery';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
+import { PurchaseOrderSuggestion } from '../../search-component/SearchComponentAll'
 export default function PurchaseQuoteOrder() {
-    // constructor(props) {
-    //     super(props)
-    //     this.state = {
-    //         filter: {
-    //             searchQuery: "",
-    //             currentPage: 1,
-    //             sizePerPage: 8,
-    //             poSearchFilter: {
-    //                 status: 2,
 
-    //             }
-    //         },
-    //         listDraftColumn: {
-    //             id: true,
-    //             supplierName: true,
-    //             supplierId: false,
-    //             supplierPhone: false,
-    //             supplierEmail: false,
-    //             createdByName: true,
-    //             canceledByName: false,
-    //             confirmedByName: true,
-    //             status: true,
-    //             totalPrice: true,
-    //             costFee: false,
-    //             deliveryDate: true,
-    //             confirmedDate: false,
-    //             createdDate: false,
-    //             suggest: false,
-    //         },
-    //         listColumn: {
-    //             id: true,
-    //             supplierName: true,
-    //             supplierId: false,
-    //             supplierPhone: false,
-    //             supplierEmail: false,
-    //             createdByName: true,
-    //             canceledByName: false,
-    //             confirmedByName: true,
-    //             status: true,
-    //             totalPrice: true,
-    //             costFee: false,
-    //             deliveryDate: true,
-    //             confirmedDate: false,
-    //             createdDate: false,
-    //             suggest: false,
-
-
-    //         },
-    //         listHeaderEdit: {
-    //             id: "Order Id"
-    //         }
-    //     }
-    //     this.onClickToDetailPurchaseOrder = this.onClickToDetailPurchaseOrder.bind(this)
-    //     this.onClickToDetailQuoteOrder = this.onClickToDetailQuoteOrder.bind(this)
-    //     this.nextPagingClick = this.nextPagingClick.bind(this)
-    //     this.backPagingClick = this.backPagingClick.bind(this)
-    //     this.clickToSearchOrder = this.clickToSearchOrder.bind(this)
-    //     this.selectStatus = this.selectStatus.bind(this)
-    //     this.props.searchPurchaseOrder(this.state.filter)
-    //     this.props.getListQuote();
-    // }
     let history = useHistory()
     const { token, purchaseOrderStore } = useSelector(state => ({
         token: state.client.token,
         purchaseOrderStore: state.searchPurchaseOrderReducer
     }))
+    const [purchaseOrderFilter, setpurchaseOrderFilter] = useState(purchaseOrderStore.purchaserOrderFilter)
+    const [infoTablePage, setInfoTablePage] = useState(purchaseOrderStore.infoTablePage)
     const [listPriceQuote, setListPriceQuote] = useState([])
     const [listPurchaseOrder, setListPurchaseOrder] = useState([])
     const dispatch = useDispatch()
+    const [listKeyArrayFilter, setListKeyArrayFilter] = useState([])
+    const [eventPage , setEventPage] = useState({
+        isShowFilter: false
+    })
     useEffect(() => {
-        dispatch(searchPurchaseOrder({}))
+        dispatch(searchPurchaseOrder({ filter: purchaseOrderFilter }))
         dispatch(getListQuote())
     }, [])
-
+    
     useEffect(() => {
         setListPriceQuote(
             purchaseOrderStore.listQuote
@@ -95,16 +42,58 @@ export default function PurchaseQuoteOrder() {
         setListPurchaseOrder(
             purchaseOrderStore.listPurchaseOrder
         )
+        setpurchaseOrderFilter(
+            purchaseOrderStore.purchaserOrderFilter
+        )
+        setInfoTablePage(
+            purchaseOrderStore.infoTablePage
+        )
     }, [purchaseOrderStore])
     console.log(listPurchaseOrder)
     const columns = [
         {
             dataField: 'id',
             text: 'Order ID',
-         },
+        },
         {
             dataField: 'createdByName',
             text: 'Create By ',
+        },
+        {
+            dataField: 'status',
+            text: 'Status',
+            align: 'center',
+            formatter: (cell, row, rowIndex, extraData) => {
+
+                if (row.status === "POCreated") {
+                    return <span class="badge bg-secondary">Draft</span>
+
+                }
+                if (row.status === "POWaitingConfirmation") {
+                    return <span class="badge bg-warning text-dark">Watinng confirm</span>
+
+
+
+                }
+                if (row.status === "POConfirm") {
+                    return <span class="badge bg-success">Confirmed</span>
+
+
+
+                }
+                if (row.status === "Done") {
+                    return <span class="badge bg-primary">Done</span>
+
+
+                }
+                if (row.status === "POCanceled") {
+                    return <span class="badge bg-danger">Canceled</span>
+
+
+                }
+                return row.status
+
+            }
         },
         {
             dataField: 'createdDate',
@@ -125,25 +114,41 @@ export default function PurchaseQuoteOrder() {
 
 
     ];
+    const purchaserOrderFilterReset ={
+      
+        // HideMerged: true
+        supplier:{
+            SupplierId:"",
+            supplierName: "",
+        },
+       
+        FromTotalOrderPrice:"",
+        ToTotalOrderPrice:"",
+        FromDeliveryDate:"",
+        ToDeliveryDate:"",
+        FromConfirmedDate:"",
+        ToConfirmedDate:"",
+        ConfirmedByName:"",
+        FromCreatedDate:"",
+        ToCreatedDate:"",
+        FromModifiedDate:"",
+        ToModifiedDate:"",
+     
+    }
     const rowEvents = {
         onClick: (e, row, rowIndex) => {
-            if (row.status === "POCreated") {
-                history.push("/homepage/purchase/PurchaseOrder", { orderID: row.id, status: row.status });
-    
-            }
-            // console.log(row.status)
-            if (row.status === "POWaitingConfirmation") {
-                history.push("/homepage/purchase/PurchaseOrderConfirm", { orderID: row.id, status: row.status });
-    
-            }
-            if (row.status === "POConfirm") {
-                history.push("/homepage/purchase/PurchaseOrderDone", { orderID: row.id, status: row.status });
-    
-            }
+
+            history.push("/homepage/purchase/PurchaseOrder", { orderID: row.id, status: row.status });
+
+
+         
 
         },
 
     };
+    function cancelFilter(arr){
+        setListKeyArrayFilter([...arr])
+    }
     function onClickToDetailPurchaseOrder(row) {
         console.log(row)
         if (row.status === "POCreated") {
@@ -164,79 +169,44 @@ export default function PurchaseQuoteOrder() {
     }
     function onClickToDetailQuoteOrder(row) {
         console.log(row)
-        history.push("/homepage/purchase/PriceQuote", { orderID: row.id, status: row.status });
-        // console.log(orderID)
+        history.push("/homepage/purchase/PriceQuote", { orderId: row.id, status: row.status });
     }
-    // nextPagingClick() {
-    //     this.setState({
-    //         currentPage: this.state.currentPage + 1
-    //     })
-    //     this.props.searchPurchaseOrder({
-    //         searchQuery: this.state.searchQuery,
-    //         status: this.state.status,
-    //         currentPage: this.state.currentPage + 1,
-    //         sizePerPage: 8,
-    //     })
-    // }
-    // backPagingClick() {
-    //     this.setState({
-    //         currentPage: this.state.currentPage - 1
-    //     })
-    //     this.props.searchPurchaseOrder({
-    //         searchQuery: this.state.searchQuery,
-    //         status: this.state.status,
-    //         currentPage: this.state.currentPage - 1,
-    //         sizePerPage: 8,
-    //     })
-    // }
-    // submitDisplay() {
-    //     this.setState({
-    //         listColumn: {
-    //             ...this.state.listDraftColumn
-    //         }
-    //     })
-    // }
-    // setCheckBoxClick(event) {
-    //     this.setState({
-    //         listDraftColumn: {
-    //             ...this.state.listDraftColumn,
-    //             [event.target.name]: event.target.checked
-    //         }
-    //     })
-    // }
-    // clickToSearchOrder(keySearch) {
+    
+    
 
-    //     this.props.searchPurchaseOrder(this.state.filter)
-
-    // }
+    function setListTablePaging(event) {
 
 
-    // selectStatus(event) {
-    //     if (event.target.name !== "searchQuery") {
-    //         this.setState((prevState) => ({
-    //             filter: {
-    //                 ...prevState.filter,
-    //                 poSearchFilter: {
-    //                     ...prevState.filter.poSearchFilter,
-    //                     [event.target.name]: event.target.value
-    //                 }
-    //             }
-    //         }))
-    //     }
-    //     else if (event.target.name === "searchQuery") {
-    //         this.setState((prevState) => ({
-    //             filter: {
-    //                 ...prevState.filter,
-    //                 searchQuery: event.target.value
-    //             }
-    //         }))
-    //     }
+        dispatch(searchPurchaseOrder({ filter: { ...purchaseOrderFilter, [event.target.name]: event.target.value, CurrentPage: 1 } }))
+    }
+    function pagingPurchaseOrder(index) {
+        dispatch(searchPurchaseOrder({ filter: { ...purchaseOrderFilter, CurrentPage: purchaseOrderFilter.CurrentPage + index } }))
+    }
+    function submitFilter(listselectFilter,filter) {
+        setListKeyArrayFilter([...listselectFilter])
+        setShowFilter()
+        dispatch(searchPurchaseOrder({ filter: filter }))
 
-    // }
-
-
-
-
+    }
+    function searchKeyWordPurchaseOrder(searchKey) {
+        dispatch(searchPurchaseOrder({ filter: {...purchaseOrderFilter, SearchQuery: searchKey} }))
+    }
+    function reloadTable(){
+        searchKeyWordPurchaseOrder("")
+    }
+    function resetFilter(){
+        setListKeyArrayFilter([])
+        setShowFilter()
+        dispatch(searchPurchaseOrder({ filter: {...purchaseOrderFilter,...purchaserOrderFilterReset} }))
+    }
+    function setListKeyWordArrayFilter(value){
+        setListKeyArrayFilter([...value])
+    }
+    function setShowFilter(){
+        setEventPage((state) =>({
+            ...state, isShowFilter: ! state.isShowFilter
+        }))
+    }
     return (
         <div className="purchase-quote-order">
             <div className="title-purchase-quote-order">
@@ -245,8 +215,8 @@ export default function PurchaseQuoteOrder() {
             </div>
 
             <Gallery
-                    clickQuote={onClickToDetailQuoteOrder}
-                    listData={listPriceQuote} />
+                clickQuote={onClickToDetailQuoteOrder}
+                listData={listPriceQuote} />
             <div className="title-purchase-quote-order">
                 <span>Purchase order</span>
 
@@ -266,22 +236,25 @@ export default function PurchaseQuoteOrder() {
 
                     </ul>
                 </div> */}
-            {/* <FilterModal selectStatus={this.selectStatus} />
-                <AddjustDisplayTableModal
+            {/* {/* <FilterModal selectStatus={this.selectStatus} /> */}
+            {/* <AddjustDisplayTableModal
                     submitDisplay={(e) => this.submitDisplay(e)}
                     setCheckBoxClick={(e) => this.setCheckBoxClick(e)}
-                    listColumnDisplay={this.state.listDraftColumn} /> */}
+                    listColumnDisplay={this.state.listDraftColumn} />  */}
 
             <div className="list-receipt-table-container">
                 <div className="tool-bar-table">
                     <div className="form-group search-purchase">
                         <img src="..\src\js\images\search.svg" alt="icon-search" />
-                        <input name="searchQuery" type="text" className="form-control" placeholder="Search by Order ID or Supplier Name" />
-
+                        {/* <input name="searchQuery" type="text" className="form-control" placeholder="Search by Order ID or Supplier Name" /> */}
+                    <PurchaseOrderSuggestion searchKeyWordPurchaseOrder={searchKeyWordPurchaseOrder}/>
                     </div>
                     <div className="list-icon-tool-bar">
-                        <div className="icon-tool-bar"><i class='bx bx-rotate-right'></i></div>
-                        <div className="icon-tool-bar"><i class='bx bx-filter'></i></div>
+                        <div className="icon-tool-bar" onClick={() => reloadTable()}><i class='bx bx-rotate-right'></i></div>
+                        <div class="btn btn-default filter"
+                      className="icon-tool-bar"
+                            onClick={() => setShowFilter()}
+                            ><i class='bx bx-filter'></i></div>
                         <div className="icon-tool-bar"><i class='bx bx-cog'></i></div>
 
                     </div>
@@ -304,36 +277,25 @@ export default function PurchaseQuoteOrder() {
                 <div className="paging-container">
 
                     <div className="left-size-paging">
-                        <select className="select-row-table">
-                            <option value={10}>{10}</option>
-                            <option value={11}>{10}</option>
-                            <option value={10}>{10}</option>
+                        <select onChange={setListTablePaging} name="SizePerPage" className="select-row-table">
+                            <option value={10}>10</option>
+                            <option value={25}>25</option>
+                            <option value={50}>50</option>
 
                         </select>
                         <span>Showing result out of </span>
                     </div>
                     <div className="button-paging">
-                        <img src="..\src\js\images\left-arrow.svg" />
-                        <img src="..\src\js\images\right-arrow.svg" />
+                        <img onClick={() => pagingPurchaseOrder(-1)} src="..\src\js\images\left-arrow.svg" />
+                        {purchaseOrderFilter.CurrentPage}
+                        <img onClick={() => pagingPurchaseOrder(+1)} src="..\src\js\images\right-arrow.svg" />
                     </div>
                 </div>
             </div>
 
-
-            {/* <ListReceiptTable
-                    setKeySearch={this.selectStatus}
-                    keySearch={this.state.filter.searchQuery}
-                    clickToSearch={this.clickToSearchOrder}
-                    sizePerPage={this.state.sizePerPage}
-                    currentPage={this.state.currentPage}
-                    pageCount={this.props.searchPurchaseOrderReducer.pageCount}
-                    listHeaderEdit={this.state.listHeaderEdit}
-                    listColumn={this.state.listColumn}
-                    listData={this.props.searchPurchaseOrderReducer.listPurchaseOrder}
-                    onRowClick={this.onClickToDetailPurchaseOrder}
-                    backPagingClick={this.backPagingClick}
-                    nextPagingClick={this.nextPagingClick}
-                /> */}
+            <FilterModal cancelClick={setShowFilter} isShowFilter={eventPage.isShowFilter}  listKeyArrayFilter={listKeyArrayFilter} submitFilter={submitFilter} filterValue={purchaseOrderFilter} resetFilter={resetFilter}/>
+       
+      
 
         </div>
     )

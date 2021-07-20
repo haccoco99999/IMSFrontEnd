@@ -3,9 +3,20 @@ import { GET_PRICE_QUOTE_ERROR,GET_PRICE_QUOTE_SUCCESS,GET_PRICE_QUOTE_REQUESTIN
 import handleApiErrors from '../../auth/api-errors'
 const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyNTYyMTM0NSwiZXhwIjoxNjI1Nzk0MTQ1LCJpYXQiOjE2MjU2MjEzNDV9.40NoAmbWo91YFSW_qXcSVvLx5_LBnlI9kNmSjlFu0kY"
 function searchPurchaseOrder(action){
-    const updateUrl=`https://imspublicapi.herokuapp.com/api/purchaseorder/search?CurrentPage=1&SizePerPage=20&FromStatus=4&ToStatus=4`
-    
-        console.log(action.filter)
+    let filterString = ""
+    Object.entries(action.filter).forEach(item =>{
+        if(item[1] !==""){
+            if(item[0] === "supplier" && item[1]["SupplierId"] !== "" ){
+                filterString += "SupplierId=" +item[1]["SupplierId"] + "&"
+            }
+            else if(item[0] !== "supplier")
+            filterString += item[0] + "=" +item[1] + "&"
+        }
+    })
+    console.log(filterString)
+    const updateUrl=`https://imspublicapi.herokuapp.com/api/purchaseorder/search?` +filterString
+   
+  
     return fetch(updateUrl, {
         
         method: 'GET',
@@ -55,7 +66,7 @@ function getListPriceQuoteAPI(){
       
 }
 
-    const updateUrl="https://imspublicapi.herokuapp.com/api/purchaseorder/search?FromStatus=1&ToStatus=1"
+    const updateUrl="https://imspublicapi.herokuapp.com/api/purchaseorder/search?FromStatus=0&ToStatus=2&HideMerged=true"
 
     return fetch(updateUrl, {
         
@@ -77,7 +88,8 @@ function* searchPurchaseOrderFlow(action){
     
     try{
       let  json= yield call(searchPurchaseOrder,action)
-      
+      console.log(json)
+       json= {...json, purchaserOrderFilter : action.filter}
         yield put({type:SEARCH_PURCHASE_ORDER_SEARCH, json})
     }catch(error){
        console.log(error)

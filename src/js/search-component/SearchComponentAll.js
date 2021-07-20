@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
-import { Typeahead, AsyncTypeahead } from 'react-bootstrap-typeahead';
-
-export  function SearchToAddProduct(props) {
+import React, { useEffect, useState } from 'react'
+import { ClearButton, Typeahead, AsyncTypeahead } from 'react-bootstrap-typeahead';
+export function SearchToAddProduct(props) {
 
 
     const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/productvariant/search';
@@ -14,7 +13,7 @@ export  function SearchToAddProduct(props) {
 
         fetch(`${SEARCH_URI}?SearchQuery=${query}&CurrentPage=1&SizePerPage=20`)
             .then((resp) => resp.json())
-            .then(( items ) => {
+            .then((items) => {
                 console.log(items)
                 const options = items.paging.resultList.map((i) => ({
                     name: i.name,
@@ -30,51 +29,178 @@ export  function SearchToAddProduct(props) {
     const filterBy = () => true;
 
 
-    return (<AsyncTypeahead
-        filterBy={filterBy}
-        id="async-example"
-        isLoading={isLoading}
-        labelKey="filter"
-        minLength={3}
-        onSearch={handleSearch}
-        options={options}
-        placeholder="Search for a Github user..."
-        renderMenuItemChildren={(option) => (
-            <div onClick={() => props.getInfoProduct(option.product)} key={option.id}>
-               
-                <p>{option.name}</p>
-                <p>{option.sku}</p>
-                
-            </div>
-        )}
-    />)
+    return (
+
+        <AsyncTypeahead
+            filterBy={filterBy}
+            id="async-example"
+            labelKey="filter"
+            minLength={3}
+            onSearch={handleSearch}
+            options={options}
+            placeholder="Search for a Github user..."
+
+            renderMenuItemChildren={(option) => (
+                <div onClick={() => props.getInfoProduct(option.product)} key={option.id}>
+
+                    <p>{option.name}</p>
+                    <p>{option.sku}</p>
+
+                </div>
+            )}
+        />
+
+    )
+}
+export function ProductSearchSuggestion(props) {
+
+
+    const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/product/els/';
+
+    const [keySearch, setKeySearch] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [options, setOptions] = useState([]);
+
+    const handleSearch = (query) => {
+        setIsLoading(true);
+        setKeySearch(query)
+        fetch(`${SEARCH_URI}${query}`)
+            .then((resp) => resp.json())
+            .then((items) => {
+                console.log(items)
+                const options = items.suggestions.map((i) => ({
+                    name: i,
+
+                }));
+
+                setOptions(options);
+                setIsLoading(false);
+            });
+    };
+    const filterBy = () => true;
+
+    function handleChanged(select) {
+        setKeySearch(select[0].name)
+    }
+    return (
+        <span>
+            <AsyncTypeahead
+                filterBy={filterBy}
+                id="async-example"
+                labelKey="name"
+                minLength={1}
+                onSearch={handleSearch}
+                options={options}
+                placeholder="Search for a Github user..."
+                onChange={handleChanged}
+                renderMenuItemChildren={(option, index) => (
+                    <div key={index} onClick={() => props.getListProduct(option.name)}>
+
+                        <p>{option.name}</p>
+
+                    </div>
+                )}
+            />
+            <button onClick={() => props.getListProduct(keySearch)}>Search</button>
+        </span>
+    )
+}
+export function PurchaseOrderSuggestion(props) {
+
+
+    const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/po/els/';
+
+    const [keySearch, setKeySearch] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [options, setOptions] = useState([]);
+    const [selected, setSelected] = useState([{ name: "" }]);
+    const handleSearch = (query) => {
+        setIsLoading(true);
+        setKeySearch(query)
+        fetch(`${SEARCH_URI}${query}`)
+            .then((resp) => resp.json())
+            .then((items) => {
+                console.log(items)
+                const options = items.suggestions.map((i) => ({
+                    name: i,
+
+                }));
+
+                setOptions(options);
+                setIsLoading(false);
+            });
+    };
+    const filterBy = () => true;
+
+    function handleChanged(select) {
+        setSelected(select)
+        //  setKeySearch(select[0].name)
+    }
+    return (
+        <div>
+            <AsyncTypeahead
+                filterBy={filterBy}
+                id="async-example"
+                labelKey="name"
+                minLength={1}
+                onSearch={handleSearch}
+                options={options}
+                selected={selected}
+                placeholder="Search Purchase Order"
+                onChange={handleChanged}
+                renderMenuItemChildren={(option, index) => (
+                    <div key={index} onClick={() => props.searchKeyWordPurchaseOrder(option.name)} >
+
+                        {option.name}
+
+                    </div>
+                )}
+            />
+            <button onClick={() => props.searchKeyWordPurchaseOrder(keySearch)}>Search</button>
+
+        </div>
+    )
 }
 
-export  function SeachSupplier(props) {
+export function SeachSupplier(props) {
 
 
     const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/suppliers/search';
 
 
     const [isLoading, setIsLoading] = useState(false);
-    const [options, setOptions] = useState([{ 
-        supplier: "1231",
-        supplierName: "aaa",
-        phoneNumber: "ádfas",
-        id: "Aaa",
-    }]);
+    const [options, setOptions] = useState([]);
+    const [selected, setSelected] = useState([{ ...props.supplierInfo }]);
+
+    function handleSelect(s) {
+
+        // console.log((s[0] ? s[0].DataType : 'Nothing') + ' selected');
+        setSelected(s);
+    }
+    console.log(selected)
+    function handlePreset() {
+        let s = props.options[2];
+        console.log('Preset', s);
+        setSelected([s]);
+    }
+    useEffect(() => {
+        setSelected([props.supplierInfo]);
+
+    }, [props.supplierInfo])
     const handleSearch = (query) => {
         setIsLoading(true);
 
         fetch(`${SEARCH_URI}?SearchQuery=${query}&CurrentPage=1&SizePerPage=20`)
             .then((resp) => resp.json())
-            .then(( json ) => {
-               
+            .then((json) => {
+
                 const options = json.paging.resultList.map((i) => ({
-                    supplier: i,
+
+                    id: i.id,
+                    address: i.address,
                     supplierName: i.supplierName,
                     phoneNumber: i.phoneNumber,
-                    id: i.id,
+                    email: i.email,
                 }));
 
                 setOptions(options);
@@ -84,27 +210,40 @@ export  function SeachSupplier(props) {
     const filterBy = () => true;
 
 
-    return (<AsyncTypeahead
-        defaultSelected={options.slice(0, 1)}
+    return (<div><AsyncTypeahead
+        selected={selected}
         filterBy={filterBy}
         id="async-example"
-        isLoading={isLoading}
         labelKey="supplierName"
         minLength={1}
         onSearch={handleSearch}
         options={options}
-        placeholder="Search for a Github user..."
+        onChange={handleSelect}
+        placeholder="Search for a supplier "
         renderMenuItemChildren={(option) => (
-            <div onClick={() => props.getDataSupplier(option.supplier)} key={option.supplier} key={option.id}>
-               
-                <p>{option.supplierName}</p>
-                <span>{option.phoneNumber}</span>
-                
+
+
+            <div style={{ "border-bottom": "1px solid gray" }} onClick={() => props.getDataSupplier(option)} key={option.supplier} key={option.id}>
+                {option.supplierName}
+                <div>
+                    <small>Capital: {option.phoneNumber}</small>
+                </div>
             </div>
+
+
         )}
-    />)
+
+    >
+        {isLoading ? <div className="rbt-aux">
+            <div style={{ fontSize: "10px" }} class="spinner-border spinner-grow-sm " role="status">
+
+            </div>
+        </div> : ""}</AsyncTypeahead>
+
+
+    </div>)
 }
-export  function Search() {
+export function Search() {
 
 
     const SEARCH_URI = 'https://api.github.com/search/users';
@@ -152,7 +291,7 @@ export  function Search() {
                     }}
                 />
                 <span>{option.login}</span>
-                
+
             </div>
         )}
     />)

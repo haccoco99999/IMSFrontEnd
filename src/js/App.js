@@ -14,7 +14,7 @@ import Notification from "./notification/notification";
 import ManageAccount from "./manage-account/manage-account";
 import SaleManPage from "./sale-man/sale-man";
 import { connect } from "react-redux";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch, useHistory } from "react-router-dom";
 import NotificationBell from "./notification-component/notification-component";
 class App extends Component {
   constructor(props) {
@@ -219,11 +219,7 @@ class App extends Component {
               </li>
             </nav>
           </ul>
-          <div className="profile_content logout_content">
-            <div className="profile">
-              <i className="bx bx-log-out menu-icon-notification-logout" />
-            </div>
-          </div>
+          <Logout/>
         </div>
 
         <Switch>
@@ -275,5 +271,22 @@ const mapStateToProps = (state) => ({
   client: state.client,
 });
 
+function Logout(){
+  let history = useHistory();
+  
+  const logout = () => {
+    localStorage.removeItem('token');
+
+    history.push('/login');
+ }
+
+  return(
+    <div className="profile_content logout_content">
+    <div className="profile">
+      <i  onClick={logout} className="bx bx-log-out menu-icon-notification-logout" />
+    </div>
+  </div>
+  )
+}
 const connected = connect(mapStateToProps)(App);
 export default connected;

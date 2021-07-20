@@ -1,13 +1,12 @@
 import React from 'react'
-import TablePurchase from '../purchase-quote-order/Table-Purchase-Order'
 import './CreatePurchaseOrder.css';
 import TextEditor from '../../text-editor-compoent/text-editor-compoent';
 import { getDetailPurchaseOrder,
-     setDefailtProductPurchaseOrder, 
+    //  setDefailtProductPurchaseOrder, 
      confirmDetailPurchaseOrder, 
      confirmPurchaseORderByManager,
       saveProductsPurchaseOrder,
-       getProductPurchaseOrder,
+    //    getProductPurchaseOrder,
     ignorePurchaseOrderConfirm } from './action'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
@@ -93,7 +92,7 @@ class CreatePurchaseOrder extends React.Component {
             this.setState({
                 purchaseOrderProduct: [...this.state.purchaseOrderProduct, nextProps.productPurchaseOrderReducer.product]
             })
-            this.props.setDefailtProductPurchaseOrder()
+           
 
         }
     }
@@ -324,7 +323,7 @@ class CreatePurchaseOrder extends React.Component {
     }
 
     addProductPurchaseOrder() {
-        this.props.getProductPurchaseOrder("MO569812R")
+        // this.props.getProductPurchaseOrder("MO569812R")
     }
     clickToAddProduct(productRaw) {
 
@@ -519,8 +518,8 @@ const mapStateToProps = state => ({
 })
 const connected = connect(mapStateToProps, { 
     ignorePurchaseOrderConfirm, 
-    setDefailtProductPurchaseOrder,
-     getProductPurchaseOrder, 
+   
+    //  getProductPurchaseOrder, 
      saveProductsPurchaseOrder,
       getDetailPurchaseOrder, 
       confirmDetailPurchaseOrder, 

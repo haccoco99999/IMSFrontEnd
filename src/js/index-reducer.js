@@ -5,7 +5,7 @@ import updateProfile from "./about-account/reducer";
 // import listPriceQuote from "./Gallery/reducer";
 import controlPurchaseQuotePage from "./purchase-order/reducer";
 import detailPriceQuote from "./purchase-order/detail-purchase-order/reducer";
-import sendMailReducer from "./purchase-order/create-price-quote/reducer";
+// import sendMailReducer from "./purchase-order/create-price-quote/reducer";
 import searchPurchaseOrderReducer from "./purchase-order/purchase-quote-order/reducer";
 // import updateProfile from './about-account/reducer'
 import getAllRoleReducer from "./manage-account/manager/role-manager/reducer";
@@ -24,9 +24,19 @@ import createProductReducer from "./product/create/reducer";
 import {createUserAccountReducer, getUserAccountDetail, updateAccountDetail} from "./manage-account/create/account/reducer";
 import { createRolePermission,DetailRolePermission , UpdateRolePermission } from "./manage-account/create/role/reducer";
 import getDetailsProductReducer from "./product/details/reducer";
-import { GetAllGoodIssues } from "./good-issue/manager/reducer";
-import{ DetailGoodIssue, CreateGoodIssue , UpadateGoodIssue} from "./good-issue/good-issue-detail/reducer";
-import { getDetailPurchaseReducer,productPurchaseOrderReducer, editPriceQuoteReducer } from "./purchase-order/create-purchase-order/reducer";
+import { GetAllGoodIssues, getAllGoodIssuesRequisition } from "./good-issue/manager/reducer";
+import{ DetailGoodIssue, CreateGoodIssue , UpadateGoodIssue, RejectGoodIssue} from "./good-issue/good-issue-detail/reducer";
+import { getDetailPurchaseReducer,
+  // productPurchaseOrderReducer,
+  rejectPurchaserOrder,
+  mailOrderData, priceQuoteDataEdit ,
+   purchaseOrderConfirmSended,
+   confirmPurchaserOrderOfManager,
+   productPurchaseOrderUpdate,
+   createPurchaserOrder,
+   priceQuoteCreate,
+   
+  } from "./purchase-order/create-purchase-order/reducer";
 const IndexReducer = combineReducers({
   login,
   client,
@@ -34,7 +44,6 @@ const IndexReducer = combineReducers({
 
   controlPurchaseQuotePage,
   detailPriceQuote,
-  sendMailReducer,
   searchPurchaseOrderReducer,
   getGoodsReceiptReducer,
   getAllRoleReducer,
@@ -54,11 +63,17 @@ const IndexReducer = combineReducers({
   DetailGoodIssue,
   GetAllGoodIssues,
   getDetailPurchaseReducer,
-  productPurchaseOrderReducer,
+  // productPurchaseOrderReducer,
   CreateGoodIssue,
   UpadateGoodIssue,
-  editPriceQuoteReducer
-
+  mailOrderData,
+  priceQuoteDataEdit,purchaseOrderConfirmSended,confirmPurchaserOrderOfManager,
+  productPurchaseOrderUpdate,
+  rejectPurchaserOrder,
+  getAllGoodIssuesRequisition,
+  priceQuoteCreate,
+  createPurchaserOrder,
+  RejectGoodIssue
 });
 
 export default IndexReducer;

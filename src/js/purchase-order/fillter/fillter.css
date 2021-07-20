@@ -2,3 +2,7 @@
     font-weight: bold;
     color: gray;
   }
+  .modal-filter-customize{
+    background: #00000052 !important;
+    display: block !important;
+  }

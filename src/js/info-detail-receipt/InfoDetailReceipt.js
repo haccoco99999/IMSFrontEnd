@@ -1,21 +1,21 @@
 import React from 'react'
 import './info-detail-receipt.css'
 export default function InfoDetailReceipt(props) {
-
+    console.log(props.applicationUser)
     return (<div className="info-detai-receipt-container">
         <div className="info-detai-receipt">
-            <p>Create by: <span>{}</span></p>
+            <p>Create by: <span>{props.applicationUser.name}</span></p>
             <div>
-                <p>Email : <span>{}</span></p>
-                <p>Phone No: <span>{}</span></p>
+                <p>Email : <span>{props.applicationUser.email}</span></p>
+                <p>Phone No: <span>{props.applicationUser.phoneNumber}</span></p>
             </div>
 
         </div>
         <div className="info-detai-receipt">
-            <p>Supplier : <span>{}</span></p>
+            <p>Supplier : <span>{props.supplier.id}</span></p>
             <div>
-                <p>Email : <span>{}</span></p>
-                <p>Phone No: <span>{}</span></p>
+                <p>Email : <span>{props.supplier.email}</span></p>
+                <p>Phone No: <span>{props.supplier.phoneNumber}</span></p>
             </div>
 
         </div>

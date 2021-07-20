@@ -6,10 +6,10 @@ import {Route, withRouter, Switch } from 'react-router-dom'
 import CreatePurchaseOrder from './create-purchase-order/CreatePurchaseOrder'
 import PurchaseQuoteOrder from './purchase-quote-order/PurchaseQuoteOrder'
 import DetailPuchaseOrder from './create-purchase-order/DetailPuchaseOrder'
-import PriceQuote from './create-purchase-order/PirceQuote'
+import PriceQuote from './create-purchase-order/PriceQuote'
 import PurchaseOrder from './create-purchase-order/PurchaseOrder'
 import PurchaseOrderConfirm from './create-purchase-order/PurchaseOrderConfirm'
-import PurchaseOrderDone from './create-purchase-order/PurchaseOrderDone'
+// import PurchaseOrderConfirmed from './create-purchase-order/PurchaseOrderConfirmed'
 import { connect } from 'react-redux'
 //create purchae da ton tai do dat sai ten
 class Purchase extends React.Component {
@@ -31,7 +31,7 @@ class Purchase extends React.Component {
             <Route path="/homepage/purchase/PriceQuote"> <PriceQuote/></Route>
             <Route path="/homepage/purchase/PurchaseOrder"> <PurchaseOrder/></Route>
             <Route path="/homepage/purchase/PurchaseOrderConfirm"> <PurchaseOrderConfirm/></Route>
-            <Route path="/homepage/purchase/PurchaseOrderDone"> <PurchaseOrderDone/></Route>
+            {/* <Route path="/homepage/purchase/PurchaseOrderConfirmed"> <PurchaseOrderConfirmed/></Route> */}
             {/* <Route path="/homepage/purchase/DetailPurhcaseOrder"> <DetailPurhcaseOrder/></Route> */}
             <Route path="/homepage/purchase/CreatePriceQuote"> <CreatePriceQuote /></Route>
             
