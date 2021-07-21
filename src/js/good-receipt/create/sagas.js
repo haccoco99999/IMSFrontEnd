@@ -25,8 +25,8 @@ import handleApiErrors from "../../auth/api-errors";
 //api
 
 function getListConfirmedPurchaseOrder(action) {
-  const url = `${process.env.REACT_APP_API}/purchaseorder/search?CurrentPage=0&SizePerPage=0&FromStatus=5&ToStatus=5`;
-
+  // const url = `${process.env.REACT_APP_API}/purchaseorder/search?CurrentPage=0&SizePerPage=0&FromStatus=5&ToStatus=5`;
+  const url = `${process.env.REACT_APP_API}/purchaseorder/search?CurrentPage=0&SizePerPage=0&Statuses=POConfirm`;
   return fetch(url, {
     method: "GET",
     headers: {

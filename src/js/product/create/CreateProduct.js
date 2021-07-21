@@ -16,10 +16,10 @@ export default function CreateProductComponent(props) {
   //@params:formData declare data
   // const [formData, setFormData] = props.formData;
   //todos: declare to get all Brand and category
-  const [categorySelected, setCategorySelected] = useState({
-    id: "",
-    name: "",
-  });
+  // const [categorySelected, setCategorySelected] = useState({
+  //   id: "",
+  //   name: "",
+  // });
   const [selectedBrand, setSelectedBrand] = useState({
     id: "",
     brandName: "",

@@ -129,7 +129,7 @@ export default function details() {
 
   function onclickUpdate() {
     const data = {
-      supplierId: "50715",
+      // supplierId: "50715",
       requisitionId: location.state.purchaseRequisitionId,
       deadline: deadline,
       orderItems: cleanListProducts.map((product) => {

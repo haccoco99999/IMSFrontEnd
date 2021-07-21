@@ -72,17 +72,18 @@ export default function reducer(state = initialState, action) {
       };
 
     case GET_DETAILS_PO_RESPONSE:
-      let cleanJson = { ...action.json.purchaseOrder };
+      // let cleanJson = { ...action.json.purchaseOrder };
 
-      action.json.purchaseOrder.purchaseOrderProduct =
-        cleanJson.purchaseOrderProduct.map((product) => {
-          product.name = product.productVariant.name;
-          product.sku = product.productVariant.sku;
-          product.barcode = product.productVariant.barcode
-          product.productId = product.productVariant.productId
-          delete product["productVariant"];
-          return product;
-        });
+      // action.json.purchaseOrder.purchaseOrderProduct =
+      //   cleanJson.purchaseOrderProduct.map((product) => {
+      //     product.name = product.productVariant.name;
+      //     product.sku = product.productVariant.sku;
+      //     product.barcode = product.productVariant.barcode
+      //     product.productId = product.productVariant.productId
+      //     product.
+      //     delete product["productVariant"];
+      //     return product;
+      //   });
 
       return {
         ...state,

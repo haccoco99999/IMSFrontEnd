@@ -2,6 +2,7 @@ import React, { useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
+import BootstrapTable from "react-bootstrap-table-next";
 //css
 import "../sale-man.css";
 
@@ -50,6 +51,9 @@ export default function () {
     listSuppliers: state.getCreatedFormPurchaseRequisitionReducer.listSuppliers,
   }));
 
+  //todo: declare button
+  const columns =[]
+
   const handleChangeSuppliers = (e) => {
     const index = e.target.selectedIndex;
     const el = e.target.childNodes[index];
@@ -61,6 +65,21 @@ export default function () {
     });
     console.log(supplierSelected);
   };
+
+   //todo: function nav button
+   const listButton = setListButtonNav();
+   function setListButtonNav() {
+     return [
+       {
+         isShow: true,
+         title: "Submit",
+         class: " btn-primary",
+         action: () => onSaveClick(),
+       },
+     ];
+   }
+
+   //todo: go back click
   function goBackClick() {
     history.goBack();
   }
@@ -105,7 +124,7 @@ export default function () {
 
   function onSaveClick() {
     const data = {
-      supplierId: supplierSelected.id,
+      // supplierId: supplierSelected.id,
       deadline: deadline,
       orderItems: purchaseOrderProduct.map((product) => {
         return {
@@ -121,8 +140,6 @@ export default function () {
     console.log(data);
     dispatch(createPRAction({ data: data, token: token }));
   }
-
-
 
   useEffect(() => {
     if (message !== "") {
@@ -141,29 +158,21 @@ export default function () {
 
   return (
     <div>
-      {/* todo: task heading */}
-      {/* todo: gop chung 2 page voi 2 nut khâc nhau  */}
-      <div className=" tab-fixed container-fluid  fixed-top">
-        <div className=" tab-fixed container-fluid  fixed-top">
-          <div className=" d-flex mb-3 justify-content-end mt-4 ">
-            <a className="me-2" onClick={goBackClick}>
-              <h3>Back</h3>
-            </a>
-            <h2 className="id-color fw-bold me-auto">Create Goods Receipt</h2>
-            <div>
-              <button
-                type="button"
-                className="btn btn-primary me-3 text-white button-tab"
-                onClick={onSaveClick}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <NavigationBar
+        actionGoBack={goBackClick}
+        titleBar="Create"
+        status=""
+        listButton={listButton}
+      />
+
       {/* content */}
       <div className="wrapper space-top">
+        {/* <div class="card">
+          <h5 class="card-header fw-bold">Goods Receipt Information</h5>
+          <div class="card-body">
+
+          </div>
+        </div> */}
         <div className="wrapper-content shadow">
           <div className="title-heading mt-2">
             <span>Select your product</span>
@@ -184,7 +193,7 @@ export default function () {
             onChange={onChangeDeadline}
           />
         </div>
-        <div className="mt-3">
+        {/* <div className="mt-3">
           <label for="supplier" class="form-label">
             Supplier
           </label>
@@ -205,7 +214,7 @@ export default function () {
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
 
         <div className="mt-3">
           <label class="form-label" value="">

@@ -18,7 +18,7 @@ import NavigationBar from "../../../components/navbar/navbar-component";
 
 export default function CreateNoVariants(props) {
   let history = useHistory();
-  // let dispatch = useDispatch();
+  let dispatch = useDispatch();
   // let location = useLocation();
 
   // const [formData, setFormData] = useReducer(props.formReducer, {});
@@ -44,6 +44,13 @@ export default function CreateNoVariants(props) {
     // history.goBack();
     props.prevStep();
   }
+  function checkUndifined() {
+    if (props.formData.sku === undefined) {
+      props.setFormDataManager("sku", "");
+    }
+    if (props.formData.barcode === undefined)
+      props.setFormDataManager("barcode", "");
+  }
 
   const onClickSave = (event) => {
     event.preventDefault();
@@ -53,6 +60,7 @@ export default function CreateNoVariants(props) {
       event.stopPropagation();
     } else {
       event.preventDefault();
+      checkUndifined();
       const data = {
         name: props.formData.name,
         brandName: props.formData.brand,
@@ -71,7 +79,7 @@ export default function CreateNoVariants(props) {
         ],
       };
       console.log("Data output:", data);
-      // dispatch(createProduct({ data: data, token: token }));
+      dispatch(createProduct({ data: data, token: props.token }));
     }
     form.classList.add("was-validated");
 
@@ -120,11 +128,7 @@ export default function CreateNoVariants(props) {
         <div class="card">
           <h5 class="card-header">Product Information</h5>
           <div class="card-body">
-            <form
-              id="productDetailsForm"
-              class="row g-3 needs-validation "
-              noValidate
-            >
+            <div className="row g-3 ">
               <div class="mb-3">
                 <div class="row g-3 align-items-center">
                   <div class="col">
@@ -156,50 +160,55 @@ export default function CreateNoVariants(props) {
                   </div>
                 </div>
               </div>
-
-              <div class="mb-3">
-                <div class="row g-3 align-items-center">
-                  <div class="col">
-                    <label for="price" class="col-form-label">
-                      Price
-                    </label>
-                    <div className="input-group has-validation">
-                      <input
-                        name="price"
-                        value={props.formData.price || ""}
-                        onChange={handleChangeValueFormData}
-                        type="number"
-                        class="form-control"
-                        required
-                      />
-                      <span class="input-group-text">VND</span>
-                      <div class="invalid-feedback">
-                        Please input valid price
+              <form
+                id="productDetailsForm"
+                class="row g-3 needs-validation "
+                noValidate
+              >
+                <div class="mb-3">
+                  <div class="row g-3 align-items-center">
+                    <div class="col">
+                      <label for="price" class="col-form-label">
+                        Price
+                      </label>
+                      <div className="input-group has-validation">
+                        <input
+                          name="price"
+                          value={props.formData.price || ""}
+                          onChange={handleChangeValueFormData}
+                          type="number"
+                          class="form-control"
+                          required
+                        />
+                        <span class="input-group-text">VND</span>
+                        <div class="invalid-feedback">
+                          Please input valid price
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col">
-                    <label for="saleprice" class="col-form-label">
-                      Sale Price
-                    </label>
-                    <div className="input-group has-validation">
-                      <input
-                        name="saleprice"
-                        value={props.formData.saleprice || ""}
-                        onChange={handleChangeValueFormData}
-                        type="number"
-                        class="form-control"
-                        required
-                      />
-                      <span class="input-group-text">VND</span>
-                      <div class="invalid-feedback">
-                        Please input valid sale price
+                    <div class="col">
+                      <label for="saleprice" class="col-form-label">
+                        Sale Price
+                      </label>
+                      <div className="input-group has-validation">
+                        <input
+                          name="saleprice"
+                          value={props.formData.saleprice || ""}
+                          onChange={handleChangeValueFormData}
+                          type="number"
+                          class="form-control"
+                          required
+                        />
+                        <span class="input-group-text">VND</span>
+                        <div class="invalid-feedback">
+                          Please input valid sale price
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
 

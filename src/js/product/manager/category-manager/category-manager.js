@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useReducer } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal } from "bootstrap";
+import BootstrapTable from "react-bootstrap-table-next";
 //css
 import "../../product.css";
 

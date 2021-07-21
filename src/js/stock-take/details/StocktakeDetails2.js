@@ -119,7 +119,6 @@ export default function StocktakeDetailsComponent() {
       editable: true,
       validator: (newValue, oldValue, row) => {
         if (isNaN(newValue)) {
-          // setInvalidNumeric(isInvalidNumeric + 1);
           setIsChecking(true);
           return {
             valid: false,
@@ -244,9 +243,8 @@ export default function StocktakeDetailsComponent() {
 
   function clickDeleteCheckItems(rowIndex) {
     console.log(rowIndex);
-    setListCheckedItems(
-      listCheckedItems.filter((_, index) => index !== rowIndex)
-    );
+    setListCheckedItems((state) => state.filter((_, i) => i !== rowIndex));
+
     // console.log("Da xoa:",listCheckedItems)
   }
 

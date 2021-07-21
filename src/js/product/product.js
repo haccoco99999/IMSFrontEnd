@@ -15,7 +15,6 @@ import ProductDetails from "./details/ProductDetails";
 import VariantDetails from "./details/VariantDetails";
 import PackageDetails from "./details/PackageDetails";
 import CreateVariant from "./details/CreateVariant";
-import CreateTest2 from "./create/CreateNewProduct2";
 import CreateProductManager from "./create/CreateProductManager"
 export default function () {
   return (

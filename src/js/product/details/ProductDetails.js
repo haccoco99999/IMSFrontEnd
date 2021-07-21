@@ -13,6 +13,7 @@ import {
 } from "./action";
 import { getCategoriesAllAction } from "../create/action";
 import ListProductsTable from "../../table-receipt/ListReceiptsTable";
+import NavigationBar from "../../components/navbar/navbar-component";
 
 export default function ProductDetails() {
   let history = useHistory();
@@ -123,6 +124,10 @@ export default function ProductDetails() {
   }
   function onClickCancel() {
     setIsDisabled(true);
+    //todo: reset
+    setProductDetails(productDetailsStore);
+    setBrandDetails(productBrandDetailsStore);
+    setCategoryDtails(categoryDtailsStore);
   }
   function onClickSave() {
     const data = {
@@ -165,13 +170,14 @@ export default function ProductDetails() {
   }, []);
 
   useEffect(() => {
-    if (productDetailsStore !== {}) {
-      setProductDetails(productDetailsStore);
-    }
     if (listVariantsStores !== null) {
       setIsReturnData(true);
       setListVariants(listVariantsStores);
     }
+    if (productDetailsStore !== {}) {
+      setProductDetails(productDetailsStore);
+    }
+
     if (productBrandDetailsStore !== {}) {
       setBrandDetails(productBrandDetailsStore);
     }
@@ -336,7 +342,7 @@ export default function ProductDetails() {
                           name="brand"
                           class="form-select"
                           // aria-label="Default select example"
-                          defaultValue=""
+                          defaultValue={brandDetails.brandName}
                           onChange={handleChangeBrand}
                         >
                           <option value="" disabled>
@@ -359,7 +365,9 @@ export default function ProductDetails() {
                           name="categoryID"
                           class="form-select"
                           // aria-label="Default select example"
-                          defaultValue=""
+                          defaultValue={
+                            categoryDtails.categoryName || categorySelected
+                          }
                           onChange={handleChangeCategory}
                         >
                           <option value="" disabled>

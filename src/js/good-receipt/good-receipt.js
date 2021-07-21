@@ -10,7 +10,7 @@ import Filter from "./filter";
 import Create from "./create/CreateGoodReceipt";
 import Details from "./details/GoodReceiptsDetails";
 import Manager from "./manager/GoodReceiptManager";
-
+// import Create2 from "./create/CreateGoodsReceipt2"
 export default function () {
   return (
     //<Details/>
@@ -28,6 +28,7 @@ export default function () {
           {/* create good receipt path */}
           <Route path="/homepage/good-receipt/create-goods-receipt">
             <Create />
+            {/* <Create2/> */}
           </Route>
 
           <Route path="/homepage/good-receipt/details"><Details/></Route>

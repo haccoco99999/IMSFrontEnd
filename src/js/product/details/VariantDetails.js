@@ -82,6 +82,8 @@ export default function VariantDetails() {
   }
   function onClickCancel() {
     setIsDisabled(true);
+    //reset
+    setVariant(variantStore);
   }
   function onClickSave() {
     const data = {
@@ -294,10 +296,10 @@ export default function VariantDetails() {
                           />
                         )}
                       </p>
-                      <p>
+                      {/* <p>
                         <strong>Total Price:</strong>
                         {variant.cost}
-                      </p>
+                      </p> */}
                     </div>
                   </div>
                 </div>

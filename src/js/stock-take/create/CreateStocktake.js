@@ -40,7 +40,8 @@ export default function CreateStocktakeComponent() {
   });
   const [listCheckedItems, setListCheckedItems] = useState([
     {
-      id: "",
+      id: uuid(),
+      packageId: "",
       productVariantId: "",
       quantity: "",
       counted: "",
@@ -55,10 +56,11 @@ export default function CreateStocktakeComponent() {
     );
     const temp = [...listCheckedItems];
     temp[event.target.id].quantity = packageDetails.quantity;
-    temp[event.target.id].id = packageDetails.id;
+    temp[event.target.id].packageId = packageDetails.id;
     temp[event.target.id].productVariantId = packageDetails.productVariantId;
     temp[event.target.id].counted = 0;
     setListCheckedItems(temp);
+    // setListCheckedItems((state) => [...state, temp]);
     console.log(listCheckedItems);
 
     // console.log(listCheckedItems);
@@ -66,16 +68,15 @@ export default function CreateStocktakeComponent() {
 
   function clickDeleteCheckItems(rowIndex) {
     console.log(rowIndex);
-    setListCheckedItems(
-      listCheckedItems.filter((_, index) => index !== rowIndex)
-    );
+    setListCheckedItems((state) => state.filter((_, i) => i !== rowIndex));
   }
 
   function onAddCheckItemClick() {
     setListCheckedItems([
       ...listCheckedItems,
       {
-        id: "",
+        id: uuid(),
+        packageId: "",
         productVariantId: "",
         quantity: "",
         counted: 0,
@@ -105,6 +106,10 @@ export default function CreateStocktakeComponent() {
   const columns = [
     {
       dataField: "id",
+      hidden: true,
+    },
+    {
+      dataField: "packageId",
       text: "Package ID",
       editable: false,
       formatter: (cellContent, row, rowIndex) => {
@@ -117,7 +122,7 @@ export default function CreateStocktakeComponent() {
               id={rowIndex}
               class="form-select"
               aria-label="Default select example"
-              defaultValue={row.id}
+              defaultValue={row.packageId}
               onChange={onChangeSelectPackage}
             >
               <option value={""} disabled>
@@ -143,6 +148,7 @@ export default function CreateStocktakeComponent() {
       dataField: "quantity",
       text: "Quantity",
       editable: false,
+
       // formatter: (cellContent, row) => <></>,
     },
     {
@@ -216,7 +222,7 @@ export default function CreateStocktakeComponent() {
   }
 
   function onClickSubmit() {
-    if (checkForDuplicates(listCheckedItems, "id")) {
+    if (checkForDuplicates(listCheckedItems, "packageId")) {
       console.log("Duplicate");
 
       Swal.fire({
@@ -229,24 +235,35 @@ export default function CreateStocktakeComponent() {
       });
     } else {
       console.log("No duplicate");
-      const data = {
-        stockTakeGroupLocation: [
-          {
-            locationId: selectedLocation.id,
-            checkItems: listCheckedItems.map((checkItem) => {
-              return {
-                packageId: checkItem.id,
-                actualQuantity: checkItem.counted,
-                note: checkItem.note,
-              };
-            }),
-          },
-        ],
-        stockTakeId: null,
-      };
+      if (listCheckedItems.length > 0) {
+        const data = {
+          stockTakeGroupLocation: [
+            {
+              locationId: selectedLocation.id,
+              checkItems: listCheckedItems.map((checkItem) => {
+                return {
+                  packageId: checkItem.packageId,
+                  actualQuantity: checkItem.counted,
+                  note: checkItem.note,
+                };
+              }),
+            },
+          ],
+          stockTakeId: null,
+        };
 
-      console.log("Data output:", data);
-      dispatch(createStocktkaeAction({ token: token, data: data }));
+        console.log("Data output:", data);
+        // dispatch(createStocktkaeAction({ token: token, data: data }));
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: "Empty list!",
+          icon: "error",
+          showCancelButton: true,
+          cancelButtonText: "Cancel",
+          showConfirmButton: false,
+        });
+      }
     }
   }
 
@@ -257,7 +274,8 @@ export default function CreateStocktakeComponent() {
     setIsLoading(false);
     setListCheckedItems([
       {
-        id: "",
+        id: uuid(),
+        packageId: "",
         productVariantId: "",
         quantity: "",
         counted: "",
@@ -270,6 +288,17 @@ export default function CreateStocktakeComponent() {
   //todo: check duplicate in list
   function checkForDuplicates(array, keyName) {
     return new Set(array.map((item) => item[keyName])).size !== array.length;
+  }
+  //todo: random ID
+  function uuid() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
   }
 
   useEffect(() => {
@@ -345,18 +374,15 @@ export default function CreateStocktakeComponent() {
         {isLoading ? (
           <>
             <div className="shadow wrapper-content mt-3">
-              <button
-                className="btn btn-secondary"
-                onClick={onAddCheckItemClick}
-              >
+              <button className="btn btn-primary" onClick={onAddCheckItemClick}>
                 Add
               </button>
-              <button
+              {/* <button
                 className="btn btn-secondary"
                 onClick={clickDeleteCheckItems}
               >
                 Discard
-              </button>
+              </button> */}
               <Table
                 keyField="id"
                 data={listCheckedItems}

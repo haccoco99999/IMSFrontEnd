@@ -23,6 +23,16 @@ export default function CreateProductManager() {
   const [step, setStep] = useState(1);
   const [isSelectVariantType, setIsSelectVariantType] = useState(false);
   const [formData, setFormData] = useReducer(formReducer, {});
+  const [variantValues, setVariantValues] = useState([
+    {
+      id: uuid(),
+      name: "",
+      price: 0,
+      salePrice: 0,
+      barcode: "",
+      sku: "",
+    },
+  ]);
   //todo:declare store
   const { listCategoriesStore, token, listBrandStore, messages } = useSelector(
     (state) => ({
@@ -46,6 +56,38 @@ export default function CreateProductManager() {
       name: inputName,
       value: inputValue,
     });
+  }
+  function setVariantValuesManager() {}
+  console.log("A", variantValues);
+  function clickToAddVariants() {
+    let productVariants = {
+      id: uuid(),
+      name: "",
+      price: 0,
+      salePrice: 0,
+      barcode: "",
+      sku: "",
+    };
+    setVariantValues([...variantValues, productVariants]);
+  }
+
+  function clickDeleteVariant(rowIndex) {
+    console.log(rowIndex);
+    console.log(variantValues);
+    console.log((state) => state.filter((_, i) => i !== rowIndex));
+
+    setVariantValues((state) => state.filter((_, i) => i !== rowIndex));
+  }
+  //@params: uuid set random ID
+  function uuid() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
   }
 
   useEffect(() => {
@@ -72,9 +114,12 @@ export default function CreateProductManager() {
           <CreateWithVariants
             formData={formData}
             prevStep={prevStep}
-            formReducer={formReducer}
             token={token}
             messages={messages}
+            variantValues={variantValues}
+            clickToAddVariants={clickToAddVariants}
+            clickDeleteVariant={clickDeleteVariant}
+            setVariantValuesManager={setVariantValuesManager}
           />
         );
       } else
@@ -82,9 +127,9 @@ export default function CreateProductManager() {
           <CreateNoVariants
             formData={formData}
             prevStep={prevStep}
-            formReducer={formReducer}
             token={token}
             messages={messages}
+            setFormDataManager={setFormDataManager}
           />
         );
   }
