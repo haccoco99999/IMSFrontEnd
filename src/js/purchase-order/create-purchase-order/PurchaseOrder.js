@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { useHistory, useLocation, withRouter } from 'react-router-dom'
-import { getDetailPurchaseOrder, confirmDetailPurchaseOrder, sendMailService,confirmPurchaseORderByManager, saveProductsPurchaseOrder , rejectPurchaseOrderConfirm} from './action'
+import { getDetailPurchaseOrder, confirmDetailPurchaseOrder, sendMailService, confirmPurchaseORderByManager, saveProductsPurchaseOrder, rejectPurchaseOrderConfirm } from './action'
 import NavigationBar from '../../navigation-bar-component/NavigationBar';
 import InfoDetailReceipt from '../../info-detail-receipt/InfoDetailReceipt';
 import ListProductsTable from '../../list-products-table/ListProductsTable';
@@ -44,21 +44,64 @@ export default function PurchaseOrder() {
         {
             dataField: 'orderQuantity',
             text: 'Quantity',
-            editable: true
+            editable: true,
+            editable: !eventPage.isShowEdit,
+            formatter: (cellContent, row, rowIndex) => {
+                return (
+                    <div>
+                        {!eventPage.isShowEdit ? <input className="form-control" value={row.orderQuantity} type="text" /> : row.orderQuantity}
+                    </div>);
+            },
+            validator: (newValue, row, column) => {
+                if (isNaN(newValue)) {
+                    return {
+                        valid: false,
+                        message: 'Price should be numeric'
+                    };
+                }
+                if (newValue <= 0) {
+                    return {
+                        valid: false,
+                        message: 'Price should bigger than 0'
+                    };
+                }
+                return true;
+            }
         },
         {
             dataField: 'price',
             text: 'Unit Price',
-            editable: true
+            editable: !eventPage.isShowEdit,
+            formatter: (cellContent, row, rowIndex) => {
+                return (
+                    <div>
+                        {!eventPage.isShowEdit ? <input className="form-control" value={row.price} type="text" /> : row.price}
+                    </div>);
+            },
+            validator: (newValue, row, column) => {
+                if (isNaN(newValue)) {
+                    return {
+                        valid: false,
+                        message: 'Price should be numeric'
+                    };
+                }
+                if (newValue <= 0) {
+                    return {
+                        valid: false,
+                        message: 'Price should bigger than 0'
+                    };
+                }
+                return true;
+            }
         },
         {
             dataField: 'totalAmount',
             text: 'Total Price',
             editable: false,
             formatter: (cellContent, row, rowIndex) => {
-                
-                return ( 
-                   row.orderQuantity * row.price
+
+                return (
+                    row.orderQuantity * row.price
                 );
             },
         },
@@ -83,8 +126,10 @@ export default function PurchaseOrder() {
 
     ];
 
-    let {purchaseOrderDataGlobal, token} = useSelector(state => ({purchaseOrderDataGlobal:state.getDetailPurchaseReducer.detailPurchaseOrder, 
-          token: state.client.token,}))
+    let { purchaseOrderDataGlobal, token } = useSelector(state => ({
+        purchaseOrderDataGlobal: state.getDetailPurchaseReducer.detailPurchaseOrder,
+        token: state.client.token,
+    }))
     let [detailPurchaseState, setDetailPurchaseState] = useState(purchaseOrderDataGlobal)
     let [listProductPurchaseOrder, setListProductPurchaseOrder] = useState(purchaseOrderDataGlobal.purchaseOrderProduct)
     useEffect(() => {
@@ -97,13 +142,17 @@ export default function PurchaseOrder() {
             ...purchaseOrderDataGlobal
         })
         setListProductPurchaseOrder(
-            purchaseOrderDataGlobal.purchaseOrderProduct
+            purchaseOrderDataGlobal.purchaseOrderProduct.map(product => {
+                return {
+                    ...product
+                }
+            })
         )
     }, [purchaseOrderDataGlobal])
 
     console.log(listProductPurchaseOrder)
     function statusButton(status) {
-        if (status === "POCreated") {
+        if (status === "PurchaseOrder") {
             return [{
                 isShow: eventPage.isShowEdit,
                 title: "Edit",
@@ -169,7 +218,7 @@ export default function PurchaseOrder() {
                         background: "#4ca962"
                     }
                 },
-    
+
                 {
                     isShow: true,
                     title: "Ignore",
@@ -236,7 +285,11 @@ export default function PurchaseOrder() {
     }
     function cancelEditClick() {
         setListProductPurchaseOrder(
-            purchaseOrderDataGlobal.purchaseOrderProduct
+            purchaseOrderDataGlobal.purchaseOrderProduct.map(product => {
+                return {
+                    ...product
+                }
+            })
         )
         setEventPage({
             isShowEdit: true,
@@ -252,19 +305,19 @@ export default function PurchaseOrder() {
             purchaseOrderNumber: detailPurchaseState.orderId,
             mailDescription: "string",
             orderItemInfos: listProductPurchaseOrder.map(product => {
-                    return {
-                        productVariantId: product.productVariantId,
-                        orderQuantity: product.orderQuantity,
-                        unit: product.unit,
-                        price: product.price,
-                        discountAmount: product.discountAmount,
-                        totalAmount: product.totalAmount,
-                    }
-                })
+                return {
+                    productVariantId: product.productVariantId,
+                    orderQuantity: product.orderQuantity,
+                    unit: product.unit,
+                    price: product.price,
+                    discountAmount: product.discountAmount,
+                    totalAmount: product.totalAmount,
+                }
+            })
 
         }
-            console.log(dataUpdate)
-         dispatch(saveProductsPurchaseOrder({data:dataUpdate, token:token}))
+        console.log(dataUpdate)
+        dispatch(saveProductsPurchaseOrder({ data: dataUpdate, token: token }))
         setEventPage({
             isShowEdit: true,
             isCreatePO: true,
@@ -274,8 +327,13 @@ export default function PurchaseOrder() {
         })
     }
     function clickToCreate() {
-        dispatch(confirmDetailPurchaseOrder(location.state.orderID))
-        goBackClick()
+        let data ={
+            
+                purchaseOrderNumber: location.state.orderID
+              
+        }
+        dispatch(confirmDetailPurchaseOrder({data: data, token, token}))
+        // goBackClick()
     }
 
     function isShowConfirmModal() {
@@ -288,28 +346,28 @@ export default function PurchaseOrder() {
             ...state, isShowReject: !state.isShowReject,
         }))
     }
-    function sendMailSupplier(pdf, note){
-  
+    function sendMailSupplier(pdf, note) {
+
     }
 
 
-    
+
     function clickToCLoseConfirm(status, pdf, note) {
         if (status === true) {
-            let data ={
+            let data = {
                 purchaseOrderNumber: detailPurchaseState.orderId
             }
-            if(pdf !== undefined){
+            if (pdf !== undefined) {
                 // sendMailSupplier(pdf)
                 const formData = new FormData();
-  
+
                 formData.append('To', 'hungppse130422@fpt.edu.vn')
                 formData.append('Content', note)
                 formData.append('Subject', 'Gui MAil')
                 formData.append('pdf', pdf)
                 dispatch(sendMailService({ data: formData }))
             }
-            dispatch(confirmPurchaseORderByManager({data:data, token:token}))
+            dispatch(confirmPurchaseORderByManager({ data: data, token: token }))
             goBackClick()
         }
         setEventPage((state) => ({
@@ -317,13 +375,13 @@ export default function PurchaseOrder() {
         }))
     }
     function clickToCLoseReject(cancelReason) {
-        if ( cancelReason !== undefined) {
+        if (cancelReason !== undefined) {
             console.log(cancelReason)
-            let data={
+            let data = {
                 id: detailPurchaseState.orderId,
                 cancelReason: cancelReason,
             }
-            dispatch(rejectPurchaseOrderConfirm({data: data, token }))
+            dispatch(rejectPurchaseOrderConfirm({ data: data, token }))
             goBackClick()
         }
         setEventPage((state) => ({
@@ -353,7 +411,7 @@ export default function PurchaseOrder() {
         setListProductPurchaseOrder((state) => [...state, product])
         clickSetShowAddProductPage()
     }
-    function goBackClick(){
+    function goBackClick() {
         history.go(-1)
     }
     return (
@@ -364,7 +422,7 @@ export default function PurchaseOrder() {
             />
 
 
-            
+
             <InfoDetailReceipt
                 applicationUser={detailPurchaseState.applicationUser}
                 supplier={detailPurchaseState.supplier}
@@ -397,8 +455,8 @@ export default function PurchaseOrder() {
                         cellEdit={cellEditFactory({
                             mode: "click",
                             blurToSave: true,
-                            afterSaveCell: (oldValue, newValue, row, column) => { row.totalAmount = row.orderQuantity * row.price}
-                          })}
+                            afterSaveCell: (oldValue, newValue, row, column) => { row.totalAmount = row.orderQuantity * row.price }
+                        })}
 
 
 
@@ -411,14 +469,14 @@ export default function PurchaseOrder() {
             <ConfirmDateModal
 
                 listProduct={listProductPurchaseOrder}
-                infoPriceQuote = {detailPurchaseState}
-            clickToCLoseConfirm={clickToCLoseConfirm} isConfirm={eventPage.isShowConfirm} />
+                infoPriceQuote={detailPurchaseState}
+                clickToCLoseConfirm={clickToCLoseConfirm} isConfirm={eventPage.isShowConfirm} />
             <RejectReceiptModal clickToCLoseReject={clickToCLoseReject} isReject={eventPage.isShowReject} />
             <FormAddProductModal
                 clickSetShowAddProductPage={clickSetShowAddProductPage}
                 isShowAddProductPage={eventPage.isShowAddProductPage}
                 clickToAddProduct={clickToAddProduct}
-                        
+
             />
 
         </div>

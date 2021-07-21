@@ -88,7 +88,8 @@ export default function PurchaseOrderConfirm() {
                 return true;
             }
         },
-        {
+        {   //neu duoc isShowEdit true thi khong duoc delete
+            hidden: eventPage.isShowEdit,
             dataField: 'action',
             text: 'action',
             editable: false,
@@ -130,9 +131,10 @@ export default function PurchaseOrderConfirm() {
             orderNumber: purchaseOrderDataGlobal.orderId
         }
         dispatch(createPurchaseOrder({ data: data, token: token }))
+        goBackClick()
     }
     function setListButton(status) {
-        if (status === "PQCreated") {
+        if (status === "PriceQuote") {
             return [
 
 
@@ -282,16 +284,7 @@ export default function PurchaseOrderConfirm() {
             ...purchaseOrderDataGlobal
         })
         setMailDescription(purchaseOrderDataGlobal.mailDescription)
-        setSupplier({
-            address: "",
-            description: "",
-            email: "",
-            id: "",
-            phoneNumber: "",
-            salePersonName: "",
-            supplierName: "",
-            transactionId: ""
-        })
+        setSupplier(purchaseOrderDataGlobal.supplier)
         setEventPage({
             isShowEdit: true,
             isCreatePO: true,
@@ -332,7 +325,7 @@ export default function PurchaseOrderConfirm() {
     }
     function clickShowPreviewSendMail() {
         setEventPage((state) => ({
-            ...state, isPreview: true
+            ...state, isPreview: !state.isPreview
         }))
     }
 
@@ -450,8 +443,15 @@ export default function PurchaseOrderConfirm() {
         })
     }
     function clickToAddProduct(product) {
-        // console.log(product)
-        setListProductPurchaseOrder((state) => [...state, product])
+        console.log(product)
+        if (checkProductExist(product.productVariantId)) {
+            setListProductPurchaseOrder((state) => state.map(item =>
+                item.productVariantId === product.productVariantId ? { ...item, orderQuantity: item.orderQuantity + product.orderQuantity } : item))
+        }
+        else {
+            setListProductPurchaseOrder((state) => [...state, product])
+        }
+
         clickSetShowAddProductPage()
     }
 
@@ -467,12 +467,19 @@ export default function PurchaseOrderConfirm() {
         formData.append('pdf', pdf)
         dispatch(sendMailService({ data: formData }))
     }
-    function clostPreviewSendMail(pdf) {
-        if (pdf !== undefined) {
-            sendMailSupplier(pdf)
-            dispatch(createPriceQuote({ data: purchaseOrderDataGlobal.orderId, token: token }))
-            goBackClick()
-        }
+    function clostPreviewSendMail(pdf, isResend) {
+     
+          
+            if(isResend){
+                sendMailSupplier(pdf)
+            }
+            else{
+                sendMailSupplier(pdf)
+                dispatch(createPriceQuote({ data: purchaseOrderDataGlobal.orderId, token: token }))
+                goBackClick()
+            }
+           
+        
         setEventPage((state) => ({
             ...state, isPreview: false
         }))
@@ -511,60 +518,51 @@ export default function PurchaseOrderConfirm() {
 
             <div class="card">
                 <div class="card-header">
-                    Featured
+                    Info Order:
                 </div>
                 <div class="card-body">
                     <form id="choose-supplier-form" class="row g-3 needs-validation " novalidate>
                         <SelectSupplier supplierInfo={supplier} getDataSupplier={getDataSupplier} />
                     </form>
-                    
+                    {/* 
                     <form class="form-floating">
                         <div class="form-control" id="floatingInputValue"  >{supplier.email}</div>
                         <label for="floatingInputValue">Email</label>
                     </form>
                     <form class="form-floating">
-                    <div class="form-control" id="floatingInputValue"  >{supplier.phoneNumber}</div>
+                        <div class="form-control" id="floatingInputValue"  >{supplier.phoneNumber}</div>
                         <label for="floatingInputValue">Phone No:</label>
-                    </form>
-                    <form class="form-floating">
-                    <div class="form-control" id="floatingInputValue"  >{supplier.address}</div>
-                        <label for="floatingInputValue">Address:</label>
-                    </form>
+                    </form> */}
+
+                    <div className="form-text">
+                        Email:
+                    </div>
+                    <label className="form-check-label" >
+                        {supplier.email}
+                    </label>
+                    <div className="form-text">
+                        Phone Number:
+                    </div>
+                    <label className="form-check-label" >
+                        {supplier.phoneNumber}
+                    </label>
+                    <div className="form-text">
+                        Address:
+                    </div>
+                    <label className="form-check-label" >
+                        {supplier.address}
+                    </label>
+
 
                     {/* <p>Supplier <SeachSupplier supplierInfo={supplier} getDataSupplier={getDataSupplier} /> </p> */}
 
-                  
+
                 </div>
-            </div>
-
-            <div className="content-container-receipt">
-                {/* <div className="list-receipt-table-container">
-
-                    <p>Supplier <SeachSupplier supplierInfo={supplier} getDataSupplier={getDataSupplier} /> </p>
-                    <p> Email: {supplier.email} </p>
-                    <p>  Phone No: {supplier.phoneNumber}</p>
-                    <p>  Address: {supplier.address}</p>
-
-                </div> */}
-                <button onClick={clickSetShowAddProductPage}>Add Product</button>
-                <button onClick={clickSetEventMergePriceQuote} >Merge Price Quote</button>
-                <p class="btn btn-default fw-bold filter"
-                    data-bs-target="#FilterModal"
-                    data-bs-toggle="modal"
-                >Merge</p>
-                <div className="list-receipt-table-container">
-                    <div className="tool-bar-table">
-
-                        <div className="list-icon-tool-bar">
-                            <div className="icon-tool-bar"><i class='bx bx-rotate-right'></i></div>
-                            <div className="icon-tool-bar"><i class='bx bx-filter'></i></div>
-                            <div className="icon-tool-bar"><i class='bx bx-cog'></i></div>
-
-                        </div>
-
-                    </div>
-                    <div className="table-container">
-                        <BootstrapTable
+                <div class="card-header">
+                    List Products
+                </div>
+                <div class="card-body">
+                <BootstrapTable
                             keyField='id'
                             data={listProductPurchaseOrder}
                             columns={columns}
@@ -581,10 +579,53 @@ export default function PurchaseOrderConfirm() {
 
                             headerClasses="table-header-receipt"
                         />
-                    </div>
+                           {!eventPage.isShowEdit ?
+                        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group me-2" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-outline-primary" onClick={clickSetShowAddProductPage}>Add Product</button>
 
+                            </div>
+                            <div class="btn-group me-2" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-outline-success" onClick={clickSetEventMergePriceQuote} >Merge Requisition</button>
 
+                            </div>
+                        </div> : ""}
                 </div>
+            </div>
+
+            <div className="content-container-receipt">
+                {/* <div className="list-receipt-table-container">
+
+                    <p>Supplier <SeachSupplier supplierInfo={supplier} getDataSupplier={getDataSupplier} /> </p>
+                    <p> Email: {supplier.email} </p>
+                    <p>  Phone No: {supplier.phoneNumber}</p>
+                    <p>  Address: {supplier.address}</p>
+
+                </div> */}
+                {/* 
+                <p class="btn btn-default fw-bold filter"
+                    data-bs-target="#FilterModal"
+                    data-bs-toggle="modal"
+                >Merge</p> */}
+                {/* <div className="list-receipt-table-container"> */}
+                    {/* <div className="tool-bar-table">
+
+                        <div className="list-icon-tool-bar">
+                            <div className="icon-tool-bar"><i class='bx bx-rotate-right'></i></div>
+                            <div className="icon-tool-bar"><i class='bx bx-filter'></i></div>
+                            <div className="icon-tool-bar"><i class='bx bx-cog'></i></div>
+
+                        </div>
+
+                    </div> */}
+
+{/* 
+                    <div className="table-container">
+                       
+                    </div> */}
+                    {/* Neu xuat hien isShowEdit la false thi dc phep edit */}
+                 
+                {/* </div> */}
                 <FormAddProductModal
                     clickSetShowAddProductPage={clickSetShowAddProductPage}
                     isShowAddProductPage={eventPage.isShowAddProductPage}
@@ -605,11 +646,14 @@ export default function PurchaseOrderConfirm() {
                 {<TextEditor setDefault={purchaseOrderDataGlobal.mailDescription === mailDescription} contentEmail={mailDescription} changeMailContent={changeMailContent} />}
 
 
-                <PreviewSendMail clostPreviewSendMail={() => this.clostPreviewSendMail()}
+                <PreviewSendMail
                     statusSendMail={eventPage.isPreview}
                     contentEmail={mailDescription}
                     listProduct={listProductPurchaseOrder}
                     infoPriceQuote={purchaseOrderDataGlobal}
+                    supplierInfo={supplier}
+                    closePreview={clickShowPreviewSendMail}
+                    isResend= {eventPage.isResend}
                     clostPreviewSendMail={clostPreviewSendMail}
                 />
 
@@ -670,7 +714,7 @@ function SelectSupplier(props) {
 
 
         <div class="col-md-3 form-floating">
-            
+
             <select onChange={onChangeValue} value={JSON.stringify(selected)} class="form-select" id="validationCustom04" required>
                 <option selected disabled value="">Choose...</option>
                 {listSupplier.map(supplier => <option value={JSON.stringify(supplier)} >{supplier.supplierName}</option>)}

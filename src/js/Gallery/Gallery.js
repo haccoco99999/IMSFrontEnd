@@ -30,7 +30,7 @@ class Gallery extends React.Component {
         if (this.props.clickQuote !== undefined ) {
            
         function setStatusPriQuote(hasBeenModified,status){
-            if(status ==="PQCreated"){
+            if(status ==="PriceQuote"){
                  return <span class="badge bg-primary">Sent</span>
 
             }

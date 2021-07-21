@@ -65,7 +65,7 @@ export default function PurchaseQuoteOrder() {
             align: 'center',
             formatter: (cell, row, rowIndex, extraData) => {
 
-                if (row.status === "POCreated") {
+                if (row.status === "PurchaseOrder") {
                     return <span class="badge bg-secondary">Draft</span>
 
                 }

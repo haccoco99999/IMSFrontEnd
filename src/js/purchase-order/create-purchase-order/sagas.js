@@ -119,15 +119,16 @@ function sendEmailQuote(action){
     .then(json => json)
     .catch((error) => {throw error})
 }
-function sendConfirmForManagerAPI(orderId) {
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/create/"+ orderId
+function sendConfirmForManagerAPI(action) {
+    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/create"
     return fetch(updateUrl, {
         method: 'POST',
         headers: {
-            "Authorization": "Bearer " + token,
+            "Authorization": "Bearer " + action.token,
             "Content-Type": "application/json",
             "Origin": ""
         },
+        body: JSON.stringify(action.data),
         credentials: "include",
 
     })
@@ -267,7 +268,7 @@ function* confirmPurchaseOrderFlow(action) {
     try {
 
        
-          let  json= yield call(sendConfirmForManagerAPI,action.orderID)
+          let  json= yield call(sendConfirmForManagerAPI,action)
          
         //     console.log(json)
             // yield put({type:SEND_CONFIRM_PURCHASE_ORDER_SUCCESS, json})

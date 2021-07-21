@@ -35,16 +35,20 @@ export function SearchToAddProduct(props) {
             filterBy={filterBy}
             id="async-example"
             labelKey="filter"
-            minLength={3}
+            minLength={1}
             onSearch={handleSearch}
             options={options}
             placeholder="Search for a Github user..."
 
             renderMenuItemChildren={(option) => (
                 <div onClick={() => props.getInfoProduct(option.product)} key={option.id}>
-
-                    <p>{option.name}</p>
-                    <p>{option.sku}</p>
+                    <img src="https://github.com/mdo.png" alt="@mdo" width="32" height="32" class="rounded me-2" loading="lazy" />
+                    <span>
+                        <strong>{option.name}</strong> {option.sku}
+                        
+                    </span>
+                   
+                  
 
                 </div>
             )}
@@ -60,6 +64,7 @@ export function ProductSearchSuggestion(props) {
     const [keySearch, setKeySearch] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [options, setOptions] = useState([]);
+    const [selected, setSelected] = useState([{ name: "" }]);
 
     const handleSearch = (query) => {
         setIsLoading(true);
@@ -80,23 +85,28 @@ export function ProductSearchSuggestion(props) {
     const filterBy = () => true;
 
     function handleChanged(select) {
-        setKeySearch(select[0].name)
+        setSelected(select)
+      
+        // setKeySearch(select[0].name)
     }
-    return (
+    console.log(keySearch)
+     return (
         <span>
             <AsyncTypeahead
+            size="small"
                 filterBy={filterBy}
                 id="async-example"
                 labelKey="name"
                 minLength={1}
                 onSearch={handleSearch}
                 options={options}
+                selected={selected}
                 placeholder="Search for a Github user..."
                 onChange={handleChanged}
                 renderMenuItemChildren={(option, index) => (
-                    <div key={index} onClick={() => props.getListProduct(option.name)}>
+                    <div  key={index} onClick={() => props.getListProduct(option.name)}>
 
-                        <p>{option.name}</p>
+                       {option.name}
 
                     </div>
                 )}

@@ -9,8 +9,15 @@ function searchPurchaseOrder(action){
             if(item[0] === "supplier" && item[1]["SupplierId"] !== "" ){
                 filterString += "SupplierId=" +item[1]["SupplierId"] + "&"
             }
-            else if(item[0] !== "supplier")
-            filterString += item[0] + "=" +item[1] + "&"
+            if(item[0]==="Statuses"){
+                item[1].forEach(status => filterString += item[0] + "=" +status + "&")
+                
+            }
+            else {
+              
+                filterString += item[0] + "=" +item[1] + "&"
+            }
+           
         }
     })
     console.log(filterString)
@@ -66,7 +73,7 @@ function getListPriceQuoteAPI(){
       
 }
 
-    const updateUrl="https://imspublicapi.herokuapp.com/api/purchaseorder/search?FromStatus=0&ToStatus=2&HideMerged=true"
+    const updateUrl="https://imspublicapi.herokuapp.com/api/purchaseorder/search?Statuses=PriceQuote&Statuses=Requisition&HideMerged=true"
 
     return fetch(updateUrl, {
         

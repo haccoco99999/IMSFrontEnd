@@ -5,8 +5,8 @@ import './FormAddProductModal.css'
 export default function FormAddProductModal(props) {
   const productInit = {
     id: "",
-    productVariantId: "",
-    orderQuantity: "",
+    productVariantId: 0,
+    orderQuantity: 0,
     unit: "",
     price: 0,
     discountAmount: 0,
@@ -22,11 +22,8 @@ export default function FormAddProductModal(props) {
     })
     const [listGroupNameProduct, setListGroupNameProduct] = useState([])
     function getInfoProduct(info) {
-      if (props.checkProductExist(info.productVariantId)) {
-        console.log("product da ton tai")
-        setProduct(productInit)
-      }
-      else {
+    
+     
         setProduct({
           id: info.id,
           productVariantId: info.productVariantId,
@@ -38,7 +35,7 @@ export default function FormAddProductModal(props) {
           name: info.name,
           sku: info.sku,
         })
-      }
+      
     }
     function changeValueInput(event) {
       setProduct((state) => ({

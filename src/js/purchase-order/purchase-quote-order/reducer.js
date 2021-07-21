@@ -18,8 +18,9 @@ const initalState = {
         SearchQuery:"",
         CurrentPage: 1,
         SizePerPage: 10,
-        FromStatus: 3,
+        FromStatus: 4,
         ToStatus: 6,
+        Statuses:["PurchaseOrder","POWaitingConfirmation","POConfirm","Done","POCanceled"],
         // HideMerged: true
         supplier:{
             SupplierId:"",

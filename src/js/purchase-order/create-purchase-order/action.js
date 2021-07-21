@@ -37,10 +37,11 @@ export  function sendMailService({data, token}){
     }
 }
 
-export function confirmDetailPurchaseOrder(orderID){
+export function confirmDetailPurchaseOrder({data, token}){
     return {
         type: SEND_CONFIRM_PURCHASE_ORDER_REQUEST,
-        orderID,
+        token,
+        data,
     }
 }
 export function saveProductsPurchaseOrder({data, token}){

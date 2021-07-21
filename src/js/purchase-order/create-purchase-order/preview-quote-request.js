@@ -50,9 +50,9 @@ export default function PreviewSendMail(props) {
                 theme: 'plain',
                 head: [['PRICE QUOTE REQUEST']],
                 body: [
-                    ['Quote #:' +props.infoPriceQuote.orderId],
+                    ['Quote #:' + props.infoPriceQuote.orderId],
                     ['Date: ' + new Date().toISOString().slice(0, 10)],
-                    ['Request By: ' +user.fullname],
+                    ['Request By: ' + user.fullname],
                     ['Quote expires: ' + props.infoPriceQuote.deadline]
 
                 ],
@@ -60,10 +60,10 @@ export default function PreviewSendMail(props) {
 
             var finalY = doc.lastAutoTable.finalY + 15 || 10
 
-        
-     
 
-        
+
+
+
 
             doc.autoTable({
                 styles: {},
@@ -76,28 +76,28 @@ export default function PreviewSendMail(props) {
                     { header: 'SKU', dataKey: 'sku' },
                     { header: 'Product Name', dataKey: 'name' },
                     { header: 'Quantity', dataKey: 'orderQuantity' },
-               
-            ],
-                body: 
-                    props.listProduct.map(product=> product)
-                    // ['1', 'Donna', 'dmoore0@furl.net', 'China', '211.56.242.221'],
-                    // ['2', 'Janice', 'jhenry1@theatlantic.com', 'Ukraine', '38.36.7.199'],
-                    // [
-                    //     '3',
-                    //     'Ruth',
-                    //     'rwells2@constantcontact.com',
-                    //     'Trinidad and Tobago',
-                    //     '19.162.133.184',
-                    // ],
-                    // ['4', 'Jason', 'jray3@psu.edu', 'Brazil', '10.68.11.42'],
-                    // ['5', 'Jane', 'jstephens4@go.com', 'United States', '47.32.129.71'],
-                    // ['6', 'Adam', 'anichols5@com.com', 'Canada', '18.186.38.37'],
-                    // ['6', 'Adam', 'anichols5@com.com', 'Canada', '18.186.38.37'],
+
+                ],
+                body:
+                    props.listProduct.map(product => product)
+                // ['1', 'Donna', 'dmoore0@furl.net', 'China', '211.56.242.221'],
+                // ['2', 'Janice', 'jhenry1@theatlantic.com', 'Ukraine', '38.36.7.199'],
+                // [
+                //     '3',
+                //     'Ruth',
+                //     'rwells2@constantcontact.com',
+                //     'Trinidad and Tobago',
+                //     '19.162.133.184',
+                // ],
+                // ['4', 'Jason', 'jray3@psu.edu', 'Brazil', '10.68.11.42'],
+                // ['5', 'Jane', 'jstephens4@go.com', 'United States', '47.32.129.71'],
+                // ['6', 'Adam', 'anichols5@com.com', 'Canada', '18.186.38.37'],
+                // ['6', 'Adam', 'anichols5@com.com', 'Canada', '18.186.38.37'],
 
                 ,
             })
             var finalY = doc.lastAutoTable.finalY + 5 || 10
-        
+
             doc.autoTable({
                 startY: finalY,
                 styles: { halign: 'center' },
@@ -120,7 +120,7 @@ export default function PreviewSendMail(props) {
 
 
             return doc.output('datauristring')
-          
+
 
 
 
@@ -139,27 +139,43 @@ export default function PreviewSendMail(props) {
                     <div class="modal-content modal-content-preview-quote-request">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalCenterTitle">Preview</h5>
-                            <button type="button" onClick={() => props.clostPreviewSendMail()} class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" onClick={() => props.closePreview()} class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body" style={{ overflow: "auto" }}>
+                            <div className="form-text">
+                                From:
+                            </div>
+                            <label className="form-check-label" >
+                                {"InventoryABC@gmail.com"}
+                            </label>
+                            <div className="form-text">
+                                TO:
+                            </div>
+                            <label className="form-check-label" >
+                                {props.supplierInfo.email}
+                            </label>
+                            <div className="form-text">
+                                Subject:
+                            </div>
+                            <label className="form-check-label" >
+                                {"Send Price QUote"}
+                            </label>
+                            <div className="form-text">
+                                Content:
+                            </div>
+                            <label className="form-check-label" >
                             <div dangerouslySetInnerHTML={{ __html: `${html}` }} />
-                            {/* <textarea className="design-textarea" disabled value={editorState && draftToMarkdown(convertToRaw(editorState.getCurrentContent()))} /> */}
-                            {/* {htmlToDraft(props.mailDescription)} */}
-                            {/* <div id="toilahhp"></div>
-                        {print()} */}
-{/* 
-                            <embed src={print()} width="500" height="375"
-                                type="application/pdf"></embed> */}
 
-                            {/* <div class="embed-responsive embed-responsive-4by3"> */}
+                            </label>
+                           
                             <iframe width="100%" height="100%" class="embed-responsive-item" src={print() + "#toolbar=0"}></iframe>
-                         
+
 
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" onClick={() => props.clostPreviewSendMail()} class="btn btn-secondary btn-cancel-preview" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" onClick={() => props.clostPreviewSendMail(  doc.output('blob'))} class="btn btn-primary">Send email to vendor</button>
+                            <button type="button" onClick={() => props.closePreview()} class="btn btn-secondary btn-cancel-preview" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" onClick={() => props.clostPreviewSendMail(doc.output('blob'), props.isResend)} class="btn btn-primary">Send email to vendor</button>
                         </div>
                     </div>
                 </div>
