@@ -176,7 +176,7 @@ export default function CreateStocktakeComponent() {
     },
     {
       dataField: "id",
-      text: "Delete",
+      text: "Action",
       editable: false,
       formatter: (cellContent, row, rowIndex) => {
         return (
@@ -253,7 +253,7 @@ export default function CreateStocktakeComponent() {
         };
 
         console.log("Data output:", data);
-        // dispatch(createStocktkaeAction({ token: token, data: data }));
+        dispatch(createStocktkaeAction({ token: token, data: data }));
       } else {
         Swal.fire({
           title: "Error",

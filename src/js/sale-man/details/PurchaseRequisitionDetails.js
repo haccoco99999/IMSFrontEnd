@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import moment from "moment";
+import BootstrapTable from "react-bootstrap-table-next";
+import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
+import Swal from "sweetalert2";
 //css
 import "../sale-man.css";
 //components
@@ -28,6 +31,8 @@ export default function details() {
   );
 
   const [cleanListProducts, setCleanListProducts] = useState([]);
+  const [listOrigin, setListOrigin] = useState([]);
+  const [isReturnData, setIsReturnData] = useState(false);
   // const [listProductReset, setListProductReset] = useState(cleanListProducts);
 
   const [listValueColumn, setListColumn] = useState([
@@ -45,6 +50,108 @@ export default function details() {
       price: "Price",
     },
   ]);
+  //todo: declare button
+  const columnsEdit = [
+    {
+      dataField: "productVariantId",
+      hidden: true,
+    },
+    {
+      dataField: "name",
+      text: "Product Name",
+      editable: false,
+    },
+    { dataField: "unit", text: "Unit", editable: false },
+    {
+      dataField: "orderQuantity",
+      text: "Order Quantity",
+      formatter: (cellContent, row, rowIndex) =>
+        (cleanListProducts[rowIndex].orderQuantity = row.orderQuantity),
+      validator: (newValue, oldValue, row) => {
+        if (isNaN(newValue)) {
+          return {
+            valid: false,
+            message: "Quantity should be numeric",
+          };
+        }
+      },
+    },
+    { dataField: "price", text: "Price", editable: false },
+    {
+      dataField: "totalAmount",
+      text: "Total Amount",
+      editable: false,
+      formatter: (cellContent, row, rowIndex) => (
+        <div>
+          <span>{cleanListProducts[rowIndex].orderQuantity * row.price}</span>
+        </div>
+      ),
+    },
+    {
+      dataField: "name",
+      text: "Action",
+      editable: false,
+      formatter: (cellContent, row, rowIndex) => {
+        return (
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => clickDeleteCheckItems(rowIndex)}
+          >
+            Delete
+          </button>
+        );
+      },
+    },
+  ];
+
+  const columnsShow = [
+    {
+      dataField: "productVariantId",
+      hidden: true,
+    },
+    {
+      dataField: "name",
+      text: "Product Name",
+      // editable: false,
+    },
+    {
+      dataField: "unit",
+      text: "Unit",
+      //  editable: false
+    },
+    {
+      dataField: "orderQuantity",
+      text: "Order Quantity",
+      // formatter: (cellContent, row, rowIndex) =>
+      //   (purchaseOrderProduct[rowIndex].orderQuantity = row.orderQuantity),
+      // validator: (newValue, oldValue, row) => {
+      //   if (isNaN(newValue)) {
+      //     return {
+      //       valid: false,
+      //       message: "Quantity should be numeric",
+      //     };
+      //   }
+      // },
+    },
+    {
+      dataField: "price",
+      text: "Price",
+      //  editable: false
+    },
+    {
+      dataField: "totalAmount",
+      text: "Total Amount",
+      // editable: false,
+      // formatter: (cellContent, row, rowIndex) => (
+      //   <div>
+      //     <span>
+      //       {purchaseOrderProduct[rowIndex].orderQuantity * row.price}
+      //     </span>
+      //   </div>
+      // ),
+    },
+  ];
 
   const {
     status,
@@ -89,9 +196,28 @@ export default function details() {
   }
 
   function onCancelClick() {
+    console.log(cleanListProducts);
+    console.log(listGetProductsStore);
     setIsEditDisabled(!isEditDisabled);
     // setIsCancel(true);
-    setCleanListProducts(listGetProductsStore);
+    //reset
+    setCleanListProducts(
+      listGetProductsStore.map((product) => {
+        // product.name = product.productVariant.name;
+        // delete product["productVariant"];
+        // return product;
+        return {
+          name: product.productVariant.name,
+          productVariantId: product.productVariantId,
+          orderQuantity: product.orderQuantity,
+          unit: product.unit,
+          price: product.price,
+          discountAmount: product.discountAmount,
+          totalAmount: product.totalAmount,
+        };
+      })
+    );
+
     setDeadline(deadlineStore);
     setIsCancel(!isCancel);
   }
@@ -113,7 +239,7 @@ export default function details() {
       unit: productRaw.unit,
       price: productRaw.price,
       discountAmount: 0,
-      totalAmount: productRaw.price * 1,
+      totalAmount: 1,
       name: productRaw.name,
     };
     setCleanListProducts([...cleanListProducts, product]);
@@ -146,7 +272,21 @@ export default function details() {
 
     dispatch(updateAction({ data: data, token: token }));
   }
-
+  function clickDeleteCheckItems(rowIndex) {
+    // console.log(rowIndex);
+    if (cleanListProducts.length === 1)
+      Swal.fire({
+        title: "Error",
+        text: "Do not let list product empty",
+        icon: "error",
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        showConfirmButton: false,
+      });
+    else {
+      setCleanListProducts((state) => state.filter((_, i) => i !== rowIndex));
+    }
+  }
   function onChangeValueProduct(event) {
     setCleanListProducts(
       cleanListProducts.map((element, index) =>
@@ -178,25 +318,24 @@ export default function details() {
   }, []);
 
   useEffect(() => {
-    // if (listGetProductsStore !== null) {
-    //   if (listGetProductsStore !== []) {
-    //     setCleanListProducts(
-    //       listGetProductsStore.map((product) => {
-    //         product.name = product.productVariant.name;
-    //         delete product["productVariant"];
-    //         return product;
-    //       })
-    //     );
-    //   }
-    // }
     if (listGetProductsStore.length > 0) {
       setCleanListProducts(
         listGetProductsStore.map((product) => {
-          product.name = product.productVariant.name;
-          delete product["productVariant"];
-          return product;
+          // product.name = product.productVariant.name;
+          // delete product["productVariant"];
+          // return product;
+          return {
+            name: product.productVariant.name,
+            productVariantId: product.productVariantId,
+            orderQuantity: product.orderQuantity,
+            unit: product.unit,
+            price: product.price,
+            discountAmount: product.discountAmount,
+            totalAmount: product.totalAmount,
+          };
         })
       );
+      setIsReturnData(true);
     }
   }, [listGetProductsStore]);
   console.log(listGetProductsStore);
@@ -300,75 +439,109 @@ export default function details() {
         </div>
       </div>
       <div className="wrapper space-top">
-        <div className="wrapper-content shadow">
-          {/* Show info */}
-
-          <div className="row g-3 justify-content-between me-3">
-            <div className="col-4">
-              <p>
-                <strong>Created by:</strong>
-                {/* {createdBy} */}
-                {transactionRecordStore[0].applicationUser.userName}
-              </p>
-              {/* <p>
+        <div class="card">
+          <div class="card-header fw-bold">Purchase Requisition Details</div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div className="row g-3 justify-content-between me-3">
+                <div className="col-4">
+                  <p>
+                    <strong>Created by:</strong>
+                    {/* {createdBy} */}
+                    {transactionRecordStore[0].applicationUser.userName}
+                  </p>
+                  {/* <p>
                     <strong>Submitted by:</strong> Huy Nguyen{" "}
                 </p>
                 <p>
                     <strong>Adjusted by:</strong> Mr. Hung
                 </p> */}
-            </div>
-            <div className="col-4">
-              <p>
-                <strong>Create date:</strong>
-                {/* {createDate.split("T")[0]} */}
-                {transactionRecordStore[0].date}
-              </p>
-              <p>
-                <strong>Deadline:</strong>
-                {deadlineStore.split("T")[0]}
-              </p>
-              {/* <p>
+                </div>
+                <div className="col-4">
+                  <p>
+                    <strong>Create date:</strong>
+                    {/* {createDate.split("T")[0]} */}
+                    {transactionRecordStore[0].date}
+                  </p>
+                  <p>
+                    <strong>Deadline:</strong>
+                    {deadlineStore.split("T")[0]}
+                  </p>
+                  {/* <p>
                     <strong>Submit date:</strong> 05/12/2021
                 </p>
                 <p>
                     <strong>Adjust date:</strong> 05/21/2021
                 </p> */}
-            </div>
-          </div>
-        </div>
-        <div className="wrapper-content shadow mt-3">
-          {!isEditDisabled && (
-            <>
-              <div className="mt-2">
-                <label for="deadline" class="form-label">
-                  Deadline
-                </label>
-                <input
-                  type="datetime-local"
-                  name="deadline"
-                  defaultValue={deadline}
-                  class="form-control"
-                  onChange={onChangeDeadline}
-                />
+                </div>
               </div>
+            </li>
+            <li class="list-group-item">
+              {!isEditDisabled && (
+                <>
+                  <div className="mt-2">
+                    <label for="deadline" class="form-label">
+                      Deadline
+                    </label>
+                    <input
+                      type="datetime-local"
+                      name="deadline"
+                      defaultValue={deadline}
+                      class="form-control"
+                      onChange={onChangeDeadline}
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <label for="deadline" class="form-label">
+                      Search
+                    </label>
+                    <SearchComponent clickToAddProduct={clickToAddProduct} />
+                  </div>
+                </>
+              )}
               <div className="mt-2">
-                <label for="deadline" class="form-label">
-                  Search
-                </label>
-                <SearchComponent clickToAddProduct={clickToAddProduct} />
+                {isEditDisabled ? (
+                  <BootstrapTable
+                    keyField="productVariantId"
+                    data={cleanListProducts}
+                    columns={columnsShow}
+                    noDataIndication="Table is Empty"
+                  />
+                ) : (
+                  <BootstrapTable
+                    keyField="productVariantId"
+                    data={cleanListProducts}
+                    columns={columnsEdit}
+                    noDataIndication="Table is Empty"
+                    cellEdit={cellEditFactory({
+                      mode: "click",
+                      blurToSave: true,
+
+                      afterSaveCell: (oldValue, newValue, row, column) => {
+                        row.totalAmount = row.orderQuantity * row.price;
+                        // console.log(row.totalAmount);
+                        // console.log(row.price);
+                        // console.log(row.orderQuantity);
+                      },
+                    })}
+                  />
+                )}
+
+                {/* {isReturnData && (
+
+                 
+                  <Table
+                    clickToAddProduct={clickToAddProduct}
+                    listColumn={listValueColumn}
+                    listData={cleanListProducts}
+                    disabled={isEditDisabled}
+                    clickDeleteProduct={clickDeleteProduct}
+                    onChangeValueProduct={onChangeValueProduct}
+                  />
+                )} */}
               </div>
-            </>
-          )}
-          <div className="mt-2">
-            <Table
-              clickToAddProduct={clickToAddProduct}
-              listColumn={listValueColumn}
-              listData={cleanListProducts}
-              disabled={isEditDisabled}
-              clickDeleteProduct={clickDeleteProduct}
-              onChangeValueProduct={onChangeValueProduct}
-            />
-          </div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ import "../../product.css";
 import Filter from "../../filter";
 import { getAllProductAction } from "./action";
 import Table from "../../../table-receipt/ListReceiptsTable";
-import PagingComponent from "../../components/paging-component";
+import PagingComponent from "../../../components/paging/paging-component"
 export default function () {
   let history = useHistory();
   let dispatch = useDispatch();

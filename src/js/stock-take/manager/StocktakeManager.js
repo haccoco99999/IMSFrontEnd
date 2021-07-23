@@ -11,7 +11,8 @@ import "../stocktake.css";
 //components
 // import Details from "../details/details";
 import { getAllStocktakeAction } from "./action";
-
+// import PagingComponent from "../../components/";
+import PagingComponent from "../../components/paging/paging-component";
 export default function () {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -252,7 +253,13 @@ export default function () {
             rowEvents={rowEvents}
             // pagination={paginationFactory(options2)}
           />
-          <div className="paging-container">
+          <PagingComponent
+            currentPage={currentPage}
+            pageCount={pageCount}
+            nextPagingClick={nextPagingClick}
+            backPagingClick={backPagingClick}
+          />
+          {/* <div className="paging-container">
             <div className="left-size-paging">
               <select className="select-row-table">
                 <option value={10}>{10}</option>
@@ -265,7 +272,7 @@ export default function () {
               <img src="..\src\js\images\left-arrow.svg" />
               <img src="..\src\js\images\right-arrow.svg" />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>{" "}
     </div>
