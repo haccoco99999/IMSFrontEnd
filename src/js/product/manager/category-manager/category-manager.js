@@ -12,7 +12,7 @@ import {
   UpdateCategoryAction,
 } from "./action";
 import Table from "../../../table-receipt/ListReceiptsTable";
-
+import PagingComponent from "../../../components/paging/paging-component";
 export default function CategoryManager() {
   let dispatch = useDispatch();
   //modal
@@ -62,19 +62,37 @@ export default function CategoryManager() {
 
   const [isCreate, setIsCreate] = useState(true);
 
-  const [listValueColumn, setListValueColumn] = useState({
-    id: true,
-    categoryName: true,
-    categoryDescription: true,
-    transactionId: false,
-  });
+  // const [listValueColumn, setListValueColumn] = useState({
+  //   id: true,
+  //   categoryName: true,
+  //   categoryDescription: true,
+  //   transactionId: false,
+  // });
 
-  const [listEditHeader, setListEditHeader] = useState({
-    categoryName: "Name",
-    categoryDescription: "Description",
-    id: "Category ID",
-  });
+  // const [listEditHeader, setListEditHeader] = useState({
+  //   categoryName: "Name",
+  //   categoryDescription: "Description",
+  //   id: "Category ID",
+  // });
 
+  const columns = [
+    {
+      dataField: "id",
+      hidden: true,
+    },
+    {
+      dataField: "categoryName",
+      text: "Name",
+    },
+    {
+      dataField: "categoryDescription",
+      text: "Description",
+    },
+    {
+      dataField: "transactionId",
+      hidden: true,
+    },
+  ];
   function nextPagingClick() {
     console.log("forward");
     setCurrentPage(currentPage + 1);
@@ -83,6 +101,19 @@ export default function CategoryManager() {
     console.log("backWard");
     setCurrentPage(currentPage - 1);
   }
+
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      setCategoryData({
+        id: row.id,
+        categoryName: row.categoryName,
+        categoryDescription: row.categoryDescription,
+        transactionId: row.transactionId,
+      });
+      setIsCreate(false);
+      showModal();
+    },
+  };
 
   function onRowClick(row) {
     setCategoryData({
@@ -125,7 +156,7 @@ export default function CategoryManager() {
         hideModal={hideModal}
         isCreate={isCreate}
         categoryData={categoryData}
-        onChangeValue={onChangeValue}
+        // onChangeValue={onChangeValue}
         token={token}
         messaages={messages}
       />
@@ -152,7 +183,24 @@ export default function CategoryManager() {
       </div>
 
       <div className="mt-3">
-        <Table
+        <BootstrapTable
+          keyField="id"
+          striped
+          hover
+          condensed
+          columns={columns}
+          headerClasses="table-header-receipt"
+          noDataIndication="Table is Empty"
+          data={list_Categories}
+          rowEvents={rowEvents}
+        />
+        <PagingComponent
+          currentPage={currentPage}
+          pageCount={pageCount}
+          nextPagingClick={nextPagingClick}
+          backPagingClick={backPagingClick}
+        />
+        {/* <Table
           listHeaderEdit={listEditHeader}
           listColumn={listValueColumn}
           listData={list_Categories}
@@ -162,7 +210,7 @@ export default function CategoryManager() {
           currentPage={currentPage}
           pageCount={pageCount}
           onRowClick={onRowClick}
-        />
+        /> */}
       </div>
     </div>
   );
@@ -196,9 +244,7 @@ function ModalFunction(props) {
         categoryName: categorySelected.categoryName,
         categoryDescription: categorySelected.categoryDescription,
       };
-      dispatch(
-        UpdateCategoryAction({ token: props.token, data: dataUpdate })
-      );
+      dispatch(UpdateCategoryAction({ token: props.token, data: dataUpdate }));
     }
   }
 
@@ -228,9 +274,9 @@ function ModalFunction(props) {
         <div className="modal-content">
           <div className="modal-header">
             {props.isCreate ? (
-              <h5 className="modal-title">Create</h5>
+              <h5 className="modal-title fw-bold">Create</h5>
             ) : (
-              <h5 className="modal-title">Details</h5>
+              <h5 className="modal-title fw-bold">Details</h5>
             )}
 
             <button
@@ -242,14 +288,14 @@ function ModalFunction(props) {
           </div>
 
           <div className="modal-body">
-            <div class="mb-3">
-              <label for="Category" class="form-label">
+            <div className="mb-3">
+              <label for="Category" className="form-label">
                 Category Name
               </label>
               {props.isCreate ? (
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   name="categoryName"
                   value={categorySelected.categoryName}
                   onChange={onChangeValue}
@@ -257,7 +303,7 @@ function ModalFunction(props) {
               ) : (
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   name="categoryName"
                   disabled={isDisabled}
                   value={categorySelected.categoryName}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal } from "bootstrap";
@@ -14,30 +14,33 @@ import {
   setCreateingGRRequestAction,
   getAllLocationsAction,
 } from "./action";
-import Table from "../../list-products-table/ListProductsTable";
+// import Table from "../../list-products-table/ListProductsTable";
 import ListLocationsModal from "../../stock-take/create/search-location-modal";
 import NavigationBar from "../../components/navbar/navbar-component";
 import ListPurchaseConfirmModal from "../components/purchase-accept-component";
-const formReducer = (state, event) => {
-  return {
-    ...state,
-    [event.name]: event.value,
-  };
-};
+// const formReducer = (state, event) => {
+//   return {
+//     ...state,
+//     [event.name]: event.value,
+//   };
+// };
 
 export default function CreateGoodsReceiptComponent() {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  const [formData, setFormData] = useReducer(formReducer, {});
-  const [isChange, setIsChange] = useState(false);
+  // const [formData, setFormData] = useReducer(formReducer, {});
+  const [isChanging, setIsChanging] = useState(false);
+  const [isValid, setIsValid] = useState(true);
+  const [isCheckingNumeric, setIsCheckingNumeric] = useState(false);
+  const [isReturnData, setIsReturnData] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState({
     id: "",
     locationName: "",
     locationBarcode: "",
   });
   const [selectedPO, setSelectedPO] = useState("");
-
+  const [listCompare, setListCompare] = useState([]);
   const {
     list_ConfirmPurchaseOrderID,
     list_BuyingProductStore,
@@ -56,29 +59,6 @@ export default function CreateGoodsReceiptComponent() {
   }));
 
   const [list_BuyingProduct, setList_BuyingProduct] = useState([]);
-
-  const [listValueColumn, setListValueColumn] = useState([
-    { id: "ID" },
-    {
-      productId: "Product ID",
-    },
-    {
-      productVariantId: "Variant ID",
-    },
-    {
-      name: "Product Name",
-    },
-    { sku: "SKU", input: "true" },
-    { barcode: "Barcode", input: "true" },
-    {
-      orderQuantity: "Quantity",
-      input: true,
-    },
-  ]);
-
-  const [listEditHeader, setListEditHeader] = useState({
-    // id: "Goods Receipt ID",
-  });
 
   const columns = [
     {
@@ -114,11 +94,12 @@ export default function CreateGoodsReceiptComponent() {
       editable: true,
       validator: (newValue, oldValue, row) => {
         if (isNaN(newValue)) {
+          setIsCheckingNumeric(true);
           return {
             valid: false,
             message: "Sale price should be numeric",
           };
-        }
+        } else setIsCheckingNumeric(false);
       },
       formatter: (cellContent, row, rowIndex) =>
         (list_BuyingProduct[rowIndex].received = row.received),
@@ -138,7 +119,6 @@ export default function CreateGoodsReceiptComponent() {
           </button>
         );
       },
-      
     },
   ];
 
@@ -146,14 +126,32 @@ export default function CreateGoodsReceiptComponent() {
   const listButton = setListButtonNav();
 
   function setListButtonNav() {
-    return [
-      {
-        isShow: true,
-        title: "Save",
-        action: () => saveGoodsReceipt(),
-        class: "btn-primary",
-      },
-    ];
+    if (isChanging)
+      return [
+        {
+          isShow: true,
+          title: "Revert",
+          action: () => onRevertClick(),
+          class: "btn-secondary",
+        },
+        {
+          isShow: true,
+          title: "Save",
+          action: () => saveGoodsReceipt(),
+          class: "btn-primary",
+          disabled: isCheckingNumeric,
+        },
+      ];
+    else
+      return [
+        {
+          isShow: true,
+          title: "Save",
+          action: () => saveGoodsReceipt(),
+          class: "btn-primary",
+          disabled: isCheckingNumeric,
+        },
+      ];
   }
 
   //todo:modal location declare
@@ -213,7 +211,7 @@ export default function CreateGoodsReceiptComponent() {
 
   function onSelectPOClick() {
     hideModalPO();
-    setIsChange(true);
+    setIsReturnData(true);
     dispatch(getConfirmedPODetailsAction({ id: selectedPO, token: token }));
   }
 
@@ -228,6 +226,7 @@ export default function CreateGoodsReceiptComponent() {
     // console.log((state) => state.filter((_, i) => i !== rowIndex));
 
     setList_BuyingProduct((state) => state.filter((_, i) => i !== rowIndex));
+    setListCompare((state) => state.filter((_, i) => i !== rowIndex));
   }
 
   // function onChangeValueProduct(event) {
@@ -243,10 +242,11 @@ export default function CreateGoodsReceiptComponent() {
   // }
 
   function isDataInputEmpty(array) {
-    const check1 = (element) => element.sku === "";
-    const check2 = (element) => element.barcode === "";
-    if (array.some(check1) || array.some(check2))
-      return true;
+    const checkSKU = (element) => element.sku === "";
+    const checkBarcode = (element) => element.barcode === "";
+    if (array.some(checkSKU) && array.some(checkBarcode)) return true;
+    // else if (array.some(checkSKU) && !array.some(checkBarcode)) return false;
+    // else if (!array.some(checkSKU) && array.some(checkBarcode)) return false;
     return false;
   }
 
@@ -261,10 +261,11 @@ export default function CreateGoodsReceiptComponent() {
         showConfirmButton: false,
       });
     } else {
-      if (isDataInputEmpty(list_BuyingProduct)) {
+      // if (isDataInputEmpty(list_BuyingProduct)) {
+      if (!isValid) {
         Swal.fire({
           title: "Error",
-          text: "Please input barcode and sku",
+          text: "Please input valid barcode or sku",
           icon: "error",
           showCancelButton: true,
           cancelButtonText: "Cancel",
@@ -284,10 +285,9 @@ export default function CreateGoodsReceiptComponent() {
           }),
         };
         console.log(Data);
-        dispatch(setCreateingGRRequestAction({ data: Data, token: token }));
+        // dispatch(setCreateingGRRequestAction({ data: Data, token: token }));
       }
     }
-  
   }
 
   // const handleChangeValue = (event) => {
@@ -302,10 +302,7 @@ export default function CreateGoodsReceiptComponent() {
   //   );
   // };
 
-
-  function onClickDiscard(){
-    
-  }
+  function onRevertClick() {}
 
   //@params: suppliers get details suppliers
   const suppliers = list_ConfirmPurchaseOrderID
@@ -340,8 +337,34 @@ export default function CreateGoodsReceiptComponent() {
           };
         })
       );
+      setListCompare(
+        list_BuyingProductStore.map((product) => {
+          var isValid = true;
+          if (product.sku === "" && product.barcode === "") isValid = false;
+
+          return {
+            id: product.id,
+            sku: product.productVariant.sku,
+            barcode: product.productVariant.barcode,
+            isChanging: false,
+            isValid: isValid,
+          };
+        })
+      );
     }
   }, [list_BuyingProductStore]);
+  useEffect(() => {
+    const checkIsChanging = (element) => element.isChanging === true;
+    const checkisValid = (element) => element.isValid === false;
+    if (listCompare.length > 0) {
+      if (listCompare.some(checkIsChanging)) setIsChanging(true);
+      else setIsChanging(false);
+      console.log(isChanging);
+      if (listCompare.some(checkisValid)) setIsValid(false);
+      else setIsValid(true);
+      console.log(isValid);
+    }
+  }, [listCompare]);
   return (
     <div>
       <NavigationBar
@@ -363,31 +386,9 @@ export default function CreateGoodsReceiptComponent() {
               >
                 Select Purchase Order
               </button>
-              {/* <div className="row g-3">
-                <div class="col-auto">
-                  <label for="search" class="form-label">
-                    Purchase Order ID
-                  </label>
-                </div>
-                <div class="input-group mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="eg. PO000001"
-                    aria-label="eg. PO000001"
-                    aria-describedby="button-addon2"
-                    value=""
-                  />
-                  <button class="btn btn-outline-secondary" type="button"
-                  onClick={showModalPO}
-                  >
-                    Search More
-                  </button>
-                </div>
-              </div> */}
             </li>
 
-            {isChange && (
+            {isReturnData && (
               <li class="list-group-item">
                 <p>
                   <strong>Purchase Order:</strong> {selectedPO}
@@ -405,7 +406,6 @@ export default function CreateGoodsReceiptComponent() {
             )}
 
             <li class="list-group-item">
-              {" "}
               <div className="mt-3">
                 <BootstrapTable
                   keyField="id"
@@ -415,6 +415,82 @@ export default function CreateGoodsReceiptComponent() {
                   cellEdit={cellEditFactory({
                     mode: "click",
                     blurToSave: true,
+                    beforeSaveCell(oldValue, newValue, row, column, done) {
+                      let findEle = listCompare.find((e) => e.id === row.id);
+                      console.log(findEle);
+
+                      if (column.dataField === "sku") {
+                        console.log("Dang check SKU");
+                        let currentBarcode = row.barcode;
+                        if (
+                          newValue !== findEle.sku ||
+                          currentBarcode !== findEle.barcode
+                        ) {
+                          setListCompare([
+                            ...listCompare,
+                            listCompare.map((e) =>
+                              e === findEle ? (e.isChanging = true) : e
+                            ),
+                          ]);
+                          //todo: check invalid
+                          if (newValue === "" && currentBarcode === "") {
+                            setListCompare([
+                              ...listCompare,
+                              listCompare.map((e) =>
+                                e === findEle ? (e.isValid = false) : e
+                              ),
+                            ]);
+                          } else
+                            setListCompare([
+                              ...listCompare,
+                              listCompare.map((e) =>
+                                e === findEle ? (e.isValid = true) : e
+                              ),
+                            ]);
+                        } else
+                          setListCompare([
+                            ...listCompare,
+                            listCompare.map((e) =>
+                              e === findEle ? (e.isChanging = false) : e
+                            ),
+                          ]);
+                      } else if (column.dataField === "barcode") {
+                        console.log("Dang check barcode");
+                        let currentSKU = row.sku;
+                        if (
+                          newValue.barcode !== findEle ||
+                          currentBarcode !== findEle.barcode
+                        ) {
+                          setListCompare([
+                            ...listCompare,
+                            listCompare.map((e) =>
+                              e === findEle ? (e.isChanging = true) : e
+                            ),
+                          ]);
+                          //todo: check invalid
+                          if (newValue === "" && currentSKU === "") {
+                            setListCompare([
+                              ...listCompare,
+                              listCompare.map((e) =>
+                                e === findEle ? (e.isValid = false) : e
+                              ),
+                            ]);
+                          } else
+                            setListCompare([
+                              ...listCompare,
+                              listCompare.map((e) =>
+                                e === findEle ? (e.isValid = true) : e
+                              ),
+                            ]);
+                        } else
+                          setListCompare([
+                            ...listCompare,
+                            listCompare.map((e) =>
+                              e === findEle ? (e.isChanging = false) : e
+                            ),
+                          ]);
+                      }
+                    },
                   })}
                 />
               </div>
@@ -451,72 +527,6 @@ export default function CreateGoodsReceiptComponent() {
             </li>
           </ul>
         </div>
-        {/* <div className="shadow wrapper-content">
-          <form>
-            <div className="mt-3">
-              <label for="search" class="form-label">
-                Purchase Order ID
-              </label>
-              <select
-                name="orderid"
-                value={formData.orderid || ""}
-                class="form-select"
-                aria-label="Default select example"
-                onChange={handleChangeValue}
-              >
-                <option value="" disabled>
-                  Select Order ID
-                </option>
-
-                {list_ConfirmPurchaseOrderID.map((purchaseOrder) => (
-                  <option value={purchaseOrder.id}>{purchaseOrder.id}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="mt-3"></div>
-          </form>
-        </div> */}
-
-        {/* {isChange && (
-          <div className="shadow wrapper-content mt-3">
-            <div className="mt-3">
-              <label class="form-label" value="">
-                Select Location
-              </label>
-              <button
-                class="btn btn-outline-secondary"
-                type="button"
-                onClick={showModal}
-              >
-                Search Location
-              </button>
-            </div>
-            <div className="mt-3">
-              <p>
-                <strong>Location ID:</strong> {selectedLocation.id}
-              </p>
-              <p>
-                <strong>Location Name:</strong> {selectedLocation.locationName}
-              </p>
-              <p>
-                <strong>Location Barcode:</strong>{" "}
-                {selectedLocation.locationBarcode}
-              </p>
-            </div>
-            <div className="mt-3">
-              <label class="form-label" value="">
-                Products
-              </label>
-              <Table
-                listHeaderEdit={listEditHeader}
-                listColumn={listValueColumn}
-                listData={list_BuyingProduct}
-                onChangeValueProduct={onChangeValueProduct}
-              />
-            </div>
-          </div>
-        )} */}
       </div>
       <ListLocationsModal
         modalRef={modalRef}

@@ -8,7 +8,7 @@ import "./product.css";
 import Empty from "./empty";
 import Manager from "./manager/manager";
 import Manager2 from "./manager/manager2";
-import Create from "./create/CreateNewProduct";
+// import Create from "./create/CreateNewProduct";
 import Variants from "./create/create-with-variants/CreateWithVariants";
 import NoVariants from "./create/create-no-variants/CreateNoVariants";
 import ProductDetails from "./details/ProductDetails";

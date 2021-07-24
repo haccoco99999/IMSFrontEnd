@@ -6,7 +6,7 @@ import "../product.css";
 //components
 import ProductManager from "./product-manager/product-manager";
 import CategoryManager from "./category-manager/category-manager";
-
+import LocationManager from "./location-manager/LocationManager";
 export default function Manager() {
   return (
     <>
@@ -74,6 +74,20 @@ export default function Manager() {
                 Variant
               </button>
             </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="pills-supplier-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-supplier"
+                type="button"
+                role="tab"
+                aria-controls="pills-supplier"
+                aria-selected="false"
+              >
+                Suppliers
+              </button>
+            </li>
           </ul>
           <div class="tab-content" id="pills-tabContent">
             <div
@@ -98,7 +112,7 @@ export default function Manager() {
               role="tabpanel"
               aria-labelledby="pills-location-tab"
             >
-              ...
+               <LocationManager/>
             </div>
             <div
               class="tab-pane fade"
@@ -107,6 +121,14 @@ export default function Manager() {
               aria-labelledby="pills-variant-tab"
             >
               ...
+            </div>
+            <div
+              class="tab-pane fade"
+              id="pills-supplier"
+              role="tabpanel"
+              aria-labelledby="pills-supplier-tab"
+            >
+             ...
             </div>
           </div>
         </div>

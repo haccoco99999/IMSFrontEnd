@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 //css
 import "../sale-man.css";
 //components
-import Table from "../../list-products-table/ListProductsTable";
+// import Table from "../../list-products-table/ListProductsTable";
 import {
   getPRDetailsAction,
   submitAction,
@@ -31,25 +31,25 @@ export default function details() {
   );
 
   const [cleanListProducts, setCleanListProducts] = useState([]);
-  const [listOrigin, setListOrigin] = useState([]);
+  // const [listOrigin, setListOrigin] = useState([]);
   const [isReturnData, setIsReturnData] = useState(false);
   // const [listProductReset, setListProductReset] = useState(cleanListProducts);
 
-  const [listValueColumn, setListColumn] = useState([
-    {
-      productVariantId: "Variant Id",
-    },
-    {
-      name: "Variant Name",
-    },
-    {
-      orderQuantity: "Order Quantity",
-      input: true,
-    },
-    {
-      price: "Price",
-    },
-  ]);
+  // const [listValueColumn, setListColumn] = useState([
+  //   {
+  //     productVariantId: "Variant Id",
+  //   },
+  //   {
+  //     name: "Variant Name",
+  //   },
+  //   {
+  //     orderQuantity: "Order Quantity",
+  //     input: true,
+  //   },
+  //   {
+  //     price: "Price",
+  //   },
+  // ]);
   //todo: declare button
   const columnsEdit = [
     {
@@ -76,17 +76,17 @@ export default function details() {
         }
       },
     },
-    { dataField: "price", text: "Price", editable: false },
-    {
-      dataField: "totalAmount",
-      text: "Total Amount",
-      editable: false,
-      formatter: (cellContent, row, rowIndex) => (
-        <div>
-          <span>{cleanListProducts[rowIndex].orderQuantity * row.price}</span>
-        </div>
-      ),
-    },
+    // { dataField: "price", text: "Price", editable: false },
+    // {
+    //   dataField: "totalAmount",
+    //   text: "Total Amount",
+    //   editable: false,
+    //   formatter: (cellContent, row, rowIndex) => (
+    //     <div>
+    //       <span>{cleanListProducts[rowIndex].orderQuantity * row.price}</span>
+    //     </div>
+    //   ),
+    // },
     {
       dataField: "name",
       text: "Action",
@@ -134,23 +134,23 @@ export default function details() {
       //   }
       // },
     },
-    {
-      dataField: "price",
-      text: "Price",
-      //  editable: false
-    },
-    {
-      dataField: "totalAmount",
-      text: "Total Amount",
-      // editable: false,
-      // formatter: (cellContent, row, rowIndex) => (
-      //   <div>
-      //     <span>
-      //       {purchaseOrderProduct[rowIndex].orderQuantity * row.price}
-      //     </span>
-      //   </div>
-      // ),
-    },
+    // {
+    //   dataField: "price",
+    //   text: "Price",
+    //   //  editable: false
+    // },
+    // {
+    //   dataField: "totalAmount",
+    //   text: "Total Amount",
+    //   // editable: false,
+    //   // formatter: (cellContent, row, rowIndex) => (
+    //   //   <div>
+    //   //     <span>
+    //   //       {purchaseOrderProduct[rowIndex].orderQuantity * row.price}
+    //   //     </span>
+    //   //   </div>
+    //   // ),
+    // },
   ];
 
   const {

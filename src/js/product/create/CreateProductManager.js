@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 //css
 import "../product.css";
 //components
-import CreateNewProduct from "./CreateNewProduct";
+// import CreateNewProduct from "./CreateNewProduct";
 import CreateNoVariants from "./create-no-variants/CreateNoVariants";
 import CreateWithVariants from "./create-with-variants/CreateWithVariants";
 import CreateProduct from "./CreateProduct";
@@ -122,15 +122,16 @@ export default function CreateProductManager() {
             setVariantValuesManager={setVariantValuesManager}
           />
         );
-      } else
-        return (
-          <CreateNoVariants
-            formData={formData}
-            prevStep={prevStep}
-            token={token}
-            messages={messages}
-            setFormDataManager={setFormDataManager}
-          />
-        );
+      }
+      //  else
+      //   return (
+      //     <CreateNoVariants
+      //       formData={formData}
+      //       prevStep={prevStep}
+      //       token={token}
+      //       messages={messages}
+      //       setFormDataManager={setFormDataManager}
+      //     />
+      //   );
   }
 }

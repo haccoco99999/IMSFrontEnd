@@ -26,26 +26,26 @@ export default function () {
   const [supplierSelected, setSupplierSelected] = useState({});
   const [purchaseOrderProduct, setPurchaseOrderProduct] = useState([]);
   const [deadline, setDeadline] = useState("");
-  const [listColumn, setListColumn] = useState([
-    {
-      name: "Product Name",
-    },
-    {
-      unit: "Unit",
-      //input: true,
-    },
-    {
-      orderQuantity: "Quantity",
-      input: true,
-    },
-    {
-      price: "Unit Price",
-      input: true,
-    },
-    {
-      totalAmount: "Amount",
-    },
-  ]);
+  // const [listColumn, setListColumn] = useState([
+  //   {
+  //     name: "Product Name",
+  //   },
+  //   {
+  //     unit: "Unit",
+  //     //input: true,
+  //   },
+  //   {
+  //     orderQuantity: "Quantity",
+  //     input: true,
+  //   },
+  //   {
+  //     price: "Unit Price",
+  //     input: true,
+  //   },
+  //   {
+  //     totalAmount: "Amount",
+  //   },
+  // ]);
 
   const { message, token, listSuppliers } = useSelector((state) => ({
     message: state.getCreatedFormPurchaseRequisitionReducer.messages,
@@ -79,19 +79,19 @@ export default function () {
         }
       },
     },
-    { dataField: "price", text: "Price", editable: false },
-    {
-      dataField: "totalAmount",
-      text: "Total Amount",
-      editable: false,
-      formatter: (cellContent, row, rowIndex) => (
-        <div>
-          <span>
-            {purchaseOrderProduct[rowIndex].orderQuantity * row.price}
-          </span>
-        </div>
-      ),
-    },
+    // { dataField: "price", text: "Price", editable: false },
+    // {
+    //   dataField: "totalAmount",
+    //   text: "Total Amount",
+    //   editable: false,
+    //   formatter: (cellContent, row, rowIndex) => (
+    //     <div>
+    //       <span>
+    //         {purchaseOrderProduct[rowIndex].orderQuantity * row.price}
+    //       </span>
+    //     </div>
+    //   ),
+    // },
     { dataField: "name", text: "Action",editable: false,
     formatter: (cellContent, row, rowIndex) => {
       return (
@@ -124,7 +124,7 @@ export default function () {
     return [
       {
         isShow: true,
-        title: "Submit",
+        title: "Save",
         class: " btn-primary",
         action: () => onSaveClick(),
       },
@@ -198,9 +198,9 @@ export default function () {
             productVariantId: product.productVariantId,
             orderQuantity: product.orderQuantity,
             unit: product.unit,
-            price: product.price,
+            price: 0,
             discountAmount: product.discountAmount,
-            totalAmount: product.totalAmount,
+            totalAmount:0,
           };
         }),
       };

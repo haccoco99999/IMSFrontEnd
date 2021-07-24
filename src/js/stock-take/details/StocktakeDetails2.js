@@ -401,7 +401,6 @@ export default function StocktakeDetailsComponent() {
   useEffect(() => {
     const check = (element) => element.isChanging === true;
     if (listCompare.length > 0) {
-      // console.log(listCompare.some(check))
       if (listCompare.some(check)) setIsChanging(true);
       else setIsChanging(false);
     }

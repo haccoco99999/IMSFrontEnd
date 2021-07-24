@@ -58,37 +58,37 @@ export default function CreateWithVariants(props) {
       formatter: (cellContent, row, rowIndex) =>
         (props.variantValues[rowIndex].barcode = row.barcode),
     },
-    {
-      dataField: "price",
-      text: "Price",
-      editable: true,
-      validator: (newValue, oldValue, row) => {
-        if (isNaN(newValue)) {
-          setIsChecking(true);
-          return {
-            valid: false,
-            message: "Price should be numeric",
-          };
-        } else setIsChecking(false);
-      },
-      formatter: (cellContent, row, rowIndex) =>
-        (props.variantValues[rowIndex].price = row.price),
-    },
-    {
-      dataField: "salePrice",
-      text: "Sale price",
-      editable: true,
-      validator: (newValue, oldValue, row) => {
-        if (isNaN(newValue)) {
-          return {
-            valid: false,
-            message: "Sale price should be numeric",
-          };
-        }
-      },
-      formatter: (cellContent, row, rowIndex) =>
-        (props.variantValues[rowIndex].salePrice = row.salePrice),
-    },
+    // {
+    //   dataField: "price",
+    //   text: "Price",
+    //   editable: true,
+    //   validator: (newValue, oldValue, row) => {
+    //     if (isNaN(newValue)) {
+    //       setIsChecking(true);
+    //       return {
+    //         valid: false,
+    //         message: "Price should be numeric",
+    //       };
+    //     } else setIsChecking(false);
+    //   },
+    //   formatter: (cellContent, row, rowIndex) =>
+    //     (props.variantValues[rowIndex].price = row.price),
+    // },
+    // {
+    //   dataField: "salePrice",
+    //   text: "Sale price",
+    //   editable: true,
+    //   validator: (newValue, oldValue, row) => {
+    //     if (isNaN(newValue)) {
+    //       return {
+    //         valid: false,
+    //         message: "Sale price should be numeric",
+    //       };
+    //     }
+    //   },
+    //   formatter: (cellContent, row, rowIndex) =>
+    //     (props.variantValues[rowIndex].salePrice = row.salePrice),
+    // },
     {
       dataField: "id",
       text: "Action",
@@ -221,7 +221,7 @@ export default function CreateWithVariants(props) {
   //todo: list nav button
   const listButton = setListButtonNav();
   function setListButtonNav() {
-    return [
+ return [
       {
         isShow: true,
         title: "Save",

@@ -26,6 +26,7 @@ import getDetailsProductReducer from "./product/details/reducer";
 import createSupplierReducer from "./supplier/create/reducer";
 import getAllStocktakeReducer from "./stock-take/manager/reducer";
 import getDetailsStocktakeReducer from "./stock-take/details/reducer";
+import notificationReducer from "./notification-component/reducer";
 import {
   createUserAccountReducer,
   getUserAccountDetail,
@@ -38,7 +39,8 @@ import {
 } from "./manage-account/create/role/reducer";
 import { GetAllGoodIssues } from "./good-issue/manager/reducer";
 import { DetailGoodIssue } from "./good-issue/good-issue-detail/reducer";
-import createStocktakeReducer from './stock-take/create/reducer'
+import createStocktakeReducer from "./stock-take/create/reducer";
+import locationManagetReducer from "./product/manager/location-manager/reducer";
 const IndexReducer = combineReducers({
   login,
   client,
@@ -70,7 +72,10 @@ const IndexReducer = combineReducers({
   // createUserAccountReducer,getDetailsProductReducer,getUserAccountDetail, updateAccountDetail,
   // createRolePermission, DetailRolePermission, UpdateRolePermission,
   DetailGoodIssue,
-  GetAllGoodIssues,createStocktakeReducer
+  GetAllGoodIssues,
+  createStocktakeReducer,
+  locationManagetReducer,
+  notificationReducer,
 });
 
 export default IndexReducer;

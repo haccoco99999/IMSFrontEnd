@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { HubConnectionBuilder } from "@microsoft/signalr";
 //css
 import "./notification.css";
 

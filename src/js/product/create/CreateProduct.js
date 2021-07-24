@@ -43,16 +43,28 @@ export default function CreateProductComponent(props) {
   //todo: declare navigation bar
   const listButtons = setListButtonNav();
   function setListButtonNav() {
-    return [
-      {
-        isShow: true,
-        title: "Continue",
-        action: (e) => onClickContinue(e),
-        class: "btn-warning text-white",
-        form: "productDetailsForm",
-        type: "submit",
-      },
-    ];
+    if (!props.isSelectVariantType)
+      return [
+        {
+          isShow: true,
+          title: "Save",
+          action: (e) => onClickSave(e),
+          class: "btn-primary",
+          form: "productDetailsForm",
+          type: "submit",
+        },
+      ];
+    else
+      return [
+        {
+          isShow: true,
+          title: "Continue",
+          action: (e) => onClickContinue(e),
+          class: "btn-warning text-white",
+          form: "productDetailsForm",
+          type: "submit",
+        },
+      ];
   }
   //todo: function
   const handleChangeValueFormData = (event) => {
@@ -120,6 +132,51 @@ export default function CreateProductComponent(props) {
     history.goBack();
   }
 
+  function checkUndifined() {
+    if (props.formData.sku === undefined) {
+      props.setFormDataManager("sku", "");
+    }
+    if (props.formData.barcode === undefined)
+      props.setFormDataManager("barcode", "");
+  }
+
+  const onClickSave = (event) => {
+    event.preventDefault();
+    const form = document.getElementById("productDetailsForm");
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    } else {
+      event.preventDefault();
+      checkUndifined();
+      const data = {
+        name: props.formData.name,
+        brandName: props.formData.brand,
+        brandDescription: "",
+        unit: props.formData.unit,
+        categoryId: props.formData.categoryId,
+        isVariantType: false,
+        productVariants: [
+          {
+            name: props.formData.name,
+            price: props.formData.price,
+            salePrice: props.formData.saleprice,
+            barcode: props.formData.barcode,
+            sku: props.formData.sku,
+          },
+        ],
+      };
+      console.log("Data output:", data);
+      dispatch(createProduct({ data: data, token: props.token }));
+    }
+    form.classList.add("was-validated");
+
+    // console.log("DATA:", data);
+    // console.log("UNIT:", formData.unit);
+    // console.log(JSON.stringify(data));
+
+    // console.log(formData);
+  };
   return (
     <div>
       <NavigationBar
@@ -180,7 +237,11 @@ export default function CreateProductComponent(props) {
                       </option>
 
                       {props.listCategories.map((category) => (
-                        <option key={category.id} id={category.id} value={category.categoryName}>
+                        <option
+                          key={category.id}
+                          id={category.id}
+                          value={category.categoryName}
+                        >
                           {category.categoryName}
                         </option>
                       ))}
@@ -233,6 +294,40 @@ export default function CreateProductComponent(props) {
                 </div>
               </div>
             </form>
+            {!props.isSelectVariantType && (
+              <div class="mb-3">
+                <div class="row g-3 align-items-center">
+                  <div class="col">
+                    <label for="sku" class="col-form-label">
+                      SKU
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="eg. 312456962"
+                      name="sku"
+                      value={props.formData.sku || ""}
+                      onChange={handleChangeValueFormData}
+                    />
+                  </div>
+                  <div class="col">
+                    <label for="barcode" class="col-form-label">
+                      Barcode (optional)
+                    </label>{" "}
+                    <input
+                      name="barcode"
+                      value={props.formData.barcode || ""}
+                      onChange={handleChangeValueFormData}
+                      type="text"
+                      id="barcode"
+                      class="form-control"
+                      placeholder="eg. 1012345678910"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="mb-3">
               <div className="mb-3 form-check">
                 <input
