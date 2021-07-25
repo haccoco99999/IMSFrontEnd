@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, {  useState, useEffect } from "react";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import "./App.css";
 import AboutAccount from "./about-account/about-account";
@@ -23,9 +23,8 @@ import {
   useHistory,
 } from "react-router-dom";
 import NotificationBell from "./notification-component/notification-component";
-import NotificationToast from "./components/notification/notification-toast";
-import { Toast } from "bootstrap";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App(props) {
   const [eventPage, setEventPage] = useState({
     hide: "bx-menu",
@@ -38,7 +37,7 @@ function App(props) {
   const { client } = useSelector((state) => ({
     client: state.client,
   }));
-
+  console.log(client);
   function toggleAbout() {
     setEventPage({
       statusSetting: !eventPage.statusSetting,
@@ -69,22 +68,8 @@ function App(props) {
   }
   const [hubConnection, setHubConnection] = useState();
 
-  //todo: declare notification toast
-  const toastRef = useRef();
-  const showToast = () => {
-    const toastEle = toastRef.current;
-    const bsToast = new Toast(toastEle, {
-      autohide: false,
-    });
-    bsToast.show();
-  };
-  const hideToast = () => {
-    const toastEle = toastRef.current;
-    const bsToast = Toast.getInstance(toastEle);
-    bsToast.hide();
-  };
 
-  const [notification, setNotification] = useState([]);
+  const [notification, setNotification] = useState(["Hello", "hello2"]);
   console.log(notification);
   function showNotification() {}
   useEffect(() => {
@@ -112,9 +97,20 @@ function App(props) {
           console.log("NotificationGroupMessage", message);
           // setNotification(message);
           // console.log(notification);
-          setNotification([...notification, message]);
+          // setNotification([...notification, message]);
 
-          showToast();
+          toast(message, {
+            position: "bottom-right",
+            autoClose: false,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+
+          // toast(message);
+          // showToast();
         });
 
         //Send a notification to all
@@ -135,12 +131,12 @@ function App(props) {
 
         //Send a message to a channel
         //SendMessageToGroup(string groupName, string message)
-        hubConnection
-          .invoke("SendMessageToGroup", "Manager", "message send to the group")
-          .catch((err) => {
-            alert(err);
-            console.log("Error invoking function: " + { err });
-          });
+        // hubConnection
+        //   .invoke("SendMessageToGroup", "Manager", "message send to the group")
+        //   .catch((err) => {
+        //     alert(err);
+        //     console.log("Error invoking function: " + { err });
+        //   });
 
         //Receive a message if user is allowed to edit a page
         /* 
@@ -158,12 +154,12 @@ function App(props) {
           userId: Id of user in database
           pageId: PO47OLJXKJ | GR11TUG4IZ | GO0OCT3GD0 ...
         */
-        hubConnection
-          .invoke("ConnectWithResource", "userId", "pageId")
-          .catch((err) => {
-            alert(err);
-            console.log("Error while connecting to resource: " + { err });
-          });
+        // hubConnection
+        //   .invoke("ConnectWithResource", "userId", "pageId")
+        //   .catch((err) => {
+        //     alert(err);
+        //     console.log("Error while connecting to resource: " + { err });
+        //   });
 
         //Call method when leaving a page
         // DisconnectFromResource(string userId, string resourceId)
@@ -389,14 +385,16 @@ function App(props) {
         </Route>
       </Switch>
 
-      <div class="toast-container position-absolute bottom-0 end-0 m-4">
-        {notification.map((e) => (
-          <NotificationToast
-            message={e}
-            toastRef={toastRef}
-            hideToast={hideToast}
-          />
-        ))}
+      <div className="position-absolute bottom-0 end-0 m-4">
+        <ToastContainer
+          position="bottom-right"
+          autoClose={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable={false}
+        />
       </div>
     </div>
   );

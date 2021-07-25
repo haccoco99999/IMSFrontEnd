@@ -9,7 +9,7 @@ import {
 import handleApiErrors from "../auth/api-errors";
 
 function getAllNotifications(action) {
-  const url = `${process.env.REACT_APP_API}/notification?CurrentPage=0&SizePerPage=0&Channel=Manager`;
+  const url = `${process.env.REACT_APP_API}/notification?CurrentPage=1&SizePerPage=6&Channel=Manager`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -29,11 +29,12 @@ function getAllNotifications(action) {
 
 function* getAllNotificationsFlow(action) {
   try {
-    let json = yield call(getDetailsPO, action);
+    let json = yield call(getAllNotifications, action);
 
-    yield put({ type: GET_DETAILS_PO_RESPONSE, json });
+    yield put({ type: GET_ALL_NOTIFICATIONS_RESPONSE, json });
   } catch (error) {
-    GET_ALL_NOTIFICATIONS_RESPONSE;
+    console.log(error);
+
     yield put({ type: GET_ALL_NOTIFICATIONS_ERROR });
   }
 }
