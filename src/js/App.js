@@ -95,10 +95,6 @@ function App(props) {
         //Receive notification from a specific channel:
         hubConnection.on("NotificationGroupMessage", (message) => {
           console.log("NotificationGroupMessage", message);
-          // setNotification(message);
-          // console.log(notification);
-          // setNotification([...notification, message]);
-
           toast(message, {
             position: "bottom-right",
             autoClose: false,
@@ -109,8 +105,6 @@ function App(props) {
             progress: undefined,
           });
 
-          // toast(message);
-          // showToast();
         });
 
         //Send a notification to all
@@ -124,7 +118,7 @@ function App(props) {
 
         //Join a channel
         //CHANNEL = ROLE NAME
-        hubConnection.invoke("JoinGroup", "Manager").catch((err) => {
+        hubConnection.invoke("JoinGroup", client.userRole).catch((err) => {
           alert(err);
           console.log("Error invoking function: " + { err });
         });

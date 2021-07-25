@@ -31,25 +31,8 @@ export default function details() {
   );
 
   const [cleanListProducts, setCleanListProducts] = useState([]);
-  // const [listOrigin, setListOrigin] = useState([]);
   const [isReturnData, setIsReturnData] = useState(false);
-  // const [listProductReset, setListProductReset] = useState(cleanListProducts);
-
-  // const [listValueColumn, setListColumn] = useState([
-  //   {
-  //     productVariantId: "Variant Id",
-  //   },
-  //   {
-  //     name: "Variant Name",
-  //   },
-  //   {
-  //     orderQuantity: "Order Quantity",
-  //     input: true,
-  //   },
-  //   {
-  //     price: "Price",
-  //   },
-  // ]);
+  const [statusString, setStatusString] = useState('')
   //todo: declare button
   const columnsEdit = [
     {
@@ -184,7 +167,6 @@ export default function details() {
   }
 
   function onSubmitClick(event) {
-    event.preventDefault();
     dispatch(
       submitAction({ id: location.state.purchaseRequisitionId, token: token })
     );
@@ -287,22 +269,67 @@ export default function details() {
       setCleanListProducts((state) => state.filter((_, i) => i !== rowIndex));
     }
   }
-  function onChangeValueProduct(event) {
-    setCleanListProducts(
-      cleanListProducts.map((element, index) =>
-        index == event.target.id
-          ? {
-              ...element,
-              [event.target.name]: event.target.value,
-              totalAmount:
-                [event.target.name] === "orderQuantity"
-                  ? event.target.value * element.price
-                  : event.target.value * element.orderQuantity,
-            }
-          : element
-      )
-    );
+  // function onChangeValueProduct(event) {
+  //   setCleanListProducts(
+  //     cleanListProducts.map((element, index) =>
+  //       index == event.target.id
+  //         ? {
+  //             ...element,
+  //             [event.target.name]: event.target.value,
+  //             totalAmount:
+  //               [event.target.name] === "orderQuantity"
+  //                 ? event.target.value * element.price
+  //                 : event.target.value * element.orderQuantity,
+  //           }
+  //         : element
+  //     )
+  //   );
+  // }
+
+  const listButtons = setListButtonNav(status);
+
+  function setListButtonNav(status) {
+    if (status === 0) {
+      if (isEditDisabled) {
+        return [
+          {
+            isShow: true,
+            title: "Delete",
+            action: () => onDeletePRClick(),
+            class: "btn-danger",
+          },
+          {
+            isShow: true,
+            title: "Edit",
+            action: () => onEditClick(),
+            class: "btn-warning text-white",
+          },
+          {
+            isShow: true,
+            title: "Submit",
+            action: () => onSubmitClick(),
+            class: "btn-primary",
+          },
+        ];
+      } else {
+        return [
+          {
+            isShow: true,
+            title: "Cancel",
+            action: () => onCancelClick(),
+            class: "btn-secondary",
+          },
+          {
+            isShow: true,
+            title: "Update",
+            action: () => onclickUpdate(),
+            class: "btn-primary",
+          },
+        ];
+      }
+    } else return [];
   }
+
   useEffect(() => {
     dispatch(
       getPRDetailsAction({
@@ -321,9 +348,6 @@ export default function details() {
     if (listGetProductsStore.length > 0) {
       setCleanListProducts(
         listGetProductsStore.map((product) => {
-          // product.name = product.productVariant.name;
-          // delete product["productVariant"];
-          // return product;
           return {
             name: product.productVariant.name,
             productVariantId: product.productVariantId,
@@ -368,8 +392,7 @@ export default function details() {
     <div>
       {/* todo: task heading */}
       {/* todo: gop chung 2 page voi 2 nut khâc nhau  */}
-      <div className=" tab-fixed container-fluid  fixed-top">
-        {/* todo: task heading */}
+      {/* <div className=" tab-fixed container-fluid  fixed-top">
         <div className=" tab-fixed container-fluid  fixed-top">
           <div className=" d-flex mb-3 justify-content-end mt-4 ">
             {isFromManagerPage ? (
@@ -437,7 +460,13 @@ export default function details() {
             )}
           </div>
         </div>
-      </div>
+      </div> */}
+      <NavigationBar
+        listButton={listButtons}
+        titleBar={location.state.purchaseRequisitionId}
+        actionGoBack={goBackClick}
+        status=""
+      />
       <div className="wrapper space-top">
         <div class="card">
           <div class="card-header fw-bold">Purchase Requisition Details</div>
@@ -519,26 +548,10 @@ export default function details() {
 
                       afterSaveCell: (oldValue, newValue, row, column) => {
                         row.totalAmount = row.orderQuantity * row.price;
-                        // console.log(row.totalAmount);
-                        // console.log(row.price);
-                        // console.log(row.orderQuantity);
                       },
                     })}
                   />
                 )}
-
-                {/* {isReturnData && (
-
-                 
-                  <Table
-                    clickToAddProduct={clickToAddProduct}
-                    listColumn={listValueColumn}
-                    listData={cleanListProducts}
-                    disabled={isEditDisabled}
-                    clickDeleteProduct={clickDeleteProduct}
-                    onChangeValueProduct={onChangeValueProduct}
-                  />
-                )} */}
               </div>
             </li>
           </ul>

@@ -222,38 +222,67 @@ export default function CreateStocktakeComponent() {
   }
 
   function onClickSubmit() {
-    if (checkForDuplicates(listCheckedItems, "packageId")) {
-      console.log("Duplicate");
+    const data = {
+      stockTakeGroupLocation: [
+        {
+          locationId: selectedLocation.id,
+          checkItems: listCheckedItems.map((checkItem) => {
+            return {
+              packageId: checkItem.packageId,
+              actualQuantity: checkItem.counted,
+              note: checkItem.note,
+            };
+          }),
+        },
+      ],
+      stockTakeId: null,
+    };
 
+    if (selectedLocation.id === "") {
       Swal.fire({
         title: "Error",
-        text: "There is no duplicate in the list",
+        text: "Empty list!",
         icon: "error",
         showCancelButton: true,
         cancelButtonText: "Cancel",
         showConfirmButton: false,
       });
     } else {
-      console.log("No duplicate");
       if (listCheckedItems.length > 0) {
-        const data = {
-          stockTakeGroupLocation: [
-            {
-              locationId: selectedLocation.id,
-              checkItems: listCheckedItems.map((checkItem) => {
-                return {
-                  packageId: checkItem.packageId,
-                  actualQuantity: checkItem.counted,
-                  note: checkItem.note,
-                };
-              }),
-            },
-          ],
-          stockTakeId: null,
-        };
+        if (listCheckedItems.length === 1) {
+          if (listCheckedItems[0].packageId === "") {
+            Swal.fire({
+              title: "Error",
+              text: "Empty list!",
+              icon: "error",
+              showCancelButton: true,
+              cancelButtonText: "Cancel",
+              showConfirmButton: false,
+            });
+          } else {
+            console.log("Data output:", data);
+            dispatch(createStocktkaeAction({ token: token, data: data }));
+          }
+          // console.log(listCheckedItems[0].packageId);
+        } else {
+          if (checkForDuplicates(listCheckedItems, "packageId")) {
+            console.log("Duplicate");
 
-        console.log("Data output:", data);
-        dispatch(createStocktkaeAction({ token: token, data: data }));
+            Swal.fire({
+              title: "Error",
+              text: "There is no duplicate in the list",
+              icon: "error",
+              showCancelButton: true,
+              cancelButtonText: "Cancel",
+              showConfirmButton: false,
+            });
+          } else {
+            console.log("No duplicate");
+
+            console.log("Data output:", data);
+            dispatch(createStocktkaeAction({ token: token, data: data }));
+          }
+        }
       } else {
         Swal.fire({
           title: "Error",
@@ -322,19 +351,19 @@ export default function CreateStocktakeComponent() {
   }, [messages]);
 
   //todo: toast
-  const toastRef = useRef();
-  const showToast = () => {
-    const toastEle = toastRef.current;
-    const bsToast = new Toast(toastEle, {
-      autohide: false,
-    });
-    bsToast.show();
-  };
-  const hideToast = () => {
-    const toastEle = toastRef.current;
-    const bsToast = Toast.getInstance(toastEle);
-    bsToast.hide();
-  };
+  // const toastRef = useRef();
+  // const showToast = () => {
+  //   const toastEle = toastRef.current;
+  //   const bsToast = new Toast(toastEle, {
+  //     autohide: false,
+  //   });
+  //   bsToast.show();
+  // };
+  // const hideToast = () => {
+  //   const toastEle = toastRef.current;
+  //   const bsToast = Toast.getInstance(toastEle);
+  //   bsToast.hide();
+  // };
 
   return (
     <div>
@@ -346,60 +375,69 @@ export default function CreateStocktakeComponent() {
       />
       {/* content */}
       <div className="wrapper space-top">
-        <div className="shadow wrapper-content">
+        <div className="card">
+          <div className="card-header fw-bold">Create Stocktake</div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div className="mt-3">
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  onClick={showModal}
+                >
+                  Select Location
+                </button>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div className="mt-3">
+                <p>
+                  <strong>Location ID:</strong> {selectedLocation.id}
+                </p>
+                <p>
+                  <strong>Location Name:</strong>{" "}
+                  {selectedLocation.locationName}
+                </p>
+                <p>
+                  <strong>Location Barcode:</strong>{" "}
+                  {selectedLocation.locationBarcode}
+                </p>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <h5 className="card-title">List items</h5>
+              {isLoading ? (
+                <>
+                  <button
+                    className="btn btn-primary"
+                    onClick={onAddCheckItemClick}
+                  >
+                    Add
+                  </button>
+                  <Table
+                    keyField="id"
+                    data={listCheckedItems}
+                    columns={columns}
+                    cellEdit={cellEditFactory({
+                      mode: "click",
+                      blurToSave: true,
+                    })}
+                  />
+                </>
+              ) : (
+                <SpinnerComponent />
+              )}
+            </li>
+          </ul>
+        </div>
+        {/* <div className="shadow wrapper-content">
           <div className="mt-3">
             <div className="title-heading mt-2">
               <span>Select Location</span>
             </div>
-            <div className="mt-3">
-              <button
-                class="btn btn-outline-secondary"
-                type="button"
-                // data-bs-target="#ListLocationstModal"
-                // data-bs-toggle="modal"
-                onClick={showModal}
-              >
-                Search More...
-              </button>
-              {/* <button
-                  className="btn btn-outline-secondary"
-                  type="button"
-                  onClick={showToast}
-                >
-                  Toast
-                </button> */}
-            </div>
           </div>
-        </div>
-        {isLoading ? (
-          <>
-            <div className="shadow wrapper-content mt-3">
-              <button className="btn btn-primary" onClick={onAddCheckItemClick}>
-                Add
-              </button>
-              {/* <button
-                className="btn btn-secondary"
-                onClick={clickDeleteCheckItems}
-              >
-                Discard
-              </button> */}
-              <Table
-                keyField="id"
-                data={listCheckedItems}
-                columns={columns}
-                cellEdit={cellEditFactory({
-                  mode: "click",
-                  blurToSave: true,
-                })}
-                // selectRow={selectRow}
-              />
-            </div>
-          </>
-        ) : (
-          <SpinnerComponent />
-        )}
+        </div> */}
       </div>
-      {/* <AddMultiple /> */}
       <ListLocationsModal
         modalRef={modalRef}
         hideModal={hideModal}
@@ -408,7 +446,7 @@ export default function CreateStocktakeComponent() {
         onSelectLocationClick={onSelectLocationClick}
       />
 
-      <ToastComponent toastRef={toastRef} hideToast={hideToast} />
+      {/* <ToastComponent toastRef={toastRef} hideToast={hideToast} /> */}
     </div>
   );
 }
