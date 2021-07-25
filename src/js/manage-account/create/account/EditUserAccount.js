@@ -8,7 +8,13 @@ import { useLocation, useHistory } from 'react-router-dom';
 
 
 export default function EditUserAccount() {
-
+  // var cloudinary = require('cloudinary').v2;
+  // cloudinary.config({ 
+  //   cloud_name: 'sample', 
+  //   api_key: '172825112783497', 
+  //   api_secret: 'OSGtNv2rDf-BVGGJ19IzLu-DD78',
+  //   secure: true
+  // });
   // const dataUser = {
   //   email:"tmh1799@gmail.com",
   //   fullName: "Huy Beo",
@@ -18,6 +24,7 @@ export default function EditUserAccount() {
   //   dateOfBirth:""
   // }
  
+
   let location = useLocation()
   const dispatch = useDispatch()
 
@@ -74,7 +81,7 @@ export default function EditUserAccount() {
   }
   function clickUpdate(){
     
-    console.log(infoAccountState)
+ 
     const data={
       userId: infoAccountState.userID, 
       email: infoAccountState.email,
@@ -84,7 +91,8 @@ export default function EditUserAccount() {
       dateOfBirth: infoAccountState.dateOfBirth,
       fullname: infoAccountState.fullname
     }
-    dispatch(updateUserAccountDetail({data: data, token:token}))
+    console.log(data)
+     dispatch(updateUserAccountDetail({data: data, token:token}))
   }
   function clickCancel(){
     setInfoAccountState(infoDetailAccount)
@@ -182,6 +190,7 @@ export default function EditUserAccount() {
          
     
 
+          {/* <AdvancedImage cldImg={myImage} /> */}
 
           <div class="form-group">
             <label for="">Full Name:</label>

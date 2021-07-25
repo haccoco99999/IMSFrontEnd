@@ -9,7 +9,17 @@
     height: 200px;
 
   }
-
+button.close {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+button.close >  span.sr-only {
+    display: none;
+}
 .item-search{
     background: white;
     padding-left: 0rem !important;

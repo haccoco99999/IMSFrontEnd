@@ -24,28 +24,45 @@ class Login extends Component {
             [event.target.name]: event.target.value
         });
         
-        if(event.target.name === "email" && this.emailIsvalid(event.target.value)){
-            this.setState({
-                emailIsvalid : true
-            });
+        if(event.target.name === "email" ){
+            if(this.emailIsvalid(event.target.value)){
+                this.setState({
+                    emailIsvalid : true
+                });
+            }
+             else if(event.target.value === ""){
+                this.setState({
+                    emailIsvalid : null
+                });
+            }
+            else{
+                this.setState({
+                    emailIsvalid : false
+                });
+            }
+            
             
         }
-        else{
-            
-            this.setState({
-                emailIsvalid : false
-            });
+       
+         if(event.target.name === "password"){
+             if( this.passwordIsvalid(event.target.value)){
+                this.setState({
+                    passwordIsvalid: true
+                });
+             }
+             else if(event.target.value ===""){
+                this.setState({
+                    passwordIsvalid: null
+                });
+             }
+             else{
+                this.setState({
+                    emailIsvalid : true
+                });
+             }
+           
         }
-         if(event.target.name === "password" && this.passwordIsvalid(event.target.value)){
-            this.setState({
-                passwordIsvalid: true
-            });
-        }
-        else{
-            this.setState({
-                emailIsvalid : true
-            });
-        }
+       
         
         
     }

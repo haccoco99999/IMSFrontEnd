@@ -126,9 +126,20 @@ export default function PurchaseOrder() {
 
     ];
 
-    let { purchaseOrderDataGlobal, token } = useSelector(state => ({
+    let {
+        purchaseOrderDataGlobal,
+        token,
+        updatePurchaseOrderStatus,
+        submitPurchaseOrderStatus,
+        confirmPurchaserOrderStatus,
+        rejectPurchaserOrderStatus
+    } = useSelector(state => ({
         purchaseOrderDataGlobal: state.getDetailPurchaseReducer.detailPurchaseOrder,
         token: state.client.token,
+        updatePurchaseOrderStatus: state.updatePurchaseOrder,
+        submitPurchaseOrderStatus: state.submitPurchaseOrder,
+        confirmPurchaserOrderStatus: state.confirmPurchaserOrder,
+        rejectPurchaserOrderStatus: state.rejectPurchaserOrder,
     }))
     let [detailPurchaseState, setDetailPurchaseState] = useState(purchaseOrderDataGlobal)
     let [listProductPurchaseOrder, setListProductPurchaseOrder] = useState(purchaseOrderDataGlobal.purchaseOrderProduct)
@@ -136,6 +147,53 @@ export default function PurchaseOrder() {
         dispatch(getDetailPurchaseOrder(location.state.orderID))
     }, [])
 
+
+    useEffect(() => {
+        if (updatePurchaseOrderStatus.requesting === true) {
+            alert("Danh update PO")
+        }
+        else if (updatePurchaseOrderStatus.successful === true) {
+            alert("Update PO Thanh Cong")
+        }
+        else if (updatePurchaseOrderStatus.errors === true) {
+            alert("Update PO Thất Bại")
+        }
+
+        if (submitPurchaseOrderStatus.requesting === true) {
+            alert("Dang Submit")
+        }
+        else if (submitPurchaseOrderStatus.successful === true) {
+            alert("Submit Thanh Cong")
+        }
+        else if (submitPurchaseOrderStatus.errors === true) {
+            alert("Submit That Bai")
+        }
+
+        if (rejectPurchaserOrderStatus.requesting === true) {
+            alert("Dang Reject")
+        }
+        else if (rejectPurchaserOrderStatus.successful === true) {
+            alert("Reject Thanh Cong")
+        }
+        else if (rejectPurchaserOrderStatus.errors === true) {
+            alert("Reject That Bai")
+        }
+
+        if (confirmPurchaserOrderStatus.requesting === true) {
+            alert("Dang Confirm")
+        }
+        else if (confirmPurchaserOrderStatus.successful === true) {
+            alert("Confirm Thanh Cong")
+        }
+        else if (confirmPurchaserOrderStatus.errors === true) {
+            alert("Confirm That Bai")
+        }
+    }, [updatePurchaseOrderStatus,
+        submitPurchaseOrderStatus,
+        rejectPurchaserOrderStatus,
+        confirmPurchaserOrderStatus
+
+    ])
 
     useEffect(() => {
         setDetailPurchaseState({
@@ -182,7 +240,7 @@ export default function PurchaseOrder() {
             {
                 isShow: eventPage.isCreatePO,
                 title: "Submit",
-                action: () => clickToCreate(),
+                action: () => clickToSubmitPurchaseOrder(),
                 style: {
                     background: "#4e9ae8"
                 },
@@ -326,13 +384,13 @@ export default function PurchaseOrder() {
 
         })
     }
-    function clickToCreate() {
-        let data ={
-            
-                purchaseOrderNumber: location.state.orderID
-              
+    function clickToSubmitPurchaseOrder() {
+        let data = {
+
+            purchaseOrderNumber: location.state.orderID
+
         }
-        dispatch(confirmDetailPurchaseOrder({data: data, token, token}))
+        dispatch(confirmDetailPurchaseOrder({ data: data, token, token }))
         // goBackClick()
     }
 
@@ -368,7 +426,7 @@ export default function PurchaseOrder() {
                 dispatch(sendMailService({ data: formData }))
             }
             dispatch(confirmPurchaseORderByManager({ data: data, token: token }))
-            goBackClick()
+            // goBackClick()
         }
         setEventPage((state) => ({
             ...state, isShowConfirm: !state.isShowConfirm,
@@ -382,7 +440,7 @@ export default function PurchaseOrder() {
                 cancelReason: cancelReason,
             }
             dispatch(rejectPurchaseOrderConfirm({ data: data, token }))
-            goBackClick()
+            // goBackClick()
         }
         setEventPage((state) => ({
             ...state, isShowReject: !state.isShowReject,
@@ -407,12 +465,54 @@ export default function PurchaseOrder() {
         })
     }
     function clickToAddProduct(product) {
-        // console.log(product)
-        setListProductPurchaseOrder((state) => [...state, product])
+        if (checkProductExist(product.productVariantId)) {
+            setListProductPurchaseOrder((state) => state.map(item =>
+                item.productVariantId === product.productVariantId ? { ...item, orderQuantity: item.orderQuantity + product.orderQuantity } : item))
+        }
+        else {
+            setListProductPurchaseOrder((state) => [...state, product])
+        }
+
         clickSetShowAddProductPage()
     }
+
     function goBackClick() {
         history.go(-1)
+    }
+    function checkProductExist(productVariantId) {
+        return listProductPurchaseOrder.some(product => product.productVariantId === productVariantId)
+    }
+    function addGroupProduct(listGroupProduct) {
+
+        console.log("aa", listGroupProduct)
+        let listGroupProductIsSelected = listGroupProduct.filter(product => product.isChecked)
+        console.log(listGroupProductIsSelected)
+        let listGroupProductSelected = listGroupProductIsSelected.map(groupProduct => groupProduct.listProductVariant)
+        let temp = [...listProductPurchaseOrder]
+
+
+        listGroupProductSelected.map(arrayProduct => {
+            arrayProduct.map(product => {
+                let count = 0
+
+                if (temp.some(function (p, index) {
+                    count = index
+                    return p.productVariantId === product.productVariantId
+                })) {
+                }
+                else {
+                    temp.push({ ...product })
+                }
+
+
+            })
+        })
+        console.log("bb", temp)
+        setListProductPurchaseOrder((state) =>
+            [...temp]
+        )
+        clickSetShowAddProductPage()
+
     }
     return (
         <div>
@@ -421,7 +521,32 @@ export default function PurchaseOrder() {
                 listButton={listButton}
             />
 
+            {location.state.status === "POCanceled" ? <div class="card text-white alert-danger mb-3" >
+                <div class="row">
 
+
+                    <div class="card-body col-sm-4">
+                        <h5 class="card-title text-danger">Reject By:</h5>
+                        <div className="form-text text-danger">
+                            Name:
+                        </div>
+                        <label className="form-check-label text-danger" >
+                            Logan
+                        </label>
+                        <div className="form-text text-danger">
+                            Phone Number:
+                        </div>
+                        <label className="form-check-label text-danger" >
+                            2621546165
+                        </label>
+
+                    </div>
+                    <div class="card-body col-sm-8">
+                        <h5 class="card-title text-danger">Reson:</h5>
+                        <p class="card-text text-danger">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                </div>
+            </div> : ""}
 
             <InfoDetailReceipt
                 applicationUser={detailPurchaseState.applicationUser}
@@ -434,12 +559,12 @@ export default function PurchaseOrder() {
                     }
                 }
             />
-            <button onClick={clickSetShowAddProductPage}>Add Product</button>
+
 
             <div className="list-receipt-table-container">
                 <div className="table-container">
                     <BootstrapTable
-                        keyField='id'
+                        keyField='productVariantId'
                         data={listProductPurchaseOrder}
                         columns={columns}
                         striped
@@ -463,6 +588,14 @@ export default function PurchaseOrder() {
                         headerClasses="table-header-receipt"
 
                     />
+                    {!eventPage.isShowEdit ?
+                        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group me-2" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-outline-primary" onClick={clickSetShowAddProductPage}>Add Product</button>
+
+                            </div>
+
+                        </div> : ""}
                 </div>
             </div>
 
@@ -476,8 +609,11 @@ export default function PurchaseOrder() {
                 clickSetShowAddProductPage={clickSetShowAddProductPage}
                 isShowAddProductPage={eventPage.isShowAddProductPage}
                 clickToAddProduct={clickToAddProduct}
+                addGroupProduct={addGroupProduct}
+                checkProductExist={checkProductExist}
 
             />
+
 
         </div>
     )

@@ -7,39 +7,44 @@ import {
 
 
 const initalState = {
-    requesting: false,
-    successful: false,
-    messages: "",
-    errors: "",
+    requestingPO: false,
+    successfulPO: false,
+    messagesPO: "",
+    errorsPO: "",
+
+    requestingPQ: false,
+    successfulPQ: false,
+    messagesPQ: "",
+    errorsPQ: "",
     
     listPurchaseOrder: [],
     listQuote: [],
-    purchaserOrderFilter:{
-        SearchQuery:"",
-        CurrentPage: 1,
-        SizePerPage: 10,
-        FromStatus: 4,
-        ToStatus: 6,
-        Statuses:["PurchaseOrder","POWaitingConfirmation","POConfirm","Done","POCanceled"],
-        // HideMerged: true
-        supplier:{
-            SupplierId:"",
-            supplierName: "",
-        },
+    // purchaserOrderFilter:{
+    //     SearchQuery:"",
+    //     CurrentPage: 1,
+    //     SizePerPage: 10,
+    //     FromStatus: 4,
+    //     ToStatus: 6,
+    //     Statuses:["PurchaseOrder","POWaitingConfirmation","POConfirm","Done","POCanceled"],
+    //     // HideMerged: true
+    //     supplier:{
+    //         SupplierId:"",
+    //         supplierName: "",
+    //     },
        
-        FromTotalOrderPrice:"",
-        ToTotalOrderPrice:"",
-        FromDeliveryDate:"",
-        ToDeliveryDate:"",
-        FromConfirmedDate:"",
-        ToConfirmedDate:"",
-        ConfirmedByName:"",
-        FromCreatedDate:"",
-        ToCreatedDate:"",
-        FromModifiedDate:"",
-        ToModifiedDate:"",
+    //     FromTotalOrderPrice:"",
+    //     ToTotalOrderPrice:"",
+    //     FromDeliveryDate:"",
+    //     ToDeliveryDate:"",
+    //     FromConfirmedDate:"",
+    //     ToConfirmedDate:"",
+    //     ConfirmedByName:"",
+    //     FromCreatedDate:"",
+    //     ToCreatedDate:"",
+    //     FromModifiedDate:"",
+    //     ToModifiedDate:"",
      
-    },
+    // },
     infoTablePage:{
         currentPage: 0,
         pageCount: 0,
@@ -55,10 +60,10 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
         case SEARCH_PURCHASE_ORDER:
             return {
                 ...state,
-                requesting: true,
-                successful: false,
-                messages: "",
-                errors: "",
+                requestingPO: true,
+                successfulPO: false,
+                messagesPO: "",
+                errorsPO: false,
                 listPurchaseOrder: [],
                 purchaserOrderFilter : action.filter
             }
@@ -74,10 +79,10 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
              })
             return {
                 ...state,
-                requesting: false,
-                successful: true,
-                messages: "",
-                errors: "",
+                requestingPO: false,
+                successfulPO: true,
+                messagesPO: "",
+                errorsPO: false,
                 listPurchaseOrder: listPurchaseOrder,
                 infoTablePage:{
                 currentPage: action.json.paging.currentPage,
@@ -85,44 +90,44 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
                 sizePerPage: action.json.paging.sizePerPage,
                 rowCountTotal: action.json.paging.rowCountTotal
                 },
-                purchaserOrderFilter : action.json.purchaserOrderFilter
+                // purchaserOrderFilter : action.json.purchaserOrderFilter
             }
         case SEARCH_PURCHASE_ORDER_ERROR:
             return {
                 ...state,
-                requesting: false,
-                successful: false,
-                messages: "",
-                errors: "error",
+                requestingPO: false,
+                successfulPO: false,
+                messagesPO: "",
+                errorsPO: true,
                 listPurchaseOrder: []
             }
         case GET_PRICE_QUOTE_REQUESTING:
 
             return {
                 ...state,
-                requesting: true,
-                successful: false,
-                messages: "",
-                errors: "",
+                requestingPQ: true,
+                successfulPQ: false,
+                messagesPQ: "",
+                errorsPQ: false,
                 listQuote: []
             }
         case GET_PRICE_QUOTE_SUCCESS:
             console.log(action.json.paging.resultList)
             return {
                 ...state,
-                requesting: false,
-                successful: true,
-                messages: "",
-                errors: "",
+                requestingPQ: false,
+                successfulPQ: true,
+                messagesPQ: "",
+                errorsPQ: false,
                 listQuote: action.json.paging.resultList
             }
         case GET_PRICE_QUOTE_ERROR:
             return {
                 ...state,
-                requesting: false,
-                successful: false,
-                messages: "",
-                errors: "",
+                requestingPQ: false,
+                successfulPQ: false,
+                messagesPQ: "",
+                errorsPQ: true,
                 listQuote: []
             }
 

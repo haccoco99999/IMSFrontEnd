@@ -4,9 +4,9 @@ import {
     GET_DETAIL_PURCHASE_ORDER_SUCCESS,
     GET_DETAIL_PURCHASE_ORDER_ERROR,
 
-    SEND_CONFIRM_PURCHASE_ORDER_REQUEST,
-    SEND_CONFIRM_PURCHASE_ORDER_SUCCESS,
-    SEND_CONFIRM_PURCHASE_ORDER_ERROR,
+    SUBMIT_PURCHASE_ORDER_REQUEST,
+    SUBMIT_PURCHASE_ORDER_SUCCESS,
+    SUBMIT_PURCHASE_ORDER_ERROR,
 
 
     SAVE_PRODUCTS_PURCHASE_ORDER_REQUEST,
@@ -47,7 +47,6 @@ import action from "../../good-receipt/details/action"
 let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDE3NDUzNywiZXhwIjoxNjI0MzQ3MzM3LCJpYXQiOjE2MjQxNzQ1Mzd9.rKQllv-JADJYAYcBoIkGxRnSwgMKknKk1xlZTJwxXmc"
 function getPurchaseOderAPI(orderId) {
     const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/number/"
-    console.log(orderId)
     return fetch(updateUrl + orderId, {
         method: 'GET',
         headers: {
@@ -119,8 +118,8 @@ function sendEmailQuote(action){
     .then(json => json)
     .catch((error) => {throw error})
 }
-function sendConfirmForManagerAPI(action) {
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/create"
+function submitPurchaseOrderAPI(action) {
+    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/submit"
     return fetch(updateUrl, {
         method: 'POST',
         headers: {
@@ -190,7 +189,6 @@ function rejectPurchaseOrderConfirmAPI(action) {
         .catch((error) => { throw error })
 }
 function confirmByManagerAPI(action) {
-    console.log(action.data)
     const updateUrl = "https://imspublicapi.herokuapp.com/api/po/confirm"
     return fetch(updateUrl, {
         method: 'POST',
@@ -204,8 +202,8 @@ function confirmByManagerAPI(action) {
         body: JSON.stringify(action.data)
     })
         .then(response => handleApiErrors(response))
-        .then(response => response)
-        
+        .then(response => response.json())
+        .then(json => json)
         .catch((error) => { throw error })
 }
 function updateProductPurchaseOrderAPI(action) {
@@ -231,7 +229,6 @@ function* getDetailPurchaseOrderFlow(action) {
     
     try {
         let json = yield call(getPurchaseOderAPI, action.orderID)
-        console.log(json)
         yield put({ type: GET_DETAIL_PURCHASE_ORDER_SUCCESS, json })
     } catch (error) {
       
@@ -243,8 +240,8 @@ function* createPriceQuoteFlow(action) {
     
     try {
         let json = yield call(createPriceQuoteAPI, action)
-        console.log(json)
-        yield put({ type: CREATE_PRICE_QUOTE_SUCCESS, json })
+        yield put({ type: CREATE_PRICE_QUOTE_SUCCESS })
+        yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
     } catch (error) {
       
         yield put({ type: CREATE_PRICE_QUOTE_ERROR })
@@ -255,26 +252,26 @@ function* editPriceQuoteFlow(action) {
     
     try {
         let json = yield call(editPriceQuoteAPI, action)
-        console.log(json)
-        yield put({ type: EDIT_PRICE_QUOTE_SUCCESS, json })
+        yield put({ type: EDIT_PRICE_QUOTE_SUCCESS })
+        yield put({ type: GET_DETAIL_PURCHASE_ORDER_SUCCESS, json })
     } catch (error) {
       
         yield put({ type: EDIT_PRICE_QUOTE_ERROR })
     }
 
 }
-function* confirmPurchaseOrderFlow(action) {
+function* submitPurchaseOrderFlow(action) {
 
     try {
 
        
-          let  json= yield call(sendConfirmForManagerAPI,action)
+          let  json= yield call(submitPurchaseOrderAPI,action)
          
-        //     console.log(json)
-            // yield put({type:SEND_CONFIRM_PURCHASE_ORDER_SUCCESS, json})
+            yield put({type:SUBMIT_PURCHASE_ORDER_SUCCESS})
+            yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
     } catch (error) {
         
-        yield put({ type: SEND_CONFIRM_PURCHASE_ORDER_ERROR })
+        yield put({ type: SUBMIT_PURCHASE_ORDER_ERROR })
     }
 
 }
@@ -300,21 +297,24 @@ function* saveProductsPurchaseOrderFlow(action) {
        
           let  json= yield call(updateProductPurchaseOrderAPI,action)
             
-            // yield put({type:SAVE_PRODUCTS_PURCHASE_ORDER_RE, json})
+            yield put({type:SAVE_PRODUCTS_PURCHASE_ORDER_SUCCESS})
+            yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
     } catch (error) {
     
         yield put({ type: SAVE_PRODUCTS_PURCHASE_ORDER_ERROR })
     }
 
 }
-function* sendConfirmByManager(action) {
+function* confirmPurchaseOrderFlow(action) {
 
     try {
 
        
           let  json= yield call(confirmByManagerAPI,action)
           
-        //     yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
+            yield put({type:CONFIRM_PURCHASE_ORDER_SUCCESS})
+            console.log(json)
+            yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
     } catch (error) {
      
         yield put({ type: CONFIRM_PURCHASE_ORDER_ERROR })
@@ -327,7 +327,8 @@ function* rejectPurchaseOrderConfirmFlow(action) {
 
       
           let  json= yield call(rejectPurchaseOrderConfirmAPI,action)
-        //     yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
+            yield put({type:REJECT_PURCHASE_ORDER_CONFIRM_SUCCESS})
+            yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
     } catch (error) {
      
         yield put({ type: REJECT_PURCHASE_ORDER_CONFIRM_ERROR })
@@ -337,12 +338,11 @@ function* rejectPurchaseOrderConfirmFlow(action) {
 function* sendMailPriceQuoteFlow(action){
     
     try{
-        console.log("ok vao")
       let  json= yield call(sendEmailQuote,action)
-     console.log("thanh cong")
-    //     yield put({type:SEND_MAIL_PRICE_QUOTE_SUCCESS, json})
+        yield put({type:SEND_MAIL_SERVICE_SUCCESS})
+        console.log("day la json send mail", json)
+        // yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
     }catch(error){
-       console.log("that bai")
         yield put({type:SEND_MAIL_SERVICE_ERROR})
     }
 
@@ -363,9 +363,9 @@ function* createPurchaseOrderFlow(action){
 function* updateWatcher() {
 
     yield takeEvery(GET_DETAIL_PURCHASE_ORDER, getDetailPurchaseOrderFlow)
-    yield takeEvery(SEND_CONFIRM_PURCHASE_ORDER_REQUEST, confirmPurchaseOrderFlow)
+    yield takeEvery(SUBMIT_PURCHASE_ORDER_REQUEST, submitPurchaseOrderFlow)
     yield takeEvery(SAVE_PRODUCTS_PURCHASE_ORDER_REQUEST, saveProductsPurchaseOrderFlow)
-    yield takeEvery(CONFIRM_PURCHASE_ORDER_REQUEST, sendConfirmByManager)
+    yield takeEvery(CONFIRM_PURCHASE_ORDER_REQUEST, confirmPurchaseOrderFlow)
     // yield takeEvery(GET_PRODUCT_PURCHASE_ORDER, getProductPurchaseOrderFlow)
     yield takeEvery(REJECT_PURCHASE_ORDER_CONFIRM_REQUEST, rejectPurchaseOrderConfirmFlow)
     yield takeEvery(EDIT_PRICE_QUOTE_REQUEST, editPriceQuoteFlow)

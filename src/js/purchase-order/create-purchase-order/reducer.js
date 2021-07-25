@@ -2,9 +2,6 @@
 import {
     GET_DETAIL_PURCHASE_ORDER, GET_DETAIL_PURCHASE_ORDER_SUCCESS, GET_DETAIL_PURCHASE_ORDER_ERROR,
 
-    SEND_CONFIRM_PURCHASE_ORDER_REQUEST,
-    SEND_CONFIRM_PURCHASE_ORDER_SUCCESS,
-    SEND_CONFIRM_PURCHASE_ORDER_ERROR,
 
     CONFIRM_PURCHASE_ORDER_REQUEST,
     CONFIRM_PURCHASE_ORDER_SUCCESS,
@@ -37,7 +34,11 @@ import {
     CREATE_PRICE_QUOTE_ERROR,
     CREATE_PURCHASE_ORDER_REQUEST,
     CREATE_PURCHASE_ORDER_SUCCESS,
-    CREATE_PURCHASE_ORDER_ERROR
+    CREATE_PURCHASE_ORDER_ERROR,
+
+    SUBMIT_PURCHASE_ORDER_REQUEST,
+    SUBMIT_PURCHASE_ORDER_SUCCESS,
+    SUBMIT_PURCHASE_ORDER_ERROR
 } from './contants'
 
 
@@ -50,12 +51,9 @@ const initalState = {
         orderId: "",
         deliveryDate:"",
         deadline:"",
+        status:"",
         supplier: {
-            id: "",
-            address: "",
-            supplierName: "",
-            phoneNumber: "",
-            email: "",
+           
         },
         transaction: {
             createdBy: {}
@@ -70,11 +68,12 @@ const initalState = {
             email:"da89d8c@gmail.com",
             phoneNumber:"032464564"
         },
+        hasSentMail:"",
         mailDescription: "",
         purchaseOrderProduct: [{
 
             id: "",
-            orderId: "",
+         
             productVariantId: "",
             orderQuantity: 0,
             unit: "",
@@ -101,7 +100,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
 
             }
         case GET_DETAIL_PURCHASE_ORDER_SUCCESS:
-
+            console.log(action.json)
             return {
                 ...state,
                 requesting: false,
@@ -110,16 +109,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                 errors: "",
                 detailPurchaseOrder: {
                     orderId: action.json.purchaseOrder.id,
-                    supplier: {
-                        id: action.json.purchaseOrder.supplier.id,
-                        address: action.json.purchaseOrder.supplier.address,
-                        supplierName: action.json.purchaseOrder.supplier.supplierName,
-                        phoneNumber: action.json.purchaseOrder.supplier.phoneNumber,
-                        email: action.json.purchaseOrder.supplier.email,
-
-
-
-                    },
+                    status: action.json.purchaseOrder.purchaseOrderStatusString,
                     transaction: {
                         createdBy: {}
                     },
@@ -135,19 +125,20 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                     },
                     deliveryDate:action.json.purchaseOrder.deliveryDate.split("T")[0],
                     deadline:action.json.purchaseOrder.deadline.split("T")[0],
-                    supplier: {
+                    supplier:action.json.purchaseOrder.supplier !== null? {
                         id: action.json.purchaseOrder.supplier.id,
                         address: action.json.purchaseOrder.supplier.address,
                         supplierName: action.json.purchaseOrder.supplier.supplierName,
                         phoneNumber: action.json.purchaseOrder.supplier.phoneNumber,
                         email: action.json.purchaseOrder.supplier.email
-                    },
+                    }:{},
+                    hasSentMail: action.json.purchaseOrder.hasSentMail,
                     mailDescription: action.json.purchaseOrder.mailDescription === null? "":action.json.purchaseOrder.mailDescription,
                     purchaseOrderProduct: action.json.purchaseOrder.purchaseOrderProduct.map(product => {
 
                         return {
 
-                            id: product.id,
+                           
                            
                             productVariantId: product.productVariantId,
                             orderQuantity: product.orderQuantity,
@@ -281,7 +272,7 @@ const mailDataState = {
     requesting: false,
     successful: false,
     messages: "",
-    errors: "",
+    errors: false,
 }
 export const mailOrderData = function SendMailReducer(state = mailDataState, action) {
     switch (action.type) {
@@ -290,7 +281,7 @@ export const mailOrderData = function SendMailReducer(state = mailDataState, act
                 requesting: true,
                 successful: false,
                 messages: "",
-                errors: "",
+                errors: false,
 
             }
         case SEND_MAIL_SERVICE_SUCCESS:
@@ -299,7 +290,7 @@ export const mailOrderData = function SendMailReducer(state = mailDataState, act
                 requesting: false,
                 successful: true,
                 messages: "",
-                errors: "",
+                errors: false,
 
             }
         case SEND_MAIL_SERVICE_ERROR:
@@ -307,7 +298,7 @@ export const mailOrderData = function SendMailReducer(state = mailDataState, act
                 requesting: false,
                 successful: false,
                 messages: "",
-                errors: "error",
+                errors:  true,
 
             }
         default:
@@ -320,7 +311,7 @@ const priceQuoteCreateState = {
     messages: "",
     errors: "",
 }
-export const priceQuoteCreate = function priceQuoteCreateReducer(state = priceQuoteCreateState, action) {
+export const createPriceQuote = function createPriceQuoteReducer(state = priceQuoteCreateState, action) {
     switch (action.type) {
         case CREATE_PRICE_QUOTE_REQUEST:
             return {
@@ -356,8 +347,9 @@ const rejectPurchaserOrderState = {
     requesting: false,
     successful: false,
     messages: "",
-    errors: "",
+    errors: false,
 }
+
 export const rejectPurchaserOrder = function rejectPurchaserOrder(state = rejectPurchaserOrderState, action) {
     switch (action.type) {
         case REJECT_PURCHASE_ORDER_CONFIRM_REQUEST:
@@ -365,7 +357,7 @@ export const rejectPurchaserOrder = function rejectPurchaserOrder(state = reject
                 requesting: true,
                 successful: false,
                 messages: "",
-                errors: "",
+                errors: false,
 
             }
         case REJECT_PURCHASE_ORDER_CONFIRM_SUCCESS:
@@ -374,7 +366,7 @@ export const rejectPurchaserOrder = function rejectPurchaserOrder(state = reject
                 requesting: false,
                 successful: true,
                 messages: "",
-                errors: "",
+                errors: false,
 
             }
         case REJECT_PURCHASE_ORDER_CONFIRM_ERROR:
@@ -382,7 +374,7 @@ export const rejectPurchaserOrder = function rejectPurchaserOrder(state = reject
                 requesting: false,
                 successful: false,
                 messages: "",
-                errors: "error",
+                errors: true,
 
             }
         default:
@@ -431,10 +423,10 @@ const priceQuoteDataEditState = {
     requesting: false,
     successful: false,
     messages: "",
-    errors: "",
+    errors: false,
 }
 
-export const priceQuoteDataEdit = function editPriceQuoteDataReducer(state = priceQuoteDataEditState, action) {
+export const PriceQuoteUpdate = function editPriceQuoteDataReducer(state = priceQuoteDataEditState, action) {
     switch (action.type) {
         case EDIT_PRICE_QUOTE_REQUEST:
             return {
@@ -458,7 +450,7 @@ export const priceQuoteDataEdit = function editPriceQuoteDataReducer(state = pri
                 requesting: false,
                 successful: false,
                 messages: "",
-                errors: "error",
+                errors: true,
 
             }
         default:
@@ -469,34 +461,34 @@ const createConfirmState = {
     requesting: false,
     successful: false,
     messages: "",
-    errors: "",
+    errors: false,
 }
 
-export const purchaseOrderConfirmSended = function purchaseOrderConfirmSendedReducer(state = createConfirmState, action) {
+export const submitPurchaseOrder = function purchaseOrderConfirmSendedReducer(state = createConfirmState, action) {
     switch (action.type) {
-        case SEND_CONFIRM_PURCHASE_ORDER_REQUEST:
+        case SUBMIT_PURCHASE_ORDER_REQUEST:
             return {
                 requesting: true,
                 successful: false,
                 messages: "",
-                errors: "",
+                errors: false,
 
             }
-        case SEND_CONFIRM_PURCHASE_ORDER_SUCCESS:
+        case SUBMIT_PURCHASE_ORDER_SUCCESS:
 
             return {
                 requesting: false,
                 successful: true,
                 messages: "",
-                errors: "",
+                errors: false,
 
             }
-        case SEND_CONFIRM_PURCHASE_ORDER_ERROR:
+        case SUBMIT_PURCHASE_ORDER_ERROR:
             return {
                 requesting: false,
                 successful: false,
                 messages: "",
-                errors: "error",
+                errors: true,
 
             }
         default:
@@ -508,17 +500,17 @@ const confirmPurchaserOrderOfAdminState = {
     requesting: false,
     successful: false,
     messages: "",
-    errors: "",
+    errors: false,
 }
 
-export const confirmPurchaserOrderOfManager = function confirmPurchaserOrderOfManagerReducer(state = confirmPurchaserOrderOfAdminState, action) {
+export const confirmPurchaserOrder = function confirmPurchaserOrderOfManagerReducer(state = confirmPurchaserOrderOfAdminState, action) {
     switch (action.type) {
         case CONFIRM_PURCHASE_ORDER_REQUEST:
             return {
                 requesting: true,
                 successful: false,
                 messages: "",
-                errors: "",
+                errors: false,
 
             }
         case CONFIRM_PURCHASE_ORDER_SUCCESS:
@@ -527,7 +519,7 @@ export const confirmPurchaserOrderOfManager = function confirmPurchaserOrderOfMa
                 requesting: false,
                 successful: true,
                 messages: "",
-                errors: "",
+                errors: false,
 
             }
         case CONFIRM_PURCHASE_ORDER_ERROR:
@@ -535,7 +527,7 @@ export const confirmPurchaserOrderOfManager = function confirmPurchaserOrderOfMa
                 requesting: false,
                 successful: false,
                 messages: "",
-                errors: "error",
+                errors: true,
 
             }
         default:
@@ -548,17 +540,17 @@ const productPurchaseOrderUpdateState = {
     requesting: false,
     successful: false,
     messages: "",
-    errors: "",
+    errors: false,
 }
 
-export const productPurchaseOrderUpdate = function productPurchaseOrderUpdateStateRedcer(state = productPurchaseOrderUpdateState, action) {
+export const updatePurchaseOrder = function productPurchaseOrderUpdateStateRedcer(state = productPurchaseOrderUpdateState, action) {
     switch (action.type) {
         case SAVE_PRODUCTS_PURCHASE_ORDER_REQUEST:
             return {
                 requesting: true,
                 successful: false,
                 messages: "",
-                errors: "",
+                errors: false,
 
             }
         case SAVE_PRODUCTS_PURCHASE_ORDER_SUCCESS:
@@ -566,8 +558,8 @@ export const productPurchaseOrderUpdate = function productPurchaseOrderUpdateSta
             return {
                 requesting: false,
                 successful: true,
-                messages: "",
-                errors: "",
+                messages: "Update Success",
+                errors: false,
 
             }
         case SAVE_PRODUCTS_PURCHASE_ORDER_ERROR:
@@ -575,7 +567,7 @@ export const productPurchaseOrderUpdate = function productPurchaseOrderUpdateSta
                 requesting: false,
                 successful: false,
                 messages: "",
-                errors: "error",
+                errors: true
 
             }
         default:

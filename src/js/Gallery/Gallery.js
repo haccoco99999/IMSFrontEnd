@@ -29,12 +29,12 @@ class Gallery extends React.Component {
       
         if (this.props.clickQuote !== undefined ) {
            
-        function setStatusPriQuote(hasBeenModified,status){
-            if(status ==="PriceQuote"){
+        function setStatusPriQuote(hasSentMail,status){
+            if(status ==="PriceQuote" && hasSentMail){
                  return <span class="badge bg-primary">Sent</span>
 
             }
-            else if(hasBeenModified === true){
+            else if(status ==="PriceQuote" && hasSentMail === false){
                  return   <span class="badge bg-warning text-dark">Draft</span>
 
             }
@@ -61,7 +61,7 @@ class Gallery extends React.Component {
                                     <p>Create by: {quote.createdDate.split("T")[0]}</p>
                                     <p>Vender: {quote.supplierName}</p>
                                 <div className="footer-gallery">  <p>{quote.totalPrice} Product</p> 
-                                    {setStatusPriQuote(quote.hasBeenModified, quote.status)}
+                                    {setStatusPriQuote(quote.hasSentMail, quote.status)}
                                 </div>
                                 </div>
                             </div>)}

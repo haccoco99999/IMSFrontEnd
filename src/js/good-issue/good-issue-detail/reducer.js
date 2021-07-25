@@ -70,6 +70,9 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
         if(element.userTransactionActionType === 0){
           transaction = element
         }
+        else{
+          transaction = element
+        }
       
       })
       console.log(transaction)
@@ -83,7 +86,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
           customerName:action.json.goodsIssueOrder.customerName,
           customerPhoneNumber:action.json.goodsIssueOrder.customerPhoneNumber,
           deliveryDate:action.json.goodsIssueOrder.deliveryDate.split("T")[0],
-          deliverMethod:action.json.goodsIssueOrder.deliveryMethod.split("T")[0],
+          deliverMethod:action.json.goodsIssueOrder.deliveryMethod,
           createdDate: transaction.date.split("T")[0],
           infoCreater:{
             fullname: transaction.applicationUser.fullname,

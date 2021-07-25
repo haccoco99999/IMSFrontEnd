@@ -10,7 +10,7 @@ export default function MergePriceQuote(props) {
      props.mergedRequisitionIds.forEach(element => {
       query +="&IgnoreOrderID=" +element
     });
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/search?HideMerged=true&FromStatus=0&ToStatus=0"+query
+    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/search?HideMerged=true&Status=Requisition"+query
 
     let json = await fetch(updateUrl, {
 
@@ -62,8 +62,7 @@ export default function MergePriceQuote(props) {
       ...element, haveProduct: true,
       listProductOrder: json.purchaseOrder.purchaseOrderProduct.map(product => {
         return {
-          id: product.id,
-          orderId: product.orderId,
+      
           productVariantId: product.productVariantId,
           orderQuantity: product.orderQuantity,
           unit: product.unit,

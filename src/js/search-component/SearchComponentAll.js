@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { ClearButton, Typeahead, AsyncTypeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+
+import { ClearButton, Token, Typeahead, AsyncTypeahead } from 'react-bootstrap-typeahead';
 export function SearchToAddProduct(props) {
 
 
@@ -45,15 +47,41 @@ export function SearchToAddProduct(props) {
                     <img src="https://github.com/mdo.png" alt="@mdo" width="32" height="32" class="rounded me-2" loading="lazy" />
                     <span>
                         <strong>{option.name}</strong> {option.sku}
-                        
+
                     </span>
-                   
-                  
+
+
 
                 </div>
             )}
         />
 
+    )
+}
+export function SelectStatusPurchaseOrder(props) {
+    const optionsInit = [
+        { key: "PurchaseOrder", value: "Draft" },
+        { key: "POWaitingConfirmation", value: "Watting Confirm" },
+        { key: "POConfirm", value: "Confirmed" },
+        { key: "Done", value: "Done" },
+        { key: "POCanceled", value: "Canceled" },
+
+    ]
+    
+    const [options, setOptions] = useState([...optionsInit])
+   function handelOnChanged(selected){
+       props.selectStatus(selected)
+   }
+    return (
+        <Typeahead
+            defaultSelected={options.slice(0, 4)}
+            id="public-methods-example"
+            labelKey="value"
+            multiple
+            options={options}
+            placeholder="Choose a state..."
+            onChange={handelOnChanged}
+        />
     )
 }
 export function ProductSearchSuggestion(props) {
@@ -86,14 +114,14 @@ export function ProductSearchSuggestion(props) {
 
     function handleChanged(select) {
         setSelected(select)
-      
+
         // setKeySearch(select[0].name)
     }
     console.log(keySearch)
-     return (
+    return (
         <span>
             <AsyncTypeahead
-            size="small"
+                size="small"
                 filterBy={filterBy}
                 id="async-example"
                 labelKey="name"
@@ -104,9 +132,9 @@ export function ProductSearchSuggestion(props) {
                 placeholder="Search for a Github user..."
                 onChange={handleChanged}
                 renderMenuItemChildren={(option, index) => (
-                    <div  key={index} onClick={() => props.getListProduct(option.name)}>
+                    <div key={index} onClick={() => props.getListProduct(option.name)}>
 
-                       {option.name}
+                        {option.name}
 
                     </div>
                 )}
@@ -166,12 +194,67 @@ export function PurchaseOrderSuggestion(props) {
                     </div>
                 )}
             />
-            <button onClick={() => props.searchKeyWordPurchaseOrder(keySearch)}>Search</button>
+            {/* <button onClick={() => props.searchKeyWordPurchaseOrder(keySearch)}>Search</button> */}
 
         </div>
     )
 }
+export function SearchPurchaseOrder(props) {
 
+
+    const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/po/els/';
+
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [options, setOptions] = useState([]);
+    const [selected, setSelected] = useState([{ name: "" }]);
+    const handleSearch = (query) => {
+        setIsLoading(true);
+        props.searchKeyWordPurchaseOrder(query)
+        fetch(`${SEARCH_URI}${query}`)
+            .then((resp) => resp.json())
+            .then((items) => {
+                console.log(items)
+                const options = items.suggestions.map((i) => ({
+                    name: i,
+
+                }));
+
+                setOptions(options);
+                setIsLoading(false);
+            });
+    };
+    const filterBy = () => true;
+
+    function handleChanged(select) {
+        setSelected(select)
+        //  setKeySearch(select[0].name)
+    }
+    return (
+        <div>
+            <AsyncTypeahead
+                filterBy={filterBy}
+                id="async-example"
+                labelKey="name"
+                minLength={1}
+                onSearch={handleSearch}
+                options={options}
+                selected={selected}
+                placeholder="Search Purchase Order"
+                onChange={handleChanged}
+                renderMenuItemChildren={(option, index) => (
+                    <div key={index} onClick={() => props.searchKeyWordPurchaseOrder(option.name)} >
+
+                        {option.name}
+
+                    </div>
+                )}
+            />
+            {/* <button onClick={() => props.searchKeyWordPurchaseOrder(keySearch)}>Search</button> */}
+
+        </div>
+    )
+}
 export function SeachSupplier(props) {
 
 
@@ -305,4 +388,74 @@ export function Search() {
             </div>
         )}
     />)
+}
+export function SelectSupplier(props) {
+    const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/suppliers/search';
+    const [listSupplier, setListSupplier] = useState([])
+    const [selected, setSelected] = useState({})
+
+    useEffect(() => {
+
+        if (props.supplierInfo.id !== "") {
+
+            setSelected({
+                ...props.supplierInfo
+            })
+        }
+    }, [props.supplierInfo])
+
+    useEffect(() => {
+
+
+
+        fetch(`${SEARCH_URI}`)
+            .then((resp) => resp.json())
+            .then((json) => {
+
+                setListSupplier(json.paging.resultList.map((i) => {
+                    return {
+
+                        id: i.id,
+                        address: i.address,
+                        supplierName: i.supplierName,
+                        phoneNumber: i.phoneNumber,
+                        email: i.email,
+                    }
+                }))
+
+
+            })
+
+
+    }, [])
+    function onChangeValue(event) {
+
+        props.getDataSupplier(JSON.parse(event.target.value))
+    }
+    return (
+
+
+
+        <div class="form-group">
+            <label for="">Select Supplier</label>
+            <select disabled={props.isDisabled} onChange={onChangeValue} value={JSON.stringify(selected)} class="form-select" id="validationCustom04" required>
+                <option selected disabled value={JSON.stringify({})}>Choose...</option>
+        //         {listSupplier.map(supplier => <option value={JSON.stringify(supplier)} >{supplier.supplierName}</option>)}
+            </select>
+        </div>
+
+
+
+        // <div class="form-floating">
+
+        //     <select disabled={props.isDisabled} onChange={onChangeValue} value={JSON.stringify(selected)} class="form-select" id="validationCustom04" required>
+        //         <option selected disabled value={JSON.stringify({})}>Choose...</option>
+        //         {listSupplier.map(supplier => <option value={JSON.stringify(supplier)} >{supplier.supplierName}</option>)}
+        //     </select>
+        //     <label for="floatingSelect">Select Supplier</label>
+        //     <div class="invalid-feedback">
+        //         Please select a valid state.
+        //     </div>
+        // </div>
+    )
 }

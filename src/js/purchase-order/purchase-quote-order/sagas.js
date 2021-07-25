@@ -3,32 +3,16 @@ import { GET_PRICE_QUOTE_ERROR,GET_PRICE_QUOTE_SUCCESS,GET_PRICE_QUOTE_REQUESTIN
 import handleApiErrors from '../../auth/api-errors'
 const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyNTYyMTM0NSwiZXhwIjoxNjI1Nzk0MTQ1LCJpYXQiOjE2MjU2MjEzNDV9.40NoAmbWo91YFSW_qXcSVvLx5_LBnlI9kNmSjlFu0kY"
 function searchPurchaseOrder(action){
-    let filterString = ""
-    Object.entries(action.filter).forEach(item =>{
-        if(item[1] !==""){
-            if(item[0] === "supplier" && item[1]["SupplierId"] !== "" ){
-                filterString += "SupplierId=" +item[1]["SupplierId"] + "&"
-            }
-            if(item[0]==="Statuses"){
-                item[1].forEach(status => filterString += item[0] + "=" +status + "&")
-                
-            }
-            else {
-              
-                filterString += item[0] + "=" +item[1] + "&"
-            }
-           
-        }
-    })
-    console.log(filterString)
-    const updateUrl=`https://imspublicapi.herokuapp.com/api/purchaseorder/search?` +filterString
+
+  
+    const updateUrl=`https://imspublicapi.herokuapp.com/api/purchaseorder/search?` +action.filter
    
   
     return fetch(updateUrl, {
         
         method: 'GET',
         headers:{
-            "Authorization": "Bearer " + token,
+            "Authorization": "Bearer " + action.token,
             "Content-Type": "application/json",
             "Origin": ""
         },
@@ -96,7 +80,7 @@ function* searchPurchaseOrderFlow(action){
     try{
       let  json= yield call(searchPurchaseOrder,action)
       console.log(json)
-       json= {...json, purchaserOrderFilter : action.filter}
+      
         yield put({type:SEARCH_PURCHASE_ORDER_SEARCH, json})
     }catch(error){
        console.log(error)

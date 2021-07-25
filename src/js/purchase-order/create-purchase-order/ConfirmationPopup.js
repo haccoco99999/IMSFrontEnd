@@ -12,7 +12,7 @@ export default function ConfirmationPopup(props) {
                         <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body ">
                         Update Sucess Full
                     </div>
                     <div class="modal-footer modal-footer-error-true">

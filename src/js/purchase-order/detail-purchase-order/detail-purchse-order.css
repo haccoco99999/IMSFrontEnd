@@ -1,4 +1,4 @@
-.name-oder{
+/* .name-oder{
     position: absolute;
     top: 0;
     left: 0;
@@ -19,7 +19,7 @@
     width: 200px;
     align-items: center;
     justify-content: space-evenly;
-}
+} */
 /* .name-oder button{
     float: right;
 }
@@ -33,7 +33,7 @@
     width: 50%;
     font-size: 15px;
 } */
-.info-purchase-order{
+/* .info-purchase-order{
     font-size: 15px;
     display: flex;
     flex-direction: column;
@@ -48,11 +48,11 @@
 .info-create  > p{
     width: 300px;
     
-}    
+}     */
 /* .info-create-detail{
     float: left;
 } */
-.info-date{
+/* .info-date{
     width: 540px;
 }
 .info-date p:nth-child(1){
@@ -67,4 +67,4 @@
     border: 1px solid black;
     
     background-color: white;
-}
+} */

@@ -1,0 +1,22 @@
+.row-dashboard{
+    
+    margin-top: 20px !important;
+    align-items: flex-start;
+    
+    justify-content: space-around;
+
+}
+.item-top-dashboard{
+    width: 100%;
+    background-color: blue;
+    height: 130px !important;
+
+}
+.dastboard-top{
+    width: 100%;
+    background-color: blue;
+    height: 500px !important;
+}
+
+
+

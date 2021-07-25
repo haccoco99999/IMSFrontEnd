@@ -86,6 +86,7 @@ export default function CreateAccount() {
     if(isvalidPassword.isValidNewPassword && isvalidPassword.isConfirmPassword){
       const data = {...infoAccountState, password:newPassword.current.value }
     dispatch(CreateAccountAction({ data: data, token: token }));
+    // history.go(-1)
     }
     else{
       alert("ko hop le")

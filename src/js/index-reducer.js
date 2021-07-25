@@ -29,12 +29,12 @@ import{ DetailGoodIssue, CreateGoodIssue , UpadateGoodIssue, RejectGoodIssue} fr
 import { getDetailPurchaseReducer,
   // productPurchaseOrderReducer,
   rejectPurchaserOrder,
-  mailOrderData, priceQuoteDataEdit ,
-   purchaseOrderConfirmSended,
-   confirmPurchaserOrderOfManager,
-   productPurchaseOrderUpdate,
+  mailOrderData, PriceQuoteUpdate ,
+  submitPurchaseOrder,
+  confirmPurchaserOrder,
+   updatePurchaseOrder,
    createPurchaserOrder,
-   priceQuoteCreate,
+   createPriceQuote,
    
   } from "./purchase-order/create-purchase-order/reducer";
 const IndexReducer = combineReducers({
@@ -42,8 +42,7 @@ const IndexReducer = combineReducers({
   client,
   updateProfile,
 
-  controlPurchaseQuotePage,
-  detailPriceQuote,
+
   searchPurchaseOrderReducer,
   getGoodsReceiptReducer,
   getAllRoleReducer,
@@ -67,11 +66,12 @@ const IndexReducer = combineReducers({
   CreateGoodIssue,
   UpadateGoodIssue,
   mailOrderData,
-  priceQuoteDataEdit,purchaseOrderConfirmSended,confirmPurchaserOrderOfManager,
-  productPurchaseOrderUpdate,
+  PriceQuoteUpdate,
+  submitPurchaseOrder,confirmPurchaserOrder,
+  updatePurchaseOrder,
   rejectPurchaserOrder,
   getAllGoodIssuesRequisition,
-  priceQuoteCreate,
+  createPriceQuote,
   createPurchaserOrder,
   RejectGoodIssue
 });

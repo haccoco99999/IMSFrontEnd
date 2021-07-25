@@ -1,4 +1,6 @@
 const path = require("path");
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+
 // const nodeExternals = require('webpack-node-externals');
 module.exports = {
   mode: "development",
@@ -6,6 +8,9 @@ module.exports = {
   devtool: "inline-source-map",
   target: "web",
    node: {global: true},
+  //  plugins: [
+	// 	new NodePolyfillPlugin()
+	// ],
 //   externals: [nodeExternals({
 //     importType: 'umd'
 //  })],

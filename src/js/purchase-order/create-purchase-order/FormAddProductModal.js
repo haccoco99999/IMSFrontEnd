@@ -25,11 +25,11 @@ export default function FormAddProductModal(props) {
     
      
         setProduct({
-          id: info.id,
+     
           productVariantId: info.productVariantId,
-          orderQuantity: info.quantity,
+          orderQuantity: 0,
           unit: info.unit,
-          price: info.price,
+          price: 0,
           discountAmount: 0,
           totalAmount: 0,
           name: info.name,
@@ -104,11 +104,11 @@ export default function FormAddProductModal(props) {
         ...element, haveProduct: true,
         listProductVariant: json.product.productVariants.map(productVariant => {
           return {
-            id: productVariant.productId,
-
+            
+        
             productVariantId: productVariant.id,
             orderQuantity: 0,
-            unit: json.unit,
+            unit: productVariant.unit,
             price: 0,
             discountAmount: 0,
             totalAmount: 0,

@@ -187,28 +187,28 @@ export default function ConfirmDateModal(props) {
 
 
               <div class="form-check">
-
+                  <p>Do you want to send mail for supplier ?</p>
                 <label class="form-check-label">
                   <input type="checkbox" class="form-check-input" value={isSendMail} onChange={() => setIsSendMail(!isSendMail)} id="" />
-                  Send Purchase Order For Supplier
+                  I agree
                 </label>
               </div>
 
               {isSendMail ? (<div>
 
                 <div class="mb-3">
-                  <label for="exampleFormControlTextarea1" class="form-label">Note</label>
+                  <label for="exampleFormControlTextarea1" class="form-label">Content:</label>
                   <textarea ref={note} class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
                 </div>
 
-                <iframe width="100%" height="100%" class="embed-responsive-item" src={print() + "#toolbar=0"}></iframe></div>) : ""}
+                <iframe width="100%" height="800" class="embed-responsive-item" src={print() + "#toolbar=0"}></iframe></div>) : ""}
 
 
 
             </div>
             <div class="modal-footer">
               <button type="button" onClick={() => props.clickToCLoseConfirm(false)} class="btn btn-secondary btn-cancel-preview" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" onClick={() => props.clickToCLoseConfirm(true, print(), note.current.value)} class="btn btn-primary">Confirm to send mail</button>
+              <button type="button" onClick={() => props.clickToCLoseConfirm(true, print(), note.current.value)} class="btn btn-primary">Confirm</button>
             </div>
           </div>
         </div>

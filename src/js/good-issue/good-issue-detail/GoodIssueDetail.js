@@ -330,7 +330,6 @@ export default function DetailGoodIssue() {
 
 
         <div>
-            <button onClick={() => printDeliverNote()}>PRINTER</button>
             <NavigationBar listButton={listButton}
                 titleBar={GoodIssueDetail.infoGoodIssueDetail.id}
                 actionGoBack={backPage}

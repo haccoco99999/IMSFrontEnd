@@ -6,11 +6,14 @@
     max-width: 600px !important;
 }
 .modal-content-confirm-date{
-    height: 450px;
+    height: 677px;
     border-radius: 15px !important;
 }
 .btn-cancel-preview{
     background: white !important;
     color: black !important;
     border: 0 !important;
+}
+.modal-body{
+    overflow: auto !important;
 }
