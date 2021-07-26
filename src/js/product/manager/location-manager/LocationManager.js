@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useReducer } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal } from "bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
+import Swal from "sweetalert2";
 //css
 import "../../product.css";
 //components
@@ -166,7 +167,7 @@ function ModalFunction(props) {
 
   function onCancelClick() {
     // setCategorySelected(props.categoryData);
-    setLocationSelected(props.categoryData);
+    setLocationSelected(props.locationData);
     setIsDisabled(!isDisabled);
   }
 
@@ -175,19 +176,38 @@ function ModalFunction(props) {
   }
 
   function onSaveClick() {
-    console.log(locationSelected);
-
-    if (props.isCreate) {
-      // dispatch(
-      //   createLocationAction({ token: props.token, data: categorySelected })
-      // );
+    // console.log(locationSelected);
+    if (locationSelected.locationName === "") {
+      Swal.fire({
+        title: "Error",
+        text: "Empty Data!",
+        icon: "error",
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        showConfirmButton: false,
+      });
     } else {
-      // const dataUpdate = {
-      //   categoryId: categorySelected.id,
-      //   categoryName: categorySelected.categoryName,
-      //   categoryDescription: categorySelected.categoryDescription,
-      // };
-      // dispatch(updateLocationAction({ token: props.token, data: dataUpdate }));
+      if (props.isCreate) {
+        const data = {
+          locationName: locationSelected.locationName,
+        };
+        console.log(data);
+        dispatch(createLocationAction({ token: props.token, data: data }));
+      } else {
+        const dataUpdate = {
+          locationId: locationSelected.id,
+          locationName: locationSelected.locationName,
+        };
+        console.log(dataUpdate);
+        // const dataUpdate = {
+        //   categoryId: categorySelected.id,
+        //   categoryName: categorySelected.categoryName,
+        //   categoryDescription: categorySelected.categoryDescription,
+        // };
+        dispatch(
+          updateLocationAction({ token: props.token, data: dataUpdate })
+        );
+      }
     }
   }
 
@@ -210,12 +230,9 @@ function ModalFunction(props) {
   }
 
   useEffect(() => {
-    if (props.isCreate)
-      {
-        setLocationSelected({ locationName: "" });
-      }
-    else
-    {
+    if (props.isCreate) {
+      setLocationSelected({ locationName: "" });
+    } else {
       setLocationSelected(props.locationData);
     }
   }, [props.locationData, props.isCreate]);
@@ -231,12 +248,12 @@ function ModalFunction(props) {
               <h5 className="modal-title fw-bold">Details</h5>
             )}
 
-            <button
+            {/* <button
               type="button"
               className="btn-close"
               // data-bs-dismiss="modal"
               aria-label="Close"
-            ></button>
+            ></button> */}
           </div>
 
           <div className="modal-body">

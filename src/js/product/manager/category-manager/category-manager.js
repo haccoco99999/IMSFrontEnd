@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useReducer } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal } from "bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
+import Swal from "sweetalert2";
 //css
 import "../../product.css";
 
@@ -200,17 +201,6 @@ export default function CategoryManager() {
           nextPagingClick={nextPagingClick}
           backPagingClick={backPagingClick}
         />
-        {/* <Table
-          listHeaderEdit={listEditHeader}
-          listColumn={listValueColumn}
-          listData={list_Categories}
-          backPagingClick={backPagingClick}
-          nextPagingClick={nextPagingClick}
-          sizePerPage={sizePerPage}
-          currentPage={currentPage}
-          pageCount={pageCount}
-          onRowClick={onRowClick}
-        /> */}
       </div>
     </div>
   );
@@ -232,19 +222,35 @@ function ModalFunction(props) {
   }
 
   function onSaveClick() {
-    console.log(categorySelected);
+    // console.log(categorySelected);
 
-    if (props.isCreate)
-      dispatch(
-        CreateCategoryAction({ token: props.token, data: categorySelected })
-      );
-    else {
-      const dataUpdate = {
-        categoryId: categorySelected.id,
-        categoryName: categorySelected.categoryName,
-        categoryDescription: categorySelected.categoryDescription,
-      };
-      dispatch(UpdateCategoryAction({ token: props.token, data: dataUpdate }));
+    if (
+      categorySelected.categoryName === "" ||
+      categorySelected.categoryDescription === ""
+    ) {
+      Swal.fire({
+        title: "Error",
+        text: "Empty Data!",
+        icon: "error",
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        showConfirmButton: false,
+      });
+    } else {
+      if (props.isCreate)
+        dispatch(
+          CreateCategoryAction({ token: props.token, data: categorySelected })
+        );
+      else {
+        const dataUpdate = {
+          categoryId: categorySelected.id,
+          categoryName: categorySelected.categoryName,
+          categoryDescription: categorySelected.categoryDescription,
+        };
+        dispatch(
+          UpdateCategoryAction({ token: props.token, data: dataUpdate })
+        );
+      }
     }
   }
 
@@ -279,12 +285,12 @@ function ModalFunction(props) {
               <h5 className="modal-title fw-bold">Details</h5>
             )}
 
-            <button
+            {/* <button
               type="button"
               className="btn-close"
               // data-bs-dismiss="modal"
               aria-label="Close"
-            ></button>
+            ></button> */}
           </div>
 
           <div className="modal-body">
