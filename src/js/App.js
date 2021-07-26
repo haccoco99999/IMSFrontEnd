@@ -37,7 +37,7 @@ function App(props) {
   const { client } = useSelector((state) => ({
     client: state.client,
   }));
-  console.log(client);
+  // console.log(client);
   function toggleAbout() {
     setEventPage({
       statusSetting: !eventPage.statusSetting,

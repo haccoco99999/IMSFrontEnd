@@ -4,7 +4,7 @@ import handleApiErrors from "../../auth/api-errors";
 import { GET_SP_REQUEST, GET_SP_RESPONSE, GET_SP_ERROR } from "./constants";
 
 function getAllSuppliers(action) {
-  const getAllSuppliersURL = `http://imspublicapi.herokuapp.com/api/suppliers/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+  const getAllSuppliersURL = `${process.env.REACT_APP_API}/suppliers/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
 
   return fetch(getAllSuppliersURL, {
     method: "GET",

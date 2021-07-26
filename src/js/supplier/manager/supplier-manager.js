@@ -1,32 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import BootstrapTable from "react-bootstrap-table-next";
+
 //css
 import "../supplier.css";
 //component
 import ListReceiptTable from "../../table-receipt/ListReceiptsTable";
 import { getAllSuppliersAction } from "./action";
+import NavigationBar from "../../components/navbar/navbar-component";
+import PagingComponent from "../../components/paging/paging-component";
 
-export default function () {
+export default function SupplierManager() {
   let history = useHistory();
   let dispatch = useDispatch();
-  
 
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
 
-  const [listValueColumn, setListValueColumn] = useState({
-    id:false,
-    supplierName: true,
-    email: true,
-    phoneNumber: true,
-  });
+  // const [listValueColumn, setListValueColumn] = useState({
+  //   id: false,
+  //   supplierName: true,
+  //   email: true,
+  //   phoneNumber: true,
+  // });
 
-  const [listEditHeader, setListEditHeader] = useState({
-    // id: "Goods Receipt ID",
-  });
+  // const [listEditHeader, setListEditHeader] = useState({
+  //   // id: "Goods Receipt ID",
+  // });
 
-  const { listData, pageCount,token } = useSelector((state) => ({
+  const columns = [
+    {
+      dataField: "id",
+      text: "ID",
+      hidden: true,
+    },
+    {
+      dataField: "supplierName",
+      text: "Name",
+    },
+    {
+      dataField: "email",
+      text: "Email",
+    },
+    { dataField: "phoneNumber", text: "Phone Number" },
+  ];
+
+  const { listData, pageCount, token } = useSelector((state) => ({
     listData: state.getAllSuppliersReducer.listSuppliers,
     pageCount: state.getAllSuppliersReducer.pageCount,
     token: state.client.token,
@@ -51,12 +71,20 @@ export default function () {
     });
   }
 
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      history.push("/homepage/supplier/details", {
+        supplierId: row.id,
+      });
+    },
+  };
+
   useEffect(() => {
     dispatch(
       getAllSuppliersAction({
         currentPage: currentPage,
         sizePerPage: sizePerPage,
-        token: token
+        token: token,
       })
     );
   }, [currentPage, sizePerPage]);
@@ -136,7 +164,24 @@ export default function () {
           </a>
         </div>
         <div className="mt-3">
-          <ListReceiptTable
+          <BootstrapTable
+            keyField="id"
+            columns={columns}
+            striped
+            hover
+            condensed
+            headerClasses="table-header-receipt"
+            noDataIndication="Table is Empty"
+            data={listData}
+            rowEvents={rowEvents}
+          />
+          <PagingComponent
+            currentPage={currentPage}
+            pageCount={pageCount}
+            nextPagingClick={nextPagingClick}
+            backPagingClick={backPagingClick}
+          />
+          {/* <ListReceiptTable
             listHeaderEdit={listEditHeader}
             listColumn={listValueColumn}
             listData={listData}
@@ -146,7 +191,7 @@ export default function () {
             currentPage={currentPage}
             pageCount={pageCount}
             onRowClick={onClickToDetails}
-          />
+          /> */}
         </div>
       </div>
     </div>

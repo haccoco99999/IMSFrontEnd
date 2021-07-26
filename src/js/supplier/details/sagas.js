@@ -1,4 +1,4 @@
-import { call, put, takeEvery,takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import handleApiErrors from "../../auth/api-errors";
 
 import {
@@ -102,7 +102,7 @@ function* deleteSupplierFlow(action) {
 }
 
 function* watcher() {
-  yield takeLatest(GET_DETAILS_SUPPLIER_REQUEST, getDetailsSupplierFlow);
+  yield takeEvery(GET_DETAILS_SUPPLIER_REQUEST, getDetailsSupplierFlow);
   yield takeEvery(UPDATE_SUPPLIER_REQUEST, updateSupplierFlow);
   yield takeEvery(DELETE_SUPPLIER_REQUEST, deleteSupplierFlow);
 }

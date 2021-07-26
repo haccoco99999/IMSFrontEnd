@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 
 //css
 import "../supplier.css";
-
+//components
 import { createSupplierAction } from "./action";
+import NavigationBar from "../../components/navbar/navbar-component";
 
 const formReducer = (state, event) => {
   return {
@@ -47,6 +48,14 @@ export default function () {
       value: event.target.value,
     });
   };
+
+  const listButtons = setListButtonNav()
+
+  function setListButtonNav() {
+    return [{
+      
+    }]
+  }
 
   useEffect(() => {
     if (messages !== "") {

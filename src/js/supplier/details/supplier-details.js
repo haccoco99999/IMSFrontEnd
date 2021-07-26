@@ -10,8 +10,9 @@ import {
   updateDetailsSupplierAction,
   deleteSupplierAction,
 } from "./action";
+import NavigationBar from "../../components/navbar/navbar-component"
 
-export default function () {
+export default function SupplierDetails() {
   let history = useHistory();
   let location = useLocation();
   let dispatch = useDispatch();
@@ -127,6 +128,8 @@ export default function () {
           </div>
         </div>
       </div>
+
+      <NavigationBar />
       {/* content */}
       {returnData && (
         <div className="wrapper space-top">
