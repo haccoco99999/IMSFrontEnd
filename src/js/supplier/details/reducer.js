@@ -28,7 +28,6 @@ const reducer = function GoodsReceiptReducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-        supplierDetails: {},
       };
     case GET_DETAILS_SUPPLIER_RESPONSE:
       return {
@@ -46,7 +45,6 @@ const reducer = function GoodsReceiptReducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "error",
-        supplierDetails: {},
       };
     case UPDATE_SUPPLIER_REQUEST:
       return {
@@ -61,7 +59,8 @@ const reducer = function GoodsReceiptReducer(state = initialState, action) {
         ...state,
         requesting: false,
         successful: true,
-        messages: action.json.modifiedSupplierId,
+        // messages: action.json.modifiedSupplierId,
+        messages:"Update Success",
         errors: "",
       };
     case UPDATE_SUPPLIER_ERROR:

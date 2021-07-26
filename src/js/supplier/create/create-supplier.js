@@ -14,7 +14,7 @@ const formReducer = (state, event) => {
     [event.name]: event.value,
   };
 };
-export default function () {
+export default function CreateSupplier() {
   let history = useHistory();
   let dispatch = useDispatch();
 

@@ -21,7 +21,6 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-        listSuppliers: [],
       };
 
     case GET_SP_RESPONSE:
@@ -45,7 +44,7 @@ export default function reducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: "",
-        listSuppliers: [],
+        
       };
 
     default:

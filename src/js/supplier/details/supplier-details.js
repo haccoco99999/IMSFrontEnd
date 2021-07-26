@@ -10,7 +10,7 @@ import {
   updateDetailsSupplierAction,
   deleteSupplierAction,
 } from "./action";
-import NavigationBar from "../../components/navbar/navbar-component"
+import NavigationBar from "../../components/navbar/navbar-component";
 
 export default function SupplierDetails() {
   let history = useHistory();
@@ -48,7 +48,7 @@ export default function SupplierDetails() {
       phoneNumber: supplier.phoneNumber,
       email: supplier.email,
     };
-  
+
     console.log(data);
     dispatch(updateDetailsSupplierAction({ data: data, token: token }));
   }
@@ -59,6 +59,59 @@ export default function SupplierDetails() {
   }
   function onChangeValue(event) {
     setSupplier({ ...supplier, [event.target.name]: event.target.value });
+  }
+
+  //todo: function Nav Button
+  const listButton = setListButtonNav(isDisabled);
+  function setListButtonNav(isDisabled) {
+    if (isDisabled) {
+      return [
+        {
+          isShow: true,
+          title: "Delete",
+          action: () => onClickDelete(),
+          // action: () => testSWAL(),
+          class: "btn-danger ",
+          // style: {},
+        },
+
+        {
+          isShow: true,
+          title: "Edit",
+          action: () => onClickEdit(),
+          // action: () => clicktTest(),
+          class: "btn-warning text-white",
+          // style: {},
+        },
+      ];
+    } else {
+      return [
+        {
+          isShow: true,
+          title: "Delete",
+          action: () => onClickDelete(),
+          // action: () => testSWAL(),
+          class: "btn-danger ",
+          // style: {},
+        },
+        {
+          isShow: true,
+          title: "Cancel",
+          action: () => onClickCancel(),
+          // action: () => testSWAL(),
+          class: "btn-secondary ",
+          // style: {},
+        },
+        {
+          isShow: true,
+          title: "Save",
+          action: () => onClickSave(),
+          // action: () => clicktTest(),
+          class: "btn-primary",
+          // style: {},
+        },
+      ];
+    }
   }
 
   useEffect(() => {
@@ -78,9 +131,15 @@ export default function SupplierDetails() {
   }, [supplierStore]);
 
   useEffect(() => {
-    if (messages !== "");
-    {
-      dispatch(getDetailsSupplierAction({ id: messages, token: token }));
+    if (messages === "Update Success") {
+      dispatch(
+        getDetailsSupplierAction({
+          id: location.state.supplierId,
+          token: token,
+        })
+      );
+    } else if (messages === "Delete Success") {
+      history.push("/homepage/supplier");
     }
   }, [messages]);
 
@@ -89,7 +148,7 @@ export default function SupplierDetails() {
   return (
     <div>
       {/* todo: task heading */}
-      <div className=" tab-fixed container-fluid  fixed-top">
+      {/* <div className=" tab-fixed container-fluid  fixed-top">
         <div className=" d-flex mb-3 justify-content-end mt-4 ">
           <a className="me-2" onClick={goBackClick}>
             <h3>Back</h3>
@@ -127,9 +186,14 @@ export default function SupplierDetails() {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      <NavigationBar />
+      <NavigationBar
+        listButton={listButton}
+        titleBar="Details"
+        actionGoBack={goBackClick}
+        status=""
+      />
       {/* content */}
       {returnData && (
         <div className="wrapper space-top">

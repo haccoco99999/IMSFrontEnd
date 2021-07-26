@@ -102,7 +102,7 @@ function* deleteSupplierFlow(action) {
 }
 
 function* watcher() {
-  yield takeEvery(GET_DETAILS_SUPPLIER_REQUEST, getDetailsSupplierFlow);
+  yield takeLatest(GET_DETAILS_SUPPLIER_REQUEST, getDetailsSupplierFlow);
   yield takeEvery(UPDATE_SUPPLIER_REQUEST, updateSupplierFlow);
   yield takeEvery(DELETE_SUPPLIER_REQUEST, deleteSupplierFlow);
 }

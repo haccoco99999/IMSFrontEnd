@@ -26,17 +26,7 @@ export default function () {
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
 
-  // const [listValueColumn, setListValueColumn] = useState({
-  //   id: true,
-  //   status: true,
-  //   createdByName: true,
-  //   createdDate: true,
-  //   modifiedDate: true,
-  // });
-  // const [listEditHeader, setListEditHeader] = useState({
-  //   id: "Stocktake ID",
-  //   createdByName: "Created by",
-  // });
+ 
 
   // TODO: DECLARE BOOTSTRAP TABLE
   const columns = [
@@ -107,10 +97,10 @@ export default function () {
   //   lastPageText: "Last",
   //   paginationTotalRenderer: customTotal,
   // };
-  const options = {
-    custom: true,
-    totalSize: pageCount,
-  };
+  // const options = {
+  //   custom: true,
+  //   totalSize: pageCount,
+  // };
 
   function pushAddPage() {
     history.push("/homepage/stock-take/create");
@@ -141,31 +131,20 @@ export default function () {
     );
   }, [currentPage, sizePerPage]);
 
-  function handleNextPage({ page, onPageChange }) {
-    // onPageChange(page + 1);
-    // setCurrentPage(currentPage + 1);
-    setCurrentPage(currentPage + 1);
-  }
-
-  function handlePrevPage({ page, onPageChange }) {
-    onPageChange(page - 1);
-    setCurrentPage(currentPage - 1);
-  }
-  console.log(pageCount);
 
   //todo: options2
-  const options2 = {
-    sizePerPage: 5,
-    totalSize: pageCount,
-    paginationTotalRenderer: customTotal,
-    firstPageText: "First",
-    prePageText: "Back",
-    nextPageText: "Next",
-    lastPageText: "Last",
-    showTotal: true,
-    hidePageListOnlyOnePage: true,
-    // disablePageTitle: true,
-  };
+  // const options2 = {
+  //   sizePerPage: 5,
+  //   totalSize: pageCount,
+  //   paginationTotalRenderer: customTotal,
+  //   firstPageText: "First",
+  //   prePageText: "Back",
+  //   nextPageText: "Next",
+  //   lastPageText: "Last",
+  //   showTotal: true,
+  //   hidePageListOnlyOnePage: true,
+  //   // disablePageTitle: true,
+  // };
 
   return (
     <div className="space-top-heading">

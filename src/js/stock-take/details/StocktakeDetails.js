@@ -188,9 +188,6 @@ export default function StocktakeDetailsComponent() {
   ];
   //todo: function Nav Button
   const listButton = setListButtonNav(statusStocktakeStore);
-  // function clicktTest() {
-  //   console.log(listCompare);
-  // }
   function setListButtonNav(status) {
     if (status === 0) {
       return [
