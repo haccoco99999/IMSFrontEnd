@@ -32,6 +32,16 @@ const composeSetup = process.env.NODE_ENV !== 'production' && typeof window === 
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose
 
+
+  // const rootReducer = (state, action) => {
+  //   if (action.type === 'SEND') {
+  //         delete state.mailOrderData 
+  //   }
+  
+  //   return IndexReducer(state, action);
+  // };
+
+
 const store = createStore(
   IndexReducer,
   composeSetup(applyMiddleware(sagaMiddleware)), // allows redux devtools to watch sagas

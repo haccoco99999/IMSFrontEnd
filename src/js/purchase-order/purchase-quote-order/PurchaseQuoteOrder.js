@@ -16,7 +16,10 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import { SearchPurchaseOrder, SelectSupplier, SelectStatusPurchaseOrder } from '../../search-component/SearchComponentAll'
 import ContentLoader from "react-content-loader"
 import PagingComponent from '../../components/paging/paging-component'
-import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit'; export default function PurchaseQuoteOrder() {
+import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
+import ProductVariantsFilter from './ProductVariantsFilter'
+import StockTakeFilter from './StockTakeFilter'
+export default function PurchaseQuoteOrder() {
 
     let history = useHistory()
     const { token, purchaseOrderStore } = useSelector(state => ({
@@ -156,7 +159,7 @@ import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/di
             text: 'Action',
             formatter: (cell, row, rowIndex, extraData) => {
                 return (
-                    <div onClick={() => history.push("/homepage/purchase/PurchaseOrder", { orderID: row.id, status: row.status })}>
+                    <div onClick={() => history.push("/homepage/purchase/PriceQuote", { orderId: row.id, status: row.status })}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
@@ -366,32 +369,181 @@ import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/di
             {/* {console.log(arr.map((_,i) => ( <rect x="-33" y={i*35} rx="3" ry="3" width="634" height="20" /> )))} */}
             {Array.apply(null, Array(20)).map((val, idx) => (<rect x="-33" y={idx * 40} rx="3" ry="3" width="100%" height="30" />))}
 
-            {/* <rect x="-33" y="35" rx="3" ry="3" width="634" height="20" /> 
-        <rect x="-33" y="70" rx="3" ry="3" width="634" height="20" /> 
-        <rect x="-33" y="105" rx="3" ry="3" width="634" height="20" /> 
-        <rect x="-33" y="140" rx="3" ry="3" width="634" height="20" /> 
-        <rect x="-33" y="175" rx="3" ry="3" width="634" height="20" /> 
-        <rect x="-33" y="0" rx="3" ry="3" width="634" height="20" /> 
-        <rect x="-33" y="35" rx="3" ry="3" width="634" height="20" /> 
-        <rect x="-33" y="70" rx="3" ry="3" width="634" height="20" /> 
-        <rect x="-33" y="105" rx="3" ry="3" width="634" height="20" /> 
-        <rect x="-33" y="140" rx="3" ry="3" width="634" height="20" /> 
-        <rect x="-33" y="175" rx="3" ry="3" width="634" height="20" />  */}
+
 
         </ContentLoader>
         )
     };
+
+
+    /////////////////////////////////////////////////////////
+    //////PRODUCT VARIANTS
+    function productVariantsFilterAPI(string) {
+        const updateUrl = `https://imspublicapi.herokuapp.com/api/productvariant/search?${string}`
+
+
+
+        return fetch(updateUrl, {
+
+            method: 'GET',
+            headers: {
+
+                "Content-Type": "application/json",
+                "Origin": ""
+            },
+            credentials: "include",
+
+        })
+
+            .then(response => response.json())
+            .then(json => json)
+            .catch((error) => { throw error })
+    }
+
+    const productVariantFilterInit = {
+        SearchNameOnly: true,
+        SearchQuery: "",
+        Category: "",
+        FromCreatedDate: "",
+        ToCreatedDate: "",
+        FromModifiedDate: "",
+        ToModifiedDate: "",
+        CreatedByName: "",
+        ModifiedByName: "",
+        FromPrice: "",
+        ToPrice: "",
+        Brand: "",
+    }
+    const [productVariantsFilter, setProductVariantsFilter] = useState({
+        CurrentPage: 1,
+        SizePerPage: 25,
+        ...productVariantFilterInit
+    })
+
+    function onChangeProductVariantFilter(event) {
+        setProductVariantsFilter((state) => ({
+            ...state, [event.target.name]: event.target.value
+        }))
+    }
+    function submitProductVariantsFilter() {
+        let filterString = ""
+        Object.entries(productVariantsFilter).forEach(item => {
+            if (item[1] !== "") {
+                filterString += item[0] + "=" + item[1] + "&"
+            }
+        })
+        let json = productVariantsFilterAPI(filterString)
+        console.log(json)
+    }
+    function resetProductVariantsFilter() {
+        setProductVariantsFilter((state) => ({
+            ...state, ...productVariantFilterInit
+        }))
+    }
+
+    //COMPONENT SEARCH PRODUCT VARIANTS
+
+    // <ProductVariantsFilter 
+    // onChangeValueFilter={onChangeProductVariantFilter}
+    //  filter={productVariantsFilter} 
+    //  submitFilter={submitProductVariantsFilter}
+    //  resetFilter={resetProductVariantsFilter}
+    //  />
+
+
+
+
+    ////////////////////////////////////////////////////////
+    ///SEARCH LOCATION
+ 
+
+    // const stockTakeFilterInit = {
+    //     IsLocationOnly: true,
+    //     SearchQuery: "",
+    //     FromImportedDate:"",
+    //     ToImportedDate:"",
+    //     ProductVariantID:"",
+    //     FromTotalPrice:"",
+    //     ToTotalPrice:"",
+    //     FromPrice:"",
+    //     ToPrice:"",
+    //     LocationId:"",
+    //     FromQuantity:"",
+    //     ToQuantity:"",
+    // }
+    const stockTakeFilterInit = {
+      
+        SearchQuery: "",
+        FromStatus:"",
+        ToStatus:"",
+        FromCreatedDate:"",
+        ToCreatedDate:"",
+        ToTotalPrice:"",
+        CreatedByName:"",
+        DeliveryMethod:"",
+        FromDeliveryDate:"",
+        ToDeliveryDate:"",
+      
+    }
+    const [stockTakeFilter, setStockTakeFilter] = useState({
+        CurrentPage: 1,
+        SizePerPage: 25,
+        ...stockTakeFilterInit
+    })
+
+    function onChangeStockTaketFilter(event) {
+        setStockTakeFilter((state) => ({
+            ...state, [event.target.name]: event.target.value
+        }))
+    }
+    function submitStockTakeFilter() {
+        let filterString = ""
+        Object.entries(stockTakeFilter).forEach(item => {
+            if (item[1] !== "") {
+                filterString += item[0] + "=" + item[1] + "&"
+            }
+        })
+        alert(filterString)
+    }
+    function resetStockTakeFilter() {
+      
+        setStockTakeFilter((state) => ({
+            ...state, ...stockTakeFilterInit
+        }))
+    }
+    
+    //////////////////////////////////////////////////////
+
+
+
     return (
         <div className="purchase-quote-order">
             <div className="title-purchase-quote-order">
                 <span>Purchase requistion</span>
                 <div>6</div>
             </div>
-
+{// <ProductVariantsFilter 
+    // onChangeValueFilter={onChangeProductVariantFilter}
+    //  filter={productVariantsFilter} 
+    //  submitFilter={submitProductVariantsFilter}
+    //  resetFilter={resetProductVariantsFilter}
+    //  />
+}
+            
+            <StockTakeFilter  
+            
+               onChangeValueFilter={onChangeStockTaketFilter}
+     filter={stockTakeFilter} 
+     submitFilter={submitStockTakeFilter}
+     resetFilter={resetStockTakeFilter}
+            />
             {purchaseOrderStore.successfulPQ ?
                 <Gallery
                     clickQuote={onClickToDetailQuoteOrder}
-                    listData={listPriceQuote} /> : <ContentLoader viewBox="0 0 1360 175" height={175} width={1360} >
+                    listData={listPriceQuote} /> : <ContentLoader viewBox="0 0 1360 175"
+                        backgroundColor="#c2c2c2"
+                        foregroundColor="#ecebeb"
+                        height={175} width={1360} >
                     <rect x="30" y="20" rx="8" ry="8" width="200" height="200" />
                     <rect x="250" y="20" rx="8" ry="8" width="200" height="200" />
                     <rect x="470" y="20" rx="8" ry="8" width="200" height="200" />
@@ -409,6 +561,8 @@ import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/di
             </div>
 
             <div class="d-grid gap-2">
+
+
                 <div class="p-3">
                     <div class="card">
 
@@ -522,7 +676,9 @@ import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/di
                         </div>
 
 
-                    </div></div>
+                    </div>
+                </div>
+
 
                 <div class="p-3 ">
                     <div className="card">

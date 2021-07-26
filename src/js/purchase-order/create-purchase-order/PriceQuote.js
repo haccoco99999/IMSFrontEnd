@@ -10,6 +10,7 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ConfirmDateModal from './ConfirmDateModal';
 import './PriceQuote.css'
+import { reset } from 'redux-form'
 import { SearchToAddProduct, SeachSupplier } from '../../search-component/SearchComponentAll';
 import MergePriceQuote from './MergePriceQuoteComponent';
 import FormAddProductModal from './FormAddProductModal';
@@ -17,6 +18,8 @@ import TextEditor from '../../text-editor-compoent/text-editor-compoent';
 import PreviewSendMail from './preview-quote-request';
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import Swal from 'sweetalert2'
+import RejectReceiptModal from '../../RejectReceiptModal/RejectReceiptModal';
+import { CONFIRM_PURCHASE_ORDER_RESET, CREATE_PRICE_QUOTE_RESET, CREATE_PURCHASE_ORDER_RESET, REJECT_PURCHASE_ORDER_CONFIRM_RESET, SEND_MAIL_SERVICE_RESET, SUBMIT_PURCHASE_ORDER_RESET } from './contants';
 
 export default function PurchaseOrderConfirm() {
     const dispatch = useDispatch()
@@ -28,21 +31,33 @@ export default function PurchaseOrderConfirm() {
         isShowAddProductPage: false,
         isShowEdit: false,
         isCreatePO: false,
-
-
+        isShowReject: false,
+        isShowConfirm: false,
         isPreview: false,
         isResend: false
     })
 
 
     const [mergedRequisitionIds, setMergedRequisitionIds] = useState([location.state.orderId])
-    const { purchaseOrderDataGlobal, token, priceQuoteUpdateStatus, createPriceQuoteStatus, mailOrderDataStatus } = useSelector(state => ({
-        purchaseOrderDataGlobal: state.getDetailPurchaseReducer.detailPurchaseOrder,
-        token: state.client.token,
-        priceQuoteUpdateStatus: state.PriceQuoteUpdate,
-        createPriceQuoteStatus: state.createPriceQuote,
-        mailOrderDataStatus: state.mailOrderData
-    }))
+    const { purchaseOrderDataGlobal,
+        token, priceQuoteUpdateStatus,
+        createPriceQuoteStatus,
+        mailOrderDataStatus,
+        submitPurchaseOrderStatus,
+        rejectPurchaserOrderStatus,
+        confirmPurchaserOrderStatus,
+        createPurchaserOrderStatus } = useSelector(state => ({
+            purchaseOrderDataGlobal: state.getDetailPurchaseReducer.detailPurchaseOrder,
+            token: state.client.token,
+            priceQuoteUpdateStatus: state.PriceQuoteUpdate,
+            createPriceQuoteStatus: state.createPriceQuote,
+            mailOrderDataStatus: state.mailOrderData,
+            submitPurchaseOrderStatus: state.submitPurchaseOrder,
+            rejectPurchaserOrderStatus: state.rejectPurchaserOrder,
+            confirmPurchaserOrderStatus: state.confirmPurchaserOrder,
+            createPurchaserOrderStatus: state.createPurchaserOrder,
+
+        }))
     const [mailDescription, setMailDescription] = useState("");
 
     const [detailPurchaseState, setDetailPurchaseState] = useState(purchaseOrderDataGlobal)
@@ -51,35 +66,133 @@ export default function PurchaseOrderConfirm() {
     function clickToResendMail() {
 
     }
-    function onChangeValueProduct(event) {
+    const columns = [
+        {
+            dataField: 'sku',
+            text: 'SKU',
+            editable: false,
 
-        // setListProductPurchaseOrder(
-        //     listProductPurchaseOrder.map((element, index) =>
-        //         index ===  i ?
-        //             {
-        //                 ...element, [event.target.name]: event.target.value,
+        },
+        {
+            dataField: 'name',
+            text: 'Product Name',
+            editable: false,
+        },
+        {
+            dataField: 'orderQuantity',
+            text: 'Quantity',
+            editor: {
+                type: Type.TEXT,
 
-        //             }
-        //             : element)
-        // )
+            },
+            editable: !eventPage.isShowEditListProducts,
+            formatter: (cellContent, row, rowIndex) => {
+                return (
+                    <div>
+                        {!eventPage.isShowEditListProducts ? <input className="form-control" defaultValue={row.orderQuantity} type="text" /> : row.orderQuantity}
+                    </div>);
+            },
+            validator: (newValue, row, column) => {
+                if (isNaN(newValue)) {
+                    return {
+                        valid: false,
+                        message: 'Price should be numeric'
+                    };
+                }
+                if (newValue <= 0) {
+                    return {
+                        valid: false,
+                        message: 'Price should bigger than 0'
+                    };
+                }
+                return true;
+            }
+        },
+        {
+            hidden: ["Requisition", "PriceQuote"].includes(detailPurchaseState.status),
+            dataField: 'price',
+            text: 'Unit Price',
+            editable: !eventPage.isShowEditListProducts,
+            formatter: (cellContent, row, rowIndex) => {
+                return (
+                    <div>
+                        {!eventPage.isShowEditListProducts ? <input className="form-control" defaultValue={row.price} type="text" /> : row.price}
+                    </div>);
+            },
+            validator: (newValue, row, column) => {
+                if (isNaN(newValue)) {
+                    return {
+                        valid: false,
+                        message: 'Price should be numeric'
+                    };
+                }
+                if (newValue <= 0) {
+                    return {
+                        valid: false,
+                        message: 'Price should bigger than 0'
+                    };
+                }
+                return true;
+            }
+        },
 
-    }
+        {
+            hidden: ["Requisition", "PriceQuote"].includes(detailPurchaseState.status),
+            dataField: 'totalAmount',
+            text: 'Total Price',
+            editable: false,
+            formatter: (cellContent, row, rowIndex) => {
+
+                return (
+                    row.orderQuantity * row.price
+                );
+            },
+        },
+        {   //neu duoc isShowEdit true thi khong duoc delete
+            hidden: eventPage.isShowEditListProducts,
+            dataField: 'action',
+            text: 'action',
+            editable: false,
+            formatter: (cellContent, row, rowIndex) => {
+                return (
+                    <div>
+                        {!eventPage.isShowEditListProducts ? <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={() => clickDeleteProduct(rowIndex)} >
+                            Delete
+                        </button> : ""}
+
+
+                    </div>
+                );
+            },
+        },
+
+
+
+
+    ];
+    const [columnsState, setColumns] = useState(columns)
     function clickCreatePurchaseOrder() {
         let data = {
             orderNumber: purchaseOrderDataGlobal.orderId
         }
         dispatch(createPurchaseOrder({ data: data, token: token }))
-        goBackClick()
     }
     const ListEdit = function listEdit(props) {
-
-        return (
-            <div>
-                {!props.statusEdit ? <span onClick={() => cancelEditClick(props.nameEdit)} class="badge bg-secondary me-1">Discard</span> : ""}
-                {props.statusEdit ? <span onClick={() => editClick(props.nameEdit)} class="badge bg-success me-1">Edit</span> : ""}
-                {!props.statusEdit ? <span onClick={(() => saveEditClick(props.nameEdit))} class="badge bg-primary me-1">Save</span> : ""}
-            </div>
-        )
+        if (props.statusEdit !== undefined) {
+            return (
+                <div>
+                    {!props.statusEdit ? <span onClick={() => cancelEditClick(props.nameEdit)} class="badge bg-secondary me-1">Discard</span> : ""}
+                    {props.statusEdit ? <span onClick={() => editClick(props.nameEdit)} class="badge bg-success me-1">Edit</span> : ""}
+                    {!props.statusEdit ? <span onClick={(() => saveEditClick(props.nameEdit))} class="badge bg-primary me-1">Save</span> : ""}
+                </div>
+            )
+        }
+        else {
+            return ""
+        }
     }
     function setListButton(status) {
         if (status === "PriceQuote" && purchaseOrderDataGlobal.hasSentMail) {
@@ -87,30 +200,6 @@ export default function PurchaseOrderConfirm() {
             return [
 
 
-                // {
-                //     isShow: eventPage.isShowEdit,
-                //     title: "Edit",
-                //     action: () => editClick(),
-                //     style: {
-                //         "background-color": "#f9c421"
-                //     }
-                // },
-                // {
-                //     isShow: eventPage.isShowCancel,
-                //     title: "Cancel",
-                //     action: () => cancelEditClick(),
-                //     style: {
-                //         background: "red"
-                //     }
-                // },
-                // {
-                //     isShow: eventPage.isShowSave,
-                //     title: "Save",
-                //     action: () => saveEditClick(),
-                //     style: {
-                //         background: "#4ca962"
-                //     }
-                // },
 
 
                 {
@@ -138,30 +227,7 @@ export default function PurchaseOrderConfirm() {
         }
         else if (status === "PriceQuote" && purchaseOrderDataGlobal.hasSentMail === false) {
             return [
-                // {
-                //     isShow: eventPage.isShowEdit,
-                //     title: "Edit",
-                //     action: () => editClick(),
-                //     style: {
-                //         "background-color": "#f9c421"
-                //     }
-                // },
-                // {
-                //     isShow: eventPage.isShowCancel,
-                //     title: "Cancel",
-                //     action: () => cancelEditClick(),
-                //     style: {
-                //         background: "red"
-                //     }
-                // },
-                // {
-                //     isShow: eventPage.isShowSave,
-                //     title: "Save",
-                //     action: () => saveEditClick(),
-                //     style: {
-                //         background: "#4ca962"
-                //     }
-                // },
+
 
                 {
                     isShow: true,
@@ -173,35 +239,18 @@ export default function PurchaseOrderConfirm() {
                 },
             ]
         }
-        else {
+        else if (status === "Requisition") {
 
             return [
 
-
-                // {
-                //     isShow: eventPage.isShowEdit,
-                //     title: "Edit",
-                //     action: () => editClick(),
-                //     style: {
-                //         "background-color": "#f9c421"
-                //     }
-                // },
-                // {
-                //     isShow: eventPage.isShowCancel,
-                //     title: "Cancel",
-                //     action: () => cancelEditClick(),
-                //     style: {
-                //         background: "red"
-                //     }
-                // },
-                // {
-                //     isShow: eventPage.isShowSave,
-                //     title: "Save",
-                //     action: () => saveEditClick(),
-                //     style: {
-                //         background: "#4ca962"
-                //     }
-                // },
+                {
+                    isShow: true,
+                    title: "Reject",
+                    action: () => isShowRejectModal(),
+                    style: {
+                        background: "red"
+                    }
+                },
 
 
                 {
@@ -216,76 +265,115 @@ export default function PurchaseOrderConfirm() {
                 },
             ]
         }
+        else if (status === "PurchaseOrder") {
+
+            return [
+
+                {
+                    isShow: true,
+                    title: "Submit",
+                    action: () => clickToSubmitPurchaseOrder(),
+                    style: {
+                        background: "#4e9ae8"
+                    },
+
+
+                }
+            ]
+        } else if (status === "POWaitingConfirmation") {
+            return [
+
+
+                {
+                    isShow: true,
+                    title: "Reject",
+                    action: () => isShowRejectModal(),
+                    style: {
+                        background: "red"
+                    }
+                },
+
+                {
+                    isShow: true,
+                    title: "Confirm",
+                    action: () => isShowConfirmModal(),
+                    style: {
+                        "background-color": "#4e9ae8"
+                    }
+                },
+
+            ]
+
+        }
+        else if (status === "POConfirm") {
+            return [
+                {
+                    isShow: true,
+                    title: "Create Good Receipt",
+                    action: () => IgnorePurchase(),
+                    style: {
+                        background: "blue"
+                    }
+                },
+
+
+            ]
+
+        }
+
+        return []
+    }
+    function isShowConfirmModal() {
+        setEventPage((state) => ({
+            ...state, isShowConfirm: !state.isShowConfirm,
+        }))
+    }
+    function clickToSubmitPurchaseOrder() {
+        let data = {
+
+            purchaseOrderNumber: purchaseOrderDataGlobal.orderId
+
+        }
+        dispatch(confirmDetailPurchaseOrder({ data: data, token, token }))
+
+    }
+    function isShowRejectModal() {
+        setEventPage((state) => ({
+            ...state, isShowReject: !state.isShowReject,
+        }))
+    }
+    function clickToCLoseReject(cancelReason) {
+        if (cancelReason !== undefined) {
+            console.log(cancelReason)
+            let data = {
+                id: detailPurchaseState.orderId,
+                cancelReason: cancelReason,
+            }
+            dispatch(rejectPurchaseOrderConfirm({ data: data, token }))
+            // goBackClick()
+        }
+        setEventPage((state) => ({
+            ...state, isShowReject: !state.isShowReject,
+        }))
     }
     const listButton = setListButton(purchaseOrderDataGlobal.status)
-
-    const columns = [
-        {
-            dataField: 'sku',
-            text: 'SKU',
-            editable: false,
-
-        },
-        {
-            dataField: 'name',
-            text: 'Product Name',
-            editable: false,
-        },
-        {
-            dataField: 'orderQuantity',
-            text: 'Quantity',
-            editor: {
-                type: Type.TEXT,
-
-            },
-            editable: !eventPage.isShowEditListProducts,
-            formatter: (cellContent, row, rowIndex) => {
-                return (
-                    <div>
-                        {!eventPage.isShowEditListProducts ? <input className="form-control" value={row.orderQuantity} type="text" /> : row.orderQuantity}
-                    </div>);
-            },
-            validator: (newValue, row, column) => {
-                if (isNaN(newValue)) {
-                    return {
-                        valid: false,
-                        message: 'Price should be numeric'
-                    };
-                }
-                if (newValue <= 0) {
-                    return {
-                        valid: false,
-                        message: 'Price should bigger than 0'
-                    };
-                }
-                return true;
+    function clickToCLoseConfirm(status, pdf, note) {
+        if (status === true) {
+            let data = {
+                purchaseOrderNumber: detailPurchaseState.orderId
             }
-        },
-        {   //neu duoc isShowEdit true thi khong duoc delete
-            hidden: eventPage.isShowEditListProducts,
-            dataField: 'action',
-            text: 'action',
-            editable: false,
-            formatter: (cellContent, row, rowIndex) => {
-                return (
-                    <div>
-                        {!eventPage.isShowEditListProducts ? <button
-                            type="button"
-                            className="btn btn-danger"
-                            onClick={() => clickDeleteProduct(rowIndex)} >
-                            Delete
-                        </button> : ""}
+            if (pdf !== undefined) {
+                sendMailSupplier(pdf, note, purchaseOrderDataGlobal.orderId)
 
+            }
+            dispatch(confirmPurchaseORderByManager({ data: data, token: token }))
+            // goBackClick()
+        }
+        setEventPage((state) => ({
+            ...state, isShowConfirm: !state.isShowConfirm,
+        }))
+    }
 
-                    </div>
-                );
-            },
-        },
-
-
-
-
-    ];
 
 
     useEffect(() => {
@@ -295,30 +383,16 @@ export default function PurchaseOrderConfirm() {
     useEffect(() => {
 
         if (priceQuoteUpdateStatus.requesting === true) {
-            // let timerInterval
             Swal.fire({
                 title: 'Updating!',
                 html: 'Watting...',
                 timerProgressBar: true,
                 didOpen: () => {
                     Swal.showLoading()
-                    // timerInterval = setInterval(() => {
-                    //   const content = Swal.getHtmlContainer()
-                    //   if (content) {
 
-                    //     const b = content.querySelector('b')
-                    //     if (b) {
-                    //       b.textContent = Swal.getTimerLeft()
-                    //     }
-                    //   }
-                    // }, 100)
                 },
-                //   willClose: () => {
 
-                //     clearInterval(timerInterval)
-                //   }
             }).then((result) => {
-                /* Read more about handling dismissals below */
                 if (result.dismiss === Swal.DismissReason.timer) {
                     console.log('I was closed by the timer')
                 }
@@ -342,13 +416,33 @@ export default function PurchaseOrderConfirm() {
     useEffect(() => {
 
         if (mailOrderDataStatus.requesting === true) {
-            alert("Send Mail Dang dc Gui di")
+            Swal.fire({
+                title: 'Mail Sending!',
+                html: 'Watting...',
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+
+                },
+
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    console.log('I was closed by the timer')
+                }
+            })
         }
         if (mailOrderDataStatus.successful === true) {
-            alert("Send Mail Thanh Cong")
+            Swal.fire(
+                'Send Mail Success!',
+                'Click to Close!',
+                'success'
+
+            )
+            dispatch({ type: SEND_MAIL_SERVICE_RESET })
         }
         if (mailOrderDataStatus.errors === true) {
             alert("Send Mail that bai")
+            dispatch({ type: SEND_MAIL_SERVICE_RESET })
         }
 
 
@@ -356,17 +450,180 @@ export default function PurchaseOrderConfirm() {
     useEffect(() => {
 
         if (createPriceQuoteStatus.requesting === true) {
-            alert("Dang Create")
+            Swal.fire({
+                title: 'Creating!',
+                html: 'Watting...',
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+
+                },
+
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    console.log('I was closed by the timer')
+                }
+            })
         }
         if (createPriceQuoteStatus.successful === true) {
-            alert("Creaet Thanh Cong")
+            Swal.fire(
+                'Create Price Quote Success!',
+                'Click to Close!',
+                'success'
+
+            )
+            dispatch({ type: CREATE_PRICE_QUOTE_RESET })
         }
         if (createPriceQuoteStatus.errors === true) {
             alert("create that bai")
+            dispatch({ type: CREATE_PRICE_QUOTE_RESET })
         }
 
 
     }, [createPriceQuoteStatus])
+    useEffect(() => {
+
+        if (confirmPurchaserOrderStatus.requesting === true) {
+            Swal.fire({
+                title: 'Confirming!',
+                html: 'Watting...',
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+
+                },
+
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    console.log('I was closed by the timer')
+                }
+            })
+        }
+        else if (confirmPurchaserOrderStatus.successful === true) {
+            Swal.fire(
+                'Confirm Success!',
+                'Click to Close!',
+                'success'
+
+            )
+            dispatch({ type: CONFIRM_PURCHASE_ORDER_RESET })
+        }
+        else if (confirmPurchaserOrderStatus.errors === true) {
+            alert("Confirm That Bai")
+            dispatch({ type: CONFIRM_PURCHASE_ORDER_RESET })
+
+        }
+
+
+    }, [confirmPurchaserOrderStatus])
+    useEffect(() => {
+
+        if (createPurchaserOrderStatus.requesting === true) {
+            Swal.fire({
+                title: 'Creating!',
+                html: 'Watting...',
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+
+                },
+
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    console.log('I was closed by the timer')
+                }
+            })
+        }
+        else if (createPurchaserOrderStatus.successful === true) {
+            Swal.fire(
+                'Create Purchase Order Success!',
+                'Click to Close!',
+                'success'
+
+            )
+
+            dispatch({ type: CREATE_PURCHASE_ORDER_RESET })
+        }
+        else if (createPurchaserOrderStatus.errors === true) {
+            alert("Confirm That Bai")
+            dispatch({ type: CREATE_PURCHASE_ORDER_RESET })
+
+        }
+
+
+    }, [createPurchaserOrderStatus])
+    useEffect(() => {
+
+
+        if (submitPurchaseOrderStatus.requesting === true) {
+            Swal.fire({
+                title: 'Submiting!',
+                html: 'Watting...',
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+
+                },
+
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    console.log('I was closed by the timer')
+                }
+            })
+        }
+        else if (submitPurchaseOrderStatus.successful === true) {
+            Swal.fire(
+                'Submit Success!',
+                'Click to Close!',
+                'success'
+
+            )
+            dispatch({ type: SUBMIT_PURCHASE_ORDER_RESET })
+        }
+        else if (submitPurchaseOrderStatus.errors === true) {
+            alert("Submit That Bai")
+            dispatch({ type: SUBMIT_PURCHASE_ORDER_RESET })
+
+        }
+
+
+    }, [submitPurchaseOrderStatus])
+    useEffect(() => {
+
+
+        if (rejectPurchaserOrderStatus.requesting === true) {
+            Swal.fire({
+                title: 'Rejecting!',
+                html: 'Watting...',
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+
+                },
+
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    console.log('I was closed by the timer')
+                }
+            })
+        }
+        else if (rejectPurchaserOrderStatus.successful === true) {
+            Swal.fire(
+                'Reject Success!',
+                'Click to Close!',
+                'success'
+
+            )
+            dispatch({ type: REJECT_PURCHASE_ORDER_CONFIRM_RESET })
+        }
+        else if (rejectPurchaserOrderStatus.errors === true) {
+            alert("Reject That Bai")
+            dispatch({ type: REJECT_PURCHASE_ORDER_CONFIRM_RESET })
+
+        }
+
+
+    }, [rejectPurchaserOrderStatus])
     useEffect(() => {
         setDetailPurchaseState({
             ...purchaseOrderDataGlobal
@@ -381,7 +638,30 @@ export default function PurchaseOrderConfirm() {
                 }
             })
         )
-        if (purchaseOrderDataGlobal.status !== "PriceQuote") {
+        setColumns((state) =>
+            columns.filter(column => {
+                if (column.dataField === "price") {
+                
+                    console.log( ["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status))
+                   return  !["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status)
+                }
+                if (column.dataField === "totalAmount") {
+                    return !["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status)
+                }
+                return true
+            })
+            // state.map(column => {
+            //     if(column.dataField==="price"){
+            //         return {...column, hidden:["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status)}
+            //     }
+            //     if(column.dataField ==="totalAmount"){
+            //         return {...column, hidden: ["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status)}
+            //     }
+            //     return column
+            // })
+        )
+        if (!["Requisition", "Done", "PQCanceled", "Requisition"].includes(purchaseOrderDataGlobal.status)) {
+
             setEventPage(state => ({
                 ...state, isShowEdit: true,
                 isCreatePO: true,
@@ -389,13 +669,7 @@ export default function PurchaseOrderConfirm() {
                 isShowEditListProducts: true
             }))
         }
-        else {
-            setEventPage(state => ({
-                ...state, isShowEdit: true,
-                isCreatePO: true,
-                isResend: true,
-            }))
-        }
+
     }, [purchaseOrderDataGlobal])
 
     function editClick(nameEdit) {
@@ -618,24 +892,24 @@ export default function PurchaseOrderConfirm() {
     function changeMailContent(contentEmail) {
         setMailDescription(contentEmail)
     }
-    function sendMailSupplier(pdf) {
+    function sendMailSupplier(pdf, contentMail, orderId) {
         const formData = new FormData();
 
         formData.append('To', 'hungppse130422@fpt.edu.vn')
-        formData.append('Content', mailDescription)
+        formData.append('Content', contentMail)
         formData.append('Subject', 'Gui MAil')
-        formData.append('PurchaseOrderId', purchaseOrderDataGlobal.orderId)
+        formData.append('PurchaseOrderId', orderId)
         formData.append('pdf', pdf)
         dispatch(sendMailService({ data: formData }))
     }
     function clickCreatePriceQuote() {
         dispatch(createPriceQuote({ data: { id: purchaseOrderDataGlobal.orderId }, token: token }))
     }
-    function clostPreviewSendMail(pdf, isResend) {
+    function clostPreviewSendMail(pdf) {
 
 
 
-        sendMailSupplier(pdf)
+        sendMailSupplier(pdf, mailDescription, purchaseOrderDataGlobal.orderId)
 
 
 
@@ -643,6 +917,7 @@ export default function PurchaseOrderConfirm() {
             ...state, isPreview: false
         }))
     }
+    console.log(columnsState)
 
     function goBackClick() {
         history.go(-1)
@@ -680,28 +955,24 @@ export default function PurchaseOrderConfirm() {
                 <div className="p-3">
                     <div class="card">
                         <dl class="row p-5">
-                            <dt class="col-sm-3">Description lists</dt>
-                            <dd class="col-sm-9">A description list is perfect for defining terms.</dd>
+                            <dt class="col-sm-3">Created By:</dt>
+                            <dd class="col-sm-9">Hung Phan</dd>
 
-                            <dt class="col-sm-3">Term</dt>
+                            <dt class="col-sm-3">Email:</dt>
                             <dd class="col-sm-9">
-                                <p>Definition for the term.</p>
-                                <p>And some more placeholder definition text.</p>
+                                hunghanhphuc@gmai.com
                             </dd>
 
-                            <dt class="col-sm-3">Another term</dt>
-                            <dd class="col-sm-9">This definition is short, so no extra paragraphs or anything.</dd>
+                            <dt class="col-sm-3">Phone Number:</dt>
+                            <dd class="col-sm-9">0134156498</dd>
 
-                            <dt class="col-sm-3 text-truncate">Truncated term is truncated</dt>
-                            <dd class="col-sm-9">This can be useful when space is tight. Adds an ellipsis at the end.</dd>
+                            <dt class="col-sm-3 text-truncate">Created Date:</dt>
+                            <dd class="col-sm-9">1020/254</dd>
 
-                            <dt class="col-sm-3">Nesting</dt>
-                            <dd class="col-sm-9">
-                                <dl class="row">
-                                    <dt class="col-sm-4">Nested definition list</dt>
-                                    <dd class="col-sm-8">I heard you like definition lists. Let me put a definition list inside your definition list.</dd>
-                                </dl>
-                            </dd>
+                            <dt class="col-sm-3 text-truncate">Deadline Date:</dt>
+                            <dd class="col-sm-9">1020/254</dd>
+
+
                         </dl>
                         {/* <div class="card-header p-0">
                             <div class="d-flex ">
@@ -768,24 +1039,30 @@ export default function PurchaseOrderConfirm() {
                                 </div>
                             </div>                        </div>
                         <div class="card-body">
+
+
+
+
+
                             <BootstrapTable
                                 keyField='productVariantId'
                                 data={listProductPurchaseOrder}
-                                columns={columns}
+                                columns={columnsState}
                                 striped
                                 hover
                                 condensed
                                 noDataIndication="Table is Empty"
                                 // rowEvents={rowEvents}
+
                                 cellEdit={cellEditFactory({
                                     mode: "click",
                                     blurToSave: true,
-                                    afterSaveCell: (oldValue, newValue, row, column) => { onChangeValueProduct(row) }
+                                    afterSaveCell: (oldValue, newValue, row, column) => { row.totalAmount = row.orderQuantity * row.price }
                                 })}
 
                                 headerClasses="table-header-receipt"
                             />
-                            {!eventPage.isShowEditListProducts ?
+                            {eventPage.isShowEditListProducts === false ?
                                 <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                                     <div class="btn-group me-2" role="group" aria-label="First group">
                                         <button type="button" class="btn btn-outline-primary" onClick={clickSetShowAddProductPage}>Add Product</button>
@@ -819,7 +1096,12 @@ export default function PurchaseOrderConfirm() {
                     mergePriceQuote={mergePriceQuote}
                 />
 
+                <RejectReceiptModal clickToCLoseReject={clickToCLoseReject} isReject={eventPage.isShowReject} />
+                <ConfirmDateModal
 
+                    listProduct={listProductPurchaseOrder}
+                    infoPriceQuote={detailPurchaseState}
+                    clickToCLoseConfirm={clickToCLoseConfirm} isConfirm={eventPage.isShowConfirm} />
                 <PreviewSendMail
                     statusSendMail={eventPage.isPreview}
                     contentEmail={mailDescription}

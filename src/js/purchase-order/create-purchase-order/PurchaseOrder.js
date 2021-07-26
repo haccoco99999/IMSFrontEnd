@@ -68,32 +68,7 @@ export default function PurchaseOrder() {
                 return true;
             }
         },
-        {
-            dataField: 'price',
-            text: 'Unit Price',
-            editable: !eventPage.isShowEdit,
-            formatter: (cellContent, row, rowIndex) => {
-                return (
-                    <div>
-                        {!eventPage.isShowEdit ? <input className="form-control" value={row.price} type="text" /> : row.price}
-                    </div>);
-            },
-            validator: (newValue, row, column) => {
-                if (isNaN(newValue)) {
-                    return {
-                        valid: false,
-                        message: 'Price should be numeric'
-                    };
-                }
-                if (newValue <= 0) {
-                    return {
-                        valid: false,
-                        message: 'Price should bigger than 0'
-                    };
-                }
-                return true;
-            }
-        },
+     
         {
             dataField: 'totalAmount',
             text: 'Total Price',

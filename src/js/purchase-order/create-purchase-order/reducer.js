@@ -38,7 +38,16 @@ import {
 
     SUBMIT_PURCHASE_ORDER_REQUEST,
     SUBMIT_PURCHASE_ORDER_SUCCESS,
-    SUBMIT_PURCHASE_ORDER_ERROR
+    SUBMIT_PURCHASE_ORDER_ERROR,
+    GET_DETAIL_PURCHASE_ORDER_RESET,
+    SEND_MAIL_SERVICE_RESET,
+    CREATE_PRICE_QUOTE_RESET,
+    REJECT_PURCHASE_ORDER_CONFIRM_RESET,
+    CREATE_PURCHASE_ORDER_RESET,
+    EDIT_PRICE_QUOTE_RESET,
+    SUBMIT_PURCHASE_ORDER_RESET,
+    CONFIRM_PURCHASE_ORDER_RESET,
+    SAVE_PRODUCTS_PURCHASE_ORDER_RESET
 } from './contants'
 
 
@@ -162,111 +171,17 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                 errors: "error",
 
             }
-        // case SEND_CONFIRM_PURCHASE_ORDER:
-        //     return {
-        //         ...state,
-        //         requesting: true,
-        //         successful: false,
-        //         messages: "",
-        //         errors: "",
-
-        //     }
-        // case INGORE_PURCHASE_ORDER_CONFIRM:
-        //     return {
-        //         ...state,
-        //         requesting: true,
-        //         successful: false,
-        //         messages: "",
-        //         errors: "",
-
-        //     }
-        // case CONFIRM_PURCHASE_ORDER_BY_MAMAGER:
-        //     return {
-        //         ...state,
-        //         requesting: true,
-        //         successful: false,
-        //         messages: "",
-        //         errors: "",
-
-        //     }
-        // case SAVE_PRODUCTS_PURCHASE_ORDER_REQUEST:
-        //     return {
-        //         ...state,
-        //         requesting: true,
-        //         successful: false,
-        //         messages: "",
-        //         errors: "",
-
-        //     }
+        case GET_DETAIL_PURCHASE_ORDER_RESET:
+            return initalState
+          
         default:
             return state
     }
 }
 
-// const productState = {
-//     requesting: false,
-//     successful: false,
-//     messages: "",
-//     errors: "",
-//     product: {}
-// }
 
-// export const productPurchaseOrderReducer = function productPurchaseOrderReducer(state = productState, action) {
-//     switch (action.type) {
-//         case GET_PRODUCT_PURCHASE_ORDER:
-//             return {
 
-//                 requesting: true,
-//                 successful: false,
-//                 messages: "",
-//                 errors: "",
 
-//             }
-//         case GET_PRODUCT_PURCHASE_ORDER_SUCCESS:
-//             let product = {
-//                 id: action.json.paging.resultList[0].productId,
-//                 orderId: "",
-//                 productVariantId: action.json.paging.resultList[0].id,
-//                 orderQuantity: 0,
-//                 unit: action.json.paging.resultList[0].unit,
-//                 price: 0,
-//                 discountAmount: 0,
-//                 totalAmount: 0,
-//                 name: action.json.paging.resultList[0].name,
-//             }
-
-//             return {
-
-//                 requesting: false,
-//                 successful: true,
-//                 messages: "",
-//                 errors: "",
-//                 product: product,
-
-//             }
-//         case GET_PRODUCT_PURCHASE_ORDER_ERROR:
-//             return {
-
-//                 requesting: false,
-//                 successful: false,
-//                 messages: "",
-//                 errors: "error",
-
-//             }
-//         case SET_DEFAULT_PRODUCT_PURCHASE_ORDER:
-//             return {
-
-//                 requesting: false,
-//                 successful: false,
-//                 messages: "",
-//                 errors: "",
-//                 product: {}
-//             }
-
-//         default:
-//             return state
-//     }
-// }
 
 const mailDataState = {
     requesting: false,
@@ -301,6 +216,8 @@ export const mailOrderData = function SendMailReducer(state = mailDataState, act
                 errors:  true,
 
             }
+        case SEND_MAIL_SERVICE_RESET:
+            return mailDataState
         default:
             return state
     }
@@ -338,6 +255,8 @@ export const createPriceQuote = function createPriceQuoteReducer(state = priceQu
                 errors: "error",
 
             }
+        case CREATE_PRICE_QUOTE_RESET:
+            return priceQuoteCreateState
         default:
             return state
     }
@@ -377,6 +296,8 @@ export const rejectPurchaserOrder = function rejectPurchaserOrder(state = reject
                 errors: true,
 
             }
+        case REJECT_PURCHASE_ORDER_CONFIRM_RESET:
+            return rejectPurchaserOrderState
         default:
             return state
     }
@@ -386,7 +307,7 @@ const createPurchaserOrderState = {
     requesting: false,
     successful: false,
     messages: "",
-    errors: "",
+    errors: false,
 }
 export const createPurchaserOrder = function createPurchaserOrderReducer(state = createPurchaserOrderState, action) {
     switch (action.type) {
@@ -395,7 +316,7 @@ export const createPurchaserOrder = function createPurchaserOrderReducer(state =
                 requesting: true,
                 successful: false,
                 messages: "",
-                errors: "",
+                errors: false,
 
             }
         case CREATE_PURCHASE_ORDER_SUCCESS:
@@ -404,7 +325,7 @@ export const createPurchaserOrder = function createPurchaserOrderReducer(state =
                 requesting: false,
                 successful: true,
                 messages: "",
-                errors: "",
+                errors: false,
 
             }
         case CREATE_PURCHASE_ORDER_ERROR:
@@ -412,9 +333,11 @@ export const createPurchaserOrder = function createPurchaserOrderReducer(state =
                 requesting: false,
                 successful: false,
                 messages: "",
-                errors: "error",
+                errors: true,
 
             }
+        case CREATE_PURCHASE_ORDER_RESET:
+            return createPurchaserOrderState
         default:
             return state
     }
@@ -453,6 +376,8 @@ export const PriceQuoteUpdate = function editPriceQuoteDataReducer(state = price
                 errors: true,
 
             }
+        case EDIT_PRICE_QUOTE_RESET:
+            return priceQuoteDataEditState
         default:
             return state
     }
@@ -491,6 +416,8 @@ export const submitPurchaseOrder = function purchaseOrderConfirmSendedReducer(st
                 errors: true,
 
             }
+        case SUBMIT_PURCHASE_ORDER_RESET:
+            return createConfirmState
         default:
             return state
     }
@@ -530,6 +457,8 @@ export const confirmPurchaserOrder = function confirmPurchaserOrderOfManagerRedu
                 errors: true,
 
             }
+        case CONFIRM_PURCHASE_ORDER_RESET:
+            return confirmPurchaserOrderOfAdminState
         default:
             return state
     }
@@ -570,72 +499,10 @@ export const updatePurchaseOrder = function productPurchaseOrderUpdateStateRedce
                 errors: true
 
             }
+        case SAVE_PRODUCTS_PURCHASE_ORDER_RESET:
+            return productPurchaseOrderUpdateState
         default:
             return state
     }
 }
-
-// const productState = {
-//     requesting: false,
-//     successful: false,
-//     messages: "",
-//     errors: "",
-//     product: {}
-// }
-// export const ignorePurchaseOrderConfirmReducer = function ignorePurchaseOrderConfirmReducer(state = productState, action) {
-//     switch (action.type) {
-//         case GET_PRODUCT_PURCHASE_ORDER:
-//             return {
-
-//                 requesting: true,
-//                 successful: false,
-//                 messages: "",
-//                 errors: "",
-
-//             }
-//         case GET_PRODUCT_PURCHASE_ORDER_SUCCESS:
-//             let product = {
-//                 id: action.json.paging.resultList[0].productId,
-//                 orderId: "",
-//                 productVariantId: action.json.paging.resultList[0].id,
-//                 orderQuantity: 0,
-//                 unit: action.json.paging.resultList[0].unit,
-//                 price: 0,
-//                 discountAmount: 0,
-//                 totalAmount: 0,
-//                 name: action.json.paging.resultList[0].name,
-//             }
-
-//             return {
-
-//                 requesting: false,
-//                 successful: true,
-//                 messages: "",
-//                 errors: "",
-//                 product: product,
-
-//             }
-//         case GET_PRODUCT_PURCHASE_ORDER_ERROR:
-//             return {
-
-//                 requesting: false,
-//                 successful: false,
-//                 messages: "",
-//                 errors: "error",
-
-//             }
-//         case SET_DEFAULT_PRODUCT_PURCHASE_ORDER:
-//             return {
-
-//                 requesting: false,
-//                 successful: false,
-//                 messages: "",
-//                 errors: "",
-//                 product: {}
-//             }
-
-//         default:
-//             return state
-//     }
-// }
 

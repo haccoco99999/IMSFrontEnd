@@ -40,6 +40,7 @@ import {
     CREATE_PURCHASE_ORDER_REQUEST,
     CREATE_PURCHASE_ORDER_ERROR,
     CREATE_PURCHASE_ORDER_SUCCESS,
+    GET_DETAIL_PURCHASE_ORDER_RESET,
 } from './contants'
 
 import handleApiErrors from '../../auth/api-errors'
@@ -340,8 +341,7 @@ function* sendMailPriceQuoteFlow(action){
     try{
       let  json= yield call(sendEmailQuote,action)
         yield put({type:SEND_MAIL_SERVICE_SUCCESS})
-        console.log("day la json send mail", json)
-        // yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
+        yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
     }catch(error){
         yield put({type:SEND_MAIL_SERVICE_ERROR})
     }
@@ -352,7 +352,8 @@ function* createPurchaseOrderFlow(action){
     try{
        
       let  json= yield call(createPurchaseOrderAPI,action)
-        // yield put({type:CREATE_PURCHASE_ORDER_SUCCESS, json})
+        yield put({type:CREATE_PURCHASE_ORDER_SUCCESS, json})
+        yield put({type: GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
     }catch(error){
       
         yield put({type:CREATE_PURCHASE_ORDER_ERROR})
