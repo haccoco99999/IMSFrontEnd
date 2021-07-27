@@ -26,19 +26,32 @@ export default function CreateSupplier() {
   function goBackClick() {
     history.goBack();
   }
+  function checkUndifined() {
+    if (formData.description === undefined)
+      setFormData({ name: "description", value: "" });
+  }
 
-  function onSaveClick() {
-    const data = {
-      supplierName: formData.name,
-      description: formData.description,
-      address: formData.address,
-      salePersonName: formData.sellername,
-      phoneNumber: formData.phone,
-      email: formData.email,
-    };
-    console.log(data);
+  function onSaveClick(event) {
+    event.preventDefault();
+    const form = document.getElementById("productDetailsForm");
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation;
+    } else {
+      checkUndifined();
+      const data = {
+        supplierName: formData.name,
+        description: formData.description,
+        address: formData.address,
+        salePersonName: formData.sellername,
+        phoneNumber: formData.phone,
+        email: formData.email,
+      };
+      console.log(data);
 
-    dispatch(createSupplierAction({ token: token, data: data }));
+      dispatch(createSupplierAction({ token: token, data: data }));
+    }
+    form.classList.add("was-validated");
   }
 
   const handleChangeValue = (event) => {
@@ -49,12 +62,19 @@ export default function CreateSupplier() {
     });
   };
 
-  const listButtons = setListButtonNav()
+  const listButton = setListButtonNav();
 
   function setListButtonNav() {
-    return [{
-      
-    }]
+    return [
+      {
+        isShow: true,
+        title: "Save",
+        class: " btn-primary",
+        action: (e) => onSaveClick(e),
+        type: "submit",
+        form: "productDetailsForm",
+      },
+    ];
   }
 
   useEffect(() => {
@@ -66,119 +86,138 @@ export default function CreateSupplier() {
   return (
     <div>
       {/* todo: task heading */}
-      <div className=" tab-fixed container-fluid  fixed-top">
-        <div className=" d-flex mb-3 justify-content-end mt-4 ">
-          <a className="me-2" onClick={goBackClick}>
-            <h3>Back</h3>
-          </a>
-          <h2 className="id-color fw-bold me-auto">Create new supplier</h2>
-          <div>
-            <button className="btn btn-danger button-tab button me-3">
-              Cancel
-            </button>
-            <button
-              className="btn btn-primary button-tab button me-3"
-              onClick={onSaveClick}
-            >
-              Save
-            </button>
-          </div>
-        </div>
-      </div>
-
+      <NavigationBar
+        actionGoBack={goBackClick}
+        titleBar="Create"
+        status=""
+        listButton={listButton}
+      />
       {/* content */}
 
       <div className="wrapper space-top">
         {/* content field 1  */}
-        <div className="wrapper-content shadow">
-          <div className="title-heading mt-2">
-            <span>Supplier Details</span>
-          </div>
-          <form>
-            {/* Supplier name  */}
-            <div className="mt-3">
-              <label for="search" class="form-label">
-                Supplier Name
-              </label>
-              <input
-                type="text"
-                class="form-control"
-                name="name"
-                value={formData.name || ""}
-                onChange={handleChangeValue}
-              />
-            </div>
-            <div className="mt-3">
-              <label for="search" class="form-label">
-                Seller Name
-              </label>
-              <input
-                type="text"
-                class="form-control"
-                name="sellername"
-                value={formData.sellername || ""}
-                onChange={handleChangeValue}
-              />
-            </div>
-            {/* Email &&  Phone No  */}
-            <div className="mt-3">
-              <div class="row g-3 align-items-center">
-                <div class="col">
-                  <label for="inputEmail" class="col-form-label">
-                    Email
-                  </label>{" "}
+        <div class="card">
+          <div class="card-header">Supplier Information</div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <form
+                id="productDetailsForm"
+                class="row g-3 needs-validation "
+                noValidate
+              >
+                {/* Supplier name  */}
+                <div className="mt-3">
+                  <label for="search" class="form-label">
+                     Name
+                  </label>
                   <input
                     type="text"
                     class="form-control"
-                    name="email"
-                    value={formData.email || ""}
+                    name="name"
+                    value={formData.name || ""}
                     onChange={handleChangeValue}
+                    placeholder="etc. Nike Company"
+                    required
                   />
+                  <div className="invalid-feedback">
+                    PLease input valid name
+                  </div>
                 </div>
-                <div class="col">
-                  <label for="inputphoneno" class="col-form-label">
-                    Phone No.
+                <div className="mt-3">
+                  <label for="search" class="form-label">
+                    Seller Name
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="sellername"
+                    value={formData.sellername || ""}
+                    onChange={handleChangeValue}
+                    placeholder="Type seller name"
+                    required
+                  />
+                  <div className="invalid-feedback">
+                    PLease input valid seller name
+                  </div>
+                </div>
+                {/* Email &&  Phone No  */}
+                <div className="mt-3">
+                  <div class="row g-3 align-items-center">
+                    <div class="col">
+                      <label for="inputEmail" class="col-form-label">
+                        Email
+                      </label>{" "}
+                      <input
+                        type="email"
+                        class="form-control"
+                        name="email"
+                        value={formData.email || ""}
+                        onChange={handleChangeValue}
+                        placeholder="clarice@gmail.com"
+                        pattern="^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        Please input valid email
+                      </div>
+                    </div>
+                    <div class="col">
+                      <label for="inputphoneno" class="col-form-label">
+                        Phone No.
+                      </label>{" "}
+                      <input
+                        type="tel"
+                        class="form-control"
+                        name="phone"
+                        value={formData.phone || ""}
+                        onChange={handleChangeValue}
+                        pattern="((09|03|07|08|05|028|024)+([0-9]{8})\b)"
+                        required
+                        placeholder="0903321332"
+                        // aria-describedby="passwordHelpInline"
+                      />
+                      <div class="invalid-feedback">
+                        Please input valid phone number
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mb-3 mt-3">
+                  <label for="inputEmail" class="col-form-label">
+                    Address
                   </label>{" "}
                   <input
-                    type="tel"
+                    type="text"
+                    name="address"
                     class="form-control"
-                    name="phone"
-                    value={formData.phone || ""}
+                    value={formData.address || ""}
                     onChange={handleChangeValue}
-                    // aria-describedby="passwordHelpInline"
+                    placeholder="Your address"
+                    required
                   />
+                  <div className="invalid-feedback">
+                    Please input valid address
+                  </div>
                 </div>
+                {/* Note  */}
+              </form>
+              <div class="mb-3 mt-3">
+                <label for="description" class="form-label">
+                  Description (optional)
+                </label>
+                <textarea
+                  class="form-control"
+                  name="description"
+                  rows="2"
+                  value={formData.description || ""}
+                  onChange={handleChangeValue}
+                  placeholder="Type your description..."
+                ></textarea>
               </div>
-            </div>
-
-            {/* Note  */}
-            <div class="mb-3 mt-3">
-              <label for="description" class="form-label">
-                Description
-              </label>
-              <textarea
-                class="form-control"
-                name="description"
-                rows="2"
-                value={formData.description || ""}
-                onChange={handleChangeValue}
-              ></textarea>
-            </div>
-          </form>
-        </div>
-
-        {/* content field 2  */}
-        <div className="wrapper-content mt-3 shadow">
-          <div className="title-heading mt-2">
-            <span>Address</span>
-          </div>
-          <input
-            type="text"
-            name="address"
-            class="form-control"
-            value={formData.address || ""}
-            onChange={handleChangeValue}
-          />
+            </li>
+            {/* <li class="list-group-item">A second item</li>
+            <li class="list-group-item">A third item</li> */}
+          </ul>
         </div>
       </div>
     </div>

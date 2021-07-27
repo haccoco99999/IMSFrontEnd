@@ -67,11 +67,7 @@ function App(props) {
     }
   }
   const [hubConnection, setHubConnection] = useState();
-
-
-  const [notification, setNotification] = useState(["Hello", "hello2"]);
-  console.log(notification);
-  function showNotification() {}
+  
   useEffect(() => {
     const createHubConnection = async () => {
       const hubConnection = new HubConnectionBuilder()

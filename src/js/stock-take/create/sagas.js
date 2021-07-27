@@ -1,4 +1,4 @@
-import { call, put, takeEvery,takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import handleApiErrors from "../../auth/api-errors";
 
 import {
@@ -34,8 +34,7 @@ function createStocktake(action) {
 }
 
 function getAllLocations(action) {
-  const url =
-    `${process.env.REACT_APP_API}/package?IsLocationOnly=true&CurrentPage=0&SizePerPage=0`;
+  const url = `${process.env.REACT_APP_API}/package?IsLocationOnly=true&CurrentPage=0&SizePerPage=0`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -54,7 +53,7 @@ function getAllLocations(action) {
 }
 
 function getPackages(action) {
-  const url = `${process.env.REACT_APP_API}/package?SearchQuery=${action.id}&CurrentPage=0&SizePerPage=0&IsLocationOnly=false`;;
+  const url = `${process.env.REACT_APP_API}/package?SearchQuery=${action.id}&IsLocationOnly=false&CurrentPage=0&SizePerPage=0`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -92,17 +91,17 @@ function* getAllLocationsFlow(action) {
 }
 function* getPackagesFlow(action) {
   try {
-    let json = yield call(getPackages,action)
-    yield put({ type:GET_PACKAGE_RESPONSE,json})
+    let json = yield call(getPackages, action);
+    yield put({ type: GET_PACKAGE_RESPONSE, json });
   } catch (error) {
-    console.log(error)
-    yield put({ type: GET_PACKAGE_ERROR})
+    console.log(error);
+    yield put({ type: GET_PACKAGE_ERROR });
   }
 }
 function* watcher() {
   yield takeEvery(CREATE_STOCKTAKE_REQUEST, createStocktakeFlow);
   yield takeLatest(GET_LOCATION_REQUEST, getAllLocationsFlow);
-  yield takeLatest(GET_PACKAGE_REQUEST,getPackagesFlow)
+  yield takeLatest(GET_PACKAGE_REQUEST, getPackagesFlow);
 }
 
 export default watcher;

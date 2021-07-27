@@ -124,6 +124,12 @@ export default function StocktakeDetailsComponent() {
             valid: false,
             message: "Counted should be numeric",
           };
+        } else if (newValue > row.quantity) {
+          setIsChecking(true);
+          return {
+            valid: false,
+            message: "Counted number should be lower than ordered number",
+          };
         } else {
           setIsChecking(false);
         }

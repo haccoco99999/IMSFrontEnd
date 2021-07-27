@@ -48,23 +48,8 @@ export default function CreateStocktakeComponent() {
       note: "",
     },
   ]);
-  // const [selectedPackage, setSelectedPackage] = useState([]);
-
-  function onChangeSelectPackage(event) {
-    const packageDetails = listPackagesStore.find(
-      (element) => element.id === event.target.value
-    );
-    const temp = [...listCheckedItems];
-    temp[event.target.id].quantity = packageDetails.quantity;
-    temp[event.target.id].packageId = packageDetails.id;
-    temp[event.target.id].productVariantId = packageDetails.productVariantId;
-    temp[event.target.id].counted = 0;
-    setListCheckedItems(temp);
-    // setListCheckedItems((state) => [...state, temp]);
-    console.log(listCheckedItems);
-
-    // console.log(listCheckedItems);
-  }
+  const [isTimeForTrigger, setIsTimeForTrigger] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
 
   function clickDeleteCheckItems(rowIndex) {
     console.log(rowIndex);
@@ -100,6 +85,7 @@ export default function CreateStocktakeComponent() {
     const bsModal = Modal.getInstance(modalEle);
     bsModal.hide();
   };
+  //todo: format input value
 
   //todo: bootstrap table declare
 
@@ -113,17 +99,31 @@ export default function CreateStocktakeComponent() {
       text: "Package ID",
       editable: false,
       formatter: (cellContent, row, rowIndex) => {
+        const onChange = (e) => {
+          const packageDetails = listPackagesStore.find(
+            (element) => element.id === e.target.value
+          );
+          console.log(listCheckedItems);
+          listCheckedItems[rowIndex].quantity = packageDetails.quantity;
+          listCheckedItems[rowIndex].packageId = packageDetails.id;
+          listCheckedItems[rowIndex].productVariantId =
+            packageDetails.productVariantId;
+          listCheckedItems[rowIndex].counted = 0;
+          // changeValue(e.target.value, rowIndex);
+          setIsTimeForTrigger(true);
+          setTimeout(() => {
+            setIsTimeForTrigger(false);
+          }, 500);
+        };
+
         return (
           <>
-            {/* <div>
-            Selected Package: {row.id}
-          </div> */}
             <select
-              id={rowIndex}
+              // id={rowIndex}
               class="form-select"
               aria-label="Default select example"
               defaultValue={row.packageId}
-              onChange={onChangeSelectPackage}
+              onChange={onChange}
             >
               <option value={""} disabled>
                 Select package ID
@@ -149,7 +149,10 @@ export default function CreateStocktakeComponent() {
       text: "Quantity",
       editable: false,
 
-      // formatter: (cellContent, row) => <></>,
+      // formatter: (cellContent, row, rowIndex) => {
+      //   if (isTimeForTrigger)
+      //     return <span> {listCheckedItems[rowIndex].quantity}</span>;
+      // },
     },
     {
       dataField: "counted",
@@ -158,12 +161,25 @@ export default function CreateStocktakeComponent() {
       editable: true,
       formatter: (cellContent, row, rowIndex) =>
         (listCheckedItems[rowIndex].counted = row.counted),
-      validator: (newValue, oldValue, row) => {
+      validator: (newValue, row, column) => {
         if (isNaN(newValue)) {
+          setIsChecking(true);
           return {
             valid: false,
             message: "Price should be numeric",
           };
+        } else {
+          // if (newValue > row.quantity) {
+          //   console.log(row.quantity);
+          //   setIsChecking(true);
+          //   return {
+          //     valid: false,
+          //     message: "Counted number should be lower than ordered number",
+          //   };
+          // }
+          console.log(newValue);
+          console.log(column);
+          setIsChecking(false);
         }
       },
     },
@@ -201,6 +217,7 @@ export default function CreateStocktakeComponent() {
         title: "Submit",
         class: " btn-primary",
         action: () => onClickSubmit(),
+        disabled: isChecking,
       },
     ];
   }
@@ -364,7 +381,7 @@ export default function CreateStocktakeComponent() {
   //   const bsToast = Toast.getInstance(toastEle);
   //   bsToast.hide();
   // };
-
+  const [count, setCount] = useState(0);
   return (
     <div>
       <NavigationBar
@@ -430,13 +447,6 @@ export default function CreateStocktakeComponent() {
             </li>
           </ul>
         </div>
-        {/* <div className="shadow wrapper-content">
-          <div className="mt-3">
-            <div className="title-heading mt-2">
-              <span>Select Location</span>
-            </div>
-          </div>
-        </div> */}
       </div>
       <ListLocationsModal
         modalRef={modalRef}

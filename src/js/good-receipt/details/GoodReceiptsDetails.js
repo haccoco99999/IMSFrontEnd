@@ -103,21 +103,6 @@ export default function details() {
 
   return (
     <div>
-      {/* <div className=" tab-fixed container-fluid  fixed-top">
-        <div className=" tab-fixed tab-fixed--details container-fluid  fixed-top">
-          <div className=" d-flex  mb-3 justify-content-start mt-4 ">
-            {isFromManagerPage ? (
-              <a className="me-2" onClick={goBackClick}>
-                <h3>Back</h3>
-              </a>
-            ) : (
-              <a className="me-2" onClick={goToManagerPage}>
-                <h3>Home Page</h3>
-              </a>
-            )}
-          </div>
-        </div>
-      </div> */}
       <NavigationBar
         listButton={listButton}
         titleBar="Details"
