@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import client from "./user/reducer";
 import login from "./login/reducer";
-import updateProfile from "./about-account/reducer";
+import updateProfileClient from "./about-account/reducer";
 import listPriceQuote from "./Gallery/reducer";
 import controlPurchaseQuotePage from "./purchase-order/reducer";
 import detailPriceQuote from "./purchase-order/detail-purchase-order/reducer";
@@ -21,30 +21,41 @@ import getAllSuppliersReducer from "./supplier/manager/reducer";
 import getDetailsSupplierReducer from "./supplier/details/reducer";
 import getCreatedFormPurchaseRequisitionReducer from "./sale-man/create/reducer";
 import createProductReducer from "./product/create/reducer";
-import createAccountReducer from "./manage-account/create/account/reducer";
+import {createUserAccountReducer, getUserAccountDetail, updateAccountDetail} from "./manage-account/create/account/reducer";
+import { createRolePermission,DetailRolePermission , UpdateRolePermission } from "./manage-account/create/role/reducer";
+import { getDetailPurchaseReducer,
+  rejectPurchaserOrder,
+  mailOrderData, PriceQuoteUpdate ,
+  submitPurchaseOrder,
+  confirmPurchaserOrder,
+   updatePurchaseOrder,
+   createPurchaserOrder,
+   createPriceQuote,
+   
+  } from "./purchase-order/create-purchase-order/reducer";
 import getDetailsProductReducer from "./product/details/reducer";
 import createSupplierReducer from "./supplier/create/reducer";
 import getAllStocktakeReducer from "./stock-take/manager/reducer";
 import getDetailsStocktakeReducer from "./stock-take/details/reducer";
 import notificationReducer from "./notification-component/reducer";
-import {
-  createUserAccountReducer,
-  getUserAccountDetail,
-  updateAccountDetail,
-} from "./manage-account/create/account/reducer";
-import {
-  createRolePermission,
-  DetailRolePermission,
-  UpdateRolePermission,
-} from "./manage-account/create/role/reducer";
-import { GetAllGoodIssues } from "./good-issue/manager/reducer";
-import { DetailGoodIssue } from "./good-issue/good-issue-detail/reducer";
+// import {
+//   createUserAccountReducer,
+//   getUserAccountDetail,
+//   updateAccountDetail,
+// } from "./manage-account/create/account/reducer";
+// import {
+//   createRolePermission,
+//   DetailRolePermission,
+//   UpdateRolePermission,
+// } from "./manage-account/create/role/reducer";
+import { GetAllGoodIssues, getAllGoodIssuesRequisition } from "./good-issue/manager/reducer";
+import{ DetailGoodIssue, CreateGoodIssue , UpadateGoodIssue, RejectGoodIssue} from "./good-issue/good-issue-detail/reducer";
 import createStocktakeReducer from "./stock-take/create/reducer";
 import locationManagetReducer from "./product/manager/location-manager/reducer";
 const IndexReducer = combineReducers({
   login,
   client,
-  updateProfile,
+  updateProfileClient,
   listPriceQuote,
   controlPurchaseQuotePage,
   detailPriceQuote,
@@ -63,19 +74,31 @@ const IndexReducer = combineReducers({
   getDetailsSupplierReducer,
   getCreatedFormPurchaseRequisitionReducer,
   createProductReducer,
-  createAccountReducer,
+  createUserAccountReducer, getUserAccountDetail, updateAccountDetail,
   getDetailsProductReducer,
   createSupplierReducer,
   getAllStocktakeReducer,
   getDetailsStocktakeReducer,
   createProductReducer,
   // createUserAccountReducer,getDetailsProductReducer,getUserAccountDetail, updateAccountDetail,
-  // createRolePermission, DetailRolePermission, UpdateRolePermission,
-  DetailGoodIssue,
-  GetAllGoodIssues,
+  createRolePermission,DetailRolePermission , UpdateRolePermission ,
+
   createStocktakeReducer,
   locationManagetReducer,
   notificationReducer,
+
+  //purchase order reducer
+  getDetailPurchaseReducer,
+  rejectPurchaserOrder,
+  mailOrderData, PriceQuoteUpdate ,
+  submitPurchaseOrder,
+  confirmPurchaserOrder,
+   updatePurchaseOrder,
+   createPurchaserOrder,
+   createPriceQuote,
+   //Good issue
+   GetAllGoodIssues, getAllGoodIssuesRequisition,
+   DetailGoodIssue, CreateGoodIssue , UpadateGoodIssue, RejectGoodIssue,
 });
 
 export default IndexReducer;

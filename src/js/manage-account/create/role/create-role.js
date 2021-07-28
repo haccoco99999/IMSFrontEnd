@@ -1,90 +1,238 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
+import { createRole } from './action'
 import "../../accountmanager.css";
 
-const formReducer = (state, event) => {
-  return {
-    ...state,
-    [event.name]: event.value,
-  };
-};
+
 
 export default function AddNewRole() {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  const [formData, setFormData] = useReducer(formReducer, {});
-  const [categorySelected, setCategorySelected] = useState({});
 
-  //9 loai trang khac nhau
-  const [productPermission, setProductPermission] = useState([]);
-  const [goodReceiptPermission, setGoodReceiptPermission] = useState([]);
-  const [purchaseOrderPermission, setPurchaseOrderPermission] = useState([]);
-  const [purchaseRequisitionPermission, setPurchaseRequisitionPermission] =
-    useState([]);
-  const [priceQuoteOrder, setPriceQuoteOrder] = useState([]);
-  const [goodIssuePermission, setGoodIssuePermission] = useState([]);
-  const [stocktakePermission, setStocktakePermission] = useState([]);
-  const [supplierPermission, setSupplierPermission] = useState([]);
-  const [accountPermission, setAccountPermission] = useState([]);
-  const [reportPermission, setReportPermission] = useState([]);
-  const [pageClaimDictionary, setPageClaimDictionary] = useState({});
 
-  const handleChange = (event) => {
-    const isCheckbox = event.target.type === "checkbox";
-    setFormData({
-      name: event.target.name,
-      value: isCheckbox ? event.target.checked : event.target.value,
-    });
+  const token = useSelector(state => state.client.token)
+  const permissions = [
+    { name: "Create", isChecked: false },
+    { name: "Read", isChecked: false },
+    { name: "Update", isChecked: false },
+    { name: "Delete", isChecked: false },
+    { name: "Approve", isChecked: false },
+    { name: "Reject", isChecked: false }
+  ]
+  const pagePermissions = [
+    {
+      isCheck: false,
+
+      name: "StockTakeOrder",
+      listPermission: [
+        ...permissions
+      ],
+    }, {
+      isCheck: false,
+
+      name: "GoodsIssue",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "UserDetail",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "RolePermissionUpdate",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Product",
+
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+
+      isCheck: false,
+
+      name: "PriceQuoteOrder",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "PurchaseOrder",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Requisition",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Supplier",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "GoodsReceipt",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Transaction",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Registration",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Category",
+      listPermission: [
+        ...permissions
+      ]
+    },
+    {
+      isCheck: false,
+
+      name: "Report",
+      listPermission: [
+        ...permissions
+      ]
+    },
+  ]
+
+  const [listPermissionState, setListPermissionState] = useState(pagePermissions)
+  const handleChangePermissionAll = (event) => {
+
+    setListPermissionState([...listPermissionState.map((item) => item.name === event.target.name ?
+      {
+        ...item, isCheck: event.target.checked,
+        listPermission: item.listPermission.map(permission => ({ ...permission, isChecked: event.target.checked }))
+      }
+
+
+      : item)])
+
+
   };
 
+
+
+  const handleChangePermission = (event, parentName, index) => {
+
+    let temp = [...listPermissionState.map((item) => item.name === parentName ?
+      {
+        ...item,
+        listPermission: item.listPermission.map(permission => permission.name === event.target.name ? { ...permission, isChecked: event.target.checked } : permission)
+      }
+      : item)]
+
+    //Check all
+    let isCheckedParent = false
+    temp[index].listPermission.forEach(permission => {
+      if (permission.isChecked) {
+        isCheckedParent = true
+      }
+
+    })
+    temp[index].isCheck = isCheckedParent
+    setListPermissionState([
+      ...temp]
+    )
+
+
+  };
+
+  const [infoRole, setInfoRole] = useState({
+    roleName: "",
+  })
+  console.log(listPermissionState)
   function goBackClick() {
     history.goBack();
   }
 
-  function onSaveClick(e) {
-    e.preventDefault();
+  function onSaveClick() {
+    let cleanPermission = {}
 
-    dataDictionary();
-  }
+    listPermissionState.forEach(item => {
+      if (item.isCheck) {
+        let listPermission = []
+        item.listPermission.map(permission => {
 
-  function dataDictionary(e) {
-    Object.entries(formData).map(([name, value]) => {
-      console.log(name);
-      console.log(value);
-      if (name !== "name") {
-        var str = name.split(".");
-        if (name !== "productPermission") {
-          if (str[0] === "productPermission" && value) {
-            setProductPermission((oldArray) => [...oldArray, str[1]]);
+          if (permission.isChecked) {
+            listPermission.push(permission.name)
           }
-        }
-        if (name !== "goodReceiptPermission") {
-          if (str[0] === "goodReceiptPermission" && value) {
-            setGoodReceiptPermission((oldArray) => [...oldArray, str[1]]);
-          }
-        }
-        if (name !== "PurchaseOrder") {
-          if (str[0] === "PurchaseOrder" && value) {
-            setPurchaseOrderPermission((oldArray) => [...oldArray, str[1]]);
-          }
-        }
-        if (name !== "PriceQuoteOrder") {
-          if (str[0] === "PriceQuoteOrder" && value) {
-            setPriceQuoteOrder((oldArray) => [...oldArray, str[1]]);
-          }
-        }
+        })
+        cleanPermission[item.name] = listPermission
       }
-    });
-    console.log(productPermission);
+    })
+    const data = {
+      roleName: infoRole.roleName,
+      pageClaimDictionary: cleanPermission
+    }
+    // console.log(data)
+    dispatch(createRole({ data: data, token: token }))
+    // const data = {
+    //   roleName: infoRole.roleName,
+    //   pageClaimDictionary: listPermissionState
+    // }
+
+    // dispatch(createRole({data: data, token: token}))
   }
-  console.log(pageClaimDictionary);
+  // const nodes = [{
+  //   value: 'mars',
+  //   label: 'Mars',
+  //   children: [
+  //     { value: 'phobos', label: 'Phobos' },
+  //     { value: 'deimos', label: 'Deimos' },
+  //   ],
+  // }];
+
+  // console.log(pagePermissions)
+  // console.log(Object.assign({}, pagePermissions))
+
+
 
 
   return (
     <div className="home_content ">
+
       {/* todo: task heading */}
       <div className=" tab-fixed container-fluid  fixed-top">
         <div className=" d-flex mb-3 justify-content-end mt-4 ">
@@ -97,7 +245,7 @@ export default function AddNewRole() {
             <button
               type="button"
               className="btn btn-primary button-tab me-3 text-white"
-              onClick={dataDictionary}
+              onClick={onSaveClick}
             >
               Save
             </button>
@@ -118,366 +266,68 @@ export default function AddNewRole() {
                   Name
                 </label>
                 <input
+                  onChange={(e) => setInfoRole(state => ({ ...state, [e.target.name]: e.target.value }))}
                   type="text"
                   class="form-control"
                   placeholder="Name of role"
-                  value=""
+                  value={infoRole.roleName}
+                  name="roleName"
                 />
               </div>
             </div>
+
           </form>
         </div>
 
         {/* content 2 */}
         <div className="wrapper-content shadow mt-3">
           {/* check1 */}
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              name="productPermission"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapsediv1"
-              onChange={handleChange}
-              checked={formData["productPermission"] || false}
-            />
-            <label class="form-check-label">Product</label>
-          </div>
-          <div id="collapsediv1" class="collapse">
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="productPermission.Read"
-                  checked={formData["productPermission.Read"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Read product</label>
-              </div>
+          {listPermissionState.map((items, index) => {
+            return (
+              <div>
+                <div class="form-check" >
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name={items.name}
+                    checked={items.isCheck}
 
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="productPermission.Create"
-                  checked={formData["productPermission.Create"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Create new product</label>
-              </div>
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="productPermission.Update"
-                  checked={formData["productPermission.Update"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Update product</label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="productPermission.Delete"
-                  checked={formData["productPermission.Delete"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Delete product</label>
-              </div>
+                    onChange={e => handleChangePermissionAll(e)}
+                  // checked={formData["productPermission"] || false}
+                  />
+                  <label class="form-check-label" data-bs-toggle="collapse"
+                    data-bs-target={"#collapsediv" + index}>{items.name}</label>
+                </div>
+                <div id={"collapsediv" + index} class="collapse">
+                  {items.listPermission.map((childItem, idx) => {
 
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="productPermission.Approve"
-                  checked={formData["productPermission.Approve"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Approve</label>
-              </div>
+                    return (
+                      <div class="d-flex justify-content-center">
+                        {/* {console.log(checkRolePermission(items[0], childItem))} */}
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name={childItem.name}
+                          checked={childItem.isChecked}
+                          // checked={checkRolePermission(items[0], childItem)}
+                          onChange={e => handleChangePermission(e, items.name, index)}
+                        />
+                        <label class="form-check-label">{childItem.name}</label>
 
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="productPermission.Reject"
-                  checked={formData["productPermission.Reject"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Reject</label>
-              </div>
-            </div>
-          </div>
-          {/* Check2 */}
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              name="goodReceiptPermission"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapsediv2"
-              onChange={handleChange}
-              checked={formData["goodReceiptPermission"] || false}
-            />
-            <label class="form-check-label">Goods Receipt</label>
-          </div>
+                      </div>
+                    )
+                  })}
 
-          <div id="collapsediv2" class="collapse">
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="goodReceiptPermission.Read"
-                  checked={formData["goodReceiptPermission.Read"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Read product</label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="goodReceiptPermission.Create"
-                  checked={formData["goodReceiptPermission.Create"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Read product</label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="goodReceiptPermission.Update"
-                  checked={formData["goodReceiptPermission.Update"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Update</label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="goodReceiptPermission.Delete"
-                  checked={formData["goodReceiptPermission.Delete"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Delete</label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="goodReceiptPermission.Approve"
-                  checked={formData["goodReceiptPermission.Approve"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Approve </label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="goodReceiptPermission.Reject"
-                  checked={formData["goodReceiptPermission.Reject"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Reject </label>
-              </div>
-            </div>
-          </div>
 
-          {/* Check3 */}
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              name="PriceQuoteOrder"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapsediv2"
-              onChange={handleChange}
-              checked={formData["PriceQuoteOrder"] || false}
-            />
-            <label class="form-check-label">PriceQuoteOrder</label>
-          </div>
+                </div>
 
-          <div id="collapsediv2" class="collapse">
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="PriceQuoteOrder.Read"
-                  checked={formData["PriceQuoteOrder.Read"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Read </label>
               </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="PriceQuoteOrder.Create"
-                  checked={formData["PriceQuoteOrder.Create"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Create </label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="PriceQuoteOrder.Update"
-                  checked={formData["PriceQuoteOrder.Update"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Update</label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="PriceQuoteOrder.Delete"
-                  checked={formData["PriceQuoteOrder.Delete"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Delete</label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="PriceQuoteOrder.Approve"
-                  checked={formData["PriceQuoteOrder.Approve"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Approve </label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="PriceQuoteOrder.Reject"
-                  checked={formData["PriceQuoteOrder.Reject"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Reject </label>
-              </div>
-            </div>
-          </div>
+            )
+          })}
 
-          {/* Check4 */}
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              name="PurchaseOrder"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapsediv2"
-              onChange={handleChange}
-              checked={formData["PurchaseOrder"] || false}
-            />
-            <label class="form-check-label">Purchase Order</label>
-          </div>
 
-          <div id="collapsediv2" class="collapse">
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="PurchaseOrder.Read"
-                  checked={formData["PurchaseOrder.Read"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Read </label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="PurchaseOrder.Create"
-                  checked={formData["PurchaseOrder.Create"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Create </label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="PurchaseOrder.Update"
-                  checked={formData["PurchaseOrder.Update"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Update</label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="PurchaseOrder.Delete"
-                  checked={formData["PurchaseOrder.Delete"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Delete</label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="PurchaseOrder.Approve"
-                  checked={formData["PurchaseOrder.Approve"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Approve </label>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <div class="form-check d-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="PurchaseOrder.Reject"
-                  checked={formData["PurchaseOrder.Reject"] || false}
-                  onChange={handleChange}
-                />
-                <label class="form-check-label">Reject </label>
-              </div>
-            </div>
-          </div>
+
+
         </div>
       </div>
     </div>
@@ -486,6 +336,6 @@ export default function AddNewRole() {
 
 
 
-function ComponentCheck(){
-  
+function ComponentCheck() {
+
 }

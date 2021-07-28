@@ -1,5 +1,4 @@
-
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from 'draftjs-to-html';
@@ -7,38 +6,44 @@ import htmlToDraft from 'html-to-draftjs';
 import {connect} from 'react-redux'
 import './text-editor-compoent.css'
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
-class TextEditor extends React.Component{
-    constructor(props){
-        super(props)
-        const html = this.props.mailDescription;
+ export default function TextEditor(props) {
+    // console.log({...EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft("html").contentBlocks))})
+  
+    const [editorState, setEditorState] = useState( EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft("html").contentBlocks)))
+    useEffect(()=>{
+
+       
+        if(props.setDefault){
+   
+        const html = props.contentEmail
         const contentBlock = htmlToDraft(html)
-        if(contentBlock){
+      
             
             const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks)
-            const editorState = EditorState.createWithContent(contentState)
-            this.state = {
-                editorState,
+           
+            setEditorState(
+                EditorState.createWithContent(contentState)
+            )
+            
             }
-            
-            console.log(this.state.editorState.getCurrentContent())
-        }
-        this.onEditorStateChange = this.onEditorStateChange.bind(this)
-       
+
+    
+    },[props.contentEmail])
+
+     console.log(editorState)
+    
+    
+  function  onEditorStateChange(editorState){
+      
+        props.changeMailContent(draftToHtml(convertToRaw(editorState.getCurrentContent())))
+        setEditorState(
+            editorState
+        )
     }
-    onEditorStateChange(editorState){
-        this.setState({
-            editorState,
-        })
-    }
-    componentWillReceiveProps(){
-        if(!this.props.controlPurchaseQuotePage.isClickToPreviewPriceQuote){
-            
-            this.props.changeMailContent(this.state.editorState)
-        }
-    }
+
     // draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
-    render(){
-        const { editorState } = this.state;
+    
+     
         return(
             <div>
               
@@ -62,20 +67,20 @@ class TextEditor extends React.Component{
                
                 link: { inDropdown: true },
                 }}
-              onEditorStateChange={this.onEditorStateChange}
+              onEditorStateChange={onEditorStateChange}
                 
             />
             {/* draftToHtml(convertToRaw(editorState.getCurrentContent())) */}
-            {/* {this.props.controlPurchaseQuotePage.isClickToSendMailPriceQuote?() =>this.props.changeMailContent("abc"):""} */}
+            {/* {props.controlPurchaseQuotePage.isClickToSendMailPriceQuote?() =>props.changeMailContent("abc"):""} */}
             </div>
         );
-    }
+    
    
 }
 
-const mapStateToProps = state => ({
-    controlPurchaseQuotePage: state.controlPurchaseQuotePage,
-})
+// const mapStateToProps = state => ({
+//     controlPurchaseQuotePage: state.controlPurchaseQuotePage,
+// })
 
-const connected = connect(mapStateToProps)(TextEditor)
-export default connected
+// const connected = connect(mapStateToProps)(TextEditor)
+// export default connected

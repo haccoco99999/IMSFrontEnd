@@ -26,6 +26,10 @@
 .priceQuoteOrderNumber{
     color: #4A94FC;
 }
+.footer-gallery{
+    display: flex;
+    justify-content: space-between;
+}
 
 
 

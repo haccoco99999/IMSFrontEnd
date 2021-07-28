@@ -57,7 +57,7 @@ function AddAccountModal() {
       address: formData.address,
       dateOfBirth: "2021-06-26T19:13:19.555Z",
     };
-    dispatch(CreateAccountAction({data:data, token: token }));
+    // dispatch(CreateAccountAction({data:data, token: token }));
     // console.log('Hello')
   }
 

@@ -15,7 +15,6 @@ import Table from "../../../table-receipt/ListReceiptsTable";
 function AccountManager() {
   let history = useHistory();
   let dispatch = useDispatch();
-
   const { data, token, pageCount } = useSelector((state) => ({
     data: state.getAllAccountsReducer.listAccounts,
     token: state.client.token,
@@ -48,10 +47,13 @@ function AccountManager() {
   }
 
   function onClickToDetails(row) {
-    history.push("/homepage/sale-man/details", {
-      purchaseRequisitionId: row.id,
+   
+    history.push("/homepage/manage-account/create-account", {
+      userId: row.id,
+      status:"EDITUSER"
     });
   }
+  
   useEffect(() => {
     dispatch(
       Action({
@@ -80,14 +82,17 @@ function AccountManager() {
   // }, []);
 
   // console.log(listAccounts);
+
+  function onRowClick(row){
+    history.push("/homepage/manage-account/edit-user-account");
+  }
+  function redirectCreateAccount(){
+    history.push("/homepage/manage-account/create-account", {status: "CREATEUSER"});
+  }
   return (
     <>
       <div>
-        <a
-          class="btn btn-default me-md-2 add"
-          data-bs-target="#AddAccountModal"
-          data-bs-toggle="modal"
-        >
+        <a onClick={() => redirectCreateAccount()}>
           <svg
             class="svg-icon"
             xmlns="http://www.w3.org/2000/svg"
@@ -134,6 +139,7 @@ function AccountManager() {
           currentPage={currentPage}
           backPagingClick={backPagingClick}
           nextPagingClick={nextPagingClick}
+          onRowClick={onClickToDetails}
         />
       </div>
 

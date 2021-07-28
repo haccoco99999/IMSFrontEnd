@@ -1,7 +1,7 @@
 import React, {  useState, useEffect } from "react";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import "./App.css";
-import AboutAccount from "./about-account/about-account";
+import ProfileClient from "./about-account/ProfileClient";
 import AboutSoftware from "./about-software/about-software";
 import Dashboard from "./dashboard/dashboard";
 import Purchase from "./purchase-order/purchase-order";
@@ -14,6 +14,7 @@ import Supplier from "./supplier/supplier";
 import Notification from "./notification/notification";
 import ManageAccount from "./manage-account/manage-account";
 import SaleManPage from "./sale-man/sale-man";
+
 import { connect, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
@@ -362,7 +363,7 @@ function App(props) {
           <ManageAccount />
         </Route>
         <Route path="/homepage/about-my-account">
-          <AboutAccount />
+          <ProfileClient/>
         </Route>
         <Route path="/homepage/about-software">
           <AboutSoftware />

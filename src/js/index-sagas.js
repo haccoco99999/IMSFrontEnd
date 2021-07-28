@@ -1,9 +1,14 @@
 import LoginSaga from "./login/sagas";
 import UpdateSaga from "./about-account/sagas";
 import PriceQuoteSaga from "./Gallery/sagas";
-import DetailPriceQuote from "./purchase-order/detail-purchase-order/sagas";
-import SendMailPriceQuote from "./purchase-order/create-price-quote/sagas";
+
+
 import searchPurchaseOrder from "./purchase-order/purchase-quote-order/sagas";
+import PurchaseOrderSaga from "./purchase-order/create-purchase-order/sagas";
+
+
+
+
 import getGoodsReceipt from "./good-receipt/manager/sagas";
 import getAllRole from "./manage-account/manager/role-manager/sagas";
 import getAllConfirmedPurchaseOrder from "./good-receipt/create/sagas";
@@ -20,7 +25,7 @@ import createProduct from "./product/create/sagas";
 import createAccount from "./manage-account/create/account/sagas";
 import getDetailsProduct from "./product/details/sagas";
 import createSupplier from "./supplier/create/sagas";
-import getAllGoodIssue from "./good-issue/manager/sagas";
+// import getAllGoodIssue from "./good-issue/manager/sagas";
 import getAllStocktake from "./stock-take/manager/sagas";
 import getDetailsStocktake from "./stock-take/details/sagas";
 import GetDetailGoodIssueSaga from "./good-issue/good-issue-detail/sagas";
@@ -34,9 +39,13 @@ export default function* IndexSaga() {
     LoginSaga(),
     UpdateSaga(),
     PriceQuoteSaga(),
-    DetailPriceQuote(),
-    SendMailPriceQuote(),
+    //////PQ PO
+    PurchaseOrderSaga(),
     searchPurchaseOrder(),
+    ////Good -u
+    GetDetailGoodIssueSaga(),
+    listGoodIssueSaga(),
+    /////
     getGoodsReceipt(),
     getAllRole(),
     getAllConfirmedPurchaseOrder(),
@@ -53,7 +62,6 @@ export default function* IndexSaga() {
     createAccount(),
     getDetailsProduct(),
     createSupplier(),
-    getAllGoodIssue(),
     getAllStocktake(),
     getDetailsStocktake(),
     createStocktake(),

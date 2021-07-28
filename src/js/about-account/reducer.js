@@ -13,7 +13,7 @@ const initalState = {
 }
 
 
-const reducer = function updateReducer(state = initalState, action){
+const updateProfileClient = function updateReducer(state = initalState, action){
     switch(action.type){
         case UPDATE_PROFILE_REQUESTING:
            console.log("update");
@@ -50,4 +50,4 @@ const reducer = function updateReducer(state = initalState, action){
     }
 }
 
-export default reducer
+export default updateProfileClient

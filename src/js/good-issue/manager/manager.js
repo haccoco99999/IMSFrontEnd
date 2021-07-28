@@ -5,62 +5,89 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import Progress from "../progress/progressing";
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
-import { getAllGoodIssue } from './action'
+import { getAllGoodIssue ,getAllGoodIssueRequisition } from './action'
 import { useDispatch, useSelector } from "react-redux";
 import DetailGoodIssue from "../good-issue-detail/GoodIssueDetail";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import SearchTest from "./search";
 import { useHistory } from "react-router-dom";
+import Gallery from "../../Gallery/Gallery";
 export default function manager() {
 
   let history = useHistory()
-  let goodIssueStore = useSelector(state => state.GetAllGoodIssues)
+  let {goodIssueStore,goodIssueRequisition } = useSelector(state => ({goodIssueStore :state.GetAllGoodIssues,
+    goodIssueRequisition : state.getAllGoodIssuesRequisition,
+  }))
   let [listGoodIssues, setListGoodIssues] = useState([])
+  let [listGoodIssueRequisition, setListGoodIssueRequisition] = useState([])
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getAllGoodIssue(""))
+    dispatch(getAllGoodIssueRequisition())
   }, [])
   useEffect(() => {
     setListGoodIssues(
       goodIssueStore.infoListGoodIssue.listGoodIssue
     )
-  }, [goodIssueStore])
+    setListGoodIssueRequisition(
+      goodIssueRequisition.infoListGoodIssueRequisition.listGoodIssueRequisition
+    )
+  }, [goodIssueStore, goodIssueRequisition])
   console.log(listGoodIssues)
-  const columns = [{
-    dataField: 'id',
-    text: 'Goods Issue ID'
-    
-  }, {
-    dataField: 'goodsIssueNumber',
-    text: 'Goods Issue Request ID',
-    // formatter: (cell, row) =>{
-    //   return(
-    //     <SearchTest/>
-    //   )
-    // }
-  }, 
-  {
-    dataField: 'status',
-    text: 'Status'
-  },
-  {
-    dataField: 'createdByName',
-    text: 'Create By'
-  },
-  {
-    dataField: 'deliveryDate',
-    text: 'Delivery Date'
-  },
-  {
-    dataField: 'createdDate',
-    text: 'Create Date'
-  },
-  {
-    dataField: 'deliveryMethod',
-    text: 'Delivery Method'
-  }
+  const columns = [
+    {
+      dataField: 'goodsIssueNumber',
+      text: 'Goods Issue Request ID',
 
-];
+    },
+    {
+      dataField: 'status',
+      text: 'Status',
+      align:'center',
+      formatter: (cell, row, rowIndex, extraData) => {
+
+        if (row.status === "Packing") {
+            return <span class="badge bg-warning text-dark">Packing</span>
+
+        }
+        if (row.status === "Shipping") {
+            return <span class="badge bg-primary">Shipping</span>
+
+
+        }
+        if (row.status === "Completed") {
+            return <span class="badge bg-success">Completed</span>
+
+
+        }
+      
+        if (row.status === "Canceled") {
+            return <span class="badge bg-danger">Canceled</span>
+
+
+        }
+        return row.status
+
+    }
+    },
+    {
+      dataField: 'createdByName',
+      text: 'Create By'
+    },
+    {
+      dataField: 'deliveryDate',
+      text: 'Delivery Date'
+    },
+    {
+      dataField: 'createdDate',
+      text: 'Create Date'
+    },
+    {
+      dataField: 'deliveryMethod',
+      text: 'Delivery Method'
+    }
+
+  ];
   const products = [
     {
       id: 1,
@@ -81,18 +108,28 @@ export default function manager() {
 
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
-      history.push("/homepage/good-issue/detail", {id: row.id})
-     
+      history.push("/homepage/good-issue/detail", { id: row.id, status: row.status })
+
     },
     // onMouseEnter: (e, row, rowIndex) => {
     //   console.log(`enter on row with index: ${rowIndex}`);
     // }
   };
+  function clickGoodIssueRequisition(data){
+    history.push("/homepage/good-issue/detail", { id: data.id, status: data.status })
+  }
   const hiddenRowKeys = [-1, -3];
   const { ToggleList } = ColumnToggle;
   return (
     <div className="space-top-heading">
       {/* title */}
+      <div className="title-heading mt-2">
+        <span>Goods Issues Requisition</span>
+      </div>
+      <Gallery listData={listGoodIssueRequisition}
+      clickGoodIssueRequisition={clickGoodIssueRequisition}
+      />
+
       <div className="title-heading mt-2">
         <span>Goods Issues</span>
       </div>
@@ -184,24 +221,7 @@ export default function manager() {
             hiddenRows={hiddenRowKeys}
             headerClasses="table-header-receipt"
           />
-          <ToolkitProvider
-            keyField="id"
-            data={products}
-            columns={columns}
-            columnToggle
-          >
-            {
-              props => (
-                <div>
-                  <ToggleList {...props.columnToggleProps} />
-                  <hr />
-                  <BootstrapTable
-                    {...props.baseProps}
-                  />
-                </div>
-              )
-            }
-          </ToolkitProvider>
+
           {/* end table */}
         </div>
       </div>

@@ -1,8 +1,26 @@
-.name-oder{
-    min-width: 768px;
-    max-width: 1100px;
+/* .name-oder{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
 }
-.name-oder button{
+.confirm-bar-left{
+    display: flex;
+    width: 250px;
+    justify-content: space-evenly;
+}
+.confirm-bar-right{
+    display: flex;
+    width: 200px;
+    align-items: center;
+    justify-content: space-evenly;
+} */
+/* .name-oder button{
     float: right;
 }
 .name-oder h3{
@@ -14,24 +32,27 @@
  .name-oder p{
     width: 50%;
     font-size: 15px;
-}
-.info-purchase-order{
+} */
+/* .info-purchase-order{
     font-size: 15px;
     display: flex;
     flex-direction: column;
+    margin-top: 120px;
 }
 .info-create{
+    display: flex;
+    justify-content: flex-start;
     max-width: 600px;
     
 }    
 .info-create  > p{
     width: 300px;
+    
+}     */
+/* .info-create-detail{
     float: left;
-}    
-.info-create-detail{
-    float: left;
-}
-.info-date{
+} */
+/* .info-date{
     width: 540px;
 }
 .info-date p:nth-child(1){
@@ -46,4 +67,4 @@
     border: 1px solid black;
     
     background-color: white;
-}
+} */

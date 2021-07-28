@@ -57,6 +57,9 @@ export default function () {
   function pushAddRolePage() {
     history.push("");
   }
+  function onRowClickTable(row){
+    history.push("/homepage/manage-account/detail-role", {roleId: row.id});
+  }
   return (
     <>
       <div>
@@ -88,6 +91,7 @@ export default function () {
         pageCount={pageCount}
         sizePerPage={sizePerPage}
         currentPage={currentPage}
+        onRowClick={onRowClickTable}
         backPagingClick={backPagingClick}
         nextPagingClick={nextPagingClick}
       />
