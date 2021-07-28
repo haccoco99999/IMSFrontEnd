@@ -274,10 +274,10 @@ export default function VariantDetails() {
                       </p>
                     </div>
                     <div className="col-4">
-                      <p>
+                      {/* <p>
                         <strong>Unit:</strong>
                         {variant.unit}
-                      </p>
+                      </p> */}
                       <p>
                         <strong>Quantity:</strong>
                         {variant.storageQuantity}

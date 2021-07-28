@@ -1,4 +1,4 @@
-import React, {  useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import "./App.css";
 import AboutAccount from "./about-account/about-account";
@@ -15,6 +15,7 @@ import Notification from "./notification/notification";
 import ManageAccount from "./manage-account/manage-account";
 import SaleManPage from "./sale-man/sale-man";
 import { connect, useSelector } from "react-redux";
+import moment from "moment";
 import {
   BrowserRouter as Router,
   Route,
@@ -67,7 +68,7 @@ function App(props) {
     }
   }
   const [hubConnection, setHubConnection] = useState();
-  
+
   useEffect(() => {
     const createHubConnection = async () => {
       const hubConnection = new HubConnectionBuilder()
@@ -91,7 +92,12 @@ function App(props) {
         //Receive notification from a specific channel:
         hubConnection.on("NotificationGroupMessage", (message) => {
           console.log("NotificationGroupMessage", message);
-          toast(message, {
+          var stringCheckTime = message.split("at:");
+          var newMessage =
+            stringCheckTime[0] +
+            "at:" +
+            moment(stringCheckTime[1]).add(7, "h").format("DD/MM/YYYY HH:mm");
+          toast(newMessage, {
             position: "bottom-right",
             autoClose: false,
             hideProgressBar: true,
@@ -100,7 +106,6 @@ function App(props) {
             draggable: true,
             progress: undefined,
           });
-
         });
 
         //Send a notification to all

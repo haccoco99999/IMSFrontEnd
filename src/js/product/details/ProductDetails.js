@@ -309,14 +309,18 @@ export default function ProductDetails() {
                         />
                       )}
                     </p>
-                    {!productDetails.isVariantType && (
+                    {/* {!productDetails.isVariantType && (
                       <>
                         <p>
                           <strong>Unit:</strong>
                           {productDetails.unit}
                         </p>
                       </>
-                    )}
+                    )} */}
+                    <p>
+                      <strong>Unit:</strong>
+                      {productDetails.unit}
+                    </p>
 
                     <div class="form-check">
                       <input

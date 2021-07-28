@@ -3,17 +3,17 @@ import Table from "react-bootstrap-table-next";
 import ToolkitProvider, {
   Search,
 } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min";
-
+import moment from "moment";
 export default function PurchaseAcceptModal(props) {
   const { SearchBar } = Search;
   const columns = [
     { dataField: "id", text: "Purchase Order ID" },
     { dataField: "supplierName", text: "Supplier" },
     {
-      dataField: "createdDate",
-      text: "Created Date",
+      dataField: "modifiedDate",
+      text: "Modified Date",
       formatter: (cellContent, row, rowIndex) => {
-        return row.createdDate.split("T")[0];
+        return <span>{moment(row.modifiedDate).format("DD-MM-YYYY")}</span>;
       },
     },
   ];

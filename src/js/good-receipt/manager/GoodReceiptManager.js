@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import BootstrapTable from "react-bootstrap-table-next";
+import moment from "moment";
 // css
 import "../goodreceipt.css";
 import "./good-receipt-manager.css";
@@ -57,8 +58,17 @@ export default function GoodsReceipt() {
     {
       dataField: "createdDate",
       text: "Created Date",
+      formatter: (cellContent, row, rowIndex) => {
+        return <span>{moment(row.createdDate).format("DD-MM-YYYY")}</span>;
+      },
     },
-    { dataField: "modifiedDate", text: "Modified Date" },
+    {
+      dataField: "modifiedDate",
+      text: "Modified Date",
+      formatter: (cellContent, row, rowIndex) => {
+        return <span>{moment(row.modifiedDate).format("DD-MM-YYYY")}</span>;
+      },
+    },
   ];
 
   const [listEditHeader, setListEditHeader] = useState({

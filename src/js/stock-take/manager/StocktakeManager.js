@@ -2,16 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Table from "react-bootstrap-table-next";
-// import paginationFactory, {
-//   PaginationProvider,
-// } from "react-bootstrap-table2-paginator";
+import moment from "moment";
 //css
 import "../stocktake.css";
 
 //components
-// import Details from "../details/details";
 import { getAllStocktakeAction } from "./action";
-// import PagingComponent from "../../components/";
 import PagingComponent from "../../components/paging/paging-component";
 export default function () {
   let history = useHistory();
@@ -26,15 +22,11 @@ export default function () {
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
 
- 
-
   // TODO: DECLARE BOOTSTRAP TABLE
   const columns = [
     {
       dataField: "id",
       text: "Stocktake ID",
-      headerAlign: "center",
-      align: "center",
     },
     {
       dataField: "status",
@@ -56,22 +48,14 @@ export default function () {
     {
       dataField: "createdByName",
       text: "Created By",
-      headerAlign: "center",
-      align: "center",
     },
     {
       dataField: "createdDate",
       text: "Create Date",
-      headerAlign: "center",
-      align: "center",
       formatter: (cellContent, row) => {
-        return row.createdDate.split("T")[0];
+        return <span>{moment(row.createdDate).format("DD-MM-YYYY")}</span>;
       },
     },
-    // {
-    //   dataField:"modifiedDate"
-
-    // }
   ];
 
   const customTotal = (from, to, size) => (
@@ -87,20 +71,6 @@ export default function () {
       });
     },
   };
-
-  // const options = {
-  //   paginationSize: 5,
-  //   onPageChange: (page, sizePerPage) => {},
-  //   firstPageText: "First",
-  //   prePageText: "Back",
-  //   nextPageText: "Next",
-  //   lastPageText: "Last",
-  //   paginationTotalRenderer: customTotal,
-  // };
-  // const options = {
-  //   custom: true,
-  //   totalSize: pageCount,
-  // };
 
   function pushAddPage() {
     history.push("/homepage/stock-take/create");
@@ -130,21 +100,6 @@ export default function () {
       })
     );
   }, [currentPage, sizePerPage]);
-
-
-  //todo: options2
-  // const options2 = {
-  //   sizePerPage: 5,
-  //   totalSize: pageCount,
-  //   paginationTotalRenderer: customTotal,
-  //   firstPageText: "First",
-  //   prePageText: "Back",
-  //   nextPageText: "Next",
-  //   lastPageText: "Last",
-  //   showTotal: true,
-  //   hidePageListOnlyOnePage: true,
-  //   // disablePageTitle: true,
-  // };
 
   return (
     <div className="space-top-heading">
@@ -230,7 +185,6 @@ export default function () {
             headerClasses="table-header-receipt"
             noDataIndication="Table is Empty"
             rowEvents={rowEvents}
-            // pagination={paginationFactory(options2)}
           />
           <PagingComponent
             currentPage={currentPage}
@@ -238,90 +192,9 @@ export default function () {
             nextPagingClick={nextPagingClick}
             backPagingClick={backPagingClick}
           />
-          {/* <div className="paging-container">
-            <div className="left-size-paging">
-              <select className="select-row-table">
-                <option value={10}>{10}</option>
-                <option value={11}>{10}</option>
-                <option value={10}>{10}</option>
-              </select>
-              <span>Showing result out of </span>
-            </div>
-            <div className="button-paging">
-              <img src="..\src\js\images\left-arrow.svg" />
-              <img src="..\src\js\images\right-arrow.svg" />
-            </div>
-          </div> */}
         </div>
       </div>{" "}
     </div>
   );
 }
 
-{
-  /* <PaginationProvider pagination={paginationFactory(options)}>
-            {({ paginationProps, paginationTableProps }) => (
-              <div>
-                <div>
-                  <p>Current Page: {paginationProps.page}</p>
-                  <p>Current SizePerPage: {paginationProps.sizePerPage}</p>
-                  <p>Current Size: {paginationProps.totalSize}</p>
-                </div>
-                <Table
-                  keyField="id"
-                  striped
-                  hover
-                  condensed
-                  headerClasses="table-header-receipt"
-                  noDataIndication="Table is Empty"
-                  columns={columns}
-                  data={listStocktakeStore}
-                  {...paginationTableProps}
-                />
-                <div className="btn-group" role="group">
-                  <button className="btn btn-primary" onClick={ this.handleNextPage(paginationProps) }>Next Page</button>
-                  <button className="btn btn-success" onClick={ this.handlePrevPage(paginationProps) }>Prev Page</button>
-                  <button className="btn btn-danger" onClick={ () => this.handleSizePerPage(paginationProps, 10) }>Size Per Page: 10</button>
-                  <button className="btn btn-warning" onClick={ () => this.handleSizePerPage(paginationProps, 25) }>Size Per Page: 25</button>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => handleNextPage(paginationProps)}
-                  >
-                    Next Page
-                  </button>
-                  <button
-                    className="btn btn-success"
-                    onClick={() => handlePrevPage(paginationProps)}
-                  >
-                    Prev Page
-                  </button>
-                </div>
-              </div>
-            )}
-          </PaginationProvider> */
-}
-
-{
-  /* <div className="mt-3">
-            <Table
-              keyField="id"
-              data={listStocktakeStore}
-              columns={columns}
-              pagination={paginationFactory(options2)}
-            />
-          </div> */
-}
-
-{
-  /* <Table
-            listHeaderEdit={listEditHeader}
-            listColumn={listValueColumn}
-            listData={listStocktakeStore}
-            backPagingClick={backPagingClick}
-            nextPagingClick={nextPagingClick}
-            sizePerPage={sizePerPage}
-            currentPage={currentPage}
-            pageCount={pageCount}
-            onRowClick={onClickToDetails}
-          /> */
-}

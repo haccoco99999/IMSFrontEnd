@@ -5,6 +5,7 @@ import moment from "moment";
 import BootstrapTable from "react-bootstrap-table-next";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import Swal from "sweetalert2";
+
 //css
 import "../sale-man.css";
 //components
@@ -27,12 +28,13 @@ export default function details() {
   const [deadline, setDeadline] = useState("");
   const [isCancel, setIsCancel] = useState(false);
   const message = useSelector(
+    
     (state) => state.getDetailsPurchaseRequisitionReducer.messages
   );
 
   const [cleanListProducts, setCleanListProducts] = useState([]);
   const [isReturnData, setIsReturnData] = useState(false);
-  const [statusString, setStatusString] = useState('')
+  const [status,setStatus] = useState('')
   //todo: declare button
   const columnsEdit = [
     {
@@ -137,13 +139,13 @@ export default function details() {
   ];
 
   const {
-    status,
+    statusStore,
     listGetProductsStore,
     token,
     deadlineStore,
     transactionRecordStore,
   } = useSelector((state) => ({
-    status:
+    statusStore:
       state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
         .purchaseOrderStatus,
     listGetProductsStore:
@@ -390,77 +392,6 @@ export default function details() {
 
   return (
     <div>
-      {/* todo: task heading */}
-      {/* todo: gop chung 2 page voi 2 nut khâc nhau  */}
-      {/* <div className=" tab-fixed container-fluid  fixed-top">
-        <div className=" tab-fixed container-fluid  fixed-top">
-          <div className=" d-flex mb-3 justify-content-end mt-4 ">
-            {isFromManagerPage ? (
-              <a className="me-2" onClick={goBackClick}>
-                <h3>Back</h3>
-              </a>
-            ) : (
-              <a className="me-2" onClick={goToManagerPage}>
-                <h3>ManagerPage</h3>
-              </a>
-            )}
-
-            <div class="me-auto">
-              <h2 class="id-color fw-bold">
-                {location.state.purchaseRequisitionId}
-              </h2>
-              <div class="form-text id-color">{status}</div>
-            </div>
-            {status === 0 && (
-              <div>
-                {isEditDisabled ? (
-                  <>
-                    <button
-                      type="button"
-                      className="btn btn-danger button-tab me-3 text-white"
-                      onClick={onDeletePRClick}
-                    >
-                      Delete
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-warning button-tab me-3 text-white"
-                      onClick={onEditClick}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={onSubmitClick}
-                      className="btn btn-primary me-3 text-white button-tab "
-                    >
-                      Submit
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {" "}
-                    <button
-                      type="button"
-                      className="btn btn-secondary button-tab me-3 text-white"
-                      onClick={onCancelClick}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      onClick={onclickUpdate}
-                      className="btn btn-primary me-3 text-white button-tab "
-                    >
-                      Update
-                    </button>
-                  </>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      </div> */}
       <NavigationBar
         listButton={listButtons}
         titleBar={location.state.purchaseRequisitionId}
@@ -477,7 +408,7 @@ export default function details() {
                   <p>
                     <strong>Created by:</strong>
                     {/* {createdBy} */}
-                    {transactionRecordStore[0].applicationUser.userName}
+                    {transactionRecordStore[0].applicationUser.fullname}
                   </p>
                   {/* <p>
                     <strong>Submitted by:</strong> Huy Nguyen{" "}
@@ -490,11 +421,13 @@ export default function details() {
                   <p>
                     <strong>Create date:</strong>
                     {/* {createDate.split("T")[0]} */}
-                    {transactionRecordStore[0].date}
+                    {moment(transactionRecordStore[0].date).format(
+                      "DD-MM-YYYY HH:mm"
+                    )}
                   </p>
                   <p>
                     <strong>Deadline:</strong>
-                    {deadlineStore.split("T")[0]}
+                    {moment(deadlineStore).format("DD-MM-YYYY HH:mm")}
                   </p>
                   {/* <p>
                     <strong>Submit date:</strong> 05/12/2021

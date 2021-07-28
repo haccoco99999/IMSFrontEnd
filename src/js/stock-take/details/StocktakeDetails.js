@@ -5,6 +5,7 @@ import Table from "react-bootstrap-table-next";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import { Modal } from "bootstrap";
 import Swal from "sweetalert2";
+import moment from "moment";
 //css
 import "../stocktake.css";
 //components
@@ -18,7 +19,7 @@ import {
 import NavigationBar from "../../components/navbar/navbar-component";
 import RejectModal from "../components/reject-component";
 import AdjustModal from "../components/adjust-component";
-
+import RejectWrapper from "../../components/reject-wrapper/reject-component";
 export default function StocktakeDetailsComponent() {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -31,7 +32,11 @@ export default function StocktakeDetailsComponent() {
   const [titleStatus, setTitleStatus] = useState("");
   //todo: check valid truoc khi submit
   const [isChecking, setIsChecking] = useState(false);
-  const [transactionRecord, setTransacetionRecord] = useState({});
+  const [transactionRecordCompacts, setTransactionRecordCompacts] = useState(
+    []
+  );
+  const [applicationUser, setApplicationUser] = useState({});
+  const [reject, setReject] = useState({});
   //todo: store state
   const {
     token,
@@ -442,8 +447,17 @@ export default function StocktakeDetailsComponent() {
     )
       // setIsLoading(true);
       console.log(transactionRecordStore);
-    setTransacetionRecord(transactionRecordStore.transactionRecord.pop());
-    console.log(transactionRecord);
+    setTransactionRecordCompacts(
+      transactionRecordStore.transactionRecordCompacts
+    );
+
+    setApplicationUser(
+      transactionRecordStore.transactionRecord[0].applicationUser
+    );
+    if (statusStocktakeStore === -1)
+      setReject(transactionRecordStore.transactionRecordCompacts.pop());
+
+    // setTransactionRecord(transactionRecordStore.transactionRecord);
   }, [transactionRecordStore]);
   return (
     <div>
@@ -497,6 +511,16 @@ export default function StocktakeDetailsComponent() {
               aria-labelledby="nav-home-tab"
             >
               <div className="wrapper-content shadow mt-3">
+                {isLoading && statusStocktakeStore === -1 && (
+                  <RejectWrapper
+                    name={applicationUser.fullname}
+                    email={applicationUser.email}
+                    phoneNumber={applicationUser.phoneNumber}
+                    reason={reject.transactionName}
+                    date={moment(reject.date).format("DD-MM-YYYY")}
+                  />
+                )}
+
                 {isLoading && (
                   <div className="row g-3 justify-content-between me-3">
                     <div className="col-4">
@@ -516,11 +540,13 @@ export default function StocktakeDetailsComponent() {
                     <div className="col-4">
                       <p>
                         <strong>Created By: </strong>
-                        {transactionRecord.applicationUser.fullname}
+                        {transactionRecordCompacts[0].user}
                       </p>
                       <p>
                         <strong>Create Date:</strong>
-                        {transactionRecord.date}
+                        {moment(transactionRecordCompacts[0].date).format(
+                          "DD-MM-YYYY"
+                        )}
                       </p>
                     </div>
                   </div>
