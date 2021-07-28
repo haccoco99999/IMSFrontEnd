@@ -20,7 +20,7 @@ import {
 } from "./constants";
 
 function getDetailsStocktake(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/stocktake/${action.id}`;
+  const url = `${process.env.REACT_APP_API}/stocktake/${action.id}`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -39,7 +39,7 @@ function getDetailsStocktake(action) {
 }
 
 function submitStocktake(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/stocktake/submit";
+  const url = `${process.env.REACT_APP_API}/stocktake/submit`;
   return fetch(url, {
     method: "PUT",
     headers: {
@@ -58,7 +58,7 @@ function submitStocktake(action) {
 }
 
 function adjustStocktake(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/stocktake/adjust";
+  const url = `${process.env.REACT_APP_API}/stocktake/adjust`;
   return fetch(url, {
     method: "POST",
     headers: {
@@ -77,7 +77,7 @@ function adjustStocktake(action) {
 }
 
 function rejectStocktake(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/stocktake/reject";
+  const url = `${process.env.REACT_APP_API}/stocktake/reject`;
   return fetch(url, {
     method: "PUT",
     headers: {
@@ -96,7 +96,7 @@ function rejectStocktake(action) {
 }
 
 function updateStocktake(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/stocktake/add";
+  const url = `${process.env.REACT_APP_API}/stocktake/add`;
   return fetch(url, {
     method: "PUT",
     headers: {
@@ -165,7 +165,7 @@ function* updateStocktakeFlow(action) {
 }
 
 function* watcher() {
-  yield takeEvery(GET_DETAILS_STOCKTAKE_REQUEST, getDetailsStocktakeFlow);
+  yield takeLatest(GET_DETAILS_STOCKTAKE_REQUEST, getDetailsStocktakeFlow);
   yield takeLatest(REJECT_STOCKTAKE_REQUEST, rejectStocktakeFlow);
   yield takeLatest(ADJUST_REQUEST, adjustStocktakeFlow);
   yield takeLatest(SUBMIT_REQUEST, submitStocktakeFlow);

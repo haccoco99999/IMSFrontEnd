@@ -8,7 +8,7 @@ import {
 } from "./constants";
 
 function createSupplier(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/supplier/create";
+  const url = `${process.env.REACT_APP_API}/supplier/create`;
   return fetch(url, {
     method: "POST",
     headers: {

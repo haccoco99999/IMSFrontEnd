@@ -34,7 +34,7 @@ function getDetailsSupplier(action) {
 }
 
 function updateSupplier(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/supplier/edit";
+  const url = `${process.env.REACT_APP_API}/supplier/edit`;
   return fetch(url, {
     method: "PUT",
     headers: {
@@ -54,7 +54,7 @@ function updateSupplier(action) {
 }
 
 function deleteSupplier(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/supplier/${action.id}`;
+  const url = `${process.env.REACT_APP_API}/supplier/${action.id}`;
   return fetch(url, {
     method: "DELETE",
     headers: {

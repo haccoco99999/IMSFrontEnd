@@ -31,7 +31,7 @@ export default function StocktakeDetailsComponent() {
   const [titleStatus, setTitleStatus] = useState("");
   //todo: check valid truoc khi submit
   const [isChecking, setIsChecking] = useState(false);
-
+  const [transactionRecord, setTransacetionRecord] = useState({});
   //todo: store state
   const {
     token,
@@ -50,11 +50,11 @@ export default function StocktakeDetailsComponent() {
     statusStocktakeStore:
       state.getDetailsStocktakeReducer.stocktake.stockTakeOrderType,
     IDStocktakeStore: state.getDetailsStocktakeReducer.stocktake.id,
-    transactionStore:
-      state.getDetailsStocktakeReducer.stocktake.transaction.transactionRecord,
+    transactionRecordStore:
+      state.getDetailsStocktakeReducer.stocktake.transaction,
   }));
-  console.log(stocktakeDetailsStore);
-  console.log(groupLocationStore[0]);
+  // console.log(stocktakeDetailsStore);
+  // console.log(groupLocationStore[0]);
   // console.log(groupLocationStore[0].checkItems);
   //todo: reject modal declare
   const modalRef = useRef();
@@ -434,6 +434,17 @@ export default function StocktakeDetailsComponent() {
       else if (statusStocktakeStore === -1) setTitleStatus("Cancel");
     }
   }, [statusStocktakeStore]);
+
+  useEffect(() => {
+    if (
+      // transactionRecordStore.transactionRecord.length > 0 &&
+      transactionRecordStore !== undefined
+    )
+      // setIsLoading(true);
+      console.log(transactionRecordStore);
+    setTransacetionRecord(transactionRecordStore.transactionRecord.pop());
+    console.log(transactionRecord);
+  }, [transactionRecordStore]);
   return (
     <div>
       <NavigationBar
@@ -500,6 +511,16 @@ export default function StocktakeDetailsComponent() {
                       <p>
                         <strong>Location Barcode:</strong>
                         {groupLocationStore[0].location.locationBarcode}
+                      </p>
+                    </div>
+                    <div className="col-4">
+                      <p>
+                        <strong>Created By: </strong>
+                        {transactionRecord.applicationUser.fullname}
+                      </p>
+                      <p>
+                        <strong>Create Date:</strong>
+                        {transactionRecord.date}
                       </p>
                     </div>
                   </div>

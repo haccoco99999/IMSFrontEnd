@@ -12,7 +12,7 @@ import handleApiErrors from "../../auth/api-errors";
 
 function createPurchaseRequisition(action) {
   const createPRURL =
-    "https://imspublicapi.herokuapp.com/api/requisition/create";
+    `${process.env.REACT_APP_API}/requisition/create`;
 
   return fetch(createPRURL, {
     method: "POST",
@@ -33,7 +33,7 @@ function createPurchaseRequisition(action) {
 }
 
 function getAllSuppliers(action) {
-  const getAllSuppliersURL = `http://imspublicapi.herokuapp.com/api/suppliers/search?CurrentPage=0&SizePerPage=0`;
+  const getAllSuppliersURL = `${process.env.REACT_APP_API}/suppliers/search?CurrentPage=0&SizePerPage=0`;
 
   return fetch(getAllSuppliersURL, {
     method: "GET",

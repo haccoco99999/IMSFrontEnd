@@ -285,7 +285,7 @@ export default function CreateGoodsReceiptComponent() {
           }),
         };
         console.log(Data);
-        // dispatch(setCreateingGRRequestAction({ data: Data, token: token }));
+        dispatch(setCreateingGRRequestAction({ data: Data, token: token }));
       }
     }
   }

@@ -214,7 +214,7 @@ export default function CreateStocktakeComponent() {
     return [
       {
         isShow: true,
-        title: "Submit",
+        title: "Save",
         class: " btn-primary",
         action: () => onClickSubmit(),
         disabled: isChecking,

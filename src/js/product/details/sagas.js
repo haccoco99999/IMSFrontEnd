@@ -23,7 +23,7 @@ import {
 } from "./constants";
 
 function getDetailsProduct(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/product/${action.id}`;
+  const url = `${process.env.REACT_APP_API}/product/${action.id}`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -41,7 +41,7 @@ function getDetailsProduct(action) {
     });
 }
 function updateProduct(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/product/update";
+  const url = `${process.env.REACT_APP_API}/product/update`;
   return fetch(url, {
     method: "PUT",
     headers: {
@@ -60,7 +60,7 @@ function updateProduct(action) {
 }
 
 function getDetailsVariant(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/productvariant/${action.id}`;
+  const url = `${process.env.REACT_APP_API}/productvariant/${action.id}`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -79,8 +79,7 @@ function getDetailsVariant(action) {
 }
 
 function getAllBrand(action) {
-  const url =
-      `${process.env.REACT_APP_API}/product/brands?CurrentPage=0&SizePerPage=0`;
+  const url = `${process.env.REACT_APP_API}/product/brands?CurrentPage=0&SizePerPage=0`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -99,7 +98,7 @@ function getAllBrand(action) {
 }
 
 function getDetailsPackage(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/package/${action.id}`;
+  const url = `${process.env.REACT_APP_API}/package/${action.id}`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -118,7 +117,7 @@ function getDetailsPackage(action) {
 }
 
 function updateVariant(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/productvariant/update";
+  const url = `${process.env.REACT_APP_API}/productvariant/update`;
   return fetch(url, {
     method: "PUT",
     headers: {

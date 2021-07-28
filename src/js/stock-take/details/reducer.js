@@ -26,7 +26,8 @@ const initialState = {
     stockTakeOrderType: "",
     id: "",
     transaction: {
-      transactionRecord: [{ date: "", applicationUser: {} }],
+      transactionRecord: [{ date: "", applicationUser: { fullName: "" } }],
+      // transactionRecord: [],
     },
   },
 };

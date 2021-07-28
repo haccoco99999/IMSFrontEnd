@@ -8,11 +8,9 @@ import {
   GET_ALL_STOCKTAKE_ERROR,
 } from "./constants";
 
-const baseUrl = process.env.REACT_APP_API
-
 function getAllStocktake(action) {
-  console.log(baseUrl);
-  const url = `${baseUrl}/stocktake/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+  
+  const url = `${process.env.REACT_APP_API}/stocktake/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
   return fetch(url, {
     method: "GET",
     headers: {

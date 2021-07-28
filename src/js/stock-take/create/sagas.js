@@ -14,7 +14,7 @@ import {
 } from "./constants";
 
 function createStocktake(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/stocktake/add";
+  const url = `${process.env.REACT_APP_API}/stocktake/add`;
   return fetch(url, {
     method: "PUT",
     headers: {
