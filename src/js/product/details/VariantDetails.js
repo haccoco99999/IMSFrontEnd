@@ -5,8 +5,9 @@ import BootstrapTable from "react-bootstrap-table-next";
 //css
 import "../product.css";
 //components
-import ListPackageTable from "../../table-receipt/ListReceiptsTable";
+// import ListPackageTable from "../../table-receipt/ListReceiptsTable";
 import { getDetailsVariant, updateVariantAction } from "./action";
+import NavigationBar from "../../components/navbar/navbar-component";
 
 export default function VariantDetails() {
   let history = useHistory();
@@ -77,6 +78,36 @@ export default function VariantDetails() {
     });
   }
 
+  //todo:list buttons
+  const listButtons = setListButtonNav();
+  function setListButtonNav() {
+    if (isDisabled) {
+      return [
+        {
+          isShow: true,
+          title: "Edit",
+          action: () => onClickEdit(),
+          class: "btn-warning text-white",
+        },
+      ];
+    } else {
+      return [
+        {
+          isShow: true,
+          title: "Cancel",
+          action: () => onClickCancel(),
+          class: "btn-secondary",
+        },
+        {
+          isShow: true,
+          title: "Save",
+          action: () => onClickSave(),
+          class: "btn-primary",
+        },
+      ];
+    }
+  }
+
   function onClickEdit() {
     setIsDisabled(false);
   }
@@ -136,21 +167,20 @@ export default function VariantDetails() {
     }
   }, [messages]);
   return (
-    <div className="overflow-scroll">
-      <div className=" tab-fixed container-fluid  fixed-top">
+    <div>
+      <NavigationBar
+        listButton={listButtons}
+        titleBar="Variant Details"
+        actionGoBack={goBackClick}
+        status=""
+      />
+      {/* <div className=" tab-fixed container-fluid  fixed-top">
         <div className=" d-flex mb-3 justify-content-end mt-4 ">
           <a className="me-2" onClick={goBackClick}>
             <h3>Back</h3>
           </a>
           <h2 className="id-color fw-bold me-auto">Details</h2>
           <div>
-            {/* <button
-              className="btn btn-danger button-tab text-white button me-3"
-              onClick={onClickDelete}
-            >
-              Delete
-            </button> */}
-
             {isDisabled ? (
               <button
                 className="btn btn-warning button-tab text-white button me-3"
@@ -176,7 +206,7 @@ export default function VariantDetails() {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* content */}
       <div className="wrapper space-top">
         <div className="wrapper-content shadow">
@@ -279,12 +309,12 @@ export default function VariantDetails() {
                         {variant.unit}
                       </p> */}
                       <p>
-                        <strong>Quantity:</strong>
+                        <strong>Storage Quantity:</strong>
                         {variant.storageQuantity}
                       </p>
                       <p>
                         <strong>Price:</strong>
-                        {isDisabled ? (
+                        {/* {isDisabled ? (
                           variant.price
                         ) : (
                           <input
@@ -294,7 +324,8 @@ export default function VariantDetails() {
                             onChange={onChangeValue}
                             value={variant.price}
                           />
-                        )}
+                        )} */}
+                        {variant.price}
                       </p>
                       {/* <p>
                         <strong>Total Price:</strong>

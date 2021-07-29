@@ -12,7 +12,7 @@ import {
   getAllBrandAction,
 } from "./action";
 import { getCategoriesAllAction } from "../create/action";
-import ListProductsTable from "../../table-receipt/ListReceiptsTable";
+// import ListProductsTable from "../../table-receipt/ListReceiptsTable";
 import NavigationBar from "../../components/navbar/navbar-component";
 
 export default function ProductDetails() {
@@ -163,6 +163,41 @@ export default function ProductDetails() {
     });
   }
 
+  //todo: list buttons
+  const listButtons = setListButtonNav();
+  function setListButtonNav() {
+    if (isDisabled)
+      return [
+        {
+          isShow: true,
+          title: "Add Variant",
+          action: () => onClickToAddVariant(),
+          class: "btn-danger",
+        },
+        {
+          isShow: true,
+          title: "Edit",
+          action: () => onClickEdit(),
+          class: "btn-warning text-white",
+        },
+      ];
+    else
+      return [
+        {
+          isShow: true,
+          title: "Cancel",
+          action: () => onClickCancel(),
+          class: "btn-secondary",
+        },
+        {
+          isShow: true,
+          title: "Save",
+          action: () => onClickSave(),
+          class: "btn-primary",
+        },
+      ];
+  }
+
   useEffect(() => {
     dispatch(
       getDetailsProductAction({ id: location.state.productId, token: token })
@@ -199,51 +234,12 @@ export default function ProductDetails() {
 
   return (
     <>
-      <div className=" tab-fixed container-fluid  fixed-top">
-        <div className=" d-flex mb-3 justify-content-end mt-4 ">
-          <a className="me-2" onClick={goBackClick}>
-            <h3>Back</h3>
-          </a>
-          <h2 className="id-color fw-bold me-auto">Details</h2>
-          <div>
-            {/* <button
-              className="btn btn-danger button-tab text-white button me-3"
-              onClick={onClickDelete}
-            >
-              Delete
-            </button> */}
-            <button
-              className="btn btn-danger button-tab text-white button me-3"
-              onClick={onClickToAddVariant}
-            >
-              Add Variant
-            </button>
-            {isDisabled ? (
-              <button
-                className="btn btn-warning button-tab text-white button me-3"
-                onClick={onClickEdit}
-              >
-                Edit
-              </button>
-            ) : (
-              <button
-                className="btn btn-secondary button-tab text-white button me-3"
-                onClick={onClickCancel}
-              >
-                Cancel
-              </button>
-            )}
-
-            <button
-              className="btn btn-primary button-tab button me-3"
-              disabled={isDisabled}
-              onClick={onClickSave}
-            >
-              Save
-            </button>
-          </div>
-        </div>
-      </div>
+      <NavigationBar
+        listButton={listButtons}
+        titleBar="Create"
+        actionGoBack={goBackClick}
+        status=""
+      />
       {/* content */}
       <div className="wrapper space-top">
         <div className="wrapper-content shadow">

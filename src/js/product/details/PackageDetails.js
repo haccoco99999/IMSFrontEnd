@@ -5,9 +5,9 @@ import { useHistory, useLocation } from "react-router-dom";
 //css
 import "../product.css";
 //components
-import ListPackageTable from "../../table-receipt/ListReceiptsTable";
+// import ListPackageTable from "../../table-receipt/ListReceiptsTable";
 import { getDetailsPackageAction } from "./action";
-
+import NavigationBar from "../../components/navbar/navbar-component";
 export default function PackageDetails() {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -37,6 +37,11 @@ export default function PackageDetails() {
     history.goBack();
   }
 
+  const listButtons = setListButtonNav();
+  function setListButtonNav() {
+    return [];
+  }
+
   useEffect(() => {
     dispatch(
       getDetailsPackageAction({
@@ -47,22 +52,25 @@ export default function PackageDetails() {
   }, []);
   return (
     <div>
-      {/* todo: task heading */}
-      {/* todo: gop chung 2 page voi 2 nut khâc nhau  */}
-      <div className=" tab-fixed container-fluid  fixed-top">
-        {/* todo: task heading */}
+      <NavigationBar
+        listButton={listButtons}
+        titleBar={packageDetailsStore.id}
+        actionGoBack={goBackClick}
+        status=""
+      />
+
+      {/* <div className=" tab-fixed container-fluid  fixed-top">
         <div className=" tab-fixed container-fluid  fixed-top">
           <div className=" d-flex mb-3 justify-content-end mt-4 ">
             <a className="me-2" onClick={goBackClick}>
               <h3>Back</h3>
             </a>
             <div class="me-auto">
-              <h2 class="id-color fw-bold">{packageDetailsStore.id}</h2>
-              {/* <div class="form-text id-color">Stock take complete</div> */}
+              <h2 class="id-color fw-bold"></h2>
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="wrapper space-top">
         <div className="wrapper-content shadow">

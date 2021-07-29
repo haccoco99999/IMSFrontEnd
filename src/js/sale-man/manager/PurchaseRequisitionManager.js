@@ -10,6 +10,7 @@ import "../sale-man.css";
 import { getAllPRAction } from "./action";
 import PagingComponent from "../../product/components/paging-component";
 
+
 export default function () {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -23,21 +24,44 @@ export default function () {
     {
       dataField: "status",
       text: "Status",
+      align: "center",
+      isDummyField: true,
+      formatter: (cellContent, row) => {
+        if (row.status === "RequisitionCreated")
+          return <span className="badge bg-secondary">Draft</span>;
+        else if (row.status === "POConfirm") {
+          return <span class="badge bg-success">Confirmed</span>;
+        } else if (row.status === "Done") {
+          return <span class="badge bg-primary">Done</span>;
+        } else if (
+          row.status === "POCanceled" ||
+          row.status === "RequisitionCanceled" ||
+          row.status === "POCanceled"
+        ) {
+          return <span class="badge bg-danger">Canceled</span>;
+        } else
+          return (
+            <span class="badge bg-warning text-dark">Waiting confirm</span>
+          );
+      },
     },
     {
       dataField: "createdByName",
       text: "Created By",
+      hidden: true,
     },
     {
       dataField: "createdDate",
-      text: "Create Date",
+      text: "Created Date",
+      align: "right",
       formatter: (cellContent, row, rowIndex) => {
         return <span>{moment(row.createdDate).format("DD-MM-YYYY")}</span>;
       },
     },
     {
       dataField: "modifiedDate",
-      text: "Modify Date",
+      text: "Modified Date",
+      align: "right",
       formatter: (cellContent, row, rowIndex) => {
         return <span>{moment(row.modifiedDate).format("DD-MM-YYYY")}</span>;
       },

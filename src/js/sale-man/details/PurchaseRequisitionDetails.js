@@ -28,13 +28,12 @@ export default function details() {
   const [deadline, setDeadline] = useState("");
   const [isCancel, setIsCancel] = useState(false);
   const message = useSelector(
-    
     (state) => state.getDetailsPurchaseRequisitionReducer.messages
   );
 
   const [cleanListProducts, setCleanListProducts] = useState([]);
   const [isReturnData, setIsReturnData] = useState(false);
-  const [status,setStatus] = useState('')
+  const [status, setStatus] = useState("");
   //todo: declare button
   const columnsEdit = [
     {
@@ -288,7 +287,7 @@ export default function details() {
   //   );
   // }
 
-  const listButtons = setListButtonNav(status);
+  const listButtons = setListButtonNav(statusStore);
 
   function setListButtonNav(status) {
     if (status === 0) {
@@ -389,14 +388,20 @@ export default function details() {
       );
     }
   }, [message]);
-
+  useEffect(() => {
+    if (statusStore === 0) setStatus("Draft");
+    else if (statusStore === 6) setStatus("Confirmed");
+    else if (statusStore === 7) setStatus("Done");
+    else if (statusStore < 0) setStatus("Canceled");
+    else setStatus("Waiting confirm");
+  }, [statusStore]);
   return (
     <div>
       <NavigationBar
         listButton={listButtons}
         titleBar={location.state.purchaseRequisitionId}
         actionGoBack={goBackClick}
-        status=""
+        status={status}
       />
       <div className="wrapper space-top">
         <div class="card">
@@ -421,9 +426,9 @@ export default function details() {
                   <p>
                     <strong>Create date:</strong>
                     {/* {createDate.split("T")[0]} */}
-                    {moment(transactionRecordStore[0].date).format(
-                      "DD-MM-YYYY HH:mm"
-                    )}
+                    {moment(
+                      transactionRecordStore[0].date.split("T")[0]
+                    ).format("DD-MM-YYYY")}
                   </p>
                   <p>
                     <strong>Deadline:</strong>
