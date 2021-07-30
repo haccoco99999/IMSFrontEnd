@@ -183,7 +183,7 @@ function App(props) {
         <div className={"logo_content hide-" + eventPage.statusSetting}>
           <div className="logo">
             <div className="logo_name">
-              <img src="src\js\images\Logo.png" />
+              <img src="\src\js\images\Logo.png" />
             </div>
           </div>
           <i
@@ -208,7 +208,7 @@ function App(props) {
               className="bx menu-icon-notification-logout"
               onClick={toggleBell}
             >
-              <img src="src\js\images\alarm.png" />
+              <img src="\src\js\images\alarm.png" />
               <span className="badge badge-customize">3</span>
             </i>
           </div>
@@ -241,7 +241,7 @@ function App(props) {
             <li>
               <Link to="/homepage/dashboard">
                 <i className="bx">
-                  <img src="src\js\images\dashboard-2.png" />
+                  <img src="\src\js\images\dashboard-2.png" />
                 </i>
                 <span className="links_name">Dashboard</span>
               </Link>
@@ -251,7 +251,7 @@ function App(props) {
             <li>
               <Link to="/homepage/purchase">
                 <i className="bx">
-                  <img src="src\js\images\shopping-2.png" />
+                  <img src= "\src\js\images\shopping-2.png" />
                 </i>
                 <span className="links_name">Purchase order</span>
               </Link>
@@ -260,7 +260,7 @@ function App(props) {
             <li>
               <Link to="/homepage/good-receipt">
                 <i className="bx">
-                  <img src="src\js\images\import-2.png" />
+                  <img src="\src\js\images\import-2.png" />
                 </i>
                 <span className="links_name">Good Recipt</span>
               </Link>
@@ -269,7 +269,7 @@ function App(props) {
             <li>
               <Link to="/homepage/good-issue">
                 <i className="bx">
-                  <img src="src\js\images\box-2.png" />
+                  <img src="\src\js\images\box-2.png" />
                 </i>
                 <span className="links_name">Good issue</span>
               </Link>
@@ -278,7 +278,7 @@ function App(props) {
             <li>
               <Link to="/homepage/stock-take">
                 <i className="bx">
-                  <img src="src\js\images\shelf-2.png" />
+                  <img src="\src\js\images\shelf-2.png" />
                 </i>
                 <span className="links_name">Stock take</span>
               </Link>
@@ -287,7 +287,7 @@ function App(props) {
             <li>
               <Link to="/homepage/report">
                 <i className="bx">
-                  <img src="src\js\images\report-2.png" />
+                  <img src="\src\js\images\report-2.png" />
                 </i>
                 <span className="links_name">Report</span>
               </Link>
@@ -297,7 +297,7 @@ function App(props) {
             <li>
               <Link to="/homepage/product">
                 <i className="bx">
-                  <img src="src\js\images\product-2.png" />
+                  <img src="\src\js\images\product-2.png" />
                 </i>
                 <span className="links_name">Product</span>
               </Link>
@@ -306,7 +306,7 @@ function App(props) {
             <li>
               <Link to="/homepage/supplier">
                 <i className="bx">
-                  <img src="src\js\images\manufacture-2.png" />
+                  <img src="\src\js\images\manufacture-2.png" />
                 </i>
                 <span className="links_name">Supplier</span>
               </Link>
@@ -315,7 +315,7 @@ function App(props) {
             <li>
               <Link to="/homepage/manage-account">
                 <i className="bx">
-                  <img src="src\js\images\user-2.png" />
+                  <img src="\src\js\images\user-2.png" />
                 </i>
                 <span className="links_name">Account</span>
               </Link>
@@ -324,7 +324,7 @@ function App(props) {
             <li>
               <Link to="/homepage/sale-man">
                 <i className="bx">
-                  <img src="src\js\images\user-2.png" />
+                  <img src="\src\js\images\user-2.png" />
                 </i>
                 <span className="links_name">Sale man</span>
               </Link>

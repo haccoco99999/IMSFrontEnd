@@ -14,7 +14,7 @@ import Manager from "./manager/GoodReceiptManager";
 export default function () {
   return (
     //<Details/>
-    <div className="home_content wrapper">
+    <div className="home_content p-3">
       <div className="text">
         {/* ############################ */}
         {/* Route trong goods receipt */}

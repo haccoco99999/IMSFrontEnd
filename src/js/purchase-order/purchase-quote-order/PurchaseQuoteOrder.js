@@ -17,7 +17,7 @@ import PagingComponent from '../../components/paging/paging-component'
 import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import ProductVariantsFilter from './ProductVariantsFilter'
 import StockTakeFilter from './StockTakeFilter'
-import {Cloudinary} from "@cloudinary/base";
+import { Cloudinary } from "@cloudinary/base";
 
 export default function PurchaseQuoteOrder() {
     // const cld = new Cloudinary({
@@ -73,7 +73,7 @@ export default function PurchaseQuoteOrder() {
     }
     const [filter, setFilter] = useState({
 
-        CurrentPage: 1,
+        currentPage: 1,
         SizePerPage: 25,
 
         ...purchaserOrderFilterInit
@@ -226,10 +226,10 @@ export default function PurchaseQuoteOrder() {
     // function setListTablePaging(event) {
 
 
-    //     dispatch(searchPurchaseOrder({ filter: { ...purchaseOrderFilter, [event.target.name]: event.target.value, CurrentPage: 1 } }))
+    //     dispatch(searchPurchaseOrder({ filter: { ...purchaseOrderFilter, [event.target.name]: event.target.value, currentPage: 1 } }))
     // }
     // function pagingPurchaseOrder(index) {
-    //     dispatch(searchPurchaseOrder({ filter: { ...purchaseOrderFilter, CurrentPage: purchaseOrderFilter.CurrentPage + index } }))
+    //     dispatch(searchPurchaseOrder({ filter: { ...purchaseOrderFilter, currentPage: purchaseOrderFilter.currentPage + index } }))
     // }
     function submitFilter(listselectFilter, filter) {
         setListKeyArrayFilter([...listselectFilter])
@@ -262,12 +262,12 @@ export default function PurchaseQuoteOrder() {
         }))
     }
     function nextPagingClick() {
-        let dataFilter = { ...filter, CurrentPage: filter.CurrentPage + 1 }
+        let dataFilter = { ...filter, currentPage: filter.currentPage + 1 }
         dispatch(searchPurchaseOrder({ filter: parseFilterToString(dataFilter) }))
         setFilter(dataFilter)
     }
     function backPagingClick() {
-        let dataFilter = { ...filter, CurrentPage: filter.CurrentPage - 1 }
+        let dataFilter = { ...filter, currentPage: filter.currentPage - 1 }
         dispatch(searchPurchaseOrder({ filter: parseFilterToString(dataFilter) }))
         setFilter(dataFilter)
     }
@@ -415,7 +415,7 @@ export default function PurchaseQuoteOrder() {
         Brand: "",
     }
     const [productVariantsFilter, setProductVariantsFilter] = useState({
-        CurrentPage: 1,
+        currentPage: 1,
         SizePerPage: 25,
         ...productVariantFilterInit
     })
@@ -455,7 +455,7 @@ export default function PurchaseQuoteOrder() {
 
     ////////////////////////////////////////////////////////
     ///SEARCH LOCATION
- 
+
 
     // const stockTakeFilterInit = {
     //     IsLocationOnly: true,
@@ -472,21 +472,21 @@ export default function PurchaseQuoteOrder() {
     //     ToQuantity:"",
     // }
     const stockTakeFilterInit = {
-      
+
         SearchQuery: "",
-        FromStatus:"",
-        ToStatus:"",
-        FromCreatedDate:"",
-        ToCreatedDate:"",
-        ToTotalPrice:"",
-        CreatedByName:"",
-        DeliveryMethod:"",
-        FromDeliveryDate:"",
-        ToDeliveryDate:"",
-      
+        FromStatus: "",
+        ToStatus: "",
+        FromCreatedDate: "",
+        ToCreatedDate: "",
+        ToTotalPrice: "",
+        CreatedByName: "",
+        DeliveryMethod: "",
+        FromDeliveryDate: "",
+        ToDeliveryDate: "",
+
     }
     const [stockTakeFilter, setStockTakeFilter] = useState({
-        CurrentPage: 1,
+        currentPage: 1,
         SizePerPage: 25,
         ...stockTakeFilterInit
     })
@@ -506,12 +506,12 @@ export default function PurchaseQuoteOrder() {
         alert(filterString)
     }
     function resetStockTakeFilter() {
-      
+
         setStockTakeFilter((state) => ({
             ...state, ...stockTakeFilterInit
         }))
     }
-    
+
     //////////////////////////////////////////////////////
 
 
@@ -522,21 +522,14 @@ export default function PurchaseQuoteOrder() {
                 <span>Purchase requistion</span>
                 <div>6</div>
             </div>
-{// <ProductVariantsFilter 
-    // onChangeValueFilter={onChangeProductVariantFilter}
-    //  filter={productVariantsFilter} 
-    //  submitFilter={submitProductVariantsFilter}
-    //  resetFilter={resetProductVariantsFilter}
-    //  />
-}
-{/*             
-            <StockTakeFilter  
+            {// <ProductVariantsFilter 
+                // onChangeValueFilter={onChangeProductVariantFilter}
+                //  filter={productVariantsFilter} 
+                //  submitFilter={submitProductVariantsFilter}
+                //  resetFilter={resetProductVariantsFilter}
+                //  />
+            }
             
-               onChangeValueFilter={onChangeStockTaketFilter}
-     filter={stockTakeFilter} 
-     submitFilter={submitStockTakeFilter}
-     resetFilter={resetStockTakeFilter}
-            /> */}
             {purchaseOrderStore.successfulPQ ?
                 <Gallery
                     clickQuote={onClickToDetailQuoteOrder}
@@ -664,6 +657,7 @@ export default function PurchaseQuoteOrder() {
 
 
                         </div>
+                        
                         <div className="card-body">
                             <div className="row">
 
@@ -686,7 +680,7 @@ export default function PurchaseQuoteOrder() {
                         <div className="card-body">
 
 
-                            <PagingComponent sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} />
+                            <PagingComponent sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.currentPage} />
                             <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z" />
@@ -726,7 +720,8 @@ export default function PurchaseQuoteOrder() {
 
 
                         </div>
-                    </div></div>
+                    </div>
+                </div>
 
             </div>
 
@@ -786,7 +781,7 @@ export default function PurchaseQuoteOrder() {
                     </div>
                     <div className="button-paging">
                         <img onClick={() => pagingPurchaseOrder(-1)} src="..\src\js\images\left-arrow.svg" />
-                        {filter.CurrentPage}
+                        {filter.currentPage}
                         <img onClick={() => pagingPurchaseOrder(+1)} src="..\src\js\images\right-arrow.svg" />
                     </div>
                 </div>
