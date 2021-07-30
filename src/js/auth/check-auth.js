@@ -31,7 +31,7 @@ function checkAuthorization (dispatch) {
       const client = getState().client
   
       
-      if (client && client.token) return true
+       if (client && client.token) return true
   
       
       if (checkAuthorization(dispatch)) return true

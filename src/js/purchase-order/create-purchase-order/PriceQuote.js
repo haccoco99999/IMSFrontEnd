@@ -5,6 +5,8 @@ import { getDetailPurchaseOrder, sendMailService, createPurchaseOrder, rejectPur
 import NavigationBar from '../../navigation-bar-component/NavigationBar';
 // import sendMailPriceQuote from '../create-price-quote/action';
 // import InfoDetailReceipt from '../../info-detail-receipt/InfoDetailReceipt';
+import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
+
 import ListProductsTable from '../../list-products-table/ListProductsTable';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -33,8 +35,10 @@ export default function PurchaseOrderConfirm() {
         isShowReject: false,
         isShowConfirm: false,
         isPreview: false,
-        isResend: false
+        isResend: false,
+        isShowEditListProducts: false
     })
+    // alert(eventPage.isShowEditListProducts)
 
     const [listTransactions, setListTransactions] = useState([])
     const [mergedRequisitionIds, setMergedRequisitionIds] = useState([location.state.orderId])
@@ -69,6 +73,9 @@ export default function PurchaseOrderConfirm() {
     function clickToResendMail() {
 
     }
+    const [test,setTest] = useState(true);
+   
+
     const columns = [
         {
             dataField: 'sku',
@@ -112,9 +119,11 @@ export default function PurchaseOrderConfirm() {
             }
         },
         {
-            hidden: ["Requisition", "PriceQuote"].includes(detailPurchaseState.status),
+
             dataField: 'price',
             text: 'Unit Price',
+            hidden: test,
+
             editable: !eventPage.isShowEditListProducts,
             formatter: (cellContent, row, rowIndex) => {
                 return (
@@ -140,10 +149,11 @@ export default function PurchaseOrderConfirm() {
         },
 
         {
-            hidden: ["Requisition", "PriceQuote"].includes(detailPurchaseState.status),
             dataField: 'totalAmount',
             text: 'Total Price',
             editable: false,
+           
+            hidden: test,
             formatter: (cellContent, row, rowIndex) => {
 
                 return (
@@ -152,19 +162,16 @@ export default function PurchaseOrderConfirm() {
             },
         },
         {   //neu duoc isShowEdit true thi khong duoc delete
-            hidden: eventPage.isShowEditListProducts,
             dataField: 'action',
             text: 'action',
+            hidden: eventPage.isShowEditListProducts,
             editable: false,
             formatter: (cellContent, row, rowIndex) => {
                 return (
-                    <div>
-                        {!eventPage.isShowEditListProducts ? <button
-                            type="button"
-                            className="btn btn-danger"
-                            onClick={() => clickDeleteProduct(rowIndex)} >
-                            Delete
-                        </button> : ""}
+                    <div  className="text-danger"  onClick={() => clickDeleteProduct(rowIndex)}> 
+                        <i class="bi bi-trash"></i>
+
+                      
 
 
                     </div>
@@ -176,7 +183,7 @@ export default function PurchaseOrderConfirm() {
 
 
     ];
-    const [columnsState, setColumns] = useState(columns)
+
     function clickCreatePurchaseOrder() {
         let data = {
             orderNumber: purchaseOrderDataGlobal.orderId
@@ -409,6 +416,7 @@ export default function PurchaseOrderConfirm() {
                 'success'
 
             )
+            dispatch({type:"EDIT_PRICE_QUOTE_RESET"})
         }
         if (priceQuoteUpdateStatus.errors === true) {
             alert("Loi")
@@ -644,28 +652,14 @@ export default function PurchaseOrderConfirm() {
                 }
             })
         )
-        setColumns((state) =>
-            columns.filter(column => {
-                if (column.dataField === "price") {
-
-                    console.log(["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status))
-                    return !["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status)
-                }
-                if (column.dataField === "totalAmount") {
-                    return !["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status)
-                }
-                return true
-            })
-            // state.map(column => {
-            //     if(column.dataField==="price"){
-            //         return {...column, hidden:["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status)}
-            //     }
-            //     if(column.dataField ==="totalAmount"){
-            //         return {...column, hidden: ["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status)}
-            //     }
-            //     return column
-            // })
-        )
+        if(!["Requisition","PriceQuote"].includes(purchaseOrderDataGlobal.status)){
+         
+            setTest((state) => (false))
+        }
+        else{
+          
+            setTest((state) => (true))
+        }
         if (!["Requisition", "Done", "PQCanceled", "Requisition"].includes(purchaseOrderDataGlobal.status)) {
 
             setEventPage(state => ({
@@ -677,7 +671,6 @@ export default function PurchaseOrderConfirm() {
         }
 
     }, [purchaseOrderDataGlobal])
-
     function editClick(nameEdit) {
 
 
@@ -884,9 +877,10 @@ export default function PurchaseOrderConfirm() {
         })
     }
     function clickToAddProduct(product) {
+        console.log(product)
         if (checkProductExist(product.productVariantId)) {
             setListProductPurchaseOrder((state) => state.map(item =>
-                item.productVariantId === product.productVariantId ? { ...item, orderQuantity: item.orderQuantity + product.orderQuantity } : item))
+                item.productVariantId === product.productVariantId ? { ...item, orderQuantity: (item.orderQuantity + product.orderQuantity) } : item))
         }
         else {
             setListProductPurchaseOrder((state) => [...state, product])
@@ -923,7 +917,6 @@ export default function PurchaseOrderConfirm() {
             ...state, isPreview: false
         }))
     }
-    console.log(columnsState)
 
     function goBackClick() {
         history.go(-1)
@@ -947,55 +940,11 @@ export default function PurchaseOrderConfirm() {
                 }, false)
             })
     })()
-    const columnTransaction = [
-
-        {
-            hidden: true,
-            dataField: 'transactionId',
-            text: 'SKU',
 
 
-        },
-        {
-            dataField: 'name',
-            text: 'Description',
-
-        },
-        {
-            dataField: 'date',
-            text: 'Date',
+    
 
 
-        },
-        {
-            dataField: 'fullname',
-            text: 'Full name',
-
-
-        },
-    ]
-    const columnlistMerged = [
-
-        {
-
-            dataField: 'createdBy',
-            text: 'By',
-
-
-        },
-        {
-            dataField: 'createdDate',
-            text: 'Created Date',
-
-        },
-        {
-            dataField: 'purchaseOrderId',
-            text: 'ID',
-
-
-        },
-
-    ]
     const listpermissionEdit = ["PriceQuote", "PurchaseOrder", "POWaitingConfirmation"]
     return (
         <div>
@@ -1010,44 +959,45 @@ export default function PurchaseOrderConfirm() {
                     {detailPurchaseState.status !== "PriceQuote" ? <div class="card">
                         <div class="row p-5">
                             <div className="col-md-4">
-                            <div className="form-text">
-                                Create By:
-                            </div>
-                            <label className="form-check-label" >
-                                {"hung phan"}
-                            </label>
+                                <div className="form-text">
+                                    Create By:
+                                </div>
+                                <label className="form-check-label" >
+                                    {"hung phan"}
+                                </label>
 
-                            <div className="form-text">
-                                Email:
-                            </div>
-                            <label className="form-check-label" >
-                                {"hunghanhpuc@gmail.comn"}
-                            </label>
+                                <div className="form-text">
+                                    Email:
+                                </div>
+                                <label className="form-check-label" >
+                                    {"hunghanhpuc@gmail.comn"}
+                                </label>
 
-                            <div className="form-text">
-                                Phone Number:
-                            </div>
-                            <label className="form-check-label" >
-                                {"0546544986"}
-                            </label>
+                                <div className="form-text">
+                                    Phone Number:
+                                </div>
+                                <label className="form-check-label" >
+                                    {"0546544986"}
+                                </label>
 
-                            <div className="form-text">
-                                Create date:
-                            </div>
-                            <label className="form-check-label" >
-                                {"1/2/2020"}
-                            </label>
+                                <div className="form-text">
+                                    Create date:
+                                </div>
+                                <label className="form-check-label" >
+                                    {"1/2/2020"}
+                                </label>
 
-                            <div className="form-text">
-                                Deadline:
+                                <div className="form-text">
+                                    Deadline:
+                                </div>
+                                <label className="form-check-label" >
+                                    {"1/2/2020"}
+                                </label>
                             </div>
-                            <label className="form-check-label" >
-                                {"1/2/2020"}
-                            </label>
-                        </div>
-                        <div className="col-md-8"> 
-                        <p data-bs-toggle="collapse" data-bs-target="#collapseHistory" >History</p>
-                                    <div className="collapse" id="collapseHistory" >
+                            <div className="col-md-8" >
+                                <p data-bs-toggle="collapse" data-bs-target="#collapseHistory" >History</p>
+                                <div className="collapse show " id="collapseHistory" >
+                                    <div style={{ height: "250px", overflow: "auto" }} >
                                         <table className="table">
                                             <tbody> {listTransactions.map((transaction, index) => (<tr>
                                                 <td>{transaction.name}</td>
@@ -1055,17 +1005,11 @@ export default function PurchaseOrderConfirm() {
                                                 <td>{transaction.applicationUser.fullname}</td>
                                             </tr>))}
                                             </tbody>  </table>
-                                        {/* <BootstrapTable
-                                            keyField='transactionId'
-                                            data={listTransactions}
-                                            columns={columnTransaction}
 
-                                        /> */}
 
                                     </div>
-
-                        
-                        </div>
+                                </div>
+                            </div>
                         </div>
                     </div> : <div class="card">
 
@@ -1106,28 +1050,26 @@ export default function PurchaseOrderConfirm() {
                                 </div>
                                 <div className="col-md-8" >
                                     <p data-bs-toggle="collapse" data-bs-target="#collapseHistory" >History</p>
-                                    <div className="collapse" id="collapseHistory" >
-                                        <table className="table">
-                                            <tbody> {listTransactions.map((transaction, index) => (<tr>
-                                                <td>{transaction.name}</td>
-                                                <td>{transaction.date}</td>
-                                                <td>{transaction.applicationUser.fullname}</td>
-                                            </tr>))}
-                                            </tbody>  </table>
-                                        {/* <BootstrapTable
-                                            keyField='transactionId'
-                                            data={listTransactions}
-                                            columns={columnTransaction}
+                                    <div className="collapse show " id="collapseHistory" >
+                                        <div style={{ height: "250px", overflow: "auto" }} >
+                                            <table className="table">
+                                                <tbody> {listTransactions.map((transaction, index) => (<tr>
+                                                    <td>{transaction.name}</td>
+                                                    <td>{transaction.date}</td>
+                                                    <td>{transaction.applicationUser.fullname}</td>
+                                                </tr>))}
+                                                </tbody>  </table>
 
-                                        /> */}
 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
                             <div className="form-text dropdown-toggle text-success" data-bs-toggle="collapse" data-bs-target="#collapseMoreCotent">
-                                More
+                                Content Mail:
                             </div>
-                            <div class="collapse" id="collapseMoreCotent">
+                            <div class="collapse show" id="collapseMoreCotent">
                                 <div className="card p-0">
                                     <div className="card-header">
                                         Content Mail:
@@ -1140,18 +1082,55 @@ export default function PurchaseOrderConfirm() {
                             </div>
 
 
+                            <div className="form-text dropdown-toggle text-success" data-bs-toggle="collapse" data-bs-target="#mergedOrderIdLists" >
+                                Merged Order List
+                            </div>
+                            <div className="collapse show " id="mergedOrderIdLists" >
+                                <div style={{ maxHeight: "250px", overflow: "auto" }} >
+                                    <table className="table">
+                                        <tbody> {mergedOrderIdLists.map((order, index) => (<tr>
+                                            <td>{order.purchaseOrderId}</td>
+                                            <td>{order.createdBy}</td>
+                                            <td>{order.createdDate}</td>
+
+                                        </tr>))}
+                                        </tbody>  </table>
+
+
+                                </div>
+                            </div>
 
                         </div>
 
                     </div>}
 
+                    {purchaseOrderDataGlobal.status === "POCanceled" ? <div class="card text-white alert-danger mb-3" >
+                        <div class="row">
 
-                    <BootstrapTable
-                        keyField='transactionId'
-                        data={mergedOrderIdLists}
-                        columns={columnlistMerged}
 
-                    />
+                            <div class="card-body col-sm-4">
+                                <h5 class="card-title text-danger">Reject By:</h5>
+                                <div className="form-text text-danger">
+                                    Name:
+                                </div>
+                                <label className="form-check-label text-danger" >
+                                    Logan
+                                </label>
+                                <div className="form-text text-danger">
+                                    Phone Number:
+                                </div>
+                                <label className="form-check-label text-danger" >
+                                    2621546165
+                                </label>
+
+                            </div>
+                            <div class="card-body col-sm-8">
+                                <h5 class="card-title text-danger">Reson:</h5>
+                                <p class="card-text text-danger">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            </div>
+                        </div>
+                    </div> : ""}
+
                 </div>
                 {/* <p>Supplier <SeachSupplier supplierInfo={supplier} getDataSupplier={getDataSupplier} /> </p> */}
 
@@ -1161,19 +1140,19 @@ export default function PurchaseOrderConfirm() {
                             <div class="d-flex ">
                                 <div class="me-auto p-2">Info Order:</div>
                                 <div class="p-2 pe-4 ">
-                                    <ListEdit statusEdit={eventPage.isShowEditListProducts} nameEdit="listProducts" />
+                                   {listpermissionEdit.includes(detailPurchaseState.status)?  <ListEdit statusEdit={eventPage.isShowEditListProducts} nameEdit="listProducts" />:""}
+                                  
                                 </div>
-                            </div>                        </div>
+                            </div>                        
+                            </div>
                         <div class="card-body">
-
-
-
-
+                            
+                           
 
                             <BootstrapTable
                                 keyField='productVariantId'
                                 data={listProductPurchaseOrder}
-                                columns={columnsState}
+                                columns={columns}
                                 striped
                                 hover
                                 condensed
@@ -1188,6 +1167,9 @@ export default function PurchaseOrderConfirm() {
 
                                 headerClasses="table-header-receipt"
                             />
+
+
+
                             {eventPage.isShowEditListProducts === false && listpermissionEdit.includes(detailPurchaseState.status) ?
                                 <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                                     <div class="btn-group me-2" role="group" aria-label="First group">
@@ -1204,6 +1186,7 @@ export default function PurchaseOrderConfirm() {
                     </div>
                 </div>
             </div>
+            
             <div className="content-container-receipt">
 
                 <FormAddProductModal
@@ -1297,7 +1280,7 @@ function SelectSupplier(props) {
 
 
 
-        <div class="col-md-3 form-floating">
+        <div class="form-floating">
 
             <select disabled={props.isDisabled} onChange={onChangeValue} value={JSON.stringify(selected)} class="form-select" id="validationCustom04" required>
                 <option selected disabled value={JSON.stringify({})}>Choose...</option>

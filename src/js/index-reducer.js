@@ -3,9 +3,6 @@ import client from "./user/reducer";
 import login from "./login/reducer";
 import updateProfileClient from "./about-account/reducer";
 import listPriceQuote from "./Gallery/reducer";
-import controlPurchaseQuotePage from "./purchase-order/reducer";
-import detailPriceQuote from "./purchase-order/detail-purchase-order/reducer";
-import sendMailReducer from "./purchase-order/create-price-quote/reducer";
 import searchPurchaseOrderReducer from "./purchase-order/purchase-quote-order/reducer";
 // import updateProfile from './about-account/reducer'
 import getAllRoleReducer from "./manage-account/manager/role-manager/reducer";
@@ -21,7 +18,7 @@ import getAllSuppliersReducer from "./supplier/manager/reducer";
 import getDetailsSupplierReducer from "./supplier/details/reducer";
 import getCreatedFormPurchaseRequisitionReducer from "./sale-man/create/reducer";
 import createProductReducer from "./product/create/reducer";
-import {createUserAccountReducer, getUserAccountDetail, updateAccountDetail} from "./manage-account/create/account/reducer";
+import {createUserAccountReducer, getUserAccountDetail, updateAccountDetail, setActiveAccount} from "./manage-account/create/account/reducer";
 import { createRolePermission,DetailRolePermission , UpdateRolePermission } from "./manage-account/create/role/reducer";
 import { getDetailPurchaseReducer,
   rejectPurchaserOrder,
@@ -57,9 +54,6 @@ const IndexReducer = combineReducers({
   client,
   updateProfileClient,
   listPriceQuote,
-  controlPurchaseQuotePage,
-  detailPriceQuote,
-  sendMailReducer,
   searchPurchaseOrderReducer,
   getGoodsReceiptReducer,
   getAllRoleReducer,
@@ -81,7 +75,7 @@ const IndexReducer = combineReducers({
   getDetailsStocktakeReducer,
   createProductReducer,
   // createUserAccountReducer,getDetailsProductReducer,getUserAccountDetail, updateAccountDetail,
-  createRolePermission,DetailRolePermission , UpdateRolePermission ,
+  createRolePermission,DetailRolePermission , UpdateRolePermission , setActiveAccount,
 
   createStocktakeReducer,
   locationManagetReducer,

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.css'
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 
 // import {
@@ -41,10 +42,10 @@ sagaMiddleware.run(IndexSagas);
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router>
+      <Router >
         
-      <Route path="/login" component={Login}></Route>
-        {checkHomePageAuthorization(store) ?<Redirect to="/homepage"/>: <Redirect to="/Login"/>}
+      <Route exact path="/login" component={Login}></Route>
+        {checkHomePageAuthorization(store) ?<Redirect to="/homepage/dashboard"/>: <Redirect to="/login"/>}
         <Route path="/homepage" component={App}>
           
         </Route>

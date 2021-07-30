@@ -39,8 +39,9 @@ class Login extends Component {
         
     }
     handleSubmit(event) {
+        const { history } = this.props;
         if(this.state.emailIsvalid && this.state.passwordIsvalid){
-            this.props.loginRequest(this.state);
+            this.props.loginRequest({  email: this.state.email, password: this.state.password ,history:history});
         }
         
 
@@ -95,7 +96,7 @@ class Login extends Component {
                     </form>
 
                 </div>
-                {this.props.login.successful ? <Redirect to="/homepage" /> : null}
+                {/* {this.props.login.successful ? <Redirect to="/homepage" /> : null} */}
             </div>
 
 

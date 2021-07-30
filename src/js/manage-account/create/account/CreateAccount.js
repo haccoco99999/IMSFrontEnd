@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './create-account.css'
 import RoleManagerAction from "../../manager/role-manager/action";
-import { CreateAccountAction, getUserAccountDetail } from './action';
+import { CreateAccountAction, getUserAccountDetail, setActiveAccountAction } from './action';
 import { useDispatch, useSelector } from 'react-redux';
 import NavigationBar from '../../../navigation-bar-component/NavigationBar';
 import { useLocation } from 'react-router-dom';
 export default function CreateAccount() {
- 
 
- 
+
+
   const [eventPage, setEventPage] = useState({
     isShowEdit: true
   })
@@ -20,13 +20,13 @@ export default function CreateAccount() {
   })
 
 
-  const {  token,infoDetailAccountStore } = useSelector((state) => ({
-  
+  const { token, infoDetailAccountStore } = useSelector((state) => ({
+
     token: state.client.token,
     infoDetailAccountStore: state.getUserAccountDetail.infoDetailAccount
   }));
 
-  const [infoAccountState, setInfoAccountState] = useState({...infoDetailAccountStore })
+  const [infoAccountState, setInfoAccountState] = useState({ ...infoDetailAccountStore })
   // password: "dellDell123*",
   // email: "",
   // roleId: "",
@@ -35,27 +35,27 @@ export default function CreateAccount() {
   // address: "",
   // dateOfBirth: ""
   const location = useLocation()
-  const[statusUser, setStatusUser] = useState("")
-  useEffect(() =>{
-    if(location.state.status === "EDITUSER") {
-      setStatusUser(location.state.status )
+  const [statusUser, setStatusUser] = useState("")
+  useEffect(() => {
+    if (location.state.status === "EDITUSER") {
+      setStatusUser(location.state.status)
       dispatch(
-       
+
         getUserAccountDetail({ userID: location.state.userId, token: token })
       );
     }
-    else if(location.state.status === "CREATEUSER"){
-      setStatusUser(location.state.status )
+    else if (location.state.status === "CREATEUSER") {
+      setStatusUser(location.state.status)
     }
-    else{
+    else {
 
     }
-  },[])
+  }, [])
 
-  useEffect(() =>{
+  useEffect(() => {
     setInfoAccountState(infoDetailAccountStore)
-  },[infoDetailAccountStore])
-  
+  }, [infoDetailAccountStore])
+
 
   function checkValidPassword(password) {
     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)
@@ -116,7 +116,7 @@ export default function CreateAccount() {
 
 
 
-  function createAccountInfo(event) {
+  function createAccountInfo() {
 
     if (isvalidPassword.isValidNewPassword && isvalidPassword.isConfirmPassword) {
       const data = { ...infoAccountState, password: newPassword.current.value }
@@ -137,59 +137,67 @@ export default function CreateAccount() {
     image.src = URL.createObjectURL(event.target.files[0]);
 
   }
-  function clickCancel(){
+  function clickCancel() {
     setInfoAccountState(infoDetailAccountStore)
     setClickEdit();
   }
-  function clickUpdate(){
-    
-    if(isvalidPassword.isValidNewPassword !== false && isvalidPassword.isConfirmPassword !== false ){
-    let data={
-      userId: infoAccountState.userID, 
-      email: infoAccountState.email,
-      phoneNumber: infoAccountState.phoneNumber,
-      address: infoAccountState.address,
-      roleId: infoAccountState.roleID,
-      dateOfBirth: infoAccountState.dateOfBirth,
-      fullname: infoAccountState.fullname
-    }
-  //neu data hop le //co 3 trang thai null(ko dien vao gi het) true("thi add vao update product") false("ko cho update")
-    if(isvalidPassword.isValidNewPassword && isvalidPassword.isConfirmPassword){
-      data = {...data,password: newPassword.current.value }
-    }
+  function clickUpdate() {
 
-    //  dispatch(updateUserAccountDetail({data: data, token:token}))
-     setClickEdit();
+    if (isvalidPassword.isValidNewPassword !== false && isvalidPassword.isConfirmPassword !== false) {
+      let data = {
+        userId: infoAccountState.userID,
+        email: infoAccountState.email,
+        phoneNumber: infoAccountState.phoneNumber,
+        address: infoAccountState.address,
+        roleId: infoAccountState.roleID,
+        dateOfBirth: infoAccountState.dateOfBirth,
+        fullname: infoAccountState.fullname
+      }
+      //neu data hop le //co 3 trang thai null(ko dien vao gi het) true("thi add vao update product") false("ko cho update")
+      if (isvalidPassword.isValidNewPassword && isvalidPassword.isConfirmPassword) {
+        data = { ...data, password: newPassword.current.value }
+      }
+
+      //  dispatch(updateUserAccountDetail({data: data, token:token}))
+      setClickEdit();
     }
-    else{alert("nhap sai mat khau")}
-    
+    else { alert("nhap sai mat khau") }
+
   }
 
-  function setClickEdit(){
-    setEventPage((state) =>({
-      ...state, isShowEdit: ! state.isShowEdit
+  function clickSetActiveAccount(){
+    const data ={
+      userId: infoDetailAccountStore.userID,
+      isDeactivated: false
+    }
+    dispatch(setActiveAccountAction({data: data, token: token}))
+  }
+
+  function setClickEdit() {
+    setEventPage((state) => ({
+      ...state, isShowEdit: !state.isShowEdit
     }))
   }
-  function setListButton(status){
-    if(status ==="CREATEUSER"){
-     return [{
+  function setListButton(status) {
+    if (status === "CREATEUSER") {
+      return [{
         isShow: true,
         title: "Create User",
-        action: () =>createAccountInfo,
+        action: () => createAccountInfo(),
         style: {
           background: "#4e9ae8"
         }
       },
       ]
     }
-    else if(status ==="EDITUSER"){
+    else if (status === "EDITUSER") {
       return [
         {
           isShow: eventPage.isShowEdit,
           title: "Edit",
           action: setClickEdit,
           style: {
-              background: "#4e9ae8"
+            background: "#4e9ae8"
           }
         },
         {
@@ -197,7 +205,7 @@ export default function CreateAccount() {
           title: "Cancel",
           action: clickCancel,
           style: {
-              background: "#4e9ae8"
+            background: "#4e9ae8"
           }
         },
         {
@@ -205,9 +213,19 @@ export default function CreateAccount() {
           title: "Save",
           action: clickUpdate,
           style: {
-              background: "#4e9ae8"
+            background: "#4e9ae8"
           }
-        },  ]
+        },
+        {
+          isShow: true,
+          title: "BANNED ACCOUNT",
+          action: clickSetActiveAccount,
+          style: {
+            background: "#4e9ae8"
+          }
+        },
+      
+      ]
     }
     return []
   }
@@ -234,7 +252,7 @@ export default function CreateAccount() {
               <img id="output-avatar" class="card-img-top rounded-pill" width="90px" height="300px" src="https://i.stack.imgur.com/l60Hf.png" alt="Card image cap" />
 
 
-            
+
 
 
 
@@ -249,15 +267,16 @@ export default function CreateAccount() {
             <h3>Profile Detail</h3>
 
 
+
+            <div class="form-group">
+              <label for="">Email:</label>
+              <input type="text" onChange={onchangeInputInfoAccount} name="email" value={infoAccountState.email} disabled={statusUser !== "CREATEUSER"}
+                class="form-control" aria-describedby="helpId" placeholder="" />
+
+            </div>
             <div class="form-group">
               <label for="">Full Name:</label>
               <input type="text" onChange={onchangeInputInfoAccount} name="fullname" value={infoAccountState.fullname}
-                class="form-control" aria-describedby="helpId" placeholder="" />
-              <div></div>
-            </div>
-            <div class="form-group">
-              <label for="">Email:</label>
-              <input type="text" onChange={onchangeInputInfoAccount} name="email" value={infoAccountState.email} disabled={status!=="CREATEUSER"}
                 class="form-control" aria-describedby="helpId" placeholder="" />
 
             </div>
@@ -269,13 +288,13 @@ export default function CreateAccount() {
             </div>
             <div class="form-group">
               <label for="">Address:</label>
-              <input type="text" onChange={onchangeInputInfoAccount} name="address"   value={infoAccountState.address}
+              <input type="text" onChange={onchangeInputInfoAccount} name="address" value={infoAccountState.address}
                 class="form-control" aria-describedby="helpId" placeholder="" />
 
             </div>
             <div class="form-group">
               <label for="">Birthday</label>
-              <input type="date" onChange={onchangeInputInfoAccount} name="dateOfBirth"  value={infoAccountState.dateOfBirth.split("T")[0]}
+              <input type="date" onChange={onchangeInputInfoAccount} name="dateOfBirth" value={infoAccountState.dateOfBirth.split("T")[0]}
                 class="form-control" aria-describedby="helpId" placeholder="" />
 
             </div>
@@ -283,10 +302,10 @@ export default function CreateAccount() {
               <label for="">Select Role</label>
               <select onChange={onchangeInputInfoAccount} class="form-control" name="roleId" id="">
                 <option value="" disabled selected>  -- No Selected --  </option>
-                <option value="Manager" >Manager</option>
-                <option value="Accountant" >Accountant</option>
-                <option value="StockKeeper" >StockKeeper</option>
-                <option value="Saleman" >Saleman</option>
+                <option value="c7c84372-2a0f-4bf5-b496-886855e6747b" >Manager</option>
+                <option value="e21db315-bbe3-421f-bab4-589e4b849bff" >Accountant</option>
+                <option value="7845e265-673d-4ad9-b3ce-67bfb13f80ab" >StockKeeper</option>
+                <option value="9e0d49c6-5217-45fd-8fcc-8e9402ca8118" >Saleman</option>
 
               </select>
             </div>

@@ -22,7 +22,7 @@ export default function FormAddProductModal(props) {
     })
     const [listGroupNameProduct, setListGroupNameProduct] = useState([])
     function getInfoProduct(info) {
-    
+    console.log(info)
      
         setProduct({
      
@@ -39,7 +39,7 @@ export default function FormAddProductModal(props) {
     }
     function changeValueInput(event) {
       setProduct((state) => ({
-        ...state, [event.target.name]: event.target.value
+        ...state, [event.target.name]: event.target.valueAsNumber
       }))
     }
     function changeNavTabs(event) {
@@ -169,7 +169,7 @@ export default function FormAddProductModal(props) {
                     </div>
                     <div class="form-group">
                       <label for="">Quantity</label>
-                      <input type="text"
+                      <input type="number"
                         value={product.orderQuantity} class="form-control" name="orderQuantity" onChange={changeValueInput} aria-describedby="helpId" placeholder="" />
                     </div>
                   </div>) : ""}

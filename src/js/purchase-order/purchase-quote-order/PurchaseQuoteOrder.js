@@ -1,10 +1,8 @@
 import React from 'react'
 
-import FilterModal from '../fillter/FilterModal'
 import './PurchaseQuoteOrder.css'
 import 'bootstrap/js/dist/modal'
 import { connect, useDispatch, useSelector } from 'react-redux'
-import AddjustDisplayTableModal from '../adjust-display-table/AddjustDisplayTableModal'
 import { useState, useEffect } from 'react'
 import ListReceiptTable from '../../table-receipt/ListReceiptsTable'
 import { useHistory, withRouter } from 'react-router-dom'
@@ -19,7 +17,19 @@ import PagingComponent from '../../components/paging/paging-component'
 import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import ProductVariantsFilter from './ProductVariantsFilter'
 import StockTakeFilter from './StockTakeFilter'
+import {Cloudinary} from "@cloudinary/base";
+
 export default function PurchaseQuoteOrder() {
+    // const cld = new Cloudinary({
+    //     cloud: {
+    //       cloudName: 'demo',
+    //       api_key: '874837483274837', 
+    //       api_secret: 'a676b67565c6767a6767d6767f676fe1' 
+    //     }
+    //   });
+    //   cld.v2.uploader.upload("https://www.example.com/mysample.jpg",
+    //   { public_id: "sample_woman" }, 
+    //   function(error, result) {alert(result) }); 
 
     let history = useHistory()
     const { token, purchaseOrderStore } = useSelector(state => ({
@@ -341,16 +351,6 @@ export default function PurchaseQuoteOrder() {
 
                         </div>
 
-                        // <button
-                        //   type="button"
-                        //   key={ column.dataField }
-                        //   className={ `btn btn-warning ${column.toggle ? 'active' : ''}` }
-                        //   data-toggle="button"
-                        //   aria-pressed={ column.toggle ? 'true' : 'false' }
-                        //   onClick={ () => onColumnToggle(column.dataField) }
-                        // >
-                        //   { column.text }
-                        // </button>
                     ))
             }
         </div>
@@ -529,14 +529,14 @@ export default function PurchaseQuoteOrder() {
     //  resetFilter={resetProductVariantsFilter}
     //  />
 }
-            
+{/*             
             <StockTakeFilter  
             
                onChangeValueFilter={onChangeStockTaketFilter}
      filter={stockTakeFilter} 
      submitFilter={submitStockTakeFilter}
      resetFilter={resetStockTakeFilter}
-            />
+            /> */}
             {purchaseOrderStore.successfulPQ ?
                 <Gallery
                     clickQuote={onClickToDetailQuoteOrder}

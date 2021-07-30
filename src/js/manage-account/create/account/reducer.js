@@ -9,7 +9,11 @@ import {
 
   UPDATE_DETAIL_ACC_ERR,
   UPDATE_DETAIL_ACC_REQUEST,
-  UPDATE_DETAIL_ACC_SUCCESS
+  UPDATE_DETAIL_ACC_SUCCESS,
+  SET_ACTIVE_ACC_REQUEST,
+  SET_ACTIVE_ACC_SUCCESS,
+  SET_ACTIVE_ACC_ERR,
+  SET_ACTIVE_ACC_CLEAN
 } from "./constants";
 
 const initalCreateAccountState = {
@@ -50,6 +54,46 @@ export function createUserAccountReducer(state = initalCreateAccountState, actio
       return state;
   }
 };
+const deactivatedAccountInit = {
+  requesting: false,
+  success: false,
+  messages: "",
+  errors: false,
+ 
+};
+
+export const setActiveAccount =  function createUserAccountReducer(state = deactivatedAccountInit, action) {
+  switch (action.type) {
+    case SET_ACTIVE_ACC_REQUEST:
+      return {
+        requesting: true,
+        success: false,
+        messages: "",
+        errors: false,
+   
+      };
+    case SET_ACTIVE_ACC_SUCCESS:
+      return {
+        requesting: false,
+        successful: true,
+        messages: "",
+        errors: false,
+        
+      };
+    case SET_ACTIVE_ACC_ERR:
+      return {
+        requesting: false,
+        success: false,
+        messages: "",
+        errors: true,
+       
+      };
+    case SET_ACTIVE_ACC_CLEAN:
+      return deactivatedAccountInit
+    default:
+      return state;
+  }
+};
 
 const initalGetDetailAccountState = {
   requesting: false,
@@ -58,13 +102,13 @@ const initalGetDetailAccountState = {
   errors: "",
   infoDetailAccount: {
 
-    id: "",
+    userID: "",
     email: "",
-    phoneNumber: "1324564",
+    phoneNumber: "",
     fullname: "",
     address: "",
     dateOfBirth: "",
-    isActive: null,
+    isActive: "",
     roleID: "",
     userRole: "",
 

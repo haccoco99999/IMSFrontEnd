@@ -171,6 +171,7 @@ function App(props) {
       setHubConnection(hubConnection);
     };
     createHubConnection();
+    
   }, []);
   return (
     <div>
@@ -335,7 +336,7 @@ function App(props) {
       </div>
 
       <Switch>
-        <Route path="/homepage/dashboard">
+        <Route  path="/homepage/dashboard">
           <Dashboard />
         </Route>
         <Route path="/homepage/purchase">

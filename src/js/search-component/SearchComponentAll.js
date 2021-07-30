@@ -1,49 +1,61 @@
 import React, { useEffect, useState } from "react";
 import { Typeahead, AsyncTypeahead } from "react-bootstrap-typeahead";
 
-export function SearchToAddProduct() {
-  const SEARCH_URI =
-    "https://imspublicapi.herokuapp.com/api/productvariant/search";
+export function SearchToAddProduct(props) {
+
+
+  const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/productvariant/search';
+
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
   const handleSearch = (query) => {
-    setIsLoading(true);
+      setIsLoading(true);
 
-    fetch(`${SEARCH_URI}?SearchQuery=${query}&CurrentPage=1&SizePerPage=20`)
-      .then((resp) => resp.json())
-      .then((items) => {
-        console.log(items);
-        const options = items.paging.resultList.map((i) => ({
-          name: i.name,
-          sku: i.sku,
-          filter: i.sku + " " + i.name,
-        }));
+      fetch(`${SEARCH_URI}?SearchQuery=${query}&CurrentPage=1&SizePerPage=20`)
+          .then((resp) => resp.json())
+          .then((items) => {
+              console.log(items)
+              const options = items.paging.resultList.map((i) => ({
+                  name: i.name,
+                  sku: i.sku,
+                  filter: i.sku + " " + i.name,
+                  product: i,
+              }));
 
-        setOptions(options);
-        setIsLoading(false);
-      });
+              setOptions(options);
+              setIsLoading(false);
+          });
   };
   const filterBy = () => true;
 
+
   return (
-    <AsyncTypeahead
-      filterBy={filterBy}
-      id="async-example"
-      isLoading={isLoading}
-      labelKey="filter"
-      minLength={1}
-      onSearch={handleSearch}
-      options={options}
-      placeholder="Search for a Github user..."
-      renderMenuItemChildren={(option, props) => (
-        <div onClick={() => console.log(option.id)} key={option.id}>
-          <p>{option.name}</p>
-          <p>{option.sku}</p>
-        </div>
-      )}
-    />
-  );
+
+      <AsyncTypeahead
+          filterBy={filterBy}
+          id="async-example"
+          labelKey="filter"
+          minLength={1}
+          onSearch={handleSearch}
+          options={options}
+          placeholder="Search for a Github user..."
+
+          renderMenuItemChildren={(option) => (
+              <div onClick={() => props.getInfoProduct(option.product)} key={option.id}>
+                  <img src="https://github.com/mdo.png" alt="@mdo" width="32" height="32" class="rounded me-2" loading="lazy" />
+                  <span>
+                      <strong>{option.name}</strong> {option.sku}
+
+                  </span>
+
+
+
+              </div>
+          )}
+      />
+
+  )
 }
 export function Search() {
   const SEARCH_URI = "https://api.github.com/search/users";

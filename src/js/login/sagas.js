@@ -5,6 +5,7 @@ import handleApiErrors from '../auth/api-errors'
 
 
 
+
 // Our login constants
 import {  
   LOGIN_REQUESTING,
@@ -56,19 +57,22 @@ function* logout () {
 
 }
 
-function* loginFlow (email, password) {  
+function* loginFlow (email, password, history) {  
   let json
   try {
     
     json = yield call(loginApi, email, password)
+
     if(json.result){
       yield put(setClient(json))
 
-    
+
       yield put({ type: LOGIN_SUCCESS })
-      
+
+    
       
       localStorage.setItem('token', JSON.stringify(json))
+      history.push('/homepage/dashboard')
     }
     else{
       yield put({type: LOGIN_BANNED})
@@ -93,9 +97,9 @@ function* loginWatcher () {
  
   while (true) {
  
-    const { email, password } = yield take(LOGIN_REQUESTING)
+    const { email, password, history } = yield take(LOGIN_REQUESTING)
 
-    const task = yield fork(loginFlow, email, password)
+    const task = yield fork(loginFlow,email, password, history)
     
     
     const action = yield take([CLIENT_UNSET, LOGIN_ERROR, LOGIN_BANNED])

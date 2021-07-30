@@ -128,7 +128,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                     orderId: action.json.purchaseOrder.id,
                     status: action.json.purchaseOrder.purchaseOrderStatusString,
                     transaction: action.json.purchaseOrder.transaction,
-                    mergedOrderIdLists: [] ,
+                    mergedOrderIdLists: action.json.mergedOrderIdLists !== undefined? action.json.mergedOrderIdLists: [] ,
                     applicationUser: {
      
                         createDate: "2019-04-19T09:05:17.641865",
