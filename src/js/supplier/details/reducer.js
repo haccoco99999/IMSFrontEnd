@@ -15,11 +15,11 @@ const initialState = {
   requesting: false,
   successful: false,
   messages: "",
-  errors: "",
+  errors: false,
   supplierDetails: {},
 };
 
-const reducer = function GoodsReceiptReducer(state = initialState, action) {
+export function getDetailsSupplierReducer(state = initialState, action) {
   switch (action.type) {
     case GET_DETAILS_SUPPLIER_REQUEST:
       return {
@@ -27,7 +27,7 @@ const reducer = function GoodsReceiptReducer(state = initialState, action) {
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
     case GET_DETAILS_SUPPLIER_RESPONSE:
       return {
@@ -35,7 +35,7 @@ const reducer = function GoodsReceiptReducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
+        errors: false,
         supplierDetails: action.json.paging.resultList[0],
       };
     case GET_DETAILS_SUPPLIER_ERROR:
@@ -44,24 +44,39 @@ const reducer = function GoodsReceiptReducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "error",
+        errors: true,
       };
+
+    case CLEAR_MESSAGE:
+      return initalState;
+    default:
+      return state;
+  }
+}
+
+const updateState = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: false,
+};
+export function updateSupplierReducer(state = updateState, action) {
+  switch (action.type) {
     case UPDATE_SUPPLIER_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
     case UPDATE_SUPPLIER_RESPONSE:
       return {
         ...state,
         requesting: false,
         successful: true,
-        // messages: action.json.modifiedSupplierId,
-        messages:"Update Success",
-        errors: "",
+        messages: "Update Success",
+        errors: false,
       };
     case UPDATE_SUPPLIER_ERROR:
       return {
@@ -69,15 +84,30 @@ const reducer = function GoodsReceiptReducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "error",
+        errors: true,
       };
+    case CLEAR_MESSAGE:
+      return updateState;
+    default:
+      return state;
+  }
+}
+const deleteState = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: false,
+};
+
+export function deleteSupplierReducer(state = deleteState, action) {
+  switch (action.type) {
     case DELETE_SUPPLIER_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
     case DELETE_SUPPLIER_RESPONSE:
       return {
@@ -85,7 +115,7 @@ const reducer = function GoodsReceiptReducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: "Delete Success",
-        errors: "",
+        errors: false,
       };
     case DELETE_SUPPLIER_ERROR:
       return {
@@ -93,19 +123,11 @@ const reducer = function GoodsReceiptReducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "error",
+        errors: true,
       };
     case CLEAR_MESSAGE:
-      return {
-        ...state,
-        requesting: false,
-        successful: false,
-        messages: "",
-        errors: "",
-      };
+      return deleteState;
     default:
       return state;
   }
-};
-
-export default reducer;
+}

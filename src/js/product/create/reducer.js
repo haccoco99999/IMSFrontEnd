@@ -5,17 +5,18 @@ import {
   GET_ALL_CATEGORY_CREATED_RESPONSE,
   GET_ALL_CATEGORY_CREATED_REQUEST,
   GET_ALL_CATEGORY_CREATED_ERROR,
+  RESET,
 } from "./constants";
 
 const initialState = {
   requesting: false,
   successful: false,
   messages: "",
-  errors: "",
+  errors: false,
   listCategories: [],
 };
 
-export default function reducer(state = initialState, action) {
+export function createProductReducer(state = initialState, action) {
   switch (action.type) {
     case CREATE_PRODUCT_REQUEST:
       return {
@@ -23,7 +24,7 @@ export default function reducer(state = initialState, action) {
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
 
     case CREATE_PRODUCT_RESPONSE:
@@ -32,7 +33,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: action.json.createdProductId,
-        errors: "",
+        errors: false,
       };
 
     case CREATE_PRODUCT_ERROR:
@@ -41,17 +42,36 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
       };
 
+    case RESET:
+      return initialState;
+    default:
+      return state;
+  }
+}
+
+const categoriesState = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: false,
+  listCategories: [],
+};
+
+export function getCategoriesCreateProductReducer(
+  state = categoriesState,
+  action
+) {
+  switch (action.type) {
     case GET_ALL_CATEGORY_CREATED_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
-        
+        errors: false,
       };
 
     case GET_ALL_CATEGORY_CREATED_RESPONSE:
@@ -60,7 +80,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
+        errors: false,
         listCategories: action.json.paging.resultList,
       };
 
@@ -70,7 +90,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
         listCategories: [],
       };
 

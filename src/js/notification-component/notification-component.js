@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import moment from "moment";
 //css
 import "./notification-component.css";
 //components
@@ -10,7 +11,7 @@ export default function NotificationBellComponents(props) {
     token: state.client.token,
     listNotificationStore: state.notificationReducer.listNotifications,
   }));
-  
+
   useEffect(() => {
     dispatch(getAllLocationsAction({ token: token }));
   }, []);
@@ -21,15 +22,21 @@ export default function NotificationBellComponents(props) {
       </div>
       <div className="list-notification">
         <ul>
-          {listNotificationStore.map((notification) => (
-            <li key={notification.id}>
-              {/* <img src="..\src\js\images\manufacture-2.png" /> */}
-              <div>
-                <span>{notification.message}</span>
-                {/* <p>Last:2/6/2020</p> */}
-              </div>
-            </li>
-          ))}
+          {listNotificationStore.map((notification) => {
+            var stringCheckTime = notification.message.split("at:");
+            var newMessage =
+              stringCheckTime[0] +
+              "at:" +
+              moment(stringCheckTime[1]).add(7, "h").format("DD/MM/YYYY HH:mm");
+
+            return (
+              <li key={notification.id}>
+                <div>
+                  <span>{newMessage}</span>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </div>
       <div className="footer-notification">

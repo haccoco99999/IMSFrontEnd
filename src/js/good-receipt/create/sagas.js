@@ -5,7 +5,7 @@ import {
   GET_CONFIRMED_PURCHASE_ORDER_REQUEST,
   GET_CONFIRMED_PURCHASE_ORDER_RESPONSE,
   GET_CONFIRMED_PURCHASE_ORDER_ERROR,
-  //PO
+  //PO  
   GET_DETAILS_PO_REQUEST,
   GET_DETAILS_PO_RESPONSE,
   GET_DETAILS_PO_ERROR,
@@ -87,7 +87,7 @@ function setReceivingPurchaseOrderQuantity(action) {
     });
 }
 function getAllLocations(action) {
-  const url = `${process.env.REACT_APP_API}/package?CurrentPage=0&SizePerPage=0&IsLocationOnly=true"`;
+  const url = `${process.env.REACT_APP_API}/package?CurrentPage=0&SizePerPage=0&IsLocationOnly=true`;
   return fetch(url, {
     method: "GET",
     headers: {

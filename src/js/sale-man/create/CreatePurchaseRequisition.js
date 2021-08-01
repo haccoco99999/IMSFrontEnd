@@ -10,47 +10,27 @@ import "../sale-man.css";
 
 //components
 import SearchComponent from "../../search-component/SearchComponent";
-// import ListProductsTable from "../../list-products-table/ListProductsTable";
 import NavigationBar from "../../components/navbar/navbar-component";
-
+import { TableLoading } from "../../components/loading/loading-component";
 import {
   createPRAction,
   clearMessageAction,
   getALlSuppliersAction,
 } from "./action";
 
-export default function () {
+export default function CreatePurchaseRequisition() {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  const [supplierSelected, setSupplierSelected] = useState({});
+  // const [supplierSelected, setSupplierSelected] = useState({});
   const [purchaseOrderProduct, setPurchaseOrderProduct] = useState([]);
   const [deadline, setDeadline] = useState("");
-  // const [listColumn, setListColumn] = useState([
-  //   {
-  //     name: "Product Name",
-  //   },
-  //   {
-  //     unit: "Unit",
-  //     //input: true,
-  //   },
-  //   {
-  //     orderQuantity: "Quantity",
-  //     input: true,
-  //   },
-  //   {
-  //     price: "Unit Price",
-  //     input: true,
-  //   },
-  //   {
-  //     totalAmount: "Amount",
-  //   },
-  // ]);
 
-  const { message, token, listSuppliers } = useSelector((state) => ({
-    message: state.getCreatedFormPurchaseRequisitionReducer.messages,
+  const { token, createPRReducer } = useSelector((state) => ({
+    // message: state.getCreatedFormPurchaseRequisitionReducer.messages,
     token: state.client.token,
-    listSuppliers: state.getCreatedFormPurchaseRequisitionReducer.listSuppliers,
+    createPRReducer: state.getCreatedFormPurchaseRequisitionReducer,
+    // listSuppliers: state.getCreatedFormPurchaseRequisitionReducer.listSuppliers,
   }));
 
   //todo: declare button
@@ -76,6 +56,12 @@ export default function () {
             valid: false,
             message: "Quantity should be numeric",
           };
+        } else {
+          if (newValue < 0)
+            return {
+              valid: false,
+              message: "Quantity should be bigger than 0",
+            };
         }
       },
     },
@@ -92,31 +78,41 @@ export default function () {
     //     </div>
     //   ),
     // },
-    { dataField: "name", text: "Action",editable: false,
-    formatter: (cellContent, row, rowIndex) => {
-      return (
-        <button
-          type="button"
-          className="btn btn-danger"
-          onClick={() => clickDeleteCheckItems(rowIndex)}
-        >
-          Delete
-        </button>
-      );
-    },},
+    {
+      dataField: "name",
+      text: "Action",
+      editable: false,
+      formatter: (cellContent, row, rowIndex) => {
+        return (
+          <div
+            className="text-danger"
+            onClick={() => clickDeleteCheckItems(rowIndex)}
+          >
+            <i class="bi bi-trash"></i>
+          </div>
+          // <button
+          //   type="button"
+          //   className="btn btn-danger"
+          //   onClick={() => clickDeleteCheckItems(rowIndex)}
+          // >
+          //   Delete
+          // </button>
+        );
+      },
+    },
   ];
 
-  const handleChangeSuppliers = (e) => {
-    const index = e.target.selectedIndex;
-    const el = e.target.childNodes[index];
+  // const handleChangeSuppliers = (e) => {
+  //   const index = e.target.selectedIndex;
+  //   const el = e.target.childNodes[index];
 
-    // console.log(event.target.id);
-    setSupplierSelected({
-      id: el.getAttribute("id"),
-      name: el.getAttribute("value"),
-    });
-    console.log(supplierSelected);
-  };
+  //   // console.log(event.target.id);
+  //   setSupplierSelected({
+  //     id: el.getAttribute("id"),
+  //     name: el.getAttribute("value"),
+  //   });
+  //   console.log(supplierSelected);
+  // };
 
   //todo: function nav button
   const listButton = setListButtonNav();
@@ -157,22 +153,22 @@ export default function () {
     setPurchaseOrderProduct([...purchaseOrderProduct, product]);
   }
 
-  function onChangeValueProduct(event) {
-    setPurchaseOrderProduct(
-      purchaseOrderProduct.map((element, index) =>
-        index == event.target.id
-          ? {
-              ...element,
-              [event.target.name]: event.target.value,
-              totalAmount:
-                [event.target.name] === "orderQuantity"
-                  ? event.target.value * element.price
-                  : event.target.value * element.orderQuantity,
-            }
-          : element
-      )
-    );
-  }
+  // function onChangeValueProduct(event) {
+  //   setPurchaseOrderProduct(
+  //     purchaseOrderProduct.map((element, index) =>
+  //       index == event.target.id
+  //         ? {
+  //             ...element,
+  //             [event.target.name]: event.target.value,
+  //             totalAmount:
+  //               [event.target.name] === "orderQuantity"
+  //                 ? event.target.value * element.price
+  //                 : event.target.value * element.orderQuantity,
+  //           }
+  //         : element
+  //     )
+  //   );
+  // }
 
   function onChangeDeadline(event) {
     setDeadline(moment.utc(event.target.value).format());
@@ -200,7 +196,7 @@ export default function () {
             unit: product.unit,
             price: 0,
             discountAmount: product.discountAmount,
-            totalAmount:0,
+            totalAmount: 0,
           };
         }),
       };
@@ -209,28 +205,67 @@ export default function () {
     }
   }
 
+  //todo: listEdit
+
+  // useEffect(() => {
+  //   if (message !== "") {
+  //     dispatch(clearMessageAction());
+  //     // console.log("ID:", message);
+  //     history.push("/homepage/sale-man/details", {
+  //       fromPage: "CreatePage",
+  //       purchaseRequisitionId: message,
+  //     });
+  //   }
+  // }, [message]);
   useEffect(() => {
-    if (message !== "") {
-      dispatch(clearMessageAction());
-      // console.log("ID:", message);
-      history.push("/homepage/sale-man/details", {
-        fromPage: "CreatePage",
-        purchaseRequisitionId: message,
+    if (createPRReducer.requesting === true) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
       });
     }
-  }, [message]);
 
-  useEffect(() => {
-    dispatch(getALlSuppliersAction({ token: token }));
-  }, []);
-  console.log(purchaseOrderProduct);
+    if (createPRReducer.successful === true) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          history.push("/homepage/sale-man/details", {
+            // fromPage: "CreatePage",
+            purchaseRequisitionId: createPRReducer.messages,
+          });
+        }
+      });
+    }
+
+    if (createPRReducer.errors === true) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  }, [createPRReducer]);
+
   return (
     <div>
       <NavigationBar
         actionGoBack={goBackClick}
-        titleBar="Create"
+        titleBar="Create Purchase Requisition"
         status=""
         listButton={listButton}
+        home="Purchase Requisition"
+        currentPage="Create "
+        classStatus="bg-secondary"
       />
 
       {/* content */}
@@ -270,55 +305,9 @@ export default function () {
                   },
                 })}
               />
-              {/* <ListProductsTable
-                clickToAddProduct={clickToAddProduct}
-                onChangeValueProduct={onChangeValueProduct}
-                listColumn={listColumn}
-                listData={purchaseOrderProduct}
-              /> */}
             </li>
           </ul>
         </div>
-        {/* <div className="wrapper-content shadow">
-          <div className="title-heading mt-2">
-            <span>Select your product</span>
-          </div>
-        </div>
-      </div>
-      <div className="wrapper-content shadow mt-3">
-        <div>
-          <label for="deadline" class="form-label">
-            Deadline
-          </label>
-        </div>
-        <div className="mt-3">
-          <label for="supplier" class="form-label">
-            Supplier
-          </label>
-          <select
-            name="categoryID"
-            class="form-select"
-            aria-label="Default select example"
-            defaultValue=""
-            onChange={handleChangeSuppliers}
-          >
-            <option value="" disabled>
-              -- No Selected --
-            </option>
-
-            {listSuppliers.map((supplier) => (
-              <option id={supplier.id} value={supplier.supplierName}>
-                {supplier.supplierName}
-              </option>
-            ))}
-          </select>
-        </div> */}
-
-        {/* <div className="mt-3">
-          <label class="form-label" value="">
-            Products
-          </label>
-        </div> */}
       </div>
     </div>
   );

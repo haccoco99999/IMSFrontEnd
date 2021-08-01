@@ -10,6 +10,7 @@ import {
   updateDetailsSupplierAction,
   deleteSupplierAction,
 } from "./action";
+import { CLEAR_MESSAGE } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
 
 export default function SupplierDetails() {
@@ -17,10 +18,19 @@ export default function SupplierDetails() {
   let location = useLocation();
   let dispatch = useDispatch();
 
-  const { supplierStore, token, messages } = useSelector((state) => ({
+  const {
+    supplierStore,
+    token,
+    messages,
+    updateSupplierReducer,
+    deleteSupplierReducer,
+  } = useSelector((state) => ({
     supplierStore: state.getDetailsSupplierReducer.supplierDetails,
-    messages: state.getDetailsSupplierReducer.messages,
+    // messages: state.getDetailsSupplierReducer.messages,
     token: state.client.token,
+    updateSupplierReducer: state.updateSupplierReducer,
+
+    deleteSupplierReducer: state.deleteSupplierReducer,
   }));
   const [supplier, setSupplier] = useState({});
 
@@ -143,6 +153,9 @@ export default function SupplierDetails() {
         token: token,
       })
     );
+    return () => {
+      dispatch({ type: CLEAR_MESSAGE });
+    };
   }, []);
 
   useEffect(() => {
@@ -153,19 +166,79 @@ export default function SupplierDetails() {
   }, [supplierStore]);
 
   useEffect(() => {
-    if (messages === "Update Success") {
-      dispatch(
-        getDetailsSupplierAction({
-          id: location.state.supplierId,
-          token: token,
-        })
-      );
-    } else if (messages === "Delete Success") {
-      history.push("/homepage/supplier");
+    if (updateSupplierReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (updateSupplierReducer.successful) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed)
+          dispatch(
+            getDetailsSupplierAction({
+              id: location.state.supplierId,
+              token: token,
+            })
+          );
+      });
+    } else if (updateSupplierReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+      });
     }
-  }, [messages]);
+  }, [updateSupplierReducer]);
 
-  console.log(supplier);
+  useEffect(() => {
+    if (deleteSupplierReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (deleteSupplierReducer.successful) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) history.push("/homepage/supplier");
+      });
+    } else if (deleteSupplierReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+      });
+    }
+  }, [deleteSupplierReducer]);
+
+  // useEffect(() => {
+  //   if (messages === "Update Success") {
+  //     dispatch(
+  //       getDetailsSupplierAction({
+  //         id: location.state.supplierId,
+  //         token: token,
+  //       })
+  //     );
+  //   } else if (messages === "Delete Success") {
+  //     history.push("/homepage/supplier");
+  //   }
+  // }, [messages]);
 
   return (
     <div>

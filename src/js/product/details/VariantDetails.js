@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
+import Swal from "sweetalert2";
 //css
 import "../product.css";
 //components
 // import ListPackageTable from "../../table-receipt/ListReceiptsTable";
 import { getDetailsVariant, updateVariantAction } from "./action";
+import { RESET } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
 
 export default function VariantDetails() {
@@ -18,19 +20,6 @@ export default function VariantDetails() {
   const [variant, setVariant] = useState({});
   const [listPackage, setListPackage] = useState([]);
   const [isReturnData, setIsReturnData] = useState(false);
-  const [listColumn, setListColumn] = useState({
-    id: true,
-    quantity: true,
-    price: true,
-    totalPrice: true,
-    locationName: true,
-    importedDate: true,
-  });
-
-  const [listHeaderEdit, setListEditHeader] = useState({
-    id: "Package ID",
-    importedDate: "Imported Date",
-  });
 
   const columns = [
     { dataField: "id", text: "Variant ID" },
@@ -50,14 +39,14 @@ export default function VariantDetails() {
     },
   };
 
-  const { variantStore, listPackageStore, token, messages } = useSelector(
-    (state) => ({
-      variantStore: state.getDetailsProductReducer.productVariant,
-      listPackageStore: state.getDetailsProductReducer.productVariant.packages,
+  const { variantStore, listPackageStore, token, updateVariantReducer } =
+    useSelector((state) => ({
+      variantStore: state.getDetailsVariantReducer.productVariant,
+      listPackageStore: state.getDetailsVariantReducer.productVariant.packages,
       token: state.client.token,
-      messages: state.getDetailsProductReducer.messages,
-    })
-  );
+      updateVariantReducer: state.updateVariantReducer,
+      // messages: state.getDetailsProductReducer.messages,
+    }));
 
   const onChangeValue = (event) => {
     console.log(event.target.name);
@@ -72,11 +61,11 @@ export default function VariantDetails() {
     history.goBack();
   }
 
-  function onClickToDetails(row) {
-    history.push("/homepage/product/details/package", {
-      packageId: row.id,
-    });
-  }
+  // function onClickToDetails(row) {
+  //   history.push("/homepage/product/details/package", {
+  //     packageId: row.id,
+  //   });
+  // }
 
   //todo:list buttons
   const listButtons = setListButtonNav();
@@ -136,6 +125,9 @@ export default function VariantDetails() {
   }
   useEffect(() => {
     dispatch(getDetailsVariant({ id: location.state.variantId, token: token }));
+    return () => {
+      dispatch({ type: RESET });
+    };
   }, []);
 
   useEffect(() => {
@@ -160,12 +152,42 @@ export default function VariantDetails() {
   }, [variantStore, listPackageStore]);
 
   useEffect(() => {
-    if (messages === "Update Variant success") {
-      dispatch(
-        getDetailsVariant({ id: location.state.variantId, token: token })
-      );
+    if (updateVariantReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (updateVariantReducer.successful) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed)
+        dispatch(
+          getDetailsVariant({ id: location.state.variantId, token: token })
+        );
+      });
+    } else if (updateVariantReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+      });
     }
-  }, [messages]);
+  }, [updateVariantReducer]);
+  // useEffect(() => {
+  //   if (messages === "Update Variant success") {
+  //     dispatch(
+  //       getDetailsVariant({ id: location.state.variantId, token: token })
+  //     );
+  //   }
+  // }, [messages]);
   return (
     <div>
       <NavigationBar
@@ -174,40 +196,6 @@ export default function VariantDetails() {
         actionGoBack={goBackClick}
         status=""
       />
-      {/* <div className=" tab-fixed container-fluid  fixed-top">
-        <div className=" d-flex mb-3 justify-content-end mt-4 ">
-          <a className="me-2" onClick={goBackClick}>
-            <h3>Back</h3>
-          </a>
-          <h2 className="id-color fw-bold me-auto">Details</h2>
-          <div>
-            {isDisabled ? (
-              <button
-                className="btn btn-warning button-tab text-white button me-3"
-                onClick={onClickEdit}
-              >
-                Edit
-              </button>
-            ) : (
-              <button
-                className="btn btn-secondary button-tab text-white button me-3"
-                onClick={onClickCancel}
-              >
-                Cancel
-              </button>
-            )}
-
-            <button
-              className="btn btn-primary button-tab button me-3"
-              disabled={isDisabled}
-              onClick={onClickSave}
-            >
-              Save
-            </button>
-          </div>
-        </div>
-      </div> */}
-      {/* content */}
       <div className="wrapper space-top">
         <div className="wrapper-content shadow">
           <nav>
@@ -314,17 +302,7 @@ export default function VariantDetails() {
                       </p>
                       <p>
                         <strong>Price:</strong>
-                        {/* {isDisabled ? (
-                          variant.price
-                        ) : (
-                          <input
-                            type="text"
-                            name="price"
-                            className="form-control"
-                            onChange={onChangeValue}
-                            value={variant.price}
-                          />
-                        )} */}
+
                         {variant.price}
                       </p>
                       {/* <p>
@@ -344,12 +322,6 @@ export default function VariantDetails() {
             >
               {isReturnData && (
                 <div className="mt-3">
-                  {/* <ListPackageTable
-                    listHeaderEdit={listHeaderEdit}
-                    listColumn={listColumn}
-                    listData={listPackage}
-                    onRowClick={onClickToDetails}
-                  /> */}
                   <BootstrapTable
                     keyField="id"
                     striped

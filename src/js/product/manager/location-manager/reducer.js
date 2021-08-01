@@ -8,13 +8,14 @@ import {
   UPDATE_LOCATION_REQUEST,
   UPDATE_LOCATION_ERROR,
   UPDATE_LOCATION_RESPONSE,
+  RESET,
 } from "../constants";
 
 const initialState = {
   requesting: false,
   successful: false,
   messages: "",
-  errors: "",
+  errors: false,
   currentPage: 0,
   pageCount: 0,
   sizePerPage: 0,
@@ -22,7 +23,7 @@ const initialState = {
   listLocations: [],
 };
 
-export default function reducer(state = initialState, action) {
+export function locationManagerReducer(state = initialState, action) {
   switch (action.type) {
     case GET_ALL_LOCATIONS_REQUEST:
       return {
@@ -30,7 +31,7 @@ export default function reducer(state = initialState, action) {
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
     case GET_ALL_LOCATIONS_RESPONSE:
       return {
@@ -38,7 +39,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
+        errors: false,
         currentPage: action.json.paging.currentPage,
         pageCount: action.json.paging.pageCount,
         sizePerPage: action.json.paging.sizePerPage,
@@ -51,16 +52,31 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
-        listLocations: [],
+        errors: true,
+        // listLocations: [],
       };
+
+    default:
+      return state;
+  }
+}
+
+const createLocationState = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: false,
+};
+
+export function createLocationReducer(state = createLocationState, action) {
+  switch (action.type) {
     case CREATE_LOCATION_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
     case CREATE_LOCATION_RESPONSE:
       return {
@@ -68,7 +84,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: "Create Success",
-        errors: "",
+        errors: false,
       };
     case CREATE_LOCATION_ERROR:
       return {
@@ -76,15 +92,31 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
       };
+    case RESET:
+      return createLocationState;
+    default:
+      return state;
+  }
+}
+
+const updateLocationState = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: false,
+};
+
+export function updateLocationReducer(state = updateLocationState, action) {
+  switch (action.type) {
     case UPDATE_LOCATION_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
     case UPDATE_LOCATION_RESPONSE:
       return {
@@ -92,7 +124,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: "Update Success",
-        errors: "",
+        errors: false,
       };
     case UPDATE_LOCATION_ERROR:
       return {
@@ -100,8 +132,10 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
       };
+    case RESET:
+      return updateLocationState;
     default:
       return state;
   }

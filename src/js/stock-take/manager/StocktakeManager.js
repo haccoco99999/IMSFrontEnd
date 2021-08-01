@@ -53,7 +53,7 @@ export default function () {
       dataField: "createdDate",
       text: "Create Date",
       formatter: (cellContent, row) => {
-        return <span>{moment(row.createdDate).format("DD-MM-YYYY")}</span>;
+        return <span>{moment(row.createdDate).add(7, "h").format("DD-MM-YYYY")}</span>;
       },
     },
   ];

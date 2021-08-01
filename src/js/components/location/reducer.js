@@ -1,11 +1,7 @@
 import {
-  CREATE_PR_REQUEST,
-  CREATE_PR_RESPONSE,
-  CREATE_PR_ERROR,
-  CLEAR_MESSAGE,
-  GET_ALL_SUPPLIER_REQUEST,
-  GET_ALL_SUPPLIER_RESPONSE,
-  GET_ALL_SUPPLIER_ERROR,
+  GET_LOCATION_REQUEST,
+  GET_LOCATION_RESPONSE,
+  GET_LOCATION_ERROR,
 } from "./constants";
 
 const initialState = {
@@ -13,12 +9,12 @@ const initialState = {
   successful: false,
   messages: "",
   errors: false,
-  // listSuppliers: [],
+  listLocations: [],
 };
 
-export default function reducer(state = initialState, action) {
+export function getAllLocationsReducer(state = initialState, action) {
   switch (action.type) {
-    case CREATE_PR_REQUEST:
+    case GET_LOCATION_REQUEST:
       return {
         ...state,
         requesting: true,
@@ -26,26 +22,24 @@ export default function reducer(state = initialState, action) {
         messages: "",
         errors: false,
       };
-
-    case CREATE_PR_RESPONSE:
-      console.log(action.json);
+    case GET_LOCATION_RESPONSE:
       return {
         ...state,
         requesting: false,
         successful: true,
-        messages: action.json.createdRequisitionId,
+        messages: "",
         errors: false,
+        listLocations: action.json.paging.resultList,
       };
 
-    case CREATE_PR_ERROR:
+    case GET_LOCATION_ERROR:
       return {
-        ...state,
         requesting: false,
         successful: false,
         messages: "",
         errors: true,
+        listLocations: [],
       };
-
     default:
       return state;
   }

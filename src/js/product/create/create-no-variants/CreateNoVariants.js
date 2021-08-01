@@ -105,12 +105,12 @@ export default function CreateNoVariants(props) {
     ];
   }
 
-  useEffect(() => {
-    if (props.messages !== "")
-      history.push("/homepage/product/details", {
-        productId: props.messages,
-      });
-  }, [props.messages]);
+  // useEffect(() => {
+  //   if (props.messages !== "")
+  //     history.push("/homepage/product/details", {
+  //       productId: props.messages,
+  //     });
+  // }, [props.messages]);
   //   todo: gop chung 2 bang , sau do tach ra
   return (
     <div>

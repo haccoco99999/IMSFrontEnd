@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
-
+import Swal from "sweetalert2";
 //css
 import "../product.css";
 //components
@@ -12,7 +12,7 @@ import {
   getAllBrandAction,
 } from "./action";
 import { getCategoriesAllAction } from "../create/action";
-// import ListProductsTable from "../../table-receipt/ListReceiptsTable";
+import { RESET } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
 
 export default function ProductDetails() {
@@ -22,24 +22,26 @@ export default function ProductDetails() {
 
   const {
     productDetailsStore,
-    messages,
+    // messages,
     token,
     listVariantsStores,
     listCategoriesStore,
     listBrandStore,
     productBrandDetailsStore,
     categoryDtailsStore,
+    updateProductReducer,
   } = useSelector((state) => ({
     token: state.client.token,
     productDetailsStore: state.getDetailsProductReducer.productDetails,
-    messages: state.getDetailsProductReducer.messages,
+    // messages: state.getDetailsProductReducer.messages,
     listVariantsStores:
       state.getDetailsProductReducer.productDetails.productVariants,
-    listCategoriesStore: state.createProductReducer.listCategories,
-    listBrandStore: state.getDetailsProductReducer.listBrand,
+    listCategoriesStore: state.getCategoriesCreateProductReducer.listCategories,
+    listBrandStore: state.getBrandReducer.listBrand,
     productBrandDetailsStore:
       state.getDetailsProductReducer.productDetails.brand,
     categoryDtailsStore: state.getDetailsProductReducer.productDetails.category,
+    updateProductReducer: state.updateProductReducer,
   }));
 
   const [isFromManagerPage, setIsFromManagerPage] = useState(true);
@@ -51,24 +53,6 @@ export default function ProductDetails() {
   const [brandSelected, setBrandSelected] = useState({});
   const [brandDetails, setBrandDetails] = useState({});
   const [categoryDtails, setCategoryDtails] = useState({});
-  // const [isUpdateGeneralInformation, setIsUpdateGeneralInformation] =
-  //   useState(true);
-  //todo: Declare table
-  const [listColumn, setListColumn] = useState({
-    id: true,
-    name: true,
-    sku: true,
-    barcode: true,
-    // unit: true,
-    storageQuantity: true,
-    price: true,
-    cost: true,
-  });
-
-  const [listEditHeader, setListEditHeader] = useState({
-    id: "Variant ID",
-  });
-
   const columns = [
     { dataField: "id", text: "VariantID" },
     { dataField: "name", text: "Variant Name" },
@@ -138,7 +122,7 @@ export default function ProductDetails() {
       categoryId: categorySelected.id,
     };
 
-    console.log(data);
+    // console.log(data);
     dispatch(updateProductAction({ token: token, data: data }));
   }
   function goBackClick() {
@@ -148,13 +132,13 @@ export default function ProductDetails() {
   function goToManagerPage() {
     history.push("/homepage/product");
   }
-  function onClickToDetails(row) {
-    history.push("/homepage/product/details/variant", {
-      variantId: row.id,
-      productId: productDetails.id,
-      variantType: productDetails.isVariantType,
-    });
-  }
+  // function onClickToDetails(row) {
+  //   history.push("/homepage/product/details/variant", {
+  //     variantId: row.id,
+  //     productId: productDetails.id,
+  //     variantType: productDetails.isVariantType,
+  //   });
+  // }
   function onClickToAddVariant() {
     history.push("/homepage/product/details/create-variant", {
       productId: productDetails.id,
@@ -202,6 +186,9 @@ export default function ProductDetails() {
     dispatch(
       getDetailsProductAction({ id: location.state.productId, token: token })
     );
+    return () => {
+      dispatch({ type: RESET });
+    };
   }, []);
 
   useEffect(() => {
@@ -218,20 +205,52 @@ export default function ProductDetails() {
     }
     if (categoryDtailsStore !== {}) setCategoryDtails(categoryDtailsStore);
 
-    if (messages === "Update Product Success") {
-      dispatch(
-        getDetailsProductAction({ id: location.state.productId, token: token })
-      );
-      console.log("Update Success");
-    }
+    // if (messages === "Update Product Success") {
+    //   dispatch(
+    //     getDetailsProductAction({ id: location.state.productId, token: token })
+    //   );
+    //   console.log("Update Success");
+    // }
   }, [
     productDetailsStore,
     listVariantsStores,
     productBrandDetailsStore,
-    messages,
     categoryDtailsStore,
   ]);
 
+  useEffect(() => {
+    if (updateProductReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (updateProductReducer.successful) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed)
+        dispatch(
+          getDetailsProductAction({
+            id: location.state.variantId,
+            token: token,
+          })
+        );
+      });
+    } else if (updateProductReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+      });
+    }
+  }, [updateProductReducer]);
   return (
     <>
       <NavigationBar
@@ -305,14 +324,6 @@ export default function ProductDetails() {
                         />
                       )}
                     </p>
-                    {/* {!productDetails.isVariantType && (
-                      <>
-                        <p>
-                          <strong>Unit:</strong>
-                          {productDetails.unit}
-                        </p>
-                      </>
-                    )} */}
                     <p>
                       <strong>Unit:</strong>
                       {productDetails.unit}
@@ -418,12 +429,6 @@ export default function ProductDetails() {
                 <div>
                   <div className="mt-3">
                     {isReturnData && (
-                      // <ListProductsTable
-                      //   listHeaderEdit={listEditHeader}
-                      //   listColumn={listColumn}
-                      //   listData={listVariantsStores}
-                      //   onRowClick={onClickToDetails}
-                      // />
                       <BootstrapTable
                         keyField="id"
                         striped

@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
+import Swal from "sweetalert2";
 //css
 import "../supplier.css";
 //components
 import { createSupplierAction } from "./action";
+import { RESET } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
 
 const formReducer = (state, event) => {
@@ -19,9 +20,10 @@ export default function CreateSupplier() {
   let dispatch = useDispatch();
 
   const [formData, setFormData] = useReducer(formReducer, {});
-  const { token, messages } = useSelector((state) => ({
+  const { token, messages, createSupplierReducer } = useSelector((state) => ({
     token: state.client.token,
-    messages: state.createSupplierReducer.messages,
+    // messages: state.createSupplierReducer.messages,
+    createSupplierReducer: state.createSupplierReducer,
   }));
   function goBackClick() {
     history.goBack();
@@ -78,10 +80,46 @@ export default function CreateSupplier() {
   }
 
   useEffect(() => {
-    if (messages !== "") {
-      history.push("/homepage/supplier/details", { supplierId: messages });
+    return () => {
+      dispatch({ type: RESET });
+    };
+  }, []);
+
+  useEffect(() => {
+    if (createSupplierReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (createSupplierReducer.successful) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed)
+          history.push("/homepage/supplier/details", {
+            supplierId: createSupplierReducer.messages,
+          });
+      });
+    } else if (createSupplierReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+      });
     }
-  }, [messages]);
+  }, [createSupplierReducer]);
+  // useEffect(() => {
+  //   if (messages !== "") {
+  //     history.push("/homepage/supplier/details", { supplierId: messages });
+  //   }
+  // }, [messages]);
 
   return (
     <div>
@@ -108,7 +146,7 @@ export default function CreateSupplier() {
                 {/* Supplier name  */}
                 <div className="mt-3">
                   <label for="search" class="form-label">
-                     Name
+                    Name
                   </label>
                   <input
                     type="text"

@@ -2,6 +2,7 @@ import {
   GET_GR_DETAILS_REQUEST,
   GET_GR_DETAILS_RESPONSE,
   GET_GR_DETAILS_ERROR,
+  RESET,
 } from "./constants";
 
 const initialState = {
@@ -13,7 +14,7 @@ const initialState = {
     supplier: {},
     receivedOrderItems: [],
     transaction: {
-     transactionRecord: [{ date: "", applicationUser: {} }],
+      transactionRecord: [{ date: "", applicationUser: {} }],
     },
   },
 };
@@ -47,6 +48,9 @@ export default function reducer(state = initialState, action) {
         messages: "",
         errors: "",
       };
+
+    case RESET:
+      return initialState;
 
     default:
       return state;

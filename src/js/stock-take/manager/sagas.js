@@ -38,7 +38,6 @@ function* getAllStocktakeFlow(action) {
 }
 
 function* watcher() {
-  // yield debounce(500,GET_ALL_STOCKTAKE_REQUEST, getAllStocktakeFlow);
   yield takeLatest(GET_ALL_STOCKTAKE_REQUEST, getAllStocktakeFlow);
 }
 

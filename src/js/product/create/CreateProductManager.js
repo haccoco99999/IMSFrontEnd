@@ -36,10 +36,12 @@ export default function CreateProductManager() {
   //todo:declare store
   const { listCategoriesStore, token, listBrandStore, messages } = useSelector(
     (state) => ({
-      listCategoriesStore: state.createProductReducer.listCategories,
+      listCategoriesStore:
+        state.getCategoriesCreateProductReducer.listCategories,
       token: state.client.token,
-      listBrandStore: state.getDetailsProductReducer.listBrand,
+      listBrandStore: state.getBrandReducer.listBrand,
       messages: state.createProductReducer.messages,
+      createProductReducer: state.createProductReducer,
     })
   );
   function prevStep() {
@@ -72,9 +74,9 @@ export default function CreateProductManager() {
   }
 
   function clickDeleteVariant(rowIndex) {
-    console.log(rowIndex);
-    console.log(variantValues);
-    console.log((state) => state.filter((_, i) => i !== rowIndex));
+    // console.log(rowIndex);
+    // console.log(variantValues);
+    // console.log((state) => state.filter((_, i) => i !== rowIndex));
 
     setVariantValues((state) => state.filter((_, i) => i !== rowIndex));
   }
@@ -95,6 +97,39 @@ export default function CreateProductManager() {
     dispatch(getAllBrandAction({ token: token }));
   }, []);
 
+  useEffect(() => {
+    if (createProductReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (createProductReducer.successful) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          history.push("/homepage/product/details", {
+            productId: createProductReducer.messages,
+          });
+        }
+      });
+    } else if (createProductReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  }, [createProductReducer]);
   switch (step) {
     case 1:
       return (
@@ -123,15 +158,15 @@ export default function CreateProductManager() {
           />
         );
       }
-      //  else
-      //   return (
-      //     <CreateNoVariants
-      //       formData={formData}
-      //       prevStep={prevStep}
-      //       token={token}
-      //       messages={messages}
-      //       setFormDataManager={setFormDataManager}
-      //     />
-      //   );
+    //  else
+    //   return (
+    //     <CreateNoVariants
+    //       formData={formData}
+    //       prevStep={prevStep}
+    //       token={token}
+    //       messages={messages}
+    //       setFormDataManager={setFormDataManager}
+    //     />
+    //   );
   }
 }

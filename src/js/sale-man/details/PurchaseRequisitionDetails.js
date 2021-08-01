@@ -27,9 +27,9 @@ export default function details() {
   const [isEditDisabled, setIsEditDisabled] = useState(true);
   const [deadline, setDeadline] = useState("");
   const [isCancel, setIsCancel] = useState(false);
-  const message = useSelector(
-    (state) => state.getDetailsPurchaseRequisitionReducer.messages
-  );
+  // const message = useSelector(
+  //   (state) => state.getDetailsPurchaseRequisitionReducer.messages
+  // );
 
   const [cleanListProducts, setCleanListProducts] = useState([]);
   const [isReturnData, setIsReturnData] = useState(false);
@@ -57,6 +57,12 @@ export default function details() {
             valid: false,
             message: "Quantity should be numeric",
           };
+        } else {
+          if (newValue < 0)
+            return {
+              valid: false,
+              message: "Quantity should be bigger than 0",
+            };
         }
       },
     },
@@ -107,6 +113,7 @@ export default function details() {
     {
       dataField: "orderQuantity",
       text: "Order Quantity",
+
       // formatter: (cellContent, row, rowIndex) =>
       //   (purchaseOrderProduct[rowIndex].orderQuantity = row.orderQuantity),
       // validator: (newValue, oldValue, row) => {
@@ -143,6 +150,10 @@ export default function details() {
     token,
     deadlineStore,
     transactionRecordStore,
+    getDetailsPurchaseRequisitionReducer,
+    submitDraftReducer,
+    updatePRReducer,
+    deletePRReducer,
   } = useSelector((state) => ({
     statusStore:
       state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
@@ -157,6 +168,11 @@ export default function details() {
     transactionRecordStore:
       state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
         .transaction.transactionRecord,
+    getDetailsPurchaseRequisitionReducer:
+      state.getDetailsPurchaseRequisitionReducer,
+    submitDraftReducer: state.submitDraftReducer,
+    updatePRReducer: state.updatePRReducer,
+    deletePRReducer: state.deletePRReducer,
   }));
   console.log(transactionRecordStore);
   function goBackClick() {
@@ -363,31 +379,146 @@ export default function details() {
       setIsReturnData(true);
     }
   }, [listGetProductsStore]);
-  console.log(listGetProductsStore);
+
   useEffect(() => {
-    if (message === "Submit Success") {
-      dispatch(
-        getPRDetailsAction({
-          id: location.state.purchaseRequisitionId,
-          token: token,
-        })
-      );
-    } else if (message === "Update Success") {
-      dispatch(
-        getPRDetailsAction({
-          id: location.state.purchaseRequisitionId,
-          token: token,
-        })
-      );
-    } else if (message === "Delete Success") {
-      dispatch(
-        getPRDetailsAction({
-          id: location.state.purchaseRequisitionId,
-          token: token,
-        })
-      );
+    if (getDetailsPurchaseRequisitionReducer.errors === true) {
     }
-  }, [message]);
+  }, [getDetailsPurchaseRequisitionReducer]);
+
+  useEffect(() => {
+    if (submitDraftReducer.requesting === true) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (submitDraftReducer.successful === true) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            getPRDetailsAction({
+              id: location.state.purchaseRequisitionId,
+              token: token,
+            })
+          );
+        }
+      });
+    } else if (submitDraftReducer.errors === true) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  }, [submitDraftReducer]);
+
+  useEffect(() => {
+    if (updatePRReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (updatePRReducer.successful) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            getPRDetailsAction({
+              id: location.state.purchaseRequisitionId,
+              token: token,
+            })
+          );
+        }
+      });
+    } else if (updatePRReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  }, [updatePRReducer]);
+
+  useEffect(() => {
+    if (deletePRReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (deletePRReducer.successful) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            getPRDetailsAction({
+              id: location.state.purchaseRequisitionId,
+              token: token,
+            })
+          );
+        }
+      });
+    } else if (deletePRReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  }, [deletePRReducer]);
+  // useEffect(() => {
+  //   if (message === "Submit Success") {
+  //     dispatch(
+  //       getPRDetailsAction({
+  //         id: location.state.purchaseRequisitionId,
+  //         token: token,
+  //       })
+  //     );
+  //   } else if (message === "Update Success") {
+  //     dispatch(
+  //       getPRDetailsAction({
+  //         id: location.state.purchaseRequisitionId,
+  //         token: token,
+  //       })
+  //     );
+  //   } else if (message === "Delete Success") {
+  //     dispatch(
+  //       getPRDetailsAction({
+  //         id: location.state.purchaseRequisitionId,
+  //         token: token,
+  //       })
+  //     );
+  //   }
+  // }, [message]);
   useEffect(() => {
     if (statusStore === 0) setStatus("Draft");
     else if (statusStore === 6) setStatus("Confirmed");

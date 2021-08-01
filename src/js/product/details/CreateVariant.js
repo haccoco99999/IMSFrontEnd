@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-
+import Swal from "sweetalert2";
 //css
 import "../product.css";
 //components
 import { updateVariantAction } from "./action";
+import { RESET } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
 const formReducer = (state, event) => {
   return {
@@ -20,9 +21,10 @@ export default function CreateVariant() {
 
   const [formData, setFormData] = useReducer(formReducer, {});
 
-  const { token, messages } = useSelector((state) => ({
+  const { token, updateVariantReducer } = useSelector((state) => ({
     token: state.client.token,
-    messages: state.getDetailsProductReducer.messages,
+    updateVariantReducer: state.updateVariantReducer,
+    // messages: state.getDetailsProductReducer.messages,
   }));
 
   const handleChangeValue = (event) => {
@@ -85,14 +87,51 @@ export default function CreateVariant() {
 
   //todo:function nav
 
+  // useEffect(() => {
+  //   if (messages === "Update Variant success") {
+  //     history.push("/homepage/product/details", {
+  //       productId: location.state.productId,
+  //       // fromPage: "ManagerPage",
+  //     });
+  //   }
+  // }, [messages]);
+
   useEffect(() => {
-    if (messages === "Update Variant success") {
-      history.push("/homepage/product/details", {
-        productId: location.state.productId,
-        // fromPage: "ManagerPage",
+    return () => {
+      dispatch({ type: RESET });
+    };
+  }, []);
+  useEffect(() => {
+    if (updateVariantReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (updateVariantReducer.successful) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed)
+        history.push("/homepage/product/details", {
+          productId: location.state.productId,
+          // fromPage: "ManagerPage",
+        });
+      });
+    } else if (updateVariantReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
       });
     }
-  }, [messages]);
+  }, [updateVariantReducer]);
   return (
     <>
       <NavigationBar
@@ -174,12 +213,6 @@ export default function CreateVariant() {
                 </div>
               </div>
             </div>
-
-            {/* <div class="mb-3">
-              <div class="row g-3 align-items-center">
-                
-              </div>
-            </div> */}
           </div>
         </div>
       </div>

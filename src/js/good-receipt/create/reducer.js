@@ -13,26 +13,72 @@ import {
   SEND_CREATING_GOODS_RECEIPT_REQUEST,
   SEND_CREATING_GOODS_RECEIPT_RESPONSE,
   SEND_CREATING_GOODS_RECEIPT_ERROR,
-
+  RESET,
   //LOCATION
   GET_LOCATION_REQUEST,
   GET_LOCATION_RESPONSE,
   GET_LOCATION_ERROR,
 } from "./constant";
 
-const initialState = {
+// const initialState = {
+//   requesting: false,
+//   successful: false,
+//   messages: "",
+//   errors: false,
+//   listConfirmedPurchaseOrder: [],
+//   listProducts: {
+//     purchaseOrderProduct: [],
+//   },
+//   listLocations: [],
+// };
+
+// export default function reducer(state = initialState, action) {
+//   switch (action.type) {
+//     //Details
+
+//     case GET_LOCATION_REQUEST:
+//       return {
+//         ...state,
+//         requesting: true,
+//         successful: false,
+//         messages: "",
+//         errors: false,
+//       };
+//     case GET_LOCATION_RESPONSE:
+//       return {
+//         ...state,
+//         requesting: false,
+//         successful: true,
+//         messages: "",
+//         errors: false,
+//         listLocations: action.json.paging.resultList,
+//       };
+//     case GET_LOCATION_ERROR:
+//       return {
+//         ...state,
+//         requesting: false,
+//         successful: false,
+//         messages: "",
+//         errors: true,
+//         listLocations: [],
+//       };
+//     default:
+//       return state;
+//   }
+// }
+
+const confirmedPOState = {
   requesting: false,
   successful: false,
   messages: "",
-  errors: "",
+  errors: false,
   listConfirmedPurchaseOrder: [],
-  listProducts: {
-    purchaseOrderProduct: [],
-  },
-  listLocations: [],
 };
 
-export default function reducer(state = initialState, action) {
+export function getAllConfirmedPurchaseOrderReducer(
+  state = confirmedPOState,
+  action
+) {
   switch (action.type) {
     case GET_CONFIRMED_PURCHASE_ORDER_REQUEST:
       return {
@@ -40,8 +86,8 @@ export default function reducer(state = initialState, action) {
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
-        listConfirmedPurchaseOrder: [],
+        errors: false,
+        // listConfirmedPurchaseOrder: [],
       };
     case GET_CONFIRMED_PURCHASE_ORDER_RESPONSE:
       return {
@@ -49,7 +95,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
+        errors: false,
         listConfirmedPurchaseOrder: action.json.paging.resultList,
       };
     case GET_CONFIRMED_PURCHASE_ORDER_ERROR:
@@ -58,40 +104,42 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
-        listConfirmedPurchaseOrder: [],
+        errors: true,
+        // listConfirmedPurchaseOrder: [],
       };
-    //Details
+    default:
+      return state;
+  }
+}
+
+const detailsPOState = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: false,
+  listProducts: {
+    purchaseOrderProduct: [],
+  },
+};
+export function getDetailsPOReducer(state = detailsPOState, action) {
+  switch (action.type) {
     case GET_DETAILS_PO_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
 
     case GET_DETAILS_PO_RESPONSE:
-      // let cleanJson = { ...action.json.purchaseOrder };
-
-      // action.json.purchaseOrder.purchaseOrderProduct =
-      //   cleanJson.purchaseOrderProduct.map((product) => {
-      //     product.name = product.productVariant.name;
-      //     product.sku = product.productVariant.sku;
-      //     product.barcode = product.productVariant.barcode
-      //     product.productId = product.productVariant.productId
-      //     product.
-      //     delete product["productVariant"];
-      //     return product;
-      //   });
-
       return {
         ...state,
 
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
+        errors: false,
         listProducts: action.json.purchaseOrder,
       };
 
@@ -101,27 +149,40 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
         listProducts: [],
       };
+    default:
+      return state;
+  }
+}
 
+const submitPRState = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: false,
+};
+
+export function submitPRReducer(state = submitPRState, action) {
+  switch (action.type) {
     case SEND_CREATING_GOODS_RECEIPT_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
 
     case SEND_CREATING_GOODS_RECEIPT_RESPONSE:
-      console.log(action.json.createdGoodsReceiptId);
+      // console.log(action.json.createdGoodsReceiptId);
       return {
         ...state,
         requesting: false,
         successful: true,
         messages: action.json.createdGoodsReceiptId,
-        errors: "",
+        errors: false,
       };
 
     case SEND_CREATING_GOODS_RECEIPT_ERROR:
@@ -130,34 +191,10 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
       };
-    case GET_LOCATION_REQUEST:
-      return {
-        ...state,
-        requesting: true,
-        successful: false,
-        messages: "",
-        errors: "",
-      };
-    case GET_LOCATION_RESPONSE:
-      return {
-        ...state,
-        requesting: false,
-        successful: true,
-        messages: "",
-        errors: "",
-        listLocations: action.json.paging.resultList,
-      };
-    case GET_LOCATION_ERROR:
-      return {
-        ...state,
-        requesting: false,
-        successful: false,
-        messages: "",
-        errors: "",
-        listLocations: [],
-      };
+    case RESET:
+      return submitPRState;
     default:
       return state;
   }
