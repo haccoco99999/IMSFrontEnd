@@ -5,6 +5,9 @@ import {
   GET_ALL_CATEGORY_CREATED_RESPONSE,
   GET_ALL_CATEGORY_CREATED_REQUEST,
   GET_ALL_CATEGORY_CREATED_ERROR,
+  // CHECK_DUPLICATE_REQUEST,
+  // CHECK_DUPLICATE_RESPONSE,
+  // CHECK_DUPLICATE_ERROR,
   RESET,
 } from "./constants";
 
@@ -28,13 +31,22 @@ export function createProductReducer(state = initialState, action) {
       };
 
     case CREATE_PRODUCT_RESPONSE:
-      return {
-        ...state,
-        requesting: false,
-        successful: true,
-        messages: action.json.createdProductId,
-        errors: false,
-      };
+      if (action.json === undefined) {
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Duplicate",
+          errors: true,
+        };
+      } else
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: action.json.createdProductId,
+          errors: false,
+        };
 
     case CREATE_PRODUCT_ERROR:
       return {
@@ -98,3 +110,27 @@ export function getCategoriesCreateProductReducer(
       return state;
   }
 }
+// const checkDupState = {
+//   requesting: false,
+//   successful: false,
+//   messages: "",
+//   errors: false,
+// };
+// export function checkDuplicateProductReducer(state = checkDupState, action) {
+//   switch (action.type) {
+//     case CHECK_DUPLICATE_RESPONSE:
+//       return {
+//         ...state,
+//         requesting: false,
+//         successful: true,
+//         messages: action.json,
+//         errors: false,
+//       };
+
+//     case RESET:
+//       return checkDupState;
+
+//     default:
+//       return state;
+//   }
+// }

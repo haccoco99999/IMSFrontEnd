@@ -27,6 +27,23 @@ export default function NavigationBar(props) {
                   >
                     {props.currentPage}
                   </li>
+                  {props.level3 && (
+                    <li
+                    class="breadcrumb-item active text-dark"
+                    aria-current="page"
+                  >
+                    {props.level3Page}
+                  </li>
+                  )}
+
+                  {
+                    props.level4 && (<li
+                      class="breadcrumb-item active text-dark"
+                      aria-current="page"
+                    >
+                      {props.level4Page}
+                    </li>)
+                  }
                 </ol>
               </nav>
               <div className="d-sm-flex align-items-sm-center ">

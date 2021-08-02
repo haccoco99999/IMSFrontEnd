@@ -81,13 +81,22 @@ export function createCategoriesReducer(state = createCategoryState, action) {
         errors: false,
       };
     case CREATE_CATEGORY_RESPONSE:
-      return {
-        ...state,
-        requesting: false,
-        successful: true,
-        messages: "Create Success",
-        errors: false,
-      };
+      if (action.json === undefined)
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Duplicate",
+          errors: true,
+        };
+      else
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Create Success",
+          errors: false,
+        };
     case CREATE_CATEGORY_ERROR:
       return {
         ...state,
@@ -120,13 +129,22 @@ export function updateCategoriesReducer(state = updateCategoryState, action) {
         errors: false,
       };
     case UPDATE_CATEGORY_RESPONSE:
-      return {
-        ...state,
-        requesting: false,
-        successful: true,
-        messages: "Update Success",
-        errors: false,
-      };
+      if (action.json === undefined)
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Duplicate",
+          errors: true,
+        };
+      else
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Update Success",
+          errors: false,
+        };
     case UPDATE_CATEGORY_ERROR:
       return {
         ...state,

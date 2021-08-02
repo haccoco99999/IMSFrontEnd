@@ -198,7 +198,7 @@ export default function CreateWithVariants(props) {
   //todo: list nav button
   const listButton = setListButtonNav();
   function setListButtonNav() {
- return [
+    return [
       {
         isShow: true,
         title: "Save",
@@ -221,9 +221,13 @@ export default function CreateWithVariants(props) {
     <div>
       <NavigationBar
         listButton={listButton}
-        titleBar="With Variant"
+        titleBar="Create variants "
         actionGoBack={goBackClick}
         status=""
+        home="Product"
+        currentPage="Create product"
+        level3={true}
+        level3Page="Create variants"
       />
       {/* content */}
       <div className="wrapper space-top">

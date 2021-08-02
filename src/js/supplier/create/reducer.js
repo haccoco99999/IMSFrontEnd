@@ -23,13 +23,22 @@ export function createSupplierReducer(state = initialState, action) {
         errors: "",
       };
     case CREAT_SUPPLIER_RESPONSE:
-      return {
-        ...state,
-        requesting: false,
-        successful: true,
-        messages: action.json.modifiedSupplierId,
-        errors: "",
-      };
+      if (action.json === undefined)
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Duplicate",
+          errors: true,
+        };
+      else
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: action.json.modifiedSupplierId,
+          errors: "",
+        };
     case CREAT_SUPPLIER_ERROR:
       return {
         ...state,
@@ -44,5 +53,4 @@ export function createSupplierReducer(state = initialState, action) {
     default:
       return state;
   }
-};
-
+}

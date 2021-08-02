@@ -10,8 +10,7 @@ import "../sale-man.css";
 import { getAllPRAction } from "./action";
 import PagingComponent from "../../product/components/paging-component";
 
-
-export default function () {
+export default function PurchaseRequisitionManager () {
   let history = useHistory();
   let dispatch = useDispatch();
 
@@ -70,6 +69,7 @@ export default function () {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
+  const [returnData,setReturnData] = useState(false)
 
   const { listData, pageCount, token } = useSelector((state) => ({
     listData: state.getAllPurchaseRequisitionReducer.listPurchaseRequisition,

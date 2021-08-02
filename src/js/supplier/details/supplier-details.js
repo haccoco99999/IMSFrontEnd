@@ -12,7 +12,7 @@ import {
 } from "./action";
 import { CLEAR_MESSAGE } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
-
+import { TableLoading } from "../../components/loading/loading-component";
 export default function SupplierDetails() {
   let history = useHistory();
   let location = useLocation();
@@ -24,13 +24,14 @@ export default function SupplierDetails() {
     messages,
     updateSupplierReducer,
     deleteSupplierReducer,
+    getDetailsSupplierReducer,
   } = useSelector((state) => ({
     supplierStore: state.getDetailsSupplierReducer.supplierDetails,
     // messages: state.getDetailsSupplierReducer.messages,
     token: state.client.token,
     updateSupplierReducer: state.updateSupplierReducer,
-
     deleteSupplierReducer: state.deleteSupplierReducer,
+    getDetailsSupplierReducer: state.getDetailsSupplierReducer,
   }));
   const [supplier, setSupplier] = useState({});
 
@@ -160,7 +161,6 @@ export default function SupplierDetails() {
 
   useEffect(() => {
     if (supplierStore !== null) {
-      setReturnData(true);
       setSupplier(supplierStore);
     }
   }, [supplierStore]);
@@ -176,20 +176,29 @@ export default function SupplierDetails() {
         },
       });
     } else if (updateSupplierReducer.successful) {
-      Swal.fire({
-        icon: "success",
-        title: "Your work has been saved",
-        showCancelButton: false,
-        confirmButtonColor: "#3085d6",
-      }).then((result) => {
-        if (result.isConfirmed)
-          dispatch(
-            getDetailsSupplierAction({
-              id: location.state.supplierId,
-              token: token,
-            })
-          );
-      });
+      if (updateSupplierReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
+        Swal.fire({
+          icon: "success",
+          title: "Your work has been saved",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        }).then((result) => {
+          if (result.isConfirmed)
+            dispatch(
+              getDetailsSupplierAction({
+                id: location.state.supplierId,
+                token: token,
+              })
+            );
+        });
     } else if (updateSupplierReducer.errors) {
       Swal.fire({
         icon: "error",
@@ -227,6 +236,9 @@ export default function SupplierDetails() {
     }
   }, [deleteSupplierReducer]);
 
+  useEffect(() => {
+    if (getDetailsSupplierReducer.successful) setReturnData(true);
+  }, [getDetailsSupplierReducer]);
   // useEffect(() => {
   //   if (messages === "Update Success") {
   //     dispatch(
@@ -242,142 +254,149 @@ export default function SupplierDetails() {
 
   return (
     <div>
-      <NavigationBar
-        listButton={listButton}
-        titleBar="Details"
-        actionGoBack={goBackClick}
-        status=""
-      />
-      {/* content */}
-      {/* {returnData && (
-        
-      )} */}
-      <div className="wrapper space-top">
-        <div className="card">
-          <div class="card-header">Supplier Information</div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <form
-                id="productDetailsForm"
-                class="row g-3 needs-validation "
-                noValidate
-              >
-                <div className="mt-3">
-                  <label for="supplierName" class="form-label">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="supplierName"
-                    value={supplier.supplierName}
-                    disabled={isDisabled}
-                    readOnly={isDisabled}
-                    onChange={onChangeValue}
-                    required
-                    placeholder="etc. Nike Company"
-                  />
-                  <div class="invalid-feedback">Please input valid name</div>
-                </div>
-                <div className="mt-3">
-                  <label for="search" class="form-label">
-                    Seller Name
-                  </label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="salePersonName"
-                    value={supplier.salePersonName}
-                    onChange={onChangeValue}
-                    disabled={isDisabled}
-                    readOnly={isDisabled}
-                    placeholder="Type seller name"
-                    required
-                  />
-                  <div className="invalid-feedback">
-                    PLease input valid seller name
-                  </div>
-                </div>
-                {/* Email &&  Phone No  */}
-                <div className="mt-3">
-                  <div class="row g-3 align-items-center">
-                    <div class="col">
-                      <label for="inputEmail" class="col-form-label">
-                        Email
-                      </label>{" "}
+      {returnData ? (
+        <>
+          <NavigationBar
+            listButton={listButton}
+            titleBar="Supplier details"
+            actionGoBack={goBackClick}
+            status=""
+            home="Supplier"
+            currentPage="Supplier details"
+          />
+
+          <div className="wrapper space-top">
+            <div className="card">
+              <div class="card-header">Supplier Information</div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <form
+                    id="productDetailsForm"
+                    class="row g-3 needs-validation "
+                    noValidate
+                  >
+                    <div className="mt-3">
+                      <label for="supplierName" class="form-label">
+                        Name
+                      </label>
                       <input
                         type="text"
-                        name="email"
                         class="form-control"
-                        value={supplier.email}
+                        name="supplierName"
+                        value={supplier.supplierName}
                         disabled={isDisabled}
                         readOnly={isDisabled}
                         onChange={onChangeValue}
-                        pattern="^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$"
                         required
-                        placeholder="clarice@gmail.com"
+                        placeholder="etc. Nike Company"
                       />
                       <div class="invalid-feedback">
-                        Please input valid email
+                        Please input valid name
                       </div>
                     </div>
-                    <div class="col">
-                      <label for="phone" class="col-form-label">
-                        Phone No.
-                      </label>{" "}
+                    <div className="mt-3">
+                      <label for="search" class="form-label">
+                        Seller Name
+                      </label>
                       <input
-                        type="tel"
-                        name="phoneNumber"
+                        type="text"
                         class="form-control"
-                        value={supplier.phoneNumber}
+                        name="salePersonName"
+                        value={supplier.salePersonName}
+                        onChange={onChangeValue}
+                        disabled={isDisabled}
+                        readOnly={isDisabled}
+                        placeholder="Type seller name"
+                        required
+                      />
+                      <div className="invalid-feedback">
+                        PLease input valid seller name
+                      </div>
+                    </div>
+                    {/* Email &&  Phone No  */}
+                    <div className="mt-3">
+                      <div class="row g-3 align-items-center">
+                        <div class="col">
+                          <label for="inputEmail" class="col-form-label">
+                            Email
+                          </label>{" "}
+                          <input
+                            type="text"
+                            name="email"
+                            class="form-control"
+                            value={supplier.email}
+                            disabled={isDisabled}
+                            readOnly={isDisabled}
+                            onChange={onChangeValue}
+                            pattern="^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$"
+                            required
+                            placeholder="clarice@gmail.com"
+                          />
+                          <div class="invalid-feedback">
+                            Please input valid email
+                          </div>
+                        </div>
+                        <div class="col">
+                          <label for="phone" class="col-form-label">
+                            Phone No.
+                          </label>{" "}
+                          <input
+                            type="tel"
+                            name="phoneNumber"
+                            class="form-control"
+                            value={supplier.phoneNumber}
+                            disabled={isDisabled}
+                            readOnly={isDisabled}
+                            onChange={onChangeValue}
+                            pattern="((09|03|07|08|05|028|024)+([0-9]{8})\b)"
+                            required
+                            placeholder="0903321332"
+                          />
+                          <div class="invalid-feedback">
+                            Please input valid phone number
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mb-3 mt-3">
+                      <label for="note" class="form-label">
+                        Address
+                      </label>
+                      <input
+                        type="text"
+                        name="address"
+                        class="form-control"
+                        value={supplier.address}
                         disabled={isDisabled}
                         readOnly={isDisabled}
                         onChange={onChangeValue}
-                        pattern="((09|03|07|08|05|028|024)+([0-9]{8})\b)"
-                        required
-                        placeholder="0903321332"
                       />
-                      <div class="invalid-feedback">
-                        Please input valid phone number
-                      </div>
+                      <div class="invalid-feedback">Please input address</div>
                     </div>
+                  </form>
+                  {/* Note  */}
+                  <div class="mb-3 mt-3">
+                    <label for="note" class="form-label">
+                      Note
+                    </label>
+                    <textarea
+                      class="form-control"
+                      name="description"
+                      rows="3"
+                      value={supplier.description}
+                      disabled={isDisabled}
+                      readOnly={isDisabled}
+                      onChange={onChangeValue}
+                    ></textarea>
                   </div>
-                </div>
-                <div className="mb-3 mt-3">
-                  <label for="note" class="form-label">
-                    Address
-                  </label>
-                  <input
-                    type="text"
-                    name="address"
-                    class="form-control"
-                    value={supplier.address}
-                    disabled={isDisabled}
-                    readOnly={isDisabled}
-                    onChange={onChangeValue}
-                  />
-                  <div class="invalid-feedback">Please input address</div>
-                </div>
-              </form>
-              {/* Note  */}
-              <div class="mb-3 mt-3">
-                <label for="note" class="form-label">
-                  Note
-                </label>
-                <textarea
-                  class="form-control"
-                  name="description"
-                  rows="3"
-                  value={supplier.description}
-                  disabled={isDisabled}
-                  readOnly={isDisabled}
-                  onChange={onChangeValue}
-                ></textarea>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </>
+      ) : (
+        <TableLoading />
+      )}
     </div>
   );
 }

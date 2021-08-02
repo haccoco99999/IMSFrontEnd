@@ -40,6 +40,7 @@ import getCreatedFormPurchaseRequisitionReducer from "./sale-man/create/reducer"
 import {
   createProductReducer,
   getCategoriesCreateProductReducer,
+  // checkDuplicateProductReducer
 } from "./product/create/reducer";
 import createAccountReducer from "./manage-account/create/account/reducer";
 import {
@@ -140,6 +141,7 @@ const IndexReducer = combineReducers({
   updateLocationReducer,
   updateSupplierReducer,
   deleteSupplierReducer,
+  // checkDuplicateProductReducer
 });
 
 export default IndexReducer;

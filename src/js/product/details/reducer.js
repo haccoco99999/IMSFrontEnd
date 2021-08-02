@@ -86,13 +86,22 @@ export function updateProductReducer(state = updateProductState, action) {
         errors: false,
       };
     case UPDATE_PRODUCT_RESPONSE:
-      return {
-        ...state,
-        requesting: false,
-        successful: true,
-        messages: "Update Product Success",
-        errors: false,
-      };
+      if (action.json === undefined)
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Duplicate",
+          errors: true,
+        };
+      else
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Update Product Success",
+          errors: false,
+        };
     case UPDATE_PRODUCT_ERROR:
       return {
         ...state,
@@ -122,13 +131,23 @@ export function updateVariantReducer(state = updateVariantState, action) {
         errors: false,
       };
     case UPDATE_VARIANTS_RESPONSE:
-      return {
-        ...state,
-        requesting: false,
-        successful: true,
-        messages: "Update Variant success",
-        errors: false,
-      };
+      if (action.json === undefined)
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Duplicate",
+          errors: true,
+        };
+      else
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Update Variant success",
+          errors: false,
+        };
+
     case UPDATE_VARIANTS_ERROR:
       return {
         ...state,
@@ -137,8 +156,8 @@ export function updateVariantReducer(state = updateVariantState, action) {
         messages: "",
         errors: true,
       };
-      case RESET:
-        return updateVariantState;
+    case RESET:
+      return updateVariantState;
     default:
       return state;
   }

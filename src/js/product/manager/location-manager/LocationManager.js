@@ -11,7 +11,8 @@ import {
   getAllLocationsAction,
   createLocationAction,
   updateLocationAction,
-} from "./action"; import {RESET} from '../constants'
+} from "./action";
+import { RESET } from "../constants";
 export default function LocationManager() {
   let dispatch = useDispatch();
 
@@ -56,9 +57,9 @@ export default function LocationManager() {
     createLocationReducer,
     updateLocationReducer,
   } = useSelector((state) => ({
-    listLocationsStore: state.locationManagetReducer.listLocations,
+    listLocationsStore: state.locationManagerReducer.listLocations,
     token: state.client.token,
-    pageCount: state.locationManagetReducer.pageCount,
+    pageCount: state.locationManagerReducer.pageCount,
     // messages: state.locationManagetReducer.messages,
     createLocationReducer: state.createLocationReducer,
     updateLocationReducer: state.updateLocationReducer,
@@ -107,13 +108,13 @@ export default function LocationManager() {
         sizePerPage: sizePerPage,
       })
     );
-    return ()=>{
-      dispatch({ type: RESET })
-    }
+    return () => {
+      dispatch({ type: RESET });
+    };
   }, []);
 
   useEffect(() => {
-    if (updateLocationReducer.requesting) {
+    if (createLocationReducer.requesting) {
       Swal.fire({
         title: "Progressing",
         html: "Waiting...",
@@ -122,7 +123,16 @@ export default function LocationManager() {
           Swal.showLoading();
         },
       });
-    } else if (updateLocationReducer.successful) {
+    } else if (createLocationReducer.successful) {
+      if (createLocationReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
       Swal.fire({
         icon: "success",
         title: "Your work has been saved",
@@ -133,7 +143,7 @@ export default function LocationManager() {
           hideModal();
         }
       });
-    } else if (updateLocationReducer.errors) {
+    } else if (createLocationReducer.errors) {
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -153,6 +163,15 @@ export default function LocationManager() {
         },
       });
     } else if (updateLocationReducer.successful) {
+      if (updateLocationReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
       Swal.fire({
         icon: "success",
         title: "Your work has been saved",

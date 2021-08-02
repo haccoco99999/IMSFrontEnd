@@ -165,16 +165,25 @@ export default function CategoryManager() {
         },
       });
     } else if (updateCategoriesReducer.successful) {
-      Swal.fire({
-        icon: "success",
-        title: "Your work has been saved",
-        showCancelButton: false,
-        confirmButtonColor: "#3085d6",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          hideModal();
-        }
-      });
+      if (updateCategoriesReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
+        Swal.fire({
+          icon: "success",
+          title: "Your work has been saved",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            hideModal();
+          }
+        });
     } else if (updateCategoriesReducer.error) {
       Swal.fire({
         icon: "error",
@@ -195,6 +204,15 @@ export default function CategoryManager() {
         },
       });
     } else if (createCategoriesReducer.successful) {
+      if (createCategoriesReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
       Swal.fire({
         icon: "success",
         title: "Your work has been saved",

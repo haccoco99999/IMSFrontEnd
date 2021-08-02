@@ -12,6 +12,7 @@ import {
   getAllBrandAction,
 } from "./action";
 import { getCategoriesAllAction } from "../create/action";
+import { TableLoading } from "../../components/loading/loading-component";
 import { RESET } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
 
@@ -30,6 +31,7 @@ export default function ProductDetails() {
     productBrandDetailsStore,
     categoryDtailsStore,
     updateProductReducer,
+    getDetailsProductReducer,
   } = useSelector((state) => ({
     token: state.client.token,
     productDetailsStore: state.getDetailsProductReducer.productDetails,
@@ -42,6 +44,7 @@ export default function ProductDetails() {
       state.getDetailsProductReducer.productDetails.brand,
     categoryDtailsStore: state.getDetailsProductReducer.productDetails.category,
     updateProductReducer: state.updateProductReducer,
+    getDetailsProductReducer: state.getDetailsProductReducer,
   }));
 
   const [isFromManagerPage, setIsFromManagerPage] = useState(true);
@@ -53,6 +56,7 @@ export default function ProductDetails() {
   const [brandSelected, setBrandSelected] = useState({});
   const [brandDetails, setBrandDetails] = useState({});
   const [categoryDtails, setCategoryDtails] = useState({});
+
   const columns = [
     { dataField: "id", text: "VariantID" },
     { dataField: "name", text: "Variant Name" },
@@ -193,7 +197,6 @@ export default function ProductDetails() {
 
   useEffect(() => {
     if (listVariantsStores !== null) {
-      setIsReturnData(true);
       setListVariants(listVariantsStores);
     }
     if (productDetailsStore !== {}) {
@@ -229,6 +232,15 @@ export default function ProductDetails() {
         },
       });
     } else if (updateProductReducer.successful) {
+      if (updateProductReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
       Swal.fire({
         icon: "success",
         title: "Your work has been saved",
@@ -236,12 +248,12 @@ export default function ProductDetails() {
         confirmButtonColor: "#3085d6",
       }).then((result) => {
         if (result.isConfirmed)
-        dispatch(
-          getDetailsProductAction({
-            id: location.state.variantId,
-            token: token,
-          })
-        );
+          dispatch(
+            getDetailsProductAction({
+              id: location.state.variantId,
+              token: token,
+            })
+          );
       });
     } else if (updateProductReducer.errors) {
       Swal.fire({
@@ -251,203 +263,222 @@ export default function ProductDetails() {
       });
     }
   }, [updateProductReducer]);
+
+  useEffect(() => {
+    if (getDetailsProductReducer.successful) {
+      setIsReturnData(true);
+    }
+  }, [getDetailsProductReducer]);
   return (
     <>
-      <NavigationBar
-        listButton={listButtons}
-        titleBar="Create"
-        actionGoBack={goBackClick}
-        status=""
-      />
-      {/* content */}
-      <div className="wrapper space-top">
-        <div className="wrapper-content shadow">
-          {/* Show info */}
-          <div className="title-heading mt-2">
-            <span>Product Details</span>
-          </div>
+      {isReturnData ? (
+        <>
+          <NavigationBar
+            listButton={listButtons}
+            titleBar="Product details"
+            actionGoBack={goBackClick}
+            status=""
+            home="Product"
+            currentPage="Product details"
+            
 
-          <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <button
-                class="nav-link active"
-                id="nav-home-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#nav-home"
-                type="button"
-                role="tab"
-                aria-controls="nav-home"
-                aria-selected="true"
-              >
-                General Information
-              </button>
-              <button
-                class="nav-link"
-                id="nav-profile-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#nav-profile"
-                type="button"
-                role="tab"
-                aria-controls="nav-profile"
-                aria-selected="false"
-              >
-                Variants
-              </button>
-            </div>
-          </nav>
-          <div class="tab-content" id="nav-tabContent">
-            <div
-              class="tab-pane fade show active"
-              id="nav-home"
-              role="tabpanel"
-              aria-labelledby="nav-home-tab"
-            >
-              <div className="wrapper-content shadow mt-3">
-                {/* Show info */}
+          />
 
-                <div className="row g-3 justify-content-between me-3">
-                  <div className="col-4">
-                    <p>
-                      <strong>Product ID:</strong> {productDetails.id}
-                    </p>
-                    <p>
-                      <strong>Name:</strong>{" "}
-                      {isDisabled ? (
-                        productDetails.name
-                      ) : (
-                        <input
-                          type="text"
-                          name="name"
-                          className="form-control"
-                          onChange={handleChangeProductName}
-                          value={productDetails.name}
-                        />
-                      )}
-                    </p>
-                    <p>
-                      <strong>Unit:</strong>
-                      {productDetails.unit}
-                    </p>
+          <div className="wrapper space-top">
+            <div className="wrapper-content shadow">
+              <div className="title-heading mt-2">
+                <span>Product Details</span>
+              </div>
 
-                    <div class="form-check">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        value={""}
-                        name="isVariantType"
-                        checked={productDetails.isVariantType}
-                        disabled={isDisabled}
-                      />
-                      <label class="form-check-label" for="flexCheckDefault">
-                        <strong>Products has many attribute</strong>
-                      </label>
+              <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button
+                    class="nav-link active"
+                    id="nav-home-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-home"
+                    type="button"
+                    role="tab"
+                    aria-controls="nav-home"
+                    aria-selected="true"
+                  >
+                    General Information
+                  </button>
+                  <button
+                    class="nav-link"
+                    id="nav-profile-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-profile"
+                    type="button"
+                    role="tab"
+                    aria-controls="nav-profile"
+                    aria-selected="false"
+                  >
+                    Variants
+                  </button>
+                </div>
+              </nav>
+              <div class="tab-content" id="nav-tabContent">
+                <div
+                  class="tab-pane fade show active"
+                  id="nav-home"
+                  role="tabpanel"
+                  aria-labelledby="nav-home-tab"
+                >
+                  <div className="wrapper-content shadow mt-3">
+                    {/* Show info */}
+
+                    <div className="row g-3 justify-content-between me-3">
+                      <div className="col-4">
+                        <p>
+                          <strong>Product ID:</strong> {productDetails.id}
+                        </p>
+                        <p>
+                          <strong>Name:</strong>{" "}
+                          {isDisabled ? (
+                            productDetails.name
+                          ) : (
+                            <input
+                              type="text"
+                              name="name"
+                              className="form-control"
+                              onChange={handleChangeProductName}
+                              value={productDetails.name}
+                            />
+                          )}
+                        </p>
+                        <p>
+                          <strong>Unit:</strong>
+                          {productDetails.unit}
+                        </p>
+
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={""}
+                            name="isVariantType"
+                            checked={productDetails.isVariantType}
+                            disabled={isDisabled}
+                          />
+                          <label
+                            class="form-check-label"
+                            for="flexCheckDefault"
+                          >
+                            <strong>Products has many attribute</strong>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-4">
+                        <p>
+                          <strong>Brand:</strong>
+                          {isDisabled ? (
+                            brandDetails.brandName
+                          ) : (
+                            <select
+                              name="brand"
+                              class="form-select"
+                              // aria-label="Default select example"
+                              defaultValue={brandDetails.brandName}
+                              onChange={handleChangeBrand}
+                            >
+                              <option value="" disabled>
+                                Select brand
+                              </option>
+                              {listBrandStore.map((brand) => (
+                                <option id={brand.id} value={brand.brandName}>
+                                  {brand.brandName}
+                                </option>
+                              ))}
+                            </select>
+                          )}
+                        </p>
+                        <p>
+                          <strong>Category:</strong>{" "}
+                          {isDisabled ? (
+                            categoryDtails.categoryName
+                          ) : (
+                            <select
+                              name="categoryID"
+                              class="form-select"
+                              // aria-label="Default select example"
+                              defaultValue={
+                                categoryDtails.categoryName || categorySelected
+                              }
+                              onChange={handleChangeCategory}
+                            >
+                              <option value="" disabled>
+                                --No selected--
+                              </option>
+                              {listCategoriesStore.map((category) => (
+                                <option
+                                  id={category.id}
+                                  value={category.categoryName}
+                                >
+                                  {category.categoryName}
+                                </option>
+                              ))}
+                            </select>
+                          )}
+                        </p>
+                        {!productDetails.isVariantType && isReturnData && (
+                          <>
+                            <p>
+                              <strong>Storage Quantity:</strong>
+                              {listVariants[0].storageQuantity}
+                            </p>
+                            <p>
+                              <strong>SKU:</strong>
+                              {listVariants[0].sku}
+                            </p>
+                            <p>
+                              <strong>Barcode:</strong>
+                              {listVariants[0].barcode}
+                            </p>
+                            <p>
+                              <strong>Price:</strong>
+                              {listVariants[0].price}
+                            </p>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
-                  <div className="col-4">
-                    <p>
-                      <strong>Brand:</strong>
-                      {isDisabled ? (
-                        brandDetails.brandName
-                      ) : (
-                        <select
-                          name="brand"
-                          class="form-select"
-                          // aria-label="Default select example"
-                          defaultValue={brandDetails.brandName}
-                          onChange={handleChangeBrand}
-                        >
-                          <option value="" disabled>
-                            Select brand
-                          </option>
-                          {listBrandStore.map((brand) => (
-                            <option id={brand.id} value={brand.brandName}>
-                              {brand.brandName}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                    </p>
-                    <p>
-                      <strong>Category:</strong>{" "}
-                      {isDisabled ? (
-                        categoryDtails.categoryName
-                      ) : (
-                        <select
-                          name="categoryID"
-                          class="form-select"
-                          // aria-label="Default select example"
-                          defaultValue={
-                            categoryDtails.categoryName || categorySelected
-                          }
-                          onChange={handleChangeCategory}
-                        >
-                          <option value="" disabled>
-                            --No selected--
-                          </option>
-                          {listCategoriesStore.map((category) => (
-                            <option
-                              id={category.id}
-                              value={category.categoryName}
-                            >
-                              {category.categoryName}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                    </p>
-                    {!productDetails.isVariantType && isReturnData && (
-                      <>
-                        <p>
-                          <strong>Storage Quantity:</strong>
-                          {listVariants[0].storageQuantity}
-                        </p>
-                        <p>
-                          <strong>SKU:</strong>
-                          {listVariants[0].sku}
-                        </p>
-                        <p>
-                          <strong>Barcode:</strong>
-                          {listVariants[0].barcode}
-                        </p>
-                        <p>
-                          <strong>Price:</strong>
-                          {listVariants[0].price}
-                        </p>
-                      </>
-                    )}
-                  </div>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  id="nav-profile"
+                  role="tabpanel"
+                  aria-labelledby="nav-profile-tab"
+                >
+                  {productDetails.isVariantType && (
+                    <div>
+                      <div className="mt-3">
+                        <BootstrapTable
+                          keyField="id"
+                          striped
+                          hover
+                          condensed
+                          columns={columns}
+                          headerClasses="table-header-receipt"
+                          noDataIndication="Table is Empty"
+                          data={listVariantsStores}
+                          rowEvents={rowEvents}
+                        />
+                        {/* {isReturnData && (
+                         
+                        )} */}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-            <div
-              class="tab-pane fade"
-              id="nav-profile"
-              role="tabpanel"
-              aria-labelledby="nav-profile-tab"
-            >
-              {productDetails.isVariantType && (
-                <div>
-                  <div className="mt-3">
-                    {isReturnData && (
-                      <BootstrapTable
-                        keyField="id"
-                        striped
-                        hover
-                        condensed
-                        columns={columns}
-                        headerClasses="table-header-receipt"
-                        noDataIndication="Table is Empty"
-                        data={listVariantsStores}
-                        rowEvents={rowEvents}
-                      />
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
           </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <TableLoading />
+      )}
     </>
   );
 }

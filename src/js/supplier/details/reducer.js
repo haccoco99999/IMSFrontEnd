@@ -48,7 +48,7 @@ export function getDetailsSupplierReducer(state = initialState, action) {
       };
 
     case CLEAR_MESSAGE:
-      return initalState;
+      return initialState;
     default:
       return state;
   }
@@ -71,13 +71,22 @@ export function updateSupplierReducer(state = updateState, action) {
         errors: false,
       };
     case UPDATE_SUPPLIER_RESPONSE:
-      return {
-        ...state,
-        requesting: false,
-        successful: true,
-        messages: "Update Success",
-        errors: false,
-      };
+      if (action.json === undefined)
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Duplicate",
+          errors: true,
+        };
+      else
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Update Success",
+          errors: false,
+        };
     case UPDATE_SUPPLIER_ERROR:
       return {
         ...state,
@@ -86,8 +95,8 @@ export function updateSupplierReducer(state = updateState, action) {
         messages: "",
         errors: true,
       };
-    case CLEAR_MESSAGE:
-      return updateState;
+    // case CLEAR_MESSAGE:
+    //   return updateState;
     default:
       return state;
   }
@@ -125,8 +134,8 @@ export function deleteSupplierReducer(state = deleteState, action) {
         messages: "",
         errors: true,
       };
-    case CLEAR_MESSAGE:
-      return deleteState;
+    // case CLEAR_MESSAGE:
+    //   return deleteState;
     default:
       return state;
   }

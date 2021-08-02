@@ -9,7 +9,7 @@ import "../product.css";
 //components
 import NavigationBar from "../../components/navbar/navbar-component";
 import BrandSelectModal from "../components/brand-component";
-
+import { createProduct } from "./action";
 export default function CreateProductComponent(props) {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -132,13 +132,9 @@ export default function CreateProductComponent(props) {
     history.goBack();
   }
 
-  function checkUndifined() {
-    if (props.formData.sku === undefined) {
-      props.setFormDataManager("sku", "");
-    }
-    if (props.formData.barcode === undefined)
-      props.setFormDataManager("barcode", "");
-  }
+  // function checkUndifined() {
+
+  // }
 
   const onClickSave = (event) => {
     event.preventDefault();
@@ -148,7 +144,14 @@ export default function CreateProductComponent(props) {
       event.stopPropagation();
     } else {
       event.preventDefault();
-      checkUndifined();
+      // checkUndifined();
+
+      if (props.formData.sku === undefined) {
+        props.setFormDataManager("sku", "");
+      }
+      if (props.formData.barcode === undefined)
+        props.setFormDataManager("barcode", "");
+
       const data = {
         name: props.formData.name,
         brandName: props.formData.brand,
@@ -159,8 +162,8 @@ export default function CreateProductComponent(props) {
         productVariants: [
           {
             name: props.formData.name,
-            price: props.formData.price,
-            salePrice: props.formData.saleprice,
+            price: 0,
+            salePrice: 0,
             barcode: props.formData.barcode,
             sku: props.formData.sku,
           },
@@ -181,9 +184,11 @@ export default function CreateProductComponent(props) {
     <div>
       <NavigationBar
         listButton={listButtons}
-        titleBar="Create"
+        titleBar="Create product"
         actionGoBack={goBackClick}
         status=""
+        home="Product"
+        currentPage="Create product"
       />
       <div className="wrapper space-top">
         {/* content 1 */}
@@ -299,7 +304,7 @@ export default function CreateProductComponent(props) {
                 <div class="row g-3 align-items-center">
                   <div class="col">
                     <label for="sku" class="col-form-label">
-                      SKU
+                      SKU (optional)
                     </label>
                     <input
                       type="text"

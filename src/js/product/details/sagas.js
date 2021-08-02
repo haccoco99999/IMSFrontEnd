@@ -136,21 +136,56 @@ function updateVariant(action) {
     });
 }
 
+function checkDuplicateProduct(action) {
+  const url = `${process.env.REACT_APP_API}/dupcheck/product`;
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      value: action.data.name,
+    }),
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+function checkDuplicateVariant(action) {
+  const url = `${process.env.REACT_APP_API}/dupcheck/productvariant`;
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      value: action.data.name,
+    }),
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
+
 function* getDetailsProductFlow(action) {
   try {
     let json = yield call(getDetailsProduct, action);
     yield put({ type: GET_DETAILS_PRODUCT_RESPONSE, json });
   } catch (error) {
     yield put({ type: GET_DETAILS_PRODUCT_ERROR });
-  }
-}
-
-function* updateProductFlow(action) {
-  try {
-    let json = yield call(updateProduct, action);
-    yield put({ type: UPDATE_PRODUCT_RESPONSE, json });
-  } catch (error) {
-    yield put({ type: UPDATE_PRODUCT_ERROR });
   }
 }
 
@@ -180,11 +215,44 @@ function* getDetailsPackageFlow(action) {
     yield put({ type: GET_DETAILS_PACKAGE_ERROR });
   }
 }
+function* checkDuplicateProductFlow(action) {
+  try {
+    let resultCheckDup = yield call(checkDuplicateProduct, action);
+    return resultCheckDup;
+  } catch (error) {
+    yield put({ type: UPDATE_PRODUCT_ERROR });
+  }
+}
+
+function* checkDuplicateVariantFlow(action) {
+  try {
+    let resultCheckDup = yield call(checkDuplicateVariant, action);
+    return resultCheckDup;
+  } catch (error) {
+    yield put({ type: UPDATE_PRODUCT_ERROR });
+  }
+}
+
+function* updateProductFlow(action) {
+  let check = yield call(checkDuplicateProductFlow, action);
+  try {
+    if (!check.hasMatch) {
+      let json = yield call(updateProduct, action);
+      yield put({ type: UPDATE_PRODUCT_RESPONSE, json });
+    } else yield put({ type: UPDATE_PRODUCT_RESPONSE });
+  } catch (error) {
+    yield put({ type: UPDATE_PRODUCT_ERROR });
+  }
+}
 
 function* updateVariantFlow(action) {
+  let check = yield call(checkDuplicateVariant, action);
+
   try {
-    let json = yield call(updateVariant, action);
-    yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
+    if (!check.hasMatch) {
+      let json = yield call(updateVariant, action);
+      yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
+    } else yield put({ type: UPDATE_VARIANTS_RESPONSE });
   } catch (error) {
     console.log(error);
     yield put({ type: UPDATE_VARIANTS_ERROR });

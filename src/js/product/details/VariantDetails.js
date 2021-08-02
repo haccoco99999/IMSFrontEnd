@@ -10,7 +10,7 @@ import "../product.css";
 import { getDetailsVariant, updateVariantAction } from "./action";
 import { RESET } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
-
+import { TableLoading } from "../../components/loading/loading-component";
 export default function VariantDetails() {
   let history = useHistory();
   let location = useLocation();
@@ -39,14 +39,20 @@ export default function VariantDetails() {
     },
   };
 
-  const { variantStore, listPackageStore, token, updateVariantReducer } =
-    useSelector((state) => ({
-      variantStore: state.getDetailsVariantReducer.productVariant,
-      listPackageStore: state.getDetailsVariantReducer.productVariant.packages,
-      token: state.client.token,
-      updateVariantReducer: state.updateVariantReducer,
-      // messages: state.getDetailsProductReducer.messages,
-    }));
+  const {
+    variantStore,
+    listPackageStore,
+    token,
+    updateVariantReducer,
+    getDetailsVariantReducer,
+  } = useSelector((state) => ({
+    variantStore: state.getDetailsVariantReducer.productVariant,
+    listPackageStore: state.getDetailsVariantReducer.productVariant.packages,
+    token: state.client.token,
+    updateVariantReducer: state.updateVariantReducer,
+    getDetailsVariantReducer: state.getDetailsVariantReducer,
+    // messages: state.getDetailsProductReducer.messages,
+  }));
 
   const onChangeValue = (event) => {
     console.log(event.target.name);
@@ -162,17 +168,26 @@ export default function VariantDetails() {
         },
       });
     } else if (updateVariantReducer.successful) {
-      Swal.fire({
-        icon: "success",
-        title: "Your work has been saved",
-        showCancelButton: false,
-        confirmButtonColor: "#3085d6",
-      }).then((result) => {
-        if (result.isConfirmed)
-        dispatch(
-          getDetailsVariant({ id: location.state.variantId, token: token })
-        );
-      });
+      if (updateVariantReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
+        Swal.fire({
+          icon: "success",
+          title: "Your work has been saved",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        }).then((result) => {
+          if (result.isConfirmed)
+            dispatch(
+              getDetailsVariant({ id: location.state.variantId, token: token })
+            );
+        });
     } else if (updateVariantReducer.errors) {
       Swal.fire({
         icon: "error",
@@ -181,6 +196,11 @@ export default function VariantDetails() {
       });
     }
   }, [updateVariantReducer]);
+
+  useEffect(() => {
+    if (getDetailsVariantReducer.successful) setIsReturnData(true);
+  }, [getDetailsVariantReducer]);
+
   // useEffect(() => {
   //   if (messages === "Update Variant success") {
   //     dispatch(
@@ -190,155 +210,163 @@ export default function VariantDetails() {
   // }, [messages]);
   return (
     <div>
-      <NavigationBar
-        listButton={listButtons}
-        titleBar="Variant Details"
-        actionGoBack={goBackClick}
-        status=""
-      />
-      <div className="wrapper space-top">
-        <div className="wrapper-content shadow">
-          <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <button
-                class="nav-link active"
-                id="nav-home-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#nav-home"
-                type="button"
-                role="tab"
-                aria-controls="nav-home"
-                aria-selected="true"
-              >
-                General Information
-              </button>
-              <button
-                class="nav-link"
-                id="nav-profile-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#nav-profile"
-                type="button"
-                role="tab"
-                aria-controls="nav-profile"
-                aria-selected="false"
-              >
-                Packages
-              </button>
-            </div>
-          </nav>
-          <div class="tab-content" id="nav-tabContent">
-            <div
-              class="tab-pane fade show active"
-              id="nav-home"
-              role="tabpanel"
-              aria-labelledby="nav-home-tab"
-            >
-              <div className="wrapper-content shadow mt-3">
-                <div className="title-heading mt-2">
-                  <span>Variant Details </span>
+      {isReturnData ? (
+        <>
+          <NavigationBar
+            listButton={listButtons}
+            titleBar={location.state.variantId}
+            actionGoBack={goBackClick}
+            status=""
+            home="Product"
+            currentPage="Product details"
+            level3={true}
+            level3Page="Variant Details"
+          />
+          <div className="wrapper space-top">
+            <div className="wrapper-content shadow">
+              <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button
+                    class="nav-link active"
+                    id="nav-home-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-home"
+                    type="button"
+                    role="tab"
+                    aria-controls="nav-home"
+                    aria-selected="true"
+                  >
+                    General Information
+                  </button>
+                  <button
+                    class="nav-link"
+                    id="nav-profile-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nav-profile"
+                    type="button"
+                    role="tab"
+                    aria-controls="nav-profile"
+                    aria-selected="false"
+                  >
+                    Packages
+                  </button>
                 </div>
-                <div className="mt-3">
-                  <div className="row g-3 justify-content-between me-3">
-                    <div className="col-4">
-                      <p>
-                        <strong>Variant ID:</strong>
-                        {variant.id}
-                      </p>
-                      <p>
-                        <strong>Product ID:</strong>
-                        {variant.productId}
-                      </p>
-                      <p>
-                        <strong>Name:</strong>
-                        {isDisabled ? (
-                          variant.name
-                        ) : (
-                          <input
-                            type="text"
-                            name="name"
-                            className="form-control"
-                            onChange={onChangeValue}
-                            value={variant.name}
-                          />
-                        )}
-                      </p>
-                      <p>
-                        <strong>SKU:</strong>
-                        {isDisabled ? (
-                          variant.sku
-                        ) : (
-                          <input
-                            type="text"
-                            name="sku"
-                            className="form-control"
-                            onChange={onChangeValue}
-                            value={variant.sku}
-                          />
-                        )}
-                      </p>
-                      <p>
-                        <strong>Barcode:</strong>
-                        {isDisabled ? (
-                          variant.barcode
-                        ) : (
-                          <input
-                            type="text"
-                            name="barcode"
-                            className="form-control"
-                            onChange={onChangeValue}
-                            value={variant.barcode}
-                          />
-                        )}
-                      </p>
+              </nav>
+              <div class="tab-content" id="nav-tabContent">
+                <div
+                  class="tab-pane fade show active"
+                  id="nav-home"
+                  role="tabpanel"
+                  aria-labelledby="nav-home-tab"
+                >
+                  <div className="wrapper-content shadow mt-3">
+                    <div className="title-heading mt-2">
+                      <span>Variant Details </span>
                     </div>
-                    <div className="col-4">
-                      {/* <p>
+                    <div className="mt-3">
+                      <div className="row g-3 justify-content-between me-3">
+                        <div className="col-4">
+                          <p>
+                            <strong>Variant ID:</strong>
+                            {variant.id}
+                          </p>
+                          <p>
+                            <strong>Product ID:</strong>
+                            {variant.productId}
+                          </p>
+                          <p>
+                            <strong>Name:</strong>
+                            {isDisabled ? (
+                              variant.name
+                            ) : (
+                              <input
+                                type="text"
+                                name="name"
+                                className="form-control"
+                                onChange={onChangeValue}
+                                value={variant.name}
+                              />
+                            )}
+                          </p>
+                          <p>
+                            <strong>SKU:</strong>
+                            {isDisabled ? (
+                              variant.sku
+                            ) : (
+                              <input
+                                type="text"
+                                name="sku"
+                                className="form-control"
+                                onChange={onChangeValue}
+                                value={variant.sku}
+                              />
+                            )}
+                          </p>
+                          <p>
+                            <strong>Barcode:</strong>
+                            {isDisabled ? (
+                              variant.barcode
+                            ) : (
+                              <input
+                                type="text"
+                                name="barcode"
+                                className="form-control"
+                                onChange={onChangeValue}
+                                value={variant.barcode}
+                              />
+                            )}
+                          </p>
+                        </div>
+                        <div className="col-4">
+                          {/* <p>
                         <strong>Unit:</strong>
                         {variant.unit}
                       </p> */}
-                      <p>
-                        <strong>Storage Quantity:</strong>
-                        {variant.storageQuantity}
-                      </p>
-                      <p>
-                        <strong>Price:</strong>
+                          <p>
+                            <strong>Storage Quantity:</strong>
+                            {variant.storageQuantity}
+                          </p>
+                          <p>
+                            <strong>Price:</strong>
 
-                        {variant.price}
-                      </p>
-                      {/* <p>
+                            {variant.price}
+                          </p>
+                          {/* <p>
                         <strong>Total Price:</strong>
                         {variant.cost}
                       </p> */}
+                        </div>
+                      </div>
                     </div>
+                  </div>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  id="nav-profile"
+                  role="tabpanel"
+                  aria-labelledby="nav-profile-tab"
+                >
+                  <div className="mt-3">
+                    <BootstrapTable
+                      keyField="id"
+                      striped
+                      hover
+                      condensed
+                      columns={columns}
+                      headerClasses="table-header-receipt"
+                      noDataIndication="Table is Empty"
+                      data={listPackage}
+                      rowEvents={rowEvents}
+                    />
                   </div>
                 </div>
               </div>
             </div>
-            <div
-              class="tab-pane fade"
-              id="nav-profile"
-              role="tabpanel"
-              aria-labelledby="nav-profile-tab"
-            >
-              {isReturnData && (
-                <div className="mt-3">
-                  <BootstrapTable
-                    keyField="id"
-                    striped
-                    hover
-                    condensed
-                    columns={columns}
-                    headerClasses="table-header-receipt"
-                    noDataIndication="Table is Empty"
-                    data={listPackage}
-                    rowEvents={rowEvents}
-                  />
-                </div>
-              )}
-            </div>
           </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <TableLoading />
+      )}
     </div>
   );
 }

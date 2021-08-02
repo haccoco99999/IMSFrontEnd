@@ -53,7 +53,6 @@ export function locationManagerReducer(state = initialState, action) {
         successful: false,
         messages: "",
         errors: true,
-        // listLocations: [],
       };
 
     default:
@@ -79,13 +78,22 @@ export function createLocationReducer(state = createLocationState, action) {
         errors: false,
       };
     case CREATE_LOCATION_RESPONSE:
-      return {
-        ...state,
-        requesting: false,
-        successful: true,
-        messages: "Create Success",
-        errors: false,
-      };
+      if (action.json === undefined)
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Duplicate",
+          errors: true,
+        };
+      else
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Create Success",
+          errors: false,
+        };
     case CREATE_LOCATION_ERROR:
       return {
         ...state,
@@ -119,13 +127,22 @@ export function updateLocationReducer(state = updateLocationState, action) {
         errors: false,
       };
     case UPDATE_LOCATION_RESPONSE:
-      return {
-        ...state,
-        requesting: false,
-        successful: true,
-        messages: "Update Success",
-        errors: false,
-      };
+      if (action.json === undefined)
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Duplicate",
+          errors: true,
+        };
+      else
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Update Success",
+          errors: false,
+        };
     case UPDATE_LOCATION_ERROR:
       return {
         ...state,

@@ -112,18 +112,27 @@ export default function CreateVariant() {
         },
       });
     } else if (updateVariantReducer.successful) {
-      Swal.fire({
-        icon: "success",
-        title: "Your work has been saved",
-        showCancelButton: false,
-        confirmButtonColor: "#3085d6",
-      }).then((result) => {
-        if (result.isConfirmed)
-        history.push("/homepage/product/details", {
-          productId: location.state.productId,
-          // fromPage: "ManagerPage",
+      if (updateVariantReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
         });
-      });
+      } else
+        Swal.fire({
+          icon: "success",
+          title: "Your work has been saved",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        }).then((result) => {
+          if (result.isConfirmed)
+            history.push("/homepage/product/details", {
+              productId: location.state.productId,
+              // fromPage: "ManagerPage",
+            });
+        });
     } else if (updateVariantReducer.errors) {
       Swal.fire({
         icon: "error",

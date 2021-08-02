@@ -96,6 +96,15 @@ export default function CreateSupplier() {
         },
       });
     } else if (createSupplierReducer.successful) {
+      if (createSupplierReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
       Swal.fire({
         icon: "success",
         title: "Your work has been saved",
@@ -126,9 +135,11 @@ export default function CreateSupplier() {
       {/* todo: task heading */}
       <NavigationBar
         actionGoBack={goBackClick}
-        titleBar="Create"
+        titleBar="Create supplier"
         status=""
         listButton={listButton}
+        home="Supplier"
+        currentPage="Create supplier "
       />
       {/* content */}
 
