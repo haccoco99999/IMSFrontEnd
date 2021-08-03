@@ -109,6 +109,8 @@ import {
   deleteSupplierReducer,
 } from "./supplier/details/reducer";
 import { createSupplierReducer } from "./supplier/create/reducer";
+//LOCATION
+import { getAllLocationsReducer } from "./components/location/reducer";
 
 const IndexReducer = combineReducers({
   login,
@@ -180,6 +182,8 @@ const IndexReducer = combineReducers({
   createSupplierReducer,
   updateSupplierReducer,
   deleteSupplierReducer,
+  //LOCATION 
+  getAllLocationsReducer
 });
 
 export default IndexReducer;
