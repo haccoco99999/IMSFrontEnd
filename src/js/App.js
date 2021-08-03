@@ -14,6 +14,7 @@ import Supplier from "./supplier/supplier";
 import Notification from "./notification/notification";
 import ManageAccount from "./manage-account/manage-account";
 import SaleManPage from "./sale-man/sale-man";
+import moment from "moment";
 
 import { connect, useSelector } from "react-redux";
 import {
@@ -92,7 +93,12 @@ function App(props) {
         //Receive notification from a specific channel:
         hubConnection.on("NotificationGroupMessage", (message) => {
           console.log("NotificationGroupMessage", message);
-          toast(message, {
+          var stringCheckTime = message.split("at:");
+          var newMessage =
+            stringCheckTime[0] +
+            "at:" +
+            moment(stringCheckTime[1]).add(7, "h").format("DD/MM/YYYY HH:mm");
+          toast(newMessage, {
             position: "bottom-right",
             autoClose: false,
             hideProgressBar: true,
@@ -101,7 +107,6 @@ function App(props) {
             draggable: true,
             progress: undefined,
           });
-
         });
 
         //Send a notification to all
@@ -206,12 +211,12 @@ function App(props) {
             </div>
             <i
               className="bx menu-icon-notification-logout dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
-             
+
             >
               <img src="\src\js\images\alarm.png" />
               <span className="badge badge-customize">3</span>
             </i>
-          <NotificationBell/>
+            <NotificationBell />
           </div>
           <div className={"profile hide-" + !eventPage.statusSetting}>
             <div className="profile_details">
@@ -219,121 +224,138 @@ function App(props) {
             </div>
           </div>
         </div>
-        <ul className="nav_list">
-          <nav className={"hide-" + !eventPage.statusSetting}>
-            <li>
-              <Link to="/homepage/about-my-account">
-                <span className="links_name">My Account</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/homepage/notification">
-                <span className="links_name">Notification</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/homepage/about-software">
-                <span className="links_name">About</span>
-              </Link>
-            </li>
-          </nav>
+        <div>
+          <ul className="nav_list">
+            {/* <nav className={"hide-" + !eventPage.statusSetting}>
+              <li>
+                <Link to="/homepage/about-my-account">
+                  <span className="links_name">My Account</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/homepage/notification">
+                  <span className="links_name">Notification</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/homepage/about-software">
+                  <span className="links_name">About</span>
+                </Link>
+              </li>
+            </nav> */}
 
-          <nav className={"hide-" + eventPage.statusSetting}>
-            <li>
-              <Link to="/homepage/dashboard">
-                <i className="bx">
-                  <img src="\src\js\images\dashboard-2.png" />
-                </i>
-                <span className="links_name">Dashboard</span>
-              </Link>
-              <span className="tooltip">Dashboard</span>
-            </li>
+            <nav className="nav-side-bar">
+              <li>
+                <Link to="/homepage/dashboard">
+                  <i className="bx">
+                    <img src="\src\js\images\dashboard-2.png" />
+                  </i>
+                  <span className="links_name">Dashboard</span>
+                </Link>
+                <span className="tooltip">Dashboard</span>
+              </li>
 
-            <li>
-              <Link to="/homepage/purchase">
-                <i className="bx">
-                  <img src="\src\js\images\shopping-2.png" />
-                </i>
-                <span className="links_name">Purchase order</span>
-              </Link>
-              <span className="tooltip">Purchase</span>
-            </li>
-            <li>
-              <Link to="/homepage/good-receipt">
-                <i className="bx">
-                  <img src="\src\js\images\import-2.png" />
-                </i>
-                <span className="links_name">Good Recipt</span>
-              </Link>
-              <span className="tooltip">Good Recipt</span>
-            </li>
-            <li>
-              <Link to="/homepage/good-issue">
-                <i className="bx">
-                  <img src="\src\js\images\box-2.png" />
-                </i>
-                <span className="links_name">Good issue</span>
-              </Link>
-              <span className="tooltip">Good issue</span>
-            </li>
-            <li>
-              <Link to="/homepage/stock-take">
-                <i className="bx">
-                  <img src="\src\js\images\shelf-2.png" />
-                </i>
-                <span className="links_name">Stock take</span>
-              </Link>
-              <span className="tooltip">Stock take</span>
-            </li>
-            <li>
-              <Link to="/homepage/report">
-                <i className="bx">
-                  <img src="\src\js\images\report-2.png" />
-                </i>
-                <span className="links_name">Report</span>
-              </Link>
-              <span className="tooltip">Report</span>
-            </li>
+              <li>
+                <Link to="/homepage/purchase">
+                  <i className="bx">
+                    <img src="\src\js\images\shopping-2.png" />
+                  </i>
+                  <span className="links_name">Purchase order</span>
+                </Link>
+                <span className="tooltip">Purchase</span>
+              </li>
+              <li>
+                <Link to="/homepage/good-receipt">
+                  <i className="bx">
+                    <img src="\src\js\images\import-2.png" />
+                  </i>
+                  <span className="links_name">Good Recipt</span>
+                </Link>
+                <span className="tooltip">Good Recipt</span>
+              </li>
+              <li>
+                <Link to="/homepage/good-issue">
+                  <i className="bx">
+                    <img src="\src\js\images\box-2.png" />
+                  </i>
+                  <span className="links_name">Good issue</span>
+                </Link>
+                <span className="tooltip">Good issue</span>
+              </li>
+              <li>
+                <Link to="/homepage/stock-take">
+                  <i className="bx">
+                    <img src="\src\js\images\shelf-2.png" />
+                  </i>
+                  <span className="links_name">Stock take</span>
+                </Link>
+                <span className="tooltip">Stock take</span>
+              </li>
+              <li>
+                <Link to="/homepage/report">
+                  <i className="bx">
+                    <img src="\src\js\images\report-2.png" />
+                  </i>
+                  <span className="links_name">Report</span>
+                </Link>
+                <span className="tooltip">Report</span>
+              </li>
 
-            <li>
-              <Link to="/homepage/product">
-                <i className="bx">
-                  <img src="\src\js\images\product-2.png" />
-                </i>
-                <span className="links_name">Product</span>
-              </Link>
-              <span className="tooltip">Product</span>
-            </li>
-            <li>
-              <Link to="/homepage/supplier">
-                <i className="bx">
-                  <img src="\src\js\images\manufacture-2.png" />
-                </i>
-                <span className="links_name">Supplier</span>
-              </Link>
-              <span className="tooltip">Supplier</span>
-            </li>
-            <li>
-              <Link to="/homepage/manage-account">
-                <i className="bx">
-                  <img src="\src\js\images\user-2.png" />
-                </i>
-                <span className="links_name">Account</span>
-              </Link>
-              <span className="tooltip">Account</span>
-            </li>
-            <li>
-              <Link to="/homepage/sale-man">
-                <i className="bx">
-                  <img src="\src\js\images\user-2.png" />
-                </i>
-                <span className="links_name">Sale man</span>
-              </Link>
-              <span className="tooltip">Sale man</span>
-            </li>
-          </nav>
-        </ul>
-        <Logout />
+              <li data-bs-toggle="collapse" href="#collapseListMenuProductManager">
+                <a href="#">
+                  <i className="bx">
+                    <img src="\src\js\images\product-2.png" />
+                  </i>
+                  <span className="links_name">Product</span>
+                </a>
+                <span className="tooltip">Product</span>
+              </li>
+
+              <li class="collapse text-white" id="collapseListMenuProductManager">
+                <ul>
+                  <li className="list-child-item ps-5">
+                  <Link to="/homepage/product">Product</Link>
+                  </li>
+                  <li className="list-child-item ps-5"><span>Text</span></li>
+                  <li className="list-child-item ps-5"><span>Text</span></li>
+                  <li className="list-child-item ps-5"><span>Text</span></li>
+
+                </ul>
+
+              </li>
+              <li>
+                <Link to="/homepage/supplier">
+                  <i className="bx">
+                    <img src="\src\js\images\manufacture-2.png" />
+                  </i>
+                  <span className="links_name">Supplier</span>
+                </Link>
+                <span className="tooltip">Supplier</span>
+              </li>
+              <li>
+                <Link to="/homepage/manage-account">
+                  <i className="bx">
+                    <img src="\src\js\images\user-2.png" />
+                  </i>
+                  <span className="links_name">Account</span>
+                </Link>
+                <span className="tooltip">Account</span>
+              </li>
+              <li>
+                <Link to="/homepage/sale-man">
+                  <i className="bx">
+                    <img src="\src\js\images\user-2.png" />
+                  </i>
+                  <span className="links_name">Sale man</span>
+                </Link>
+                <span className="tooltip">Sale man</span>
+              </li>
+            </nav>
+          </ul>
+          <div class="sticky-bottom"> <Logout /></div>
+
+        </div>
+
       </div>
 
       <Switch>

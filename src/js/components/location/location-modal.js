@@ -1,20 +1,25 @@
 import React from "react";
+
 import Table from "react-bootstrap-table-next";
 import ToolkitProvider, {
   Search,
 } from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min";
-import moment from "moment";
-export default function PurchaseAcceptModal(props) {
+
+export default function ListLocationsModal(props) {
   const { SearchBar } = Search;
+
   const columns = [
-    { dataField: "id", text: "Purchase Order ID" },
-    { dataField: "supplierName", text: "Supplier" },
     {
-      dataField: "modifiedDate",
-      text: "Modified Date",
-      formatter: (cellContent, row, rowIndex) => {
-        return <span>{moment(row.modifiedDate).format("DD-MM-YYYY")}</span>;
-      },
+      dataField: "id",
+      text: " ID",
+    },
+    {
+      dataField: "locationName",
+      text: "Location Name",
+    },
+    {
+      dataField: "locationBarcode",
+      text: "Location Barcode",
     },
   ];
 
@@ -28,6 +33,7 @@ export default function PurchaseAcceptModal(props) {
   const afterSearch = (newResult) => {
     console.log(newResult);
   };
+
   return (
     <div>
       <div
@@ -41,7 +47,7 @@ export default function PurchaseAcceptModal(props) {
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Search: Confirmed Purchase Order </h5>
+              <h5 className="modal-title">Search: Locations </h5>
               <button
                 type="button"
                 className="btn-close"
@@ -52,7 +58,7 @@ export default function PurchaseAcceptModal(props) {
             <div className="modal-body">
               <ToolkitProvider
                 keyField="id"
-                data={props.listPOConfirm}
+                data={props.listLocations}
                 columns={columns}
                 search={afterSearch}
               >
@@ -60,7 +66,11 @@ export default function PurchaseAcceptModal(props) {
                   <div>
                     <SearchBar {...props.searchProps} />
                     <hr />
-                    <Table selectRow={selectRow} {...props.baseProps} />
+                    <Table
+                      noDataIndication="Table is Empty"
+                      selectRow={selectRow}
+                      {...props.baseProps}
+                    />
                   </div>
                 )}
               </ToolkitProvider>
@@ -77,7 +87,7 @@ export default function PurchaseAcceptModal(props) {
               <button
                 type="button"
                 className="btn btn-default button-save--modal text-white"
-                onClick={props.onSelectConfirm}
+                onClick={props.onSelectLocationClick}
               >
                 Select
               </button>

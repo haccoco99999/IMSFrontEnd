@@ -16,6 +16,8 @@ import { getAllStocktakeAction } from "./action";
 // import PagingComponent from "../../components/";
 import PagingComponent from "../../components/paging/paging-component";
 import { CustomToggleList } from "../../components/toggle-columns-table/CustomToggleList";
+import moment from "moment";
+
 export default function () {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -85,10 +87,8 @@ export default function () {
     {
       dataField: "createdDate",
       text: "Create Date",
-      headerAlign: "center",
-      align: "center",
       formatter: (cellContent, row) => {
-        return row.createdDate.split("T")[0];
+        return <span>{moment(row.createdDate).add(7, "h").format("DD-MM-YYYY")}</span>;
       },
     },
     // {

@@ -107,29 +107,6 @@ export default function CreateWithVariants(props) {
     },
   ];
 
-  // const [listValueColumn, setListValueColumn] = useState([
-  //   {
-  //     name: "Variants Name",
-  //     input: true,
-  //   },
-  //   {
-  //     price: "Price",
-  //     input: true,
-  //   },
-  //   {
-  //     salePrice: "Saleprice",
-  //     input: true,
-  //   },
-  //   {
-  //     sku: "SKU",
-  //     input: true,
-  //   },
-  //   {
-  //     barcode: "Barcode",
-  //     input: true,
-  //   },
-  // ]);
-
   // const dataLastPage = location.state.formData;
   // const selectedCategory = location.state.categorySelected;
 
@@ -221,7 +198,7 @@ export default function CreateWithVariants(props) {
   //todo: list nav button
   const listButton = setListButtonNav();
   function setListButtonNav() {
- return [
+    return [
       {
         isShow: true,
         title: "Save",
@@ -232,21 +209,25 @@ export default function CreateWithVariants(props) {
     ];
   }
 
-  useEffect(() => {
-    if (props.messages !== "")
-      history.push("/homepage/product/details", {
-        productId: props.messages,
-      });
-  }, [props.messages]);
+  // useEffect(() => {
+  //   if (props.messages !== "")
+  //     history.push("/homepage/product/details", {
+  //       productId: props.messages,
+  //     });
+  // }, [props.messages]);
 
   return (
     //   todo: gop chung 2 bang , sau do tach ra
     <div>
       <NavigationBar
         listButton={listButton}
-        titleBar="With Variant"
+        titleBar="Create variants "
         actionGoBack={goBackClick}
         status=""
+        home="Product"
+        currentPage="Create product"
+        level3={true}
+        level3Page="Create variants"
       />
       {/* content */}
       <div className="wrapper space-top">

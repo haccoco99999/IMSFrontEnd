@@ -2,25 +2,17 @@ import React, { useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import BootstrapTable from "react-bootstrap-table-next";
+import moment from "moment";
 //css
 import "../sale-man.css";
 
 //components
 import { getAllPRAction } from "./action";
-// import ListReceiptTable from "../../table-receipt/ListReceiptsTable";
 import PagingComponent from "../../product/components/paging-component";
 
-export default function () {
+export default function PurchaseRequisitionManager () {
   let history = useHistory();
   let dispatch = useDispatch();
-
-  // const [listValueColumn, setListValueColumn] = useState({
-  //   id: true,
-  //   status: true,
-  //   createdByName: true,
-  //   createdDate: true,
-  //   modifiedDate: true,
-  // });
 
   //todo: declare  bootstrap table
   const columns = [
@@ -31,28 +23,53 @@ export default function () {
     {
       dataField: "status",
       text: "Status",
+      align: "center",
+      isDummyField: true,
+      formatter: (cellContent, row) => {
+        if (row.status === "RequisitionCreated")
+          return <span className="badge bg-secondary">Draft</span>;
+        else if (row.status === "POConfirm") {
+          return <span class="badge bg-success">Confirmed</span>;
+        } else if (row.status === "Done") {
+          return <span class="badge bg-primary">Done</span>;
+        } else if (
+          row.status === "POCanceled" ||
+          row.status === "RequisitionCanceled" ||
+          row.status === "POCanceled"
+        ) {
+          return <span class="badge bg-danger">Canceled</span>;
+        } else
+          return (
+            <span class="badge bg-warning text-dark">Waiting confirm</span>
+          );
+      },
     },
     {
       dataField: "createdByName",
       text: "Created By",
+      hidden: true,
     },
     {
       dataField: "createdDate",
-      text: "Create Date",
+      text: "Created Date",
+      align: "right",
+      formatter: (cellContent, row, rowIndex) => {
+        return <span>{moment(row.createdDate).format("DD-MM-YYYY")}</span>;
+      },
     },
     {
       dataField: "modifiedDate",
-      text: "Modify Date",
+      text: "Modified Date",
+      align: "right",
+      formatter: (cellContent, row, rowIndex) => {
+        return <span>{moment(row.modifiedDate).format("DD-MM-YYYY")}</span>;
+      },
     },
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
-
-  // const [listEditHeader, setListEditHeader] = useState({
-  //   id: "Purchase Requisition ID",
-  //   createdByName: "Created by",
-  // });
+  const [returnData,setReturnData] = useState(false)
 
   const { listData, pageCount, token } = useSelector((state) => ({
     listData: state.getAllPurchaseRequisitionReducer.listPurchaseRequisition,
@@ -73,11 +90,11 @@ export default function () {
     setCurrentPage(currentPage - 1);
   }
 
-  function onClickToDetails(row) {
-    history.push("/homepage/sale-man/details", {
-      purchaseRequisitionId: row.id,
-    });
-  }
+  // function onClickToDetails(row) {
+  //   history.push("/homepage/sale-man/details", {
+  //     purchaseRequisitionId: row.id,
+  //   });
+  // }
 
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
@@ -173,17 +190,6 @@ export default function () {
         </div>
 
         <div className="mt-3">
-          {/* <ListReceiptTable
-            listHeaderEdit={listEditHeader}
-            listColumn={listValueColumn}
-            listData={listData}
-            backPagingClick={backPagingClick}
-            nextPagingClick={nextPagingClick}
-            sizePerPage={sizePerPage}
-            currentPage={currentPage}
-            pageCount={pageCount}
-            onRowClick={onClickToDetails}
-          /> */}
           <BootstrapTable
             keyField="id"
             striped

@@ -18,7 +18,7 @@ const initialState = {
   requesting: false,
   successful: false,
   messages: "",
-  errors: "",
+  errors: false,
 
   purchaseRequisitionDetails: {
     supplier: {},
@@ -36,7 +36,10 @@ const initialState = {
   },
 };
 
-export default function reducer(state = initialState, action) {
+export function getDetailsPurchaseRequisitionReducer(
+  state = initialState,
+  action
+) {
   switch (action.type) {
     case GET_DETAILS_PR_REQUEST:
       return {
@@ -44,7 +47,7 @@ export default function reducer(state = initialState, action) {
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
 
     case GET_DETAILS_PR_RESPONSE:
@@ -53,7 +56,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
+        errors: false,
         purchaseRequisitionDetails: action.json.purchaseOrder,
       };
 
@@ -63,16 +66,31 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
       };
 
+    case CLEAR_MESSAGE:
+      return initialState;
+    default:
+      return state;
+  }
+}
+
+const submitState = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: false,
+};
+export function submitDraftReducer(state = submitState, action) {
+  switch (action.type) {
     case SUBMIT_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
     case SUBMIT_RESPONSE:
       return {
@@ -80,7 +98,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: "Submit Success",
-        errors: "",
+        errors: false,
       };
     case SUBMIT_ERROR:
       return {
@@ -88,16 +106,27 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
       };
-
+    default:
+      return state;
+  }
+}
+const updateState = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: false,
+};
+export function updatePRReducer(state = updateState, action) {
+  switch (action.type) {
     case UPDATE_PR_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
     case UPDATE_PR_RESPONSE:
       return {
@@ -105,7 +134,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: "Update Success",
-        errors: "",
+        errors: false,
       };
     case UPDATE_PR_ERROR:
       return {
@@ -113,15 +142,27 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
       };
+    default:
+      return state;
+  }
+}
+const deleteState = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: true,
+};
+export function deletePRReducer(state = deleteState, action) {
+  switch (action.type) {
     case DELETE_PR_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
     case DELETE_PR_RESPONSE:
       return {
@@ -129,7 +170,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: "Delete Success",
-        errors: "",
+        errors: false,
       };
     case DELETE_PR_ERROR:
       return {
@@ -137,17 +178,9 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
       };
 
-    case CLEAR_MESSAGE:
-      return {
-        ...state,
-        requesting: false,
-        successful: true,
-        messages: "",
-        errors: "",
-      };
     default:
       return state;
   }

@@ -8,9 +8,10 @@ import "../goodreceipt.css";
 
 //components
 // import { getConfirmedPODetailsAction } from "../create/action";
-import NavigationBar from "../../stock-take/components/navbar-component";
+import NavigationBar from "../../components/navbar/navbar-component";
 import GetDetailsAction from "./action";
-
+import { TableLoading } from "../../components/loading/loading-component";
+import { RESET } from "./constants";
 export default function details() {
   let history = useHistory();
   let location = useLocation();
@@ -18,21 +19,8 @@ export default function details() {
 
   const [returnData, setReturnData] = useState(false);
 
-  const [listValueColumn, setListColumn] = useState([
-    {
-      id: "Product ID",
-    },
-    {
-      productVariantName: "Name",
-    },
-    {
-      quantityReceived: "Quantity",
-    },
-  ]);
-
   //todo: declare bootstrap table
   const columns = [
-    
     {
       dataField: "productVariantId",
       text: "Variant ID",
@@ -51,7 +39,7 @@ export default function details() {
     suppliers,
     goodsreceiptId,
     purchaseOrderId,
-    // createDate,
+    getGoodsReceiptDetailsReducer,
     transactionRecordStore,
     token,
   } = useSelector((state) => ({
@@ -68,6 +56,7 @@ export default function details() {
     transactionRecordStore:
       state.getGoodsReceiptDetailsReducer.receivingOrder.transaction
         .transactionRecord,
+    getGoodsReceiptDetailsReducer: state.getGoodsReceiptDetailsReducer,
   }));
 
   console.log(suppliers);
@@ -78,13 +67,16 @@ export default function details() {
     );
 
     // check khi true false
-    setReturnData(true);
 
     // check tu page nao toi
 
     if (location.state.fromPage !== "ManagerPage") {
       setIsFromManagerPage(false);
     }
+
+    return () => {
+      dispatch({ type: RESET });
+    };
   }, []);
 
   function goBackClick() {
@@ -101,17 +93,24 @@ export default function details() {
     return [{}];
   }
 
+  useEffect(() => {
+    if (getGoodsReceiptDetailsReducer.successful) {
+      setReturnData(true);
+    }
+  }, [getGoodsReceiptDetailsReducer]);
   return (
     <div>
-      <NavigationBar
-        listButton={listButton}
-        titleBar="Details"
-        actionGoBack={goBackClick}
-        status=""
-      />
-
-      {returnData && (
+      {returnData ? (
         <>
+          <NavigationBar
+            listButton={listButton}
+            titleBar="Details"
+            actionGoBack={goBackClick}
+            status=""
+            home="Goods receipt"
+            currentPage="Goods receipt details"
+            // classStatus="bg-secondary"
+          />
           <div className="wrapper space-top">
             <div className="wrapper-content shadow">
               <div className="title-heading mt-2">
@@ -210,21 +209,9 @@ export default function details() {
             </div>
           </div>{" "}
         </>
+      ) : (
+        <TableLoading />
       )}
-      {/* {returnData && (
-        <div className="shadow wrapper-content mt-3">
-          <Table
-            listColumn={listValueColumn}
-            listData={list_Products}
-          />
-          <BootstrapTable
-            keyField="id"
-            noDataIndication="Table is Empty"
-            columns={columns}
-            data={listProductsStore}
-          />
-        </div>
-      )}{" "} */}
     </div>
   );
 }

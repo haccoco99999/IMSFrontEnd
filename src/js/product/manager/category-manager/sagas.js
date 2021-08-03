@@ -16,7 +16,7 @@ import {
 import handleApiErrors from "../../../auth/api-errors";
 
 function getAllCategory(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/category?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+  const url = `${process.env.REACT_APP_API}/category?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
 
   return fetch(url, {
     method: "GET",
@@ -36,7 +36,7 @@ function getAllCategory(action) {
 }
 
 function createCategory(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/category/create";
+  const url = `${process.env.REACT_APP_API}/category/create`;
   return fetch(url, {
     method: "POST",
     headers: {
@@ -55,7 +55,7 @@ function createCategory(action) {
 }
 
 function updateCategory(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/category/update";
+  const url = `${process.env.REACT_APP_API}/category/update`;
   return fetch(url, {
     method: "PUT",
     headers: {
@@ -74,6 +74,27 @@ function updateCategory(action) {
     });
 }
 
+function checkDupCategory(action) {
+  const url = `${process.env.REACT_APP_API}/dupcheck/category`;
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      value: action.data.name,
+    }),
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
 function* getAllCategoryFlow(action) {
   try {
     let json = yield call(getAllCategory, action);
@@ -85,19 +106,37 @@ function* getAllCategoryFlow(action) {
   }
 }
 
-function* createCategoryFlow(action) {
+function* checkDupCategoryFlow(action, flow) {
   try {
-    let json = yield call(createCategory, action);
-    yield put({ type: CREATE_CATEGORY_RESPONSE, json });
+    let resultCheckDup = yield call(checkDupCategory, action);
+    return resultCheckDup;
+  } catch (error) {
+    console.log(error);
+    if (flow === "create") yield put({ type: CREATE_CATEGORY_ERROR });
+    else yield put({ type: UPDATE_CATEGORY_ERROR });
+  }
+}
+
+function* createCategoryFlow(action) {
+  let check = yield call(checkDupCategoryFlow, "create");
+  try {
+    if (!check.hasMatch) {
+      let json = yield call(createCategory, action);
+      yield put({ type: CREATE_CATEGORY_RESPONSE, json });
+    } else yield put({ type: CREATE_CATEGORY_RESPONSE });
   } catch (error) {
     yield put({ type: CREATE_CATEGORY_ERROR });
   }
 }
 
 function* updateCategoryFlow(action) {
+  let check = yield call(checkDupCategoryFlow, "update");
+
   try {
-    let json = yield call(updateCategory, action);
-    yield put({ type: UPDATE_CATEGORY_RESPONSE, json });
+    if (!check.hasMatch) {
+      let json = yield call(updateCategory, action);
+      yield put({ type: UPDATE_CATEGORY_RESPONSE, json });
+    } else yield put({ type: UPDATE_CATEGORY_RESPONSE });
   } catch (error) {
     yield put({ type: UPDATE_CATEGORY_ERROR });
   }

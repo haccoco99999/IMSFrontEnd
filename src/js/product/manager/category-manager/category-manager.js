@@ -12,7 +12,7 @@ import {
   CreateCategoryAction,
   UpdateCategoryAction,
 } from "./action";
-import Table from "../../../table-receipt/ListReceiptsTable";
+import { RESET } from "../constants";
 import PagingComponent from "../../../components/paging/paging-component";
 export default function CategoryManager() {
   let dispatch = useDispatch();
@@ -49,14 +49,21 @@ export default function CategoryManager() {
     transactionId: "",
   });
 
-  const { list_Categories, token, pageCount, messages } = useSelector(
-    (state) => ({
-      list_Categories: state.getAllCategoriesReducer.listCategories,
-      token: state.client.token,
-      pageCount: state.getAllCategoriesReducer.pageCount,
-      messages: state.getAllCategoriesReducer.messages,
-    })
-  );
+  const {
+    list_Categories,
+    token,
+    pageCount,
+    updateCategoriesReducer,
+    createCategoriesReducer,
+  } = useSelector((state) => ({
+    list_Categories: state.getAllCategoriesReducer.listCategories,
+    token: state.client.token,
+    pageCount: state.getAllCategoriesReducer.pageCount,
+    updateCategoriesReducer: state.updateCategoriesReducer,
+    createCategoriesReducer: state.createCategoriesReducer,
+
+    // messages: state.getAllCategoriesReducer.messages,
+  }));
 
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
@@ -116,23 +123,23 @@ export default function CategoryManager() {
     },
   };
 
-  function onRowClick(row) {
-    setCategoryData({
-      id: row.id,
-      categoryName: row.categoryName,
-      categoryDescription: row.categoryDescription,
-      transactionId: row.transactionId,
-    });
-    setIsCreate(false);
-    showModal();
-  }
+  // function onRowClick(row) {
+  //   setCategoryData({
+  //     id: row.id,
+  //     categoryName: row.categoryName,
+  //     categoryDescription: row.categoryDescription,
+  //     transactionId: row.transactionId,
+  //   });
+  //   setIsCreate(false);
+  //   showModal();
+  // }
 
-  function onChangeValue(event) {
-    setCategoryData({
-      ...categoryData,
-      [event.target.name]: event.target.value,
-    });
-  }
+  // function onChangeValue(event) {
+  //   setCategoryData({
+  //     ...categoryData,
+  //     [event.target.name]: event.target.value,
+  //   });
+  // }
 
   useEffect(() => {
     dispatch(
@@ -142,13 +149,94 @@ export default function CategoryManager() {
         token: token,
       })
     );
+    return () => {
+      dispatch({ type: RESET });
+    };
   }, [currentPage, sizePerPage]);
 
   useEffect(() => {
-    if (messages === "Create Success") {
-      console.log("Create Suceess");
-    } else if (messages === "Update Success") console.log("Update Suceess");
-  }, [messages]);
+    if (updateCategoriesReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (updateCategoriesReducer.successful) {
+      if (updateCategoriesReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
+        Swal.fire({
+          icon: "success",
+          title: "Your work has been saved",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            hideModal();
+          }
+        });
+    } else if (updateCategoriesReducer.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+      });
+    }
+  }, [updateCategoriesReducer]);
+
+  useEffect(() => {
+    if (createCategoriesReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (createCategoriesReducer.successful) {
+      if (createCategoriesReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          hideModal();
+        }
+      });
+    } else if (createCategoriesReducer.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+      });
+    }
+  }, [createCategoriesReducer]);
+
+  // useEffect(() => {
+  //   if (messages === "Create Success") {
+  //     console.log("Create Suceess");
+  //   } else if (messages === "Update Success") console.log("Update Suceess");
+  // }, [messages]);
 
   return (
     <div className="wrapper-content shadow">
@@ -159,7 +247,7 @@ export default function CategoryManager() {
         categoryData={categoryData}
         // onChangeValue={onChangeValue}
         token={token}
-        messaages={messages}
+        // messaages={messages}
       />
 
       <div className="ms-5">

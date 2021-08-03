@@ -12,19 +12,13 @@ import {
   getConfirmedPOAction,
   getConfirmedPODetailsAction,
   setCreateingGRRequestAction,
-  getAllLocationsAction,
 } from "./action";
-// import Table from "../../list-products-table/ListProductsTable";
+
 import ListLocationsModal from "../../stock-take/create/search-location-modal";
 import NavigationBar from "../../components/navbar/navbar-component";
 import ListPurchaseConfirmModal from "../components/purchase-accept-component";
-// const formReducer = (state, event) => {
-//   return {
-//     ...state,
-//     [event.name]: event.value,
-//   };
-// };
-
+import { getAllLocationsAction } from "../../components/location/action";
+import { TableLoading } from "../../components/loading/loading-component";
 export default function CreateGoodsReceiptComponent() {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -45,17 +39,24 @@ export default function CreateGoodsReceiptComponent() {
     list_ConfirmPurchaseOrderID,
     list_BuyingProductStore,
     token,
-    messages,
     listLocationsStore,
+    submitPRReducer,
+    getDetailsPOReducer,
+    getAllConfirmedPurchaseOrderReducer,
+    getAllLocationsReducer,
   } = useSelector((state) => ({
     token: state.client.token,
     list_ConfirmPurchaseOrderID:
       state.getAllConfirmedPurchaseOrderReducer.listConfirmedPurchaseOrder,
     list_BuyingProductStore:
-      state.getAllConfirmedPurchaseOrderReducer.listProducts
-        .purchaseOrderProduct,
-    messages: state.getAllConfirmedPurchaseOrderReducer.messages,
-    listLocationsStore: state.getAllConfirmedPurchaseOrderReducer.listLocations,
+      state.getDetailsPOReducer.listProducts.purchaseOrderProduct,
+    // messages: state.getAllConfirmedPurchaseOrderReducer.messages,
+    listLocationsStore: state.getAllLocationsReducer.listLocations,
+    submitPRReducer: state.submitPRReducer,
+    getDetailsPOReducer: state.getDetailsPOReducer,
+    getAllConfirmedPurchaseOrderReducer:
+      state.getAllConfirmedPurchaseOrderReducer,
+    getAllLocationsReducer: state.getAllLocationsReducer,
   }));
 
   const [list_BuyingProduct, setList_BuyingProduct] = useState([]);
@@ -99,7 +100,16 @@ export default function CreateGoodsReceiptComponent() {
             valid: false,
             message: "Sale price should be numeric",
           };
-        } else setIsCheckingNumeric(false);
+        } else {
+          if (newValue < 0) {
+            setIsCheckingNumeric(true);
+            return {
+              valid: false,
+              message: "Quantity should be bigger than 0",
+            };
+          }
+          setIsCheckingNumeric(false);
+        }
       },
       formatter: (cellContent, row, rowIndex) =>
         (list_BuyingProduct[rowIndex].received = row.received),
@@ -110,13 +120,19 @@ export default function CreateGoodsReceiptComponent() {
       editable: false,
       formatter: (cellContent, row, rowIndex) => {
         return (
-          <button
-            type="button"
-            className="btn btn-danger"
+          <div
+            className="text-danger"
             onClick={() => clickDeleteVariant(rowIndex)}
           >
-            Delete
-          </button>
+            <i class="bi bi-trash"></i>
+          </div>
+          // <button
+          //   type="button"
+          //   className="btn btn-danger"
+          //   onClick={() => clickDeleteVariant(rowIndex)}
+          // >
+          //   Delete
+          // </button>
         );
       },
     },
@@ -154,6 +170,10 @@ export default function CreateGoodsReceiptComponent() {
       ];
   }
 
+  function openLocationList() {
+    showModal();
+    dispatch(getAllLocationsAction({ token: token }));
+  }
   //todo:modal location declare
   const modalRef = useRef();
   const showModal = () => {
@@ -169,6 +189,11 @@ export default function CreateGoodsReceiptComponent() {
     const bsModal = Modal.getInstance(modalEle);
     bsModal.hide();
   };
+
+  function openConfirmedPOList() {
+    dispatch(getConfirmedPOAction({ token: token }));
+    showModalPO();
+  }
   //todo: modal po confirm modal
   const modalPO = useRef();
   const showModalPO = () => {
@@ -285,7 +310,7 @@ export default function CreateGoodsReceiptComponent() {
           }),
         };
         console.log(Data);
-        // dispatch(setCreateingGRRequestAction({ data: Data, token: token }));
+        dispatch(setCreateingGRRequestAction({ data: Data, token: token }));
       }
     }
   }
@@ -310,16 +335,16 @@ export default function CreateGoodsReceiptComponent() {
     .shift();
 
   useEffect(() => {
-    dispatch(getConfirmedPOAction({ token: token }));
-    dispatch(getAllLocationsAction({ token: token }));
-
-    if (messages !== "") {
-      history.push("/homepage/good-receipt/details", {
-        goodsreceiptId: messages,
-        fromPage: "CreatePage",
-      });
-    }
-  }, [messages]);
+    // if (messages !== "") {
+    //   history.push("/homepage/good-receipt/details", {
+    //     goodsreceiptId: messages,
+    //     fromPage: "CreatePage",
+    //   });
+    // }
+    return () => {
+      dispatch({ type: RESET });
+    };
+  }, []);
 
   useEffect(() => {
     if (list_BuyingProductStore.length > 0) {
@@ -365,6 +390,78 @@ export default function CreateGoodsReceiptComponent() {
       console.log(isValid);
     }
   }, [listCompare]);
+
+  useEffect(() => {
+    if (getAllLocationsReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          hideModal();
+        }
+      });
+    }
+  }, [getAllLocationsReducer]);
+
+  useEffect(() => {
+    if (getDetailsPOReducer.errors === true) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  }, [getDetailsPOReducer]);
+
+  useEffect(() => {
+    if (getAllConfirmedPurchaseOrderReducer.errors === true)
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      });
+  }, [getAllConfirmedPurchaseOrderReducer]);
+
+  useEffect(() => {
+    if (submitPRReducer.requesting === true) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (submitPRReducer.successful === true) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then(() => {
+        if (result.isConfirmed)
+          history.push("/homepage/good-receipt/details", {
+            goodsreceiptId: submitPRReducer.messages,
+          });
+      });
+    } else if (submitPRReducer.errors === true) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  }, submitPRReducer);
   return (
     <div>
       <NavigationBar
@@ -382,7 +479,7 @@ export default function CreateGoodsReceiptComponent() {
               <button
                 class="btn btn-outline-secondary"
                 type="button"
-                onClick={showModalPO}
+                onClick={openConfirmedPOList}
               >
                 Select Purchase Order
               </button>
@@ -505,7 +602,7 @@ export default function CreateGoodsReceiptComponent() {
               <button
                 class="btn btn-outline-secondary"
                 type="button"
-                onClick={showModal}
+                onClick={openLocationList}
               >
                 Select Location
               </button>

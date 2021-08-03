@@ -8,7 +8,7 @@ import {
 } from "./constants";
 
 function createSupplier(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/supplier/create";
+  const url = `${process.env.REACT_APP_API}/supplier/create`;
   return fetch(url, {
     method: "POST",
     headers: {
@@ -27,12 +27,48 @@ function createSupplier(action) {
     });
 }
 
-function* createSupplierFlow(action) {
+function checkDuplicateSupplier(action) {
+  // console.log(action);
+  const url = `${process.env.REACT_APP_API}/dupcheck/supplier`;
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      value: action.data.name,
+    }),
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+function* checkDuplicateSupplierFlow(action) {
   try {
-    let json = yield call(createSupplier, action);
-    yield put({ type: CREAT_SUPPLIER_RESPONSE, json });
+    let resultCheckDup = yield call(checkDuplicateSupplier, action);
+    return resultCheckDup;
   } catch (error) {
-    console.log(error)
+    console.log(error);
+    yield put({ type: CREAT_SUPPLIER_ERROR });
+  }
+}
+
+function* createSupplierFlow(action) {
+  let check = yield call(checkDuplicateSupplierFlow, action);
+  try {
+    if (!check.hasMatch) {
+      let json = yield call(createSupplier, action);
+      yield put({ type: CREAT_SUPPLIER_RESPONSE, json });
+    } else yield put({ type: CREAT_SUPPLIER_RESPONSE });
+  } catch (error) {
+    console.log(error);
     yield put({ type: CREAT_SUPPLIER_ERROR });
   }
 }

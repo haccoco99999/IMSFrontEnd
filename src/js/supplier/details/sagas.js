@@ -34,7 +34,7 @@ function getDetailsSupplier(action) {
 }
 
 function updateSupplier(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/supplier/edit";
+  const url = `${process.env.REACT_APP_API}/supplier/edit`;
   return fetch(url, {
     method: "PUT",
     headers: {
@@ -54,7 +54,7 @@ function updateSupplier(action) {
 }
 
 function deleteSupplier(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/supplier/${action.id}`;
+  const url = `${process.env.REACT_APP_API}/supplier/${action.id}`;
   return fetch(url, {
     method: "DELETE",
     headers: {
@@ -70,6 +70,15 @@ function deleteSupplier(action) {
       throw error;
     });
 }
+function* checkDuplicateSupplierFlow(action) {
+  try {
+    let resultCheckDup = yield call(checkDuplicateSupplier, action);
+    return resultCheckDup;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: CREAT_SUPPLIER_ERROR });
+  }
+}
 
 function* getDetailsSupplierFlow(action) {
   try {
@@ -82,9 +91,12 @@ function* getDetailsSupplierFlow(action) {
 }
 
 function* updateSupplierFlow(action) {
+  let check = yield call(checkDuplicateSupplierFlow, action);
   try {
-    let json = yield call(updateSupplier, action);
-    yield put({ type: UPDATE_SUPPLIER_RESPONSE, json });
+    if (!check.hasMatch) {
+      let json = yield call(updateSupplier, action);
+      yield put({ type: UPDATE_SUPPLIER_RESPONSE, json });
+    } else yield put({ type: UPDATE_SUPPLIER_RESPONSE });
   } catch (error) {
     console.log(error);
     yield put({ type: UPDATE_SUPPLIER_ERROR });

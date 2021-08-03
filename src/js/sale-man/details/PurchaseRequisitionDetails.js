@@ -5,6 +5,7 @@ import moment from "moment";
 import BootstrapTable from "react-bootstrap-table-next";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import Swal from "sweetalert2";
+
 //css
 import "../sale-man.css";
 //components
@@ -17,7 +18,8 @@ import {
 } from "./action";
 import SearchComponent from "../../search-component/SearchComponent";
 import NavigationBar from "../../components/navbar/navbar-component";
-
+import { TableLoading } from "../../components/loading/loading-component";
+import { CLEAR_MESSAGE } from "./constants";
 export default function details() {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -26,13 +28,14 @@ export default function details() {
   const [isEditDisabled, setIsEditDisabled] = useState(true);
   const [deadline, setDeadline] = useState("");
   const [isCancel, setIsCancel] = useState(false);
-  const message = useSelector(
-    (state) => state.getDetailsPurchaseRequisitionReducer.messages
-  );
+  // const message = useSelector(
+  //   (state) => state.getDetailsPurchaseRequisitionReducer.messages
+  // );
 
   const [cleanListProducts, setCleanListProducts] = useState([]);
-  const [isReturnData, setIsReturnData] = useState(false);
-  const [statusString, setStatusString] = useState('')
+  const [returnData, setIsReturnData] = useState(false);
+  const [status, setStatus] = useState("");
+  const [classStatus, setClassStatus] = useState("");
   //todo: declare button
   const columnsEdit = [
     {
@@ -56,6 +59,12 @@ export default function details() {
             valid: false,
             message: "Quantity should be numeric",
           };
+        } else {
+          if (newValue < 0)
+            return {
+              valid: false,
+              message: "Quantity should be bigger than 0",
+            };
         }
       },
     },
@@ -106,6 +115,7 @@ export default function details() {
     {
       dataField: "orderQuantity",
       text: "Order Quantity",
+
       // formatter: (cellContent, row, rowIndex) =>
       //   (purchaseOrderProduct[rowIndex].orderQuantity = row.orderQuantity),
       // validator: (newValue, oldValue, row) => {
@@ -137,13 +147,17 @@ export default function details() {
   ];
 
   const {
-    status,
+    statusStore,
     listGetProductsStore,
     token,
     deadlineStore,
     transactionRecordStore,
+    getDetailsPurchaseRequisitionReducer,
+    submitDraftReducer,
+    updatePRReducer,
+    deletePRReducer,
   } = useSelector((state) => ({
-    status:
+    statusStore:
       state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
         .purchaseOrderStatus,
     listGetProductsStore:
@@ -156,6 +170,11 @@ export default function details() {
     transactionRecordStore:
       state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
         .transaction.transactionRecord,
+    getDetailsPurchaseRequisitionReducer:
+      state.getDetailsPurchaseRequisitionReducer,
+    submitDraftReducer: state.submitDraftReducer,
+    updatePRReducer: state.updatePRReducer,
+    deletePRReducer: state.deletePRReducer,
   }));
   console.log(transactionRecordStore);
   function goBackClick() {
@@ -286,7 +305,7 @@ export default function details() {
   //   );
   // }
 
-  const listButtons = setListButtonNav(status);
+  const listButtons = setListButtonNav(statusStore);
 
   function setListButtonNav(status) {
     if (status === 0) {
@@ -337,6 +356,10 @@ export default function details() {
         token: token,
       })
     );
+
+    return () => {
+      dispatch({ type: CLEAR_MESSAGE });
+    };
     // check tu page nao toi
 
     if (location.state.fromPage !== "ManagerPage") {
@@ -359,204 +382,282 @@ export default function details() {
           };
         })
       );
-      setIsReturnData(true);
     }
   }, [listGetProductsStore]);
-  console.log(listGetProductsStore);
-  useEffect(() => {
-    if (message === "Submit Success") {
-      dispatch(
-        getPRDetailsAction({
-          id: location.state.purchaseRequisitionId,
-          token: token,
-        })
-      );
-    } else if (message === "Update Success") {
-      dispatch(
-        getPRDetailsAction({
-          id: location.state.purchaseRequisitionId,
-          token: token,
-        })
-      );
-    } else if (message === "Delete Success") {
-      dispatch(
-        getPRDetailsAction({
-          id: location.state.purchaseRequisitionId,
-          token: token,
-        })
-      );
-    }
-  }, [message]);
 
+  useEffect(() => {
+    if (getDetailsPurchaseRequisitionReducer.successful) {
+      setIsReturnData(true);
+    }
+    //  else if (getDetailsPurchaseRequisitionReducer.errors === true) {
+    // }
+  }, [getDetailsPurchaseRequisitionReducer]);
+
+  useEffect(() => {
+    if (submitDraftReducer.requesting === true) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (submitDraftReducer.successful === true) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            getPRDetailsAction({
+              id: location.state.purchaseRequisitionId,
+              token: token,
+            })
+          );
+        }
+      });
+    } else if (submitDraftReducer.errors === true) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  }, [submitDraftReducer]);
+
+  useEffect(() => {
+    if (updatePRReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (updatePRReducer.successful) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            getPRDetailsAction({
+              id: location.state.purchaseRequisitionId,
+              token: token,
+            })
+          );
+        }
+      });
+    } else if (updatePRReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  }, [updatePRReducer]);
+
+  useEffect(() => {
+    if (deletePRReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (deletePRReducer.successful) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            getPRDetailsAction({
+              id: location.state.purchaseRequisitionId,
+              token: token,
+            })
+          );
+        }
+      });
+    } else if (deletePRReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      });
+    }
+  }, [deletePRReducer]);
+  // useEffect(() => {
+  //   if (message === "Submit Success") {
+  //     dispatch(
+  //       getPRDetailsAction({
+  //         id: location.state.purchaseRequisitionId,
+  //         token: token,
+  //       })
+  //     );
+  //   } else if (message === "Update Success") {
+  //     dispatch(
+  //       getPRDetailsAction({
+  //         id: location.state.purchaseRequisitionId,
+  //         token: token,
+  //       })
+  //     );
+  //   } else if (message === "Delete Success") {
+  //     dispatch(
+  //       getPRDetailsAction({
+  //         id: location.state.purchaseRequisitionId,
+  //         token: token,
+  //       })
+  //     );
+  //   }
+  // }, [message]);
+  useEffect(() => {
+    if (statusStore === 0) {
+      setStatus("Draft");
+      setClassStatus("bg-secondary");
+    } else if (statusStore === 6) {
+      setStatus("Confirmed");
+      setClassStatus("bg-success");
+    } else if (statusStore === 7) {
+      setStatus("Done");
+      setClassStatus("primary");
+    } else if (statusStore < 0) {
+      setStatus("Canceled");
+      setClassStatus("bg-danger");
+    } else {
+      setStatus("Waiting confirm");
+      setClassStatus("bg-warning text-dark");
+    }
+  }, [statusStore]);
   return (
     <div>
-      {/* todo: task heading */}
-      {/* todo: gop chung 2 page voi 2 nut khâc nhau  */}
-      {/* <div className=" tab-fixed container-fluid  fixed-top">
-        <div className=" tab-fixed container-fluid  fixed-top">
-          <div className=" d-flex mb-3 justify-content-end mt-4 ">
-            {isFromManagerPage ? (
-              <a className="me-2" onClick={goBackClick}>
-                <h3>Back</h3>
-              </a>
-            ) : (
-              <a className="me-2" onClick={goToManagerPage}>
-                <h3>ManagerPage</h3>
-              </a>
-            )}
-
-            <div class="me-auto">
-              <h2 class="id-color fw-bold">
-                {location.state.purchaseRequisitionId}
-              </h2>
-              <div class="form-text id-color">{status}</div>
-            </div>
-            {status === 0 && (
-              <div>
-                {isEditDisabled ? (
-                  <>
-                    <button
-                      type="button"
-                      className="btn btn-danger button-tab me-3 text-white"
-                      onClick={onDeletePRClick}
-                    >
-                      Delete
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-warning button-tab me-3 text-white"
-                      onClick={onEditClick}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={onSubmitClick}
-                      className="btn btn-primary me-3 text-white button-tab "
-                    >
-                      Submit
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {" "}
-                    <button
-                      type="button"
-                      className="btn btn-secondary button-tab me-3 text-white"
-                      onClick={onCancelClick}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      onClick={onclickUpdate}
-                      className="btn btn-primary me-3 text-white button-tab "
-                    >
-                      Update
-                    </button>
-                  </>
-                )}
+      {returnData ? (
+        <>
+          <NavigationBar
+            listButton={listButtons}
+            titleBar={location.state.purchaseRequisitionId}
+            actionGoBack={goBackClick}
+            status={status}
+            home="Purchase requisition"
+            currentPage="Purchase requisition details"
+            classStatus={classStatus}
+          />
+          <div className="wrapper space-top">
+            <div class="card">
+              <div class="card-header fw-bold">
+                Purchase Requisition Details
               </div>
-            )}
-          </div>
-        </div>
-      </div> */}
-      <NavigationBar
-        listButton={listButtons}
-        titleBar={location.state.purchaseRequisitionId}
-        actionGoBack={goBackClick}
-        status=""
-      />
-      <div className="wrapper space-top">
-        <div class="card">
-          <div class="card-header fw-bold">Purchase Requisition Details</div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <div className="row g-3 justify-content-between me-3">
-                <div className="col-4">
-                  <p>
-                    <strong>Created by:</strong>
-                    {/* {createdBy} */}
-                    {transactionRecordStore[0].applicationUser.userName}
-                  </p>
-                  {/* <p>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <div className="row g-3 justify-content-between me-3">
+                    <div className="col-4">
+                      <p>
+                        <strong>Created by:</strong>
+                        {/* {createdBy} */}
+                        {transactionRecordStore[0].applicationUser.fullname}
+                      </p>
+                      {/* <p>
                     <strong>Submitted by:</strong> Huy Nguyen{" "}
                 </p>
                 <p>
                     <strong>Adjusted by:</strong> Mr. Hung
                 </p> */}
-                </div>
-                <div className="col-4">
-                  <p>
-                    <strong>Create date:</strong>
-                    {/* {createDate.split("T")[0]} */}
-                    {transactionRecordStore[0].date}
-                  </p>
-                  <p>
-                    <strong>Deadline:</strong>
-                    {deadlineStore.split("T")[0]}
-                  </p>
-                  {/* <p>
+                    </div>
+                    <div className="col-4">
+                      <p>
+                        <strong>Create date:</strong>
+                        {/* {createDate.split("T")[0]} */}
+                        {moment(
+                          transactionRecordStore[0].date.split("T")[0]
+                        ).format("DD-MM-YYYY")}
+                      </p>
+                      <p>
+                        <strong>Deadline:</strong>
+                        {moment(deadlineStore).format("DD-MM-YYYY HH:mm")}
+                      </p>
+                      {/* <p>
                     <strong>Submit date:</strong> 05/12/2021
                 </p>
                 <p>
                     <strong>Adjust date:</strong> 05/21/2021
                 </p> */}
-                </div>
-              </div>
-            </li>
-            <li class="list-group-item">
-              {!isEditDisabled && (
-                <>
-                  <div className="mt-2">
-                    <label for="deadline" class="form-label">
-                      Deadline
-                    </label>
-                    <input
-                      type="datetime-local"
-                      name="deadline"
-                      defaultValue={deadline}
-                      class="form-control"
-                      onChange={onChangeDeadline}
-                    />
+                    </div>
                   </div>
+                </li>
+                <li class="list-group-item">
+                  {!isEditDisabled && (
+                    <>
+                      <div className="mt-2">
+                        <label for="deadline" class="form-label">
+                          Deadline
+                        </label>
+                        <input
+                          type="datetime-local"
+                          name="deadline"
+                          defaultValue={deadline}
+                          class="form-control"
+                          onChange={onChangeDeadline}
+                        />
+                      </div>
+                      <div className="mt-2">
+                        <label for="deadline" class="form-label">
+                          Search
+                        </label>
+                        <SearchComponent
+                          clickToAddProduct={clickToAddProduct}
+                        />
+                      </div>
+                    </>
+                  )}
                   <div className="mt-2">
-                    <label for="deadline" class="form-label">
-                      Search
-                    </label>
-                    <SearchComponent clickToAddProduct={clickToAddProduct} />
-                  </div>
-                </>
-              )}
-              <div className="mt-2">
-                {isEditDisabled ? (
-                  <BootstrapTable
-                    keyField="productVariantId"
-                    data={cleanListProducts}
-                    columns={columnsShow}
-                    noDataIndication="Table is Empty"
-                  />
-                ) : (
-                  <BootstrapTable
-                    keyField="productVariantId"
-                    data={cleanListProducts}
-                    columns={columnsEdit}
-                    noDataIndication="Table is Empty"
-                    cellEdit={cellEditFactory({
-                      mode: "click",
-                      blurToSave: true,
+                    {isEditDisabled ? (
+                      <BootstrapTable
+                        keyField="productVariantId"
+                        data={cleanListProducts}
+                        columns={columnsShow}
+                        noDataIndication="Table is Empty"
+                      />
+                    ) : (
+                      <BootstrapTable
+                        keyField="productVariantId"
+                        data={cleanListProducts}
+                        columns={columnsEdit}
+                        noDataIndication="Table is Empty"
+                        cellEdit={cellEditFactory({
+                          mode: "click",
+                          blurToSave: true,
 
-                      afterSaveCell: (oldValue, newValue, row, column) => {
-                        row.totalAmount = row.orderQuantity * row.price;
-                      },
-                    })}
-                  />
-                )}
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
+                          afterSaveCell: (oldValue, newValue, row, column) => {
+                            row.totalAmount = row.orderQuantity * row.price;
+                          },
+                        })}
+                      />
+                    )}
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </>
+      ) : (
+        <TableLoading />
+      )}
     </div>
   );
 }

@@ -58,38 +58,38 @@ const detailPurchaseOrderInital = {
     errors: false,
     detailPurchaseOrder: {
         orderId: "",
-        deliveryDate:"",
-        deadline:"",
-        status:"",
+        deliveryDate: "",
+        deadline: "",
+        status: "",
         supplier: {
-           
+
         },
-        mergedOrderIdLists:[],
+        mergedOrderIdLists: [],
         applicationUser: {
-     
+
             createDate: "2019-04-19T09:05:17.641865",
             id: "07241",
             name: "Eileen9",
             orderId: "44424",
             transactionId: "14433",
-            email:"da89d8c@gmail.com",
-            phoneNumber:"032464564"
+            email: "da89d8c@gmail.com",
+            phoneNumber: "032464564"
         },
 
-        transaction:{
-            transactionRecord:[
+        transaction: {
+            transactionRecord: [
                 {
-                applicationUser:{}
+                    applicationUser: {}
                 }
             ]
         },
 
-        hasSentMail:"",
+        hasSentMail: "",
         mailDescription: "",
         purchaseOrderProduct: []
-       
 
-        
+
+
     }
 }
 export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(state = detailPurchaseOrderInital, action) {
@@ -116,34 +116,34 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                     orderId: action.json.purchaseOrder.id,
                     status: action.json.purchaseOrder.purchaseOrderStatusString,
                     transaction: action.json.purchaseOrder.transaction,
-                    mergedOrderIdLists: action.json.mergedOrderIdLists !== undefined? action.json.mergedOrderIdLists: [] ,
+                    mergedOrderIdLists: action.json.mergedOrderIdLists !== undefined ? action.json.mergedOrderIdLists : [],
                     applicationUser: {
-     
+
                         createDate: "2019-04-19T09:05:17.641865",
                         id: "07241",
                         name: "Eileen9",
                         orderId: "44424",
                         transactionId: "14433",
-                        email:"da89d8c@gmail.com",
-                        phoneNumber:"032464564"
+                        email: "da89d8c@gmail.com",
+                        phoneNumber: "032464564"
                     },
-                    deliveryDate:action.json.purchaseOrder.deliveryDate.split("T")[0],
-                    deadline:action.json.purchaseOrder.deadline.split("T")[0],
-                    supplier:action.json.purchaseOrder.supplier !== null? {
+                    deliveryDate: action.json.purchaseOrder.deliveryDate.split("T")[0],
+                    deadline: action.json.purchaseOrder.deadline.split("T")[0],
+                    supplier: action.json.purchaseOrder.supplier !== null ? {
                         id: action.json.purchaseOrder.supplier.id,
                         address: action.json.purchaseOrder.supplier.address,
                         supplierName: action.json.purchaseOrder.supplier.supplierName,
                         phoneNumber: action.json.purchaseOrder.supplier.phoneNumber,
                         email: action.json.purchaseOrder.supplier.email
-                    }:{},
+                    } : {},
                     hasSentMail: action.json.purchaseOrder.hasSentMail,
-                    mailDescription: action.json.purchaseOrder.mailDescription === null? "":action.json.purchaseOrder.mailDescription,
+                    mailDescription: action.json.purchaseOrder.mailDescription === null ? "" : action.json.purchaseOrder.mailDescription,
                     purchaseOrderProduct: action.json.purchaseOrder.purchaseOrderProduct.map(product => {
 
                         return {
 
-                           
-                           
+
+
                             productVariantId: product.productVariantId,
                             orderQuantity: product.orderQuantity,
                             unit: product.unit,
@@ -168,7 +168,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
             }
         case GET_DETAIL_PURCHASE_ORDER_RESET:
             return detailPurchaseOrderInital
-          
+
         default:
             return state
     }
@@ -208,7 +208,7 @@ export const mailOrderData = function SendMailReducer(state = mailDataState, act
                 requesting: false,
                 successful: false,
                 messages: "",
-                errors:  true,
+                errors: true,
 
             }
         case SEND_MAIL_SERVICE_RESET:

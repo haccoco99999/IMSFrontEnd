@@ -4,7 +4,7 @@ import {
   GET_ALL_SUPPLIER_REQUEST,
 } from "./constants";
 
-export function createPRAction({ data, token }) {
+export function createPurchaseRequisitionAction({ data, token }) {
   return { type: CREATE_PR_REQUEST, data, token };
 }
 

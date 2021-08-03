@@ -5,6 +5,8 @@ import "./notification-component.css";
 //components
 import { getAllLocationsAction } from "./action";
 import { useHistory } from "react-router-dom";
+import moment from "moment";
+
 export default function NotificationBellComponents(props) {
   let dispatch = useDispatch();
   const { token, listNotificationStore } = useSelector((state) => ({
@@ -15,9 +17,9 @@ export default function NotificationBellComponents(props) {
   useEffect(() => {
     dispatch(getAllLocationsAction({ token: token }));
   }, []);
-  function redirectDetail(notification){
+  function redirectDetail(notification) {
     history.push('/homepage/purchase')
-   
+
     history.replace("/homepage/purchase/PriceQuote", { orderId: notification.typeID, status: "" });
   }
   console.log(listNotificationStore)
@@ -26,21 +28,26 @@ export default function NotificationBellComponents(props) {
       <div class="notification-heading bg-light text-center"><p class="menu-title">Notifications</p>
       </div>
       <div className="notifications-wrapper">
-      {listNotificationStore.map((notification) => (
-        
-        <li onClick={()=> redirectDetail(notification)} key={notification.id} class=" list-group-item d-flex justify-content-between align-items-center">
-       
-          <span class="d-inline-block text-truncate" >
-            {notification.message}
+        {listNotificationStore.map((notification) => {
+          var stringCheckTime = notification.message.split("at:");
+          var newMessage =
+            stringCheckTime[0] +
+            "at:" +
+            moment(stringCheckTime[1]).add(7, "h").format("DD/MM/YYYY HH:mm");
+          return (
+            <li onClick={() => redirectDetail(notification)} key={notification.id} class=" list-group-item d-flex justify-content-between align-items-center">
 
-          </span>
+              <span class="d-inline-block text-truncate" >
+                {newMessage}
 
-          <span class="badge bg-primary rounded-pill">14</span>
-        </li>
+              </span>
 
-      ))}
+
+            </li>
+          )
+        })}
       </div>
-      
+
       <div class="notification-footer bg-light fixed-bottom text-center"><p class="menu-title">View all</p></div>
 
     </ul>

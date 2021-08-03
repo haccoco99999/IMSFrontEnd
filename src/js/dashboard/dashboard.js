@@ -17,6 +17,8 @@ export default function DashboardComponent() {
             <p class="fw-bold mb-0">QUantyt</p>
             <span className="text-muted fw-lighter">365161</span>
           </div>
+
+          
           <div className="col-md-4 align-middle">
 
             <table className="h-100">

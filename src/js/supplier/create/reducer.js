@@ -2,6 +2,7 @@ import {
   CREAT_SUPPLIER_REQUEST,
   CREAT_SUPPLIER_RESPONSE,
   CREAT_SUPPLIER_ERROR,
+  RESET,
 } from "./constants";
 
 const initialState = {
@@ -11,7 +12,7 @@ const initialState = {
   errors: "",
 };
 
-const reducer = function createSupplierReducer(state = initialState, action) {
+export function createSupplierReducer(state = initialState, action) {
   switch (action.type) {
     case CREAT_SUPPLIER_REQUEST:
       return {
@@ -22,13 +23,22 @@ const reducer = function createSupplierReducer(state = initialState, action) {
         errors: "",
       };
     case CREAT_SUPPLIER_RESPONSE:
-      return {
-        ...state,
-        requesting: false,
-        successful: true,
-        messages: action.json.modifiedSupplierId,
-        errors: "",
-      };
+      if (action.json === undefined)
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: "Duplicate",
+          errors: true,
+        };
+      else
+        return {
+          ...state,
+          requesting: false,
+          successful: true,
+          messages: action.json.modifiedSupplierId,
+          errors: "",
+        };
     case CREAT_SUPPLIER_ERROR:
       return {
         ...state,
@@ -37,8 +47,10 @@ const reducer = function createSupplierReducer(state = initialState, action) {
         messages: "",
         errors: "",
       };
+
+    case RESET:
+      return initialState;
     default:
       return state;
   }
 }
-export default reducer;

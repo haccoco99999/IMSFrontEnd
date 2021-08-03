@@ -9,14 +9,18 @@ import Swal from "sweetalert2";
 //css
 import "../stocktake.css";
 //components
-import ListLocationsModal from "./search-location-modal";
+// import ListLocationsModal from "./search-location-modal";
+import ListLocationsModal from "../../components/location/location-modal";
 import {
-  getAllLocationsAction,
+  // getAllLocationsAction,
   getListPackageAction,
   createStocktkaeAction,
 } from "./action";
+
+import { getAllLocationsAction } from "../../components/location/action";
+import {RESET} from './constants'
 import SpinnerComponent from "../components/spinner-component";
-import ToastComponent from "../components/toast-component";
+// import ToastComponent from "../components/toast-component";
 import NavigationBar from "../../components/navbar/navbar-component";
 
 export default function CreateStocktakeComponent() {
@@ -24,13 +28,21 @@ export default function CreateStocktakeComponent() {
   let dispatch = useDispatch();
 
   //todo: state store
-  const { token, listLocationsStore, listPackagesStore, messages } =
-    useSelector((state) => ({
-      token: state.client.token,
-      listLocationsStore: state.createStocktakeReducer.listLocations,
-      listPackagesStore: state.createStocktakeReducer.listPackages,
-      messages: state.createStocktakeReducer.messages,
-    }));
+  const {
+    token,
+    listLocationsStore,
+    listPackagesStore,
+    createStocktakeStore,
+    getDetailsPackageReducer,
+    getAllLocationsReducer,
+  } = useSelector((state) => ({
+    token: state.client.token,
+    listLocationsStore: state.getAllLocationsReducer.listLocations,
+    listPackagesStore: state.getDetailsPackageReducer.listPackages,
+    getDetailsPackageReducer: state.getDetailsPackageReducer,
+    createStocktakeStore: state.createStocktakeReducer,
+    getAllLocationsReducer: state.getAllLocationsReducer,
+  }));
 
   const [isLoading, setIsLoading] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState({
@@ -50,7 +62,7 @@ export default function CreateStocktakeComponent() {
   ]);
   const [isTimeForTrigger, setIsTimeForTrigger] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
-
+  const [isCreating, setIsCreating] = useState(false);
   function clickDeleteCheckItems(rowIndex) {
     console.log(rowIndex);
     setListCheckedItems((state) => state.filter((_, i) => i !== rowIndex));
@@ -70,6 +82,10 @@ export default function CreateStocktakeComponent() {
     ]);
   }
 
+  function openCheckLocation() {
+    dispatch(getAllLocationsAction({ token: token }));
+    showModal();
+  }
   //todo:modal declare
   const modalRef = useRef();
   const showModal = () => {
@@ -169,6 +185,13 @@ export default function CreateStocktakeComponent() {
             message: "Price should be numeric",
           };
         } else {
+          if (newValue < 0) {
+            setIsChecking(true);
+            return {
+              valid: false,
+              message: "Quantity should be bigger than 0",
+            };
+          }
           // if (newValue > row.quantity) {
           //   console.log(row.quantity);
           //   setIsChecking(true);
@@ -177,8 +200,6 @@ export default function CreateStocktakeComponent() {
           //     message: "Counted number should be lower than ordered number",
           //   };
           // }
-          console.log(newValue);
-          console.log(column);
           setIsChecking(false);
         }
       },
@@ -196,13 +217,12 @@ export default function CreateStocktakeComponent() {
       editable: false,
       formatter: (cellContent, row, rowIndex) => {
         return (
-          <button
-            type="button"
-            className="btn btn-danger"
+          <div
+            className="text-danger"
             onClick={() => clickDeleteCheckItems(rowIndex)}
           >
-            Delete
-          </button>
+            <i class="bi bi-trash"></i>
+          </div>
         );
       },
     },
@@ -214,7 +234,7 @@ export default function CreateStocktakeComponent() {
     return [
       {
         isShow: true,
-        title: "Submit",
+        title: "Save",
         class: " btn-primary",
         action: () => onClickSubmit(),
         disabled: isChecking,
@@ -228,8 +248,6 @@ export default function CreateStocktakeComponent() {
 
   function handleOnSelect(row, isSelect) {
     if (isSelect) {
-      // console.log(row.id);
-      // console.log(row.locationName);
       setSelectedLocation({
         id: row.id,
         locationName: row.locationName,
@@ -280,7 +298,6 @@ export default function CreateStocktakeComponent() {
             console.log("Data output:", data);
             dispatch(createStocktkaeAction({ token: token, data: data }));
           }
-          // console.log(listCheckedItems[0].packageId);
         } else {
           if (checkForDuplicates(listCheckedItems, "packageId")) {
             console.log("Duplicate");
@@ -346,27 +363,82 @@ export default function CreateStocktakeComponent() {
       }
     );
   }
-
-  useEffect(() => {
-    dispatch(getAllLocationsAction({ token: token }));
-  }, []);
+ 
 
   useEffect(() => {
     if (listPackagesStore.length > 0) {
       setIsLoading(true);
-      console.log("Check:", isLoading);
+      setIsCreating(true);
+      // console.log("Check:", isLoading);
     }
   }, [listPackagesStore]);
-
+  //todo: createStocktakeStore
   useEffect(() => {
-    if (messages !== "") {
-      console.log(messages);
-      history.push("/homepage/stock-take/details", {
-        stocktakeId: messages,
+    if (createStocktakeStore.requesting === true) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (createStocktakeStore.successful === true) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          history.push("/homepage/stock-take/details", {
+            stocktakeId: createStocktakeStore.messages,
+          });
+        }
+      });
+    } else if (createStocktakeStore.errors === true) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
       });
     }
-  }, [messages]);
+  }, [createStocktakeStore]);
 
+  //todo: getDetailsPackageReducer check error
+  useEffect(() => {
+    if (getDetailsPackageReducer.errors) {
+      setIsCreating(false);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+      });
+    }
+  }, [getDetailsPackageReducer]);
+
+  //todo: getAllLocationsReducer error
+  useEffect(() => {
+    if (getAllLocationsReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          hideModal();
+        }
+      });
+    }
+  }, [getAllLocationsReducer]);
+
+  useEffect(() => {
+    return () =>{
+      dispatch({type:RESET})
+    }
+  },[])
   //todo: toast
   // const toastRef = useRef();
   // const showToast = () => {
@@ -381,14 +453,15 @@ export default function CreateStocktakeComponent() {
   //   const bsToast = Toast.getInstance(toastEle);
   //   bsToast.hide();
   // };
-  const [count, setCount] = useState(0);
   return (
     <div>
       <NavigationBar
         actionGoBack={goBackClick}
-        titleBar="Create"
+        titleBar="Create Stocktake"
         status=""
         listButton={listButton}
+        home="Stocktake"
+        currentPage="Create stocktake"
       />
       {/* content */}
       <div className="wrapper space-top">
@@ -400,7 +473,7 @@ export default function CreateStocktakeComponent() {
                 <button
                   class="btn btn-outline-secondary"
                   type="button"
-                  onClick={showModal}
+                  onClick={openCheckLocation}
                 >
                   Select Location
                 </button>
@@ -422,27 +495,31 @@ export default function CreateStocktakeComponent() {
               </div>
             </li>
             <li class="list-group-item">
-              <h5 className="card-title">List items</h5>
-              {isLoading ? (
+              <h5 className="card-title fw-bold">List items</h5>
+              {isCreating && (
                 <>
-                  <button
-                    className="btn btn-primary"
-                    onClick={onAddCheckItemClick}
-                  >
-                    Add
-                  </button>
-                  <Table
-                    keyField="id"
-                    data={listCheckedItems}
-                    columns={columns}
-                    cellEdit={cellEditFactory({
-                      mode: "click",
-                      blurToSave: true,
-                    })}
-                  />
+                  {isLoading ? (
+                    <>
+                      <button
+                        className="btn btn-primary"
+                        onClick={onAddCheckItemClick}
+                      >
+                        Add
+                      </button>
+                      <Table
+                        keyField="id"
+                        data={listCheckedItems}
+                        columns={columns}
+                        cellEdit={cellEditFactory({
+                          mode: "click",
+                          blurToSave: true,
+                        })}
+                      />
+                    </>
+                  ) : (
+                    <SpinnerComponent />
+                  )}
                 </>
-              ) : (
-                <SpinnerComponent />
               )}
             </li>
           </ul>

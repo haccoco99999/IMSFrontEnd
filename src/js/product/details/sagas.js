@@ -23,7 +23,7 @@ import {
 } from "./constants";
 
 function getDetailsProduct(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/product/${action.id}`;
+  const url = `${process.env.REACT_APP_API}/product/${action.id}`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -41,7 +41,7 @@ function getDetailsProduct(action) {
     });
 }
 function updateProduct(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/product/update";
+  const url = `${process.env.REACT_APP_API}/product/update`;
   return fetch(url, {
     method: "PUT",
     headers: {
@@ -60,7 +60,7 @@ function updateProduct(action) {
 }
 
 function getDetailsVariant(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/productvariant/${action.id}`;
+  const url = `${process.env.REACT_APP_API}/productvariant/${action.id}`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -79,8 +79,7 @@ function getDetailsVariant(action) {
 }
 
 function getAllBrand(action) {
-  const url =
-      `${process.env.REACT_APP_API}/product/brands?CurrentPage=0&SizePerPage=0`;
+  const url = `${process.env.REACT_APP_API}/product/brands?CurrentPage=0&SizePerPage=0`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -99,7 +98,7 @@ function getAllBrand(action) {
 }
 
 function getDetailsPackage(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/package/${action.id}`;
+  const url = `${process.env.REACT_APP_API}/package/${action.id}`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -118,7 +117,7 @@ function getDetailsPackage(action) {
 }
 
 function updateVariant(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/productvariant/update";
+  const url = `${process.env.REACT_APP_API}/productvariant/update`;
   return fetch(url, {
     method: "PUT",
     headers: {
@@ -137,21 +136,56 @@ function updateVariant(action) {
     });
 }
 
+function checkDuplicateProduct(action) {
+  const url = `${process.env.REACT_APP_API}/dupcheck/product`;
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      value: action.data.name,
+    }),
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+function checkDuplicateVariant(action) {
+  const url = `${process.env.REACT_APP_API}/dupcheck/productvariant`;
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      value: action.data.name,
+    }),
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
+
 function* getDetailsProductFlow(action) {
   try {
     let json = yield call(getDetailsProduct, action);
     yield put({ type: GET_DETAILS_PRODUCT_RESPONSE, json });
   } catch (error) {
     yield put({ type: GET_DETAILS_PRODUCT_ERROR });
-  }
-}
-
-function* updateProductFlow(action) {
-  try {
-    let json = yield call(updateProduct, action);
-    yield put({ type: UPDATE_PRODUCT_RESPONSE, json });
-  } catch (error) {
-    yield put({ type: UPDATE_PRODUCT_ERROR });
   }
 }
 
@@ -181,11 +215,44 @@ function* getDetailsPackageFlow(action) {
     yield put({ type: GET_DETAILS_PACKAGE_ERROR });
   }
 }
+function* checkDuplicateProductFlow(action) {
+  try {
+    let resultCheckDup = yield call(checkDuplicateProduct, action);
+    return resultCheckDup;
+  } catch (error) {
+    yield put({ type: UPDATE_PRODUCT_ERROR });
+  }
+}
+
+function* checkDuplicateVariantFlow(action) {
+  try {
+    let resultCheckDup = yield call(checkDuplicateVariant, action);
+    return resultCheckDup;
+  } catch (error) {
+    yield put({ type: UPDATE_PRODUCT_ERROR });
+  }
+}
+
+function* updateProductFlow(action) {
+  let check = yield call(checkDuplicateProductFlow, action);
+  try {
+    if (!check.hasMatch) {
+      let json = yield call(updateProduct, action);
+      yield put({ type: UPDATE_PRODUCT_RESPONSE, json });
+    } else yield put({ type: UPDATE_PRODUCT_RESPONSE });
+  } catch (error) {
+    yield put({ type: UPDATE_PRODUCT_ERROR });
+  }
+}
 
 function* updateVariantFlow(action) {
+  let check = yield call(checkDuplicateVariant, action);
+
   try {
-    let json = yield call(updateVariant, action);
-    yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
+    if (!check.hasMatch) {
+      let json = yield call(updateVariant, action);
+      yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
+    } else yield put({ type: UPDATE_VARIANTS_RESPONSE });
   } catch (error) {
     console.log(error);
     yield put({ type: UPDATE_VARIANTS_ERROR });

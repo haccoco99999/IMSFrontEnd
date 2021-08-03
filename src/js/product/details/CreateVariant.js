@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-
+import Swal from "sweetalert2";
 //css
 import "../product.css";
 //components
 import { updateVariantAction } from "./action";
+import { RESET } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
 const formReducer = (state, event) => {
   return {
@@ -20,9 +21,10 @@ export default function CreateVariant() {
 
   const [formData, setFormData] = useReducer(formReducer, {});
 
-  const { token, messages } = useSelector((state) => ({
+  const { token, updateVariantReducer } = useSelector((state) => ({
     token: state.client.token,
-    messages: state.getDetailsProductReducer.messages,
+    updateVariantReducer: state.updateVariantReducer,
+    // messages: state.getDetailsProductReducer.messages,
   }));
 
   const handleChangeValue = (event) => {
@@ -69,7 +71,7 @@ export default function CreateVariant() {
           {
             id: null,
             name: formData.name,
-            price: formData.price,
+            price: 0,
             barcode: formData.barcode,
             sku: formData.sku,
             // unit: location.state.productUnit,
@@ -85,37 +87,62 @@ export default function CreateVariant() {
 
   //todo:function nav
 
+  // useEffect(() => {
+  //   if (messages === "Update Variant success") {
+  //     history.push("/homepage/product/details", {
+  //       productId: location.state.productId,
+  //       // fromPage: "ManagerPage",
+  //     });
+  //   }
+  // }, [messages]);
+
   useEffect(() => {
-    if (messages === "Update Variant success") {
-      history.push("/homepage/product/details", {
-        productId: location.state.productId,
-        // fromPage: "ManagerPage",
+    return () => {
+      dispatch({ type: RESET });
+    };
+  }, []);
+  useEffect(() => {
+    if (updateVariantReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (updateVariantReducer.successful) {
+      if (updateVariantReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
+        Swal.fire({
+          icon: "success",
+          title: "Your work has been saved",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        }).then((result) => {
+          if (result.isConfirmed)
+            history.push("/homepage/product/details", {
+              productId: location.state.productId,
+              // fromPage: "ManagerPage",
+            });
+        });
+    } else if (updateVariantReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
       });
     }
-  }, [messages]);
+  }, [updateVariantReducer]);
   return (
     <>
-      {/* <div className=" tab-fixed container-fluid  fixed-top">
-        <div className=" d-flex mb-3 justify-content-end mt-4 ">
-          <a className="me-2" onClick={goBackClick}>
-            <h3>Back</h3>
-          </a>
-          <h2 className="id-color fw-bold me-auto">
-            {location.state.productId}/Create Variants
-          </h2>
-          <div>
-            <button
-              className="btn btn-primary button-tab button me-3"
-              //   disabled={isDisabled}
-              onClick={onClickSave}
-            >
-              Save
-            </button>
-          </div>
-        </div>
-        
-      </div> */}
-
       <NavigationBar
         listButton={listButton}
         titleBar="Create Variant"
@@ -127,9 +154,13 @@ export default function CreateVariant() {
         <div class="card">
           <h5 class="card-header fw-bold">Variant Information</h5>
           <div class="card-body">
-            <form id="variantForm" class="row g-3 needs-validation " noValidate>
-              <div class="mb-3">
-                <div class="row g-3 align-items-center">
+            <div class="mb-3">
+              <div class="row g-3 align-items-center">
+                <form
+                  id="variantForm"
+                  class="row g-3 needs-validation "
+                  noValidate
+                >
                   <div class="col">
                     <label for="name" class="col-form-label">
                       Variant Name
@@ -146,7 +177,8 @@ export default function CreateVariant() {
                     />
                     <div class="invalid-feedback">Please input valid name</div>
                   </div>
-                  <div class="col">
+                </form>
+                {/* <div class="col">
                     <label for="name" class="col-form-label">
                       Price
                     </label>{" "}
@@ -160,12 +192,8 @@ export default function CreateVariant() {
                       required
                     />
                     <div class="invalid-feedback">Please input valid price</div>
-                  </div>
-                </div>
-              </div>
-            </form>
-            <div class="mb-3">
-              <div class="row g-3 align-items-center">
+                  </div> */}
+
                 <div class="col">
                   <label for="name" class="col-form-label">
                     SKU
@@ -196,10 +224,6 @@ export default function CreateVariant() {
             </div>
           </div>
         </div>
-
-        {/* <div className="wrapper-content shadow">
-          
-        </div> */}
       </div>
     </>
   );

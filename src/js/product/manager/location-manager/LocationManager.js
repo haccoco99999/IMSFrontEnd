@@ -12,6 +12,7 @@ import {
   createLocationAction,
   updateLocationAction,
 } from "./action";
+import { RESET } from "../constants";
 export default function LocationManager() {
   let dispatch = useDispatch();
 
@@ -49,14 +50,20 @@ export default function LocationManager() {
   };
 
   //todo:Store
-  const { listLocationsStore, token, pageCount, messages } = useSelector(
-    (state) => ({
-      listLocationsStore: state.locationManagetReducer.listLocations,
-      token: state.client.token,
-      pageCount: state.locationManagetReducer.pageCount,
-      messages: state.locationManagetReducer.messages,
-    })
-  );
+  const {
+    listLocationsStore,
+    token,
+    pageCount,
+    createLocationReducer,
+    updateLocationReducer,
+  } = useSelector((state) => ({
+    listLocationsStore: state.locationManagerReducer.listLocations,
+    token: state.client.token,
+    pageCount: state.locationManagerReducer.pageCount,
+    // messages: state.locationManagetReducer.messages,
+    createLocationReducer: state.createLocationReducer,
+    updateLocationReducer: state.updateLocationReducer,
+  }));
 
   const columns = [
     {
@@ -101,7 +108,88 @@ export default function LocationManager() {
         sizePerPage: sizePerPage,
       })
     );
+    return () => {
+      dispatch({ type: RESET });
+    };
   }, []);
+
+  useEffect(() => {
+    if (createLocationReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (createLocationReducer.successful) {
+      if (createLocationReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          hideModal();
+        }
+      });
+    } else if (createLocationReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+      });
+    }
+  }, [createLocationReducer]);
+
+  useEffect(() => {
+    if (updateLocationReducer.requesting) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (updateLocationReducer.successful) {
+      if (updateLocationReducer.errors) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Duplicate",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          hideModal();
+        }
+      });
+    } else if (updateLocationReducer.errors) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+      });
+    }
+  }, [updateLocationReducer]);
   return (
     <>
       <div className="wrapper-content shadow">
@@ -151,7 +239,7 @@ export default function LocationManager() {
         isCreate={isCreate}
         locationData={locationData}
         token={token}
-        messaages={messages}
+        // messaages={messages}
         // onChangeValue={onChangeValue}
       />
     </>

@@ -80,12 +80,12 @@ body{
   left: 90%;
 }
 .sidebar ul{
-  margin-top: 60px;
+ 
   padding-left: 0rem !important;
 }
 .sidebar ul li{
   position: relative;
-  height: 50px;
+  /* height: 50px; */
   width: 100%;
   margin: 0 5px;
   list-style: none;
@@ -183,7 +183,6 @@ body{
   pointer-events: auto
 }
 .sidebar .profile_content{
-  position: absolute;
   color: #fff;
   
   left: 0;
@@ -290,7 +289,11 @@ body{
 .logout_content{
     bottom: 0;
 }
-
+.nav-side-bar{
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 620px;
+}
 
 .hide-true{
   display: none;
@@ -312,4 +315,29 @@ body{
 
 .top-ul-true{
   margin: 0;
+}
+
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+ 
+/* .list-notification::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+  */
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0,0,0,.5);
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+.list-child-item{
+  height: 30px;
+  line-height: 29px !important;
+}
+.list-child-item span:hover{
+  color: #042333;
+  background: #fff;
 }

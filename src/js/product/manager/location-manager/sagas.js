@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import handleApiErrors from "../../../auth/api-errors";
 
 import {
@@ -68,6 +68,29 @@ function updateLocation(action) {
       throw error;
     });
 }
+
+function checkDupLocation(action) {
+  const url = `${process.env.REACT_APP_API}/dupcheck/location`;
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      value: action.data.name,
+    }),
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
+
 function* getAllLocationsFlow(action) {
   try {
     let json = yield call(getAllLocations, action);
@@ -78,10 +101,24 @@ function* getAllLocationsFlow(action) {
   }
 }
 
-function* createLocationFlow(action) {
+function* checkDupLocationFlow(action, flow) {
   try {
-    let json = yield call(createLocation, action);
-    yield put({ type:CREATE_LOCATION_RESPONSE , json });
+    let resultCheckDup = yield call(checkDupLocation, action);
+    return resultCheckDup;
+  } catch (error) {
+    console.log(error);
+    if (flow === "create") yield put({ type: CREATE_LOCATION_ERROR });
+    else yield put({ type: UPDATE_LOCATION_ERROR });
+  }
+}
+
+function* createLocationFlow(action) {
+  let check = yield call(checkDupCategoryFlow, "create");
+  try {
+    if (!check.hasMatch) {
+      let json = yield call(createLocation, action);
+      yield put({ type: CREATE_LOCATION_RESPONSE, json });
+    } else yield put({ type: CREATE_LOCATION_RESPONSE });
   } catch (error) {
     console.log(error);
     yield put({ type: CREATE_LOCATION_ERROR });
@@ -89,9 +126,12 @@ function* createLocationFlow(action) {
 }
 
 function* updateLocationFlow(action) {
+  let check = yield call(checkDupCategoryFlow, "update");
   try {
-    let json = yield call(getAllLocations, action);
-    yield put({ type: UPDATE_LOCATION_RESPONSE, json });
+    if (!check.hasMatch) {
+      let json = yield call(updateLocation, action);
+      yield put({ type: UPDATE_LOCATION_RESPONSE, json });
+    } else yield put({ type: UPDATE_LOCATION_RESPONSE });
   } catch (error) {
     console.log(error);
     yield put({ type: UPDATE_LOCATION_ERROR });
@@ -100,8 +140,8 @@ function* updateLocationFlow(action) {
 
 function* watcher() {
   yield takeEvery(GET_ALL_LOCATIONS_REQUEST, getAllLocationsFlow);
-  yield takeEvery(CREATE_LOCATION_REQUEST,createLocationFlow);
-  yield takeEvery(UPDATE_LOCATION_REQUEST,updateLocationFlow)
+  yield takeEvery(CREATE_LOCATION_REQUEST, createLocationFlow);
+  yield takeEvery(UPDATE_LOCATION_REQUEST, updateLocationFlow);
 }
 
 export default watcher;
