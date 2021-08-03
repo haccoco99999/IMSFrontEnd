@@ -9,7 +9,7 @@ import {
 } from "./constant";
 
 function getAllhGoodsReceipt(action) {
-  const url = `${process.env.REACT_APP_API}/goodsreceipt/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+  const url = `${process.env.REACT_APP_API}/goodsreceipt/search?${action.filter}`;
 
   return fetch(url, {
     method: "GET",

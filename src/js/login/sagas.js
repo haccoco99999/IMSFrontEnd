@@ -48,13 +48,13 @@ function loginApi (email, password) {
     .catch((error) => { throw error })
 }
 
-function* logout () {  
-  
+function* logout (history) {  
+  alert("alo alo logout")
   yield put(unsetClient())
 
   
   localStorage.removeItem('token')
-
+  history.push('/login')
 }
 
 function* loginFlow (email, password, history) {  
@@ -82,9 +82,10 @@ function* loginFlow (email, password, history) {
     
     yield put({ type: LOGIN_ERROR, error })
   } finally {
-   
+    alert("chán quá")
     if (yield cancelled()) {
-   
+      alert("tao da huy r")
+      history.push('/login')
     }
   }
 
@@ -96,18 +97,18 @@ function* loginFlow (email, password, history) {
 function* loginWatcher () {  
  
   while (true) {
- 
+   
     const { email, password, history } = yield take(LOGIN_REQUESTING)
 
-    const task = yield fork(loginFlow,email, password, history)
+    const task = yield fork (loginFlow,email, password, history)
     
     
-    const action = yield take([CLIENT_UNSET, LOGIN_ERROR, LOGIN_BANNED])
-   
-   
+    const action = yield take([CLIENT_UNSET, LOGIN_ERROR])
+    alert(action.type === CLIENT_UNSET)
+  
     if (action.type === CLIENT_UNSET) yield cancel(task)
-
-    yield call(logout)
+  
+    yield call(logout(history))
   }
 }
 

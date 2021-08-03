@@ -1,16 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './create-account.css'
 import RoleManagerAction from "../../manager/role-manager/action";
-import { CreateAccountAction, getUserAccountDetail, setActiveAccountAction } from './action';
+import { CreateAccountAction, getUserAccountDetail, setActiveAccountAction, updateUserAccountDetail } from './action';
 import { useDispatch, useSelector } from 'react-redux';
 import NavigationBar from '../../../navigation-bar-component/NavigationBar';
 import { useLocation } from 'react-router-dom';
+import { GET_DETAIL_ACC_CLEAN } from './constants';
 export default function CreateAccount() {
 
 
 
   const [eventPage, setEventPage] = useState({
-    isShowEdit: true
+    isShowEdit: true,
+    isShowChangePassword: false,
   })
   const confirmPassword = useRef()
   const newPassword = useRef()
@@ -38,25 +40,43 @@ export default function CreateAccount() {
   const [statusUser, setStatusUser] = useState("")
   useEffect(() => {
     if (location.state.status === "EDITUSER") {
-      setStatusUser(location.state.status)
+
       dispatch(
 
         getUserAccountDetail({ userID: location.state.userId, token: token })
       );
+
     }
-    else if (location.state.status === "CREATEUSER") {
-      setStatusUser(location.state.status)
-    }
+
     else {
 
+    }
+    return () => {
+      dispatch({ type: GET_DETAIL_ACC_CLEAN })
     }
   }, [])
 
   useEffect(() => {
     setInfoAccountState(infoDetailAccountStore)
+    if (infoDetailAccountStore.isActive !== undefined) {
+      setEventPage(state => ({
+        ...state, isShowEdit: true, isShowChangePassword: false
+      }))
+      setStatusUser("EDITUSER")
+    }
+    else {
+      setEventPage(state => ({
+        ...state, isShowEdit: false, isShowChangePassword: true
+      }))
+      setStatusUser("CREATEUSER")
+    }
   }, [infoDetailAccountStore])
 
-
+  function setIsShowChangePassword() {
+    setEventPage((state) => ({
+      ...state, isShowChangePassword: !state.isShowChangePassword
+    }))
+  }
   function checkValidPassword(password) {
     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)
   }
@@ -108,7 +128,6 @@ export default function CreateAccount() {
   // }));
   const dispatch = useDispatch()
   function onchangeInputInfoAccount(event) {
-
     setInfoAccountState(state => ({
       ...state, [event.target.name]: event.target.value
     }))
@@ -119,7 +138,17 @@ export default function CreateAccount() {
   function createAccountInfo() {
 
     if (isvalidPassword.isValidNewPassword && isvalidPassword.isConfirmPassword) {
-      const data = { ...infoAccountState, password: newPassword.current.value }
+      const data = {
+
+        email: infoAccountState.email,
+        roleId: infoAccountState.roleID,
+        fullName: infoAccountState.fullname,
+        phoneNumber: infoAccountState.phoneNumber,
+        address: infoAccountState.address,
+        dateOfBirth: infoAccountState.dateOfBirth,
+        password: newPassword.current.value
+      }
+      console.log(data)
       dispatch(CreateAccountAction({ data: data, token: token }));
       // history.go(-1)
     }
@@ -157,22 +186,21 @@ export default function CreateAccount() {
       if (isvalidPassword.isValidNewPassword && isvalidPassword.isConfirmPassword) {
         data = { ...data, password: newPassword.current.value }
       }
-
-      //  dispatch(updateUserAccountDetail({data: data, token:token}))
+      dispatch(updateUserAccountDetail({ data: data, token: token }))
       setClickEdit();
     }
     else { alert("nhap sai mat khau") }
 
   }
 
-  function clickSetActiveAccount(){
-    const data ={
-      userId: infoDetailAccountStore.userID,
-      isDeactivated: false
-    }
-    dispatch(setActiveAccountAction({data: data, token: token}))
-  }
+  function clickSetActiveAccount() {
 
+    const data = {
+      userId: infoDetailAccountStore.userID,
+      isDeactivated: !infoDetailAccountStore.isActive
+    }
+    dispatch(setActiveAccountAction({ data: data, token: token }))
+  }
   function setClickEdit() {
     setEventPage((state) => ({
       ...state, isShowEdit: !state.isShowEdit
@@ -224,11 +252,12 @@ export default function CreateAccount() {
             background: "#4e9ae8"
           }
         },
-      
+
       ]
     }
     return []
   }
+
   const listButton = setListButton(statusUser)
   // console.log(listRoles)
   function ClickGoBack() {
@@ -245,9 +274,136 @@ export default function CreateAccount() {
 
       <NavigationBar vigationBar listButton={listButton} actionGoBack={ClickGoBack} />
 
+
+
+
       <div style={{ height: 600 }} className="card mt-2">
+        <div class=" mt-3" >
+          <div class="row g-0">
+            <div class="pe-3 pt-3 col-md-4 d-flex align-items-end flex-column  ">
+              <div className="">
+                <img id="output-avatar" class="card-img-top rounded " style={{ height: "150px", width: "150px" }} src="https://i.stack.imgur.com/l60Hf.png" alt="Card image cap" />
+
+              </div>
+              <input name="image" id="fileaaa" type="file" onChange={changeUploadAvatar} style={{ display: "none" }} />
+              <div className="btn btn-primary"> <label for="fileaaa"><i class="bi bi-camera-fill"></i>Change Avatar </label></div>
+
+              <p>{infoAccountState.userRole}</p>
+              <p>{infoAccountState.isActive === undefined ? "" : infoAccountState.isActive ?
+                <span onClick={() => clickSetActiveAccount()} class="btn pe-auto badge bg-success"> <i class="bi bi-pen"></i> Active</span>
+                : <span onClick={() => clickSetActiveAccount()} class="btn pe-auto badge bg-danger"> <i class="bi bi-pen"></i> In Active</span>}</p>
+
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+
+
+
+                <div class="mb-3 row">
+                  <label for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
+                  <div class="col-sm-10">
+                    <input type="text" onChange={onchangeInputInfoAccount} name="email" value={infoAccountState.email} disabled={statusUser !== "CREATEUSER"}
+                      class="form-control" aria-describedby="helpId" placeholder="" />
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label for="inputPassword" class="col-sm-2 col-form-label">Fullname:</label>
+                  <div class="col-sm-10">
+                    <input type="text" onChange={onchangeInputInfoAccount} disabled={eventPage.isShowEdit} name="fullname" value={infoAccountState.fullname}
+                      class="form-control" aria-describedby="helpId" placeholder="" />
+
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label for="inputPassword" class="col-sm-2 col-form-label">Phone Number:</label>
+                  <div class="col-sm-10">
+                    <input type="text" onChange={onchangeInputInfoAccount} disabled={eventPage.isShowEdit} name="phoneNumber" value={infoAccountState.phoneNumber}
+                      class="form-control" id="" aria-describedby="helpId" placeholder="" />
+
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label for="inputPassword" class="col-sm-2 col-form-label">Address:</label>
+                  <div class="col-sm-10">
+                    <input type="text" onChange={onchangeInputInfoAccount} disabled={eventPage.isShowEdit} name="address" value={infoAccountState.address}
+                      class="form-control" aria-describedby="helpId" placeholder="" />
+
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label for="inputPassword" class="col-sm-2 col-form-label">Birthdate:</label>
+                  <div class="col-sm-10">
+                    <input type="date" onChange={onchangeInputInfoAccount} disabled={eventPage.isShowEdit} name="dateOfBirth" value={infoAccountState.dateOfBirth.split("T")[0]}
+                      class="form-control" aria-describedby="helpId" placeholder="" />
+
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label for="inputPassword" class="col-sm-2 col-form-label">Select Role:</label>
+                  <div class="col-sm-10">
+                    <select onChange={onchangeInputInfoAccount} disabled={eventPage.isShowEdit} value={infoAccountState.roleID} class="form-control" name="roleID" id="">
+                      <option value="" disabled selected>  -- No Selected --  </option>
+                      <option value="95301097-bd0c-472f-b69a-2316458f3afb" >Manager</option>
+                      <option value="299397f6-7994-4487-baa7-fbe12b2c7720" >Accountant</option>
+                      <option value="54775b31-8c61-4df2-b8af-eed214e07cdd" >StockKeeper</option>
+                      <option value="d0653ee8-4b41-4181-85bd-d6550fbe8626" >Saleman</option>
+
+                    </select>
+
+                  </div>
+                </div>
+
+                <div className="form-text text-success" data-bs-toggle="collapse" data-bs-target="#collapseChangePassword">
+                  {statusUser === "CREATEUSER" ? <p class="text-danger">Set password(*)</p>
+                    : <p class="text-success  dropdown-toggle">Change password</p>}
+                </div>
+                <div class={"collapse " + statusUser === "CREATEUSER" ? "show" : ""} id="collapseChangePassword">
+                  <div class="mb-3 row">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Password:</label>
+                    <div class="col-sm-10">
+                      <input type="text" ref={newPassword} onChange={onChangePassword}
+                        class="form-control" name="" id="" aria-describedby="helpId" placeholder="" />
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Confirm Password:</label>
+                    <div class="col-sm-10">
+                      <input type="text" ref={confirmPassword} onChange={onChangePassword}
+                        class="form-control" name="" id="" aria-describedby="helpId" placeholder="" />
+                    </div>
+                  </div>
+
+
+                </div>
+
+
+
+
+
+
+                {statusUser === "EDITUSER" ? infoAccountState.isActive ?
+                  <div>
+                    {eventPage.isShowEdit ? <button onClick={() => setClickEdit()} type="button" class="btn btn-primary">EDIT</button> :
+
+                      <div>
+                        <button type="button" onClick={() => clickCancel()} class="btn btn-primary">CANCEL</button>
+                        <button type="button" onClick={() => clickUpdate()} class="btn btn-primary">SAVE</button>
+                      </div>
+
+                    }
+
+                  </div> : <p className="text-danger">You must unblock account </p> : <button type="button" onClick={() => createAccountInfo()} class="btn btn-primary">Create User</button>}
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 
+
+        <div className="card-header">Detail Account</div>
         <div className="row h-100">
-          <div className="col-md-3   d-flex justify-content-center mt-3">
+          <div className="w-3  d-flex justify-content-center mt-3">
             <div class="card w-75 border-0" style={{ width: "18rem;" }}>
               <img id="output-avatar" class="card-img-top rounded-pill" width="90px" height="300px" src="https://i.stack.imgur.com/l60Hf.png" alt="Card image cap" />
 
@@ -257,78 +413,20 @@ export default function CreateAccount() {
 
 
               <div class="card-body">
-                <span class="badge badge-success">Success</span>
                 <input name="image" id="fileaaa" type="file" onChange={changeUploadAvatar} style={{ display: "none" }} />
                 <div className="btn btn-primary"> <label for="fileaaa"><i class='bx bxs-edit-alt'></i>Change Avatar </label></div>
+
               </div>
+              <button type="button" onClick={() => clickSetActiveAccount} class="btn btn-primary">{infoAccountState.isActive ? "Ban" : "UnBan"}</button>
             </div>
           </div>
-          <div className="col-md-5 border-start border-end pt-5">
+          <div className="card w-7 border-start border-end ">
             <h3>Profile Detail</h3>
 
 
-
-            <div class="form-group">
-              <label for="">Email:</label>
-              <input type="text" onChange={onchangeInputInfoAccount} name="email" value={infoAccountState.email} disabled={statusUser !== "CREATEUSER"}
-                class="form-control" aria-describedby="helpId" placeholder="" />
-
-            </div>
-            <div class="form-group">
-              <label for="">Full Name:</label>
-              <input type="text" onChange={onchangeInputInfoAccount} name="fullname" value={infoAccountState.fullname}
-                class="form-control" aria-describedby="helpId" placeholder="" />
-
-            </div>
-            <div class="form-group">
-              <label for="">Phone Number:</label>
-              <input type="text" onChange={onchangeInputInfoAccount} name="phoneNumber" value={infoAccountState.phoneNumber}
-                class="form-control" id="" aria-describedby="helpId" placeholder="" />
-
-            </div>
-            <div class="form-group">
-              <label for="">Address:</label>
-              <input type="text" onChange={onchangeInputInfoAccount} name="address" value={infoAccountState.address}
-                class="form-control" aria-describedby="helpId" placeholder="" />
-
-            </div>
-            <div class="form-group">
-              <label for="">Birthday</label>
-              <input type="date" onChange={onchangeInputInfoAccount} name="dateOfBirth" value={infoAccountState.dateOfBirth.split("T")[0]}
-                class="form-control" aria-describedby="helpId" placeholder="" />
-
-            </div>
-            <div class="form-group">
-              <label for="">Select Role</label>
-              <select onChange={onchangeInputInfoAccount} class="form-control" name="roleId" id="">
-                <option value="" disabled selected>  -- No Selected --  </option>
-                <option value="c7c84372-2a0f-4bf5-b496-886855e6747b" >Manager</option>
-                <option value="e21db315-bbe3-421f-bab4-589e4b849bff" >Accountant</option>
-                <option value="7845e265-673d-4ad9-b3ce-67bfb13f80ab" >StockKeeper</option>
-                <option value="9e0d49c6-5217-45fd-8fcc-8e9402ca8118" >Saleman</option>
-
-              </select>
-            </div>
-
           </div>
-          <div className="col-md-4 pt-5">
-            <h3>Set Password</h3>
 
-            <div class="form-group">
-              <label for="">Password:</label>
-              <input type="text" ref={newPassword} onChange={onChangePassword}
-                class="form-control" name="" id="" aria-describedby="helpId" placeholder="" />
-
-            </div>
-            <div class="form-group">
-              <label for="">Confirm apssword:</label>
-              <input type="text" ref={confirmPassword} onChange={onChangePassword}
-                class="form-control" name="" id="" aria-describedby="helpId" placeholder="" />
-
-            </div>
-
-          </div>
-        </div>
+        </div> */}
 
       </div>
 

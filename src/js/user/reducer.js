@@ -44,20 +44,7 @@ const initialState = {
         }
   
       case CLIENT_UNSET:
-        return {
-          token:null,
-          isNotAllowed: null,
-          email:null,
-          emailConfirmed: null,
-          fullname:null,
-          phoneNumber:null,
-          accessFailedCount:null,
-          address:null,
-          dateOfBirth:null,
-          isActive:null,
-          userRole:null,
-          pageAuthorized:[],
-        }
+        return initialState
   
       default:
         return state

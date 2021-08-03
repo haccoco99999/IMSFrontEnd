@@ -1,4 +1,4 @@
-import React, {  useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import "./App.css";
 import ProfileClient from "./about-account/ProfileClient";
@@ -68,7 +68,7 @@ function App(props) {
     }
   }
   const [hubConnection, setHubConnection] = useState();
-  
+
   useEffect(() => {
     const createHubConnection = async () => {
       const hubConnection = new HubConnectionBuilder()
@@ -171,13 +171,13 @@ function App(props) {
       setHubConnection(hubConnection);
     };
     createHubConnection();
-    
+
   }, []);
   return (
     <div>
-      {eventPage.statusBell ? (
+      {/* {eventPage.statusBell ? (
         <NotificationBell active={eventPage.active} />
-      ) : null}
+      ) : null} */}
 
       <div className={"sidebar " + eventPage.active}>
         <div className={"logo_content hide-" + eventPage.statusSetting}>
@@ -205,12 +205,13 @@ function App(props) {
               </div>
             </div>
             <i
-              className="bx menu-icon-notification-logout"
-              onClick={toggleBell}
+              className="bx menu-icon-notification-logout dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+             
             >
               <img src="\src\js\images\alarm.png" />
               <span className="badge badge-customize">3</span>
             </i>
+          <NotificationBell/>
           </div>
           <div className={"profile hide-" + !eventPage.statusSetting}>
             <div className="profile_details">
@@ -251,7 +252,7 @@ function App(props) {
             <li>
               <Link to="/homepage/purchase">
                 <i className="bx">
-                  <img src= "\src\js\images\shopping-2.png" />
+                  <img src="\src\js\images\shopping-2.png" />
                 </i>
                 <span className="links_name">Purchase order</span>
               </Link>
@@ -336,7 +337,7 @@ function App(props) {
       </div>
 
       <Switch>
-        <Route  path="/homepage/dashboard">
+        <Route path="/homepage/dashboard">
           <Dashboard />
         </Route>
         <Route path="/homepage/purchase">
@@ -364,7 +365,7 @@ function App(props) {
           <ManageAccount />
         </Route>
         <Route path="/homepage/about-my-account">
-          <ProfileClient/>
+          <ProfileClient />
         </Route>
         <Route path="/homepage/about-software">
           <AboutSoftware />

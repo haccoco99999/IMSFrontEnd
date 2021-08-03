@@ -4,7 +4,7 @@ import "../goodissue.css";
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import Progress from "../progress/progressing";
 import BootstrapTable from 'react-bootstrap-table-next';
-import { getAllGoodIssue, getAllGoodIssueRequisition } from './action'
+import { getAllGoodsIssue, getAllGoodsIssueRequisition } from './action'
 import { useDispatch, useSelector } from "react-redux";
 import DetailGoodIssue from "../good-issue-detail/GoodIssueDetail";
 import 'react-bootstrap-typeahead/css/Typeahead.css';
@@ -15,19 +15,41 @@ import { GalleryGoodIssue } from "../../Gallery/Gallery";
 import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import { CustomToggleList } from "../../components/toggle-columns-table/CustomToggleList";
 import { GalleryLoading, TableLoading } from "../../components/loading/loading-component";
+import { ProgressBar } from "../../components/progress-bar/ProgressBar";
+import { GoodsIssueFilter } from "../../components/filter/FilterComponents";
+import PagingComponent from "../../components/paging/paging-component";
 export default function manager() {
 
   let history = useHistory()
-  let { goodIssueStore, goodIssueRequisition } = useSelector(state => ({
-    goodIssueStore: state.GetAllGoodIssues,
-    goodIssueRequisition: state.getAllGoodIssuesRequisition,
+  const { goodIssueStore, goodIssueRequisition, token } = useSelector(state => ({
+    goodIssueStore: state.GetAllGoodsIssues,
+    goodIssueRequisition: state.getAllGoodsIssuesRequisition,
+    token: state.client.token
   }))
+ 
+  console.log(goodIssueStore)
   let [listGoodIssues, setListGoodIssues] = useState([])
   let [listGoodIssueRequisition, setListGoodIssueRequisition] = useState([])
   const dispatch = useDispatch()
+  const goodsIssueFilterInit = {
+
+    searchQuery: "",
+    statuses:["Cancel","Completed","Shipping","Packing"],
+    FromCreatedDate: "",
+    ToCreatedDate: "",
+    FromDeliveryDate: "",
+    ToDeliveryDate: "",
+
+}
+const [goodsIssueFilter, setGoodsIssueFilter] = useState({
+    currentPage: 1,
+    SizePerPage: 25,
+    ...goodsIssueFilterInit
+})
+
   useEffect(() => {
-    dispatch(getAllGoodIssue(""))
-    dispatch(getAllGoodIssueRequisition())
+    dispatch(getAllGoodsIssue({filter:parseFilterToString(goodsIssueFilter), token: token}))
+    dispatch(getAllGoodsIssueRequisition())
   }, [])
   useEffect(() => {
     setListGoodIssues(
@@ -65,7 +87,7 @@ export default function manager() {
 
         }
 
-        if (row.status === "Canceled") {
+        if (row.status === "Cancel") {
           return <span class="badge bg-danger">Canceled</span>
 
 
@@ -124,6 +146,87 @@ export default function manager() {
   }
   const hiddenRowKeys = [-1, -3];
   const { ToggleList } = ColumnToggle;
+
+function onChangeGoodsIssueFilter(event) {
+    setGoodsIssueFilter((state) => ({
+        ...state, [event.target.name]: event.target.value
+    }))
+}
+function submitgoodsIssueFilter() {
+  dispatch(
+    getAllGoodsIssue({
+      filter: parseFilterToString(goodsIssueFilter),
+      token: token,
+    })
+  );
+
+  
+    
+}
+function resetGoodsIssueFilter() {
+
+    setGoodsIssueFilter((state) => ({
+        ...state, ...goodsIssueFilterInit
+    }))
+}
+function selectStatusFilter(selected) {
+  setGoodsIssueFilter(state => ({ ...state, statuses: selected.map(item => item.key) }))
+
+}
+function nextPagingClick() {
+   
+  let dataFilter = { ...goodsIssueFilter, currentPage: goodsIssueFilter.currentPage + 1 }
+  dispatch(
+    getAllGoodsIssue({
+      filter: parseFilterToString(dataFilter),
+      token: token,
+    })
+  );
+  setGoodsIssueFilter(dataFilter)
+}
+function backPagingClick() {
+  
+  let dataFilter = { ...goodsIssueFilter, currentPage: goodsIssueFilter.currentPage - 1 }
+  dispatch(
+    getAllGoodsIssue({
+      filter: parseFilterToString(dataFilter),
+      token: token,
+    })
+  );
+  setGoodsIssueFilter(dataFilter)
+}
+function setSizePage(event) {
+
+  let dataFilter = { ...goodsIssueFilter, SizePerPage: event.target.value }
+  dispatch(
+    getAllGoodsIssue({
+      filter: parseFilterToString(dataFilter),
+      token: token,
+    })
+  );
+  setGoodsIssueFilter(dataFilter)
+}
+
+function parseFilterToString(dataFilter) {
+  let filterString = ""
+  Object.entries(dataFilter).forEach(item => {
+      if (item[1] !== "") {
+
+        
+           if (item[0] === "statuses") {
+           
+              item[1].forEach(status => filterString += item[0] + "=" + status + "&")
+
+          }
+          else {
+
+              filterString += item[0] + "=" + item[1] + "&"
+          }
+
+      }
+  })
+  return filterString
+}
   return (
     <div className="space-top-heading">
       {/* title */}
@@ -131,6 +234,7 @@ export default function manager() {
         <span>Goods Issues Requisition</span>
       </div>
       <GalleryLoading/>
+   
       <GalleryGoodIssue listData={listGoodIssueRequisition}
         clickGoodIssueRequisition={clickGoodIssueRequisition}
       />
@@ -141,11 +245,22 @@ export default function manager() {
       {/* content block  */}
 
       <div class="d-grid gap-2">
+        <GoodsIssueFilter filter={goodsIssueFilter}
+        selectStatusFilter={selectStatusFilter}
+        resetFilter={resetGoodsIssueFilter}
+        submitFilter={submitgoodsIssueFilter}
+        onChangeValueFilter={onChangeGoodsIssueFilter}
+        />
         <div class="">
           <div className="card">
             <div class="card-header text-white bg-secondary">List Purchase Order</div>
             <div className="card-body">
-              {/* <PagingComponent pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={currentPage} /> */}
+            
+              <PagingComponent pageCount={  goodIssueStore.infoListGoodIssue.pageCount} 
+              setSizePage={setSizePage}
+              nextPagingClick={nextPagingClick} 
+              backPagingClick={backPagingClick} 
+              currentPage={goodsIssueFilter.currentPage} />
 
               {/* <p onClick={handleClick}><i class="bi bi-file-earmark-plus"></i>Add</p> */}
 

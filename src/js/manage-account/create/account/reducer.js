@@ -13,15 +13,16 @@ import {
   SET_ACTIVE_ACC_REQUEST,
   SET_ACTIVE_ACC_SUCCESS,
   SET_ACTIVE_ACC_ERR,
-  SET_ACTIVE_ACC_CLEAN
+  SET_ACTIVE_ACC_CLEAN,
+  GET_DETAIL_ACC_CLEAN
 } from "./constants";
 
 const initalCreateAccountState = {
   requesting: false,
-  success: false,
+  successful: false,
   messages: "",
-  errors: "",
-  result: {},
+  errors: false,
+ 
 };
 
 export function createUserAccountReducer(state = initalCreateAccountState, action) {
@@ -29,26 +30,26 @@ export function createUserAccountReducer(state = initalCreateAccountState, actio
     case CREATE_ACC_REQUEST:
       return {
         requesting: true,
-        success: false,
+        successful: false,
         messages: "",
-        errors: "",
-        result: {},
+        errors: false,
+      
       };
     case CREATE_ACC_RESPONSE:
       return {
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
-        result: action.json,
+        errors: false,
+       
       };
     case CREATE_ACC_ERR:
       return {
         requesting: false,
-        success: false,
+        successful: false,
         messages: "",
-        errors: "",
-        result: {},
+        errors: true,
+       
       };
     default:
       return state;
@@ -56,7 +57,7 @@ export function createUserAccountReducer(state = initalCreateAccountState, actio
 };
 const deactivatedAccountInit = {
   requesting: false,
-  success: false,
+  successful: false,
   messages: "",
   errors: false,
  
@@ -67,7 +68,7 @@ export const setActiveAccount =  function createUserAccountReducer(state = deact
     case SET_ACTIVE_ACC_REQUEST:
       return {
         requesting: true,
-        success: false,
+        successful: false,
         messages: "",
         errors: false,
    
@@ -83,7 +84,7 @@ export const setActiveAccount =  function createUserAccountReducer(state = deact
     case SET_ACTIVE_ACC_ERR:
       return {
         requesting: false,
-        success: false,
+        successful: false,
         messages: "",
         errors: true,
        
@@ -97,9 +98,9 @@ export const setActiveAccount =  function createUserAccountReducer(state = deact
 
 const initalGetDetailAccountState = {
   requesting: false,
-  success: false,
+  successful: false,
   messages: "",
-  errors: "",
+  errors: false,
   infoDetailAccount: {
 
     userID: "",
@@ -108,7 +109,7 @@ const initalGetDetailAccountState = {
     fullname: "",
     address: "",
     dateOfBirth: "",
-    isActive: "",
+    isActive: undefined,
     roleID: "",
     userRole: "",
 
@@ -131,9 +132,9 @@ export function getUserAccountDetail(state = initalGetDetailAccountState, action
       return {
         ...state,
         requesting: true,
-        success: false,
+        successful: false,
         messages: "",
-        errors: "",
+        errors: false,
        
       };
     case GET_DETAIL_ACC_SUCCESS:
@@ -142,7 +143,7 @@ export function getUserAccountDetail(state = initalGetDetailAccountState, action
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
+        errors: false,
         infoDetailAccount: {
 
           userID: action.json.userAndRole.imsUser.id,
@@ -154,25 +155,28 @@ export function getUserAccountDetail(state = initalGetDetailAccountState, action
           isActive: action.json.userAndRole.imsUser.isActive,
           roleID: action.json.userAndRole.roleID,
           userRole: action.json.userAndRole.userRole,
+         
         }
       };
     case GET_DETAIL_ACC_ERR:
       return {
         requesting: false,
-        success: false,
+        successful: false,
         messages: "",
-        errors: "",
+        errors: true,
         infoDetailAccount: {},
       };
+    case GET_DETAIL_ACC_CLEAN:
+      return initalGetDetailAccountState
     default:
       return state;
   }
 };
 const initalUpdateDetailAccountState = {
   requesting: false,
-  success: false,
+  successful: false,
   messages: "",
-  errors: "",
+  errors: false,
 };
 
 export function updateAccountDetail(state = initalUpdateDetailAccountState, action) {
@@ -180,25 +184,25 @@ export function updateAccountDetail(state = initalUpdateDetailAccountState, acti
     case UPDATE_DETAIL_ACC_REQUEST:
       return {
         requesting: true,
-        success: false,
+        successful: false,
         messages: "",
-        errors: "",
+        errors: false,
        
       };
     case UPDATE_DETAIL_ACC_SUCCESS:
 
       return {
         requesting: false,
-        success: true,
+        successful: true,
         messages: "Success",
-        errors: "",
+        errors: false,
       };
     case UPDATE_DETAIL_ACC_ERR:
       return {
         requesting: false,
-        success: false,
+        successful: false,
         messages: "",
-        errors: "error",
+        errors: true,
       };
     default:
       return state;

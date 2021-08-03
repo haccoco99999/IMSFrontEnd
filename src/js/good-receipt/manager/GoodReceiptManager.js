@@ -12,6 +12,7 @@ import "./good-receipt-manager.css";
 import ListReceiptTable from "../../table-receipt/ListReceiptsTable";
 import { searchGoodsReceiptAction } from "./action";
 import PagingComponent from "../../components/paging/paging-component";
+import { GoodReceiptFilter } from "../../components/filter/FilterComponents";
 
 export default function GoodsReceipt() {
   let history = useHistory();
@@ -24,8 +25,25 @@ export default function GoodsReceipt() {
   }));
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(5);
+  // const [sizePerPage, setSizePerPage] = useState(5);
 
+  const goodsReceiptFilterInit = {
+
+    SearchQuery: "",
+    FromCreatedDate: "",
+    ToCreatedDate: "",
+  
+  
+  }
+  const [goodsReceiptFilter, setGoodsReceiptFilter] = useState({
+  
+    currentPage: 1,
+    SizePerPage: 25,
+  
+    ...goodsReceiptFilterInit
+  
+  })
+  
   // const [listValueColumn, setListValueColumn] = useState([
   //   { purchaseOrderId: "Purchase Order ID" },
   //   { createdDate: "Create Date" },
@@ -80,33 +98,74 @@ export default function GoodsReceipt() {
     console.log("CurrentPage", currentPage);
     dispatch(
       searchGoodsReceiptAction({
-        currentPage: currentPage,
-        sizePerPage: sizePerPage,
+        filter: parseFilterToString(goodsReceiptFilter),
         token: token,
       })
     );
-  }, [currentPage, sizePerPage]);
+  }, []);
 
   function handleClick() {
     history.push("/homepage/good-receipt/create-goods-receipt");
   }
-
+  function onChangeGoodsReceiptFilter(event) {
+    setGoodsReceiptFilter((state) => ({
+      ...state, [event.target.name]: event.target.value
+    }))
+  }
   function nextPagingClick() {
-    console.log("forward");
-    setCurrentPage(currentPage + 1);
+   
+    let dataFilter = { ...goodsReceiptFilter, currentPage: goodsReceiptFilter.currentPage + 1 }
+    dispatch(
+      searchGoodsReceiptAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setGoodsReceiptFilter(dataFilter)
   }
   function backPagingClick() {
-    console.log("backWard");
-    setCurrentPage(currentPage - 1);
+    
+    let dataFilter = { ...goodsReceiptFilter, currentPage: goodsReceiptFilter.currentPage - 1 }
+    dispatch(
+      searchGoodsReceiptAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setGoodsReceiptFilter(dataFilter)
   }
+  function setSizePage(event) {
+  
+    let dataFilter = { ...goodsReceiptFilter, SizePerPage: event.target.value }
+    dispatch(
+      searchGoodsReceiptAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setGoodsReceiptFilter(dataFilter)
+  }
+  function parseFilterToString(dataFilter) {
+    let filterString = ""
+    Object.entries(dataFilter).forEach(item => {
+      if (item[1] !== "") {
 
+
+          filterString += item[0] + "=" + item[1] + "&"
+      
+
+      }
+    })
+    return filterString
+  }
+  
   function onClickToDetails(row) {
     history.push("/homepage/good-receipt/details", {
       goodsreceiptId: row.id,
       fromPage: "ManagerPage",
     });
   }
-
+ 
   const CustomToggleList = ({
     columns,
     onColumnToggle,
@@ -141,7 +200,22 @@ export default function GoodsReceipt() {
       }
     </div>
   );
-
+  function submitGoodsReceiptFilter() {
+   
+    dispatch(
+      searchGoodsReceiptAction({
+        filter: parseFilterToString(goodsReceiptFilter),
+        token: token,
+      })
+    );
+  
+   
+  }
+  function resetGoodsReceiptFilter() {
+    setGoodsReceiptFilter((state) => ({
+      ...state, ...goodsReceiptFilterInit
+    }))
+  }
 //   <div className="wrapper-content shadow">
 //   {/* list nut bam  */}
 //   <div className="ms-1">
@@ -255,16 +329,22 @@ export default function GoodsReceipt() {
 
 
       <div class="d-grid gap-2">
+      <GoodReceiptFilter
+       filter={goodsReceiptFilter} 
+       onChangeValueFilter={onChangeGoodsReceiptFilter}
+      submitFilter={submitGoodsReceiptFilter}
+      resetFilter={resetGoodsReceiptFilter}
+      />
         <div class="">
           <div className="card">
             <div class="card-header text-white bg-secondary">List Purchase Order</div>
             <div className="card-body">
-              <PagingComponent pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={currentPage} />
+              <PagingComponent sizePerPage={goodsReceiptFilter.SizePerPage} setSizePage={setSizePage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={goodsReceiptFilter.currentPage} />
 
               <p onClick={handleClick}><i class="bi bi-file-earmark-plus"></i>Add</p>
 
               {/* <PagingComponent sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
-              <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseGoodReceipt" aria-expanded="false" aria-controls="collapseExample">
+              <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 <i class="bi bi-sliders"></i> Setting Colum
               </p>
 

@@ -180,6 +180,84 @@ export function SelectStatusPurchaseOrder(props) {
       />
   )
 }
+export function SelectGoodsIssueStatus(props) {
+  const optionsInit = [
+      { key: "Packing", value: "Packing" },
+      { key: "Shipping", value: "Shipping " },
+      { key: "Completed", value: "Completed" },
+      { key: "Cancel", value: "Cancel" },
+  
+
+  ]
+  
+  const [options, setOptions] = useState([...optionsInit])
+ function handelOnChanged(selected){
+     props.selectStatus(selected)
+ }
+  return (
+      <Typeahead
+          defaultSelected={options.slice(0, 4)}
+          id="public-methods-example"
+          labelKey="value"
+          multiple
+          options={options}
+          placeholder="Choose a state..."
+          onChange={handelOnChanged}
+      />
+  )
+}
+export function SelectRolePurchaseOrder(props) {
+  const optionsInit = [
+      { key: "Accountant", value: "Accountant" },
+      { key: "StockKeeper", value: "StockKeeper" },
+      { key: "Saleman", value: "Saleman" },
+      { key: "Manager ", value: "Manager" },
+
+
+  ]
+  
+  const [options, setOptions] = useState([...optionsInit])
+ function handelOnChanged(selected){
+     props.selectStatus(selected)
+ }
+  return (
+      <Typeahead
+          defaultSelected={options.slice(0, 4)}
+          id="public-methods-example"
+          labelKey="value"
+          multiple
+          options={options}
+          placeholder="Choose a state..."
+          onChange={handelOnChanged}
+      />
+  )
+}
+export function SelectStatusStockTake(props) {
+  const optionsInit = [
+      { key: "Cancel", value: "Cancel" },
+      { key: "Adjusted", value: "Adjusted" },
+      { key: "Completed", value: "Completed" },
+      { key: "Progressing", value: "Progressing" },
+
+
+  ]
+  
+  const [options, setOptions] = useState([...optionsInit])
+ function handelOnChanged(selected){
+     props.selectStatus(selected)
+ }
+  return (
+      <Typeahead
+          defaultSelected={options.slice(0, 4)}
+          id="public-methods-example"
+          labelKey="value"
+          multiple
+          options={options}
+          placeholder="Choose a state..."
+          onChange={handelOnChanged}
+      />
+  )
+}
 export function ProductSearchSuggestion(props) {
 
 

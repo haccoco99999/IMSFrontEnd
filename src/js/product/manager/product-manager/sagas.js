@@ -10,7 +10,7 @@ import {
 import handleApiErrors from "../../../auth/api-errors";
 
 function getAllProducts(action) {
-  const getAllProductsURL = `http://imspublicapi.herokuapp.com/api/product/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+  const getAllProductsURL = `http://imspublicapi.herokuapp.com/api/product/search?${action.filter}`;
 
   return fetch(getAllProductsURL, {
     method: "GET",

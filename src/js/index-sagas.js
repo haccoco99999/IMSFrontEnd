@@ -1,6 +1,5 @@
 import LoginSaga from "./login/sagas";
 import UpdateSaga from "./about-account/sagas";
-import PriceQuoteSaga from "./Gallery/sagas";
 
 
 import searchPurchaseOrder from "./purchase-order/purchase-quote-order/sagas";
@@ -38,7 +37,6 @@ export default function* IndexSaga() {
   yield all([
     LoginSaga(),
     UpdateSaga(),
-    PriceQuoteSaga(),
     //////PQ PO
     PurchaseOrderSaga(),
     searchPurchaseOrder(),

@@ -25,7 +25,24 @@ export default function () {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
-
+  const productVariantFilterInit = {
+    SearchNameOnly: false,
+    SearchQuery: "",
+    Category: "",
+    FromCreatedDate: "",
+    ToCreatedDate: "",
+    FromModifiedDate: "",
+    ToModifiedDate: "",
+    CreatedByName: "",
+    ModifiedByName: "",
+   
+    Brand: "",
+  }
+  const [productVariantsFilter, setProductVariantsFilter] = useState({
+    currentPage: 1,
+    SizePerPage: 25,
+    ...productVariantFilterInit
+  })
   const [listValueColumn, setListValueColumn] = useState({
     productId: true,
     name: true,
@@ -75,14 +92,7 @@ export default function () {
   function pushAddPage() {
     history.push("/homepage/product/create");
   }
-  function nextPagingClick() {
-    console.log("forward");
-    setCurrentPage(currentPage + 1);
-  }
-  function backPagingClick() {
-    console.log("backWard");
-    setCurrentPage(currentPage - 1);
-  }
+
 
   function onClickToDetails(row) {
     history.push("/homepage/product/details", {
@@ -96,8 +106,7 @@ export default function () {
 
     dispatch(
       getAllProductAction({
-        currentPage: currentPage,
-        sizePerPage: sizePerPage,
+        filter:  parseFilterToString(productVariantsFilter),
         token: token,
       })
     );
@@ -125,45 +134,75 @@ export default function () {
       .catch((error) => { throw error })
   }
 
-  const productVariantFilterInit = {
-    SearchNameOnly: true,
-    SearchQuery: "",
-    Category: "",
-    FromCreatedDate: "",
-    ToCreatedDate: "",
-    FromModifiedDate: "",
-    ToModifiedDate: "",
-    CreatedByName: "",
-    ModifiedByName: "",
-    FromPrice: "",
-    ToPrice: "",
-    Brand: "",
-  }
-  const [productVariantsFilter, setProductVariantsFilter] = useState({
-    currentPage: 1,
-    SizePerPage: 25,
-    ...productVariantFilterInit
-  })
+ 
+  function nextPagingClick() {
 
+  
+   
+    let dataFilter = { ...productVariantsFilter, currentPage: productVariantsFilter.currentPage + 1 }
+    dispatch(
+      getAllProductAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setProductVariantsFilter(dataFilter)
+  }
+  function backPagingClick() {
+   
+    let dataFilter = { ...productVariantsFilter, currentPage: productVariantsFilter.currentPage - 1 }
+    dispatch(
+      getAllProductAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setProductVariantsFilter(dataFilter)
+  }
   function onChangeProductVariantFilter(event) {
     setProductVariantsFilter((state) => ({
       ...state, [event.target.name]: event.target.value
     }))
   }
   function submitProductVariantsFilter() {
-    let filterString = ""
-    Object.entries(productVariantsFilter).forEach(item => {
-      if (item[1] !== "") {
-        filterString += item[0] + "=" + item[1] + "&"
-      }
-    })
-    let json = productVariantsFilterAPI(filterString)
-    console.log(json)
+   
+    dispatch(
+      getAllProductAction({
+        filter: parseFilterToString(productVariantsFilter),
+        token: token,
+      })
+    );
+  
+   
   }
   function resetProductVariantsFilter() {
     setProductVariantsFilter((state) => ({
       ...state, ...productVariantFilterInit
     }))
+  }
+  function setSizePage(event) {
+  
+    let dataFilter = { ...productVariantsFilter, SizePerPage: event.target.value }
+    dispatch(
+      getAllProductAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setProductVariantsFilter(dataFilter)
+  }
+  function parseFilterToString(dataFilter) {
+    let filterString = ""
+    Object.entries(dataFilter).forEach(item => {
+      if (item[1] !== "") {
+
+
+          filterString += item[0] + "=" + item[1] + "&"
+      
+
+      }
+    })
+    return filterString
   }
   return (
 
@@ -178,7 +217,12 @@ export default function () {
         <div className="card">
           <div class="card-header text-white bg-secondary">List Purchase Order</div>
           <div className="card-body">
-            <PagingComponent pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={currentPage} />
+            <PagingComponent
+              setSizePage={setSizePage}
+              pageCount={pageCount}
+              nextPagingClick={nextPagingClick}
+              backPagingClick={backPagingClick}
+              currentPage={productVariantsFilter.currentPage} />
 
             <p onClick={pushAddPage}><i class="bi bi-file-earmark-plus"></i>Add</p>
 

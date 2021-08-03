@@ -9,6 +9,7 @@ import CreateRole from './create/role/create-role'
 import CreateAccount from "./create/account/CreateAccount";
 import EditUserAccount from "./create/account/EditUserAccount";
 import EditRole from "./create/role/DetailRole";
+import AccountManager from "./manager/account-manager/account-manager";
 export default function () {
   return (
     <div className="home_content">
@@ -16,7 +17,7 @@ export default function () {
         {/* ############################ */}
         <Switch>
           <Route exact path="/homepage/manage-account">
-            <Manager />
+          <AccountManager/>
           </Route>
           <Route path="/homepage/manage-account/create-role">
             <CreateRole />

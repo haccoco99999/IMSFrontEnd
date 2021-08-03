@@ -101,7 +101,6 @@ export default function PurchaseQuoteOrder() {
         )
 
     }, [purchaseOrderStore])
-    console.log(listPurchaseOrder)
     const columns = [
         {
             dataField: 'id',
@@ -522,13 +521,7 @@ export default function PurchaseQuoteOrder() {
                 <span>Purchase requistion</span>
                 <div>6</div>
             </div>
-            {// <ProductVariantsFilter 
-                // onChangeValueFilter={onChangeProductVariantFilter}
-                //  filter={productVariantsFilter} 
-                //  submitFilter={submitProductVariantsFilter}
-                //  resetFilter={resetProductVariantsFilter}
-                //  />
-            }
+          
             
             {purchaseOrderStore.successfulPQ ?
                 <Gallery

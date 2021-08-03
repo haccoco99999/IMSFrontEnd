@@ -24,30 +24,13 @@ export default function ProductVariantsFilter(props){
                     </div>
                     <div className="col-md-6">
 
-                       <div class="form-group">
-                         <label for="">Category</label>
-                         <select  onChange={props.onChangeValueFilter} class="form-control" name="Category" id="">
-                           <option>A</option>
-                           <option>B</option>
-                           <option>C</option>
-                         </select>
-                       </div>
+                    <div class="form-group">
+                      <label for="">Category:</label>
+                      <input type="text" onChange={props.onChangeValueFilter} value={props.filter.Category}
+                        class="form-control" name="Category" id="" aria-describedby="helpId" placeholder=""/>    
+                    </div>
                     
-                        <div className="row">
-                            <label for="">Price:</label>
-                            <div class="form-group col-md-6" >
-
-                                <input type="text" value={props.filter.FromPrice}
-                                    onChange={props.onChangeValueFilter} step="0.01"
-                                    class="form-control" name="FromPrice" id="" aria-describedby="helpId" placeholder="" />
-                            </div>
-                            <div class="form-group col-md-6">
-
-                                <input type="text" step="0.01"
-                                    onChange={props.onChangeValueFilter} value={props.filter.ToPrice}
-                                    class="form-control" name="ToPrice" id="" aria-describedby="helpId" placeholder="" />
-                            </div>
-                        </div>
+                   
                         <div class="form-group">
                           <label for="">Brand</label>
                           <input type="text" onChange={props.onChangeValueFilter} value={props.filter.Brand}

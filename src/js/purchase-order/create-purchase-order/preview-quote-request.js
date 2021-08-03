@@ -53,7 +53,7 @@ export default function PreviewSendMail(props) {
                     ['Quote #:' + props.infoPriceQuote.orderId],
                     ['Date: ' + new Date().toISOString().slice(0, 10)],
                     ['Request By: ' + user.fullname],
-                    ['Quote expires: ' + props.infoPriceQuote.deadline]
+                   
 
                 ],
             })
@@ -98,20 +98,7 @@ export default function PreviewSendMail(props) {
             })
             var finalY = doc.lastAutoTable.finalY + 5 || 10
 
-            doc.autoTable({
-                startY: finalY,
-                styles: { halign: 'center' },
-                head: [['Comments or Special Instructions']],
-                headStyles: { fillColor: 'gray', textColor: 'white' },
-                columnStyles: { 0: { halign: 'left', cellWidth: 100, minCellHeight: 30, } }, // Cells in first column centered and green
-                margin: {},
-                tableWidth: 60,
-                theme: "grid",
-
-                body: [
-                    ["lorem ipsum dolor sit amet consectetur adipiscing elit. aliquam tincidunt elementum sem non luctus lorem ipsum dolor sit amet consectetur adipiscing elit. aliquam tincidunt elementum sem non luctus"]
-                ],
-            })
+          
             var finalY = doc.lastAutoTable.finalY || 10
             console.log(finalY)
             doc.setFontSize(11)
@@ -168,7 +155,7 @@ export default function PreviewSendMail(props) {
 
                             </label>
                            
-                            <iframe width="100%" height="100%" class="embed-responsive-item" src={print() + "#toolbar=0"}></iframe>
+                            <iframe width="100%" height="800"  class="embed-responsive-item" src={print() + "#toolbar=0"}></iframe>
 
 
 

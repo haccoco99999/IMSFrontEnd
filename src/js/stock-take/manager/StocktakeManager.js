@@ -26,9 +26,29 @@ export default function () {
     token: state.client.token,
   }));
 
+
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
 
+  const stockTakeFilterInit = {
+
+    SearchQuery: "",
+   
+    FromCreatedDate: "",
+    ToCreatedDate: "",
+    ToTotalPrice: "",
+    CreatedByName: "",
+    DeliveryMethod: "",
+    FromDeliveryDate: "",
+    ToDeliveryDate: "",
+    Statuses:["Progressing","Completed","Adjusted","Cancel"]
+
+  }
+  const [stockTakeFilter, setStockTakeFilter] = useState({
+    currentPage: 1,
+    SizePerPage: 25,
+    ...stockTakeFilterInit
+  })
 
 
   // TODO: DECLARE BOOTSTRAP TABLE
@@ -109,14 +129,6 @@ export default function () {
     history.push("/homepage/stock-take/create");
   }
 
-  function nextPagingClick() {
-    console.log("forward");
-    setCurrentPage(currentPage + 1);
-  }
-  function backPagingClick() {
-    console.log("backWard");
-    setCurrentPage(currentPage - 1);
-  }
 
   function onClickToDetails(row) {
     history.push("/homepage/stock-take/details", {
@@ -127,8 +139,7 @@ export default function () {
   useEffect(() => {
     dispatch(
       getAllStocktakeAction({
-        currentPage: currentPage,
-        sizePerPage: sizePerPage,
+        filter: parseFilterToString(stockTakeFilter),
         token: token,
       })
     );
@@ -253,25 +264,6 @@ export default function () {
   // </div>
 
 
-  const stockTakeFilterInit = {
-
-    SearchQuery: "",
-    FromStatus: "",
-    ToStatus: "",
-    FromCreatedDate: "",
-    ToCreatedDate: "",
-    ToTotalPrice: "",
-    CreatedByName: "",
-    DeliveryMethod: "",
-    FromDeliveryDate: "",
-    ToDeliveryDate: "",
-
-  }
-  const [stockTakeFilter, setStockTakeFilter] = useState({
-    currentPage: 1,
-    SizePerPage: 25,
-    ...stockTakeFilterInit
-  })
 
   function onChangeStockTaketFilter(event) {
     setStockTakeFilter((state) => ({
@@ -279,13 +271,14 @@ export default function () {
     }))
   }
   function submitStockTakeFilter() {
-    let filterString = ""
-    Object.entries(stockTakeFilter).forEach(item => {
-      if (item[1] !== "") {
-        filterString += item[0] + "=" + item[1] + "&"
-      }
-    })
-    alert(filterString)
+   
+    dispatch(
+      getAllStocktakeAction({
+        filter: parseFilterToString(stockTakeFilter),
+        token: token,
+      })
+    );
+ 
   }
   function resetStockTakeFilter() {
 
@@ -294,8 +287,62 @@ export default function () {
     }))
   }
 
+  function nextPagingClick() {
+    console.log("forward");
+    // setCurrentPage(currentPage + 1);
+    let dataFilter = { ...stockTakeFilter, currentPage: stockTakeFilter.currentPage + 1 }
+    dispatch(
+      getAllStocktakeAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setStockTakeFilter(dataFilter)
+  }
+  function setSizePage(event) {
+  
+    let dataFilter = { ...stockTakeFilter, SizePerPage: event.target.value }
+    dispatch(
+      getAllStocktakeAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setFilter(dataFilter)
+  }
+  function backPagingClick() {
+    console.log("backWard");
+    let dataFilter = { ...stockTakeFilter, currentPage: stockTakeFilter.currentPage - 1 }
+    dispatch(
+      getAllStocktakeAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setStockTakeFilter(dataFilter)
+  }
+  function parseFilterToString(dataFilter) {
+    let filterString = ""
+    Object.entries(dataFilter).forEach(item => {
+      if (item[1] !== "") {
 
+        if (item[0] === "Statuses") {
+          item[1].forEach(status => filterString += item[0] + "=" + status + "&")
 
+        }
+        else {
+
+          filterString += item[0] + "=" + item[1] + "&"
+        }
+
+      }
+    })
+    return filterString
+  }
+  function selectStatus(selected) {
+    setStockTakeFilter(state => ({ ...state, Statuses: selected.map(item => item.key) }))
+
+}
   return (
     <div className="space-top-heading">
       {/* title */}
@@ -309,6 +356,7 @@ export default function () {
         <div className="pb-3">
 
           <StockTakeFilter
+            selectStatus={selectStatus}
             onChangeValueFilter={onChangeStockTaketFilter}
             filter={stockTakeFilter}
             submitFilter={submitStockTakeFilter}
@@ -321,7 +369,12 @@ export default function () {
           <div className="card">
             <div class="card-header text-white bg-secondary">List Stock Take</div>
             <div className="card-body">
-              <PagingComponent pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={currentPage} />
+              <PagingComponent 
+              setSizePage={setSizePage}
+              pageCount={pageCount} 
+              nextPagingClick={nextPagingClick} 
+              backPagingClick={backPagingClick} 
+              currentPage={stockTakeFilter.currentPage} />
 
               <p onClick={pushAddPage}><i class="bi bi-file-earmark-plus"></i>Add</p>
 

@@ -5,7 +5,7 @@ export const CustomToggleList = ({
     toggles
   }) => (
 
-    <div className=" collapse btn-group btn-group-toggle btn-group-vertical" id="collapseGoodReceipt" data-toggle="buttons">
+    <div className=" collapse btn-group btn-group-toggle btn-group-vertical" id="collapseExample" data-toggle="buttons">
       {
         columns
           .map(column => ({

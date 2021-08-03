@@ -2,6 +2,11 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import loginRequest from './actions'
 import { Redirect } from 'react-router-dom'
+// import Multistep from 'react-multistep'
+// import StepZilla from "react-stepzilla";
+// import { ProgressBar } from '../components/progress-bar/ProgressBar'
+// import cloudinary from "cloudinary";
+
 
 class Login extends Component {
     constructor(props) {
@@ -23,40 +28,55 @@ class Login extends Component {
         this.setState({
             [event.target.name]: event.target.value
         });
-        
-        if(event.target.name === "email" && this.emailIsvalid(event.target.value)){
+
+        if (event.target.name === "email" && this.emailIsvalid(event.target.value)) {
             this.setState({
-                emailIsvalid : true
+                emailIsvalid: true
             });
-            
+
         }
-        else if(event.target.name === "password" && this.passwordIsvalid(event.target.value)){
+        else if (event.target.name === "password" && this.passwordIsvalid(event.target.value)) {
             this.setState({
                 passwordIsvalid: true
             });
         }
-        
-        
+
+
     }
     handleSubmit(event) {
         const { history } = this.props;
-        if(this.state.emailIsvalid && this.state.passwordIsvalid){
-            this.props.loginRequest({  email: this.state.email, password: this.state.password ,history:history});
+        if (this.state.emailIsvalid && this.state.passwordIsvalid) {
+            this.props.loginRequest({ email: this.state.email, password: this.state.password, history: history });
         }
-        
+
 
         event.preventDefault();
     }
-    emailIsvalid(email){
+    emailIsvalid(email) {
         return (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     }
-    passwordIsvalid(password){
+    passwordIsvalid(password) {
         // return (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password))
-         return (/^(?=.*\w).{8,}$/.test(password))
-        
+        return (/^(?=.*\w).{8,}$/.test(password))
+
     }
 
     render() {
+        // var StepZilla = require('react-stepzilla')
+        const ABC = () => {
+            return ("")
+        }
+ 
+
+        const steps =
+            [
+                { name: 'Step 1', component: <ABC /> },
+                { name: 'Step 2', component: <ABC /> },
+                { name: 'Step 3', component: <ABC /> },
+                { name: 'Step 4', component: <ABC /> },
+                { name: 'Step 5', component: <ABC /> }
+            ]
+
         return (
 
             <div className=" container-login">
@@ -65,34 +85,35 @@ class Login extends Component {
                     <img src="..\src\js\images\Shrink-1024x479.png" className="logo-bottom-inventory" />
                 </div>
                 <div className="right-side">
+                    
                     <p>Welcome to IMS</p>
                     <h2>Login into your </h2>
                     <h2>Account</h2>
-                   <div className={"alert alert-danger error-login " + this.props.login.errors} role="alert">{this.props.login.messages}</div>
-                    
+                    <div className={"alert alert-danger error-login " + this.props.login.errors} role="alert">{this.props.login.messages}</div>
+
                     <form onSubmit={this.handleSubmit}>
-                    <div className="form-group login-form-group">
-                        <label >Email address</label>
-                        <input type="text" className="form-control input-login" name="email" value={this.state.value} onChange={this.handleChange}  placeholder="Email" />
-                        <div className="icon-contain-login">
-                        <img className="icon-input-login" src="..\src\js\images\user-regular.svg" alt="icon" />
+                        <div className="form-group login-form-group">
+                            <label >Email address</label>
+                            <input type="text" className="form-control input-login" name="email" value={this.state.value} onChange={this.handleChange} placeholder="Email" />
+                            <div className="icon-contain-login">
+                                <img className="icon-input-login" src="..\src\js\images\user-regular.svg" alt="icon" />
+                            </div>
+                            <small id="helpId" className={"form-text text-muted status-valid-email-" + this.state.emailIsvalid}>Invalid email address</small>
+
+
                         </div>
-                        <small id="helpId" className={"form-text text-muted status-valid-email-" + this.state.emailIsvalid}>Invalid email address</small>
+                        <div className="form-group login-form-group">
+                            <label >Password</label>
+                            <label className="lb-reset-password">Reset password</label>
+                            <input type="password" className="form-control input-login " name="password" value={this.state.value} onChange={this.handleChange} placeholder="Password" />
+                            <div className="icon-contain-login">
+                                <img className="icon-input-login" src="..\src\js\images\key.png" alt="icon" />
+                            </div>
+                            <small id="helpId" className={"form-text text-muted status-valid-password-" + this.state.passwordIsvalid}>Password is not valid</small>
 
 
-                    </div>
-                    <div className="form-group login-form-group">
-                        <label >Password</label>
-                        <label className="lb-reset-password">Reset password</label>
-                        <input type="password" className="form-control input-login " name="password" value={this.state.value} onChange={this.handleChange} placeholder="Password" />
-                        <div className="icon-contain-login">
-                        <img className="icon-input-login" src="..\src\js\images\key.png" alt="icon" />
                         </div>
-                        <small id="helpId" className={"form-text text-muted status-valid-password-"+ this.state.passwordIsvalid}>Password is not valid</small>
-
-
-                    </div>
-                    <button type="submit" className="btn btn-primary  btn-signin"> Sign in</button>
+                        <button type="submit" className="btn btn-primary  btn-signin"> Sign in</button>
                     </form>
 
                 </div>

@@ -27,58 +27,23 @@ class Gallery extends React.Component {
         };
 
 
-        if (this.props.clickQuote !== undefined) {
 
-            function setStatusPriQuote(hasSentMail, status) {
-                if (status === "PriceQuote" && hasSentMail) {
-                    return <span class="badge bg-primary">Sent</span>
+        function setStatusPriQuote(hasSentMail, status) {
+            if (status === "PriceQuote" && hasSentMail) {
+                return <span class="badge bg-primary">Sent</span>
 
-                }
-                else if (status === "PriceQuote" && hasSentMail === false) {
-                    return <span class="badge bg-warning text-dark">Draft</span>
-
-                }
-                else {
-                    return ""
-                }
             }
-            console.log(this.props.clickQuote)
-            return (
-                <div className='my-own-custom-container'>
-                    <Carousel
+            else if (status === "PriceQuote" && hasSentMail === false) {
+                return <span class="badge bg-warning text-dark">Draft</span>
 
-                        draggable={true}
-                        autoPlaySpeed={1000}
-                        partialVisible={false}
-
-                        transitionDuration={500}
-                        responsive={responsive}>
-                        {this.props.listData.map((quote, index) =>
-                            <div className=" container-box-order" >
-                                <div className="box-order" onClick={(e) => this.props.clickQuote(quote)}>
-                                    <h4 className="priceQuoteOrderNumber">No.{quote.id}</h4>
-                                    <p>Deadline:  <span>{quote.deliveryDate.split("T")[0]}</span></p>
-                                    <p>Create by: {quote.createdDate.split("T")[0]}</p>
-                                    <p>Vender: {quote.supplierName}</p>
-                                    <div className="footer-gallery">  <p>{quote.totalPrice} Product</p>
-                                        {setStatusPriQuote(quote.hasSentMail, quote.status)}
-                                    </div>
-                                </div>
-                            </div>)}
-
-
-
-
-
-                    </Carousel>
-                </div>
-
-
-            );
+            }
+            else {
+                return ""
+            }
         }
-        else if (this.props.clickGoodIssueRequisition !== undefined) {
 
-            return (<div className='my-own-custom-container'>
+        return (
+            <div className='my-own-custom-container'>
                 <Carousel
 
                     draggable={true}
@@ -89,12 +54,14 @@ class Gallery extends React.Component {
                     responsive={responsive}>
                     {this.props.listData.map((quote, index) =>
                         <div className=" container-box-order" >
-                            <div className="box-order" onClick={(e) => this.props.clickGoodIssueRequisition(quote)}>
-                                <h3 className="priceQuoteOrderNumber">No.{quote.id}</h3>
+                            <div className="box-order" onClick={(e) => this.props.clickQuote(quote)}>
+                                <h4 className="priceQuoteOrderNumber">No.{quote.id}</h4>
                                 <p>Deadline:  <span>{quote.deliveryDate.split("T")[0]}</span></p>
                                 <p>Create by: {quote.createdDate.split("T")[0]}</p>
                                 <p>Vender: {quote.supplierName}</p>
-                                <p>{quote.totalPrice} Product</p>
+                                <div className="footer-gallery">  <p>{quote.totalPrice} Product</p>
+                                    {setStatusPriQuote(quote.hasSentMail, quote.status)}
+                                </div>
                             </div>
                         </div>)}
 
@@ -104,8 +71,11 @@ class Gallery extends React.Component {
 
                 </Carousel>
             </div>
-            )
-        }
+
+
+        );
+
+
     }
 }
 
@@ -113,6 +83,52 @@ export default Gallery
 
 
 export function GalleryGoodIssue(props) {
+
+    const responsive = {
+
+        desktop: {
+            breakpoint: { max: 1920, min: 1500 },
+            items: 6
+        },
+        tablet: {
+            breakpoint: { max: 1500, min: 1024 },
+            items: 4
+        },
+        mobile: {
+            breakpoint: { max: 464, min: 0 },
+            items: 1
+        }
+    }
+  
+    return (<div className='my-own-custom-container'>
+        <Carousel
+
+            draggable={true}
+            autoPlaySpeed={1000}
+            partialVisible={false}
+
+            transitionDuration={500}
+            responsive={responsive}>
+            {props.listData.map((quote, index) =>
+                <div className=" container-box-order" >
+                    <div className="box-order" onClick={(e) => props.clickGoodIssueRequisition(quote)}>
+                        <h3 className="priceQuoteOrderNumber">No.{quote.id}</h3>
+                        <p>Deadline:  <span>{quote.deliveryDate.split("T")[0]}</span></p>
+                        <p>Create by: {quote.createdDate.split("T")[0]}</p>
+                        {/* <p>Vender: {quote.supplierName}</p>
+                        <p>{quote.totalPrice} Product</p> */}
+                    </div>
+                </div>)}
+
+
+
+
+
+        </Carousel>
+    </div>
+    )
+}
+export function GalleryPurchaseOrder(props) {
 
     const responsive = {
 
@@ -139,14 +155,16 @@ export function GalleryGoodIssue(props) {
 
             transitionDuration={500}
             responsive={responsive}>
-            {props.listData.map((quote, index) =>
+            {this.props.listData.map((quote, index) =>
                 <div className=" container-box-order" >
-                    <div className="box-order" onClick={(e) => props.clickGoodIssueRequisition(quote)}>
-                        <h3 className="priceQuoteOrderNumber">No.{quote.id}</h3>
+                    <div className="box-order" onClick={(e) => this.props.clickQuote(quote)}>
+                        <h4 className="priceQuoteOrderNumber">No.{quote.id}</h4>
                         <p>Deadline:  <span>{quote.deliveryDate.split("T")[0]}</span></p>
                         <p>Create by: {quote.createdDate.split("T")[0]}</p>
-                        {/* <p>Vender: {quote.supplierName}</p>
-                        <p>{quote.totalPrice} Product</p> */}
+                        <p>Vender: {quote.supplierName}</p>
+                        <div className="footer-gallery">  <p>{quote.totalPrice} Product</p>
+                            {setStatusPriQuote(quote.hasSentMail, quote.status)}
+                        </div>
                     </div>
                 </div>)}
 

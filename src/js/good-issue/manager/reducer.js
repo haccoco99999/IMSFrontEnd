@@ -2,11 +2,13 @@
 import {GET_ALL_GOOD_ISSUE_ERROR,GET_ALL_GOOD_ISSUE_REQUESTING,GET_ALL_GOOD_ISSUE_SUCCESS,
 GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS, GET_ALL_GOOD_ISSUE_REQUISITION_ERROR
 } from './contants'
+
+
   const initalListGoodIssuesState = {
     requesting: false,
     success: false,
     messages: "",
-    errors: "",
+    errors: false,
     infoListGoodIssue:{
         listGoodIssue:[{
             id:"",
@@ -29,7 +31,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
     }
   };
   
-  export const GetAllGoodIssues = function getAllGoodIssues(state = initalListGoodIssuesState, action) {
+  export const GetAllGoodsIssues = function getAllGoodIssues(state = initalListGoodIssuesState, action) {
     switch (action.type) {
       case GET_ALL_GOOD_ISSUE_REQUESTING:
         return {
@@ -37,7 +39,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
           requesting: true,
           success: false,
           messages: "",
-          errors: "",
+          errors: false,
          
         };
       case GET_ALL_GOOD_ISSUE_SUCCESS:
@@ -47,7 +49,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
           requesting: false,
           successful: true,
           messages: "",
-          errors: "",
+          errors: false,
           infoListGoodIssue:{
             listGoodIssue:(action.json.paging.resultList.map(item => {
                 return {
@@ -76,7 +78,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
           requesting: false,
           success: false,
           messages: "",
-          errors: "",
+          errors: true,
           
         };
       default:
@@ -87,7 +89,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
     requesting: false,
     success: false,
     messages: "",
-    errors: "",
+    errors: false,
     infoListGoodIssueRequisition:{
         listGoodIssueRequisition:[{
             id:"",
@@ -110,7 +112,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
     }
   };
   
-  export const getAllGoodIssuesRequisition = function getAllGoodIssuesRequisitionReducer(state = initalListGoodIssuesRequisitionState, action) {
+  export const getAllGoodsIssuesRequisition = function getAllGoodIssuesRequisitionReducer(state = initalListGoodIssuesRequisitionState, action) {
     switch (action.type) {
       case GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING:
         return {
@@ -118,7 +120,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
           requesting: true,
           success: false,
           messages: "",
-          errors: "",
+          errors: false,
          
         };
       case GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS:
@@ -127,7 +129,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
           requesting: false,
           successful: true,
           messages: "",
-          errors: "",
+          errors: false,
           infoListGoodIssueRequisition:{
             listGoodIssueRequisition:(action.json.paging.resultList.map(item => {
                 return {
@@ -156,7 +158,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
           requesting: false,
           success: false,
           messages: "",
-          errors: "",
+          errors: true,
           
         };
       default:

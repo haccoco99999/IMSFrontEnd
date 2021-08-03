@@ -113,7 +113,8 @@ function* createGoodIssueFlow(action) {
   try {
     let json = yield call(createGoodIssueAPI, action);
     console.log(json)
-    yield put({ type: CREATE_GOOD_ISSUE_SUCCESS, json });
+    yield put({ type: CREATE_GOOD_ISSUE_SUCCESS });
+    yield put({ type: GET_GOOD_ISSUE_DETAIL_SUCCESS, json });
   } catch (error) {
  
     yield put({ type: CREATE_GOOD_ISSUE_ERROR });
@@ -124,7 +125,8 @@ function* updateGoodIssueFlow(action) {
   try {
     let json = yield call(updateGoodIssueAPI, action);
     console.log(json)
-    yield put({ type: UPDATE_GOOD_ISSUE_SUCCESS, json });
+    yield put({ type: UPDATE_GOOD_ISSUE_SUCCESS });
+    yield put({ type: GET_GOOD_ISSUE_DETAIL_SUCCESS, json });
   } catch (error) {
  
     yield put({ type: UPDATE_GOOD_ISSUE_ERROR });
@@ -145,8 +147,8 @@ function* rejectGoodIssueDetailFlow(action) {
     console.log("ok da chayj r")
   try {
     let json = yield call(rejectGoodIssueDetaiAPI, action);
-    console.log(json)
-    yield put({ type: REJECT_GOOD_ISSUE_SUCCESS, json });
+    yield put({ type: REJECT_GOOD_ISSUE_SUCCESS });
+    yield put({ type: GET_GOOD_ISSUE_DETAIL_SUCCESS, json });
   } catch (error) {
  
     yield put({ type: REJECT_GOOD_ISSUE_ERROR });

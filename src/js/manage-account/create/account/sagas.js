@@ -102,8 +102,8 @@ function setActiveAccountAPI(action) {
 function* CreateProductFlow(action) {
   try {
     let json = yield call(createProduct, action);
-    yield put({ type: CREATE_ACC_RESPONSE, json });
-    yield put({})
+    yield put({ type: CREATE_ACC_RESPONSE });
+    yield put({type:GET_DETAIL_ACC_SUCCESS, json})
   } catch (error) {
     yield put({ type: CREATE_ACC_ERR });
   }
@@ -134,6 +134,7 @@ function* setActiveAccountFlow(action) {
     let json = yield call(setActiveAccountAPI, action);
     
     yield put({ type: SET_ACTIVE_ACC_SUCCESS });
+    yield put({ type: GET_DETAIL_ACC_SUCCESS , json});
   } catch (error) {
  
     yield put({ type: SET_ACTIVE_ACC_ERR });

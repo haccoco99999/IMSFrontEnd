@@ -2,7 +2,7 @@ import { CLIENT_SET, CLIENT_UNSET } from './constants'
 
 export function setClient (respone_login) {  
   return {
-    type: 'CLIENT_SET',
+    type: CLIENT_SET,
     respone_login,
   }
 }
@@ -15,6 +15,6 @@ export function updateClient (updateClient) {
 
 export function unsetClient () {  
   return {
-    type: 'CLIENT_UNSET',
+    type: CLIENT_UNSET,
   }
 }

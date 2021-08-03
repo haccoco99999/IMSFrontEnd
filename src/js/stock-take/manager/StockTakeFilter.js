@@ -1,4 +1,5 @@
 import React from 'react'
+import { SelectStatusStockTake } from '../../search-component/SearchComponentAll'
 
 export default function StockTakeFilter(props){
 
@@ -32,10 +33,8 @@ export default function StockTakeFilter(props){
                      </div>
                     
                      <div class="form-group">
-                       <label for="">DeliveryMethod :</label>
-                       <input type="text" onChange={props.onChangeValueFilter} value={props.filter.DeliveryMethod}
-                         class="form-control" name="DeliveryMethod" id="" aria-describedby="helpId" placeholder=""/>
-                      
+                     <label for="">Select Status</label>
+                      <SelectStatusStockTake selectStatus={props.selectStatus} />
                      </div>
                     
                       

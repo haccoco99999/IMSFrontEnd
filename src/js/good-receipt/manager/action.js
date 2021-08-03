@@ -1,10 +1,9 @@
 import { SEARCH_GOODS_RECEIPT } from "./constant";
 
-export function searchGoodsReceiptAction({ currentPage, sizePerPage,token }) {
+export function searchGoodsReceiptAction({ filter, token }) {
   return {
     type: SEARCH_GOODS_RECEIPT,
-    currentPage,
-    sizePerPage,
+    filter,
     token
   };
 }

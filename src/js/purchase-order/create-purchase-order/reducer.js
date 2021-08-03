@@ -51,11 +51,11 @@ import {
 } from './contants'
 
 
-const initalState = {
+const detailPurchaseOrderInital = {
     requesting: false,
     successful: false,
     messages: "",
-    errors: "",
+    errors: false,
     detailPurchaseOrder: {
         orderId: "",
         deliveryDate:"",
@@ -86,25 +86,13 @@ const initalState = {
 
         hasSentMail:"",
         mailDescription: "",
-        purchaseOrderProduct: [{
-
-            id: "",
-         
-            productVariantId: "",
-            orderQuantity: 0,
-            unit: "",
-            price: 0,
-            discountAmount: 0,
-            totalAmount: 0,
-            name: "",
-            sku: "",
-        }]
+        purchaseOrderProduct: []
        
 
         
     }
 }
-export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(state = initalState, action) {
+export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(state = detailPurchaseOrderInital, action) {
     switch (action.type) {
         case GET_DETAIL_PURCHASE_ORDER:
             return {
@@ -112,7 +100,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                 requesting: true,
                 successful: false,
                 messages: "",
-                errors: "",
+                errors: false,
                 mailDescription: "",
 
             }
@@ -123,7 +111,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                 requesting: false,
                 successful: true,
                 messages: "",
-                errors: "",
+                errors: false,
                 detailPurchaseOrder: {
                     orderId: action.json.purchaseOrder.id,
                     status: action.json.purchaseOrder.purchaseOrderStatusString,
@@ -175,11 +163,11 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                 requesting: false,
                 successful: false,
                 messages: "",
-                errors: "error",
+                errors: true,
 
             }
         case GET_DETAIL_PURCHASE_ORDER_RESET:
-            return initalState
+            return detailPurchaseOrderInital
           
         default:
             return state

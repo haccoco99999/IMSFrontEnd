@@ -29,9 +29,7 @@ export default function manager() {
   return (
     <div className="space-top-heading">
       {/* title */}
-      <div className="title-heading mt-2">
-        <span>Account Manager</span>
-      </div>
+    
 
       {/* content block */}
       <div className="wrapper-content shadow">

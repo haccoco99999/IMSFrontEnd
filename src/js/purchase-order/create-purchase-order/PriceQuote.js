@@ -20,7 +20,8 @@ import PreviewSendMail from './preview-quote-request';
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import Swal from 'sweetalert2'
 import RejectReceiptModal from '../../RejectReceiptModal/RejectReceiptModal';
-import { CONFIRM_PURCHASE_ORDER_RESET, CREATE_PRICE_QUOTE_RESET, CREATE_PURCHASE_ORDER_RESET, REJECT_PURCHASE_ORDER_CONFIRM_RESET, SEND_MAIL_SERVICE_RESET, SUBMIT_PURCHASE_ORDER_RESET } from './contants';
+import { CONFIRM_PURCHASE_ORDER_RESET, CREATE_PRICE_QUOTE_RESET, CREATE_PURCHASE_ORDER_RESET, GET_DETAIL_PURCHASE_ORDER_RESET, REJECT_PURCHASE_ORDER_CONFIRM_RESET, SEND_MAIL_SERVICE_RESET, SUBMIT_PURCHASE_ORDER_RESET } from './contants';
+import { InfoPurchaseOrderLoader, TableLoading } from '../../components/loading/loading-component';
 
 export default function PurchaseOrderConfirm() {
     const dispatch = useDispatch()
@@ -51,9 +52,11 @@ export default function PurchaseOrderConfirm() {
         rejectPurchaserOrderStatus,
         confirmPurchaserOrderStatus,
         createPurchaserOrderStatus,
+        purchaseOrderDetailStore,
 
     } = useSelector(state => ({
         purchaseOrderDataGlobal: state.getDetailPurchaseReducer.detailPurchaseOrder,
+        purchaseOrderDetailStore: state.getDetailPurchaseReducer,
         token: state.client.token,
         priceQuoteUpdateStatus: state.PriceQuoteUpdate,
         createPriceQuoteStatus: state.createPriceQuote,
@@ -73,8 +76,8 @@ export default function PurchaseOrderConfirm() {
     function clickToResendMail() {
 
     }
-    const [test,setTest] = useState(true);
-   
+    const [test, setTest] = useState(true);
+
 
     const columns = [
         {
@@ -152,7 +155,7 @@ export default function PurchaseOrderConfirm() {
             dataField: 'totalAmount',
             text: 'Total Price',
             editable: false,
-           
+
             hidden: test,
             formatter: (cellContent, row, rowIndex) => {
 
@@ -168,10 +171,10 @@ export default function PurchaseOrderConfirm() {
             editable: false,
             formatter: (cellContent, row, rowIndex) => {
                 return (
-                    <div  className="text-danger"  onClick={() => clickDeleteProduct(rowIndex)}> 
+                    <div className="text-danger" onClick={() => clickDeleteProduct(rowIndex)}>
                         <i class="bi bi-trash"></i>
 
-                      
+
 
 
                     </div>
@@ -388,6 +391,9 @@ export default function PurchaseOrderConfirm() {
 
     useEffect(() => {
         dispatch(getDetailPurchaseOrder(location.state.orderId))
+        return () => {
+            dispatch({ type: GET_DETAIL_PURCHASE_ORDER_RESET })
+        };
     }, [])
 
     useEffect(() => {
@@ -416,7 +422,7 @@ export default function PurchaseOrderConfirm() {
                 'success'
 
             )
-            dispatch({type:"EDIT_PRICE_QUOTE_RESET"})
+            dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
         }
         if (priceQuoteUpdateStatus.errors === true) {
             alert("Loi")
@@ -652,12 +658,12 @@ export default function PurchaseOrderConfirm() {
                 }
             })
         )
-        if(!["Requisition","PriceQuote"].includes(purchaseOrderDataGlobal.status)){
-         
+        if (!["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status)) {
+
             setTest((state) => (false))
         }
-        else{
-          
+        else {
+
             setTest((state) => (true))
         }
         if (!["Requisition", "Done", "PQCanceled", "Requisition"].includes(purchaseOrderDataGlobal.status)) {
@@ -699,28 +705,40 @@ export default function PurchaseOrderConfirm() {
 
     }
     function cancelEditClick(nameEdit) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
 
-        setListProductPurchaseOrder(
-            purchaseOrderDataGlobal.purchaseOrderProduct.map(product => {
-                return {
-                    ...product
-                }
-            })
-        )
-        setDetailPurchaseState({
-            ...purchaseOrderDataGlobal
+                setListProductPurchaseOrder(
+                    purchaseOrderDataGlobal.purchaseOrderProduct.map(product => {
+                        return {
+                            ...product
+                        }
+                    })
+                )
+                setDetailPurchaseState({
+                    ...purchaseOrderDataGlobal
+                })
+                setMailDescription(purchaseOrderDataGlobal.mailDescription)
+                setSupplier(purchaseOrderDataGlobal.supplier)
+                editClick(nameEdit)
+                Swal.fire(
+                    'Reverted!',
+                    'Your edit has been reverted.',
+                    'success'
+                )
+
+            }
         })
-        setMailDescription(purchaseOrderDataGlobal.mailDescription)
-        setSupplier(purchaseOrderDataGlobal.supplier)
-        editClick(nameEdit)
-        // setEventPage({
-        //     isShowEdit: true,
-        //     isCreatePO: true,
-        //     isShowEditInfoOrder: true,
-        //     isShowEditListProducts: true,
 
 
-        // })
     }
 
     function saveEditClick(nameEdit) {
@@ -942,7 +960,7 @@ export default function PurchaseOrderConfirm() {
     })()
 
 
-    
+
 
 
     const listpermissionEdit = ["PriceQuote", "PurchaseOrder", "POWaitingConfirmation"]
@@ -956,153 +974,163 @@ export default function PurchaseOrderConfirm() {
 
             <div class="d-grid gap-2">
                 <div className="p-3">
-                    {detailPurchaseState.status !== "PriceQuote" ? <div class="card">
-                        <div class="row p-5">
-                            <div className="col-md-4">
-                                <div className="form-text">
-                                    Create By:
-                                </div>
-                                <label className="form-check-label" >
-                                    {"hung phan"}
-                                </label>
-
-                                <div className="form-text">
-                                    Email:
-                                </div>
-                                <label className="form-check-label" >
-                                    {"hunghanhpuc@gmail.comn"}
-                                </label>
-
-                                <div className="form-text">
-                                    Phone Number:
-                                </div>
-                                <label className="form-check-label" >
-                                    {"0546544986"}
-                                </label>
-
-                                <div className="form-text">
-                                    Create date:
-                                </div>
-                                <label className="form-check-label" >
-                                    {"1/2/2020"}
-                                </label>
-
-                                <div className="form-text">
-                                    Deadline:
-                                </div>
-                                <label className="form-check-label" >
-                                    {"1/2/2020"}
-                                </label>
-                            </div>
-                            <div className="col-md-8" >
-                                <p data-bs-toggle="collapse" data-bs-target="#collapseHistory" >History</p>
-                                <div className="collapse show " id="collapseHistory" >
-                                    <div style={{ height: "250px", overflow: "auto" }} >
-                                        <table className="table">
-                                            <tbody> {listTransactions.map((transaction, index) => (<tr>
-                                                <td>{transaction.name}</td>
-                                                <td>{transaction.date}</td>
-                                                <td>{transaction.applicationUser.fullname}</td>
-                                            </tr>))}
-                                            </tbody>  </table>
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> : <div class="card">
-
-                        <div class="card-header p-0">
-                            <div class="d-flex ">
-                                <div class="me-auto p-2">Info Order:</div>
-                                <div class="p-2 pe-4 ">
-                                    <ListEdit statusEdit={eventPage.isShowEditInfoOrder} nameEdit="infoOrder" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div className="row">
+                    {detailPurchaseState.status !== "PriceQuote" ?
+                        <div class="card">
+                            <div class="row p-5">
                                 <div className="col-md-4">
-                                    <form id="choose-supplier-form" class="row g-3 needs-validation " novalidate>
-                                        <SelectSupplier isDisabled={eventPage.isShowEditInfoOrder} supplierInfo={supplier} getDataSupplier={getDataSupplier} />
-                                    </form>
+                                    {purchaseOrderDetailStore.successful ?
+                                        <div>
+                                            <div className="form-text">
+                                                Create By:
+                                            </div>
+                                            <label className="form-check-label" >
+                                                {"hung phan"}
+                                            </label>
 
+                                            <div className="form-text">
+                                                Email:
+                                            </div>
+                                            <label className="form-check-label" >
+                                                {"hunghanhpuc@gmail.comn"}
+                                            </label>
 
-                                    <div className="form-text">
-                                        Email:
-                                    </div>
-                                    <label className="form-check-label" >
-                                        {supplier.email}
-                                    </label>
-                                    <div className="form-text">
-                                        Phone Number:
-                                    </div>
-                                    <label className="form-check-label" >
-                                        {supplier.phoneNumber}
-                                    </label>
-                                    <div className="form-text">
-                                        Address:
-                                    </div>
-                                    <label className="form-check-label" >
-                                        {supplier.address}
-                                    </label>
+                                            <div className="form-text">
+                                                Phone Number:
+                                            </div>
+                                            <label className="form-check-label" >
+                                                {"0546544986"}
+                                            </label>
+
+                                            <div className="form-text">
+                                                Create date:
+                                            </div>
+                                            <label className="form-check-label" >
+                                                {"1/2/2020"}
+                                            </label>
+
+                                            <div className="form-text">
+                                                Deadline:
+                                            </div>
+                                            <label className="form-check-label" >
+                                                {"1/2/2020"}
+                                            </label> </div>
+                                        : <InfoPurchaseOrderLoader />}
                                 </div>
                                 <div className="col-md-8" >
                                     <p data-bs-toggle="collapse" data-bs-target="#collapseHistory" >History</p>
                                     <div className="collapse show " id="collapseHistory" >
                                         <div style={{ height: "250px", overflow: "auto" }} >
                                             <table className="table">
-                                                <tbody> {listTransactions.map((transaction, index) => (<tr>
-                                                    <td>{transaction.name}</td>
-                                                    <td>{transaction.date}</td>
-                                                    <td>{transaction.applicationUser.fullname}</td>
-                                                </tr>))}
-                                                </tbody>  </table>
+                                                <tbody>
+                                                    {purchaseOrderDetailStore.successful ?
+                                                        listTransactions.map((transaction, index) => (
+                                                            <tr>
+                                                                <td>{transaction.name}</td>
+                                                                <td>{transaction.date}</td>
+                                                                <td>{transaction.applicationUser.fullname}</td>
+                                                            </tr>))
+
+                                                        : <TableLoading />}
+                                                </tbody>
+                                            </table>
 
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div> : <div class="card">
 
-                            <div className="form-text dropdown-toggle text-success" data-bs-toggle="collapse" data-bs-target="#collapseMoreCotent">
-                                Content Mail:
-                            </div>
-                            <div class="collapse show" id="collapseMoreCotent">
-                                <div className="card p-0">
-                                    <div className="card-header">
-                                        Content Mail:
-                                    </div>
-                                    <div class="card-body p-0">
-                                        <TextEditor setDefault={purchaseOrderDataGlobal.mailDescription === mailDescription} contentEmail={mailDescription} changeMailContent={changeMailContent} />
-
+                            <div class="card-header p-0">
+                                <div class="d-flex ">
+                                    <div class="me-auto p-2">Info Order:</div>
+                                    <div class="p-2 pe-4 ">
+                                        <ListEdit statusEdit={eventPage.isShowEditInfoOrder} nameEdit="infoOrder" />
                                     </div>
                                 </div>
                             </div>
+                            <div class="card-body">
+                                <div className="row">
+                                    <div className="col-md-4">
+                                        <form id="choose-supplier-form" class="row g-3 needs-validation " novalidate>
+                                            <SelectSupplier isDisabled={eventPage.isShowEditInfoOrder} supplierInfo={supplier} getDataSupplier={getDataSupplier} />
+                                        </form>
 
 
-                            <div className="form-text dropdown-toggle text-success" data-bs-toggle="collapse" data-bs-target="#mergedOrderIdLists" >
-                                Merged Order List
-                            </div>
-                            <div className="collapse show " id="mergedOrderIdLists" >
-                                <div style={{ maxHeight: "250px", overflow: "auto" }} >
-                                    <table className="table">
-                                        <tbody> {mergedOrderIdLists.map((order, index) => (<tr>
-                                            <td>{order.purchaseOrderId}</td>
-                                            <td>{order.createdBy}</td>
-                                            <td>{order.createdDate}</td>
+                                        <div className="form-text">
+                                            Email:
+                                        </div>
+                                        <label className="form-check-label" >
+                                            {supplier.email}
+                                        </label>
+                                        <div className="form-text">
+                                            Phone Number:
+                                        </div>
+                                        <label className="form-check-label" >
+                                            {supplier.phoneNumber}
+                                        </label>
+                                        <div className="form-text">
+                                            Address:
+                                        </div>
+                                        <label className="form-check-label" >
+                                            {supplier.address}
+                                        </label>
+                                    </div>
+                                    <div className="col-md-8" >
+                                        <p data-bs-toggle="collapse" data-bs-target="#collapseHistory" >History</p>
+                                        <div className="collapse show " id="collapseHistory" >
+                                            <div style={{ height: "250px", overflow: "auto" }} >
+                                                <table className="table">
+                                                    <tbody> {listTransactions.map((transaction, index) => (<tr>
+                                                        <td>{transaction.name}</td>
+                                                        <td>{transaction.date}</td>
+                                                        <td>{transaction.applicationUser.fullname}</td>
+                                                    </tr>))}
+                                                    </tbody>  </table>
 
-                                        </tr>))}
-                                        </tbody>  </table>
 
-
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <div className="form-text dropdown-toggle text-success" data-bs-toggle="collapse" data-bs-target="#collapseMoreCotent">
+                                    Content Mail:
+                                </div>
+                                <div class="collapse show" id="collapseMoreCotent">
+                                    <div className="card p-0">
+                                        <div className="card-header">
+                                            Content Mail:
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <TextEditor setDefault={purchaseOrderDataGlobal.mailDescription === mailDescription} contentEmail={mailDescription} changeMailContent={changeMailContent} />
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div className="form-text dropdown-toggle text-success" data-bs-toggle="collapse" data-bs-target="#mergedOrderIdLists" >
+                                    Merged Order List
+                                </div>
+                                <div className="collapse show " id="mergedOrderIdLists" >
+                                    <div style={{ maxHeight: "250px", overflow: "auto" }} >
+                                        <table className="table">
+                                            <tbody> {mergedOrderIdLists.map((order, index) => (<tr>
+                                                <td>{order.purchaseOrderId}</td>
+                                                <td>{order.createdBy}</td>
+                                                <td>{order.createdDate}</td>
+
+                                            </tr>))}
+                                            </tbody>  </table>
+
+
+                                    </div>
+                                </div>
+
                             </div>
 
-                        </div>
-
-                    </div>}
+                        </div>}
 
                     {purchaseOrderDataGlobal.status === "POCanceled" ? <div class="card text-white alert-danger mb-3" >
                         <div class="row">
@@ -1140,14 +1168,14 @@ export default function PurchaseOrderConfirm() {
                             <div class="d-flex ">
                                 <div class="me-auto p-2">Info Order:</div>
                                 <div class="p-2 pe-4 ">
-                                   {listpermissionEdit.includes(detailPurchaseState.status)?  <ListEdit statusEdit={eventPage.isShowEditListProducts} nameEdit="listProducts" />:""}
-                                  
+                                    {listpermissionEdit.includes(detailPurchaseState.status) ? <ListEdit statusEdit={eventPage.isShowEditListProducts} nameEdit="listProducts" /> : ""}
+
                                 </div>
-                            </div>                        
                             </div>
+                        </div>
                         <div class="card-body">
-                            
-                           
+
+
 
                             <BootstrapTable
                                 keyField='productVariantId'
@@ -1156,7 +1184,7 @@ export default function PurchaseOrderConfirm() {
                                 striped
                                 hover
                                 condensed
-                                noDataIndication="Table is Empty"
+                                noDataIndication={() => <TableLoading />}
                                 // rowEvents={rowEvents}
 
                                 cellEdit={cellEditFactory({
@@ -1186,7 +1214,7 @@ export default function PurchaseOrderConfirm() {
                     </div>
                 </div>
             </div>
-            
+
             <div className="content-container-receipt">
 
                 <FormAddProductModal

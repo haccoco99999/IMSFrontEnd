@@ -12,7 +12,7 @@ const baseUrl = process.env.REACT_APP_API
 
 function getAllStocktake(action) {
   console.log(baseUrl);
-  const url = `${baseUrl}/stocktake/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+  const url = `${baseUrl}/stocktake/search?${action.filter}`;
   return fetch(url, {
     method: "GET",
     headers: {

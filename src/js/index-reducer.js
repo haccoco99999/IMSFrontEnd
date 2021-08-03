@@ -2,7 +2,6 @@ import { combineReducers } from "redux";
 import client from "./user/reducer";
 import login from "./login/reducer";
 import updateProfileClient from "./about-account/reducer";
-import listPriceQuote from "./Gallery/reducer";
 import searchPurchaseOrderReducer from "./purchase-order/purchase-quote-order/reducer";
 // import updateProfile from './about-account/reducer'
 import getAllRoleReducer from "./manage-account/manager/role-manager/reducer";
@@ -45,7 +44,7 @@ import notificationReducer from "./notification-component/reducer";
 //   DetailRolePermission,
 //   UpdateRolePermission,
 // } from "./manage-account/create/role/reducer";
-import { GetAllGoodIssues, getAllGoodIssuesRequisition } from "./good-issue/manager/reducer";
+import { GetAllGoodsIssues, getAllGoodsIssuesRequisition } from "./good-issue/manager/reducer";
 import{ DetailGoodIssue, CreateGoodIssue , UpadateGoodIssue, RejectGoodIssue} from "./good-issue/good-issue-detail/reducer";
 import createStocktakeReducer from "./stock-take/create/reducer";
 import locationManagetReducer from "./product/manager/location-manager/reducer";
@@ -53,7 +52,6 @@ const IndexReducer = combineReducers({
   login,
   client,
   updateProfileClient,
-  listPriceQuote,
   searchPurchaseOrderReducer,
   getGoodsReceiptReducer,
   getAllRoleReducer,
@@ -91,7 +89,7 @@ const IndexReducer = combineReducers({
    createPurchaserOrder,
    createPriceQuote,
    //Good issue
-   GetAllGoodIssues, getAllGoodIssuesRequisition,
+   GetAllGoodsIssues, getAllGoodsIssuesRequisition ,
    DetailGoodIssue, CreateGoodIssue , UpadateGoodIssue, RejectGoodIssue,
 });
 
