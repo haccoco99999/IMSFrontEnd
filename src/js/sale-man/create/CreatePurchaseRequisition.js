@@ -13,7 +13,7 @@ import SearchComponent from "../../search-component/SearchComponent";
 import NavigationBar from "../../components/navbar/navbar-component";
 import { TableLoading } from "../../components/loading/loading-component";
 import {
-  createPRAction,
+  createPurchaseRequisitionAction,
   clearMessageAction,
   getALlSuppliersAction,
 } from "./action";
@@ -201,7 +201,7 @@ export default function CreatePurchaseRequisition() {
         }),
       };
       console.log(data);
-      dispatch(createPRAction({ data: data, token: token }));
+      dispatch(createPurchaseRequisitionAction({ data: data, token: token }));
     }
   }
 
