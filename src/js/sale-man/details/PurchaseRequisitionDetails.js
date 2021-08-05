@@ -20,7 +20,9 @@ import SearchComponent from "../../search-component/SearchComponent";
 import NavigationBar from "../../components/navbar/navbar-component";
 import { TableLoading } from "../../components/loading/loading-component";
 import { CLEAR_MESSAGE } from "./constants";
-export default function details() {
+import FormAddProductModal from "../../components/add-product-form/FormAddProductModal";
+
+export default function PurchaseRequisitionDetails() {
   let history = useHistory();
   let dispatch = useDispatch();
   let location = useLocation();
@@ -85,13 +87,20 @@ export default function details() {
       editable: false,
       formatter: (cellContent, row, rowIndex) => {
         return (
-          <button
-            type="button"
-            className="btn btn-danger"
+          <div
+            className="text-danger"
             onClick={() => clickDeleteCheckItems(rowIndex)}
           >
-            Delete
-          </button>
+            <i class="bi bi-trash"></i>
+          </div>
+
+          // <button
+          //   type="button"
+          //   className="btn btn-danger"
+          //   onClick={() => clickDeleteCheckItems(rowIndex)}
+          // >
+          //   Delete
+          // </button>
         );
       },
     },
@@ -105,12 +114,10 @@ export default function details() {
     {
       dataField: "name",
       text: "Product Name",
-      // editable: false,
     },
     {
       dataField: "unit",
       text: "Unit",
-      //  editable: false
     },
     {
       dataField: "orderQuantity",
@@ -172,13 +179,13 @@ export default function details() {
         .transaction.transactionRecord,
     getDetailsPurchaseRequisitionReducer:
       state.getDetailsPurchaseRequisitionReducer,
-    submitDraftReducer: state.submitDraftReducer,
+      submitDraftReducer: state.submitDraftReducer,
     updatePRReducer: state.updatePRReducer,
     deletePRReducer: state.deletePRReducer,
   }));
-  console.log(transactionRecordStore);
   function goBackClick() {
-    history.goBack();
+    // history.goBack();
+    history.push("/homepage/sale-man");
   }
 
   function goToManagerPage() {
@@ -186,9 +193,25 @@ export default function details() {
   }
 
   function onSubmitClick(event) {
-    dispatch(
-      submitAction({ id: location.state.purchaseRequisitionId, token: token })
-    );
+    Swal.fire({
+      title: "Are you sure",
+      text: "Do you want to submit?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: " #d33",
+      confirmButtonText: "Confirm",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(
+          submitAction({
+            id: location.state.purchaseRequisitionId,
+            token: token,
+          })
+        );
+      }
+    });
   }
 
   function onEditClick() {
@@ -197,8 +220,6 @@ export default function details() {
   }
 
   function onCancelClick() {
-    console.log(cleanListProducts);
-    console.log(listGetProductsStore);
     setIsEditDisabled(!isEditDisabled);
     // setIsCancel(true);
     //reset
@@ -245,11 +266,11 @@ export default function details() {
     };
     setCleanListProducts([...cleanListProducts, product]);
   }
-  function clickDeleteProduct(id) {
-    setCleanListProducts(
-      cleanListProducts.filter((element) => element.productVariantId !== id)
-    );
-  }
+  // function clickDeleteProduct(id) {
+  //   setCleanListProducts(
+  //     cleanListProducts.filter((element) => element.productVariantId !== id)
+  //   );
+  // }
   function onChangeDeadline(event) {
     setDeadline(moment.utc(event.target.value).format());
   }
@@ -271,10 +292,22 @@ export default function details() {
       }),
     };
 
-    dispatch(updateAction({ data: data, token: token }));
+    Swal.fire({
+      title: "Are you sure",
+      text: "Do you want to update?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: " #d33",
+      confirmButtonText: "Confirm",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(updateAction({ data: data, token: token }));
+      }
+    });
   }
   function clickDeleteCheckItems(rowIndex) {
-    // console.log(rowIndex);
     if (cleanListProducts.length === 1)
       Swal.fire({
         title: "Error",
@@ -362,9 +395,9 @@ export default function details() {
     };
     // check tu page nao toi
 
-    if (location.state.fromPage !== "ManagerPage") {
-      setIsFromManagerPage(false);
-    }
+    // if (location.state.fromPage !== "ManagerPage") {
+    //   setIsFromManagerPage(false);
+    // }
   }, []);
 
   useEffect(() => {
@@ -454,6 +487,7 @@ export default function details() {
               token: token,
             })
           );
+          setIsEditDisabled(true);
         }
       });
     } else if (updatePRReducer.errors) {
@@ -503,30 +537,7 @@ export default function details() {
       });
     }
   }, [deletePRReducer]);
-  // useEffect(() => {
-  //   if (message === "Submit Success") {
-  //     dispatch(
-  //       getPRDetailsAction({
-  //         id: location.state.purchaseRequisitionId,
-  //         token: token,
-  //       })
-  //     );
-  //   } else if (message === "Update Success") {
-  //     dispatch(
-  //       getPRDetailsAction({
-  //         id: location.state.purchaseRequisitionId,
-  //         token: token,
-  //       })
-  //     );
-  //   } else if (message === "Delete Success") {
-  //     dispatch(
-  //       getPRDetailsAction({
-  //         id: location.state.purchaseRequisitionId,
-  //         token: token,
-  //       })
-  //     );
-  //   }
-  // }, [message]);
+
   useEffect(() => {
     if (statusStore === 0) {
       setStatus("Draft");
@@ -558,7 +569,7 @@ export default function details() {
             currentPage="Purchase requisition details"
             classStatus={classStatus}
           />
-          <div className="wrapper space-top">
+          <div className="wrapper">
             <div class="card">
               <div class="card-header fw-bold">
                 Purchase Requisition Details

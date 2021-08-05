@@ -3,61 +3,72 @@ import { Typeahead, AsyncTypeahead } from "react-bootstrap-typeahead";
 import { useSelector } from "react-redux";
 
 export function SearchToAddProduct(props) {
-
-
-  const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/productvariant/search';
-
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [options, setOptions] = useState([]);
-  const handleSearch = (query) => {
+    const { token } = useSelector((state) => ({
+      token: state.client.token,
+    }));
+    const SEARCH_URI =
+      "https://imspublicapi.herokuapp.com/api/productvariant/search";
+  
+    const [isLoading, setIsLoading] = useState(false);
+    const [options, setOptions] = useState([]);
+    const handleSearch = (query) => {
       setIsLoading(true);
-
-      fetch(`${SEARCH_URI}?SearchQuery=${query}&CurrentPage=1&SizePerPage=20`)
-          .then((resp) => resp.json())
-          .then((items) => {
-              console.log(items)
-              const options = items.paging.resultList.map((i) => ({
-                  name: i.name,
-                  sku: i.sku,
-                  filter: i.sku + " " + i.name,
-                  product: i,
-              }));
-
-              setOptions(options);
-              setIsLoading(false);
-          });
-  };
-  const filterBy = () => true;
-
-
-  return (
-
+  
+      fetch(`${SEARCH_URI}?SearchQuery=${query}&CurrentPage=1&SizePerPage=20`, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+          Origin: "",
+        },
+        credentials: "include",
+      })
+        .then((resp) => resp.json())
+        .then((items) => {
+          console.log(items);
+          const options = items.paging.resultList.map((i) => ({
+            name: i.name,
+            sku: i.sku,
+            filter: i.sku + " " + i.name,
+            product: i,
+          }));
+  
+          setOptions(options);
+          setIsLoading(false);
+        });
+    };
+    const filterBy = () => true;
+  
+    return (
       <AsyncTypeahead
-          filterBy={filterBy}
-          id="async-example"
-          labelKey="filter"
-          minLength={1}
-          onSearch={handleSearch}
-          options={options}
-          placeholder="Search for a Github user..."
-
-          renderMenuItemChildren={(option) => (
-              <div onClick={() => props.getInfoProduct(option.product)} key={option.id}>
-                  <img src="https://github.com/mdo.png" alt="@mdo" width="32" height="32" class="rounded me-2" loading="lazy" />
-                  <span>
-                      <strong>{option.name}</strong> {option.sku}
-
-                  </span>
-
-
-
-              </div>
-          )}
+        filterBy={filterBy}
+        id="async-example"
+        labelKey="filter"
+        minLength={1}
+        onSearch={handleSearch}
+        options={options}
+        placeholder="Search for a Github user..."
+        renderMenuItemChildren={(option) => (
+          <div
+            onClick={() => props.getInfoProduct(option.product)}
+            key={option.id}
+          >
+            <img
+              src="https://github.com/mdo.png"
+              alt="@mdo"
+              width="32"
+              height="32"
+              class="rounded me-2"
+              loading="lazy"
+            />
+            <span>
+              <strong>{option.name}</strong> {option.sku}
+            </span>
+          </div>
+        )}
       />
-
-  )
-}
+    );
+  }
 export function Search() {
   const SEARCH_URI = "https://api.github.com/search/users";
 

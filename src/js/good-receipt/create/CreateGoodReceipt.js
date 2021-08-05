@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal } from "bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
-import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
+import cellEditFactory from "react-bootstrap-table2-editor";
 import Swal from "sweetalert2";
 //css
 import "../goodreceipt.css";
@@ -11,19 +11,22 @@ import "../goodreceipt.css";
 import {
   getConfirmedPOAction,
   getConfirmedPODetailsAction,
-  setCreateingGRRequestAction,
+  createGoodsReceiptAction,
+  checkDuplicateSKUAction,
+  checkSKUExistedAction,
 } from "./action";
-
+import { getAllLocationsAction } from "../../components/location/action";
+import { RESET } from "./constant";
 import ListLocationsModal from "../../stock-take/create/search-location-modal";
 import NavigationBar from "../../components/navbar/navbar-component";
 import ListPurchaseConfirmModal from "../components/purchase-accept-component";
-import { getAllLocationsAction } from "../../components/location/action";
-import { TableLoading } from "../../components/loading/loading-component";
+// import { TableLoading } from "../../components/loading/loading-component";
+import SpinnerComponent from "../../components/spinner/spinner-component";
+
 export default function CreateGoodsReceiptComponent() {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  // const [formData, setFormData] = useReducer(formReducer, {});
   const [isChanging, setIsChanging] = useState(false);
   const [isValid, setIsValid] = useState(true);
   const [isCheckingNumeric, setIsCheckingNumeric] = useState(false);
@@ -35,6 +38,10 @@ export default function CreateGoodsReceiptComponent() {
   });
   const [selectedPO, setSelectedPO] = useState("");
   const [listCompare, setListCompare] = useState([]);
+  const [list_BuyingProduct, setList_BuyingProduct] = useState([]);
+  const [isShowSpinner, setIsShowSpinner] = useState(false);
+  const [isShowTables, setIsShowTables] = useState(false);
+
   const {
     list_ConfirmPurchaseOrderID,
     list_BuyingProductStore,
@@ -44,6 +51,8 @@ export default function CreateGoodsReceiptComponent() {
     getDetailsPOReducer,
     getAllConfirmedPurchaseOrderReducer,
     getAllLocationsReducer,
+    checkDuplicateSKUReducer,
+    existRedisVariantSkus,
   } = useSelector((state) => ({
     token: state.client.token,
     list_ConfirmPurchaseOrderID:
@@ -57,9 +66,12 @@ export default function CreateGoodsReceiptComponent() {
     getAllConfirmedPurchaseOrderReducer:
       state.getAllConfirmedPurchaseOrderReducer,
     getAllLocationsReducer: state.getAllLocationsReducer,
+    checkDuplicateSKUReducer: state.checkDuplicateSKUReducer,
+    existRedisVariantSkus: state.checkSKUExistsReducer.existRedisVariantSkus,
   }));
 
-  const [list_BuyingProduct, setList_BuyingProduct] = useState([]);
+  console.log(existRedisVariantSkus);
+  //todo:spinner
 
   const columns = [
     {
@@ -78,11 +90,29 @@ export default function CreateGoodsReceiptComponent() {
       text: "Name",
       editable: false,
     },
-    { dataField: "sku", text: "SKU", editable: true },
+
     {
       dataField: "barcode",
       text: "Barcode",
-      editable: true,
+      editable: false,
+    },
+    {
+      dataField: "sku",
+      text: "SKU",
+      editable: (content, row, rowIndex, columnIndex) => content === "",
+      // editable: true,
+      validator: (newValue, oldValue, row) => {
+        if (oldValue.sku === "" && newValue !== "") {
+          dispatch(checkDuplicateSKUAction({ token: token, data: newValue }));
+          if (checkDuplicateSKUReducer.hasMatch) {
+            setIsCheckingNumeric(true);
+            return {
+              valid: false,
+              message: "SKU has existed",
+            };
+          } else setIsCheckingNumeric(false);
+        }
+      },
     },
     {
       dataField: "orderQuantity",
@@ -93,7 +123,7 @@ export default function CreateGoodsReceiptComponent() {
       dataField: "received",
       text: "Received",
       editable: true,
-      validator: (newValue, oldValue, row) => {
+      validator: (newValue, oldValue, row, columns) => {
         if (isNaN(newValue)) {
           setIsCheckingNumeric(true);
           return {
@@ -106,6 +136,13 @@ export default function CreateGoodsReceiptComponent() {
             return {
               valid: false,
               message: "Quantity should be bigger than 0",
+            };
+          }
+          if (newValue > oldValue.orderQuantity) {
+            setIsCheckingNumeric(true);
+            return {
+              valid: false,
+              message: "Received quantity should be below ordered quantity",
             };
           }
           setIsCheckingNumeric(false);
@@ -126,13 +163,6 @@ export default function CreateGoodsReceiptComponent() {
           >
             <i class="bi bi-trash"></i>
           </div>
-          // <button
-          //   type="button"
-          //   className="btn btn-danger"
-          //   onClick={() => clickDeleteVariant(rowIndex)}
-          // >
-          //   Delete
-          // </button>
         );
       },
     },
@@ -212,8 +242,8 @@ export default function CreateGoodsReceiptComponent() {
 
   function handleOnSelectLocation(row, isSelect) {
     if (isSelect) {
-      console.log(row.id);
-      console.log(row.locationName);
+      // console.log(row.id);
+      // console.log(row.locationName);
       setSelectedLocation({
         id: row.id,
         locationName: row.locationName,
@@ -237,6 +267,8 @@ export default function CreateGoodsReceiptComponent() {
   function onSelectPOClick() {
     hideModalPO();
     setIsReturnData(true);
+
+    dispatch(checkSKUExistedAction({ id: selectedPO, token: token }));
     dispatch(getConfirmedPODetailsAction({ id: selectedPO, token: token }));
   }
 
@@ -246,12 +278,9 @@ export default function CreateGoodsReceiptComponent() {
   }
 
   function clickDeleteVariant(rowIndex) {
-    // console.log(rowIndex);
-    // console.log(variantValues);
-    // console.log((state) => state.filter((_, i) => i !== rowIndex));
-
     setList_BuyingProduct((state) => state.filter((_, i) => i !== rowIndex));
     setListCompare((state) => state.filter((_, i) => i !== rowIndex));
+    setIsChanging(true);
   }
 
   // function onChangeValueProduct(event) {
@@ -266,14 +295,14 @@ export default function CreateGoodsReceiptComponent() {
   //   console.log(event.target.value);
   // }
 
-  function isDataInputEmpty(array) {
-    const checkSKU = (element) => element.sku === "";
-    const checkBarcode = (element) => element.barcode === "";
-    if (array.some(checkSKU) && array.some(checkBarcode)) return true;
-    // else if (array.some(checkSKU) && !array.some(checkBarcode)) return false;
-    // else if (!array.some(checkSKU) && array.some(checkBarcode)) return false;
-    return false;
-  }
+  // function isDataInputEmpty(array) {
+  //   const checkSKU = (element) => element.sku === "";
+  //   const checkBarcode = (element) => element.barcode === "";
+  //   if (array.some(checkSKU) && array.some(checkBarcode)) return true;
+  //   // else if (array.some(checkSKU) && !array.some(checkBarcode)) return false;
+  //   // else if (!array.some(checkSKU) && array.some(checkBarcode)) return false;
+  //   return false;
+  // }
 
   function saveGoodsReceipt() {
     if (selectedPO === "" || selectedLocation.id === "") {
@@ -286,7 +315,6 @@ export default function CreateGoodsReceiptComponent() {
         showConfirmButton: false,
       });
     } else {
-      // if (isDataInputEmpty(list_BuyingProduct)) {
       if (!isValid) {
         Swal.fire({
           title: "Error",
@@ -305,12 +333,26 @@ export default function CreateGoodsReceiptComponent() {
               productVariantId: product.productVariantId,
               quantityReceived: product.received,
               sku: product.sku,
-              barcode: product.barcode,
+              // barcode: product.barcode,
             };
           }),
         };
+        // Swal.fire({
+        //   title: "Are you sure",
+        //   text: "Do you want to save?",
+        //   icon: "question",
+        //   showCancelButton: true,
+        //   confirmButtonColor: "#3085d6",
+        //   cancelButtonColor: " #d33",
+        //   confirmButtonText: "Confirm",
+        //   reverseButtons: true,
+        // }).then((result) => {
+        //   if (result.isConfirmed) {
+        //   }
+        // });
+
         console.log(Data);
-        dispatch(setCreateingGRRequestAction({ data: Data, token: token }));
+        dispatch(createGoodsReceiptAction({ data: Data, token: token }));
       }
     }
   }
@@ -327,20 +369,51 @@ export default function CreateGoodsReceiptComponent() {
   //   );
   // };
 
-  function onRevertClick() {}
+  function onRevertClick() {
+    //revert
+    setList_BuyingProduct(
+      list_BuyingProductStore.map((product) => {
+        return {
+          id: product.id,
+          name: product.productVariant.name,
+          productId: product.productVariant.productId,
+          productVariantId: product.productVariantId,
+          //todo: Sua lai data
+          // orderQuantity: product.quantityLeftAfterReceived,
+          orderQuantity: product.orderQuantity,
+          sku: product.productVariant.sku,
+          barcode: product.productVariant.barcode,
+          received: 0,
+        };
+      })
+    );
+    setListCompare(
+      list_BuyingProductStore.map((product) => {
+        var isValid = true;
+        if (product.sku === "" && product.barcode === "") isValid = false;
+
+        return {
+          id: product.id,
+          sku: product.productVariant.sku,
+          barcode: product.productVariant.barcode,
+          isChanging: false,
+          isValid: isValid,
+        };
+      })
+    );
+  }
 
   //@params: suppliers get details suppliers
   const suppliers = list_ConfirmPurchaseOrderID
     .filter((item) => item.id === selectedPO)
     .shift();
 
+  const checkSKUSHasExistedInCache = (variantId) => {
+    const check = (element) => element.productVariantId === variantId;
+    return existRedisVariantSkus.some(check);
+  };
+
   useEffect(() => {
-    // if (messages !== "") {
-    //   history.push("/homepage/good-receipt/details", {
-    //     goodsreceiptId: messages,
-    //     fromPage: "CreatePage",
-    //   });
-    // }
     return () => {
       dispatch({ type: RESET });
     };
@@ -350,13 +423,20 @@ export default function CreateGoodsReceiptComponent() {
     if (list_BuyingProductStore.length > 0) {
       setList_BuyingProduct(
         list_BuyingProductStore.map((product) => {
+          let tempSku;
+          if (checkSKUSHasExistedInCache(product.productVariantId))
+            tempSku = "Validating";
+          else tempSku = product.productVariant.sku;
           return {
             id: product.id,
             name: product.productVariant.name,
             productId: product.productVariant.productId,
             productVariantId: product.productVariantId,
+            //todo: Sua lai data
+            // orderQuantity: product.quantityLeftAfterReceived,
             orderQuantity: product.orderQuantity,
-            sku: product.productVariant.sku,
+            // sku: product.productVariant.sku,
+            sku: tempSku,
             barcode: product.productVariant.barcode,
             received: 0,
           };
@@ -408,6 +488,12 @@ export default function CreateGoodsReceiptComponent() {
   }, [getAllLocationsReducer]);
 
   useEffect(() => {
+    if (getDetailsPOReducer.requesting) {
+      setIsShowTables(true);
+      setIsShowSpinner(true);
+    } else if (getDetailsPOReducer.successful) {
+      setIsShowSpinner(false);
+    }
     if (getDetailsPOReducer.errors === true) {
       Swal.fire({
         icon: "error",
@@ -446,7 +532,7 @@ export default function CreateGoodsReceiptComponent() {
         title: "Your work has been saved",
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
-      }).then(() => {
+      }).then((result) => {
         if (result.isConfirmed)
           history.push("/homepage/good-receipt/details", {
             goodsreceiptId: submitPRReducer.messages,
@@ -461,17 +547,19 @@ export default function CreateGoodsReceiptComponent() {
         confirmButtonColor: "#3085d6",
       });
     }
-  }, submitPRReducer);
+  }, [submitPRReducer]);
   return (
     <div>
       <NavigationBar
         listButton={listButton}
-        titleBar="Create "
+        titleBar="Create goods receipt"
         actionGoBack={goBackClick}
         status=""
+        home="Goods receipt"
+        currentPage="Create goods receipt"
       />
 
-      <div className="wrapper space-top">
+      <div className="wrapper">
         <div className="card">
           <h5 className="card-header fw-bold">Goods Receipt Information</h5>
           <ul class="list-group list-group-flush">
@@ -503,99 +591,119 @@ export default function CreateGoodsReceiptComponent() {
             )}
 
             <li class="list-group-item">
-              <div className="mt-3">
-                <BootstrapTable
-                  keyField="id"
-                  columns={columns}
-                  data={list_BuyingProduct}
-                  noDataIndication="Table is Empty"
-                  cellEdit={cellEditFactory({
-                    mode: "click",
-                    blurToSave: true,
-                    beforeSaveCell(oldValue, newValue, row, column, done) {
-                      let findEle = listCompare.find((e) => e.id === row.id);
-                      console.log(findEle);
+              <div className="card-title fw-bold">List of items</div>
+              {isShowTables && (
+                <div className="mt-3">
+                  {isShowSpinner ? (
+                    <SpinnerComponent />
+                  ) : (
+                    <BootstrapTable
+                      keyField="id"
+                      columns={columns}
+                      data={list_BuyingProduct}
+                      noDataIndication="Table is Empty"
+                      cellEdit={cellEditFactory({
+                        mode: "click",
+                        blurToSave: true,
+                        // nonEditableRows: () =>
+                        //   list_BuyingProduct.map((item) => {
+                        //     let findEle = listCompare.find(
+                        //       (e) => e.id === item.id
+                        //     );
+                        //     if (item.sku !== ""
+                        //     //  && item.sku === findEle.sku
+                        //      )
+                        //       return item.id;
+                        //   }),
+                        beforeSaveCell(oldValue, newValue, row, column, done) {
+                          let findEle = listCompare.find(
+                            (e) => e.id === row.id
+                          );
+                          // console.log(findEle);
 
-                      if (column.dataField === "sku") {
-                        console.log("Dang check SKU");
-                        let currentBarcode = row.barcode;
-                        if (
-                          newValue !== findEle.sku ||
-                          currentBarcode !== findEle.barcode
-                        ) {
-                          setListCompare([
-                            ...listCompare,
-                            listCompare.map((e) =>
-                              e === findEle ? (e.isChanging = true) : e
-                            ),
-                          ]);
-                          //todo: check invalid
-                          if (newValue === "" && currentBarcode === "") {
-                            setListCompare([
-                              ...listCompare,
-                              listCompare.map((e) =>
-                                e === findEle ? (e.isValid = false) : e
-                              ),
-                            ]);
-                          } else
-                            setListCompare([
-                              ...listCompare,
-                              listCompare.map((e) =>
-                                e === findEle ? (e.isValid = true) : e
-                              ),
-                            ]);
-                        } else
-                          setListCompare([
-                            ...listCompare,
-                            listCompare.map((e) =>
-                              e === findEle ? (e.isChanging = false) : e
-                            ),
-                          ]);
-                      } else if (column.dataField === "barcode") {
-                        console.log("Dang check barcode");
-                        let currentSKU = row.sku;
-                        if (
-                          newValue.barcode !== findEle ||
-                          currentBarcode !== findEle.barcode
-                        ) {
-                          setListCompare([
-                            ...listCompare,
-                            listCompare.map((e) =>
-                              e === findEle ? (e.isChanging = true) : e
-                            ),
-                          ]);
-                          //todo: check invalid
-                          if (newValue === "" && currentSKU === "") {
-                            setListCompare([
-                              ...listCompare,
-                              listCompare.map((e) =>
-                                e === findEle ? (e.isValid = false) : e
-                              ),
-                            ]);
-                          } else
-                            setListCompare([
-                              ...listCompare,
-                              listCompare.map((e) =>
-                                e === findEle ? (e.isValid = true) : e
-                              ),
-                            ]);
-                        } else
-                          setListCompare([
-                            ...listCompare,
-                            listCompare.map((e) =>
-                              e === findEle ? (e.isChanging = false) : e
-                            ),
-                          ]);
-                      }
-                    },
-                  })}
-                />
-              </div>
+                          if (column.dataField === "sku") {
+                            console.log("Dang check SKU");
+                            let currentBarcode = row.barcode;
+                            if (
+                              newValue !== findEle.sku ||
+                              currentBarcode !== findEle.barcode
+                            ) {
+                              setListCompare([
+                                ...listCompare,
+                                listCompare.map((e) =>
+                                  e === findEle ? (e.isChanging = true) : e
+                                ),
+                              ]);
+                              //todo: check invalid
+                              if (newValue === "" && currentBarcode === "") {
+                                setListCompare([
+                                  ...listCompare,
+                                  listCompare.map((e) =>
+                                    e === findEle ? (e.isValid = false) : e
+                                  ),
+                                ]);
+                              } else
+                                setListCompare([
+                                  ...listCompare,
+                                  listCompare.map((e) =>
+                                    e === findEle ? (e.isValid = true) : e
+                                  ),
+                                ]);
+                            } else
+                              setListCompare([
+                                ...listCompare,
+                                listCompare.map((e) =>
+                                  e === findEle ? (e.isChanging = false) : e
+                                ),
+                              ]);
+                          } else if (column.dataField === "barcode") {
+                            console.log("Dang check barcode");
+                            let currentSKU = row.sku;
+                            if (
+                              newValue.barcode !== findEle ||
+                              currentBarcode !== findEle.barcode
+                            ) {
+                              setListCompare([
+                                ...listCompare,
+                                listCompare.map((e) =>
+                                  e === findEle ? (e.isChanging = true) : e
+                                ),
+                              ]);
+                              //todo: check invalid
+                              if (newValue === "" && currentSKU === "") {
+                                setListCompare([
+                                  ...listCompare,
+                                  listCompare.map((e) =>
+                                    e === findEle ? (e.isValid = false) : e
+                                  ),
+                                ]);
+                              } else
+                                setListCompare([
+                                  ...listCompare,
+                                  listCompare.map((e) =>
+                                    e === findEle ? (e.isValid = true) : e
+                                  ),
+                                ]);
+                            } else
+                              setListCompare([
+                                ...listCompare,
+                                listCompare.map((e) =>
+                                  e === findEle ? (e.isChanging = false) : e
+                                ),
+                              ]);
+                          }
+                        },
+                      })}
+                    />
+                  )}
+                </div>
+              )}
             </li>
           </ul>
         </div>
-
-        <div className="card mt-3 me-3">
+      </div>
+      <div className="wrapper">
+        <div className="card mt-3 mb-3">
           <h5 className="card-header fw-bold">Location</h5>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">

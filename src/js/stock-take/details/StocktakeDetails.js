@@ -44,7 +44,7 @@ export default function StocktakeDetailsComponent() {
   //todo: store state
   const {
     token,
-    // messages,
+    role,
     stocktakeDetailsStore,
     groupLocationStore,
     statusStocktakeStore,
@@ -56,7 +56,7 @@ export default function StocktakeDetailsComponent() {
     submitStocktakeReducer,
   } = useSelector((state) => ({
     token: state.client.token,
-    // messages: state.getDetailsStocktakeReducer.messages,
+    role: state.client.userRole,
     stocktakeDetailsStore: state.getDetailsStocktakeReducer,
     groupLocationStore:
       state.getDetailsStocktakeReducer.stocktake.groupLocations,
@@ -71,9 +71,7 @@ export default function StocktakeDetailsComponent() {
     adjustStocktakeReducer: state.adjustStocktakeReducer,
     submitStocktakeReducer: state.submitStocktakeReducer,
   }));
-  // console.log(stocktakeDetailsStore);
-  // console.log(groupLocationStore[0]);
-  // console.log(groupLocationStore[0].checkItems);
+
   //todo: reject modal declare
   const modalRef = useRef();
   const showRejectModal = () => {
@@ -234,7 +232,7 @@ export default function StocktakeDetailsComponent() {
           disabled: isChecking,
         },
       ];
-    } else if (status === 2) {
+    } else if (status === 2 && role === "Manager") {
       return [
         {
           isShow: true,
@@ -343,11 +341,25 @@ export default function StocktakeDetailsComponent() {
     });
   }
   function onAdjustClick() {
-    hideAdjustModal();
     const data = {
       stockTakeId: location.state.stocktakeId,
     };
-    dispatch(adjustAction({ token: token, data: data }));
+    // hideAdjustModal();
+    Swal.fire({
+      title: "Do you want to adjust inventory?",
+      text: "  Inventory balance will change the amount of inventory in the system with the following products",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: " #d33",
+      confirmButtonText: "Confirm",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // dispatch(createStocktkaeAction({ token: token, data: data }));
+        dispatch(adjustAction({ token: token, data: data }));
+      }
+    });
   }
 
   //todo: discard the input
@@ -549,7 +561,7 @@ export default function StocktakeDetailsComponent() {
   }, [updateStocktakeReducer]);
 
   useEffect(() => {
-    if (adjustStocktake.requesting === true) {
+    if (adjustStocktakeReducer.requesting === true) {
       Swal.fire({
         title: "Progressing",
         html: "Waiting...",
@@ -558,7 +570,7 @@ export default function StocktakeDetailsComponent() {
           Swal.showLoading();
         },
       });
-    } else if (adjustStocktake.successful === true) {
+    } else if (adjustStocktakeReducer.successful === true) {
       Swal.fire({
         icon: "success",
         title: "Quantity has been adjusted",
@@ -572,7 +584,7 @@ export default function StocktakeDetailsComponent() {
           })
         );
       });
-    } else if (adjustStocktake.error === true) {
+    } else if (adjustStocktakeReducer.error === true) {
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -580,64 +592,43 @@ export default function StocktakeDetailsComponent() {
       });
     }
   }, [adjustStocktakeReducer]);
+
+  useEffect(() => {
+    if (submitStocktakeReducer.requesting === true) {
+      Swal.fire({
+        title: "Progressing",
+        html: "Waiting...",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else if (submitStocktakeReducer.successful === true) {
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been submitted",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        dispatch(
+          getDetailsStockTakeAction({
+            id: location.state.stocktakeId,
+            token: token,
+          })
+        );
+      });
+    } else if (submitStocktakeReducer.error === true) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong!",
+      });
+    }
+  }, [submitStocktakeReducer]);
   useEffect(() => {
     if (stocktakeDetailsStore.messages === true) {
     }
   }, [stocktakeDetailsStore]);
-  // useEffect(() => {
-  //   if (
-  //     updateStocktakeReducer.requesting === true ||
-  //     submitStocktakeReducer.requesting === true ||
-  //     rejectStocktakeReducer.requesting === true ||
-  //     adjustStocktakeReducer.requesting === true
-  //   ) {
-  //     Swal.fire({
-  //       title: "Progressing",
-  //       html: "Waiting...",
-  //       timerProgressBar: true,
-  //       didOpen: () => {
-  //         Swal.showLoading();
-  //       },
-  //     });
-  //   } else if (
-  //     updateStocktakeReducer.errors === true ||
-  //     submitStocktakeReducer.errors === true ||
-  //     adjustStocktakeReducer.errors === true ||
-  //     rejectStocktakeReducer.errors === true ||
-  //     stocktakeDetailsStore.errors === true
-  //   ) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Error",
-  //       text: "Something went wrong!",
-  //     });
-  //   } else if (
-  //     rejectStocktakeReducer.successful === true ||
-  //     submitStocktakeReducer.successful === true ||
-  //     adjustStocktakeReducer.successful === true ||
-  //     updateStocktakeReducer.successful === true
-  //   ) {
-  //     Swal.fire({
-  //       icon: "success",
-  //       title: "Your work has been saved",
-  //       showCancelButton: false,
-  //       confirmButtonColor: "#3085d6",
-  //     });
-  //     dispatch(
-  //       getDetailsStockTakeAction({
-  //         id: location.state.stocktakeId,
-  //         token: token,
-  //       })
-  //     );
-  //   }
-  // }, [
-  //   updateStocktakeReducer,
-  //   rejectStocktakeReducer,
-  //   adjustStocktakeReducer,
-  //   submitStocktakeReducer,
-  //   stocktakeDetailsStore,
-  // ]);
-
   return (
     <div>
       {showLoader ? (
@@ -654,7 +645,7 @@ export default function StocktakeDetailsComponent() {
             classStatus={classStatus}
           />
 
-          <div className="wrapper space-top">
+          <div className="wrapper">
             <div className="wrapper-content shadow">
               {/* Show info */}
               <div className="title-heading mt-2">

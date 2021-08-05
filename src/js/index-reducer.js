@@ -56,6 +56,8 @@ import {
   getAllConfirmedPurchaseOrderReducer,
   submitPRReducer,
   getDetailsPOReducer,
+  checkDuplicateSKUReducer,
+  checkSKUExistsReducer
 } from "./good-receipt/create/reducer";
 import getGoodsReceiptReducer from "./good-receipt/manager/reducer";
 import getGoodsReceiptDetailsReducer from "./good-receipt/details/reducer";
@@ -65,7 +67,7 @@ import {
   updateCategoriesReducer,
   createCategoriesReducer,
 } from "./product/manager/category-manager/reducer";
-import getAllProductsReducer from "./product/manager/product-manager/reducer";
+import getAllProductsReducer, {getAllUpdateRequestReducer} from "./product/manager/product-manager/reducer";
 import {
   createProductReducer,
   getCategoriesCreateProductReducer,
@@ -145,6 +147,11 @@ const IndexReducer = combineReducers({
   getGoodsReceiptDetailsReducer,
   submitPRReducer,
   getDetailsPOReducer,
+
+  checkDuplicateSKUReducer,
+  checkSKUExistsReducer,
+  getAllUpdateRequestReducer,
+
   //Product Manager
   locationManagerReducer,
   createProductReducer,

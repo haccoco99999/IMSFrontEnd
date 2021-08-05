@@ -159,6 +159,8 @@ function checkDuplicateProduct(action) {
 }
 
 function checkDuplicateVariant(action) {
+  let dataCheck = action.data.productVariantsUpdate[0].name;
+
   const url = `${process.env.REACT_APP_API}/dupcheck/productvariant`;
   return fetch(url, {
     method: "POST",
@@ -169,7 +171,7 @@ function checkDuplicateVariant(action) {
     },
     credentials: "include",
     body: JSON.stringify({
-      value: action.data.name,
+      value: dataCheck,
     }),
   })
     .then((response) => handleApiErrors(response))
@@ -226,6 +228,9 @@ function* checkDuplicateProductFlow(action) {
 
 function* checkDuplicateVariantFlow(action) {
   try {
+    console.log(action);
+    // let dataCheck = ;
+    // console.log(action.productVariantsUpdate[0].name);
     let resultCheckDup = yield call(checkDuplicateVariant, action);
     return resultCheckDup;
   } catch (error) {
@@ -246,7 +251,7 @@ function* updateProductFlow(action) {
 }
 
 function* updateVariantFlow(action) {
-  let check = yield call(checkDuplicateVariant, action);
+  let check = yield call(checkDuplicateVariantFlow, action);
 
   try {
     if (!check.hasMatch) {

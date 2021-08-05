@@ -2,7 +2,7 @@ import React from "react";
 import "./navbar.css";
 export default function NavigationBar(props) {
   return (
-    <nav class="navbar  sticky-top navbar-light shadow  bg-white">
+    <nav class="navbar py-0 mb-4 sticky-top navbar-light shadow  bg-white">
       <div class="container-fluid">
         <div className="card border-0">
           <div className="card-body p-0">
@@ -11,15 +11,17 @@ export default function NavigationBar(props) {
                 style={{ "--bs-breadcrumb-divider": `'>'` }}
                 aria-label="breadcrumb"
               >
-                <ol className="breadcrumb m-0 ">
-                  <li className="breadcrumb-item link-secondary">
-                    <a
-                      href="#"
-                      className="link-secondary text-decoration-none"
-                      onClick={props.actionGoBack}
-                    >
-                      {props.home}
-                    </a>
+                <ol className="breadcrumb m-0 mt-2">
+                  <li className="me-3">
+                    <div className="text-dark " onClick={props.actionGoBack}>
+                      <i className="bi bi-arrow-left fw-bold icon-size"></i>
+                    </div>
+                  </li>
+                  <li
+                    class="breadcrumb-item active text-dark"
+                    aria-current="page"
+                  >
+                    {props.home}
                   </li>
                   <li
                     class="breadcrumb-item active text-dark"
@@ -29,21 +31,21 @@ export default function NavigationBar(props) {
                   </li>
                   {props.level3 && (
                     <li
-                    class="breadcrumb-item active text-dark"
-                    aria-current="page"
-                  >
-                    {props.level3Page}
-                  </li>
+                      className="breadcrumb-item active text-dark"
+                      aria-current="page"
+                    >
+                      {props.level3Page}
+                    </li>
                   )}
 
-                  {
-                    props.level4 && (<li
-                      class="breadcrumb-item active text-dark"
+                  {props.level4 && (
+                    <li
+                      className="breadcrumb-item active text-dark"
                       aria-current="page"
                     >
                       {props.level4Page}
-                    </li>)
-                  }
+                    </li>
+                  )}
                 </ol>
               </nav>
               <div className="d-sm-flex align-items-sm-center ">

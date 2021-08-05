@@ -66,10 +66,6 @@ export default function details() {
       GetDetailsAction({ id: location.state.goodsreceiptId, token: token })
     );
 
-    // check khi true false
-
-    // check tu page nao toi
-
     if (location.state.fromPage !== "ManagerPage") {
       setIsFromManagerPage(false);
     }
@@ -104,14 +100,14 @@ export default function details() {
         <>
           <NavigationBar
             listButton={listButton}
-            titleBar="Details"
+            titleBar={location.state.goodsreceiptId}
             actionGoBack={goBackClick}
             status=""
             home="Goods receipt"
             currentPage="Goods receipt details"
             // classStatus="bg-secondary"
           />
-          <div className="wrapper space-top">
+          <div className="wrapper">
             <div className="wrapper-content shadow">
               <div className="title-heading mt-2">
                 <span>Goods Receipt Details</span>

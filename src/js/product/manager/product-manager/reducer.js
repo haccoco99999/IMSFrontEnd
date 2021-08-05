@@ -2,7 +2,11 @@ import {
   GET_ALL_PRODUCTS_REQUEST,
   GET_ALL_PRODUCTS_RESPONSE,
   GET_ALL_PRODUCTS_ERROR,
+  GET_ALL_UPDATES_REQUEST,
+  GET_ALL_UPDATES_RESPONSE,
+  GET_ALL_UPDATES_ERROR,
 } from "../constants";
+
 
 const initialState = {
   requesting: false,
@@ -64,3 +68,56 @@ export default function reducer(state = initialState, action) {
       return state;
   }
 }
+
+const getAllUpdateRequestState = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: "",
+  productUpdateMessages: [
+    {
+      id: "",
+      productVariantId: "",
+      sku: "",
+    },
+  ],
+};
+
+
+
+export function getAllUpdateRequestReducer(
+  state = getAllUpdateRequestState,
+  action
+) {
+  switch (action.type) {
+    case GET_ALL_UPDATES_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: "",
+      };
+    case GET_ALL_UPDATES_RESPONSE:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: "",
+        productUpdateMessages: action.json.productUpdateMessages,
+      };
+    case GET_ALL_UPDATES_ERROR:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: "",
+        productUpdateMessages: [],
+      };
+    default:
+      return state;
+  }
+}
+

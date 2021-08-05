@@ -1,54 +1,45 @@
 import {
-  CREATE_PR_REQUEST,
-  CREATE_PR_RESPONSE,
-  CREATE_PR_ERROR,
-  CLEAR_MESSAGE,
-  GET_ALL_SUPPLIER_REQUEST,
-  GET_ALL_SUPPLIER_RESPONSE,
-  GET_ALL_SUPPLIER_ERROR,
-} from "./constants";
+  GET_ALL_VARIANTS_REQUEST,
+  GET_ALL_VARIANTS_ERROR,
+  GET_ALL_VARIANTS_RESPONSE,
+} from "../constants";
 
 const initialState = {
   requesting: false,
   successful: false,
   messages: "",
-  errors: false,
-  // listSuppliers: [],
+  errors: "",
+  listVariants: [],
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case CREATE_PR_REQUEST:
+    case GET_ALL_VARIANTS_REQUEST:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: "",
-        errors: false,
+        errors: "",
       };
-
-    case CREATE_PR_RESPONSE:
-      console.log(action.json);
+    case GET_ALL_VARIANTS_RESPONSE:
       return {
         ...state,
         requesting: false,
         successful: true,
-        messages: action.json.createdRequisitionId,
-        errors: false,
+        messages: "",
+        errors: "",
+        listVariants: action.json.paging.resultList,
       };
-
-    case CREATE_PR_ERROR:
+    case GET_ALL_VARIANTS_ERROR:
       return {
         ...state,
         requesting: false,
         successful: false,
         messages: "",
-        errors: true,
+        errors: "",
+        listVariants: [],
       };
-
-    case CLEAR_MESSAGE:
-      return initialState;
-
     default:
       return state;
   }

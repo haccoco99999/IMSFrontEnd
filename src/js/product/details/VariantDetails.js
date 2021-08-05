@@ -120,7 +120,7 @@ export default function VariantDetails() {
           id: variant.id,
           name: variant.name,
           price: variant.price,
-          barcode: variant.barcode,
+          // barcode: variant.barcode,
           sku: variant.sku,
           unit: variant.unit,
         },
@@ -222,90 +222,93 @@ export default function VariantDetails() {
             level3={true}
             level3Page="Variant Details"
           />
-          <div className="wrapper space-top">
-            <div className="wrapper-content shadow">
-              <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                  <button
-                    class="nav-link active"
-                    id="nav-home-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nav-home"
-                    type="button"
-                    role="tab"
-                    aria-controls="nav-home"
-                    aria-selected="true"
+          <div className="wrapper ">
+            <div class="card">
+              <div class="card-header fw-bold">Variant Information</div>
+              <div class="card-body">
+                <nav>
+                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button
+                      class="nav-link active"
+                      id="nav-home-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#nav-home"
+                      type="button"
+                      role="tab"
+                      aria-controls="nav-home"
+                      aria-selected="true"
+                    >
+                      General Information
+                    </button>
+                    <button
+                      class="nav-link"
+                      id="nav-profile-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#nav-profile"
+                      type="button"
+                      role="tab"
+                      aria-controls="nav-profile"
+                      aria-selected="false"
+                    >
+                      Packages
+                    </button>
+                  </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                  <div
+                    class="tab-pane fade show active"
+                    id="nav-home"
+                    role="tabpanel"
+                    aria-labelledby="nav-home-tab"
                   >
-                    General Information
-                  </button>
-                  <button
-                    class="nav-link"
-                    id="nav-profile-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nav-profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="nav-profile"
-                    aria-selected="false"
-                  >
-                    Packages
-                  </button>
-                </div>
-              </nav>
-              <div class="tab-content" id="nav-tabContent">
-                <div
-                  class="tab-pane fade show active"
-                  id="nav-home"
-                  role="tabpanel"
-                  aria-labelledby="nav-home-tab"
-                >
-                  <div className="wrapper-content shadow mt-3">
-                    <div className="title-heading mt-2">
-                      <span>Variant Details </span>
-                    </div>
-                    <div className="mt-3">
-                      <div className="row g-3 justify-content-between me-3">
-                        <div className="col-4">
-                          <p>
-                            <strong>Variant ID:</strong>
-                            {variant.id}
-                          </p>
-                          <p>
-                            <strong>Product ID:</strong>
-                            {variant.productId}
-                          </p>
-                          <p>
-                            <strong>Name:</strong>
-                            {isDisabled ? (
-                              variant.name
-                            ) : (
-                              <input
-                                type="text"
-                                name="name"
-                                className="form-control"
-                                onChange={onChangeValue}
-                                value={variant.name}
-                              />
-                            )}
-                          </p>
-                          <p>
-                            <strong>SKU:</strong>
-                            {isDisabled ? (
-                              variant.sku
-                            ) : (
-                              <input
-                                type="text"
-                                name="sku"
-                                className="form-control"
-                                onChange={onChangeValue}
-                                value={variant.sku}
-                              />
-                            )}
-                          </p>
-                          <p>
-                            <strong>Barcode:</strong>
-                            {isDisabled ? (
-                              variant.barcode
+                    <div className="wrapper-content shadow mt-3">
+                      <div className="title-heading mt-2">
+                        <span>Variant Details </span>
+                      </div>
+                      <div className="mt-3">
+                        <div className="row g-3 justify-content-between me-3">
+                          <div className="col-4">
+                            <p>
+                              <strong>Variant ID:</strong>
+                              {variant.id}
+                            </p>
+                            <p>
+                              <strong>Product ID:</strong>
+                              {variant.productId}
+                            </p>
+                            <p>
+                              <strong>Name:</strong>
+                              {isDisabled ? (
+                                variant.name
+                              ) : (
+                                <input
+                                  type="text"
+                                  name="name"
+                                  className="form-control"
+                                  onChange={onChangeValue}
+                                  value={variant.name}
+                                />
+                              )}
+                            </p>
+                            <p>
+                              <strong>SKU:</strong>
+                              {isDisabled ? (
+                                variant.sku
+                              ) : (
+                                <input
+                                  type="text"
+                                  name="sku"
+                                  className="form-control"
+                                  onChange={onChangeValue}
+                                  value={variant.sku}
+                                />
+                              )}
+                            </p>
+                            <p>
+                              <strong>Barcode:</strong>
+                              {variant.barcode}
+                              {/* {isDisabled ? (
+                             
                             ) : (
                               <input
                                 type="text"
@@ -314,50 +317,51 @@ export default function VariantDetails() {
                                 onChange={onChangeValue}
                                 value={variant.barcode}
                               />
-                            )}
-                          </p>
-                        </div>
-                        <div className="col-4">
-                          {/* <p>
+                            )} */}
+                            </p>
+                          </div>
+                          <div className="col-4">
+                            {/* <p>
                         <strong>Unit:</strong>
                         {variant.unit}
                       </p> */}
-                          <p>
-                            <strong>Storage Quantity:</strong>
-                            {variant.storageQuantity}
-                          </p>
-                          <p>
-                            <strong>Price:</strong>
+                            <p>
+                              <strong>Storage Quantity:</strong>
+                              {variant.storageQuantity}
+                            </p>
+                            <p>
+                              <strong>Price:</strong>
 
-                            {variant.price}
-                          </p>
-                          {/* <p>
+                              {variant.price}
+                            </p>
+                            {/* <p>
                         <strong>Total Price:</strong>
                         {variant.cost}
                       </p> */}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div
-                  class="tab-pane fade"
-                  id="nav-profile"
-                  role="tabpanel"
-                  aria-labelledby="nav-profile-tab"
-                >
-                  <div className="mt-3">
-                    <BootstrapTable
-                      keyField="id"
-                      striped
-                      hover
-                      condensed
-                      columns={columns}
-                      headerClasses="table-header-receipt"
-                      noDataIndication="Table is Empty"
-                      data={listPackage}
-                      rowEvents={rowEvents}
-                    />
+                  <div
+                    class="tab-pane fade"
+                    id="nav-profile"
+                    role="tabpanel"
+                    aria-labelledby="nav-profile-tab"
+                  >
+                    <div className="mt-3">
+                      <BootstrapTable
+                        keyField="id"
+                        striped
+                        hover
+                        condensed
+                        columns={columns}
+                        headerClasses="table-header-receipt"
+                        noDataIndication="Table is Empty"
+                        data={listPackage}
+                        rowEvents={rowEvents}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
