@@ -19,7 +19,9 @@ export default function CreateVariant() {
   let location = useLocation();
   let dispatch = useDispatch();
 
-  const [formData, setFormData] = useReducer(formReducer, {});
+  const [formData, setFormData] = useReducer(formReducer, {
+    sku: "",
+  });
 
   const { token, updateVariantReducer } = useSelector((state) => ({
     token: state.client.token,

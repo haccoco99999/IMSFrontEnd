@@ -532,7 +532,7 @@ export default function CreateGoodsReceiptComponent() {
         title: "Your work has been saved",
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
-      }).then(() => {
+      }).then((result) => {
         if (result.isConfirmed)
           history.push("/homepage/good-receipt/details", {
             goodsreceiptId: submitPRReducer.messages,
@@ -547,7 +547,7 @@ export default function CreateGoodsReceiptComponent() {
         confirmButtonColor: "#3085d6",
       });
     }
-  }, submitPRReducer);
+  }, [submitPRReducer]);
   return (
     <div>
       <NavigationBar
