@@ -46,12 +46,12 @@ import {
 import handleApiErrors from '../../auth/api-errors'
 import action from "../../good-receipt/details/action"
 let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDE3NDUzNywiZXhwIjoxNjI0MzQ3MzM3LCJpYXQiOjE2MjQxNzQ1Mzd9.rKQllv-JADJYAYcBoIkGxRnSwgMKknKk1xlZTJwxXmc"
-function getPurchaseOderAPI(orderId) {
+function getPurchaseOderAPI(action) {
     const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/number/"
-    return fetch(updateUrl + orderId, {
+    return fetch(updateUrl + action.orderID, {
         method: 'GET',
         headers: {
-            "Authorization": "Bearer " + token,
+            "Authorization": "Bearer " + action.token,
             "Content-Type": "application/json",
             "Origin": ""
         },
@@ -156,6 +156,7 @@ function editPriceQuoteAPI(action) {
 }
 
 function createPurchaseOrderAPI(action) {
+
     const updateUrl = "https://imspublicapi.herokuapp.com/api/pricequote/submit"
     return fetch(updateUrl, {
         method: 'POST',
@@ -164,6 +165,7 @@ function createPurchaseOrderAPI(action) {
             "Content-Type": "application/json",
             "Origin": ""
         },
+        
         credentials: "include",
         body: JSON.stringify(action.data)
     })
@@ -229,7 +231,7 @@ function updateProductPurchaseOrderAPI(action) {
 function* getDetailPurchaseOrderFlow(action) {
     
     try {
-        let json = yield call(getPurchaseOderAPI, action.orderID)
+        let json = yield call(getPurchaseOderAPI, action)
         yield put({ type: GET_DETAIL_PURCHASE_ORDER_SUCCESS, json })
     } catch (error) {
       

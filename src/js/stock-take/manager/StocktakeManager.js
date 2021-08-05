@@ -43,7 +43,16 @@ export default function () {
     DeliveryMethod: "",
     FromDeliveryDate: "",
     ToDeliveryDate: "",
-    Statuses:["Progressing","Completed","Adjusted","Cancel"]
+    FromModifiedDate:"",
+    ToModifiedDate:"",
+    Statuses: [
+      { key: "Cancel", value: "Cancel" },
+      { key: "Adjusted", value: "Adjusted" },
+      { key: "Completed", value: "Completed" },
+      { key: "Progressing", value: "Progressing" },
+
+
+  ]
 
   }
   const [stockTakeFilter, setStockTakeFilter] = useState({
@@ -281,7 +290,15 @@ export default function () {
  
   }
   function resetStockTakeFilter() {
-
+    
+    dispatch(
+      getAllStocktakeAction({
+        filter: parseFilterToString({
+          ...stockTakeFilter, ...stockTakeFilterInit
+        }),
+        token: token,
+      })
+    );
     setStockTakeFilter((state) => ({
       ...state, ...stockTakeFilterInit
     }))
@@ -327,7 +344,7 @@ export default function () {
       if (item[1] !== "") {
 
         if (item[0] === "Statuses") {
-          item[1].forEach(status => filterString += item[0] + "=" + status + "&")
+          item[1].forEach(status => filterString += item[0] + "=" + status.key + "&")
 
         }
         else {
@@ -340,7 +357,7 @@ export default function () {
     return filterString
   }
   function selectStatus(selected) {
-    setStockTakeFilter(state => ({ ...state, Statuses: selected.map(item => item.key) }))
+    setStockTakeFilter(state => ({ ...state, Statuses: selected.map(item => item) }))
 
 }
   return (

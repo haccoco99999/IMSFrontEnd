@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Typeahead, AsyncTypeahead } from "react-bootstrap-typeahead";
+import { useSelector } from "react-redux";
 
 export function SearchToAddProduct(props) {
 
@@ -164,17 +165,18 @@ export function SelectStatusPurchaseOrder(props) {
 
   ]
   
+ 
   const [options, setOptions] = useState([...optionsInit])
  function handelOnChanged(selected){
      props.selectStatus(selected)
  }
   return (
       <Typeahead
-          defaultSelected={options.slice(0, 4)}
           id="public-methods-example"
           labelKey="value"
           multiple
           options={options}
+          selected={props.selected}
           placeholder="Choose a state..."
           onChange={handelOnChanged}
       />
@@ -201,6 +203,7 @@ export function SelectGoodsIssueStatus(props) {
           labelKey="value"
           multiple
           options={options}
+          selected={props.selected}
           placeholder="Choose a state..."
           onChange={handelOnChanged}
       />
@@ -211,7 +214,7 @@ export function SelectRolePurchaseOrder(props) {
       { key: "Accountant", value: "Accountant" },
       { key: "StockKeeper", value: "StockKeeper" },
       { key: "Saleman", value: "Saleman" },
-      { key: "Manager ", value: "Manager" },
+      { key: "Manager", value: "Manager" },
 
 
   ]
@@ -222,11 +225,11 @@ export function SelectRolePurchaseOrder(props) {
  }
   return (
       <Typeahead
-          defaultSelected={options.slice(0, 4)}
           id="public-methods-example"
           labelKey="value"
           multiple
           options={options}
+          selected={props.selected}
           placeholder="Choose a state..."
           onChange={handelOnChanged}
       />
@@ -248,11 +251,11 @@ export function SelectStatusStockTake(props) {
  }
   return (
       <Typeahead
-          defaultSelected={options.slice(0, 4)}
           id="public-methods-example"
           labelKey="value"
           multiple
           options={options}
+          selected={props.selected}
           placeholder="Choose a state..."
           onChange={handelOnChanged}
       />
@@ -430,7 +433,9 @@ export function SearchPurchaseOrder(props) {
   )
 }
 export function SeachSupplier(props) {
-
+    const{token}  =useSelector(state =>({
+        token : state.client.token
+    }))
 
   const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/suppliers/search';
 
@@ -456,8 +461,19 @@ export function SeachSupplier(props) {
   }, [props.supplierInfo])
   const handleSearch = (query) => {
       setIsLoading(true);
-
-      fetch(`${SEARCH_URI}?SearchQuery=${query}&CurrentPage=1&SizePerPage=20`)
+    
+      fetch(`${SEARCH_URI}?SearchQuery=${query}&CurrentPage=1&SizePerPage=20`,
+      {
+        method: 'GET',
+        headers: {
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/json",
+            "Origin": ""
+        },
+        credentials: "include",
+      }
+      
+      )
           .then((resp) => resp.json())
           .then((json) => {
 
@@ -551,7 +567,6 @@ export function SelectSupplier(props) {
 
   }, [])
   function onChangeValue(event) {
-
       props.getDataSupplier(JSON.parse(event.target.value))
   }
   return (
@@ -560,8 +575,12 @@ export function SelectSupplier(props) {
 
       <div class="form-group">
           <label for="">Select Supplier</label>
-          <select disabled={props.isDisabled} onChange={onChangeValue} value={JSON.stringify(selected)} class="form-select" id="validationCustom04" required>
-              <option selected disabled value={JSON.stringify({})}>Choose...</option>
+          <select disabled={props.isDisabled} onChange={onChangeValue} value={JSON.stringify(props.supplierInfo)} class="form-select" id="validationCustom04" required>
+              <option selected disabled value={JSON.stringify({  id: "",
+                      address: "",
+                      supplierName: "",
+                      phoneNumber: "",
+                      email: "",})}>Choose...</option>
       //         {listSupplier.map(supplier => <option value={JSON.stringify(supplier)} >{supplier.supplierName}</option>)}
           </select>
       </div>

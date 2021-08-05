@@ -9,16 +9,21 @@ import NavigationBar from '../../navigation-bar-component/NavigationBar';
 import RejectReceiptModal from '../../RejectReceiptModal/RejectReceiptModal';
 import { createGoodIssue, updateGoodIssue, reactjsGoodIssue } from './action'
 import PrintReceipt from './PrinterReceipt';
+import Swal from 'sweetalert2'
 
 import { jsPDF } from 'jspdf'
 import 'jspdf-autotable'
 import QRCode from 'qrcode'
+import { CREATE_GOOD_ISSUE_CLEAN, GET_GOOD_ISSUE_DETAIL_CLEAN, REJECT_GOOD_ISSUE_CLEAN, UPDATE_GOOD_ISSUE_CLEAN } from './contants';
+import { InfoPurchaseOrderLoader, TableLoading } from '../../components/loading/loading-component';
 
 export default function DetailGoodIssue() {
     const doc = new jsPDF();
     const location = useLocation()
-    const { GoodIssueDetail, token } = useSelector(state => ({
-
+    const { GoodIssueDetail, token, RejectGoodIssueStatus, createGoodIssueStatus, upadateGoodIssueStatus } = useSelector(state => ({
+        RejectGoodIssueStatus: state.RejectGoodIssue,
+        createGoodIssueStatus: state.createGoodIssue,
+        upadateGoodIssueStatus: state.upadateGoodIssue,
         GoodIssueDetail: state.DetailGoodIssue,
         token: state.client.token
     }))
@@ -31,7 +36,11 @@ export default function DetailGoodIssue() {
     console.log(status)
     useEffect(() => {
 
-        dispatch(getDetailGoodIssue({ issueId: location.state.id, token: "" }))
+        dispatch(getDetailGoodIssue({ issueId: location.state.id, token: token }))
+        return () => {
+            dispatch({ type: GET_GOOD_ISSUE_DETAIL_CLEAN })
+        }
+
     }, [])
     useEffect(() => {
         setlistGoodIssueProducts(
@@ -40,6 +49,117 @@ export default function DetailGoodIssue() {
 
         setStatus(GoodIssueDetail.infoGoodIssueDetail.status)
     }, [GoodIssueDetail])
+
+    useEffect(() => {
+        if (RejectGoodIssueStatus.requesting) {
+            Swal.fire({
+                title: 'Rejecting!',
+                html: 'Watting...',
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+
+                },
+
+            })
+        }
+        else if (RejectGoodIssueStatus.successful) {
+
+            Swal.fire(
+                'Reject Success!',
+                'Click to Close!',
+                'success'
+
+            )
+            dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
+            dispatch({ type: REJECT_GOOD_ISSUE_CLEAN })
+        }
+        else if (RejectGoodIssueStatus.errors) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong, cannot reject!',
+
+            })
+            dispatch({ type: REJECT_GOOD_ISSUE_CLEAN })
+        }
+        ///Show Create Good Issue
+        if (createGoodIssueStatus.requesting) {
+            Swal.fire({
+                title: 'Creating Goods Issue !',
+                html: 'Watting...',
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+
+                },
+
+            })
+        }
+        else if (createGoodIssueStatus.successful) {
+
+            Swal.fire(
+                'Create Goods Issue Success!',
+                'Click to Close!',
+                'success'
+
+            )
+            dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
+            dispatch({ type: CREATE_GOOD_ISSUE_CLEAN })
+        }
+        else if (createGoodIssueStatus.errors) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong, cannot create!',
+
+            })
+            dispatch({ type: CREATE_GOOD_ISSUE_CLEAN })
+        }
+        //Shipping, Confirm
+        let nameStatus
+        if (status === "Shipping") {
+            nameStatus = "Confirming"
+        }
+
+        else if (status === "Packing") {
+            nameStatus = "Shipping"
+
+        }
+        if (upadateGoodIssueStatus.requesting) {
+            Swal.fire({
+                title: `Creating ${nameStatus} !`,
+                html: 'Watting...',
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+
+                },
+
+            })
+        }
+        else if (upadateGoodIssueStatus.successful) {
+
+            Swal.fire(
+                ` ${nameStatus} Success!`,
+                'Click to Close!',
+                'success'
+
+            )
+            dispatch({ type: UPDATE_GOOD_ISSUE_CLEAN })
+
+        }
+        else if (upadateGoodIssueStatus.errors) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: `Something went wrong,  ${nameStatus}`,
+
+            })
+            dispatch({ type: UPDATE_GOOD_ISSUE_CLEAN })
+        }
+
+    }, [RejectGoodIssueStatus, createGoodIssueStatus, upadateGoodIssueStatus])
 
 
     function setListButtonNav(status) {
@@ -311,35 +431,35 @@ export default function DetailGoodIssue() {
     const listButton = setListButtonNav(status)
 
     const expandRow = {
-        
+
         renderer: row => (
 
             <div>
-               
-                    {row.listPackages.map(packageItem => {
-                        return (
-                                
-                            <div className="ps-3">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">Location: {packageItem.locationName}   <span class="badge text-danger fs-5"><i class="bi bi-geo-alt-fill"></i></span></div>
-                                    Barcode Location: {packageItem.locationBar} Quantity: {packageItem.quantity} 
-                                </div>
-                              
+
+                {row.listPackages.map(packageItem => {
+                    return (
+
+                        <div className="ps-3">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Location: {packageItem.locationName}   <span class="badge text-danger fs-5"><i class="bi bi-geo-alt-fill"></i></span></div>
+                                Barcode Location: {packageItem.locationBar} Quantity: {packageItem.quantity}
                             </div>
 
-                        )
-                    })}
+                        </div>
+
+                    )
+                })}
 
 
-                
+
 
 
 
 
             </div>
         ),
-       expanded: status === "Packing"  ? listGoodIssueProducts.map(item => item.sku) :[],
-       nonExpandable: status !== "Packing"  ? listGoodIssueProducts.map(item => item.sku) :[] 
+        expanded: status === "Packing" ? listGoodIssueProducts.map(item => item.sku) : [],
+        nonExpandable: status !== "Packing" ? listGoodIssueProducts.map(item => item.sku) : []
         // expandHeaderColumnRenderer: ({ isAnyExpands }) => {
         //     if (isAnyExpands) {
         //         return <b>-</b>;
@@ -410,7 +530,7 @@ export default function DetailGoodIssue() {
 
                             </div>
                         </div>
-                        <div class="card-body row">
+                        {GoodIssueDetail.successful ? <div class="card-body row">
                             <div className="col-md-9">
                                 {status === "IssueRequisition" ?
                                     <div className="info-detai-receipt">
@@ -443,7 +563,8 @@ export default function DetailGoodIssue() {
                                 </div>
 
                             </div>
-                            <div className="col-md-3">
+
+                            {/* <div className="col-md-3">
                                 <div className="card">
                                     <div className="card-header">
                                         {GoodIssueDetail.infoGoodIssueDetail.id}</div>
@@ -453,11 +574,12 @@ export default function DetailGoodIssue() {
                                 </div>
 
 
-                            </div>
+                            </div> */}
 
 
                         </div>
-
+                            : <InfoPurchaseOrderLoader />
+                        }
                     </div>
                 </div>
 
@@ -476,7 +598,7 @@ export default function DetailGoodIssue() {
                                 data={listGoodIssueProducts}
                                 columns={columns}
                                 expandRow={expandRow}
-
+                                noDataIndication={() => <TableLoading />}
                             />
 
                         </div>

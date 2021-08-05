@@ -33,14 +33,12 @@ function* updateFlow(action){
     try{
         
         json = yield call(updateApi,dataUpdate,token)
-       if(json.result){
+      
         yield put(updateClient(dataUpdate))
         
         yield put({type: UPDATE_PROFILE_SUCCESS})
-    }
-    else{
-        yield put({type:UPDATE_PROFILE_ERROR, error:json.verbose})
-    }
+    
+    
     }catch(error){
         console.log(error)
         yield put({type:UPDATE_PROFILE_ERROR, error})

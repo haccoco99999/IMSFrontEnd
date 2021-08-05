@@ -50,7 +50,7 @@ function App(props) {
       statusBell: !eventPage.statusBell,
     });
   }
-
+  const history = useHistory()
   function toggleActive() {
     if (eventPage.status) {
       setEventPage({
@@ -197,14 +197,14 @@ function App(props) {
             onClick={toggleActive}
           />
         </div>
-        <div className="profile_content">
+        <div className="profile_content" data-bs-toggle="collapse" href="#collapseProfile">
           <div className={"profile hide-" + eventPage.statusSetting}>
             <div className="profile_details">
               <img
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe8gF9Vvg_EI7UURdrGjFUKYQG74jZK_zPBxDLhlPqTm8rzyrhX8EeCNlPSdTlZru1oYU&usqp=CAU"
                 alt=""
               />
-              <div className="name_job" onClick={toggleAbout}>
+              <div className="name_job" >
                 <div className="name">{client.fullname}</div>
                 <div className="job">{client.userRole}</div>
               </div>
@@ -222,6 +222,11 @@ function App(props) {
             <div className="profile_details">
               <p onClick={toggleAbout}> &#60; Back</p>
             </div>
+          </div>
+          <div class="collapse text-white" id="collapseProfile">
+            <p onClick={() => history.push("/homepage/about-my-account")}>My profile</p>
+            <p>My notification</p>
+
           </div>
         </div>
         <div>
@@ -301,7 +306,12 @@ function App(props) {
                 <span className="tooltip">Report</span>
               </li>
 
-              <li data-bs-toggle="collapse" href="#collapseListMenuProductManager">
+              <li onClick={() => setEventPage({
+                hide: "",
+                isShowing: "bx-menu-alt-right",
+                active: "active",
+                status: !eventPage.status,
+              })} data-bs-toggle="collapse" href="#collapseListMenuProductManager">
                 <a href="#">
                   <i className="bx">
                     <img src="\src\js\images\product-2.png" />
@@ -314,7 +324,7 @@ function App(props) {
               <li class="collapse text-white" id="collapseListMenuProductManager">
                 <ul>
                   <li className="list-child-item ps-5">
-                  <Link to="/homepage/product">Product</Link>
+                    <Link to="/homepage/product">Product</Link>
                   </li>
                   <li className="list-child-item ps-5"><span>Text</span></li>
                   <li className="list-child-item ps-5"><span>Text</span></li>
@@ -352,7 +362,7 @@ function App(props) {
               </li>
             </nav>
           </ul>
-          <div class="sticky-bottom"> <Logout /></div>
+          <Logout />
 
         </div>
 

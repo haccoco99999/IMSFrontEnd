@@ -17,7 +17,7 @@ import getAllAccountsReducer from "./manage-account/manager/account-manager/redu
 // import getDetailsSupplierReducer from "./supplier/details/reducer";
 // import getCreatedFormPurchaseRequisitionReducer from "./sale-man/create/reducer";
 // import createProductReducer from "./product/create/reducer";
-import {createUserAccountReducer, getUserAccountDetail, updateAccountDetail, setActiveAccount} from "./manage-account/create/account/reducer";
+import {createUserAccount, getUserAccountDetail, updateAccountDetail, setActiveAccount} from "./manage-account/create/account/reducer";
 import { createRolePermission,DetailRolePermission , UpdateRolePermission } from "./manage-account/create/role/reducer";
 import { getDetailPurchaseReducer,
   rejectPurchaserOrder,
@@ -47,7 +47,7 @@ import notificationReducer from "./notification-component/reducer";
 
 
 import { GetAllGoodsIssues, getAllGoodsIssuesRequisition } from "./good-issue/manager/reducer";
-import{ DetailGoodIssue, CreateGoodIssue , UpadateGoodIssue, RejectGoodIssue} from "./good-issue/good-issue-detail/reducer";
+import{ DetailGoodIssue, createGoodIssue , upadateGoodIssue, RejectGoodIssue} from "./good-issue/good-issue-detail/reducer";
 // import createStocktakeReducer from "./stock-take/create/reducer";
 // import locationManagetReducer from "./product/manager/location-manager/reducer";
 
@@ -120,7 +120,7 @@ const IndexReducer = combineReducers({
   getAllRoleReducer,
   getAllAccountsReducer,
 
-  createUserAccountReducer, getUserAccountDetail, updateAccountDetail,
+  createUserAccount, getUserAccountDetail, updateAccountDetail,
 
   createRolePermission,DetailRolePermission , UpdateRolePermission , setActiveAccount,
 
@@ -137,7 +137,7 @@ const IndexReducer = combineReducers({
    createPriceQuote,
    //Good issue
    GetAllGoodsIssues, getAllGoodsIssuesRequisition ,
-   DetailGoodIssue, CreateGoodIssue , UpadateGoodIssue, RejectGoodIssue,
+   DetailGoodIssue, createGoodIssue , upadateGoodIssue, RejectGoodIssue,
 
    //Good Receipt\
    getGoodsReceiptReducer,

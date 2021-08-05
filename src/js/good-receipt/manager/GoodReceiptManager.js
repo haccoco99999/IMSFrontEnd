@@ -222,9 +222,14 @@ export default function GoodsReceipt() {
 
   }
   function resetGoodsReceiptFilter() {
-    setGoodsReceiptFilter((state) => ({
-      ...state, ...goodsReceiptFilterInit
-    }))
+    let defaultData = {...goodsReceiptFilter,...goodsReceiptFilterInit}
+    dispatch(
+      searchGoodsReceiptAction({
+        filter: parseFilterToString(defaultData),
+        token: token,
+      })
+    );
+    setGoodsReceiptFilter(defaultData)
   }
   //   <div className="wrapper-content shadow">
   //   {/* list nut bam  */}

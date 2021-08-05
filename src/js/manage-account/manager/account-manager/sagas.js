@@ -9,14 +9,14 @@ import {
 } from "../../constants";
 
 function getAllAccount(action) {
-  const getAllAccountURL = `http://imspublicapi.herokuapp.com/api/users?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+  const getAllAccountURL = `http://imspublicapi.herokuapp.com/api/users?${action.filter}`;
   const authorization = "Bearer " + action.token;
 
   return fetch(getAllAccountURL, {
     method: "GET",
     headers: {
       Authorization: authorization,
-      // "Bearer " +
+      
       // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyNDU0NzQzMSwiZXhwIjoxNjI0NzIwMjMxLCJpYXQiOjE2MjQ1NDc0MzF9.3WQh0R850BrprGEoaulVtsilSkLA0BEqndgm_aVo7xo",
       "Content-Type": "application/json",
       Origin: "",

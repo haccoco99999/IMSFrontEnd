@@ -34,7 +34,7 @@ export default function StockTakeFilter(props){
                     
                      <div class="form-group">
                      <label for="">Select Status</label>
-                      <SelectStatusStockTake selectStatus={props.selectStatus} />
+                      <SelectStatusStockTake selected={props.filter.Statuses} selectStatus={props.selectStatus} />
                      </div>
                     
                       

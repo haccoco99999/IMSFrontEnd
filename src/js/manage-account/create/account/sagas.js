@@ -103,7 +103,12 @@ function* CreateProductFlow(action) {
   try {
     let json = yield call(createProduct, action);
     yield put({ type: CREATE_ACC_RESPONSE });
+    if(json.result !== false){
     yield put({type:GET_DETAIL_ACC_SUCCESS, json})
+    }
+    else{
+      throw Error
+    }
   } catch (error) {
     yield put({ type: CREATE_ACC_ERR });
   }

@@ -12,13 +12,17 @@ import {
   REJECT_GOOD_ISSUE_REQUEST,
   REJECT_GOOD_ISSUE_SUCCESS,
   REJECT_GOOD_ISSUE_ERROR,
+  REJECT_GOOD_ISSUE_CLEAN,
+  CREATE_GOOD_ISSUE_CLEAN,
+  UPDATE_GOOD_ISSUE_CLEAN,
+  GET_GOOD_ISSUE_DETAIL_CLEAN,
 
 } from './contants'
 const initalGoodIssueDetailState = {
   requesting: false,
   successful: false,
   messages: "",
-  errors: "",
+  errors: false,
   infoGoodIssueDetail: {
     id: "",
     customerName: "",
@@ -34,14 +38,14 @@ const initalGoodIssueDetailState = {
       email: ""
     },
     listGoodIssueProducts: [
-      {
-        discountAmount: "",
-        sku: "",
-        quantity: "",
-        price: "",
-        nameProduct: "",
-        listPackages: []
-      }
+      // {
+      //   discountAmount: "",
+      //   sku: "",
+      //   quantity: "",
+      //   price: "",
+      //   nameProduct: "",
+      //   listPackages: []
+      // }
 
     ]
   }
@@ -55,7 +59,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
 
       };
     case GET_GOOD_ISSUE_DETAIL_SUCCESS:
@@ -71,9 +75,9 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
         }
 
       })
-      let listA
+      let listProducts
       if (action.json.productPackageFIFO !== undefined ) {
-        listA = action.json.productPackageFIFO.map(item => {
+        listProducts = action.json.productPackageFIFO.map(item => {
           return {
             discountAmount: item.orderItem.discountAmount,
             sku: item.orderItem.productVariant.sku,
@@ -94,7 +98,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
         })
       }
       else {
-        listA = action.json.goodsIssueOrder.goodsIssueProducts.map(item => {
+        listProducts = action.json.goodsIssueOrder.goodsIssueProducts.map(item => {
           return {
             discountAmount: item.discountAmount,
             sku: item.productVariant.sku,
@@ -110,7 +114,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
+        errors: false,
         infoGoodIssueDetail: {
           id: action.json.goodsIssueOrder.id,
           status: action.json.goodsIssueOrder.goodsIssueOrderStatusString,
@@ -125,7 +129,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
             phoneNumber: transaction.applicationUser.phoneNumber,
             email: transaction.applicationUser.email
           },
-          listGoodIssueProducts: listA
+          listGoodIssueProducts: listProducts
         }
       }
 
@@ -135,9 +139,11 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
 
       };
+    case GET_GOOD_ISSUE_DETAIL_CLEAN:
+      return initalGoodIssueDetailState
     default:
       return state;
   }
@@ -151,7 +157,7 @@ const initalGoodIssueState = {
 
 };
 
-export const CreateGoodIssue = function createGoodIssue(state = initalGoodIssueState, action) {
+export const createGoodIssue = function createGoodIssue(state = initalGoodIssueState, action) {
   switch (action.type) {
     case CREATE_GOOD_ISSUEL_REQUEST:
       return {
@@ -180,6 +186,8 @@ export const CreateGoodIssue = function createGoodIssue(state = initalGoodIssueS
         errors: "",
 
       };
+    case CREATE_GOOD_ISSUE_CLEAN:
+      return initalGoodIssueState;
     default:
       return state;
   }
@@ -191,10 +199,10 @@ const initalUpdateGoodIssueState = {
   requesting: false,
   successful: false,
   messages: "",
-  errors: "",
+  errors: false,
 
 };
-export const UpadateGoodIssue = function upadateGoodIssue(state = initalUpdateGoodIssueState, action) {
+export const upadateGoodIssue = function upadateGoodIssue(state = initalUpdateGoodIssueState, action) {
   switch (action.type) {
     case UPDATE_GOOD_ISSUEL_REQUEST:
       return {
@@ -202,7 +210,7 @@ export const UpadateGoodIssue = function upadateGoodIssue(state = initalUpdateGo
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
 
       };
     case UPDATE_GOOD_ISSUE_SUCCESS:
@@ -211,7 +219,7 @@ export const UpadateGoodIssue = function upadateGoodIssue(state = initalUpdateGo
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
+        errors: false,
 
       };
     case UPDATE_GOOD_ISSUE_ERROR:
@@ -220,9 +228,11 @@ export const UpadateGoodIssue = function upadateGoodIssue(state = initalUpdateGo
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
 
       };
+    case UPDATE_GOOD_ISSUE_CLEAN:
+      return initalUpdateGoodIssueState
     default:
       return state;
   }
@@ -264,6 +274,8 @@ export const RejectGoodIssue = function rejectGoodIssueReducer(state = rejectGoo
         errors: "",
 
       };
+      case REJECT_GOOD_ISSUE_CLEAN:
+        return rejectGoodIssueState
     default:
       return state;
   }

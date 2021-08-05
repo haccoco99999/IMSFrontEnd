@@ -20,13 +20,13 @@ export default function AccountManagementFilter(props) {
                     <div className="row">
                         <div class="form-group">
                             <label for="">Search:</label>
-                            <input type="text"
-                                class="form-control" name="SearchQuery" id="" aria-describedby="helpId" placeholder="" />
+                            <input type="text" value={props.filter.searchQuery}  onChange={props.onChangeAccountFilter}
+                                class="form-control" name="searchQuery" id="" aria-describedby="helpId" placeholder="" />
                         </div>
                         <div className="col-md-6">
                             <div class="form-group">
                                 <label for="">Select Role:</label>
-                                <SelectRolePurchaseOrder selectStatus={props.selectStatus} />
+                                <SelectRolePurchaseOrder selected={props.filter.role} selectStatus={props.selectStatus} />
                             </div>
                         </div>
                         <div className="col-md-6">

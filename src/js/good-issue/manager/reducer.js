@@ -6,7 +6,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
 
   const initalListGoodIssuesState = {
     requesting: false,
-    success: false,
+    successful: false,
     messages: "",
     errors: false,
     infoListGoodIssue:{
@@ -37,7 +37,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
         return {
         ...state,
           requesting: true,
-          success: false,
+          successful: false,
           messages: "",
           errors: false,
          
@@ -76,7 +76,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
         return {
             ...state,
           requesting: false,
-          success: false,
+          successful: false,
           messages: "",
           errors: true,
           
@@ -87,7 +87,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
   };
   const initalListGoodIssuesRequisitionState = {
     requesting: false,
-    success: false,
+    successful: false,
     messages: "",
     errors: false,
     infoListGoodIssueRequisition:{
@@ -118,7 +118,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
         return {
         ...state,
           requesting: true,
-          success: false,
+          successful: false,
           messages: "",
           errors: false,
          
@@ -156,7 +156,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
         return {
             ...state,
           requesting: false,
-          success: false,
+          successful: false,
           messages: "",
           errors: true,
           

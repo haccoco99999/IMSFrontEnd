@@ -7,21 +7,11 @@ export   function searchPurchaseOrder({filter, token}){
         token,
     }
 }
-export   function getListPurchseOrder({searchQuery,status, currentPage, sizePerPage}){
-    
-    return {
-        type: SEARCH_PURCHASE_ORDER,
-        searchQuery,
-        status, 
-        currentPage, 
-        sizePerPage,
-    }
-}
 
-export  function getListQuote(){
+export  function getListQuote({token}){
     
     return {
         type: GET_PRICE_QUOTE_REQUESTING,
-
+        token,
  }
 }

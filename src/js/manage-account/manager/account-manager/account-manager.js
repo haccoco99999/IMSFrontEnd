@@ -20,70 +20,55 @@ import PagingComponent from "../../../components/paging/paging-component";
 function AccountManager() {
   let history = useHistory();
   let dispatch = useDispatch();
+ 
+ 
+  const accountFilterInit = {
+
+    searchQuery: "",
+    role: [
+      { key: "Accountant", value: "Accountant" },
+      { key: "StockKeeper", value: "StockKeeper" },
+      { key: "Saleman", value: "Saleman" },
+      { key: "Manager", value: "Manager" },
+
+
+    ]
+
+
+
+  }
+  const [accountFilter, setAccountFilter] = useState({
+    currentPage: 1,
+    sizePerPage: 25,
+    ...accountFilterInit
+  })
+
+
+
   const { data, token, pageCount } = useSelector((state) => ({
     data: state.getAllAccountsReducer.listAccounts,
     token: state.client.token,
     pageCount: state.getAllAccountsReducer.pageCount,
   }));
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(5);
-
-  const [listValueColumn, setListValueColumn] = useState({
-    email: true,
-    fullname: true,
-    isActive: true,
-    phoneNumber: true,
-    userRole: true,
-  });
-
-  const [listEditHeader, setListEditHeader] = useState({
-    isActive: "Status",
-  });
 
 
-  function nextPagingClick() {
-    console.log("forward");
-    setCurrentPage(currentPage + 1);
-  }
 
-  function backPagingClick() {
-    console.log("backWard");
-    setCurrentPage(currentPage - 1);
-  }
 
- 
+
+
   useEffect(() => {
     dispatch(
       Action({
-        currentPage: currentPage,
-        sizePerPage: sizePerPage,
+        filter: parseFilterToString(accountFilter),
         token: token,
       })
     );
   }, []);
 
 
-  // useEffect(() => {
-  //   setListAccounts(
-  //     data.map((item) => {
-  //       item.id = item.imsUser.id;
-  //       item.email = item.imsUser.email;
-  //       item.phoneNumber = item.imsUser.phoneNumber;
-  //       item.fullname = item.imsUser.fullname;
-  //       item.isActive = "";
-  //       if (item.imsUser.isActive) item.isActive = "Active";
-  //       else item.isActive = "Deactive";
-  //       delete item["imsUser"];
-  //       return item;
-  //     })
-  //   );
-  // }, []);
+ 
 
-  // console.log(listAccounts);
-
-  function onRowClick(row) {
-    history.push("/homepage/manage-account/edit-user-account");
-  }
+ 
   function redirectCreateAccount() {
     history.push("/homepage/manage-account/create-account", { status: "CREATEUSER" });
   }
@@ -125,23 +110,110 @@ function AccountManager() {
 
     }
   ]
-  function selectStatus(selected){
+  function onChangeAccountFilter(event) {
+   
+    setAccountFilter((state) => ({
+      ...state, [event.target.name]: event.target.value
+    }))
+  }
+  function submitAccountFilter() {
+    dispatch(
+      Action({
+        filter: parseFilterToString(accountFilter),
+        token: token,
+      })
+    );
 
+
+
+  }
+  function resetAccountFilter() {
+    dispatch(
+      Action({
+        filter: parseFilterToString({
+          ...accountFilter, ...accountFilterInit
+        }),
+        token: token,
+      })
+    );
+    setAccountFilter((state) => ({
+      ...state, ...accountFilterInit
+    }))
+  }
+  function selectStatusFilter(selected) {
+    setAccountFilter(state => ({ ...state, role: selected.map(item => item) }))
+
+  }
+
+
+  function nextPagingClick() {
+
+    let dataFilter = { ...accountFilter, currentPage: accountFilter.currentPage + 1 }
+    dispatch(
+      Action({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setAccountFilter(dataFilter)
+  }
+  function backPagingClick() {
+
+    let dataFilter = { ...accountFilter, currentPage: accountFilter.currentPage - 1 }
+    dispatch(
+      Action({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setAccountFilter(dataFilter)
+  }
+  function setSizePage(event) {
+
+    let dataFilter = { ...accountFilter, sizePerPage: event.target.value }
+    dispatch(
+      Action({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setAccountFilter(dataFilter)
+  }
+
+  function parseFilterToString(dataFilter) {
+    let filterString = ""
+    Object.entries(dataFilter).forEach(item => {
+      if (item[1] !== "") {
+
+
+        if (item[0] === "role") {
+
+          item[1].forEach(role => filterString += item[0] + "=" + role.key + "&")
+
+        }
+        else {
+
+          filterString += item[0] + "=" + item[1] + "&"
+        }
+
+      }
+    })
+    return filterString
   }
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
 
-      
-        history.push("/homepage/manage-account/create-account", {
-          userId: row.id,
-          status: "EDITUSER"
-        });
+
+      history.push("/homepage/manage-account/create-account", {
+        userId: row.id,
+        status: "EDITUSER"
+      });
 
 
 
     },
 
-};
+  };
   return (
     <div>
       <div className="title-heading mt-2">
@@ -186,7 +258,13 @@ function AccountManager() {
         </a>
       </div> */}
 
-        <AccountManagementFilter selectStatus={selectStatus} />
+        <AccountManagementFilter
+        onChangeAccountFilter={onChangeAccountFilter}
+        resetFilter={resetAccountFilter}
+        submitFilter={submitAccountFilter}
+          selectStatus={selectStatusFilter}
+          filter={accountFilter}
+        />
 
         <div class="p-3 ">
           <div className="card">
@@ -194,8 +272,8 @@ function AccountManager() {
             <div className="card-body">
 
 
-              <PagingComponent pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={currentPage} />
-             
+              <PagingComponent setSizePage={setSizePage} sizePerPage={accountFilter.sizePerPage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={accountFilter.currentPage} />
+
               <p onClick={redirectCreateAccount}><i class="bi bi-file-earmark-plus"></i>Add</p>
               <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16">

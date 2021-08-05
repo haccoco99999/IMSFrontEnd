@@ -18,6 +18,7 @@ import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/di
 import ProductVariantsFilter from './ProductVariantsFilter'
 import StockTakeFilter from './StockTakeFilter'
 import { Cloudinary } from "@cloudinary/base";
+import { PurchaseOrderFilter } from '../../components/filter/FilterComponents'
 
 export default function PurchaseQuoteOrder() {
     // const cld = new Cloudinary({
@@ -49,7 +50,14 @@ export default function PurchaseQuoteOrder() {
     const purchaserOrderFilterInit = {
 
         SearchQuery: "",
-        Statuses: ["PurchaseOrder", "POWaitingConfirmation", "POConfirm", "Done", "POCanceled"],
+        Statuses: [
+            { key: "PurchaseOrder", value: "Draft" },
+            { key: "POWaitingConfirmation", value: "Watting Confirm" },
+            { key: "POConfirm", value: "Confirmed" },
+            { key: "Done", value: "Done" },
+            { key: "POCanceled", value: "Canceled" },
+
+        ],
         supplier: {
             id: "",
             address: "",
@@ -81,8 +89,8 @@ export default function PurchaseQuoteOrder() {
     })
     useEffect(() => {
 
-        dispatch(searchPurchaseOrder({ filter: parseFilterToString(filter) }))
-        dispatch(getListQuote())
+        dispatch(searchPurchaseOrder({ filter: parseFilterToString(filter), token:token }))
+        dispatch(getListQuote({token: token}))
     }, [])
 
     useEffect(() => {
@@ -233,7 +241,7 @@ export default function PurchaseQuoteOrder() {
     function submitFilter(listselectFilter, filter) {
         setListKeyArrayFilter([...listselectFilter])
         setShowFilter()
-        dispatch(searchPurchaseOrder({ filter: filter }))
+        dispatch(searchPurchaseOrder({ filter: filter, token: token }))
 
     }
     // function searchKeyWordPurchaseOrder(searchKey) {
@@ -262,18 +270,18 @@ export default function PurchaseQuoteOrder() {
     }
     function nextPagingClick() {
         let dataFilter = { ...filter, currentPage: filter.currentPage + 1 }
-        dispatch(searchPurchaseOrder({ filter: parseFilterToString(dataFilter) }))
+        dispatch(searchPurchaseOrder({ filter: parseFilterToString(dataFilter) , token:token}))
         setFilter(dataFilter)
     }
     function backPagingClick() {
         let dataFilter = { ...filter, currentPage: filter.currentPage - 1 }
-        dispatch(searchPurchaseOrder({ filter: parseFilterToString(dataFilter) }))
+        dispatch(searchPurchaseOrder({ filter: parseFilterToString(dataFilter), token:token }))
         setFilter(dataFilter)
     }
     function setSizePage(event) {
         console.log(event.target.value)
         let dataFilter = { ...filter, SizePerPage: event.target.value }
-        dispatch(searchPurchaseOrder({ filter: parseFilterToString(dataFilter) }))
+        dispatch(searchPurchaseOrder({ filter: parseFilterToString(dataFilter), token: token }))
         setFilter(dataFilter)
     }
     function onChangeValueFilter(event) {
@@ -281,11 +289,12 @@ export default function PurchaseQuoteOrder() {
 
     }
     function setFilterSupplier(supplierValue) {
+   
         setFilter(state => ({ ...state, supplier: supplierValue }))
 
     }
     function selectStatusFilter(selected) {
-        setFilter(state => ({ ...state, Statuses: selected.map(item => item.key) }))
+        setFilter(state => ({ ...state, Statuses: selected.map(item => item) }))
 
     }
     function parseFilterToString(dataFilter) {
@@ -298,9 +307,10 @@ export default function PurchaseQuoteOrder() {
                     if (item[1]["id"] !== "") filterString += "SupplierId=" + item[1]["id"] + "&"
                 }
                 else if (item[0] === "Statuses") {
-                    item[1].forEach(status => filterString += item[0] + "=" + status + "&")
+                    item[1].forEach(status => filterString += item[0] + "=" + status.key + "&")
 
                 }
+            
                 else {
 
                     filterString += item[0] + "=" + item[1] + "&"
@@ -314,11 +324,13 @@ export default function PurchaseQuoteOrder() {
 
 
 
-        dispatch(searchPurchaseOrder({ filter: parseFilterToString(filter) }))
+        dispatch(searchPurchaseOrder({ filter: parseFilterToString(filter) , token:token}))
 
     }
     function resetFilter() {
 
+        setFilter(state => ({ ...state, ...purchaserOrderFilterInit }))
+        dispatch(searchPurchaseOrder({ filter: parseFilterToString({ ...filter, ...purchaserOrderFilterInit }), token: token }))
     }
     const CustomToggleList = ({
         columns,
@@ -521,8 +533,8 @@ export default function PurchaseQuoteOrder() {
                 <span>Purchase requistion</span>
                 <div>6</div>
             </div>
-          
-            
+
+
             {purchaseOrderStore.successfulPQ ?
                 <Gallery
                     clickQuote={onClickToDetailQuoteOrder}
@@ -549,124 +561,14 @@ export default function PurchaseQuoteOrder() {
             <div class="d-grid gap-2">
 
 
-                <div class="p-3">
-                    <div class="card">
-
-
-                        <div class="card-header text-white bg-secondary">Filter
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
-                                <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
-                            </svg></div>
-                        <div class="card-body">
-
-
-
-
-                            <div className="row">
-                                <div class="form-group ">
-                                    <label for="">Search</label>
-                                    <SearchPurchaseOrder searchKeyWordPurchaseOrder={searchKeyWordPurchaseOrder} />                        </div>
-                                <div className="col-md-6">
-
-                                    <div class="form-group ">
-                                        <SelectSupplier isDisabled={false} supplierInfo={filter.supplier} getDataSupplier={setFilterSupplier} />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="">Select Status</label>
-                                        <SelectStatusPurchaseOrder selectStatus={selectStatusFilter} />
-                                    </div>
-                                    <div className="row">
-                                        <label for="">Price:</label>
-                                        <div class="form-group col-md-6" >
-
-                                            <input type="text"
-                                                onChange={onChangeValueFilter} step="0.01"
-                                                class="form-control" name="FromTotalOrderPrice" id="" aria-describedby="helpId" placeholder="" />
-                                        </div>
-                                        <div class="form-group col-md-6">
-
-                                            <input type="text" step="0.01"
-                                                onChange={onChangeValueFilter}
-                                                class="form-control" name="ToTotalOrderPrice" id="" aria-describedby="helpId" placeholder="" />
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                                <div className="col-md-6">
-
-
-                                    <div className="row">
-                                        <label for="">Create Date:</label>
-                                        <div class="form-group col-md-6" >
-
-                                            <input type="date"
-                                                onChange={onChangeValueFilter}
-                                                class="form-control" name="FromCreatedDate" id="" aria-describedby="helpId" placeholder="" />
-                                        </div>
-                                        <div class="form-group col-md-6">
-
-                                            <input type="date"
-                                                onChange={onChangeValueFilter}
-                                                class="form-control" name="ToCreatedDate" id="" aria-describedby="helpId" placeholder="" />
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <label for="">Confirmed Date:</label>
-                                        <div class="form-group col-md-6" >
-
-                                            <input type="date"
-                                                onChange={onChangeValueFilter}
-                                                class="form-control" name="FromConfirmedDate" id="" aria-describedby="helpId" placeholder="None date" />
-                                        </div>
-                                        <div class="form-group col-md-6">
-
-                                            <input type="date"
-                                                onChange={onChangeValueFilter}
-                                                class="form-control" name="ToConfirmedDate" id="" aria-describedby="helpId" placeholder="None date" />
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <label for="">Modified Date:</label>
-                                        <div class="form-group col-md-6" >
-
-                                            <input type="date"
-                                                onChange={onChangeValueFilter}
-                                                class="form-control" name="FromModifiedDate" id="" aria-describedby="helpId" placeholder="" />
-                                        </div>
-                                        <div class="form-group col-md-6">
-
-                                            <input type="date"
-                                                onChange={onChangeValueFilter}
-                                                class="form-control" name="ToModifiedDate" id="" aria-describedby="helpId" placeholder="" />
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                            </div>
-
-
-
-                        </div>
-                        
-                        <div className="card-body">
-                            <div className="row">
-
-                                <div className="">
-                                    <button className="btn btn-primary me-md-2 btn-sm" type="button">Reset Filter</button>
-                                    <button className="btn btn-primary btn-sm" type="button" onClick={() => submitFilter()}>Filter</button>
-                                </div>
-
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-
-
+                <PurchaseOrderFilter
+                    filter={filter}
+                    submitFilter={submitFilter}
+                    resetFilter={resetFilter}
+                    onChangeValueFilter={onChangeValueFilter}
+                    selectStatusFilter={selectStatusFilter}
+                    setFilterSupplier={setFilterSupplier}
+                />
                 <div class="p-3 ">
                     <div className="card">
                         <div class="card-header text-white bg-secondary">List Purchase Order</div>

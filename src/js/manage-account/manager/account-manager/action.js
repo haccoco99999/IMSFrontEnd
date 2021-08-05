@@ -1,10 +1,9 @@
 import { GET_ALL_ACCOUNT_REQUEST } from "../../constants";
 
-export default function action({ currentPage, sizePerPage, token }) {
+export default function action({ filter, token }) {
   return {
     type: GET_ALL_ACCOUNT_REQUEST,
-    currentPage,
-    sizePerPage,
+    filter,
     token,
   };
 }

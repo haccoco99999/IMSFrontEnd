@@ -14,7 +14,9 @@ import {
   SET_ACTIVE_ACC_SUCCESS,
   SET_ACTIVE_ACC_ERR,
   SET_ACTIVE_ACC_CLEAN,
-  GET_DETAIL_ACC_CLEAN
+  GET_DETAIL_ACC_CLEAN,
+  CREATE_ACC_CLEAN,
+  UPDATE_DETAIL_ACC_CLEAN
 } from "./constants";
 
 const initalCreateAccountState = {
@@ -25,7 +27,7 @@ const initalCreateAccountState = {
  
 };
 
-export function createUserAccountReducer(state = initalCreateAccountState, action) {
+export const createUserAccount = function createUserAccountReducer(state = initalCreateAccountState, action) {
   switch (action.type) {
     case CREATE_ACC_REQUEST:
       return {
@@ -51,6 +53,8 @@ export function createUserAccountReducer(state = initalCreateAccountState, actio
         errors: true,
        
       };
+    case CREATE_ACC_CLEAN:
+      return initalCreateAccountState;
     default:
       return state;
   }
@@ -179,7 +183,7 @@ const initalUpdateDetailAccountState = {
   errors: false,
 };
 
-export function updateAccountDetail(state = initalUpdateDetailAccountState, action) {
+export  function updateAccountDetail(state = initalUpdateDetailAccountState, action) {
   switch (action.type) {
     case UPDATE_DETAIL_ACC_REQUEST:
       return {
@@ -204,6 +208,8 @@ export function updateAccountDetail(state = initalUpdateDetailAccountState, acti
         messages: "",
         errors: true,
       };
+    case UPDATE_DETAIL_ACC_CLEAN:
+      return initalUpdateDetailAccountState
     default:
       return state;
   }

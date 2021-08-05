@@ -176,6 +176,14 @@ export default function () {
    
   }
   function resetProductVariantsFilter() {
+    dispatch(
+      getAllProductAction({
+        filter: parseFilterToString({
+          ...productVariantsFilter, ...productVariantFilterInit
+        }),
+        token: token,
+      })
+    );
     setProductVariantsFilter((state) => ({
       ...state, ...productVariantFilterInit
     }))

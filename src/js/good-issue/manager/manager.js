@@ -27,18 +27,23 @@ export default function manager() {
     token: state.client.token
   }))
  
-  console.log(goodIssueStore)
   let [listGoodIssues, setListGoodIssues] = useState([])
   let [listGoodIssueRequisition, setListGoodIssueRequisition] = useState([])
   const dispatch = useDispatch()
   const goodsIssueFilterInit = {
 
     searchQuery: "",
-    statuses:["Cancel","Completed","Shipping","Packing"],
-    FromCreatedDate: "",
-    ToCreatedDate: "",
-    FromDeliveryDate: "",
-    ToDeliveryDate: "",
+    statuses: [
+      { key: "Packing", value: "Packing" },
+      { key: "Shipping", value: "Shipping " },
+      { key: "Completed", value: "Completed" },
+      { key: "Cancel", value: "Cancel" },
+   ]
+  ,
+    fromCreatedDate: "",
+    toCreatedDate: "",
+    fromDeliveryDate: "",
+    toDeliveryDate: "",
 
 }
 const [goodsIssueFilter, setGoodsIssueFilter] = useState({
@@ -49,7 +54,7 @@ const [goodsIssueFilter, setGoodsIssueFilter] = useState({
 
   useEffect(() => {
     dispatch(getAllGoodsIssue({filter:parseFilterToString(goodsIssueFilter), token: token}))
-    dispatch(getAllGoodsIssueRequisition())
+    dispatch(getAllGoodsIssueRequisition({token: token}))
   }, [])
   useEffect(() => {
     setListGoodIssues(
@@ -164,13 +169,17 @@ function submitgoodsIssueFilter() {
     
 }
 function resetGoodsIssueFilter() {
-
-    setGoodsIssueFilter((state) => ({
-        ...state, ...goodsIssueFilterInit
-    }))
+  let dataDefault = {  ...goodsIssueFilter, ...goodsIssueFilterInit}
+  dispatch(
+    getAllGoodsIssue({
+      filter: parseFilterToString(dataDefault),
+      token: token,
+    })
+  );
+    setGoodsIssueFilter(dataDefault)
 }
 function selectStatusFilter(selected) {
-  setGoodsIssueFilter(state => ({ ...state, statuses: selected.map(item => item.key) }))
+  setGoodsIssueFilter(state => ({ ...state, statuses: selected.map(item => item) }))
 
 }
 function nextPagingClick() {
@@ -215,7 +224,7 @@ function parseFilterToString(dataFilter) {
         
            if (item[0] === "statuses") {
            
-              item[1].forEach(status => filterString += item[0] + "=" + status + "&")
+              item[1].forEach(status => filterString += item[0] + "=" + status.key + "&")
 
           }
           else {
@@ -233,11 +242,12 @@ function parseFilterToString(dataFilter) {
       <div className="title-heading mt-2">
         <span>Goods Issues Requisition</span>
       </div>
-      <GalleryLoading/>
-   
-      <GalleryGoodIssue listData={listGoodIssueRequisition}
+      {goodIssueRequisition.successful?  <GalleryGoodIssue listData={listGoodIssueRequisition}
         clickGoodIssueRequisition={clickGoodIssueRequisition}
-      />
+      />:  <GalleryLoading/>}
+     
+   
+    
 
       <div className="title-heading mt-2">
         <span>Goods Issues</span>

@@ -7,9 +7,9 @@ export function getAllGoodsIssue({filter, token}){
         token
     }   
 }
-export function getAllGoodsIssueRequisition(){
+export function getAllGoodsIssueRequisition({token}){
     return {
         type:GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,
-        
+        token
     }   
 }

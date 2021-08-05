@@ -2,14 +2,14 @@ import{
     UPDATE_PROFILE_REQUESTING,
     UPDATE_PROFILE_SUCCESS,
     UPDATE_PROFILE_ERROR,
-    CLEAER_UPDATE_PROFILE
+    UPDATE_PROFILE_CLEAN
 } from './contants'
 
 const initalState = {
     requesting: false,
     successful: false,
     messages: "",
-    errors: "",
+    errors: false,
 }
 
 
@@ -21,30 +21,25 @@ const updateProfileClient = function updateReducer(state = initalState, action){
                 requesting: true,
                 successful: false,
                 messages: "",
-                errors: "",                
+                errors: false,                
             }
         case UPDATE_PROFILE_SUCCESS:
             return  {
                 requesting: false,
                 successful: true,
                 messages: "Update Success",
-                errors: "",               
+                errors: false,               
             }
         case UPDATE_PROFILE_ERROR:
             
             return {
-                errors: action.error.toString(),
+                errors: true,
                 messages: "",
                 requesting: false,
                 successful: false,               
             } 
-        case CLEAER_UPDATE_PROFILE:
-            return{
-                requesting: false,
-                successful: false,
-                messages: "",
-                errors: "",               
-            }
+        case UPDATE_PROFILE_CLEAN:
+            return initalState
         default:
             return state
     }

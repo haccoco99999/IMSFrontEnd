@@ -40,7 +40,7 @@ export default function PurchaseOrderConfirm() {
         isShowEditListProducts: false
     })
     // alert(eventPage.isShowEditListProducts)
-
+    const [infoUserPurchaseOrder, setInfoUserPurchaseOrder] = useState({})
     const [listTransactions, setListTransactions] = useState([])
     const [mergedRequisitionIds, setMergedRequisitionIds] = useState([location.state.orderId])
     const {
@@ -76,6 +76,7 @@ export default function PurchaseOrderConfirm() {
     function clickToResendMail() {
 
     }
+    const [nameEditText, setNameEditText] = useState()
     const [test, setTest] = useState(true);
 
 
@@ -188,16 +189,48 @@ export default function PurchaseOrderConfirm() {
     ];
 
     function clickCreatePurchaseOrder() {
-        let data = {
-            orderNumber: purchaseOrderDataGlobal.orderId
+        if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
+            let nameEditText
+            if (!eventPage.isShowEditListProducts) {
+                nameEditText = "listProducts"
+            }
+            else if (!eventPage.isShowEditInfoOrder) {
+                nameEditText = "infoOrder"
+            }
+            alert(nameEditText)
+            Swal.fire({
+                title: 'Do you want to save the changes?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: `Save`,
+                denyButtonText: `Don't save`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    saveEditClick(nameEditText)
+                } else if (result.isDenied) {
+                    cancelEditClick(nameEditText)
+
+                }
+            })
         }
-        dispatch(createPurchaseOrder({ data: data, token: token }))
+        else {
+            let data = {
+                orderNumber: purchaseOrderDataGlobal.orderId
+            }
+            dispatch(createPurchaseOrder({ data: data, token: token }))
+        }
+
+
+
     }
     const ListEdit = function listEdit(props) {
         if (props.statusEdit !== undefined) {
+
             return (
                 <div>
-                    {!props.statusEdit ? <span onClick={() => cancelEditClick(props.nameEdit)} class="badge bg-secondary me-1">Discard</span> : ""}
+                    {!props.statusEdit ? <span onClick={() => cancelEditClick(props.nameEdit)} class="badge bg-secondary me-1">revert</span> : ""}
                     {props.statusEdit ? <span onClick={() => editClick(props.nameEdit)} class="badge bg-success me-1">Edit</span> : ""}
                     {!props.statusEdit ? <span onClick={(() => saveEditClick(props.nameEdit))} class="badge bg-primary me-1">Save</span> : ""}
                 </div>
@@ -323,7 +356,7 @@ export default function PurchaseOrderConfirm() {
                 {
                     isShow: true,
                     title: "Create Good Receipt",
-                    action: () => IgnorePurchase(),
+
                     style: {
                         background: "blue"
                     }
@@ -337,23 +370,61 @@ export default function PurchaseOrderConfirm() {
         return []
     }
     function isShowConfirmModal() {
-        setEventPage((state) => ({
-            ...state, isShowConfirm: !state.isShowConfirm,
-        }))
+        if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
+            beforeEdit()
+        } else {
+            setEventPage((state) => ({
+                ...state, isShowConfirm: !state.isShowConfirm,
+            }))
+        }
     }
     function clickToSubmitPurchaseOrder() {
-        let data = {
+        if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
+            let nameEditText
+            if (!eventPage.isShowEditListProducts) {
+                nameEditText = "listProducts"
+            }
+            else if (!eventPage.isShowEditInfoOrder) {
+                nameEditText = "infoOrder"
+            }
+            alert(nameEditText)
+            Swal.fire({
+                title: 'Do you want to save the changes?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: `Save`,
+                denyButtonText: `Don't save`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
 
-            purchaseOrderNumber: purchaseOrderDataGlobal.orderId
+                    saveEditClick(nameEditText)
+                } else if (result.isDenied) {
+                    cancelEditClick(nameEditText)
 
+                }
+            })
         }
-        dispatch(confirmDetailPurchaseOrder({ data: data, token, token }))
+        else {
+            let data = {
+
+                purchaseOrderNumber: purchaseOrderDataGlobal.orderId
+
+            }
+            dispatch(confirmDetailPurchaseOrder({ data: data, token, token }))
+        }
+
+
 
     }
     function isShowRejectModal() {
-        setEventPage((state) => ({
-            ...state, isShowReject: !state.isShowReject,
-        }))
+        if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
+            beforeEdit()
+        } else {
+            setEventPage((state) => ({
+                ...state, isShowReject: !state.isShowReject,
+            }))
+        }
     }
     function clickToCLoseReject(cancelReason) {
         if (cancelReason !== undefined) {
@@ -362,7 +433,7 @@ export default function PurchaseOrderConfirm() {
                 id: detailPurchaseState.orderId,
                 cancelReason: cancelReason,
             }
-            dispatch(rejectPurchaseOrderConfirm({ data: data, token }))
+            dispatch(rejectPurchaseOrderConfirm({ data: data, token: token }))
             // goBackClick()
         }
         setEventPage((state) => ({
@@ -390,7 +461,7 @@ export default function PurchaseOrderConfirm() {
 
 
     useEffect(() => {
-        dispatch(getDetailPurchaseOrder(location.state.orderId))
+        dispatch(getDetailPurchaseOrder({ orderID: location.state.orderId, token: token }))
         return () => {
             dispatch({ type: GET_DETAIL_PURCHASE_ORDER_RESET })
         };
@@ -408,10 +479,6 @@ export default function PurchaseOrderConfirm() {
 
                 },
 
-            }).then((result) => {
-                if (result.dismiss === Swal.DismissReason.timer) {
-                    console.log('I was closed by the timer')
-                }
             })
         }
         if (priceQuoteUpdateStatus.successful === true) {
@@ -458,7 +525,12 @@ export default function PurchaseOrderConfirm() {
             dispatch({ type: SEND_MAIL_SERVICE_RESET })
         }
         if (mailOrderDataStatus.errors === true) {
-            alert("Send Mail that bai")
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+                footer: '<a href="">Why do I have this issue?</a>'
+            })
             dispatch({ type: SEND_MAIL_SERVICE_RESET })
         }
 
@@ -562,7 +634,12 @@ export default function PurchaseOrderConfirm() {
             dispatch({ type: CREATE_PURCHASE_ORDER_RESET })
         }
         else if (createPurchaserOrderStatus.errors === true) {
-            alert("Confirm That Bai")
+            Swal.fire({
+                icon: 'error',
+                title: 'Create Purchase Order Failed...',
+                text: 'Something went wrong!',
+
+            })
             dispatch({ type: CREATE_PURCHASE_ORDER_RESET })
 
         }
@@ -641,6 +718,7 @@ export default function PurchaseOrderConfirm() {
 
 
     }, [rejectPurchaserOrderStatus])
+    console.log(infoUserPurchaseOrder)
     useEffect(() => {
         setDetailPurchaseState({
             ...purchaseOrderDataGlobal
@@ -648,6 +726,9 @@ export default function PurchaseOrderConfirm() {
         setListTransactions(() => [
             ...purchaseOrderDataGlobal.transaction.transactionRecord
         ])
+        setInfoUserPurchaseOrder( {
+            ...purchaseOrderDataGlobal.infoUserPurchaseOrder
+        })
         setMergedOrderIdLists(() => [...purchaseOrderDataGlobal.mergedOrderIdLists])
         setMailDescription(purchaseOrderDataGlobal.mailDescription)
         setSupplier(purchaseOrderDataGlobal.supplier)
@@ -669,7 +750,7 @@ export default function PurchaseOrderConfirm() {
         if (!["Requisition", "Done", "PQCanceled", "Requisition"].includes(purchaseOrderDataGlobal.status)) {
 
             setEventPage(state => ({
-                ...state, isShowEdit: true,
+                ...state,
                 isCreatePO: true,
                 isShowEditInfoOrder: true,
                 isShowEditListProducts: true
@@ -686,7 +767,7 @@ export default function PurchaseOrderConfirm() {
 
             setEventPage((state) => ({
                 ...state,
-                isShowEdit: false,
+
                 isCreatePO: false,
                 isShowEditListProducts: !state.isShowEditListProducts
 
@@ -695,7 +776,7 @@ export default function PurchaseOrderConfirm() {
         else if (nameEdit === "infoOrder") {
             setEventPage((state) => ({
                 ...state,
-                isShowEdit: false,
+
                 isCreatePO: false,
 
                 isShowEditInfoOrder: !state.isShowEditInfoOrder,
@@ -772,10 +853,40 @@ export default function PurchaseOrderConfirm() {
 
         // })
     }
+    function beforeEdit() {
+        let nameEditText
+        if (!eventPage.isShowEditListProducts) {
+            nameEditText = "listProducts"
+        }
+        else if (!eventPage.isShowEditInfoOrder) {
+            nameEditText = "infoOrder"
+        }
+        alert(nameEditText)
+        Swal.fire({
+            title: 'Do you want to save the changes?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: `Save`,
+            denyButtonText: `Don't save`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                saveEditClick(nameEditText)
+            } else if (result.isDenied) {
+                cancelEditClick(nameEditText)
+
+            }
+        })
+    }
     function clickShowPreviewSendMail() {
-        setEventPage((state) => ({
-            ...state, isPreview: !state.isPreview
-        }))
+        if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
+            beforeEdit()
+        } else
+            setEventPage((state) => ({
+                ...state, isPreview: !state.isPreview
+            }))
+
     }
 
     function clickDeleteProduct(rowIndex) {
@@ -863,10 +974,7 @@ export default function PurchaseOrderConfirm() {
     //     })
     // }
 
-    function IgnorePurchase() {
-        dispatch(rejectPurchaseOrderConfirm
-            (location.state.orderId))
-    }
+
     function confirmClick() {
         dispatch(confirmPurchaseORderByManager(location.state.orderId))
     }
@@ -984,36 +1092,30 @@ export default function PurchaseOrderConfirm() {
                                                 Create By:
                                             </div>
                                             <label className="form-check-label" >
-                                                {"hung phan"}
+                                                {infoUserPurchaseOrder.name}
                                             </label>
 
                                             <div className="form-text">
                                                 Email:
                                             </div>
                                             <label className="form-check-label" >
-                                                {"hunghanhpuc@gmail.comn"}
+                                                {infoUserPurchaseOrder.email}
                                             </label>
 
                                             <div className="form-text">
                                                 Phone Number:
                                             </div>
                                             <label className="form-check-label" >
-                                                {"0546544986"}
+                                                {infoUserPurchaseOrder.phoneNumber}
                                             </label>
 
                                             <div className="form-text">
                                                 Create date:
                                             </div>
                                             <label className="form-check-label" >
-                                                {"1/2/2020"}
+                                                {infoUserPurchaseOrder.createDate}
                                             </label>
-
-                                            <div className="form-text">
-                                                Deadline:
-                                            </div>
-                                            <label className="form-check-label" >
-                                                {"1/2/2020"}
-                                            </label> </div>
+                                        </div>
                                         : <InfoPurchaseOrderLoader />}
                                 </div>
                                 <div className="col-md-8" >
@@ -1257,6 +1359,9 @@ export default function PurchaseOrderConfirm() {
 }
 
 function SelectSupplier(props) {
+    const { token } = useSelector(state => ({
+        token: state.client.token
+    }))
     const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/suppliers/search';
     const [listSupplier, setListSupplier] = useState([])
     const [selected, setSelected] = useState({})
@@ -1277,7 +1382,17 @@ function SelectSupplier(props) {
 
 
 
-        fetch(`${SEARCH_URI}`)
+        fetch(`${SEARCH_URI}`,
+            {
+                method: 'GET',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json",
+                    "Origin": ""
+                },
+                credentials: "include"
+            }
+        )
             .then((resp) => resp.json())
             .then((json) => {
 

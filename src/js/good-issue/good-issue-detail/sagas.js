@@ -28,7 +28,7 @@ function getAllGoodIssueAPI(action) {
   return fetch(url, {
     method: "GET",
     headers: {
-        // Authorization: "Bearer " + action.token,
+         Authorization: "Bearer " + action.token,
       "Content-Type": "application/json",
       Origin: "",
     },

@@ -65,16 +65,7 @@ const detailPurchaseOrderInital = {
 
         },
         mergedOrderIdLists: [],
-        applicationUser: {
-
-            createDate: "2019-04-19T09:05:17.641865",
-            id: "07241",
-            name: "Eileen9",
-            orderId: "44424",
-            transactionId: "14433",
-            email: "da89d8c@gmail.com",
-            phoneNumber: "032464564"
-        },
+        infoUserPurchaseOrder: { },
 
         transaction: {
             transactionRecord: [
@@ -106,6 +97,27 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
             }
         case GET_DETAIL_PURCHASE_ORDER_SUCCESS:
             console.log(action.json)
+            let statusOrder = action.json.purchaseOrder.purchaseOrderStatusString
+           
+            let infoUserPurchaseOrder  ={}
+              action.json.purchaseOrder.transaction.transactionRecord.forEach(element => {
+             
+                if (element.typeString === statusOrder) {
+                    if (element.typeString === "Requisition" && element.userTransactionActionType === 2
+                    || element.typeString === "PriceQuote" && element.userTransactionActionType === 1
+                    
+                    ) {
+              
+                        infoUserPurchaseOrder =  {
+                            createDate: element.date,
+                            name: element.applicationUser.fullname,
+                            email: element.applicationUser.email,
+                            phoneNumber: element.applicationUser.phoneNumber,
+                        } 
+                  
+                    }
+                }
+            });
             return {
                 ...state,
                 requesting: false,
@@ -117,16 +129,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                     status: action.json.purchaseOrder.purchaseOrderStatusString,
                     transaction: action.json.purchaseOrder.transaction,
                     mergedOrderIdLists: action.json.mergedOrderIdLists !== undefined ? action.json.mergedOrderIdLists : [],
-                    applicationUser: {
-
-                        createDate: "2019-04-19T09:05:17.641865",
-                        id: "07241",
-                        name: "Eileen9",
-                        orderId: "44424",
-                        transactionId: "14433",
-                        email: "da89d8c@gmail.com",
-                        phoneNumber: "032464564"
-                    },
+                    infoUserPurchaseOrder: {...infoUserPurchaseOrder},
                     deliveryDate: action.json.purchaseOrder.deliveryDate.split("T")[0],
                     deadline: action.json.purchaseOrder.deadline.split("T")[0],
                     supplier: action.json.purchaseOrder.supplier !== null ? {

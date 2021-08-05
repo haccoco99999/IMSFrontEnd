@@ -47,7 +47,7 @@ export const InfoPurchaseOrderLoader = (props) => (<ContentLoader
 
 >
     {/* {console.log(arr.map((_,i) => ( <rect x="-33" y={i*35} rx="3" ry="3" width="634" height="20" /> )))} */}
-    {Array.apply(null, Array(20)).map((val, idx) => (<rect x="-33" y={idx * 40} rx="3" ry="3" width="100%" height="30" />))}
+    {Array.apply(null, Array(15)).map((val, idx) => (<rect x="-33" y={idx * 20} rx="3" ry="3" width="100%" height="18" />))}
 
 
 
