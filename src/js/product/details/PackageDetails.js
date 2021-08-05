@@ -27,7 +27,7 @@ export default function PackageDetails() {
     packageDetailsStore: state.gePackageReducer.package,
     supplierDetailsStore: state.gePackageReducer.package.supplier,
     goodsReceiptDetailsStore: state.gePackageReducer.package.goodsReceiptOrder,
-    productVariantStore: state.gePackageReducer.package.productVariant,
+    // productVariantStore: state.gePackageReducer.package.productVariant,
     locationStore: state.gePackageReducer.package.location,
     gePackageReducer: state.gePackageReducer,
   }));
@@ -162,7 +162,7 @@ export default function PackageDetails() {
                             {packageDetailsStore.importedDate.split("T")[0]}
                           </p>
                         </div>
-                        <div className="col-4">
+                        {/* <div className="col-4">
                           <p>
                             <strong>Product ID:</strong>{" "}
                             {productVariantStore.productId}
@@ -189,7 +189,7 @@ export default function PackageDetails() {
                             <strong>Actual Quantity:</strong>{" "}
                             {packageDetailsStore.quantity}
                           </p>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -208,19 +208,19 @@ export default function PackageDetails() {
                         <div className="col-4">
                           <p>
                             <strong>Goods Receipt ID:</strong>{" "}
-                            {goodsReceiptDetailsStore.id}
+                            {/* {goodsReceiptDetailsStore.id} */}
                           </p>
-                          <p>
+                          {/* <p>
                             <strong>Purchase Order Id</strong>{" "}
                             {goodsReceiptDetailsStore.purchaseOrderId}
-                          </p>
+                          </p> */}
                           <p>
                             <strong>Received Date</strong>{" "}
-                            {
+                            {/* {
                               goodsReceiptDetailsStore.receivedDate.split(
                                 "T"
                               )[0]
-                            }
+                            } */}
                           </p>
                         </div>
                       </div>
