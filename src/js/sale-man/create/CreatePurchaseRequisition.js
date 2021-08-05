@@ -12,11 +12,13 @@ import "../sale-man.css";
 import SearchComponent from "../../search-component/SearchComponent";
 import NavigationBar from "../../components/navbar/navbar-component";
 import { TableLoading } from "../../components/loading/loading-component";
+import { CLEAR_MESSAGE } from "./constants";
 import {
   createPurchaseRequisitionAction,
   clearMessageAction,
   getALlSuppliersAction,
 } from "./action";
+import FormAddProductModal from "../../components/add-product-form/FormAddProductModal";
 
 export default function CreatePurchaseRequisition() {
   let history = useHistory();
@@ -25,7 +27,9 @@ export default function CreatePurchaseRequisition() {
   // const [supplierSelected, setSupplierSelected] = useState({});
   const [purchaseOrderProduct, setPurchaseOrderProduct] = useState([]);
   const [deadline, setDeadline] = useState("");
-
+  const [eventPage, setEventPage] = useState({
+    isShowAddProduct: false,
+  });
   const { token, createPRReducer } = useSelector((state) => ({
     // message: state.getCreatedFormPurchaseRequisitionReducer.messages,
     token: state.client.token,
@@ -137,21 +141,21 @@ export default function CreatePurchaseRequisition() {
     setPurchaseOrderProduct((state) => state.filter((_, i) => i !== rowIndex));
   }
 
-  function clickToAddProduct(productRaw) {
-    let product = {
-      id: productRaw.productId,
-      orderId: "",
-      productVariantId: productRaw.id,
-      orderQuantity: 1,
-      unit: productRaw.unit,
-      price: productRaw.price,
-      discountAmount: 0,
-      totalAmount: 1,
-      name: productRaw.name,
-    };
-    console.log(product);
-    setPurchaseOrderProduct([...purchaseOrderProduct, product]);
-  }
+  // function clickToAddProduct(productRaw) {
+  //   let product = {
+  //     id: productRaw.productId,
+  //     orderId: "",
+  //     productVariantId: productRaw.id,
+  //     orderQuantity: 1,
+  //     unit: productRaw.unit,
+  //     price: productRaw.price,
+  //     discountAmount: 0,
+  //     totalAmount: 1,
+  //     name: productRaw.name,
+  //   };
+  //   console.log(product);
+  //   setPurchaseOrderProduct([...purchaseOrderProduct, product]);
+  // }
 
   // function onChangeValueProduct(event) {
   //   setPurchaseOrderProduct(
@@ -201,12 +205,83 @@ export default function CreatePurchaseRequisition() {
         }),
       };
       console.log(data);
-      dispatch(createPurchaseRequisitionAction({ data: data, token: token }));
+      Swal.fire({
+        title: "Are you sure",
+        text: "Do you want to save?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: " #d33",
+        confirmButtonText: "Confirm",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            createPurchaseRequisitionAction({ data: data, token: token })
+          );
+        }
+      });
     }
   }
 
-  //todo: listEdit
+  function checkProductExist(productVariantId) {
+    return purchaseOrderProduct.some(
+      (product) => product.productVariantId === productVariantId
+    );
+  }
 
+  function clickToAddProduct(product) {
+    // console.log(product);
+    if (checkProductExist(product.productVariantId)) {
+      setPurchaseOrderProduct((state) =>
+        state.map((item) =>
+          item.productVariantId === product.productVariantId
+            ? {
+                ...item,
+                orderQuantity: item.orderQuantity + product.orderQuantity,
+              }
+            : item
+        )
+      );
+    } else {
+      setPurchaseOrderProduct((state) => [...state, product]);
+    }
+
+    clickSetShowAddProductPage();
+  }
+  function addGroupProduct(listGroupProduct) {
+    let listGroupProductIsSelected = listGroupProduct.filter(
+      (product) => product.isChecked
+    );
+    let listGroupProductSelected = listGroupProductIsSelected.map(
+      (groupProduct) => groupProduct.listProductVariant
+    );
+    let temp = [...purchaseOrderProduct];
+
+    listGroupProductSelected.map((arrayProduct) => {
+      arrayProduct.map((product) => {
+        let count = 0;
+
+        if (
+          temp.some(function (p, index) {
+            count = index;
+            return p.productVariantId === product.productVariantId;
+          })
+        ) {
+        } else {
+          temp.push({ ...product });
+        }
+      });
+    });
+
+    setPurchaseOrderProduct((state) => [...temp]);
+    clickSetShowAddProductPage();
+  }
+  function clickSetShowAddProductPage() {
+    setEventPage((state) => {
+      return { ...state, isShowAddProduct: !state.isShowAddProduct };
+    });
+  }
   // useEffect(() => {
   //   if (message !== "") {
   //     dispatch(clearMessageAction());
@@ -256,26 +331,47 @@ export default function CreatePurchaseRequisition() {
     }
   }, [createPRReducer]);
 
+  useEffect(() => {
+    return () => {
+      dispatch({ type: CLEAR_MESSAGE });
+    };
+  }, []);
   return (
     <div>
       <NavigationBar
         actionGoBack={goBackClick}
-        titleBar="Create Purchase Requisition"
+        titleBar="Create purchase requisition"
         status=""
         listButton={listButton}
         home="Purchase Requisition"
-        currentPage="Create "
+        currentPage="Create purchase requisition"
         classStatus="bg-secondary"
       />
 
       {/* content */}
-      <div className="wrapper space-top">
+      <div className="wrapper mt-3">
         <div class="card">
           <h5 class="card-header fw-bold">Purchase Requisition Information</h5>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
-              <h5 class="card-title">Search product</h5>
-              <SearchComponent clickToAddProduct={clickToAddProduct} />
+              {/* <h5 class="card-title">Product</h5> */}
+              <button
+                onClick={() => clickSetShowAddProductPage()}
+                type="button"
+                class="btn btn-outline-secondary"
+              >
+                Add product
+              </button>
+              {eventPage.isShowAddProduct ? (
+                <FormAddProductModal
+                  clickSetShowAddProductPage={clickSetShowAddProductPage}
+                  clickToAddProduct={clickToAddProduct}
+                  addGroupProduct={addGroupProduct}
+                />
+              ) : (
+                ""
+              )}
+              {/* <SearchComponent clickToAddProduct={clickToAddProduct} /> */}
             </li>
             <li class="list-group-item">
               <h5 class="card-title">Deadline</h5>
@@ -297,12 +393,12 @@ export default function CreatePurchaseRequisition() {
                   mode: "click",
                   blurToSave: true,
 
-                  afterSaveCell: (oldValue, newValue, row, column) => {
-                    row.totalAmount = row.orderQuantity * row.price;
-                    console.log(row.totalAmount);
-                    console.log(row.price);
-                    console.log(row.orderQuantity);
-                  },
+                  // `afterSaveCell: (oldValue, newValue, row, column) => {
+                  //   row.totalAmount = row.orderQuantity * row.price;
+                  //   console.log(row.totalAmount);
+                  //   console.log(row.price);
+                  //   console.log(row.orderQuantity);
+                  // },`
                 })}
               />
             </li>

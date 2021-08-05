@@ -25,9 +25,9 @@ export default function AdjustInventoryModal(props) {
               ></button>
             </div>
             <div className="modal-body">
-              <p>
-                Inventory balance will change the amount of inventory in the
+              <p> Inventory balance will change the amount of inventory in the
                 system with the following products
+               
               </p>
               {/* <div>
                 <table class="table">

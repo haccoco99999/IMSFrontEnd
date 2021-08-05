@@ -18,7 +18,7 @@ import CreateVariant from "./details/CreateVariant";
 import CreateProductManager from "./create/CreateProductManager"
 export default function () {
   return (
-    <div className="home_content wrapper">
+    <div className="home_content">
       <div className="text">
         {/* ############################ */}
         <Switch>

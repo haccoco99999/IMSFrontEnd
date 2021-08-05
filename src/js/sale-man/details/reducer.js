@@ -2,9 +2,9 @@ import {
   GET_DETAILS_PR_REQUEST,
   GET_DETAILS_PR_RESPONSE,
   GET_DETAILS_PR_ERROR,
-  SUBMIT_REQUEST,
-  SUBMIT_RESPONSE,
-  SUBMIT_ERROR,
+  SUBMIT_PR_REQUEST,
+  SUBMIT_PR_RESPONSE,
+  SUBMIT_PR_ERROR,
   UPDATE_PR_REQUEST,
   UPDATE_PR_ERROR,
   UPDATE_PR_RESPONSE,
@@ -84,7 +84,7 @@ const submitState = {
 };
 export function submitDraftReducer(state = submitState, action) {
   switch (action.type) {
-    case SUBMIT_REQUEST:
+    case SUBMIT_PR_REQUEST:
       return {
         ...state,
         requesting: true,
@@ -92,7 +92,7 @@ export function submitDraftReducer(state = submitState, action) {
         messages: "",
         errors: false,
       };
-    case SUBMIT_RESPONSE:
+    case SUBMIT_PR_RESPONSE:
       return {
         ...state,
         requesting: false,
@@ -100,7 +100,7 @@ export function submitDraftReducer(state = submitState, action) {
         messages: "Submit Success",
         errors: false,
       };
-    case SUBMIT_ERROR:
+    case SUBMIT_PR_ERROR:
       return {
         ...state,
         requesting: false,
@@ -108,6 +108,8 @@ export function submitDraftReducer(state = submitState, action) {
         messages: "",
         errors: true,
       };
+    case CLEAR_MESSAGE:
+      return initialState;
     default:
       return state;
   }
@@ -144,6 +146,8 @@ export function updatePRReducer(state = updateState, action) {
         messages: "",
         errors: true,
       };
+    case CLEAR_MESSAGE:
+      return initialState;
     default:
       return state;
   }
@@ -152,7 +156,7 @@ const deleteState = {
   requesting: false,
   successful: false,
   messages: "",
-  errors: true,
+  errors: false,
 };
 export function deletePRReducer(state = deleteState, action) {
   switch (action.type) {
@@ -180,7 +184,8 @@ export function deletePRReducer(state = deleteState, action) {
         messages: "",
         errors: true,
       };
-
+    case CLEAR_MESSAGE:
+      return initialState;
     default:
       return state;
   }

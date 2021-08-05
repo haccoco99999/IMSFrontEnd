@@ -46,6 +46,9 @@ export default function reducer(state = initialState, action) {
         errors: true,
       };
 
+    case CLEAR_MESSAGE:
+      return initialState;
+
     default:
       return state;
   }

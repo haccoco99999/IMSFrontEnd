@@ -1,11 +1,11 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 
 // component
 import {
   GET_CONFIRMED_PURCHASE_ORDER_REQUEST,
   GET_CONFIRMED_PURCHASE_ORDER_RESPONSE,
   GET_CONFIRMED_PURCHASE_ORDER_ERROR,
-  //PO  
+  //PO
   GET_DETAILS_PO_REQUEST,
   GET_DETAILS_PO_RESPONSE,
   GET_DETAILS_PO_ERROR,
@@ -19,6 +19,14 @@ import {
   GET_LOCATION_REQUEST,
   GET_LOCATION_RESPONSE,
   GET_LOCATION_ERROR,
+  //CHECK DUPLICATE
+  CHECK_DUPLICATE_REQUEST,
+  CHECK_DUPLICATE_RESPONSE,
+  CHECK_DUPLICATE_ERROR,
+  //CHECK_EXISTING_
+  CHECK_SKUEXISTS_REQUEST,
+  CHECK_SKUEXISTS_RESPONSE,
+  CHECK_SKUEXISTS_ERROR,
 } from "./constant";
 import handleApiErrors from "../../auth/api-errors";
 
@@ -105,6 +113,46 @@ function getAllLocations(action) {
     });
 }
 
+function checkDuplicateSKU(action) {
+  const url = `${process.env.REACT_APP_API}/dupcheck/productvariant`;
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+    body: JSON.stringify({ value: action.data }),
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+function checkSKUExists(action) {
+  const url = `${process.env.REACT_APP_API}/goodsreceipt/skuexistance`;
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+    body: JSON.stringify({ receiptPurchaseOrderId: action.id }),
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
+
 function* getListPurchaseOrderFlow(action) {
   try {
     let json = yield call(getListConfirmedPurchaseOrder, action);
@@ -142,6 +190,27 @@ function* getAllLocationsFlow(action) {
     yield put({ type: GET_LOCATION_ERROR });
   }
 }
+
+function* checkDuplicateSKUFlow(action) {
+  try {
+    let json = yield call(checkDuplicateSKU, action);
+    yield put({ type: CHECK_DUPLICATE_RESPONSE, json });
+  } catch (error) {
+    console.log(error);
+    yield put({ type: CHECK_DUPLICATE_ERROR });
+  }
+}
+
+function* checkSKUExistsFlow(action) {
+  try {
+    let json = yield call(checkSKUExists, action);
+    yield put({ type: CHECK_SKUEXISTS_RESPONSE, json });
+  } catch (error) {
+    console.log(error);
+    yield put({ type: CHECK_SKUEXISTS_ERROR });
+  }
+}
+
 function* watcher() {
   yield takeEvery(
     GET_CONFIRMED_PURCHASE_ORDER_REQUEST,
@@ -155,6 +224,8 @@ function* watcher() {
     setReceivingPurchaseOrderQuantityFlow
   );
   yield takeEvery(GET_LOCATION_REQUEST, getAllLocationsFlow);
+  yield takeLatest(CHECK_DUPLICATE_REQUEST, checkDuplicateSKUFlow);
+  yield takeEvery(CHECK_SKUEXISTS_REQUEST, checkSKUExistsFlow);
 }
 
 export default watcher;

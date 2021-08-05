@@ -18,54 +18,16 @@ import {
   GET_LOCATION_REQUEST,
   GET_LOCATION_RESPONSE,
   GET_LOCATION_ERROR,
+  //CHECK
+  CHECK_DUPLICATE_REQUEST,
+  CHECK_DUPLICATE_RESPONSE,
+  CHECK_DUPLICATE_ERROR,
+  //CHECK_EXISTING_
+  CHECK_SKUEXISTS_REQUEST,
+  CHECK_SKUEXISTS_RESPONSE,
+  CHECK_SKUEXISTS_ERROR,
+  //RESET
 } from "./constant";
-
-// const initialState = {
-//   requesting: false,
-//   successful: false,
-//   messages: "",
-//   errors: false,
-//   listConfirmedPurchaseOrder: [],
-//   listProducts: {
-//     purchaseOrderProduct: [],
-//   },
-//   listLocations: [],
-// };
-
-// export default function reducer(state = initialState, action) {
-//   switch (action.type) {
-//     //Details
-
-//     case GET_LOCATION_REQUEST:
-//       return {
-//         ...state,
-//         requesting: true,
-//         successful: false,
-//         messages: "",
-//         errors: false,
-//       };
-//     case GET_LOCATION_RESPONSE:
-//       return {
-//         ...state,
-//         requesting: false,
-//         successful: true,
-//         messages: "",
-//         errors: false,
-//         listLocations: action.json.paging.resultList,
-//       };
-//     case GET_LOCATION_ERROR:
-//       return {
-//         ...state,
-//         requesting: false,
-//         successful: false,
-//         messages: "",
-//         errors: true,
-//         listLocations: [],
-//       };
-//     default:
-//       return state;
-//   }
-// }
 
 const confirmedPOState = {
   requesting: false,
@@ -107,6 +69,8 @@ export function getAllConfirmedPurchaseOrderReducer(
         errors: true,
         // listConfirmedPurchaseOrder: [],
       };
+    case RESET:
+      return confirmedPOState;
     default:
       return state;
   }
@@ -152,6 +116,8 @@ export function getDetailsPOReducer(state = detailsPOState, action) {
         errors: true,
         listProducts: [],
       };
+    case RESET:
+      return detailsPOState;
     default:
       return state;
   }
@@ -195,6 +161,122 @@ export function submitPRReducer(state = submitPRState, action) {
       };
     case RESET:
       return submitPRState;
+    default:
+      return state;
+  }
+}
+
+const checkDupState = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: false,
+  hasMatch: false,
+};
+export function checkDuplicateSKUReducer(state = checkDupState, action) {
+  switch (action.type) {
+    case CHECK_DUPLICATE_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: false,
+        hasMatch: false,
+      };
+    case CHECK_DUPLICATE_RESPONSE:
+      console.log(action.json);
+      let databaseMatchList = action.json.databaseMatchList;
+      let redisMatchList = action.json.redisMatchList;
+      // if (redisMatchList.length > 0 && databaseMatchList.length === 0)
+      //   return {
+      //     ...state,
+      //     requesting: true,
+      //     successful: false,
+      //     messages: "",
+      //     errors: false,
+      //     hasMatch: true,
+      //   };
+      // else if (redisMatchList.length === 0 && databaseMatchList.length > 0)
+      //   return {
+      //     ...state,
+      //     requesting: true,
+      //     successful: false,
+      //     messages: "",
+      //     errors: false,
+      //     hasMatch: true,
+      //   };
+      if (redisMatchList.length > 0 || databaseMatchList.length > 0)
+        return {
+          ...state,
+          requesting: true,
+          successful: false,
+          messages: "",
+          errors: false,
+          hasMatch: true,
+        };
+      else
+        return {
+          ...state,
+          requesting: true,
+          successful: false,
+          messages: "",
+          errors: false,
+          hasMatch: false,
+        };
+    case CHECK_DUPLICATE_ERROR:
+      return {
+        ...state,
+        requesting: false,
+        successful: false,
+        messages: "",
+        errors: true,
+        hasMatch: false,
+      };
+
+    default:
+      return state;
+  }
+}
+
+const checkSKUExistsState = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: false,
+  existRedisVariantSkus: [],
+};
+
+export function checkSKUExistsReducer(state = checkSKUExistsState, action) {
+  switch (action.type) {
+    case CHECK_SKUEXISTS_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: false,
+      };
+
+    case CHECK_SKUEXISTS_RESPONSE:
+      return {
+        ...state,
+        requesting: false,
+        successful: true,
+        messages: "",
+        errors: false,
+        existRedisVariantSkus: action.json.existRedisVariantSkus,
+      };
+
+    case CHECK_SKUEXISTS_ERROR:
+      return {
+        ...state,
+        requesting: false,
+        successful: false,
+        messages: "",
+        errors: true,
+        existRedisVariantSkus: [],
+      };
     default:
       return state;
   }

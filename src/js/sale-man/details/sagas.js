@@ -5,9 +5,9 @@ import {
   GET_DETAILS_PR_REQUEST,
   GET_DETAILS_PR_RESPONSE,
   GET_DETAILS_PR_ERROR,
-  SUBMIT_REQUEST,
-  SUBMIT_RESPONSE,
-  SUBMIT_ERROR,
+  SUBMIT_PR_REQUEST,
+  SUBMIT_PR_RESPONSE,
+  SUBMIT_PR_ERROR,
   UPDATE_PR_REQUEST,
   UPDATE_PR_ERROR,
   UPDATE_PR_RESPONSE,
@@ -113,10 +113,10 @@ function* submitPRFlow(action) {
   try {
     let json = yield call(submitPR, action);
     console.log("KET QUA", json);
-    yield put({ type: SUBMIT_RESPONSE, json });
+    yield put({ type: SUBMIT_PR_RESPONSE, json });
   } catch (error) {
     console.log("submitPRFlow", error);
-    yield put({ type: SUBMIT_ERROR });
+    yield put({ type: SUBMIT_PR_ERROR });
   }
 }
 
@@ -143,7 +143,7 @@ function* deletePRFlow(action) {
 
 function* watcher() {
   yield takeEvery(GET_DETAILS_PR_REQUEST, getDetailsPRFlow);
-  yield takeEvery(SUBMIT_REQUEST, submitPRFlow);
+  yield takeEvery(SUBMIT_PR_REQUEST, submitPRFlow);
   yield takeEvery(UPDATE_PR_REQUEST, updatePRFlow);
   yield takeEvery(DELETE_PR_REQUEST, deletePRFlow);
 }

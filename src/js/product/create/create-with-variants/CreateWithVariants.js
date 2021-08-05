@@ -51,13 +51,13 @@ export default function CreateWithVariants(props) {
       formatter: (cellContent, row, rowIndex) =>
         (props.variantValues[rowIndex].sku = row.sku),
     },
-    {
-      dataField: "barcode",
-      text: "Barcode (Optional)",
-      editable: true,
-      formatter: (cellContent, row, rowIndex) =>
-        (props.variantValues[rowIndex].barcode = row.barcode),
-    },
+    // {
+    //   dataField: "barcode",
+    //   text: "Barcode (Optional)",
+    //   editable: true,
+    //   formatter: (cellContent, row, rowIndex) =>
+    //     (props.variantValues[rowIndex].barcode = row.barcode),
+    // },
     // {
     //   dataField: "price",
     //   text: "Price",
@@ -95,13 +95,19 @@ export default function CreateWithVariants(props) {
       editable: false,
       formatter: (cellContent, row, rowIndex) => {
         return (
-          <button
-            type="button"
-            className="btn btn-danger"
-            onClick={() => props.clickDeleteVariant(rowIndex)}
+          <div
+            className="text-danger"
+            onClick={() => clickDeleteVariant(rowIndex)}
           >
-            Delete
-          </button>
+            <i class="bi bi-trash"></i>
+          </div>
+          // <button
+          //   type="button"
+          //   className="btn btn-danger"
+          //   onClick={() => props.clickDeleteVariant(rowIndex)}
+          // >
+          //   Delete
+          // </button>
         );
       },
     },
@@ -174,14 +180,27 @@ export default function CreateWithVariants(props) {
               name: variant.name,
               price: variant.price,
               salePrice: variant.salePrice,
-              barcode: variant.barcode,
+              // barcode: variant.barcode,
               sku: variant.sku,
             };
           }),
         };
 
         console.log("Data output:", data);
-        dispatch(createProduct({ data: data, token: props.token }));
+        Swal.fire({
+          title: "Are you sure",
+          text: "Do you want to save?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: " #d33",
+          confirmButtonText: "Confirm",
+          reverseButtons: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            dispatch(createProduct({ data: data, token: props.token }));
+          }
+        });
       }
     } else {
       Swal.fire({
@@ -209,13 +228,6 @@ export default function CreateWithVariants(props) {
     ];
   }
 
-  // useEffect(() => {
-  //   if (props.messages !== "")
-  //     history.push("/homepage/product/details", {
-  //       productId: props.messages,
-  //     });
-  // }, [props.messages]);
-
   return (
     //   todo: gop chung 2 bang , sau do tach ra
     <div>
@@ -230,7 +242,7 @@ export default function CreateWithVariants(props) {
         level3Page="Create variants"
       />
       {/* content */}
-      <div className="wrapper space-top">
+      <div className="wrapper">
         <div class="card">
           <h5 class="card-header fw-bold">Variants Information</h5>
           <div class="card-body">

@@ -72,7 +72,7 @@ export default function CreateVariant() {
             id: null,
             name: formData.name,
             price: 0,
-            barcode: formData.barcode,
+            // barcode: formData.barcode,
             sku: formData.sku,
             // unit: location.state.productUnit,
           },
@@ -86,15 +86,6 @@ export default function CreateVariant() {
   }
 
   //todo:function nav
-
-  // useEffect(() => {
-  //   if (messages === "Update Variant success") {
-  //     history.push("/homepage/product/details", {
-  //       productId: location.state.productId,
-  //       // fromPage: "ManagerPage",
-  //     });
-  //   }
-  // }, [messages]);
 
   useEffect(() => {
     return () => {
@@ -145,12 +136,16 @@ export default function CreateVariant() {
     <>
       <NavigationBar
         listButton={listButton}
-        titleBar="Create Variant"
+        titleBar="Add Variant"
         actionGoBack={goBackClick}
         status=""
+        home="Product"
+        currentPage="Product details"
+        level3={true}
+        level3Page="Add variant"
       />
       {/* content */}
-      <div className="wrapper space-top">
+      <div className="wrapper">
         <div class="card">
           <h5 class="card-header fw-bold">Variant Information</h5>
           <div class="card-body">
@@ -196,7 +191,7 @@ export default function CreateVariant() {
 
                 <div class="col">
                   <label for="name" class="col-form-label">
-                    SKU
+                    SKU (optional)
                   </label>
                   <input
                     type="text"
@@ -207,7 +202,7 @@ export default function CreateVariant() {
                     onChange={handleChangeValue}
                   />
                 </div>
-                <div class="col">
+                {/* <div class="col">
                   <label for="name" class="col-form-label">
                     Barcode
                   </label>{" "}
@@ -219,7 +214,7 @@ export default function CreateVariant() {
                     value={formData.barcode || ""}
                     onChange={handleChangeValue}
                   />
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

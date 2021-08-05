@@ -18,7 +18,7 @@ import {
 } from "./action";
 
 import { getAllLocationsAction } from "../../components/location/action";
-import {RESET} from './constants'
+import { RESET } from "./constants";
 import SpinnerComponent from "../components/spinner-component";
 // import ToastComponent from "../components/toast-component";
 import NavigationBar from "../../components/navbar/navbar-component";
@@ -54,6 +54,7 @@ export default function CreateStocktakeComponent() {
     {
       id: uuid(),
       packageId: "",
+      name: "",
       productVariantId: "",
       quantity: "",
       counted: "",
@@ -74,6 +75,7 @@ export default function CreateStocktakeComponent() {
       {
         id: uuid(),
         packageId: "",
+        name: "",
         productVariantId: "",
         quantity: "",
         counted: 0,
@@ -125,7 +127,7 @@ export default function CreateStocktakeComponent() {
           listCheckedItems[rowIndex].productVariantId =
             packageDetails.productVariantId;
           listCheckedItems[rowIndex].counted = 0;
-          // changeValue(e.target.value, rowIndex);
+          listCheckedItems[rowIndex].name = packageDetails.productVariant.name;
           setIsTimeForTrigger(true);
           setTimeout(() => {
             setIsTimeForTrigger(false);
@@ -160,6 +162,7 @@ export default function CreateStocktakeComponent() {
       text: "Variant ID",
       editable: false,
     },
+    { dataField: "name", text: "Name", editable: false },
     {
       dataField: "quantity",
       text: "Quantity",
@@ -314,7 +317,21 @@ export default function CreateStocktakeComponent() {
             console.log("No duplicate");
 
             console.log("Data output:", data);
-            dispatch(createStocktkaeAction({ token: token, data: data }));
+
+            Swal.fire({
+              title: "Are you sure",
+              text: "Do you want to save?",
+              icon: "question",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: " #d33",
+              confirmButtonText: "Confirm",
+              reverseButtons: true,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                dispatch(createStocktkaeAction({ token: token, data: data }));
+              }
+            });
           }
         }
       } else {
@@ -339,6 +356,7 @@ export default function CreateStocktakeComponent() {
       {
         id: uuid(),
         packageId: "",
+        name: "",
         productVariantId: "",
         quantity: "",
         counted: "",
@@ -363,7 +381,6 @@ export default function CreateStocktakeComponent() {
       }
     );
   }
- 
 
   useEffect(() => {
     if (listPackagesStore.length > 0) {
@@ -435,10 +452,10 @@ export default function CreateStocktakeComponent() {
   }, [getAllLocationsReducer]);
 
   useEffect(() => {
-    return () =>{
-      dispatch({type:RESET})
-    }
-  },[])
+    return () => {
+      dispatch({ type: RESET });
+    };
+  }, []);
   //todo: toast
   // const toastRef = useRef();
   // const showToast = () => {
@@ -464,7 +481,7 @@ export default function CreateStocktakeComponent() {
         currentPage="Create stocktake"
       />
       {/* content */}
-      <div className="wrapper space-top">
+      <div className="wrapper">
         <div className="card">
           <div className="card-header fw-bold">Create Stocktake</div>
           <ul class="list-group list-group-flush">

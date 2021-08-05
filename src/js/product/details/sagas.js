@@ -246,7 +246,7 @@ function* updateProductFlow(action) {
 }
 
 function* updateVariantFlow(action) {
-  let check = yield call(checkDuplicateVariant, action);
+  let check = yield call(checkDuplicateVariantFlow, action);
 
   try {
     if (!check.hasMatch) {

@@ -146,11 +146,11 @@ export default function CreateProductComponent(props) {
       event.preventDefault();
       // checkUndifined();
 
-      if (props.formData.sku === undefined) {
-        props.setFormDataManager("sku", "");
-      }
-      if (props.formData.barcode === undefined)
-        props.setFormDataManager("barcode", "");
+      // if (props.formData.sku === undefined) {
+      //   props.setFormDataManager("sku", "");
+      // }
+      // if (props.formData.barcode === undefined)
+      //   props.setFormDataManager("barcode", "");
 
       const data = {
         name: props.formData.name,
@@ -164,13 +164,26 @@ export default function CreateProductComponent(props) {
             name: props.formData.name,
             price: 0,
             salePrice: 0,
-            barcode: props.formData.barcode,
+            // barcode: props.formData.barcode,
             sku: props.formData.sku,
           },
         ],
       };
       console.log("Data output:", data);
-      dispatch(createProduct({ data: data, token: props.token }));
+      Swal.fire({
+        title: "Are you sure",
+        text: "Do you want to save?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: " #d33",
+        confirmButtonText: "Confirm",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(createProduct({ data: data, token: props.token }));
+        }
+      });
     }
     form.classList.add("was-validated");
 
@@ -190,7 +203,7 @@ export default function CreateProductComponent(props) {
         home="Product"
         currentPage="Create product"
       />
-      <div className="wrapper space-top">
+      <div className="wrapper">
         {/* content 1 */}
         <div class="card">
           <h5 class="card-header">Product Information</h5>
@@ -315,7 +328,7 @@ export default function CreateProductComponent(props) {
                       onChange={handleChangeValueFormData}
                     />
                   </div>
-                  <div class="col">
+                  {/* <div class="col">
                     <label for="barcode" class="col-form-label">
                       Barcode (optional)
                     </label>{" "}
@@ -328,7 +341,7 @@ export default function CreateProductComponent(props) {
                       class="form-control"
                       placeholder="eg. 1012345678910"
                     />
-                  </div>
+                  </div> */}
                 </div>
               </div>
             )}

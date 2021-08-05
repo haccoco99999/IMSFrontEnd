@@ -13,7 +13,11 @@ export default function PurchaseAcceptModal(props) {
       dataField: "modifiedDate",
       text: "Modified Date",
       formatter: (cellContent, row, rowIndex) => {
-        return <span>{moment(row.modifiedDate).format("DD-MM-YYYY")}</span>;
+        return (
+          <span>
+            {moment(row.modifiedDate).add(7, "h").format("DD-MM-YYYY")}
+          </span>
+        );
       },
     },
   ];

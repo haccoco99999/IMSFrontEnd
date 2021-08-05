@@ -67,7 +67,21 @@ export default function SupplierDetails() {
         email: supplier.email,
       };
       console.log(data);
-      dispatch(updateDetailsSupplierAction({ data: data, token: token }));
+
+      Swal.fire({
+        title: "Are you sure",
+        text: "Do you want to save?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: " #d33",
+        confirmButtonText: "Confirm",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(updateDetailsSupplierAction({ data: data, token: token }));
+        }
+      });
     }
     form.classList.add("was-validated");
   }
@@ -265,7 +279,7 @@ export default function SupplierDetails() {
             currentPage="Supplier details"
           />
 
-          <div className="wrapper space-top">
+          <div className="wrapper">
             <div className="card">
               <div class="card-header">Supplier Information</div>
               <ul class="list-group list-group-flush">
