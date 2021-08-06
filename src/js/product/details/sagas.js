@@ -239,14 +239,23 @@ function* checkDuplicateVariantFlow(action) {
 }
 
 function* updateProductFlow(action) {
-  let check = yield call(checkDuplicateProductFlow, action);
-  try {
-    if (!check.hasMatch) {
+  if (action.needCheckName) {
+    let check = yield call(checkDuplicateProductFlow, action);
+    try {
+      if (!check.hasMatch) {
+        let json = yield call(updateProduct, action);
+        yield put({ type: UPDATE_PRODUCT_RESPONSE, json });
+      } else yield put({ type: UPDATE_PRODUCT_RESPONSE });
+    } catch (error) {
+      yield put({ type: UPDATE_PRODUCT_ERROR });
+    }
+  } else {
+    try {
       let json = yield call(updateProduct, action);
       yield put({ type: UPDATE_PRODUCT_RESPONSE, json });
-    } else yield put({ type: UPDATE_PRODUCT_RESPONSE });
-  } catch (error) {
-    yield put({ type: UPDATE_PRODUCT_ERROR });
+    } catch (error) {
+      yield put({ type: UPDATE_PRODUCT_ERROR });
+    }
   }
 }
 

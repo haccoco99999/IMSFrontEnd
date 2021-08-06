@@ -39,7 +39,7 @@ function checkDuplicateSupplier(action) {
     },
     credentials: "include",
     body: JSON.stringify({
-      value: action.data.name,
+      value: action.data.supplierName,
     }),
   })
     .then((response) => handleApiErrors(response))

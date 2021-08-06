@@ -85,7 +85,7 @@ function checkDupCategory(action) {
     },
     credentials: "include",
     body: JSON.stringify({
-      value: action.data.name,
+      value: action.data.categoryName,
     }),
   })
     .then((response) => handleApiErrors(response))
@@ -107,6 +107,7 @@ function* getAllCategoryFlow(action) {
 }
 
 function* checkDupCategoryFlow(action, flow) {
+  console.log(action);
   try {
     let resultCheckDup = yield call(checkDupCategory, action);
     return resultCheckDup;
@@ -118,7 +119,7 @@ function* checkDupCategoryFlow(action, flow) {
 }
 
 function* createCategoryFlow(action) {
-  let check = yield call(checkDupCategoryFlow, "create");
+  let check = yield call(checkDupCategoryFlow, action, "create");
   try {
     if (!check.hasMatch) {
       let json = yield call(createCategory, action);
@@ -130,7 +131,7 @@ function* createCategoryFlow(action) {
 }
 
 function* updateCategoryFlow(action) {
-  let check = yield call(checkDupCategoryFlow, "update");
+  let check = yield call(checkDupCategoryFlow,action, "update");
 
   try {
     if (!check.hasMatch) {

@@ -39,7 +39,8 @@ export default function SupplierDetails() {
   const [isDisabled, setIsDisabled] = useState(true);
 
   function goBackClick() {
-    history.goBack();
+    // history.goBack();
+    history.push("/homepage/supplier");
   }
   function onClickEdit() {
     setIsDisabled(false);

@@ -318,7 +318,7 @@ export default function CreateGoodsReceiptComponent() {
       if (!isValid) {
         Swal.fire({
           title: "Error",
-          text: "Please input valid barcode or sku",
+          text: "Please input valid  sku",
           icon: "error",
           showCancelButton: true,
           cancelButtonText: "Cancel",
@@ -379,8 +379,8 @@ export default function CreateGoodsReceiptComponent() {
           productId: product.productVariant.productId,
           productVariantId: product.productVariantId,
           //todo: Sua lai data
-          // orderQuantity: product.quantityLeftAfterReceived,
-          orderQuantity: product.orderQuantity,
+          orderQuantity: product.quantityLeftAfterReceived,
+          // orderQuantity: product.orderQuantity,
           sku: product.productVariant.sku,
           barcode: product.productVariant.barcode,
           received: 0,
@@ -433,8 +433,8 @@ export default function CreateGoodsReceiptComponent() {
             productId: product.productVariant.productId,
             productVariantId: product.productVariantId,
             //todo: Sua lai data
-            // orderQuantity: product.quantityLeftAfterReceived,
-            orderQuantity: product.orderQuantity,
+            orderQuantity: product.quantityLeftAfterReceived,
+            // orderQuantity: product.orderQuantity,
             // sku: product.productVariant.sku,
             sku: tempSku,
             barcode: product.productVariant.barcode,

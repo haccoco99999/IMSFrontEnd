@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import Swal from "sweetalert2";
+import moment from "moment";
 //css
 import "../product.css";
 //components
@@ -22,14 +23,25 @@ export default function VariantDetails() {
   const [isReturnData, setIsReturnData] = useState(false);
 
   const columns = [
-    { dataField: "id", text: "Variant ID" },
-    { dataField: "price", text: "Price" },
-    { dataField: "totalPrice", text: "Total Price" },
+    { dataField: "id", text: "Package ID" },
+    { dataField: "quantity", text: "Quantity" },
+    // { dataField: "price", text: "Price" },
+    // { dataField: "totalPrice", text: "Total Price" },
+    // {
+    //   dataField: "locationName",
+    //   text: "Location Name",
+    // },
     {
-      dataField: "locationName",
-      text: "Location Name",
+      dataField: "importedDate",
+      text: "Imported Date",
+      formatter: (cellContent, row) => {
+        return (
+          <span>
+            {moment(row.importedDate).add(7, "h").format("DD-MM-YYYY")}
+          </span>
+        );
+      },
     },
-    { dataField: "importedDate", text: "Imported Date " },
   ];
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
@@ -214,157 +226,91 @@ export default function VariantDetails() {
         <>
           <NavigationBar
             listButton={listButtons}
-            titleBar={location.state.variantId}
+            titleBar="Variant details"
             actionGoBack={goBackClick}
             status=""
             home="Product"
             currentPage="Product details"
             level3={true}
-            level3Page="Variant Details"
+            level3Page="Variant details"
           />
           <div className="wrapper ">
             <div class="card">
               <div class="card-header fw-bold">Variant Information</div>
-              <div class="card-body">
-                <nav>
-                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button
-                      class="nav-link active"
-                      id="nav-home-tab"
-                      data-bs-toggle="tab"
-                      data-bs-target="#nav-home"
-                      type="button"
-                      role="tab"
-                      aria-controls="nav-home"
-                      aria-selected="true"
-                    >
-                      General Information
-                    </button>
-                    <button
-                      class="nav-link"
-                      id="nav-profile-tab"
-                      data-bs-toggle="tab"
-                      data-bs-target="#nav-profile"
-                      type="button"
-                      role="tab"
-                      aria-controls="nav-profile"
-                      aria-selected="false"
-                    >
-                      Packages
-                    </button>
-                  </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                  <div
-                    class="tab-pane fade show active"
-                    id="nav-home"
-                    role="tabpanel"
-                    aria-labelledby="nav-home-tab"
-                  >
-                    <div className="wrapper-content shadow mt-3">
-                      <div className="title-heading mt-2">
-                        <span>Variant Details </span>
-                      </div>
-                      <div className="mt-3">
-                        <div className="row g-3 justify-content-between me-3">
-                          <div className="col-4">
-                            <p>
-                              <strong>Variant ID:</strong>
-                              {variant.id}
-                            </p>
-                            <p>
-                              <strong>Product ID:</strong>
-                              {variant.productId}
-                            </p>
-                            <p>
-                              <strong>Name:</strong>
-                              {isDisabled ? (
-                                variant.name
-                              ) : (
-                                <input
-                                  type="text"
-                                  name="name"
-                                  className="form-control"
-                                  onChange={onChangeValue}
-                                  value={variant.name}
-                                />
-                              )}
-                            </p>
-                            <p>
-                              <strong>SKU:</strong>
-                              {isDisabled ? (
-                                variant.sku
-                              ) : (
-                                <input
-                                  type="text"
-                                  name="sku"
-                                  className="form-control"
-                                  onChange={onChangeValue}
-                                  value={variant.sku}
-                                />
-                              )}
-                            </p>
-                            <p>
-                              <strong>Barcode:</strong>
-                              {variant.barcode}
-                              {/* {isDisabled ? (
-                             
-                            ) : (
-                              <input
-                                type="text"
-                                name="barcode"
-                                className="form-control"
-                                onChange={onChangeValue}
-                                value={variant.barcode}
-                              />
-                            )} */}
-                            </p>
-                          </div>
-                          <div className="col-4">
-                            {/* <p>
-                        <strong>Unit:</strong>
-                        {variant.unit}
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  {" "}
+                  <div className="row g-3 justify-content-between me-3">
+                    <div className="col-4">
+                      {/* <p>
+                        <strong>Variant ID:</strong>
+                        {variant.id}
+                      </p>
+                      <p>
+                        <strong>Product ID:</strong>
+                        {variant.productId}
                       </p> */}
-                            <p>
-                              <strong>Storage Quantity:</strong>
-                              {variant.storageQuantity}
-                            </p>
-                            <p>
-                              <strong>Price:</strong>
+                      <p>
+                        <strong>Name: </strong>
+                        {isDisabled ? (
+                          variant.name
+                        ) : (
+                          <input
+                            type="text"
+                            name="name"
+                            className="form-control"
+                            onChange={onChangeValue}
+                            value={variant.name}
+                          />
+                        )}
+                      </p>
+                      <p>
+                        <strong>SKU: </strong>
+                        {isDisabled ? (
+                          variant.sku
+                        ) : (
+                          <input
+                            type="text"
+                            name="sku"
+                            className="form-control"
+                            onChange={onChangeValue}
+                            value={variant.sku}
+                          />
+                        )}
+                      </p>
+                      <p>
+                        <strong>Barcode: </strong>
+                        {variant.barcode}
+                      </p>
+                    </div>
+                    <div className="col-4">
+                      <p>
+                        <strong>Storage Quantity: </strong>
+                        {variant.storageQuantity}
+                      </p>
+                      <p>
+                        <strong>Price: </strong>
 
-                              {variant.price}
-                            </p>
-                            {/* <p>
-                        <strong>Total Price:</strong>
-                        {variant.cost}
-                      </p> */}
-                          </div>
-                        </div>
-                      </div>
+                        {variant.price}
+                      </p>
                     </div>
                   </div>
-                  <div
-                    class="tab-pane fade"
-                    id="nav-profile"
-                    role="tabpanel"
-                    aria-labelledby="nav-profile-tab"
-                  >
-                    <div className="mt-3">
-                      <BootstrapTable
-                        keyField="id"
-                        striped
-                        hover
-                        condensed
-                        columns={columns}
-                        headerClasses="table-header-receipt"
-                        noDataIndication="Table is Empty"
-                        data={listPackage}
-                        rowEvents={rowEvents}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+                </li>
+                <li class="list-group-item">
+                  <h5 class="card-title fw-bold">List of packages</h5>
+                  <BootstrapTable
+                    keyField="id"
+                    striped
+                    hover
+                    condensed
+                    columns={columns}
+                    headerClasses="table-header-receipt"
+                    noDataIndication="Table is Empty"
+                    data={listPackage}
+                    rowEvents={rowEvents}
+                  />
+                </li>
+              </ul>
             </div>
           </div>
         </>

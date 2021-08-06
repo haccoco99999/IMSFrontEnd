@@ -8,7 +8,7 @@ import {
 } from "../constants";
 
 function getAllVariants(action) {
-  const url = `http://imspublicapi.herokuapp.com/api/productvariant/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}&IsLocationOnly=true`;
+  const url = `${process.env.REACT_APP_API}/productvariant/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}&IsLocationOnly=true`;
   return fetch(url, {
     method: "GET",
     headers: {
