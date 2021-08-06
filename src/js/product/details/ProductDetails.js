@@ -100,7 +100,7 @@ export default function ProductDetails() {
     // console.log(brandSelected);
   };
 
-  const handleChangeProductName = (e) => {
+  const handleChangeProductDetails = (e) => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
     console.log(productDetails);
   };
@@ -135,6 +135,7 @@ export default function ProductDetails() {
       brandName: brandSelected.name,
       brandDescription: "",
       categoryId: categorySelected.id,
+      unit: productDetails.unit,
     };
 
     console.log(data);
@@ -342,14 +343,24 @@ export default function ProductDetails() {
                             type="text"
                             name="name"
                             className="form-control"
-                            onChange={handleChangeProductName}
+                            onChange={handleChangeProductDetails}
                             value={productDetails.name}
                           />
                         )}
                       </p>
                       <p>
                         <strong>Unit:</strong>
-                        {productDetails.unit}
+                        {isDisabled ? (
+                          productDetails.unit
+                        ) : (
+                          <input
+                            type="text"
+                            name="unit"
+                            className="form-control"
+                            onChange={handleChangeProductDetails}
+                            value={productDetails.unit}
+                          />
+                        )}
                       </p>
 
                       {/* <div class="form-check">
@@ -418,7 +429,7 @@ export default function ProductDetails() {
                           </select>
                         )}
                       </p>
-                      {!productDetails.isVariantType && isReturnData && (
+                      {/* {!productDetails.isVariantType && isReturnData && (
                         <>
                           <p>
                             <strong>Storage Quantity:</strong>
@@ -437,7 +448,7 @@ export default function ProductDetails() {
                             {listVariants[0].price}
                           </p>
                         </>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </li>

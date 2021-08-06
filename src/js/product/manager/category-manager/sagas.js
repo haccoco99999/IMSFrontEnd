@@ -131,15 +131,24 @@ function* createCategoryFlow(action) {
 }
 
 function* updateCategoryFlow(action) {
-  let check = yield call(checkDupCategoryFlow,action, "update");
+  if (action.needCheckName) {
+    let check = yield call(checkDupCategoryFlow, action, "update");
 
-  try {
-    if (!check.hasMatch) {
+    try {
+      if (!check.hasMatch) {
+        let json = yield call(updateCategory, action);
+        yield put({ type: UPDATE_CATEGORY_RESPONSE, json });
+      } else yield put({ type: UPDATE_CATEGORY_RESPONSE });
+    } catch (error) {
+      yield put({ type: UPDATE_CATEGORY_ERROR });
+    }
+  } else {
+    try {
       let json = yield call(updateCategory, action);
       yield put({ type: UPDATE_CATEGORY_RESPONSE, json });
-    } else yield put({ type: UPDATE_CATEGORY_RESPONSE });
-  } catch (error) {
-    yield put({ type: UPDATE_CATEGORY_ERROR });
+    } catch (error) {
+      yield put({ type: UPDATE_CATEGORY_ERROR });
+    }
   }
 }
 

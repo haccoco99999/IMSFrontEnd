@@ -329,30 +329,33 @@ export default function CreateGoodsReceiptComponent() {
           purchaseOrderNumber: selectedPO,
           locationId: selectedLocation.id,
           updateItems: list_BuyingProduct.map((product) => {
+            let temp;
+            if (product.sku !== "Validating") temp = product.sku;
+            else temp = null;
             return {
               productVariantId: product.productVariantId,
               quantityReceived: product.received,
-              sku: product.sku,
+              sku: temp,
               // barcode: product.barcode,
             };
           }),
         };
-        // Swal.fire({
-        //   title: "Are you sure",
-        //   text: "Do you want to save?",
-        //   icon: "question",
-        //   showCancelButton: true,
-        //   confirmButtonColor: "#3085d6",
-        //   cancelButtonColor: " #d33",
-        //   confirmButtonText: "Confirm",
-        //   reverseButtons: true,
-        // }).then((result) => {
-        //   if (result.isConfirmed) {
-        //   }
-        // });
+        Swal.fire({
+          title: "Are you sure",
+          text: "Do you want to save?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: " #d33",
+          confirmButtonText: "Confirm",
+          reverseButtons: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            dispatch(createGoodsReceiptAction({ data: Data, token: token }));
+          }
+        });
 
         console.log(Data);
-        dispatch(createGoodsReceiptAction({ data: Data, token: token }));
       }
     }
   }

@@ -297,7 +297,7 @@ export default function VariantDetails() {
                   </div>
                 </li>
                 <li class="list-group-item">
-                  <h5 class="card-title fw-bold">List of packages</h5>
+                  <h5 class="card-title fw-bold">Package Information</h5>
                   <BootstrapTable
                     keyField="id"
                     striped
