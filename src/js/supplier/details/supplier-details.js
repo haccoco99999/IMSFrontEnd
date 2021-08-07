@@ -58,6 +58,12 @@ export default function SupplierDetails() {
       event.preventDefault();
       event.stopPropagation;
     } else {
+      let needCheckName = false;
+      let needCheckEmail = false;
+      if (supplier.supplierName !== supplierStore.supplierName)
+        needCheckName = true;
+      if (supplier.email !== supplierStore.email) needCheckEmail = true;
+
       const data = {
         supplierId: supplier.id,
         supplierName: supplier.supplierName,
@@ -80,7 +86,14 @@ export default function SupplierDetails() {
         reverseButtons: true,
       }).then((result) => {
         if (result.isConfirmed) {
-          dispatch(updateDetailsSupplierAction({ data: data, token: token }));
+          dispatch(
+            updateDetailsSupplierAction({
+              data: data,
+              token: token,
+              needCheckName: needCheckName,
+              needCheckEmail: needCheckEmail,
+            })
+          );
         }
       });
     }
@@ -114,14 +127,14 @@ export default function SupplierDetails() {
   function setListButtonNav(isDisabled) {
     if (isDisabled) {
       return [
-        {
-          isShow: true,
-          title: "Delete",
-          action: () => onClickDelete(),
-          // action: () => testSWAL(),
-          class: "btn-danger ",
-          // style: {},
-        },
+        // {
+        //   isShow: true,
+        //   title: "Delete",
+        //   action: () => onClickDelete(),
+        //   // action: () => testSWAL(),
+        //   class: "btn-danger ",
+        //   // style: {},
+        // },
 
         {
           isShow: true,
@@ -134,14 +147,14 @@ export default function SupplierDetails() {
       ];
     } else {
       return [
-        {
-          isShow: true,
-          title: "Delete",
-          action: () => onClickDelete(),
-          // action: () => testSWAL(),
-          class: "btn-danger ",
-          // style: {},
-        },
+        // {
+        //   isShow: true,
+        //   title: "Delete",
+        //   action: () => onClickDelete(),
+        //   // action: () => testSWAL(),
+        //   class: "btn-danger ",
+        //   // style: {},
+        // },
         {
           isShow: true,
           title: "Cancel",
@@ -195,7 +208,7 @@ export default function SupplierDetails() {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Duplicate",
+          text: updateSupplierReducer.messages,
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
         });
@@ -254,18 +267,6 @@ export default function SupplierDetails() {
   useEffect(() => {
     if (getDetailsSupplierReducer.successful) setReturnData(true);
   }, [getDetailsSupplierReducer]);
-  // useEffect(() => {
-  //   if (messages === "Update Success") {
-  //     dispatch(
-  //       getDetailsSupplierAction({
-  //         id: location.state.supplierId,
-  //         token: token,
-  //       })
-  //     );
-  //   } else if (messages === "Delete Success") {
-  //     history.push("/homepage/supplier");
-  //   }
-  // }, [messages]);
 
   return (
     <div>

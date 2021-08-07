@@ -76,7 +76,7 @@ export function updateSupplierReducer(state = updateState, action) {
           ...state,
           requesting: false,
           successful: true,
-          messages: "Duplicate",
+          messages: action.errorMsg,
           errors: true,
         };
       else
@@ -95,8 +95,8 @@ export function updateSupplierReducer(state = updateState, action) {
         messages: "",
         errors: true,
       };
-    // case CLEAR_MESSAGE:
-    //   return updateState;
+    case CLEAR_MESSAGE:
+      return updateState;
     default:
       return state;
   }
@@ -134,8 +134,8 @@ export function deleteSupplierReducer(state = deleteState, action) {
         messages: "",
         errors: true,
       };
-    // case CLEAR_MESSAGE:
-    //   return deleteState;
+    case CLEAR_MESSAGE:
+      return deleteState;
     default:
       return state;
   }

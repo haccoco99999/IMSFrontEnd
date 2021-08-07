@@ -106,7 +106,7 @@ export default function StocktakeDetailsComponent() {
   //todo: declare bootstrap table
   const columns = [
     {
-      dataField: "packageId",
+      dataField: "pkgId",
       text: "Package Id",
       editable: false,
     },
@@ -164,7 +164,7 @@ export default function StocktakeDetailsComponent() {
         (listCheckedItems[rowIndex].note = row.note),
     },
     {
-      dataField: "packageId",
+      dataField: "pkgId",
       text: "Action",
       formatter: (cellContent, row, rowIndex) => (
         // <div>
@@ -190,7 +190,7 @@ export default function StocktakeDetailsComponent() {
 
   const columnsNotProgressing = [
     {
-      dataField: "packageId",
+      dataField: "pkgId",
       text: "Package Id",
       hidden: true,
     },
@@ -286,7 +286,7 @@ export default function StocktakeDetailsComponent() {
           locationId: groupLocationStore[0].location.id,
           checkItems: listCheckedItems.map((checkItem) => {
             return {
-              packageId: checkItem.packageId,
+              pkgId: checkItem.pkgId,
               actualQuantity: checkItem.actualQuantity,
               note: checkItem.note,
             };
@@ -391,7 +391,7 @@ export default function StocktakeDetailsComponent() {
         setListCheckedItems(
           groupLocationStore[0].checkItems.map((item) => {
             return {
-              packageId: item.packageId,
+              pkgId: item.pkgId,
               sku: item.sku,
               variantName: item.productVariantName,
               quantity: item.storageQuantity,
@@ -425,7 +425,7 @@ export default function StocktakeDetailsComponent() {
       setListCheckedItems(
         groupLocationStore[0].checkItems.map((item) => {
           return {
-            packageId: item.packageId,
+            pkgId: item.pkgId,
             sku: item.sku,
             variantName: item.productVariantName,
             quantity: item.storageQuantity,
@@ -438,7 +438,7 @@ export default function StocktakeDetailsComponent() {
       setListCompare(
         groupLocationStore[0].checkItems.map((item) => {
           return {
-            packageId: item.packageId,
+            pkgId: item.pkgId,
             actualQuantity: item.actualQuantity,
             note: item.note,
             isChanging: false,
@@ -731,7 +731,7 @@ export default function StocktakeDetailsComponent() {
                   {isLoading &&
                     (statusStocktakeStore === 0 ? (
                       <Table
-                        keyField="packageId"
+                        keyField="pkgId"
                         columns={columns}
                         data={listCheckedItems}
                         noDataIndication="Table is Empty"
@@ -746,7 +746,7 @@ export default function StocktakeDetailsComponent() {
                             done
                           ) {
                             let findEle = listCompare.find(
-                              (e) => e.packageId === row.packageId
+                              (e) => e.pkgId === row.pkgId
                             );
                             if (column.dataField === "actualQuantity") {
                               console.log("Actual quantity");
@@ -797,7 +797,7 @@ export default function StocktakeDetailsComponent() {
                       />
                     ) : (
                       <Table
-                        keyField="packageId"
+                        keyField="pkgId"
                         columns={columnsNotProgressing}
                         data={listCheckedItems}
                         noDataIndication="Table is Empty"

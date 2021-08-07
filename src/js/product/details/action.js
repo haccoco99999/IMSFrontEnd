@@ -33,13 +33,15 @@ export function updateVariantAction({
   data,
   token,
   needCheckName,
-  // needCheckSku,
+  needCheckSku,
+  page,
 }) {
   return {
     type: UPDATE_VARIANTS_REQUEST,
     data,
     token,
     needCheckName,
-    // needCheckSku,
+    needCheckSku,
+    page,
   };
 }

@@ -27,19 +27,20 @@ function createSupplier(action) {
     });
 }
 
-function checkDuplicateSupplier(action) {
+function checkDuplicateSupplier(data, token) {
   // console.log(action);
   const url = `${process.env.REACT_APP_API}/dupcheck/supplier`;
   return fetch(url, {
     method: "POST",
     headers: {
-      Authorization: "Bearer " + action.token,
+      Authorization: "Bearer " + token,
       "Content-Type": "application/json",
       Origin: "",
     },
     credentials: "include",
     body: JSON.stringify({
-      value: action.data.supplierName,
+      // value: action.data.supplierName,
+      value: data,
     }),
   })
     .then((response) => handleApiErrors(response))
@@ -50,9 +51,9 @@ function checkDuplicateSupplier(action) {
     });
 }
 
-function* checkDuplicateSupplierFlow(action) {
+function* checkDuplicateSupplierFlow(data, token) {
   try {
-    let resultCheckDup = yield call(checkDuplicateSupplier, action);
+    let resultCheckDup = yield call(checkDuplicateSupplier, data, token);
     return resultCheckDup;
   } catch (error) {
     console.log(error);
@@ -61,16 +62,47 @@ function* checkDuplicateSupplierFlow(action) {
 }
 
 function* createSupplierFlow(action) {
-  let check = yield call(checkDuplicateSupplierFlow, action);
-  try {
-    if (!check.hasMatch) {
+  let checkSupplierName = yield call(
+    checkDuplicateSupplierFlow,
+    action.data.supplierName,
+    action.token
+  );
+  let checkSupplierEmail = yield call(
+    checkDuplicateSupplierFlow,
+    action.data.email,
+    action.token
+  );
+  if (checkSupplierName.hasMatch || checkSupplierEmail.hasMatch) {
+    let errorMsg = "Duplicate at ";
+    if (checkSupplierName.hasMatch) errorMsg = errorMsg + " name";
+    if (checkSupplierEmail.hasMatch) {
+      if (checkSupplierName.hasMatch) errorMsg = errorMsg + " and email";
+      else errorMsg = errorMsg + " email";
+    }
+    try {
+      yield put({ type: CREAT_SUPPLIER_RESPONSE, errorMsg });
+    } catch (error) {
+      console.log(error);
+      yield put({ type: CREAT_SUPPLIER_ERROR });
+    }
+  } else {
+    try {
       let json = yield call(createSupplier, action);
       yield put({ type: CREAT_SUPPLIER_RESPONSE, json });
-    } else yield put({ type: CREAT_SUPPLIER_RESPONSE });
-  } catch (error) {
-    console.log(error);
-    yield put({ type: CREAT_SUPPLIER_ERROR });
+    } catch (error) {
+      console.log(error);
+      yield put({ type: CREAT_SUPPLIER_ERROR });
+    }
   }
+  // try {
+  //   if (!check.hasMatch) {
+  //     let json = yield call(createSupplier, action);
+  //     yield put({ type: CREAT_SUPPLIER_RESPONSE, json });
+  //   } else yield put({ type: CREAT_SUPPLIER_RESPONSE });
+  // } catch (error) {
+  //   console.log(error);
+  //   yield put({ type: CREAT_SUPPLIER_ERROR });
+  // }
 }
 
 function* watcher() {

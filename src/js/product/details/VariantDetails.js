@@ -123,7 +123,15 @@ export default function VariantDetails() {
     //reset
     setVariant(variantStore);
   }
+  
   function onClickSave() {
+    let needCheckName = true;
+    let needCheckSku = true;
+
+    if (variant.name === variantStore.name) needCheckName = false;
+
+    if (variant.sku === "") needCheckSku = false;
+
     const data = {
       productId: location.state.productId,
       isVariantType: location.state.variantType,
@@ -134,7 +142,7 @@ export default function VariantDetails() {
           price: variant.price,
           // barcode: variant.barcode,
           sku: variant.sku,
-          unit: variant.unit,
+          // unit: variant.unit,
         },
       ],
     };
@@ -151,22 +159,15 @@ export default function VariantDetails() {
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        if (variant.name === variantStore.name)
-          dispatch(
-            updateVariantAction({
-              token: token,
-              data: data,
-              needCheckName: false,
-            })
-          );
-        else
-          dispatch(
-            updateVariantAction({
-              token: token,
-              data: data,
-              needCheckName: true,
-            })
-          );
+        dispatch(
+          updateVariantAction({
+            token: token,
+            data: data,
+            needCheckName: needCheckName,
+            needCheckSku: needCheckSku,
+            page:"Details"
+          })
+        );
       }
     });
   }
@@ -213,7 +214,7 @@ export default function VariantDetails() {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Duplicate",
+          text: updateVariantReducer.messages,
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
         });

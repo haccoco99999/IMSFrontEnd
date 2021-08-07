@@ -1,4 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
+import { IgnorePlugin } from "webpack";
 import handleApiErrors from "../../auth/api-errors";
 
 import {
@@ -158,20 +159,20 @@ function checkDuplicateProduct(action) {
     });
 }
 
-function checkDuplicateVariant(action) {
-  let dataCheck = action.data.productVariantsUpdate[0].name;
+function checkDuplicateVariant(data, token) {
+  // let dataCheck = action.data.productVariantsUpdate[0].name;
 
   const url = `${process.env.REACT_APP_API}/dupcheck/productvariant`;
   return fetch(url, {
     method: "POST",
     headers: {
-      Authorization: "Bearer " + action.token,
+      Authorization: "Bearer " + token,
       "Content-Type": "application/json",
       Origin: "",
     },
     credentials: "include",
     body: JSON.stringify({
-      value: dataCheck,
+      value: data,
     }),
   })
     .then((response) => handleApiErrors(response))
@@ -226,15 +227,15 @@ function* checkDuplicateProductFlow(action) {
   }
 }
 
-function* checkDuplicateVariantFlow(action) {
+function* checkDuplicateVariantFlow(data, token) {
   try {
-    console.log(action);
     // let dataCheck = ;
     // console.log(action.productVariantsUpdate[0].name);
-    let resultCheckDup = yield call(checkDuplicateVariant, action);
+    let resultCheckDup = yield call(checkDuplicateVariant, data, token);
     return resultCheckDup;
   } catch (error) {
-    yield put({ type: UPDATE_PRODUCT_ERROR });
+    console.log(error);
+    yield put({ type: UPDATE_VARIANTS_ERROR });
   }
 }
 
@@ -260,27 +261,118 @@ function* updateProductFlow(action) {
 }
 
 function* updateVariantFlow(action) {
-  if (action.needCheckName) {
-    let check = yield call(checkDuplicateVariantFlow, action);
+  let checkName = false;
+  let checkSku = false;
 
-    try {
-      if (!check.hasMatch) {
+  if (action.needCheckName) {
+    checkName = yield call(
+      checkDuplicateVariantFlow,
+      action.data.productVariantsUpdate[0].name,
+      action.token
+    );
+  }
+  if (action.needCheckSku) {
+    checkSku = yield call(
+      checkDuplicateVariantFlow,
+      action.data.productVariantsUpdate[0].sku,
+      action.token
+    );
+  }
+
+  if(action.page === "Create")
+  {
+
+    if (checkName.hasMatch || checkSku.hasMatch) {  
+      let errorMsg = "Duplicate at ";
+      if (checkName.hasMatch) errorMsg += " name";
+      if (checkSku.hasMatch) {
+        if (checkName.hasMatch) errorMsg += " and sku";
+        else errorMsg += " sku";
+      } 
+  
+      try {
+        yield put({ type: UPDATE_VARIANTS_RESPONSE, errorMsg });
+      } catch (error) {
+        console.log(error);
+        yield put({ type: UPDATE_VARIANTS_ERROR });
+      }
+    } else {
+      try {
         let json = yield call(updateVariant, action);
         yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
-      } else yield put({ type: UPDATE_VARIANTS_RESPONSE });
-    } catch (error) {
-      console.log(error);
-      yield put({ type: UPDATE_VARIANTS_ERROR });
+      } catch (error) {
+        console.log(error);
+        yield put({ type: UPDATE_VARIANTS_ERROR });
+      }
     }
-  } else {
-    try {
-      let json = yield call(updateVariant, action);
-      yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
-    } catch (error) {
-      console.log(error);
-      yield put({ type: UPDATE_VARIANTS_ERROR });
+
+  }else if(action.page === "Details")
+  {
+    if (checkName.hasMatch || checkSku.hasMatch) {
+     
+  
+  
+      let errorMsg = "Duplicate at ";
+      if (checkName.hasMatch) errorMsg += " name";
+      if (checkSku.hasMatch) {
+        if (checkName.hasMatch) errorMsg += " and sku";
+        else errorMsg += " sku";
+      } 
+  
+      if(checkSku.hasMatch && checkSku.redisMatchList.length > 0) {
+          let productVariantIdCheck = checkSku.redisMatchList[0].productVariantId
+          let productVariantIdInput = action.data.productVariantsUpdate[0].id
+          
+  
+      }
+
+
+
+      try {
+        yield put({ type: UPDATE_VARIANTS_RESPONSE, errorMsg });
+      } catch (error) {
+        console.log(error);
+        yield put({ type: UPDATE_VARIANTS_ERROR });
+      }
+    } else {
+      try {
+        let json = yield call(updateVariant, action);
+        yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
+      } catch (error) {
+        console.log(error);
+        yield put({ type: UPDATE_VARIANTS_ERROR });
+      }
     }
   }
+
+
+  
+
+  // if (action.needCheckName) {
+  //   let checkName = yield call(
+  //     checkDuplicateVariantFlow,
+  //     action.data.productVariantsUpdate[0].name,
+  //     action.token
+  //   );
+
+  //   try {
+  //     if (!check.hasMatch) {
+  //       let json = yield call(updateVariant, action);
+  //       yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
+  //     } else yield put({ type: UPDATE_VARIANTS_RESPONSE });
+  //   } catch (error) {
+  //     console.log(error);
+  //     yield put({ type: UPDATE_VARIANTS_ERROR });
+  //   }
+  // } else {
+  //   try {
+  //     let json = yield call(updateVariant, action);
+  //     yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
+  //   } catch (error) {
+  //     console.log(error);
+  //     yield put({ type: UPDATE_VARIANTS_ERROR });
+  //   }
+  // }
 }
 
 function* watcher() {

@@ -65,6 +65,7 @@ export default function CreateVariant() {
       event.stopPropagation();
     } else {
       event.preventDefault();
+
       const data = {
         productId: location.state.productId,
         // isVariantType: location.state.variantType,
@@ -80,6 +81,10 @@ export default function CreateVariant() {
           },
         ],
       };
+      let needCheckSku = true;
+      if (formData.sku === "") {
+        needCheckSku = false;
+      }
       console.log(data);
       Swal.fire({
         title: "Are you sure",
@@ -97,6 +102,8 @@ export default function CreateVariant() {
               token: token,
               data: data,
               needCheckName: true,
+              needCheckSku: needCheckSku,
+              page:"Create"
             })
           );
       });
@@ -127,7 +134,7 @@ export default function CreateVariant() {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Duplicate",
+          text: updateVariantReducer.messages,
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
         });

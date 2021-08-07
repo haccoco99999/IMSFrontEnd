@@ -275,7 +275,7 @@ export default function CreateStocktakeComponent() {
           locationId: selectedLocation.id,
           checkItems: listCheckedItems.map((checkItem) => {
             return {
-              packageId: checkItem.packageId,
+              pkgId: checkItem.packageId,
               productVariantName: checkItem.name,
               sku: checkItem.sku,
               storageQuantity: checkItem.quantity,

@@ -8,8 +8,19 @@ import {
 export function getDetailsSupplierAction({ id, token }) {
   return { type: GET_DETAILS_SUPPLIER_REQUEST, id, token };
 }
-export function updateDetailsSupplierAction({ data, token }) {
-  return { type: UPDATE_SUPPLIER_REQUEST, data, token };
+export function updateDetailsSupplierAction({
+  data,
+  token,
+  needCheckName,
+  needCheckEmail,
+}) {
+  return {
+    type: UPDATE_SUPPLIER_REQUEST,
+    data,
+    token,
+    needCheckName,
+    needCheckEmail,
+  };
 }
 
 export function deleteSupplierAction({ id, token }) {

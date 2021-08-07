@@ -63,10 +63,8 @@ export default function CreateSupplier() {
       }).then((result) => {
         if (result.isConfirmed) {
           dispatch(createSupplierAction({ token: token, data: data }));
-
         }
       });
-
     }
     form.classList.add("was-validated");
   }
@@ -115,7 +113,7 @@ export default function CreateSupplier() {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Duplicate",
+          text: createSupplierReducer.messages,
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
         });
@@ -139,7 +137,6 @@ export default function CreateSupplier() {
       });
     }
   }, [createSupplierReducer]);
- 
 
   return (
     <div>
