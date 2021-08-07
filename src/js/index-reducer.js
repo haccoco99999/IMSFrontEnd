@@ -12,7 +12,10 @@ import getAllAccountsReducer from "./manage-account/manager/account-manager/redu
 // import getAllProductsReducer from "./product/manager/product-manager/reducer";
 // import getGoodsReceiptDetailsReducer from "./good-receipt/details/reducer";
 // import getAllPurchaseRequisitionReducer from "./sale-man/manager/reducer";
-// import getDetailsPurchaseRequisitionReducer from "./sale-man/details/reducer";
+
+
+
+
 // import getAllSuppliersReducer from "./supplier/manager/reducer";
 // import getDetailsSupplierReducer from "./supplier/details/reducer";
 // import getCreatedFormPurchaseRequisitionReducer from "./sale-man/create/reducer";
@@ -87,8 +90,13 @@ import {
   updateLocationReducer,
 } from "./product/manager/location-manager/reducer";
 ////SALE MAN
-
 import getAllPurchaseRequisitionReducer from "./sale-man/manager/reducer";
+import {
+  getDetailsPurchaseRequisitionReducer,
+  updatePRReducer,
+  submitDraftReducer,
+  deletePRReducer,
+} from "./sale-man/details/reducer";
 import getCreatedFormPurchaseRequisitionReducer from "./sale-man/create/reducer";
 //Stock take
 import getAllStocktakeReducer from "./stock-take/manager/reducer";
@@ -170,8 +178,11 @@ const IndexReducer = combineReducers({
   createLocationReducer,
   updateLocationReducer,
   //SALE MAN
-  
   getAllPurchaseRequisitionReducer,
+  getDetailsPurchaseRequisitionReducer,
+  updatePRReducer,
+  submitDraftReducer,
+  deletePRReducer,
   getCreatedFormPurchaseRequisitionReducer,
   //STOCK TAKE
   getAllStocktakeReducer,

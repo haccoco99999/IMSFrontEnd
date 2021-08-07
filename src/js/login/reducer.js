@@ -3,13 +3,14 @@ import {
     LOGIN_SUCCESS,
     LOGIN_ERROR,
     LOGIN_BANNED,
+    LOGIN_CLEAN,
 } from './constants'
 
 const initalState = {
     requesting: false,
     successful: false,
     messages: "",
-    errors: [],
+    errors: false,
 }
 
 const reducer = function loginReducer(state = initalState, action) {
@@ -20,7 +21,7 @@ const reducer = function loginReducer(state = initalState, action) {
                 requesting: true,
                 successful: false,
                 messages: [],
-                errors: "",
+                errors: false,
             }
         case LOGIN_SUCCESS:
            
@@ -28,28 +29,27 @@ const reducer = function loginReducer(state = initalState, action) {
                 requesting: false,
                 successful: true,
                 messages: [],
-                errors: "",
+                errors: false,
             }
         case LOGIN_BANNED:
             
             return {
-                errors: "banned",
-                messages: ["TÀI KHOẢN BỊ KHÓA, LIÊN HỆ VỚI QUẢN LÝ"],
+                errors: true,
+                messages: ["Account was Banned"],
                 requesting: false,
                 successful: false,
             }
         case LOGIN_ERROR:
             // console.log(action.error.toString())
-            let errorMessages
-             if(action.error.toString() === "Error: Unauthorized"){
-                errorMessages= "Username or password is incorrect!!!"
-             }
+           
             return {
-                errors: "error-login-opacity",
-                messages: [errorMessages],
+                errors: true,
+                messages: "Username or password is not correct!",
                 requesting: false,
                 successful: false,
             }
+        case LOGIN_CLEAN:
+            return initalState
         default:
             return state
     }

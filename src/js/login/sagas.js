@@ -1,7 +1,7 @@
-import { take, fork, cancel, call, put, cancelled } from 'redux-saga/effects'
+import { take, fork, cancel, call, put, cancelled, takeEvery } from 'redux-saga/effects'
 
 import handleApiErrors from '../auth/api-errors'
-
+import {history}from '../history'
 
 
 
@@ -12,6 +12,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_ERROR,
   LOGIN_BANNED,
+  LOGOUT_REQUESTING,
 } from './constants'
 
 
@@ -29,7 +30,6 @@ import {
   const loginUrl = `https://imspublicapi.herokuapp.com/api/authentication`
 
 function loginApi (email, password) {  
-    
   return fetch(loginUrl, {
     
     method: 'POST',
@@ -48,8 +48,8 @@ function loginApi (email, password) {
     .catch((error) => { throw error })
 }
 
-function* logout (history) {  
-  alert("alo alo logout")
+function* logout () {  
+ 
   yield put(unsetClient())
 
   
@@ -57,11 +57,12 @@ function* logout (history) {
   history.push('/login')
 }
 
-function* loginFlow (email, password, history) {  
+function* loginFlow (action) {  
   let json
   try {
-    
-    json = yield call(loginApi, email, password)
+   
+
+    json = yield call(loginApi, action.email, action.password)
 
     if(json.result){
       yield put(setClient(json))
@@ -82,9 +83,7 @@ function* loginFlow (email, password, history) {
     
     yield put({ type: LOGIN_ERROR, error })
   } finally {
-    alert("chán quá")
     if (yield cancelled()) {
-      alert("tao da huy r")
       history.push('/login')
     }
   }
@@ -96,20 +95,22 @@ function* loginFlow (email, password, history) {
 
 function* loginWatcher () {  
  
-  while (true) {
+  yield takeEvery(LOGIN_REQUESTING,loginFlow )
+//  yield takeEvery(LOGOUT_REQUESTING, logout)
+  // while (true) {
    
-    const { email, password, history } = yield take(LOGIN_REQUESTING)
+  //   const { email, password } = yield take(LOGIN_REQUESTING)
 
-    const task = yield fork (loginFlow,email, password, history)
+  //   const task = yield fork (loginFlow,email, password)
     
     
-    const action = yield take([CLIENT_UNSET, LOGIN_ERROR])
-    alert(action.type === CLIENT_UNSET)
+  //   const action = yield take([CLIENT_UNSET, LOGIN_ERROR])
+  //   alert(action.type === CLIENT_UNSET)
   
-    if (action.type === CLIENT_UNSET) yield cancel(task)
+  //   if (action.type === CLIENT_UNSET) yield cancel(task)
   
-    yield call(logout(history))
-  }
+  //   yield call(logout)
+  // }
 }
 
 export default loginWatcher  

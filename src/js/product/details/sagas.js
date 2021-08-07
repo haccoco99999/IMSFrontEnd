@@ -239,28 +239,47 @@ function* checkDuplicateVariantFlow(action) {
 }
 
 function* updateProductFlow(action) {
-  let check = yield call(checkDuplicateProductFlow, action);
-  try {
-    if (!check.hasMatch) {
+  if (action.needCheckName) {
+    let check = yield call(checkDuplicateProductFlow, action);
+    try {
+      if (!check.hasMatch) {
+        let json = yield call(updateProduct, action);
+        yield put({ type: UPDATE_PRODUCT_RESPONSE, json });
+      } else yield put({ type: UPDATE_PRODUCT_RESPONSE });
+    } catch (error) {
+      yield put({ type: UPDATE_PRODUCT_ERROR });
+    }
+  } else {
+    try {
       let json = yield call(updateProduct, action);
       yield put({ type: UPDATE_PRODUCT_RESPONSE, json });
-    } else yield put({ type: UPDATE_PRODUCT_RESPONSE });
-  } catch (error) {
-    yield put({ type: UPDATE_PRODUCT_ERROR });
+    } catch (error) {
+      yield put({ type: UPDATE_PRODUCT_ERROR });
+    }
   }
 }
 
 function* updateVariantFlow(action) {
-  let check = yield call(checkDuplicateVariantFlow, action);
+  if (action.needCheckName) {
+    let check = yield call(checkDuplicateVariantFlow, action);
 
-  try {
-    if (!check.hasMatch) {
+    try {
+      if (!check.hasMatch) {
+        let json = yield call(updateVariant, action);
+        yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
+      } else yield put({ type: UPDATE_VARIANTS_RESPONSE });
+    } catch (error) {
+      console.log(error);
+      yield put({ type: UPDATE_VARIANTS_ERROR });
+    }
+  } else {
+    try {
       let json = yield call(updateVariant, action);
       yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
-    } else yield put({ type: UPDATE_VARIANTS_RESPONSE });
-  } catch (error) {
-    console.log(error);
-    yield put({ type: UPDATE_VARIANTS_ERROR });
+    } catch (error) {
+      console.log(error);
+      yield put({ type: UPDATE_VARIANTS_ERROR });
+    }
   }
 }
 

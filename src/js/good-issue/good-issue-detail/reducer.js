@@ -37,6 +37,7 @@ const initalGoodIssueDetailState = {
       phoneNumber: "",
       email: ""
     },
+    infoRejectOrder: {},
     listGoodIssueProducts: [
       // {
       //   discountAmount: "",
@@ -64,19 +65,28 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
       };
     case GET_GOOD_ISSUE_DETAIL_SUCCESS:
       console.log(action.json.goodsIssueOrder.transaction)
-
+      let infoRejectOrder
       let transaction
       action.json.goodsIssueOrder.transaction.transactionRecord.forEach(element => {
         if (element.userTransactionActionType === 0) {
           transaction = element
         }
-        else {
-          transaction = element
+        if (element.userTransactionActionType === 4) {
+
+          infoRejectOrder = {
+            createDate: element.date,
+            name: element.applicationUser.fullname,
+            email: element.applicationUser.email,
+            phoneNumber: element.applicationUser.phoneNumber,
+            reason: element.name
+          }
+
+
         }
 
       })
       let listProducts
-      if (action.json.productPackageFIFO !== undefined ) {
+      if (action.json.productPackageFIFO !== undefined) {
         listProducts = action.json.productPackageFIFO.map(item => {
           return {
             discountAmount: item.orderItem.discountAmount,
@@ -109,7 +119,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
           }
         })
       }
-     
+
       return {
         requesting: false,
         successful: true,
@@ -129,6 +139,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
             phoneNumber: transaction.applicationUser.phoneNumber,
             email: transaction.applicationUser.email
           },
+          infoRejectOrder:infoRejectOrder,
           listGoodIssueProducts: listProducts
         }
       }
@@ -274,8 +285,8 @@ export const RejectGoodIssue = function rejectGoodIssueReducer(state = rejectGoo
         errors: "",
 
       };
-      case REJECT_GOOD_ISSUE_CLEAN:
-        return rejectGoodIssueState
+    case REJECT_GOOD_ISSUE_CLEAN:
+      return rejectGoodIssueState
     default:
       return state;
   }

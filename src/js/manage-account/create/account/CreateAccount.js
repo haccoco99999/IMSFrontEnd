@@ -284,7 +284,7 @@ else if (updateAccountDetailStatus.errors) {
 
   async function changeUploadAvatar(event) {
 
-    const url = "https://api.cloudinary.com/v1_1/demo/image/upload";
+    const url = "https://api.cloudinary.com/v1_1/ims2021/upload";
 
 
     const formData = new FormData();
@@ -292,11 +292,12 @@ else if (updateAccountDetailStatus.errors) {
 
     let file = event.target.files[0];
     formData.append("file", file);
-    formData.append("upload_preset", "docs_upload_example_us_preset");
+    formData.append("upload_preset", "rmwbm6go");
 
     await fetch(url, {
       method: "POST",
-      body: formData
+      
+      body: formData,
     })
       .then((response) => {
         return response.json();

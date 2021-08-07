@@ -22,27 +22,38 @@ import IndexSagas from './index-sagas'
 import { applyMiddleware, createStore, compose } from 'redux'
 import { Provider } from 'react-redux'
 import LoginSaga from './login/sagas'
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
+import {  Router, Route, Redirect } from 'react-router-dom'
 import {checkHomePageAuthorization} from './auth/check-auth'
-
-const sagaMiddleware = createSagaMiddleware();
+// import store from './store';
+import {history} from  './history'
+ const sagaMiddleware = createSagaMiddleware();
 
 
 const composeSetup = process.env.NODE_ENV !== 'production' && typeof window === 'object' &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose
 
+  const rootReducer = (state, action) => {
+    if (action.type === 'LOGOUT_REQUESTING') {
+      const { login } = state
+      state = { login } 
+      history.push("/login")
+    }
+  
+    return IndexReducer(state, action);
+  };
+
 const store = createStore(
-  IndexReducer,
+  rootReducer,
   composeSetup(applyMiddleware(sagaMiddleware)), // allows redux devtools to watch sagas
 )
-
+ 
 sagaMiddleware.run(IndexSagas);
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router >
+      <Router history={history}>
         
       <Route exact path="/login" component={Login}></Route>
         {checkHomePageAuthorization(store) ?<Redirect to="/homepage/dashboard"/>: <Redirect to="/login"/>}

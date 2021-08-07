@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
+import moment from "moment";
 //css
 import "../goodreceipt.css";
 // import Table from "../../list-products-table/ListProductsTable";
@@ -24,10 +25,19 @@ export default function details() {
     {
       dataField: "productVariantId",
       text: "Variant ID",
+      hidden: true,
     },
     {
       dataField: "productVariantName",
-      text: "Variant Name",
+      text: " Name",
+    },
+    {
+      dataField: "variantSku",
+      text: "SKU",
+    },
+    {
+      dataField: "variantBarcode",
+      text: "Barcode",
     },
     { dataField: "quantityReceived", text: "Received " },
   ];
@@ -42,6 +52,7 @@ export default function details() {
     getGoodsReceiptDetailsReducer,
     transactionRecordStore,
     token,
+    locationStore,
   } = useSelector((state) => ({
     listProductsStore:
       state.getGoodsReceiptDetailsReducer.receivingOrder.receivedOrderItems,
@@ -57,9 +68,10 @@ export default function details() {
       state.getGoodsReceiptDetailsReducer.receivingOrder.transaction
         .transactionRecord,
     getGoodsReceiptDetailsReducer: state.getGoodsReceiptDetailsReducer,
+    locationStore: state.getGoodsReceiptDetailsReducer.receivingOrder.location,
   }));
 
-  console.log(suppliers);
+  // console.log(suppliers);
 
   useEffect(() => {
     dispatch(
@@ -105,105 +117,78 @@ export default function details() {
             status=""
             home="Goods receipt"
             currentPage="Goods receipt details"
-            // classStatus="bg-secondary"
           />
           <div className="wrapper">
-            <div className="wrapper-content shadow">
-              <div className="title-heading mt-2">
-                <span>Goods Receipt Details</span>
-              </div>
-              <nav>
-                <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                  <button
-                    className="nav-link active"
-                    id="nav-info-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nav-info"
-                    type="button"
-                    role="tab"
-                    aria-controls="nav-info"
-                    aria-selected="true"
-                  >
-                    General Information
-                  </button>
-                  <button
-                    className="nav-link"
-                    id="nav-received-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nav-received"
-                    type="button"
-                    role="tab"
-                    aria-controls="nav-received"
-                    aria-selected="false"
-                  >
-                    List Received Items
-                  </button>
-                </div>
-              </nav>
-              <div class="tab-content" id="nav-tabContent">
-                <div
-                  className="tab-pane fade show active"
-                  id="nav-info"
-                  role="tabpanel"
-                  aria-labelledby="nav-info-tab"
-                >
-                  <div className="shadow wrapper-content">
-                    {/* Details Title*/}
-                    <div class="d-flex justify-content-between mb-3">
-                      <div>
-                        <h5>Goods Receipt ID</h5>
-                        <h5 className="id-color">{goodsreceiptId}</h5>
-                      </div>
-                      <div>
-                        <h5>Purchase Order ID</h5>
-                        <h5 className="id-color"> {purchaseOrderId}</h5>
-                      </div>
-                      <div>
-                        <h5>Create Date</h5>
-                        <h5 className="id-color">
-                          {/* {createDate.split("T")[0]} */}
-                          {transactionRecordStore[0].date.split("T")[0]}
-                        </h5>
-                      </div>
-                      <div>
-                        <h5>Created By</h5>
-                        <h5 className="id-color">
-                          {transactionRecordStore[0].applicationUser.userName}
-                        </h5>
-                      </div>
+            <div class="card">
+              <div class="card-header fw-bold">Goods receipt Information</div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <div className="row g-3 justify-content-between me-3">
+                    <div className="col-4">
+                      <p>
+                        <strong>Goods Receipt ID:</strong> {goodsreceiptId}
+                      </p>
+                      <p>
+                        <strong>Purchase Order ID:</strong> {purchaseOrderId}
+                      </p>
                     </div>
-                    {/* Details Info Small  */}
-                    <div className="mt-3">
+                    <div className="col-4">
                       <p>
-                        <strong>Supplier:</strong> {suppliers.supplierName}
+                        <strong>Created Date: </strong>{" "}
+                        {moment(transactionRecordStore[0].date.split("T")[0])
+                          .add(7, "h")
+                          .format("DD-MM-YYYY")}
                       </p>
                       <p>
-                        <strong>Email:</strong> {suppliers.email}
-                      </p>
-                      <p>
-                        <strong>Phone No:</strong> {suppliers.phoneNumber}
+                        <strong>Created By:</strong>{" "}
+                        {transactionRecordStore[0].applicationUser.fullname}
                       </p>
                     </div>
                   </div>
-                </div>
-                <div
-                  class="tab-pane fade"
-                  id="nav-received"
-                  role="tabpanel"
-                  aria-labelledby="nav-received-tab"
-                >
-                  <div className="shadow wrapper-content mt-3">
-                    <BootstrapTable
-                      keyField="productVariantId"
-                      noDataIndication="Table is Empty"
-                      columns={columns}
-                      data={listProductsStore}
-                    />
+                </li>
+                <li class="list-group-item">
+                  <h5 class="card-title">Supplier Information</h5>
+                  <div className="col-4">
+                    <p>
+                      <strong>Supplier:</strong> {suppliers.supplierName}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {suppliers.email}
+                    </p>
+                    <p>
+                      <strong>Phone No:</strong> {suppliers.phoneNumber}
+                    </p>
                   </div>
-                </div>
-              </div>
+                </li>
+                <li class="list-group-item">
+                  <h5 class="card-title">Location Information</h5>
+
+                  <div className="col-4">
+                    <p>
+                      <strong>Location ID:</strong> {locationStore.id}
+                    </p>
+                    <p>
+                      <strong>Location name:</strong>{" "}
+                      {locationStore.locationName}
+                    </p>
+                    <p>
+                      <strong>Location Barcode:</strong>{" "}
+                      {locationStore.locationBarcode}
+                    </p>
+                  </div>
+                </li>
+                <li class="list-group-item">
+                  <h5 class="card-title">List of received products</h5>
+                  <BootstrapTable
+                    keyField="productVariantId"
+                    noDataIndication="Table is Empty"
+                    columns={columns}
+                    data={listProductsStore}
+                  />
+                </li>
+              </ul>
             </div>
-          </div>{" "}
+          </div>
         </>
       ) : (
         <TableLoading />

@@ -15,8 +15,8 @@ import Notification from "./notification/notification";
 import ManageAccount from "./manage-account/manage-account";
 import SaleManPage from "./sale-man/sale-man";
 import moment from "moment";
-
-import { connect, useSelector } from "react-redux";
+// import store from './store'
+import { connect, useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
   Route,
@@ -27,6 +27,8 @@ import {
 import NotificationBell from "./notification-component/notification-component";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CLIENT_UNSET } from "./user/constants";
+import { LOGOUT_REQUESTING } from "./login/constants";
 function App(props) {
   const [eventPage, setEventPage] = useState({
     hide: "bx-menu",
@@ -430,11 +432,9 @@ const mapStateToProps = (state) => ({
 
 function Logout() {
   let history = useHistory();
-
+  const dispatch =useDispatch()
   const logout = () => {
-    localStorage.removeItem("token");
-
-    history.push("/login");
+    dispatch({type:"LOGOUT_REQUESTING"})
   };
 
   return (

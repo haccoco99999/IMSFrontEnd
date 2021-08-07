@@ -51,7 +51,22 @@ export default function CreateSupplier() {
       };
       console.log(data);
 
-      dispatch(createSupplierAction({ token: token, data: data }));
+      Swal.fire({
+        title: "Are you sure",
+        text: "Do you want to save?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: " #d33",
+        confirmButtonText: "Confirm",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(createSupplierAction({ token: token, data: data }));
+
+        }
+      });
+
     }
     form.classList.add("was-validated");
   }
@@ -105,17 +120,17 @@ export default function CreateSupplier() {
           confirmButtonColor: "#3085d6",
         });
       } else
-      Swal.fire({
-        icon: "success",
-        title: "Your work has been saved",
-        showCancelButton: false,
-        confirmButtonColor: "#3085d6",
-      }).then((result) => {
-        if (result.isConfirmed)
-          history.push("/homepage/supplier/details", {
-            supplierId: createSupplierReducer.messages,
-          });
-      });
+        Swal.fire({
+          icon: "success",
+          title: "Your work has been saved",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        }).then((result) => {
+          if (result.isConfirmed)
+            history.push("/homepage/supplier/details", {
+              supplierId: createSupplierReducer.messages,
+            });
+        });
     } else if (createSupplierReducer.errors) {
       Swal.fire({
         icon: "error",
@@ -124,11 +139,7 @@ export default function CreateSupplier() {
       });
     }
   }, [createSupplierReducer]);
-  // useEffect(() => {
-  //   if (messages !== "") {
-  //     history.push("/homepage/supplier/details", { supplierId: messages });
-  //   }
-  // }, [messages]);
+ 
 
   return (
     <div>
@@ -143,7 +154,7 @@ export default function CreateSupplier() {
       />
       {/* content */}
 
-      <div className="wrapper space-top">
+      <div className="wrapper">
         {/* content field 1  */}
         <div class="card">
           <div class="card-header">Supplier Information</div>

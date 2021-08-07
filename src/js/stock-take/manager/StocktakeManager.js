@@ -22,9 +22,10 @@ export default function () {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  const { listStocktakeStore, pageCount, token } = useSelector((state) => ({
+  const { listStocktakeStore, pageCount,rowCountTotal,  token } = useSelector((state) => ({
     listStocktakeStore: state.getAllStocktakeReducer.listStocktakes,
     pageCount: state.getAllStocktakeReducer.pageCount,
+    rowCountTotal: state.getAllStocktakeReducer.rowCountTotal,
     token: state.client.token,
   }));
 
@@ -325,7 +326,7 @@ export default function () {
         token: token,
       })
     );
-    setFilter(dataFilter)
+    setStockTakeFilter(dataFilter)
   }
   function backPagingClick() {
     console.log("backWard");
@@ -387,6 +388,8 @@ export default function () {
             <div class="card-header text-white bg-secondary">List Stock Take</div>
             <div className="card-body">
               <PagingComponent 
+              rowCountTotal = {rowCountTotal}
+              sizePerPage={stockTakeFilter.sizePerPage}
               setSizePage={setSizePage}
               pageCount={pageCount} 
               nextPagingClick={nextPagingClick} 

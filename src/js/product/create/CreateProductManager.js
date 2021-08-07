@@ -25,7 +25,7 @@ export default function CreateProductManager() {
   const [step, setStep] = useState(1);
   const [isSelectVariantType, setIsSelectVariantType] = useState(false);
   const [formData, setFormData] = useReducer(formReducer, {
-    barcode: "",
+    // barcode: "",
     sku: "",
   });
   const [variantValues, setVariantValues] = useState([

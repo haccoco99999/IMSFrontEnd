@@ -65,8 +65,8 @@ const detailPurchaseOrderInital = {
 
         },
         mergedOrderIdLists: [],
-        infoUserPurchaseOrder: { },
-
+        infoUserPurchaseOrder: {},
+        infoRejectOrder: {},
         transaction: {
             transactionRecord: [
                 {
@@ -96,27 +96,62 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
 
             }
         case GET_DETAIL_PURCHASE_ORDER_SUCCESS:
+            let listStatus = {
+                requisition: ["Requisition"],
+                priceQuote: ["PriceQuote"],
+                purchase: ["PurchaseOrder,POCanceled,Done,POConfirm,POWaitingConfirmation"],
+
+            }
             console.log(action.json)
             let statusOrder = action.json.purchaseOrder.purchaseOrderStatusString
-           
-            let infoUserPurchaseOrder  ={}
-              action.json.purchaseOrder.transaction.transactionRecord.forEach(element => {
-             
-                if (element.typeString === statusOrder) {
-                    if (element.typeString === "Requisition" && element.userTransactionActionType === 2
-                    || element.typeString === "PriceQuote" && element.userTransactionActionType === 1
-                    
-                    ) {
-              
-                        infoUserPurchaseOrder =  {
-                            createDate: element.date,
-                            name: element.applicationUser.fullname,
-                            email: element.applicationUser.email,
-                            phoneNumber: element.applicationUser.phoneNumber,
-                        } 
-                  
+
+            let infoUserPurchaseOrder = {}
+            let infoRejectOrder = {}
+            action.json.purchaseOrder.transaction.transactionRecord.forEach(element => {
+
+
+                ///Quy trinh co thu tu. set thao tung quy trinh phieu
+                if (element.userTransactionActionType === 0 && element.typeString === "PriceQuote") {
+                    infoUserPurchaseOrder = {
+                        createDate: element.date,
+                        name: element.applicationUser.fullname,
+                        email: element.applicationUser.email,
+                        phoneNumber: element.applicationUser.phoneNumber,
+
                     }
                 }
+                if (element.userTransactionActionType === 0 && element.typeString === "Requisition") {
+                    infoUserPurchaseOrder = {
+                        createDate: element.date,
+                        name: element.applicationUser.fullname,
+                        email: element.applicationUser.email,
+                        phoneNumber: element.applicationUser.phoneNumber,
+
+                    }
+                }
+
+                if (element.userTransactionActionType === 0 && element.typeString === "Purchase") {
+                    infoUserPurchaseOrder = {
+                        createDate: element.date,
+                        name: element.applicationUser.fullname,
+                        email: element.applicationUser.email,
+                        phoneNumber: element.applicationUser.phoneNumber,
+
+                    }
+                }
+                if (element.userTransactionActionType === 4) {
+                    infoRejectOrder = {
+                        createDate: element.date,
+                        name: element.applicationUser.fullname,
+                        email: element.applicationUser.email,
+                        phoneNumber: element.applicationUser.phoneNumber,
+                        reason: element.name
+                    }
+                }
+
+                ///////////////////CHƯA XG
+
+
             });
             return {
                 ...state,
@@ -129,7 +164,8 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                     status: action.json.purchaseOrder.purchaseOrderStatusString,
                     transaction: action.json.purchaseOrder.transaction,
                     mergedOrderIdLists: action.json.mergedOrderIdLists !== undefined ? action.json.mergedOrderIdLists : [],
-                    infoUserPurchaseOrder: {...infoUserPurchaseOrder},
+                    infoUserPurchaseOrder: { ...infoUserPurchaseOrder },
+                    infoRejectOrder: { ...infoRejectOrder },
                     deliveryDate: action.json.purchaseOrder.deliveryDate.split("T")[0],
                     deadline: action.json.purchaseOrder.deadline.split("T")[0],
                     supplier: action.json.purchaseOrder.supplier !== null ? {

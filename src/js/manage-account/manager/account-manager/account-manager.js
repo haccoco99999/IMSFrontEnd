@@ -45,10 +45,11 @@ function AccountManager() {
 
 
 
-  const { data, token, pageCount } = useSelector((state) => ({
+  const { data, token, pageCount, rowCountTotal } = useSelector((state) => ({
     data: state.getAllAccountsReducer.listAccounts,
     token: state.client.token,
     pageCount: state.getAllAccountsReducer.pageCount,
+    rowCountTotal: state.getAllAccountsReducer.rowCountTotal,
   }));
 
 
@@ -272,7 +273,7 @@ function AccountManager() {
             <div className="card-body">
 
 
-              <PagingComponent setSizePage={setSizePage} sizePerPage={accountFilter.sizePerPage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={accountFilter.currentPage} />
+              <PagingComponent rowCountTotal={rowCountTotal} setSizePage={setSizePage} sizePerPage={accountFilter.sizePerPage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={accountFilter.currentPage} />
 
               <p onClick={redirectCreateAccount}><i class="bi bi-file-earmark-plus"></i>Add</p>
               <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">

@@ -12,7 +12,7 @@ import {
 
 function getAllPurchaseRequisition(action) {
   const getAllPurchaseRequisitionURL =
-  `${process.env.REACT_APP_API}/purchaseorder/search?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`
+  `${process.env.REACT_APP_API}/purchaseorder/search?${action.filter}`
 
   return fetch(getAllPurchaseRequisitionURL, {
     method: "GET",

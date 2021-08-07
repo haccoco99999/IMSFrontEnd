@@ -16,6 +16,7 @@ import 'jspdf-autotable'
 import QRCode from 'qrcode'
 import { CREATE_GOOD_ISSUE_CLEAN, GET_GOOD_ISSUE_DETAIL_CLEAN, REJECT_GOOD_ISSUE_CLEAN, UPDATE_GOOD_ISSUE_CLEAN } from './contants';
 import { InfoPurchaseOrderLoader, TableLoading } from '../../components/loading/loading-component';
+import RejectWrapper from '../../components/reject-wrapper/reject-component';
 
 export default function DetailGoodIssue() {
     const doc = new jsPDF();
@@ -27,6 +28,7 @@ export default function DetailGoodIssue() {
         GoodIssueDetail: state.DetailGoodIssue,
         token: state.client.token
     }))
+    const [infoRejectOrder, setInfoRejectOrder] = useState({})
     const [listGoodIssueProducts, setlistGoodIssueProducts] = useState([])
     const [eventPage, setEvenPage] = useState({
         reject: false,
@@ -46,7 +48,7 @@ export default function DetailGoodIssue() {
         setlistGoodIssueProducts(
             GoodIssueDetail.infoGoodIssueDetail.listGoodIssueProducts
         )
-
+        setInfoRejectOrder({...GoodIssueDetail.infoGoodIssueDetail.infoRejectOrder})
         setStatus(GoodIssueDetail.infoGoodIssueDetail.status)
     }, [GoodIssueDetail])
 
@@ -521,7 +523,15 @@ export default function DetailGoodIssue() {
                 status={status} />
 
             <div class="d-grid gap-2">
+              {status === "Cancel"? <RejectWrapper 
+              name={infoRejectOrder.name}
+              phoneNumber={infoRejectOrder.phoneNumber}
+              email={infoRejectOrder.email}
+              reason={infoRejectOrder.reason}
+              data={infoRejectOrder.createdDate}
 
+              
+              />: "" }  
                 <div className="p-3">
                     <div className="card">
                         <div class="card-header p-0">

@@ -9,15 +9,21 @@ export default function PagingComponent(props) {
 
 
         <div class="d-flex  mb-3">
-          <div class="me-auto p-2 ">
+          <div class=" p-2 ">
             <select value={props.sizePerPage} onChange={props.setSizePage} class="form-select col-auto justify-content-start" aria-label="Default select example">
 
               <option value={25}>25</option>
               <option value={50}>50</option>
               <option value={75}>75</option>
-            </select></div>
+            </select>
 
+          </div>
           <div class="p-2 ">
+            Show {props.currentPage} to {props.sizePerPage} of {props.rowCountTotal} entries
+
+          </div>
+
+          <div class=" ms-auto p-2 ">
             <ul className="pagination ">
               {props.currentPage === 1 ? (
                 <li class="page-item disabled">

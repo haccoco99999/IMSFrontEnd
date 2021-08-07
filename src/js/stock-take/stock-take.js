@@ -12,7 +12,7 @@ export default function () {
   return (
     // <Details/>
 
-    <div className="home_content wrapper">
+    <div className="home_content">
       <div className="text">
         {/* ############################ */}
         <Switch>

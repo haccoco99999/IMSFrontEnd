@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import './MergePriceQuote.css'
 
 export default function MergePriceQuote(props) {
+
   if (props.isShowMergePage) {
+    const {token} = useSelector((state) =>({
+      token : state.client.token
+    }))
   const [listPriceQuote, setListPriceQuote] = useState([])
 
   async function getPriceQuoteAPI() {
@@ -16,6 +21,7 @@ export default function MergePriceQuote(props) {
 
       method: 'GET',
       headers: {
+        "Authorization": "Bearer " + token,
         "Content-Type": "application/json",
         "Origin": ""
       },
@@ -46,6 +52,7 @@ export default function MergePriceQuote(props) {
 
       method: 'GET',
       headers: {
+        "Authorization": "Bearer " + token,
         "Content-Type": "application/json",
         "Origin": ""
       },

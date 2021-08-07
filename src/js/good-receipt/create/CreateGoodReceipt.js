@@ -79,11 +79,17 @@ export default function CreateGoodsReceiptComponent() {
       text: "ID",
       hidden: true,
     },
-    { dataField: "productId", text: "Product ID", editable: false },
+    {
+      dataField: "productId",
+      text: "Product ID",
+      editable: false,
+      hidden: true,
+    },
     {
       dataField: "productVariantId",
       text: "Variant ID",
       editable: false,
+      hidden: true,
     },
     {
       dataField: "name",
@@ -96,10 +102,23 @@ export default function CreateGoodsReceiptComponent() {
       text: "Barcode",
       editable: false,
     },
+    // nonEditableRows: () =>
+    //   list_BuyingProduct.map((item) => {
+    //     let findEle = listCompare.find(
+    //       (e) => e.id === item.id
+    //     );
+    //     if (item.sku !== ""
+    //  && item.sku === findEle.sku
+    //      )
+    //       return item.id;
+    //   }),
+
     {
       dataField: "sku",
       text: "SKU",
-      editable: (content, row, rowIndex, columnIndex) => content === "",
+      editable: (content, row, rowIndex, columnIndex) => {
+        return row.hasSKU;
+      },
       // editable: true,
       validator: (newValue, oldValue, row) => {
         if (oldValue.sku === "" && newValue !== "") {
@@ -318,7 +337,7 @@ export default function CreateGoodsReceiptComponent() {
       if (!isValid) {
         Swal.fire({
           title: "Error",
-          text: "Please input valid barcode or sku",
+          text: "Please input valid  sku",
           icon: "error",
           showCancelButton: true,
           cancelButtonText: "Cancel",
@@ -329,30 +348,33 @@ export default function CreateGoodsReceiptComponent() {
           purchaseOrderNumber: selectedPO,
           locationId: selectedLocation.id,
           updateItems: list_BuyingProduct.map((product) => {
+            let temp;
+            if (product.sku !== "Validating") temp = product.sku;
+            else temp = null;
             return {
               productVariantId: product.productVariantId,
               quantityReceived: product.received,
-              sku: product.sku,
+              sku: temp,
               // barcode: product.barcode,
             };
           }),
         };
-        // Swal.fire({
-        //   title: "Are you sure",
-        //   text: "Do you want to save?",
-        //   icon: "question",
-        //   showCancelButton: true,
-        //   confirmButtonColor: "#3085d6",
-        //   cancelButtonColor: " #d33",
-        //   confirmButtonText: "Confirm",
-        //   reverseButtons: true,
-        // }).then((result) => {
-        //   if (result.isConfirmed) {
-        //   }
-        // });
+        Swal.fire({
+          title: "Are you sure",
+          text: "Do you want to save?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: " #d33",
+          confirmButtonText: "Confirm",
+          reverseButtons: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            dispatch(createGoodsReceiptAction({ data: Data, token: token }));
+          }
+        });
 
         console.log(Data);
-        dispatch(createGoodsReceiptAction({ data: Data, token: token }));
       }
     }
   }
@@ -379,8 +401,8 @@ export default function CreateGoodsReceiptComponent() {
           productId: product.productVariant.productId,
           productVariantId: product.productVariantId,
           //todo: Sua lai data
-          // orderQuantity: product.quantityLeftAfterReceived,
-          orderQuantity: product.orderQuantity,
+          orderQuantity: product.quantityLeftAfterReceived,
+          // orderQuantity: product.orderQuantity,
           sku: product.productVariant.sku,
           barcode: product.productVariant.barcode,
           received: 0,
@@ -410,6 +432,7 @@ export default function CreateGoodsReceiptComponent() {
 
   const checkSKUSHasExistedInCache = (variantId) => {
     const check = (element) => element.productVariantId === variantId;
+    console.log(existRedisVariantSkus.some(check));
     return existRedisVariantSkus.some(check);
   };
 
@@ -427,18 +450,24 @@ export default function CreateGoodsReceiptComponent() {
           if (checkSKUSHasExistedInCache(product.productVariantId))
             tempSku = "Validating";
           else tempSku = product.productVariant.sku;
+          // let hasSKU;
+          // if (tempSKU !== "") hasSKU = false;
+          // else hasSKU = true;
           return {
             id: product.id,
             name: product.productVariant.name,
             productId: product.productVariant.productId,
             productVariantId: product.productVariantId,
+
             //todo: Sua lai data
-            // orderQuantity: product.quantityLeftAfterReceived,
-            orderQuantity: product.orderQuantity,
+            orderQuantity: product.quantityLeftAfterReceived,
+            // orderQuantity: product.orderQuantity,
             // sku: product.productVariant.sku,
             sku: tempSku,
             barcode: product.productVariant.barcode,
             received: 0,
+            // hasSKU: product.productVariant.sku === "",
+            hasSKU: tempSku === "",
           };
         })
       );
@@ -467,7 +496,7 @@ export default function CreateGoodsReceiptComponent() {
       console.log(isChanging);
       if (listCompare.some(checkisValid)) setIsValid(false);
       else setIsValid(true);
-      console.log(isValid);
+      // console.log(isValid);
     }
   }, [listCompare]);
 

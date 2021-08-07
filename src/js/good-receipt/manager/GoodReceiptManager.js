@@ -19,9 +19,10 @@ export default function GoodsReceipt() {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  const { listGoodsReceipt, pageCount, token } = useSelector((state) => ({
+  const { listGoodsReceipt, pageCount,rowCountTotal, token } = useSelector((state) => ({
     listGoodsReceipt: state.getGoodsReceiptReducer.listGoodsReceipt,
     pageCount: state.getGoodsReceiptReducer.pageCount,
+    rowCountTotal: state.getGoodsReceiptReducer.rowCountTotal,
     token: state.client.token,
   }));
 
@@ -354,7 +355,7 @@ export default function GoodsReceipt() {
           <div className="card">
             <div class="card-header text-white bg-secondary">List Purchase Order</div>
             <div className="card-body">
-              <PagingComponent sizePerPage={goodsReceiptFilter.SizePerPage} setSizePage={setSizePage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={goodsReceiptFilter.currentPage} />
+              <PagingComponent rowCountTotal={rowCountTotal} sizePerPage={goodsReceiptFilter.SizePerPage} setSizePage={setSizePage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={goodsReceiptFilter.currentPage} />
 
               <p onClick={handleClick}><i class="bi bi-file-earmark-plus"></i>Add</p>
 

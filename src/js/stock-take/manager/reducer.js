@@ -21,10 +21,11 @@ export default function reducer(state = initialState, action) {
     case GET_ALL_STOCKTAKE_REQUEST:
       return {
         ...state,
+        listStocktakes: [],
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
     case GET_ALL_STOCKTAKE_RESPONSE:
       return {
@@ -32,7 +33,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
+        errors: false,
         currentPage: action.json.paging.currentPage,
         pageCount: action.json.paging.pageCount,
         sizePerPage: action.json.paging.sizePerPage,
@@ -45,7 +46,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
       };
     default:
       return state;

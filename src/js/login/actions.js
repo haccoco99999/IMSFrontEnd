@@ -1,11 +1,18 @@
-import {LOGIN_REQUESTING} from './constants'
+import {LOGIN_REQUESTING, LOGOUT_REQUESTING} from './constants'
 
- const loginRequest = function loginRequest({email, password, history}){
+ const loginRequest = function loginRequest({email, password}){
+   
     return{
         type: LOGIN_REQUESTING,
         email,
         password,
-        history
+        
+    }
+}
+export const logoutRequest = function logoutRequest(){
+    return{
+        type: LOGOUT_REQUESTING,
+        
     }
 }
 export default loginRequest  

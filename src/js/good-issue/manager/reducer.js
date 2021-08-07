@@ -11,16 +11,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
     errors: false,
     infoListGoodIssue:{
         listGoodIssue:[{
-            id:"",
-            transactionId:"",
-            goodsIssueNumber:"",
-            goodsIssueRequestNumber:"",
-            deliveryMethod:"",
-            status:"",
-            createdByName:"",
-            deliveryDate:"",
-            createdDate:"",
-
+      
         }],
         currentPage: 0,
         pageCount: 0,
@@ -36,6 +27,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
       case GET_ALL_GOOD_ISSUE_REQUESTING:
         return {
         ...state,
+        infoListGoodIssue:{...state.infoListGoodIssue,listGoodIssue:[] },
           requesting: true,
           successful: false,
           messages: "",

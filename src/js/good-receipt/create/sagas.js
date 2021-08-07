@@ -76,9 +76,9 @@ function getDetailsPO(action) {
 function setReceivingPurchaseOrderQuantity(action) {
   // const set_receiving_purchase_order_quantity =
   // "https://imspublicapi.herokuapp.com/api/goodsreceipt/update";
-  const url = `${process.env.REACT_APP_API}/goodsreceipt/update`;
+  const url = `${process.env.REACT_APP_API}/goodsreceipt/create`;
   return fetch(url, {
-    method: "PUT",
+    method: "POST",
     headers: {
       Authorization: "Bearer " + action.token,
       "Content-Type": "application/json",
