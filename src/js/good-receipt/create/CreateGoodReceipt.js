@@ -71,8 +71,19 @@ export default function CreateGoodsReceiptComponent() {
   }));
 
   console.log(existRedisVariantSkus);
+  console.log(checkDuplicateSKUReducer.hasMatch);
   //todo:spinner
+  const [checkDupicateSku, setCheckDuplicateSKU] = useState(false);
 
+  const test = (data) => {
+    dispatch(checkDuplicateSKUAction({ token: token, data: data }));
+    return checkDuplicateSKUReducer.hasMatch;
+  };
+
+  // useEffect(() => {
+  //   if (checkDuplicateSKUReducer.hasMatch) setCheckDuplicateSKU(true);
+  //   else setCheckDuplicateSKU(false);
+  // }, [checkDuplicateSKUReducer.hasMatch]);
   const columns = [
     {
       dataField: "id",
@@ -120,17 +131,47 @@ export default function CreateGoodsReceiptComponent() {
         return row.hasSKU;
       },
       // editable: true,
-      validator: (newValue, oldValue, row) => {
-        if (oldValue.sku === "" && newValue !== "") {
-          dispatch(checkDuplicateSKUAction({ token: token, data: newValue }));
-          if (checkDuplicateSKUReducer.hasMatch) {
-            setIsCheckingNumeric(true);
-            return {
-              valid: false,
-              message: "SKU has existed",
-            };
-          } else setIsCheckingNumeric(false);
+      validator: (newValue, oldValue, row, done) => {
+        if (test(newValue)) {
+          setIsCheckingNumeric(true);
+          console.log(test(newValue));
+          console.log("CHECKINGG");
+          return {
+            valid: false,
+            message: "SKU has existed",
+          };
+        } else {
+          console.log("CHECKINGG sai");
+          console.log(test(newValue));
+          setIsCheckingNumeric(false);
         }
+        // setTimeout(() => {
+        //   if (oldValue.sku === "" && newValue !== "") {
+
+        //   }
+        // }, 2000);
+
+        // setTimeout(() => {
+        //   if (oldValue.sku === "" && newValue !== "") {
+        //     // if (checkDuplicateSKUReducer.hasMatch) {
+        //       if(test(newValue)){
+        //       setIsCheckingNumeric(true);
+        //       console.log(test(newValue))
+        //       console.log("CHECKINGG");
+        //       return done({
+        //         valid: false,
+        //         message: "SKU has existed",
+        //       });
+        //     } else {
+        //       console.log("CHECKINGG sai");
+        //       console.log(test(newValue))
+        //       setIsCheckingNumeric(false);
+
+        //     }
+        //   }
+
+        // }, 2000);
+        // return { async: true };
       },
     },
     {
