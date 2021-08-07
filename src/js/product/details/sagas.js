@@ -1,5 +1,4 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { IgnorePlugin } from "webpack";
 import handleApiErrors from "../../auth/api-errors";
 
 import {
