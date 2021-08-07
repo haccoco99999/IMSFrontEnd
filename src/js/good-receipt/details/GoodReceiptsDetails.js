@@ -29,7 +29,15 @@ export default function details() {
     },
     {
       dataField: "productVariantName",
-      text: "Variant Name",
+      text: " Name",
+    },
+    {
+      dataField: "variantSku",
+      text: "SKU",
+    },
+    {
+      dataField: "variantBarcode",
+      text: "Barcode",
     },
     { dataField: "quantityReceived", text: "Received " },
   ];
