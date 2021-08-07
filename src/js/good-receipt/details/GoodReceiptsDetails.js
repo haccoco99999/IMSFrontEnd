@@ -44,6 +44,7 @@ export default function details() {
     getGoodsReceiptDetailsReducer,
     transactionRecordStore,
     token,
+    locationStore,
   } = useSelector((state) => ({
     listProductsStore:
       state.getGoodsReceiptDetailsReducer.receivingOrder.receivedOrderItems,
@@ -59,6 +60,7 @@ export default function details() {
       state.getGoodsReceiptDetailsReducer.receivingOrder.transaction
         .transactionRecord,
     getGoodsReceiptDetailsReducer: state.getGoodsReceiptDetailsReducer,
+    locationStore: state.getGoodsReceiptDetailsReducer.receivingOrder.location,
   }));
 
   // console.log(suppliers);
@@ -121,6 +123,8 @@ export default function details() {
                       <p>
                         <strong>Purchase Order ID:</strong> {purchaseOrderId}
                       </p>
+                    </div>
+                    <div className="col-4">
                       <p>
                         <strong>Created Date: </strong>{" "}
                         {moment(transactionRecordStore[0].date.split("T")[0])
@@ -132,20 +136,38 @@ export default function details() {
                         {transactionRecordStore[0].applicationUser.fullname}
                       </p>
                     </div>
-                    <div className="col-4">
-                      <p>
-                        <strong>Supplier:</strong> {suppliers.supplierName}
-                      </p>
-                      <p>
-                        <strong>Email:</strong> {suppliers.email}
-                      </p>
-                      <p>
-                        <strong>Phone No:</strong> {suppliers.phoneNumber}
-                      </p>
-                    </div>
                   </div>
+                </li>
+                <li class="list-group-item">
+                  <h5 class="card-title">Supplier Information</h5>
+                  <div className="col-4">
+                    <p>
+                      <strong>Supplier:</strong> {suppliers.supplierName}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {suppliers.email}
+                    </p>
+                    <p>
+                      <strong>Phone No:</strong> {suppliers.phoneNumber}
+                    </p>
+                  </div>
+                </li>
+                <li class="list-group-item">
+                  <h5 class="card-title">Location Information</h5>
 
-                
+                  <div className="col-4">
+                    <p>
+                      <strong>Location ID:</strong> {locationStore.id}
+                    </p>
+                    <p>
+                      <strong>Location name:</strong>{" "}
+                      {locationStore.locationName}
+                    </p>
+                    <p>
+                      <strong>Location Barcode:</strong>{" "}
+                      {locationStore.locationBarcode}
+                    </p>
+                  </div>
                 </li>
                 <li class="list-group-item">
                   <h5 class="card-title">List of received products</h5>
@@ -156,60 +178,8 @@ export default function details() {
                     data={listProductsStore}
                   />
                 </li>
-                {/* <li class="list-group-item">A third item</li> */}
               </ul>
             </div>
-            {/* <div className="wrapper-content shadow">
-              <div className="title-heading mt-2">
-                <span>Goods Receipt Details</span>
-              </div>
-              <nav>
-                <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                  <button
-                    className="nav-link active"
-                    id="nav-info-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nav-info"
-                    type="button"
-                    role="tab"
-                    aria-controls="nav-info"
-                    aria-selected="true"
-                  >
-                    General Information
-                  </button>
-                  <button
-                    className="nav-link"
-                    id="nav-received-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nav-received"
-                    type="button"
-                    role="tab"
-                    aria-controls="nav-received"
-                    aria-selected="false"
-                  >
-                    List Received Items
-                  </button>
-                </div>
-              </nav>
-              <div class="tab-content" id="nav-tabContent">
-                <div
-                  className="tab-pane fade show active"
-                  id="nav-info"
-                  role="tabpanel"
-                  aria-labelledby="nav-info-tab"
-                >
-                  <div className="shadow wrapper-content"></div>
-                </div>
-                <div
-                  class="tab-pane fade"
-                  id="nav-received"
-                  role="tabpanel"
-                  aria-labelledby="nav-received-tab"
-                >
-                  <div className="shadow wrapper-content mt-3"></div>
-                </div>
-              </div>
-            </div> */}
           </div>
         </>
       ) : (

@@ -20,8 +20,8 @@ export default function VariantManager() {
   }));
 
   const columnsProductUpdate = [
-    { dataField: "productVariantId", text: "Variant ID" },
-    { dataField: "sku", text: "Updated SKU" },
+    { dataField: "productVariantName", text: "Name" },
+    { dataField: "sku", text: "Requested SKU" },
   ];
   useEffect(() => {
     dispatch(getAllUpdateProductAction({ token: token }));

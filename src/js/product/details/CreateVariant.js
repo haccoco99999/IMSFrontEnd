@@ -81,7 +81,25 @@ export default function CreateVariant() {
         ],
       };
       console.log(data);
-      dispatch(updateVariantAction({ token: token, data: data }));
+      Swal.fire({
+        title: "Are you sure",
+        text: "Do you want to save?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: " #d33",
+        confirmButtonText: "Confirm",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed)
+          dispatch(
+            updateVariantAction({
+              token: token,
+              data: data,
+              needCheckName: true,
+            })
+          );
+      });
     }
 
     form.classList.add("was-validated");

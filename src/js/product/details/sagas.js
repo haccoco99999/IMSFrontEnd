@@ -260,16 +260,26 @@ function* updateProductFlow(action) {
 }
 
 function* updateVariantFlow(action) {
-  let check = yield call(checkDuplicateVariantFlow, action);
+  if (action.needCheckName) {
+    let check = yield call(checkDuplicateVariantFlow, action);
 
-  try {
-    if (!check.hasMatch) {
+    try {
+      if (!check.hasMatch) {
+        let json = yield call(updateVariant, action);
+        yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
+      } else yield put({ type: UPDATE_VARIANTS_RESPONSE });
+    } catch (error) {
+      console.log(error);
+      yield put({ type: UPDATE_VARIANTS_ERROR });
+    }
+  } else {
+    try {
       let json = yield call(updateVariant, action);
       yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
-    } else yield put({ type: UPDATE_VARIANTS_RESPONSE });
-  } catch (error) {
-    console.log(error);
-    yield put({ type: UPDATE_VARIANTS_ERROR });
+    } catch (error) {
+      console.log(error);
+      yield put({ type: UPDATE_VARIANTS_ERROR });
+    }
   }
 }
 

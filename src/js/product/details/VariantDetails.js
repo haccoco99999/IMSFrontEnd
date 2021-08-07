@@ -139,7 +139,36 @@ export default function VariantDetails() {
       ],
     };
     console.log("DATA:", data);
-    dispatch(updateVariantAction({ token: token, data: data }));
+
+    Swal.fire({
+      title: "Are you sure",
+      text: "Do you want to save?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: " #d33",
+      confirmButtonText: "Confirm",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (variant.name === variantStore.name)
+          dispatch(
+            updateVariantAction({
+              token: token,
+              data: data,
+              needCheckName: false,
+            })
+          );
+        else
+          dispatch(
+            updateVariantAction({
+              token: token,
+              data: data,
+              needCheckName: true,
+            })
+          );
+      }
+    });
   }
   useEffect(() => {
     dispatch(getDetailsVariant({ id: location.state.variantId, token: token }));
@@ -281,17 +310,6 @@ export default function VariantDetails() {
                       <p>
                         <strong>Barcode: </strong>
                         {variant.barcode}
-                      </p>
-                    </div>
-                    <div className="col-4">
-                      <p>
-                        <strong>Storage Quantity: </strong>
-                        {variant.storageQuantity}
-                      </p>
-                      <p>
-                        <strong>Price: </strong>
-
-                        {variant.price}
                       </p>
                     </div>
                   </div>
