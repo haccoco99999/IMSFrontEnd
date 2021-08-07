@@ -1,0 +1,88 @@
+.purchase-quote-order{
+    margin-top: 20px;
+}
+.option-purchase{
+    font-size: 16px;
+   
+    height: 45px;
+
+}
+.option-purchase ul li{
+    float:  left;
+    list-style-type: none;
+    padding-right: 30px;
+}
+.option-purchase ul li img{
+    width: 25px;
+}
+.title-purchase-quote-order{
+    padding-bottom: 8px;
+    border-bottom: 1px solid;
+    padding-left: 17px;
+    width: 300px;
+    margin-bottom: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title-purchase-quote-order span{
+    font-size: 26px;
+    font-weight: 600;
+}
+.title-purchase-quote-order div{
+    width: 33px;
+    height: 33px;
+    background: white;
+    border-radius: 50%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border: 1px solid;
+}
+
+/* 
+
+*/
+.tool-bar-table{
+    padding: 20px;
+    display: flex;
+}
+
+.search-purchase{
+    width: 300px !important;
+}
+.list-icon-tool-bar{
+    display: flex;
+    width: 300px;
+    justify-content: space-evenly;
+    
+}
+.icon-tool-bar{
+    font-size: 23px !important;
+    height: 34px;
+    width: 65px;
+    /* font-size: 20px; */
+    border-radius: 18px;
+    border: 1px solid gray;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.select-row-table{
+    width: 100px;
+
+    height: 34px;
+    border-radius: 25px;
+}
+.left-size-paging{
+    width: 350px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.select-row-table:focus{
+    outline: none;
+}

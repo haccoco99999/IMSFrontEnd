@@ -1,0 +1,35 @@
+#carouselExampleIndicators{
+    height: 155px;
+}
+.carousel-inner{
+    height: 100%;
+}
+.carousel-item{
+    height: 155px !important;
+}
+.box-order{
+    
+    padding: 10px;
+    height: 155px;
+ 
+}
+.box-order p{
+    font-size: 15px;
+    margin-bottom: 0;
+}
+.container-box-order{
+    margin: 10px 8px;
+    background-color: white;
+  border-radius: 10px;
+    box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 35%);
+}
+.priceQuoteOrderNumber{
+    color: #4A94FC;
+}
+.footer-gallery{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+

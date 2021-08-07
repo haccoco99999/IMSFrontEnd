@@ -1,0 +1,20 @@
+.price-quote-info-supplier{
+    display: flex;
+    justify-content: flex-start;
+}
+.info-supplier-email-name{
+    display: flex;
+    width: 400px;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.info-supplier-phone-address{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin-left: 100px;
+    justify-content: space-between;
+}
+.content-container-receipt{
+    padding: 0 30px;
+}

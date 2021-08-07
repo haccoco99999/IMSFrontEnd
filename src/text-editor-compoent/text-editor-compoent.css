@@ -1,0 +1,43 @@
+.demo-editor{
+    height: 300px !important;
+    border: 1px solid #F1F1F1 !important;
+    padding: 5px !important;
+    border-radius: 2px !important;
+   
+}
+.public-DraftStyleDefault-block{
+    margin: 0;
+}
+.demo-wrapper{
+    background: white;
+    overflow: hidden;
+    margin-top: 30px !important;
+}
+.toolbar-class{
+    margin-bottom: 0px !important;
+    border-radius: 0px;
+
+}
+.toolbar-class > *{
+    padding: 0 10px;
+    border-right: 1px solid black;
+}
+.rdw-option-wrapper, .rdw-dropdown-wrapper{
+    border:0
+}
+.rdw-dropdown-selectedtext {
+    color: black;
+    text-decoration: none;
+}
+
+.rdw-editor-main::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+  }
+   
+
+  .rdw-editor-main::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+  }
