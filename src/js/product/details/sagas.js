@@ -278,17 +278,15 @@ function* updateVariantFlow(action) {
     );
   }
 
-  if(action.page === "Create")
-  {
-
-    if (checkName.hasMatch || checkSku.hasMatch) {  
+  if (action.page === "Create") {
+    if (checkName.hasMatch || checkSku.hasMatch) {
       let errorMsg = "Duplicate at ";
       if (checkName.hasMatch) errorMsg += " name";
       if (checkSku.hasMatch) {
         if (checkName.hasMatch) errorMsg += " and sku";
         else errorMsg += " sku";
-      } 
-  
+      }
+
       try {
         yield put({ type: UPDATE_VARIANTS_RESPONSE, errorMsg });
       } catch (error) {
@@ -304,36 +302,96 @@ function* updateVariantFlow(action) {
         yield put({ type: UPDATE_VARIANTS_ERROR });
       }
     }
+  } else if (action.page === "Details") {
+    if (checkSku.hasMatch) {
+      if (checkSku.redisMatchList.length > 0) {
+        let productVariantIdCheck = checkSku.redisMatchList[0].productVariantId;
+        let productVariantIdInput = action.data.productVariantsUpdate[0].id;
+        if (productVariantIdCheck !== productVariantIdInput) {
+          let errorMsg =
+            "Your sku is validating, please check in request update page to select the right variant.";
+          try {
+            yield put({ type: UPDATE_VARIANTS_RESPONSE, errorMsg });
+          } catch (error) {
+            console.log(error);
+            yield put({ type: UPDATE_VARIANTS_ERROR });
+          }
+        } else {
+          if (action.needCheckName) {
+            let errorMsg = "Duplicate at ";
+            if (checkName.hasMatch) {
+              errorMsg += " name";
+              try {
+                yield put({ type: UPDATE_VARIANTS_RESPONSE, errorMsg });
+              } catch (error) {
+                console.log(error);
+                yield put({ type: UPDATE_VARIANTS_ERROR });
+              }
+            } else {
+              //todo: checkName ko match => update
+              try {
+                let json = yield call(updateVariant, action);
+                yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
+              } catch (error) {
+                console.log(error);
+                yield put({ type: UPDATE_VARIANTS_ERROR });
+              }
+            }
+          }
+          //todo: KO can check name Moi thu ok
+          try {
+            let json = yield call(updateVariant, action);
+            yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
+          } catch (error) {
+            console.log(error);
+            yield put({ type: UPDATE_VARIANTS_ERROR });
+          }
+        }
+      } else if (checkSku.databaseMatchList.length > 0) {
+        //todo: bi loi
+        let errorMsg = "";
+        if (checkName.hasMatch) errorMsg = "Duplicate at name and sku";
+        else errorMsg = "Duplicate at sku";
 
-  }else if(action.page === "Details")
-  {
-    if (checkName.hasMatch || checkSku.hasMatch) {
-     
-  
-  
-      let errorMsg = "Duplicate at ";
-      if (checkName.hasMatch) errorMsg += " name";
-      if (checkSku.hasMatch) {
-        if (checkName.hasMatch) errorMsg += " and sku";
-        else errorMsg += " sku";
-      } 
-  
-      if(checkSku.hasMatch && checkSku.redisMatchList.length > 0) {
-          let productVariantIdCheck = checkSku.redisMatchList[0].productVariantId
-          let productVariantIdInput = action.data.productVariantsUpdate[0].id
-          
-  
+        try {
+          yield put({ type: UPDATE_VARIANTS_RESPONSE, errorMsg });
+        } catch (error) {
+          console.log(error);
+          yield put({ type: UPDATE_VARIANTS_ERROR });
+        }
+      } else if (
+        checkSku.databaseMatchList.length === 0 &&
+        checkName.redisMatchList.length === 0
+      ) {
+        let errorMsg = "";
+        if (checkName.hasMatch) {
+          errorMsg = "Duplicate at name";
+          try {
+            yield put({ type: UPDATE_VARIANTS_RESPONSE, errorMsg });
+          } catch (error) {
+            console.log(error);
+            yield put({ type: UPDATE_VARIANTS_ERROR });
+          }
+        } else {
+          try {
+            let json = yield call(updateVariant, action);
+            yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
+          } catch (error) {
+            console.log(error);
+            yield put({ type: UPDATE_VARIANTS_ERROR });
+          }
+        }
       }
-
-
-
+    } else if (checkName.hasMatch && !checkSku.hasMatch) {
+      //todo:chi check name
+      let errorMsg = "Duplicate at name";
       try {
         yield put({ type: UPDATE_VARIANTS_RESPONSE, errorMsg });
       } catch (error) {
         console.log(error);
         yield put({ type: UPDATE_VARIANTS_ERROR });
       }
-    } else {
+    } else if (!checkName.hasMatch && !checkSku.hasMatch) {
       try {
         let json = yield call(updateVariant, action);
         yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
@@ -343,35 +401,6 @@ function* updateVariantFlow(action) {
       }
     }
   }
-
-
-  
-
-  // if (action.needCheckName) {
-  //   let checkName = yield call(
-  //     checkDuplicateVariantFlow,
-  //     action.data.productVariantsUpdate[0].name,
-  //     action.token
-  //   );
-
-  //   try {
-  //     if (!check.hasMatch) {
-  //       let json = yield call(updateVariant, action);
-  //       yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
-  //     } else yield put({ type: UPDATE_VARIANTS_RESPONSE });
-  //   } catch (error) {
-  //     console.log(error);
-  //     yield put({ type: UPDATE_VARIANTS_ERROR });
-  //   }
-  // } else {
-  //   try {
-  //     let json = yield call(updateVariant, action);
-  //     yield put({ type: UPDATE_VARIANTS_RESPONSE, json });
-  //   } catch (error) {
-  //     console.log(error);
-  //     yield put({ type: UPDATE_VARIANTS_ERROR });
-  //   }
-  // }
 }
 
 function* watcher() {

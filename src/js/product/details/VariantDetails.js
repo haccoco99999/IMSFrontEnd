@@ -123,53 +123,73 @@ export default function VariantDetails() {
     //reset
     setVariant(variantStore);
   }
-  
+
   function onClickSave() {
-    let needCheckName = true;
-    let needCheckSku = true;
+    if (variant.name === "") {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Do not let empty name !",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      });
+    } else {
+      let needCheckName = true;
+      let needCheckSku = true;
 
-    if (variant.name === variantStore.name) needCheckName = false;
+      if (variant.name === variantStore.name) needCheckName = false;
 
-    if (variant.sku === "") needCheckSku = false;
+      if (variant.sku === "" || variantStore.sku === variant.sku)
+        needCheckSku = false;
 
-    const data = {
-      productId: location.state.productId,
-      isVariantType: location.state.variantType,
-      productVariantsUpdate: [
-        {
-          id: variant.id,
-          name: variant.name,
-          price: variant.price,
-          // barcode: variant.barcode,
-          sku: variant.sku,
-          // unit: variant.unit,
-        },
-      ],
-    };
-    console.log("DATA:", data);
+      const data = {
+        productId: location.state.productId,
+        isVariantType: location.state.variantType,
+        productVariantsUpdate: [
+          {
+            id: variant.id,
+            name: variant.name,
+            price: variant.price,
+            // barcode: variant.barcode,
+            sku: variant.sku,
+            // unit: variant.unit,
+          },
+        ],
+      };
+      console.log("DATA:", data);
 
-    Swal.fire({
-      title: "Are you sure",
-      text: "Do you want to save?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: " #d33",
-      confirmButtonText: "Confirm",
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(
-          updateVariantAction({
-            token: token,
-            data: data,
-            needCheckName: needCheckName,
-            needCheckSku: needCheckSku,
-            page:"Details"
-          })
-        );
-      }
-    });
+      if (!needCheckName && !needCheckSku)
+        Swal.fire({
+          icon: "question",
+          title: "No data",
+          text: "There is no new data to change.",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      else
+        Swal.fire({
+          title: "Are you sure",
+          text: "Do you want to save?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: " #d33",
+          confirmButtonText: "Confirm",
+          reverseButtons: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            dispatch(
+              updateVariantAction({
+                token: token,
+                data: data,
+                needCheckName: needCheckName,
+                needCheckSku: needCheckSku,
+                page: "Details",
+              })
+            );
+          }
+        });
+    }
   }
   useEffect(() => {
     dispatch(getDetailsVariant({ id: location.state.variantId, token: token }));
@@ -235,6 +255,8 @@ export default function VariantDetails() {
         icon: "error",
         title: "Error",
         text: "Something went wrong!",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
       });
     }
   }, [updateVariantReducer]);
@@ -285,13 +307,19 @@ export default function VariantDetails() {
                         {isDisabled ? (
                           variant.name
                         ) : (
-                          <input
-                            type="text"
-                            name="name"
-                            className="form-control"
-                            onChange={onChangeValue}
-                            value={variant.name}
-                          />
+                          <>
+                            {location.state.variantType ? (
+                              <input
+                                type="text"
+                                name="name"
+                                className="form-control"
+                                onChange={onChangeValue}
+                                value={variant.name}
+                              />
+                            ) : (
+                              variant.name
+                            )}
+                          </>
                         )}
                       </p>
                       <p>

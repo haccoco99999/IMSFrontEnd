@@ -36,7 +36,7 @@ export function createProductReducer(state = initialState, action) {
           ...state,
           requesting: false,
           successful: true,
-          messages: "Duplicate",
+          messages: action.errorMsg,
           errors: true,
         };
       } else

@@ -57,7 +57,6 @@ function getAllCategoryCreatedPage(action) {
 }
 
 function checkDuplicateProduct(action) {
-  // console.log(action);
   const url = `${process.env.REACT_APP_API}/dupcheck/product`;
   return fetch(url, {
     method: "POST",
@@ -69,6 +68,28 @@ function checkDuplicateProduct(action) {
     credentials: "include",
     body: JSON.stringify({
       value: action.data.name,
+    }),
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+function checkDuplicateSku(action) {
+  const url = `${process.env.REACT_APP_API}/dupcheck/productvariant`;
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      value: action.data.sku,
     }),
   })
     .then((response) => handleApiErrors(response))
@@ -110,20 +131,31 @@ function* checkDuplicateFlow(action) {
 }
 
 function* createProductFlow(action) {
-  let check = yield call(checkDuplicateFlow, action);
-  // console.log(check);
+  let checkName = yield call(checkDuplicateFlow, action);
+  let checkSku = false;
+  if (action.needCheckSku) checkSku = yield call(checkDuplicateSku, action);
 
-  try {
-    let json;
-    if (!check.hasMatch) {
-      json = yield call(createProduct, action);
-      yield put({ type: CREATE_PRODUCT_RESPONSE, json });
-    } else {
-      yield put({ type: CREATE_PRODUCT_RESPONSE });
+  if (checkName.hasMatch || checkSku.hasMatch) {
+    let errorMsg = "Duplicate at ";
+    if (checkName.hasMatch) errorMsg += " name";
+    if (checkSku.hasMatch)
+      if (checkName.hasMatch) errorMsg += "and sku";
+      else errorMsg += " sku";
+
+    try {
+      yield put({ type: CREATE_PRODUCT_RESPONSE, errorMsg });
+    } catch (error) {
+      console.log(error);
+      yield put({ type: CREATE_PRODUCT_ERROR });
     }
-  } catch (error) {
-    console.log(error);
-    yield put({ type: CREATE_PRODUCT_ERROR });
+  } else {
+    try {
+      let json = yield call(createProduct, action);
+      yield put({ type: CREATE_PRODUCT_RESPONSE, json });
+    } catch (error) {
+      console.log(error);
+      yield put({ type: CREATE_PRODUCT_ERROR });
+    }
   }
 }
 

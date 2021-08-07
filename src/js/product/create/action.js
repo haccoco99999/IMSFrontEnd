@@ -4,8 +4,8 @@ import {
   // GET_BRAND_REQUEST,
 } from "./constants";
 
-export function createProduct({ data, token }) {
-  return { type: CREATE_PRODUCT_REQUEST, data, token };
+export function createProduct({ data, token,needCheckSku }) {
+  return { type: CREATE_PRODUCT_REQUEST, data, token,needCheckSku };
 }
 
 export function getCategoriesAllAction({ token }) {

@@ -59,7 +59,7 @@ export default function ProductDetails() {
 
   const columns = [
     { dataField: "id", text: "VariantID", hidden: true },
-    { dataField: "name", text: "Variant Name" },
+    { dataField: "name", text: "Name" },
     { dataField: "sku", text: "SKU" },
     { dataField: "barcode", text: "Barcode" },
     { dataField: "storageQuantity", text: "Quantity", hidden: true },
