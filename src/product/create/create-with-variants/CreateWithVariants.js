@@ -13,26 +13,11 @@ import NavigationBar from "../../../components/navbar/navbar-component";
 
 export default function CreateWithVariants(props) {
   let history = useHistory();
-  // let location = useLocation();
+
   let dispatch = useDispatch();
 
-  // const { token, messages } = useSelector((state) => ({
-  //   token: state.client.token,
-  //   messages: state.createProductReducer.messages,
-  // }));
   //@params isChecking check neu co loi thi disable nut save
   const [isChecking, setIsChecking] = useState(false);
-
-  // const [variantValues, setVariantValues] = useState([
-  //   {
-  //     id: 1,
-  //     name: "",
-  //     price: 0,
-  //     salePrice: 0,
-  //     barcode: "",
-  //     sku: "",
-  //   },
-  // ]);
 
   //todo: declare bootstrap tabe
   const columns = [
@@ -43,6 +28,28 @@ export default function CreateWithVariants(props) {
       editable: true,
       formatter: (cellContent, row, rowIndex) =>
         (props.variantValues[rowIndex].name = row.name),
+      validator: (newValue, oldValue, row, done) => {
+        let check = false;
+        checkDuplicateValue(newValue).then((result) => {
+          console.log(result);
+          if (result.hasMatch) {
+            setIsChecking(true);
+            check = true;
+          } else {
+            setIsChecking(false);
+          }
+        });
+        setTimeout(() => {
+          if (check)
+            return done({
+              valid: false,
+              message: "Name has existed",
+            });
+          return done();
+        }, 2000);
+
+        return { async: true };
+      },
     },
     {
       dataField: "sku",
@@ -50,6 +57,28 @@ export default function CreateWithVariants(props) {
       editable: true,
       formatter: (cellContent, row, rowIndex) =>
         (props.variantValues[rowIndex].sku = row.sku),
+      validator: (newValue, oldValue, row, done) => {
+        let check = false;
+        checkDuplicateValue(newValue).then((result) => {
+          console.log(result);
+          if (result.hasMatch) {
+            setIsChecking(true);
+            check = true;
+          } else {
+            setIsChecking(false);
+          }
+        });
+        setTimeout(() => {
+          if (check)
+            return done({
+              valid: false,
+              message: "SKU has existed",
+            });
+          return done();
+        }, 2000);
+
+        return { async: true };
+      },
     },
     // {
     //   dataField: "barcode",
@@ -97,7 +126,7 @@ export default function CreateWithVariants(props) {
         return (
           <div
             className="text-danger"
-            onClick={() => props.clickDeleteVariant(rowIndex)}
+            onClick={() => clickDeleteVariant(rowIndex)}
           >
             <i class="bi bi-trash"></i>
           </div>
@@ -145,8 +174,28 @@ export default function CreateWithVariants(props) {
   //   setVariantValues(variantValues.filter((_, index) => index !== id));
   // }
 
+  function checkDuplicateValue(keySearch) {
+    const url = `${process.env.REACT_APP_API}/dupcheck/productvariant`;
+
+    let result = fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + props.token,
+        "Content-Type": "application/json",
+        Origin: "",
+      },
+      credentials: "include",
+      body: JSON.stringify({ value: keySearch }),
+    })
+      .then((response) => response.json())
+      .then((json) => json)
+      .catch((error) => {
+        throw error;
+      });
+    return result;
+  }
+
   function goBackClick() {
-    // history.goBack();
     props.prevStep();
   }
 
@@ -248,19 +297,21 @@ export default function CreateWithVariants(props) {
           <div class="card-body">
             <button
               onClick={props.clickToAddVariants}
-              className="btn btn-primary"
+              className="btn btn-outline-secondary"
             >
-              Add
+              Add variants
             </button>
-            <BootstrapTable
-              keyField="id"
-              data={props.variantValues}
-              columns={columns}
-              cellEdit={cellEditFactory({
-                mode: "click",
-                blurToSave: true,
-              })}
-            />
+            <div className="mt-3">
+              <BootstrapTable
+                keyField="id"
+                data={props.variantValues}
+                columns={columns}
+                cellEdit={cellEditFactory({
+                  mode: "click",
+                  blurToSave: true,
+                })}
+              />
+            </div>
           </div>
         </div>
         {/* <h2 className="id-color fw-bold mb-3">{dataLastPage.name}</h2>
