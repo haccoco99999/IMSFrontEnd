@@ -9,7 +9,7 @@ import {
 import handleApiErrors from "../auth/api-errors";
 
 function getAllNotifications(action) {
-  const url = `${process.env.REACT_APP_API}/notification?CurrentPage=1&SizePerPage=6&Channel=Manager`;
+  const url = `${process.env.REACT_APP_API}/notification?CurrentPage=1&SizePerPage=6&Channel=${action.userRole}`;
   return fetch(url, {
     method: "GET",
     headers: {
