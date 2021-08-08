@@ -55,6 +55,7 @@ export default function CreateStocktakeComponent() {
       id: uuid(),
       packageId: "",
       name: "",
+      sku: "",
       productVariantId: "",
       quantity: "",
       counted: "",
@@ -128,6 +129,7 @@ export default function CreateStocktakeComponent() {
             packageDetails.productVariantId;
           listCheckedItems[rowIndex].counted = 0;
           listCheckedItems[rowIndex].name = packageDetails.productVariant.name;
+          listCheckedItems[rowIndex].sku = packageDetails.productVariant.sku;
           setIsTimeForTrigger(true);
           setTimeout(() => {
             setIsTimeForTrigger(false);
@@ -161,6 +163,13 @@ export default function CreateStocktakeComponent() {
       dataField: "productVariantId",
       text: "Variant ID",
       editable: false,
+      hidden: true,
+    },
+    {
+      dataField: "sku",
+      text: "SKU",
+      editable: false,
+      // hidden: true,
     },
     { dataField: "name", text: "Name", editable: false },
     {
@@ -266,7 +275,10 @@ export default function CreateStocktakeComponent() {
           locationId: selectedLocation.id,
           checkItems: listCheckedItems.map((checkItem) => {
             return {
-              packageId: checkItem.packageId,
+              pkgId: checkItem.packageId,
+              productVariantName: checkItem.name,
+              sku: checkItem.sku,
+              storageQuantity: checkItem.quantity,
               actualQuantity: checkItem.counted,
               note: checkItem.note,
             };
@@ -299,7 +311,21 @@ export default function CreateStocktakeComponent() {
             });
           } else {
             console.log("Data output:", data);
-            dispatch(createStocktkaeAction({ token: token, data: data }));
+
+            Swal.fire({
+              title: "Are you sure",
+              text: "Do you want to save?",
+              icon: "question",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: " #d33",
+              confirmButtonText: "Confirm",
+              reverseButtons: true,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                dispatch(createStocktkaeAction({ token: token, data: data }));
+              }
+            });
           }
         } else {
           if (checkForDuplicates(listCheckedItems, "packageId")) {
@@ -357,6 +383,7 @@ export default function CreateStocktakeComponent() {
         id: uuid(),
         packageId: "",
         name: "",
+        sku: "",
         productVariantId: "",
         quantity: "",
         counted: "",

@@ -109,6 +109,8 @@ export function updateStocktakeReducer(state = updateState, action) {
         messages: "",
         errors: true,
       };
+    case RESET:
+      return updateState;
     default:
       return state;
   }
@@ -146,6 +148,8 @@ export function rejectStocktakeReducer(state = rejectState, action) {
         messages: "",
         errors: true,
       };
+    case RESET:
+      return rejectState;
     default:
       return state;
   }
@@ -182,6 +186,8 @@ export function adjustStocktakeReducer(state = adjustState, action) {
         messages: "",
         errors: true,
       };
+    case RESET:
+      return adjustState;
     default:
       return state;
   }
@@ -218,6 +224,8 @@ export function submitStocktakeReducer(state = submitState, action) {
         messages: "",
         errors: true,
       };
+    case RESET:
+      return submitState;
     default:
       return state;
   }

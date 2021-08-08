@@ -101,7 +101,7 @@ function* checkDuplicateSupplierFlow(data, token) {
     return resultCheckDup;
   } catch (error) {
     console.log(error);
-    yield put({ type: CREAT_SUPPLIER_ERROR });
+    yield put({ type: UPDATE_SUPPLIER_ERROR });
   }
 }
 

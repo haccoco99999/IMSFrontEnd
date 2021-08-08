@@ -113,7 +113,7 @@ function* checkDupLocationFlow(action, flow) {
 }
 
 function* createLocationFlow(action) {
-  let check = yield call(checkDupCategoryFlow, "create");
+  let check = yield call(checkDupLocationFlow, "create");
   try {
     if (!check.hasMatch) {
       let json = yield call(createLocation, action);
@@ -126,7 +126,7 @@ function* createLocationFlow(action) {
 }
 
 function* updateLocationFlow(action) {
-  let check = yield call(checkDupCategoryFlow, "update");
+  let check = yield call(checkDupLocationFlow, "update");
   try {
     if (!check.hasMatch) {
       let json = yield call(updateLocation, action);

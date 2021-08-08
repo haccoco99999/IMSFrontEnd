@@ -209,8 +209,8 @@ export function checkDuplicateSKUReducer(state = checkDupState, action) {
       if (redisMatchList.length > 0 || databaseMatchList.length > 0)
         return {
           ...state,
-          requesting: true,
-          successful: false,
+          requesting: false,
+          successful: true,
           messages: "",
           errors: false,
           hasMatch: true,
@@ -218,8 +218,8 @@ export function checkDuplicateSKUReducer(state = checkDupState, action) {
       else
         return {
           ...state,
-          requesting: true,
-          successful: false,
+          requesting: false,
+          successful: true,
           messages: "",
           errors: false,
           hasMatch: false,

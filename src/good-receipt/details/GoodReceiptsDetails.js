@@ -13,7 +13,7 @@ import NavigationBar from "../../components/navbar/navbar-component";
 import GetDetailsAction from "./action";
 import { TableLoading } from "../../components/loading/loading-component";
 import { RESET } from "./constants";
-export default function Details(props) {
+export default function GoodsReceiptDetails() {
   let history = useHistory();
   let location = useLocation();
   let dispatch = useDispatch();

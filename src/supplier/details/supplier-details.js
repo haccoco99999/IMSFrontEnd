@@ -56,7 +56,7 @@ export default function SupplierDetails() {
     const form = document.getElementById("productDetailsForm");
     if (!form.checkValidity()) {
       event.preventDefault();
-      event.stopPropagation;
+      // event.stopPropagation;
     } else {
       let needCheckName = false;
       let needCheckEmail = false;

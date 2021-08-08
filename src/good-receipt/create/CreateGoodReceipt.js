@@ -71,8 +71,19 @@ export default function CreateGoodsReceiptComponent() {
   }));
 
   console.log(existRedisVariantSkus);
+  console.log(checkDuplicateSKUReducer.hasMatch);
   //todo:spinner
+  const [checkDupicateSku, setCheckDuplicateSKU] = useState(false);
 
+  const test = (data) => {
+    dispatch(checkDuplicateSKUAction({ token: token, data: data }));
+    return checkDuplicateSKUReducer.hasMatch;
+  };
+
+  // useEffect(() => {
+  //   if (checkDuplicateSKUReducer.hasMatch) setCheckDuplicateSKU(true);
+  //   else setCheckDuplicateSKU(false);
+  // }, [checkDuplicateSKUReducer.hasMatch]);
   const columns = [
     {
       dataField: "id",
@@ -120,17 +131,29 @@ export default function CreateGoodsReceiptComponent() {
         return row.hasSKU;
       },
       // editable: true,
-      validator: (newValue, oldValue, row) => {
-        if (oldValue.sku === "" && newValue !== "") {
-          dispatch(checkDuplicateSKUAction({ token: token, data: newValue }));
-          if (checkDuplicateSKUReducer.hasMatch) {
+      validator: (newValue, oldValue, row, done) => {
+        setTimeout(() => {
+          if (test(newValue)) {
             setIsCheckingNumeric(true);
-            return {
-              valid: false,
-              message: "SKU has existed",
-            };
-          } else setIsCheckingNumeric(false);
-        }
+            console.log(test(newValue));
+            console.log("CHECKINGG");
+            if (checkDuplicateSKUReducer.successful) {
+              return done({
+                valid: false,
+                message: "SKU has existed",
+              });
+            }
+          } else {
+            console.log("CHECKINGG sai");
+            console.log(test(newValue));
+            if (checkDuplicateSKUReducer.successful) {
+              setIsCheckingNumeric(false);
+              return done();
+            }
+          }
+        }, 500);
+
+        return { async: true };
       },
     },
     {
@@ -685,42 +708,44 @@ export default function CreateGoodsReceiptComponent() {
                                   e === findEle ? (e.isChanging = false) : e
                                 ),
                               ]);
-                          } else if (column.dataField === "barcode") {
-                            console.log("Dang check barcode");
-                            let currentSKU = row.sku;
-                            if (
-                              newValue.barcode !== findEle ||
-                              currentBarcode !== findEle.barcode
-                            ) {
-                              setListCompare([
-                                ...listCompare,
-                                listCompare.map((e) =>
-                                  e === findEle ? (e.isChanging = true) : e
-                                ),
-                              ]);
-                              //todo: check invalid
-                              if (newValue === "" && currentSKU === "") {
-                                setListCompare([
-                                  ...listCompare,
-                                  listCompare.map((e) =>
-                                    e === findEle ? (e.isValid = false) : e
-                                  ),
-                                ]);
-                              } else
-                                setListCompare([
-                                  ...listCompare,
-                                  listCompare.map((e) =>
-                                    e === findEle ? (e.isValid = true) : e
-                                  ),
-                                ]);
-                            } else
-                              setListCompare([
-                                ...listCompare,
-                                listCompare.map((e) =>
-                                  e === findEle ? (e.isChanging = false) : e
-                                ),
-                              ]);
-                          }
+                          } 
+                          // else if (column.dataField === "barcode") {
+                          //   console.log("Dang check barcode");
+                          //   let currentSKU = row.sku;
+                          //   if (
+                          //     newValue.barcode !== findEle ||
+                          //     currentBarcode !== findEle.barcode
+                          //   ) {
+                          //     setListCompare([
+                          //       ...listCompare,
+                          //       listCompare.map((e) =>
+                          //         e === findEle ? (e.isChanging = true) : e
+                          //       ),
+                          //     ]);
+                          //     //todo: check invalid
+                          //     if (newValue === "" && currentSKU === "") {
+                          //       setListCompare([
+                          //         ...listCompare,
+                          //         listCompare.map((e) =>
+                          //           e === findEle ? (e.isValid = false) : e
+                          //         ),
+                          //       ]);
+                          //     } else
+                          //       setListCompare([
+                          //         ...listCompare,
+                          //         listCompare.map((e) =>
+                          //           e === findEle ? (e.isValid = true) : e
+                          //         ),
+                          //       ]);
+                          //   }
+                          //    else
+                          //     setListCompare([
+                          //       ...listCompare,
+                          //       listCompare.map((e) =>
+                          //         e === findEle ? (e.isChanging = false) : e
+                          //       ),
+                          //     ]);
+                          // }
                         },
                       })}
                     />

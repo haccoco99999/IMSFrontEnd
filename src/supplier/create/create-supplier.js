@@ -38,7 +38,7 @@ export default function CreateSupplier() {
     const form = document.getElementById("productDetailsForm");
     if (!form.checkValidity()) {
       event.preventDefault();
-      event.stopPropagation;
+      // event.stopPropagation;
     } else {
       checkUndifined();
       const data = {

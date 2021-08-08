@@ -106,20 +106,21 @@ export default function StocktakeDetailsComponent() {
   //todo: declare bootstrap table
   const columns = [
     {
-      dataField: "packageId",
+      dataField: "pkgId",
       text: "Package Id",
-      editable: true,
+      editable: false,
     },
     {
       // dataField: "package.productVariantId",
-      dataField: "variantId",
-      text: "Variant ID",
+      dataField: "sku",
+      text: "SKU",
       editable: false,
+      // hidden: true,
     },
     {
       //   dataField: "package.productVariant.name",
       dataField: "variantName",
-      text: "Variant Name",
+      text: "Name",
       editable: false,
     },
     {
@@ -163,17 +164,25 @@ export default function StocktakeDetailsComponent() {
         (listCheckedItems[rowIndex].note = row.note),
     },
     {
-      dataField: "packageId",
+      dataField: "pkgId",
       text: "Action",
       formatter: (cellContent, row, rowIndex) => (
-        <div>
-          <button
-            type="button"
-            className="btn btn-danger"
-            onClick={() => clickDeleteCheckItems(rowIndex)}
-          >
-            Delete
-          </button>
+        // <div>
+
+        //   <button
+        //     type="button"
+        //     className="btn btn-danger"
+        //     onClick={() => clickDeleteCheckItems(rowIndex)}
+        //   >
+        //     Delete
+        //   </button>
+        // </div>
+
+        <div
+          className="text-danger"
+          onClick={() => clickDeleteCheckItems(rowIndex)}
+        >
+          <i class="bi bi-trash"></i>
         </div>
       ),
     },
@@ -181,18 +190,20 @@ export default function StocktakeDetailsComponent() {
 
   const columnsNotProgressing = [
     {
-      dataField: "packageId",
+      dataField: "pkgId",
       text: "Package Id",
+      hidden: true,
     },
     {
       // dataField: "package.productVariantId",
-      dataField: "variantId",
-      text: "Variant ID",
+      dataField: "sku",
+      text: "SKU",
+      // hidden: true,
     },
     {
       //   dataField: "package.productVariant.name",
       dataField: "variantName",
-      text: "Variant Name",
+      text: " Name",
     },
     {
       //   dataField: "package.quantity",
@@ -245,7 +256,7 @@ export default function StocktakeDetailsComponent() {
         {
           isShow: true,
           title: "Adjust",
-          action: () => showAdjustModal(),
+          action: () => onAdjustClick(),
           class: "btn-primary",
           // style: {},
         },
@@ -257,7 +268,8 @@ export default function StocktakeDetailsComponent() {
 
   //todo: function button
   function goBackClick() {
-    history.goBack();
+    // history.goBack();
+    history.push("/homepage/stock-take");
   }
 
   function clickDeleteCheckItems(rowIndex) {
@@ -274,7 +286,7 @@ export default function StocktakeDetailsComponent() {
           locationId: groupLocationStore[0].location.id,
           checkItems: listCheckedItems.map((checkItem) => {
             return {
-              packageId: checkItem.packageId,
+              pkgId: checkItem.pkgId,
               actualQuantity: checkItem.actualQuantity,
               note: checkItem.note,
             };
@@ -379,10 +391,10 @@ export default function StocktakeDetailsComponent() {
         setListCheckedItems(
           groupLocationStore[0].checkItems.map((item) => {
             return {
-              packageId: item.packageId,
-              variantId: item.package.productVariantId,
-              variantName: item.package.productVariant.name,
-              quantity: item.package.quantity,
+              pkgId: item.pkgId,
+              sku: item.sku,
+              variantName: item.productVariantName,
+              quantity: item.storageQuantity,
               actualQuantity: item.actualQuantity,
               note: item.note,
             };
@@ -413,10 +425,10 @@ export default function StocktakeDetailsComponent() {
       setListCheckedItems(
         groupLocationStore[0].checkItems.map((item) => {
           return {
-            packageId: item.packageId,
-            variantId: item.package.productVariantId,
-            variantName: item.package.productVariant.name,
-            quantity: item.package.quantity,
+            pkgId: item.pkgId,
+            sku: item.sku,
+            variantName: item.productVariantName,
+            quantity: item.storageQuantity,
             actualQuantity: item.actualQuantity,
             note: item.note,
           };
@@ -426,7 +438,7 @@ export default function StocktakeDetailsComponent() {
       setListCompare(
         groupLocationStore[0].checkItems.map((item) => {
           return {
-            packageId: item.packageId,
+            pkgId: item.pkgId,
             actualQuantity: item.actualQuantity,
             note: item.note,
             isChanging: false,
@@ -511,12 +523,13 @@ export default function StocktakeDetailsComponent() {
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
       }).then((result) => {
-        dispatch(
-          getDetailsStockTakeAction({
-            id: location.state.stocktakeId,
-            token: token,
-          })
-        );
+        if (result.isConfirmed)
+          dispatch(
+            getDetailsStockTakeAction({
+              id: location.state.stocktakeId,
+              token: token,
+            })
+          );
       });
     } else if (rejectStocktakeReducer.errors === true) {
       Swal.fire({
@@ -544,12 +557,13 @@ export default function StocktakeDetailsComponent() {
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
       }).then((result) => {
-        dispatch(
-          getDetailsStockTakeAction({
-            id: location.state.stocktakeId,
-            token: token,
-          })
-        );
+        if (result.isConfirmed)
+          dispatch(
+            getDetailsStockTakeAction({
+              id: location.state.stocktakeId,
+              token: token,
+            })
+          );
       });
     } else if (updateStocktakeReducer.errors === true) {
       Swal.fire({
@@ -577,12 +591,13 @@ export default function StocktakeDetailsComponent() {
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
       }).then((result) => {
-        dispatch(
-          getDetailsStockTakeAction({
-            id: location.state.stocktakeId,
-            token: token,
-          })
-        );
+        if (result.isConfirmed)
+          dispatch(
+            getDetailsStockTakeAction({
+              id: location.state.stocktakeId,
+              token: token,
+            })
+          );
       });
     } else if (adjustStocktakeReducer.error === true) {
       Swal.fire({
@@ -610,12 +625,13 @@ export default function StocktakeDetailsComponent() {
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
       }).then((result) => {
-        dispatch(
-          getDetailsStockTakeAction({
-            id: location.state.stocktakeId,
-            token: token,
-          })
-        );
+        if (result.isConfirmed)
+          dispatch(
+            getDetailsStockTakeAction({
+              id: location.state.stocktakeId,
+              token: token,
+            })
+          );
       });
     } else if (submitStocktakeReducer.error === true) {
       Swal.fire({
@@ -646,8 +662,153 @@ export default function StocktakeDetailsComponent() {
           />
 
           <div className="wrapper">
-            <div className="wrapper-content shadow">
-              {/* Show info */}
+            <div class="card">
+              <div class="card-header fw-bold">Stocktake Information</div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  {isLoading && statusStocktakeStore === -1 && (
+                    <RejectWrapper
+                      name={applicationUser.fullname}
+                      email={applicationUser.email}
+                      phoneNumber={applicationUser.phoneNumber}
+                      reason={reject.transactionName}
+                      date={moment(reject.date)
+                        .add(7, "h")
+                        .format("DD-MM-YYYY")}
+                    />
+                  )}
+                  {isLoading && (
+                    <div className="row g-3 justify-content-between me-3">
+                      <div className="col-4">
+                        <p>
+                          <strong>Location ID: </strong>
+                          {groupLocationStore[0].location.id}
+                        </p>
+                        <p>
+                          <strong>Location Name: </strong>
+                          {groupLocationStore[0].location.locationName}
+                        </p>
+                        <p>
+                          <strong>Location Barcode: </strong>
+                          {groupLocationStore[0].location.locationBarcode}
+                        </p>
+                      </div>
+                      <div className="col-4">
+                        <p>
+                          <strong>Created By: </strong>
+                          {transactionRecordCompacts[0].user}
+                        </p>
+                        <p>
+                          <strong>Created Date: </strong>
+                          {moment(transactionRecordCompacts[0].date)
+                            .add(7, "h")
+                            .format("DD-MM-YYYY")}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </li>
+                <li class="list-group-item">
+                  <h5 class="card-title fw-bold">List checked items</h5>
+                  {isChanging && (
+                    <>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        onClick={onSaveClick}
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onClick={onRevertClick}
+                      >
+                        Revert
+                      </button>
+                    </>
+                  )}
+                  {isLoading &&
+                    (statusStocktakeStore === 0 ? (
+                      <Table
+                        keyField="pkgId"
+                        columns={columns}
+                        data={listCheckedItems}
+                        noDataIndication="Table is Empty"
+                        cellEdit={cellEditFactory({
+                          mode: "click",
+                          blurToSave: true,
+                          beforeSaveCell(
+                            oldValue,
+                            newValue,
+                            row,
+                            column,
+                            done
+                          ) {
+                            let findEle = listCompare.find(
+                              (e) => e.pkgId === row.pkgId
+                            );
+                            if (column.dataField === "actualQuantity") {
+                              console.log("Actual quantity");
+                              let currentNote = row.note;
+                              console.log(currentNote);
+                              if (
+                                newValue !== findEle.actualQuantity ||
+                                currentNote !== findEle.note
+                              ) {
+                                setListCompare([
+                                  ...listCompare,
+                                  listCompare.map((e) =>
+                                    e === findEle ? (e.isChanging = true) : e
+                                  ),
+                                ]);
+                              } else {
+                                // if (currentNote === findEle.note)
+                                setListCompare([
+                                  ...listCompare,
+                                  listCompare.map((e) =>
+                                    e === findEle ? (e.isChanging = false) : e
+                                  ),
+                                ]);
+                              }
+                            } else if (column.dataField === "note") {
+                              console.log("Note");
+                              let currentQuantity = row.actualQuantity;
+                              if (
+                                newValue !== findEle.note ||
+                                currentQuantity !== findEle.actualQuantity
+                              )
+                                setListCompare([
+                                  ...listCompare,
+                                  listCompare.map((e) =>
+                                    e === findEle ? (e.isChanging = true) : e
+                                  ),
+                                ]);
+                              else
+                                setListCompare([
+                                  ...listCompare,
+                                  listCompare.map((e) =>
+                                    e === findEle ? (e.isChanging = false) : e
+                                  ),
+                                ]);
+                            }
+                          },
+                        })}
+                      />
+                    ) : (
+                      <Table
+                        keyField="pkgId"
+                        columns={columnsNotProgressing}
+                        data={listCheckedItems}
+                        noDataIndication="Table is Empty"
+                      />
+                    ))}
+                </li>
+              </ul>
+            </div>
+
+            {/* <div className="wrapper-content shadow">
+    
               <div className="title-heading mt-2">
                 <span>Stocktake Details</span>
               </div>
@@ -687,50 +848,7 @@ export default function StocktakeDetailsComponent() {
                   role="tabpanel"
                   aria-labelledby="nav-home-tab"
                 >
-                  <div className="wrapper-content shadow mt-3">
-                    {isLoading && statusStocktakeStore === -1 && (
-                      <RejectWrapper
-                        name={applicationUser.fullname}
-                        email={applicationUser.email}
-                        phoneNumber={applicationUser.phoneNumber}
-                        reason={reject.transactionName}
-                        date={moment(reject.date)
-                          .add(7, "h")
-                          .format("DD-MM-YYYY")}
-                      />
-                    )}
-
-                    {isLoading && (
-                      <div className="row g-3 justify-content-between me-3">
-                        <div className="col-4">
-                          <p>
-                            <strong>Location ID:</strong>
-                            {groupLocationStore[0].location.id}
-                          </p>
-                          <p>
-                            <strong>Location Name:</strong>
-                            {groupLocationStore[0].location.locationName}
-                          </p>
-                          <p>
-                            <strong>Location Barcode:</strong>
-                            {groupLocationStore[0].location.locationBarcode}
-                          </p>
-                        </div>
-                        <div className="col-4">
-                          <p>
-                            <strong>Created By: </strong>
-                            {transactionRecordCompacts[0].user}
-                          </p>
-                          <p>
-                            <strong>Created Date:</strong>
-                            {moment(transactionRecordCompacts[0].date)
-                              .add(7, "h")
-                              .format("DD-MM-YYYY")}
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <div className="wrapper-content shadow mt-3"></div>
                 </div>
                 <div
                   class="tab-pane fade"
@@ -738,104 +856,10 @@ export default function StocktakeDetailsComponent() {
                   role="tabpanel"
                   aria-labelledby="nav-profile-tab"
                 >
-                  <div className="wrapper-content shadow mt-3">
-                    {isChanging && (
-                      <>
-                        <button
-                          type="button"
-                          class="btn btn-primary"
-                          onClick={onSaveClick}
-                        >
-                          Save
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-secondary"
-                          onClick={onRevertClick}
-                        >
-                          Revert
-                        </button>
-                      </>
-                    )}
-                    {isLoading &&
-                      (statusStocktakeStore === 0 ? (
-                        <Table
-                          keyField="packageId"
-                          columns={columns}
-                          data={listCheckedItems}
-                          noDataIndication="Table is Empty"
-                          cellEdit={cellEditFactory({
-                            mode: "click",
-                            blurToSave: true,
-                            beforeSaveCell(
-                              oldValue,
-                              newValue,
-                              row,
-                              column,
-                              done
-                            ) {
-                              let findEle = listCompare.find(
-                                (e) => e.packageId === row.packageId
-                              );
-                              if (column.dataField === "actualQuantity") {
-                                console.log("Actual quantity");
-                                let currentNote = row.note;
-                                console.log(currentNote);
-                                if (
-                                  newValue !== findEle.actualQuantity ||
-                                  currentNote !== findEle.note
-                                ) {
-                                  setListCompare([
-                                    ...listCompare,
-                                    listCompare.map((e) =>
-                                      e === findEle ? (e.isChanging = true) : e
-                                    ),
-                                  ]);
-                                } else {
-                                  // if (currentNote === findEle.note)
-                                  setListCompare([
-                                    ...listCompare,
-                                    listCompare.map((e) =>
-                                      e === findEle ? (e.isChanging = false) : e
-                                    ),
-                                  ]);
-                                }
-                              } else if (column.dataField === "note") {
-                                console.log("Note");
-                                let currentQuantity = row.actualQuantity;
-                                if (
-                                  newValue !== findEle.note ||
-                                  currentQuantity !== findEle.actualQuantity
-                                )
-                                  setListCompare([
-                                    ...listCompare,
-                                    listCompare.map((e) =>
-                                      e === findEle ? (e.isChanging = true) : e
-                                    ),
-                                  ]);
-                                else
-                                  setListCompare([
-                                    ...listCompare,
-                                    listCompare.map((e) =>
-                                      e === findEle ? (e.isChanging = false) : e
-                                    ),
-                                  ]);
-                              }
-                            },
-                          })}
-                        />
-                      ) : (
-                        <Table
-                          keyField="packageId"
-                          columns={columnsNotProgressing}
-                          data={listCheckedItems}
-                          noDataIndication="Table is Empty"
-                        />
-                      ))}
-                  </div>
+                  <div className="wrapper-content shadow mt-3"></div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </>
       )}

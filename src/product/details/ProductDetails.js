@@ -59,7 +59,7 @@ export default function ProductDetails() {
 
   const columns = [
     { dataField: "id", text: "VariantID", hidden: true },
-    { dataField: "name", text: "Variant Name" },
+    { dataField: "name", text: "Name" },
     { dataField: "sku", text: "SKU" },
     { dataField: "barcode", text: "Barcode" },
     { dataField: "storageQuantity", text: "Quantity", hidden: true },
@@ -454,9 +454,7 @@ export default function ProductDetails() {
                 </li>
                 <li class="list-group-item">
                   <h5 class="card-title fw-bold">List of variants</h5>
-                  {productDetails.isVariantType && (
-                    <div>
-                      <div className="mt-3">
+                  <div className="mt-3">
                         <BootstrapTable
                           keyField="id"
                           striped
@@ -469,8 +467,11 @@ export default function ProductDetails() {
                           rowEvents={rowEvents}
                         />
                       </div>
+                  {/* {productDetails.isVariantType && (
+                    <div>
+                     
                     </div>
-                  )}
+                  )} */}
                 </li>
               </ul>
             </div>

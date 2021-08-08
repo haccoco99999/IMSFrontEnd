@@ -97,7 +97,7 @@ export default function CreateWithVariants(props) {
         return (
           <div
             className="text-danger"
-            onClick={() => clickDeleteVariant(rowIndex)}
+            onClick={() => props.clickDeleteVariant(rowIndex)}
           >
             <i class="bi bi-trash"></i>
           </div>

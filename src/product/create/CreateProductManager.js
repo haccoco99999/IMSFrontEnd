@@ -25,7 +25,7 @@ export default function CreateProductManager() {
   const [step, setStep] = useState(1);
   const [isSelectVariantType, setIsSelectVariantType] = useState(false);
   const [formData, setFormData] = useReducer(formReducer, {
-    // barcode: "",
+    // barcode: ""
     sku: "",
   });
   const [variantValues, setVariantValues] = useState([
@@ -45,14 +45,14 @@ export default function CreateProductManager() {
     listBrandStore,
     messages,
     createProductReducer,
-    checkDuplicateProductReducer
+    checkDuplicateProductReducer,
   } = useSelector((state) => ({
     listCategoriesStore: state.getCategoriesCreateProductReducer.listCategories,
     token: state.client.token,
     listBrandStore: state.getBrandReducer.listBrand,
     // messages: state.createProductReducer.messages,
     createProductReducer: state.createProductReducer,
-    checkDuplicateProductReducer:state.checkDuplicateProductReducer
+    checkDuplicateProductReducer: state.checkDuplicateProductReducer,
   }));
   function prevStep() {
     setStep(step - 1);
@@ -84,13 +84,9 @@ export default function CreateProductManager() {
   }
 
   function clickDeleteVariant(rowIndex) {
-    // console.log(rowIndex);
-    // console.log(variantValues);
-    // console.log((state) => state.filter((_, i) => i !== rowIndex));
 
     setVariantValues((state) => state.filter((_, i) => i !== rowIndex));
   }
-  //@params: uuid set random ID
   function uuid() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
       /[xy]/g,
@@ -122,7 +118,7 @@ export default function CreateProductManager() {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Duplicate",
+          text: createProductReducer.messages,
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
         });
@@ -171,7 +167,6 @@ export default function CreateProductManager() {
             formData={formData}
             prevStep={prevStep}
             token={token}
-            // messages={messages}
             variantValues={variantValues}
             clickToAddVariants={clickToAddVariants}
             clickDeleteVariant={clickDeleteVariant}
@@ -179,15 +174,5 @@ export default function CreateProductManager() {
           />
         );
       }
-    //  else
-    //   return (
-    //     <CreateNoVariants
-    //       formData={formData}
-    //       prevStep={prevStep}
-    //       token={token}
-    //       messages={messages}
-    //       setFormDataManager={setFormDataManager}
-    //     />
-    //   );
   }
 }

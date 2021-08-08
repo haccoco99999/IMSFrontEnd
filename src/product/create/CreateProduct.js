@@ -144,14 +144,11 @@ export default function CreateProductComponent(props) {
       event.stopPropagation();
     } else {
       event.preventDefault();
-      // checkUndifined();
 
-      // if (props.formData.sku === undefined) {
-      //   props.setFormDataManager("sku", "");
-      // }
-      // if (props.formData.barcode === undefined)
-      //   props.setFormDataManager("barcode", "");
-
+      let needCheckSku = true;
+      if (props.formData.sku === "") {
+        needCheckSku = false;
+      }
       const data = {
         name: props.formData.name,
         brandName: props.formData.brand,
@@ -181,7 +178,13 @@ export default function CreateProductComponent(props) {
         reverseButtons: true,
       }).then((result) => {
         if (result.isConfirmed) {
-          dispatch(createProduct({ data: data, token: props.token }));
+          dispatch(
+            createProduct({
+              data: data,
+              token: props.token,
+              needCheckSku: needCheckSku,
+            })
+          );
         }
       });
     }
