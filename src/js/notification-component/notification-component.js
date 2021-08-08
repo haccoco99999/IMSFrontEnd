@@ -7,13 +7,14 @@ import "./notification-component.css";
 import { getAllLocationsAction } from "./action";
 export default function NotificationBellComponents(props) {
   let dispatch = useDispatch();
-  const { token, listNotificationStore } = useSelector((state) => ({
+  const { token, listNotificationStore, userRole } = useSelector((state) => ({
     token: state.client.token,
+    userRole: state.client.userRole,
     listNotificationStore: state.notificationReducer.listNotifications,
   }));
 
   useEffect(() => {
-    dispatch(getAllLocationsAction({ token: token }));
+    dispatch(getAllLocationsAction({ token: token, userRole: userRole }));
   }, []);
   return (
     <div className={"notification-bell notification-" + props.active}>

@@ -86,7 +86,7 @@ function App(props) {
 
         //Receive notification all channel global
         hubConnection.on("NotificationMessage", (user, message) => {
-          console.log("NotificationMessage", user, message);
+          // console.log("NotificationMessage", user, message);
         });
 
         //Receive notification from a specific channel:
@@ -113,15 +113,15 @@ function App(props) {
         hubConnection
           .invoke("SendMessage", "username", "message to be sent")
           .catch((err) => {
-            alert(err);
-            console.log("Error invoking function: " + { err });
+            // alert(err);
+            // console.log("Error invoking function: " + { err });
           });
 
         //Join a channel
         //CHANNEL = ROLE NAME
         hubConnection.invoke("JoinGroup", client.userRole).catch((err) => {
-          alert(err);
-          console.log("Error invoking function: " + { err });
+          // alert(err);
+          // console.log("Error invoking function: " + { err });
         });
 
         //Send a message to a channel
@@ -140,7 +140,7 @@ function App(props) {
           False, Page already being used --> Block user from accessing page
         */
         hubConnection.on("ResourceChecker", (message) => {
-          console.log("ResourceChecker", message);
+          // console.log("ResourceChecker", message);
         });
 
         //Call method when accessing a page
