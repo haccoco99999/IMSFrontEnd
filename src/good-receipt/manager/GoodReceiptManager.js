@@ -87,7 +87,7 @@ export default function GoodsReceipt() {
       dataField: "modifiedDate",
       text: "Modified Date",
       formatter: (cellContent, row, rowIndex) => {
-        return <span>{moment(row.modifiedDate).add(7, "h").format("DD/MM/YYYY HH:mm")}</span>;
+        return <span>{moment(row.modifiedDate).add(7, "h").format("DD/MM/YYYY")}</span>;
       },
     },
   ];
