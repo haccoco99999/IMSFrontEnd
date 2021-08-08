@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import "./App.css";
+import logo from './images/Logo.png'
+import userLogo from "./images/user-2.png"
+import manufactureLogo from "./images/manufacture-2.png"
+import productLogo from "./images/product-2.png"
+import reportLogo from "./images/report-2.png"
+import shelfLogo from "./images/shelf-2.png"
+import boxLogo from "./images/box-2.png"
+import importLogo from "./images/import-2.png"
+import shoppingLogo from "./images/shopping-2.png"
+import dashboardLogo from "./images/dashboard-2.png"
+
 import ProfileClient from "./about-account/ProfileClient";
 import AboutSoftware from "./about-software/about-software";
 import Dashboard from "./dashboard/dashboard";
@@ -71,7 +82,7 @@ function App(props) {
     }
   }
   const [hubConnection, setHubConnection] = useState();
-
+  
   useEffect(() => {
     const createHubConnection = async () => {
       const hubConnection = new HubConnectionBuilder()
@@ -190,20 +201,20 @@ function App(props) {
         <div className={"logo_content hide-" + eventPage.statusSetting}>
           <div className="logo">
             <div className="logo_name">
-              <img src="\src\js\images\Logo.png" />
+              <img src={logo} />
             </div>
           </div>
           <i
-            className={"bx " + eventPage.hide + eventPage.isShowing}
+            className={" bi bi-list " + eventPage.hide + eventPage.isShowing}
             id="btn"
             onClick={toggleActive}
           />
         </div>
-        <div className="profile_content" data-bs-toggle="collapse" href="#collapseProfile">
+        <div className="profile_content" >
           <div className={"profile hide-" + eventPage.statusSetting}>
-            <div className="profile_details">
+            <div className="profile_details" data-bs-toggle="collapse" href="#collapseProfile">
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe8gF9Vvg_EI7UURdrGjFUKYQG74jZK_zPBxDLhlPqTm8rzyrhX8EeCNlPSdTlZru1oYU&usqp=CAU"
+                src={client.profileImageLink}
                 alt=""
               />
               <div className="name_job" >
@@ -215,8 +226,8 @@ function App(props) {
               className="bx menu-icon-notification-logout dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
 
             >
-              <img src="\src\js\images\alarm.png" />
-              <span className="badge badge-customize">3</span>
+              <i class="bi bi-bell"></i>
+
             </i>
             <NotificationBell />
           </div>
@@ -233,29 +244,11 @@ function App(props) {
         </div>
         <div>
           <ul className="nav_list">
-            {/* <nav className={"hide-" + !eventPage.statusSetting}>
-              <li>
-                <Link to="/homepage/about-my-account">
-                  <span className="links_name">My Account</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/homepage/notification">
-                  <span className="links_name">Notification</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/homepage/about-software">
-                  <span className="links_name">About</span>
-                </Link>
-              </li>
-            </nav> */}
-
             <nav className="nav-side-bar">
               <li>
                 <Link to="/homepage/dashboard">
                   <i className="bx">
-                    <img src="\src\js\images\dashboard-2.png" />
+                    <img src={dashboardLogo} />
                   </i>
                   <span className="links_name">Dashboard</span>
                 </Link>
@@ -265,7 +258,7 @@ function App(props) {
               <li>
                 <Link to="/homepage/purchase">
                   <i className="bx">
-                    <img src="\src\js\images\shopping-2.png" />
+                    <img src={shoppingLogo} />
                   </i>
                   <span className="links_name">Purchase order</span>
                 </Link>
@@ -274,7 +267,7 @@ function App(props) {
               <li>
                 <Link to="/homepage/good-receipt">
                   <i className="bx">
-                    <img src="\src\js\images\import-2.png" />
+                    <img src={importLogo} />
                   </i>
                   <span className="links_name">Good Recipt</span>
                 </Link>
@@ -283,7 +276,7 @@ function App(props) {
               <li>
                 <Link to="/homepage/good-issue">
                   <i className="bx">
-                    <img src="\src\js\images\box-2.png" />
+                    <img src={boxLogo} />
                   </i>
                   <span className="links_name">Good issue</span>
                 </Link>
@@ -292,7 +285,7 @@ function App(props) {
               <li>
                 <Link to="/homepage/stock-take">
                   <i className="bx">
-                    <img src="\src\js\images\shelf-2.png" />
+                    <img src={shelfLogo} />
                   </i>
                   <span className="links_name">Stock take</span>
                 </Link>
@@ -301,14 +294,22 @@ function App(props) {
               <li>
                 <Link to="/homepage/report">
                   <i className="bx">
-                    <img src="\src\js\images\report-2.png" />
+                    <img src={reportLogo} />
                   </i>
                   <span className="links_name">Report</span>
                 </Link>
                 <span className="tooltip">Report</span>
               </li>
-
-              <li onClick={() => setEventPage({
+              <li>
+                <Link to="/homepage/product">
+                  <i className="bx">
+                    <img src={productLogo} />
+                  </i>
+                  <span className="links_name">Product Manger</span>
+                </Link>
+                <span className="tooltip">Product Manger</span>
+              </li>
+              {/* <li onClick={() => setEventPage({
                 hide: "",
                 isShowing: "bx-menu-alt-right",
                 active: "active",
@@ -316,7 +317,7 @@ function App(props) {
               })} data-bs-toggle="collapse" href="#collapseListMenuProductManager">
                 <a href="#">
                   <i className="bx">
-                    <img src="\src\js\images\product-2.png" />
+                    <img src={window.location.origin + "/images/product-2.png"} />
                   </i>
                   <span className="links_name">Product</span>
                 </a>
@@ -334,11 +335,11 @@ function App(props) {
 
                 </ul>
 
-              </li>
+              </li> */}
               <li>
                 <Link to="/homepage/supplier">
                   <i className="bx">
-                    <img src="\src\js\images\manufacture-2.png" />
+                    <img src={manufactureLogo} />
                   </i>
                   <span className="links_name">Supplier</span>
                 </Link>
@@ -347,7 +348,7 @@ function App(props) {
               <li>
                 <Link to="/homepage/manage-account">
                   <i className="bx">
-                    <img src="\src\js\images\user-2.png" />
+                    <img src={userLogo} />
                   </i>
                   <span className="links_name">Account</span>
                 </Link>
@@ -356,7 +357,7 @@ function App(props) {
               <li>
                 <Link to="/homepage/sale-man">
                   <i className="bx">
-                    <img src="\src\js\images\user-2.png" />
+                    <img src={userLogo} />
                   </i>
                   <span className="links_name">Sale man</span>
                 </Link>
@@ -432,9 +433,9 @@ const mapStateToProps = (state) => ({
 
 function Logout() {
   let history = useHistory();
-  const dispatch =useDispatch()
+  const dispatch = useDispatch()
   const logout = () => {
-    dispatch({type:"LOGOUT_REQUESTING"})
+    dispatch({ type: "LOGOUT_REQUESTING" })
   };
 
   return (
@@ -442,7 +443,7 @@ function Logout() {
       <div className="profile">
         <i
           onClick={logout}
-          className="bx bx-log-out menu-icon-notification-logout"
+          className="bi bi-box-arrow-left menu-icon-notification-logout"
         />
       </div>
     </div>

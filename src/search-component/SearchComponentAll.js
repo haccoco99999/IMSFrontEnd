@@ -539,6 +539,9 @@ export function SeachSupplier(props) {
 }
 
 export function SelectSupplier(props) {
+  const {token} = useSelector((state) =>({
+    token : state.client.token
+  }))
   const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/suppliers/search';
   const [listSupplier, setListSupplier] = useState([])
   const [selected, setSelected] = useState({})
@@ -557,7 +560,15 @@ export function SelectSupplier(props) {
 
 
 
-      fetch(`${SEARCH_URI}`)
+      fetch(`${SEARCH_URI}`,{
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+          Origin: "",
+        },
+        credentials: "include",
+      })
           .then((resp) => resp.json())
           .then((json) => {
 

@@ -288,6 +288,7 @@ body{
 }
 .logout_content{
     bottom: 0;
+    position: absolute;
 }
 .nav-side-bar{
   overflow-y: auto;

@@ -62,7 +62,7 @@ const detailPurchaseOrderInital = {
         deadline: "",
         status: "",
         supplier: {
-
+            
         },
         mergedOrderIdLists: [],
         infoUserPurchaseOrder: {},

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './create-account.css'
 import RoleManagerAction from "../../manager/role-manager/action";
-import { CreateAccountAction, getUserAccountDetail, setActiveAccountAction, updateUserAccountDetail } from './action';
+import { CreateAccountAction, getUserAccountDetail, setActiveAccountAction, updateUserAccountDetail, uploadAvatarImg } from './action';
 import { useDispatch, useSelector } from 'react-redux';
 import NavigationBar from '../../../navigation-bar-component/NavigationBar';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -14,24 +14,24 @@ export default function CreateAccount() {
   const [eventPage, setEventPage] = useState({
     isShowEdit: true,
     isShowChangePassword: false,
-    
+
   })
   const confirmPassword = useRef("")
   const newPassword = useRef("")
-  const [isvalidPassword, setIsvalidPassword, ] = useState({
+  const [isvalidPassword, setIsvalidPassword,] = useState({
     isValidNewPassword: null,
     isConfirmPassword: null
   })
+  const [base64Img, setBase64Img] = useState("")
 
-
-  const { token, infoDetailAccountStore , createUserAccountStatus,setActiveAccountStatus , updateAccountDetailStatus} = useSelector((state) => ({
+  const { token, infoDetailAccountStore, createUserAccountStatus, setActiveAccountStatus, updateAccountDetailStatus } = useSelector((state) => ({
 
     token: state.client.token,
     infoDetailAccountStore: state.getUserAccountDetail.infoDetailAccount,
     createUserAccountStatus: state.createUserAccount,
     setActiveAccountStatus: state.setActiveAccount,
     updateAccountDetailStatus: state.updateAccountDetail
-    
+
   }));
 
   const [infoAccountState, setInfoAccountState] = useState({ ...infoDetailAccountStore })
@@ -78,107 +78,107 @@ export default function CreateAccount() {
     }
   }, [infoDetailAccountStore])
 
-useEffect(() =>{
-  if (createUserAccountStatus.requesting) {
-    Swal.fire({
+  useEffect(() => {
+    if (createUserAccountStatus.requesting) {
+      Swal.fire({
         title: 'Creating!',
         html: 'Watting...',
         timerProgressBar: true,
         didOpen: () => {
-            Swal.showLoading()
+          Swal.showLoading()
 
         },
 
-    })
-}
-else if (createUserAccountStatus.successful) {
+      })
+    }
+    else if (createUserAccountStatus.successful) {
 
-    Swal.fire(
+      Swal.fire(
         'Create Success!',
         'Click to Close!',
         'success'
 
-    )
-    dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
-    dispatch({ type: CREATE_ACC_CLEAN })
-}
-else if (createUserAccountStatus.errors) {
-    Swal.fire({
+      )
+      dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
+      dispatch({ type: CREATE_ACC_CLEAN })
+    }
+    else if (createUserAccountStatus.errors) {
+      Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Something went wrong, cannot reject!',
 
-    })
-    dispatch({ type: CREATE_ACC_CLEAN })
-}
-  if (setActiveAccountStatus.requesting) {
-    Swal.fire({
+      })
+      dispatch({ type: CREATE_ACC_CLEAN })
+    }
+    if (setActiveAccountStatus.requesting) {
+      Swal.fire({
         title: '!',
         html: 'Watting...',
         timerProgressBar: true,
         didOpen: () => {
-            Swal.showLoading()
+          Swal.showLoading()
 
         },
 
-    })
-}
-else if (setActiveAccountStatus.successful) {
+      })
+    }
+    else if (setActiveAccountStatus.successful) {
 
-    Swal.fire(
+      Swal.fire(
         ' Success!',
         'Click to Close!',
         'success'
 
-    )
-    dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
-    dispatch({ type: SET_ACTIVE_ACC_CLEAN })
-}
-else if (setActiveAccountStatus.errors) {
-    Swal.fire({
+      )
+      dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
+      dispatch({ type: SET_ACTIVE_ACC_CLEAN })
+    }
+    else if (setActiveAccountStatus.errors) {
+      Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Something went wrong !',
 
-    })
-    dispatch({ type: SET_ACTIVE_ACC_CLEAN })
-}
-  if (updateAccountDetailStatus.requesting) {
-    Swal.fire({
+      })
+      dispatch({ type: SET_ACTIVE_ACC_CLEAN })
+    }
+    if (updateAccountDetailStatus.requesting) {
+      Swal.fire({
         title: 'Updating!',
         html: 'Watting...',
         timerProgressBar: true,
         didOpen: () => {
-            Swal.showLoading()
+          Swal.showLoading()
 
         },
 
-    })
-}
-else if (updateAccountDetailStatus.successful) {
+      })
+    }
+    else if (updateAccountDetailStatus.successful) {
 
-    Swal.fire(
+      Swal.fire(
         'Update Success!',
         'Click to Close!',
         'success'
 
-    )
-    dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
-    dispatch({ type: SET_ACTIVE_ACC_CLEAN })
-}
-else if (updateAccountDetailStatus.errors) {
-    Swal.fire({
+      )
+      dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
+      dispatch({ type: SET_ACTIVE_ACC_CLEAN })
+    }
+    else if (updateAccountDetailStatus.errors) {
+      Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Something went wrong !',
 
-    })
-    dispatch({ type: SET_ACTIVE_ACC_CLEAN })
-}
+      })
+      dispatch({ type: SET_ACTIVE_ACC_CLEAN })
+    }
 
 
 
-}, [createUserAccountStatus, setActiveAccountStatus, updateAccountDetailStatus])
+  }, [createUserAccountStatus, setActiveAccountStatus, updateAccountDetailStatus])
 
   function setIsShowChangePassword() {
     setEventPage((state) => ({
@@ -241,34 +241,58 @@ else if (updateAccountDetailStatus.errors) {
 
 
   function createAccountInfo() {
+
+
+
     const form = document.getElementById("checkValidProfile");
     alert(form.checkValidity())
     if (!form.checkValidity() || !isvalidPassword.isValidNewPassword || !isvalidPassword.isConfirmPassword) {
       form.classList.add("was-validated");
-      if(!isvalidPassword.isValidNewPassword || !isvalidPassword.isConfirmPassword){
-      newPassword.current.value = ""
-      confirmPassword.current.value = ""
-      newPassword.current.classList.add("is-invalid")
-      confirmPassword.current.classList.add("is-invalid")
+      if (!isvalidPassword.isValidNewPassword || !isvalidPassword.isConfirmPassword) {
+        newPassword.current.value = ""
+        confirmPassword.current.value = ""
+        newPassword.current.classList.add("is-invalid")
+        confirmPassword.current.classList.add("is-invalid")
       }
     } else {
       if (isvalidPassword.isValidNewPassword && isvalidPassword.isConfirmPassword) {
-        const data = {
+        const url = "https://api.cloudinary.com/v1_1/ims2021/upload";
 
-          email: infoAccountState.email,
-          roleId: infoAccountState.roleID,
-          fullName: infoAccountState.fullname,
-          phoneNumber: infoAccountState.phoneNumber,
-          address: infoAccountState.address,
-          dateOfBirth: infoAccountState.dateOfBirth,
-          password: newPassword.current.value
-        }
-        console.log(data)
-        dispatch(CreateAccountAction({ data: data, token: token }));
-        newPassword.current.value = ""
-        confirmPassword.current.value = ""
-        newPassword.current.classList.remove("is-invalid","is-valid")
-        confirmPassword.current.classList.remove("is-invalid","is-valid")
+        const formData = new FormData()
+        formData.append("file", base64Img);
+        formData.append("upload_preset", "rmwbm6go");
+
+
+        fetch(url, {
+          method: "POST",
+
+          body: formData,
+        })
+          .then((response) => {
+            return response.json();
+          }).then((json) => {
+            console.log(json);
+            const data = {
+
+              email: infoAccountState.email,
+              roleId: infoAccountState.roleID,
+              fullName: infoAccountState.fullname,
+              phoneNumber: infoAccountState.phoneNumber,
+              address: infoAccountState.address,
+              dateOfBirth: infoAccountState.dateOfBirth,
+              password: newPassword.current.value,
+              profileImageLink: json.url,
+            }
+            console.log(data)
+            dispatch(CreateAccountAction({ data: data, token: token }));
+            newPassword.current.value = ""
+            confirmPassword.current.value = ""
+            newPassword.current.classList.remove("is-invalid", "is-valid")
+            confirmPassword.current.classList.remove("is-invalid", "is-valid")
+
+
+          });
+
         // history.go(-1)
       }
       else {
@@ -283,41 +307,38 @@ else if (updateAccountDetailStatus.errors) {
 
 
   async function changeUploadAvatar(event) {
-
-    const url = "https://api.cloudinary.com/v1_1/ims2021/upload";
-
-
-    const formData = new FormData();
-
-
     let file = event.target.files[0];
-    formData.append("file", file);
-    formData.append("upload_preset", "rmwbm6go");
-
-    await fetch(url, {
-      method: "POST",
-      
-      body: formData,
-    })
-      .then((response) => {
-        return response.json();
-      }).then((json) => {
-        console.log(json);
-      });
 
 
 
+    if (statusUser === "CREATEUSER") {
+      setBase64Img(file)
+      var image = document.getElementById('output-avatar');
 
-    var image = document.getElementById('output-avatar');
-    console.log(image)
-    image.src = URL.createObjectURL(event.target.files[0]);
+      image.src = URL.createObjectURL(file);
+    }
+    else {
+      const formData = new FormData()
+      formData.append("file", file);
+      formData.append("upload_preset", "rmwbm6go");
+      let data = {
+
+        userId: infoDetailAccountStore.userID,
+        profileImageLink: infoDetailAccountStore.profileImageLink
+
+      }
+      dispatch(uploadAvatarImg({ token: token, data: data, formData: formData, isUpdateUser: false }))
+
+    }
+
+
 
   }
   function clickCancel() {
     newPassword.current.value = ""
     confirmPassword.current.value = ""
-    newPassword.current.classList.remove("is-invalid","is-valid")
-    confirmPassword.current.classList.remove("is-invalid","is-valid")
+    newPassword.current.classList.remove("is-invalid", "is-valid")
+    confirmPassword.current.classList.remove("is-invalid", "is-valid")
     setInfoAccountState(infoDetailAccountStore)
     setClickEdit();
   }
@@ -338,8 +359,8 @@ else if (updateAccountDetailStatus.errors) {
         data = { ...data, password: newPassword.current.value }
         newPassword.current.value = ""
         confirmPassword.current.value = ""
-        newPassword.current.classList.remove("is-invalid","is-valid")
-        confirmPassword.current.classList.remove("is-invalid","is-valid")
+        newPassword.current.classList.remove("is-invalid", "is-valid")
+        confirmPassword.current.classList.remove("is-invalid", "is-valid")
       }
       dispatch(updateUserAccountDetail({ data: data, token: token }))
       setClickEdit();
@@ -382,15 +403,15 @@ else if (updateAccountDetailStatus.errors) {
 
 
 
-      <div  className="card mt-2">
+      <div className="card mt-2">
         <div class=" mt-3" >
           <div class="row g-0">
             <div class="pe-3 pt-3 col-md-4 d-flex align-items-end flex-column  ">
               <div className="">
-                <img id="output-avatar" class="card-img-top rounded " style={{ height: "150px", width: "150px" }} src="https://i.stack.imgur.com/l60Hf.png" alt="Card image cap" />
+                <img id="output-avatar" class="card-img-top rounded " style={{ height: "150px", width: "150px" }} src={infoDetailAccountStore.profileImageLink} alt="Card image cap" />
 
               </div>
-              <input name="image" id="fileaaa" type="file" onChange={changeUploadAvatar} style={{ display: "none" }} />
+              <input name="image" id="fileaaa"  type="file" onChange={changeUploadAvatar} style={{ display: "none" }} />
               <div className="btn btn-primary"> <label for="fileaaa"><i class="bi bi-camera-fill"></i>Change Avatar </label></div>
 
               <p>{infoAccountState.userRole}</p>
@@ -480,7 +501,7 @@ else if (updateAccountDetailStatus.errors) {
                     {statusUser === "CREATEUSER" ? <p class="text-danger">Set password(*)</p>
                       : <p class="text-success  dropdown-toggle" >Change password</p>}
                   </div>
-                  <div class={statusUser === "CREATEUSER" ? " collapse show" : " collapse "} id="collapseChangePassword" > 
+                  <div class={statusUser === "CREATEUSER" ? " collapse show" : " collapse "} id="collapseChangePassword" >
                     <div class="mb-3 row">
                       <label for="inputPassword" class="col-sm-2 col-form-label">Password:</label>
                       <div class="col-sm-10">

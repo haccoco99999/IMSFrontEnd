@@ -34,7 +34,7 @@ function* updateFlow(action){
         
         json = yield call(updateApi,dataUpdate,token)
       
-        yield put(updateClient(dataUpdate))
+        yield put(updateClient(json))
         
         yield put({type: UPDATE_PROFILE_SUCCESS})
     

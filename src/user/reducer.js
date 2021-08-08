@@ -1,7 +1,7 @@
 import { CLIENT_SET, CLIENT_UNSET, CLIENT_UPDATE } from './constants'
 
 const initialState = {  
-   
+    id:null,
     token:null,
     isNotAllowed: null,
     email:null,
@@ -14,6 +14,7 @@ const initialState = {
     isActive:null,
     userRole:null,
     pageAuthorized:[],
+    profileImageLink:null
   }
 
   const reducer = function clientReducer (state = initialState, action) {  
@@ -24,6 +25,7 @@ const initialState = {
           token: action.respone_login.token,
           isNotAllowed: action.respone_login.isNotAllowed,
           email: action.respone_login.applicationUser.email,
+          id: action.respone_login.applicationUser.id,
           emailConfirmed: action.respone_login.applicationUser.emailConfirmed,
           fullname:action.respone_login.applicationUser.fullname,
           phoneNumber:action.respone_login.applicationUser.phoneNumber,
@@ -31,6 +33,8 @@ const initialState = {
           address:action.respone_login.applicationUser.address,
           dateOfBirth:action.respone_login.applicationUser.dateOfBirthNormalizedString,
           isActive:action.respone_login.applicationUser.isActive,
+          profileImageLink:action.respone_login.applicationUser.profileImageLink,
+
           userRole:action.respone_login.userRole,
           pageAuthorized:action.respone_login.pageAuthorized,
         }
@@ -38,9 +42,15 @@ const initialState = {
         
         return {
           ...state,
-          fullname: action.updateClient.fullname,
-          phoneNumber: action.updateClient.phoneNumber,
-          dateOfBirth: action.updateClient.dateOfBirth,
+          email: action.respone_login.applicationUser.email,
+          emailConfirmed: action.respone_login.applicationUser.emailConfirmed,
+          fullname:action.respone_login.applicationUser.fullname,
+          phoneNumber:action.respone_login.applicationUser.phoneNumber,
+          accessFailedCount:action.respone_login.applicationUser.accessFailedCount,
+          address:action.respone_login.applicationUser.address,
+          dateOfBirth:action.respone_login.applicationUser.dateOfBirthNormalizedString,
+          isActive:action.respone_login.applicationUser.isActive,
+          profileImageLink:action.respone_login.applicationUser.profileImageLink,
         }
   
       case CLIENT_UNSET:

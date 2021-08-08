@@ -6,10 +6,10 @@ export function setClient (respone_login) {
     respone_login,
   }
 }
-export function updateClient (updateClient) {  
+export function updateClient (respone_login) {  
   return {
     type: 'CLIENT_UPDATE',
-    updateClient,
+    respone_login,
   }
 }
 

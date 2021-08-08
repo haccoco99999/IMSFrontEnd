@@ -53,7 +53,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "electron": "electron ."
+    "electron": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "homepage": "./",
   "electron-dev": "set ELECTRON_START_URL=http://localhost:3000 && electron .",
@@ -76,6 +78,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "^13.1.8"
+    "electron": "^13.1.8",
+    "electron-builder": "^22.11.7"
   }
 }

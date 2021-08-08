@@ -5,7 +5,8 @@ import { getDetailGoodIssue } from './action'
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import './GoodIssueDetail.css'
-import NavigationBar from '../../navigation-bar-component/NavigationBar';
+// import NavigationBar from '../../navigation-bar-component/NavigationBar';
+import NavigationBar from '../../components/navbar/navbar-component';
 import RejectReceiptModal from '../../RejectReceiptModal/RejectReceiptModal';
 import { createGoodIssue, updateGoodIssue, reactjsGoodIssue } from './action'
 import PrintReceipt from './PrinterReceipt';
@@ -33,6 +34,7 @@ export default function DetailGoodIssue() {
     const [eventPage, setEvenPage] = useState({
         reject: false,
     })
+    const [classStatus,setClassStatus] = useState("")
     const [status, setStatus] = useState("")
     const dispatch = useDispatch()
     console.log(status)
@@ -51,7 +53,25 @@ export default function DetailGoodIssue() {
         setInfoRejectOrder({...GoodIssueDetail.infoGoodIssueDetail.infoRejectOrder})
         setStatus(GoodIssueDetail.infoGoodIssueDetail.status)
     }, [GoodIssueDetail])
+ useEffect(()=>{
+       
+        if (status === "IssueRequisition") {
+          setClassStatus("bg-secondary");
+          } else if ( status === "Packing") {
+          
+            setClassStatus("bg-warning");
+          } else if (status === "Completed") {
+        
+            setClassStatus("bg-secondary");
+          } else if (status === "Shipping"  ||status === "Cancel" ) {
+          
+            setClassStatus("bg-danger");
+          } else {
+           
+            setClassStatus("bg-warning text-dark");
+          }
 
+    }, [status])
     useEffect(() => {
         if (RejectGoodIssueStatus.requesting) {
             Swal.fire({
@@ -520,6 +540,7 @@ export default function DetailGoodIssue() {
             <NavigationBar listButton={listButton}
                 titleBar={GoodIssueDetail.infoGoodIssueDetail.id}
                 actionGoBack={backPage}
+                classStatus={classStatus}
                 status={status} />
 
             <div class="d-grid gap-2">
@@ -630,7 +651,7 @@ export default function DetailGoodIssue() {
             /> */}
 
             {/* <PrintReceipt isShowPrintReceipt={true}/> */}
-            <RejectReceiptModal clickToCLoseReject={clickReject} isReject={eventPage.reject} />
+         {  eventPage.reject ? <RejectReceiptModal clickToCLoseReject={clickReject} /> : ""}
 
 
             {/* <RejectReceiptModal

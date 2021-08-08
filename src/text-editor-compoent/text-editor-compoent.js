@@ -48,7 +48,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
             <div>
               
             <Editor
- 
+      
             editorState={editorState}
               wrapperClassName="demo-wrapper"
               editorClassName="demo-editor"
@@ -68,7 +68,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
                 link: { inDropdown: true },
                 }}
               onEditorStateChange={onEditorStateChange}
-                
+              readOnly={props.isDisabled} 
             />
             {/* draftToHtml(convertToRaw(editorState.getCurrentContent())) */}
             {/* {props.controlPurchaseQuotePage.isClickToSendMailPriceQuote?() =>props.changeMailContent("abc"):""} */}

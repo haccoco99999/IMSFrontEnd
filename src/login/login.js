@@ -8,7 +8,7 @@ import { Redirect } from 'react-router-dom'
 // import cloudinary from "cloudinary";
 import Swal from 'sweetalert2'
 import { LOGIN_CLEAN } from './constants'
-
+import './login.css'
 
 
 export default function Login(props) {

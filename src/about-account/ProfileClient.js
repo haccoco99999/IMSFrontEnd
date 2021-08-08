@@ -4,6 +4,8 @@ import updateRequest from './action'
 import { UPDATE_PROFILE_CLEAN } from './contants'
 import './profile-client.css'
 import Swal from 'sweetalert2'
+import { uploadAvatarImg } from '../manage-account/create/account/action'
+import { UPDATE_IMAGE_CLEAN } from '../manage-account/create/account/constants'
 
 const initValue = {
 
@@ -13,7 +15,10 @@ export default function ProfileClient() {
   const dispatch = useDispatch()
 
  
-  let { infoProfileStore, updateProfileClientStatus } = useSelector(state => ({ infoProfileStore: state.client, updateProfileClientStatus: state.updateProfileClient }))
+  const { infoProfileStore, updateProfileClientStatus , updateImageStatus} = useSelector(state => ({ 
+    updateImageStatus: state.updateImage,
+    infoProfileStore: state.client, 
+    updateProfileClientStatus: state.updateProfileClient }))
   let [isEditProfile, setIsEditProfile] = useState(false)
   let [isUpdateProfile, setIsUpdateProfile] = useState(false)
   let [infoProfile, setInfoProfile] = useState(infoProfileStore)
@@ -86,11 +91,82 @@ export default function ProfileClient() {
       })
       dispatch({ type: UPDATE_PROFILE_CLEAN })
     }
-  }, [updateProfileClientStatus])
+    if (updateImageStatus.requesting) {
+      Swal.fire({
+        title: 'Updating Avatar!',
+        html: 'Watting...',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading()
+
+        },
+
+      })
+    }
+    else if (updateImageStatus.successful) {
+
+      Swal.fire(
+        'Update Success!',
+        'Click to Close!',
+        'success'
+
+      )
+      dispatch({ type: UPDATE_IMAGE_CLEAN })
+    }
+    else if (updateImageStatus.errors) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+
+      })
+      dispatch({ type: UPDATE_IMAGE_CLEAN })
+    }
+  }, [updateProfileClientStatus, updateImageStatus])
  function closeChangePasswordModal(){
    setIsChangePassword(!isChangePassword)
  }
+ async function changeUploadAvatar(event) {
+  let file = event.target.files[0];
+    const formData = new FormData()
+    formData.append("file", file);
+  formData.append("upload_preset", "rmwbm6go");
+  let data={
+    
+      userId: infoProfileStore.id,
+      profileImageLink: infoProfileStore.profileImageLink
+    
+  }
+   dispatch(uploadAvatarImg({token: infoProfileStore.token, data:data, formData: formData, isUpdateUser: true}))
+  
+  
+  // const url = "https://api.cloudinary.com/v1_1/ims2021/upload";
+ 
+  // const formData = new FormData()
 
+  
+ 
+  // formData.append("file", file);
+  // formData.append("upload_preset", "rmwbm6go");
+  // await fetch(url, {
+  //   method: "POST",
+    
+  //   body: formData,
+  // })
+  //   .then((response) => {
+  //     return response.json();
+  //   }).then((json) => {
+  //     console.log(json);
+  
+
+     
+  //  });
+
+  // var image = document.getElementById('output');
+  
+  // image.src = URL.createObjectURL(file);
+
+}
   return (
     <div className="home_content">
       <div className="text">
@@ -110,8 +186,8 @@ export default function ProfileClient() {
                     <span class="glyphicon glyphicon-camera"></span>
                     <span>Change Image</span>
                   </label>
-                  <input id="file" type="file" onChange="loadFile(event)" />
-                  <img src="https://cdn.pixabay.com/photo/2017/08/06/21/01/louvre-2596278_960_720.jpg" id="output" width="200" />
+                  <input id="file" type="file" onChange={changeUploadAvatar} />
+                  <img src={infoProfileStore.profileImageLink} id="output" width="200" />
                 </div>
                 <p
               

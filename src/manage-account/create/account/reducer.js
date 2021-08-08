@@ -16,7 +16,12 @@ import {
   SET_ACTIVE_ACC_CLEAN,
   GET_DETAIL_ACC_CLEAN,
   CREATE_ACC_CLEAN,
-  UPDATE_DETAIL_ACC_CLEAN
+  UPDATE_DETAIL_ACC_CLEAN,
+  UPDATE_IMAGE_REQUEST,
+  UPDATE_IMAGE_CLEAN,
+  UPDATE_IMAGE_ERR,
+  UPDATE_IMAGE_SUCCESS,
+  UPDATE_AVATAR_ACC
 } from "./constants";
 
 const initalCreateAccountState = {
@@ -116,7 +121,7 @@ const initalGetDetailAccountState = {
     isActive: undefined,
     roleID: "",
     userRole: "",
-
+    profileImageLink:"",
   // password: "dellDell123*",
   // email: "",
   // roleId: "",
@@ -159,9 +164,18 @@ export function getUserAccountDetail(state = initalGetDetailAccountState, action
           isActive: action.json.userAndRole.imsUser.isActive,
           roleID: action.json.userAndRole.roleID,
           userRole: action.json.userAndRole.userRole,
+          profileImageLink: action.json.userAndRole.imsUser.profileImageLink,
          
         }
       };
+    case UPDATE_AVATAR_ACC:{
+      return{
+        ...state,infoDetailAccount :{
+          ...state.infoDetailAccount,
+          profileImageLink: action.json.applicationUser.profileImageLink
+        }
+      }
+    }
     case GET_DETAIL_ACC_ERR:
       return {
         requesting: false,
@@ -209,6 +223,44 @@ export  function updateAccountDetail(state = initalUpdateDetailAccountState, act
         errors: true,
       };
     case UPDATE_DETAIL_ACC_CLEAN:
+      return initalUpdateDetailAccountState
+    default:
+      return state;
+  }
+};
+const updateImageInit = {
+  requesting: false,
+  successful: false,
+  messages: "",
+  errors: false,
+};
+
+export  function updateImage(state = updateImageInit, action) {
+  switch (action.type) {
+    case UPDATE_IMAGE_REQUEST:
+      return {
+        requesting: true,
+        successful: false,
+        messages: "",
+        errors: false,
+       
+      };
+    case UPDATE_IMAGE_SUCCESS:
+
+      return {
+        requesting: false,
+        successful: true,
+        messages: "Success",
+        errors: false,
+      };
+    case UPDATE_IMAGE_ERR:
+      return {
+        requesting: false,
+        successful: false,
+        messages: "",
+        errors: true,
+      };
+    case UPDATE_IMAGE_CLEAN:
       return initalUpdateDetailAccountState
     default:
       return state;

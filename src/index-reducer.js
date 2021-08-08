@@ -20,7 +20,7 @@ import getAllAccountsReducer from "./manage-account/manager/account-manager/redu
 // import getDetailsSupplierReducer from "./supplier/details/reducer";
 // import getCreatedFormPurchaseRequisitionReducer from "./sale-man/create/reducer";
 // import createProductReducer from "./product/create/reducer";
-import {createUserAccount, getUserAccountDetail, updateAccountDetail, setActiveAccount} from "./manage-account/create/account/reducer";
+import {createUserAccount, getUserAccountDetail, updateAccountDetail, setActiveAccount, updateImage} from "./manage-account/create/account/reducer";
 import { createRolePermission,DetailRolePermission , UpdateRolePermission } from "./manage-account/create/role/reducer";
 import { getDetailPurchaseReducer,
   rejectPurchaserOrder,
@@ -130,7 +130,7 @@ const IndexReducer = combineReducers({
   getAllRoleReducer,
   getAllAccountsReducer,
 
-  createUserAccount, getUserAccountDetail, updateAccountDetail,
+  createUserAccount, getUserAccountDetail, updateAccountDetail,updateImage,
 
   createRolePermission,DetailRolePermission , UpdateRolePermission , setActiveAccount,
 
