@@ -71,19 +71,28 @@ export default function CreateGoodsReceiptComponent() {
   }));
 
   console.log(existRedisVariantSkus);
-  console.log(checkDuplicateSKUReducer.hasMatch);
-  //todo:spinner
-  const [checkDupicateSku, setCheckDuplicateSKU] = useState(false);
+  //todo: check
+  function checkDuplicateSKU(keySearch) {
+    const url = `${process.env.REACT_APP_API}/dupcheck/productvariant`;
 
-  const test = (data) => {
-    dispatch(checkDuplicateSKUAction({ token: token, data: data }));
-    return checkDuplicateSKUReducer.hasMatch;
-  };
+    let result = fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+        Origin: "",
+      },
+      credentials: "include",
+      body: JSON.stringify({ value: keySearch }),
+    })
+      .then((response) => response.json())
+      .then((json) => json)
+      .catch((error) => {
+        throw error;
+      });
+    return result;
+  }
 
-  // useEffect(() => {
-  //   if (checkDuplicateSKUReducer.hasMatch) setCheckDuplicateSKU(true);
-  //   else setCheckDuplicateSKU(false);
-  // }, [checkDuplicateSKUReducer.hasMatch]);
   const columns = [
     {
       dataField: "id",
@@ -113,17 +122,6 @@ export default function CreateGoodsReceiptComponent() {
       text: "Barcode",
       editable: false,
     },
-    // nonEditableRows: () =>
-    //   list_BuyingProduct.map((item) => {
-    //     let findEle = listCompare.find(
-    //       (e) => e.id === item.id
-    //     );
-    //     if (item.sku !== ""
-    //  && item.sku === findEle.sku
-    //      )
-    //       return item.id;
-    //   }),
-
     {
       dataField: "sku",
       text: "SKU",
@@ -132,46 +130,26 @@ export default function CreateGoodsReceiptComponent() {
       },
       // editable: true,
       validator: (newValue, oldValue, row, done) => {
-        if (test(newValue)) {
-          setIsCheckingNumeric(true);
-          console.log(test(newValue));
-          console.log("CHECKINGG");
-          return {
-            valid: false,
-            message: "SKU has existed",
-          };
-        } else {
-          console.log("CHECKINGG sai");
-          console.log(test(newValue));
-          setIsCheckingNumeric(false);
-        }
-        // setTimeout(() => {
-        //   if (oldValue.sku === "" && newValue !== "") {
+        let check = false;
+        checkDuplicateSKU(newValue).then((result) => {
+          console.log(result);
+          if (result.hasMatch) {
+            setIsCheckingNumeric(true);
+            check = true;
+          } else {
+            setIsCheckingNumeric(false);
+          }
+        });
+        setTimeout(() => {
+          if (check)
+            return done({
+              valid: false,
+              message: "SKU has existed",
+            });
+          return done();
+        }, 2000);
 
-        //   }
-        // }, 2000);
-
-        // setTimeout(() => {
-        //   if (oldValue.sku === "" && newValue !== "") {
-        //     // if (checkDuplicateSKUReducer.hasMatch) {
-        //       if(test(newValue)){
-        //       setIsCheckingNumeric(true);
-        //       console.log(test(newValue))
-        //       console.log("CHECKINGG");
-        //       return done({
-        //         valid: false,
-        //         message: "SKU has existed",
-        //       });
-        //     } else {
-        //       console.log("CHECKINGG sai");
-        //       console.log(test(newValue))
-        //       setIsCheckingNumeric(false);
-
-        //     }
-        //   }
-
-        // }, 2000);
-        // return { async: true };
+        return { async: true };
       },
     },
     {
@@ -355,14 +333,16 @@ export default function CreateGoodsReceiptComponent() {
   //   console.log(event.target.value);
   // }
 
-  // function isDataInputEmpty(array) {
-  //   const checkSKU = (element) => element.sku === "";
-  //   const checkBarcode = (element) => element.barcode === "";
-  //   if (array.some(checkSKU) && array.some(checkBarcode)) return true;
-  //   // else if (array.some(checkSKU) && !array.some(checkBarcode)) return false;
-  //   // else if (!array.some(checkSKU) && array.some(checkBarcode)) return false;
-  //   return false;
-  // }
+  function isDataInputEmpty(array) {
+    const checkReceived = (element) => element.received === 0;
+    const checkSKU = (element) => element.sku === "";
+    if (array.some(checkReceived)) return true;
+    // const checkBarcode = (element) => element.barcode === "";
+    if (array.some(checkSKU) && array.some(checkReceived)) return true;
+    // else if (array.some(checkSKU) && !array.some(checkBarcode)) return false;
+    // else if (!array.some(checkSKU) && array.some(checkBarcode)) return false;
+    return false;
+  }
 
   function saveGoodsReceipt() {
     if (selectedPO === "" || selectedLocation.id === "") {
@@ -375,10 +355,10 @@ export default function CreateGoodsReceiptComponent() {
         showConfirmButton: false,
       });
     } else {
-      if (!isValid) {
+      if (isDataInputEmpty(list_BuyingProduct)) {
         Swal.fire({
           title: "Error",
-          text: "Please input valid  sku",
+          text: "Please input valid  sku or number should be bigger than zero",
           icon: "error",
           showCancelButton: true,
           cancelButtonText: "Cancel",
@@ -417,6 +397,19 @@ export default function CreateGoodsReceiptComponent() {
 
         console.log(Data);
       }
+
+      // if (!isValid) {
+      //   Swal.fire({
+      //     title: "Error",
+      //     text: "Please input valid  sku",
+      //     icon: "error",
+      //     showCancelButton: true,
+      //     cancelButtonText: "Cancel",
+      //     showConfirmButton: false,
+      //   });
+      // } else {
+
+      // }
     }
   }
 
@@ -483,6 +476,7 @@ export default function CreateGoodsReceiptComponent() {
     };
   }, []);
 
+  console.log(listCompare);
   useEffect(() => {
     if (list_BuyingProductStore.length > 0) {
       setList_BuyingProduct(
