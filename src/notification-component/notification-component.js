@@ -9,7 +9,7 @@ import moment from "moment";
 
 export default function NotificationBellComponents(props) {
   let dispatch = useDispatch();
-  const { token, listNotificationStore } = useSelector((state) => ({
+  const { token, listNotificationStore,userRole } = useSelector((state) => ({
     token: state.client.token,
     userRole: state.client.userRole,
     listNotificationStore: state.notificationReducer.listNotifications,
