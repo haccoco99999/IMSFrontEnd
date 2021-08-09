@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { getDetailGoodIssue } from './action'
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
@@ -29,6 +29,7 @@ export default function DetailGoodIssue() {
         GoodIssueDetail: state.DetailGoodIssue,
         token: state.client.token
     }))
+    const history = useHistory()
     const [infoRejectOrder, setInfoRejectOrder] = useState({})
     const [listGoodIssueProducts, setlistGoodIssueProducts] = useState([])
     const [eventPage, setEvenPage] = useState({
@@ -191,18 +192,14 @@ export default function DetailGoodIssue() {
                     isShow: true,
                     title: "Reject",
                     action: () => clickReject(),
-                    style: {
-                        background: "red"
-                    }
+                    class:"btn-danger"
                 },
 
                 {
                     isShow: true,
                     title: "Create good issue",
                     action: () => ClickCreateGoodIssue(),
-                    style: {
-                        "background-color": "#f9c421"
-                    }
+                    class:"btn-primary",
                 },
             ]
         }
@@ -212,15 +209,13 @@ export default function DetailGoodIssue() {
                     isShow: true,
                     title: "Shipping",
                     action: () => clickToShipping(),
-                    style: {
-                        background: "red"
-                    }
+                    class:"btn-warning",
                 },
                 {
                     isShow: true,
                     title: "print",
                     action: () => printDeliverNote(),
-
+                    class:"btn-secondary",
                 },
             ]
 
@@ -231,9 +226,7 @@ export default function DetailGoodIssue() {
                     isShow: true,
                     title: "Confirm",
                     action: () => clickToConfirm(),
-                    style: {
-                        background: "red"
-                    }
+                    class:"btn-primary"
                 },
             ]
         }
@@ -500,7 +493,7 @@ export default function DetailGoodIssue() {
         // }
     };
     function backPage() {
-        // history.go(-1)
+        history.go(-1)
     }
 
 
@@ -541,7 +534,11 @@ export default function DetailGoodIssue() {
                 titleBar={GoodIssueDetail.infoGoodIssueDetail.id}
                 actionGoBack={backPage}
                 classStatus={classStatus}
-                status={status} />
+                status={status} 
+                currentPage ={"Detail Good Issue"}
+                home ={"Goods Issue"}
+                
+                />
 
             <div class="d-grid gap-2">
               {status === "Cancel"? <RejectWrapper 

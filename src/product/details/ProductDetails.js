@@ -289,13 +289,15 @@ export default function ProductDetails() {
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
         }).then((result) => {
-          if (result.isConfirmed)
+          if (result.isConfirmed) {
             dispatch(
               getDetailsProductAction({
                 id: location.state.productId,
                 token: token,
               })
             );
+            setIsDisabled(true);
+          }
         });
     } else if (updateProductReducer.errors) {
       Swal.fire({
@@ -455,18 +457,18 @@ export default function ProductDetails() {
                 <li class="list-group-item">
                   <h5 class="card-title fw-bold">List of variants</h5>
                   <div className="mt-3">
-                        <BootstrapTable
-                          keyField="id"
-                          striped
-                          hover
-                          condensed
-                          columns={columns}
-                          headerClasses="table-header-receipt"
-                          noDataIndication="Table is Empty"
-                          data={listVariantsStores}
-                          rowEvents={rowEvents}
-                        />
-                      </div>
+                    <BootstrapTable
+                      keyField="id"
+                      striped
+                      hover
+                      condensed
+                      columns={columns}
+                      headerClasses="table-header-receipt"
+                      noDataIndication="Table is Empty"
+                      data={listVariantsStores}
+                      rowEvents={rowEvents}
+                    />
+                  </div>
                   {/* {productDetails.isVariantType && (
                     <div>
                      

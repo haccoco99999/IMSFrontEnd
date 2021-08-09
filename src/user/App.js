@@ -127,12 +127,14 @@ function App(props) {
         hubConnection
           .invoke("SendMessage", "username", "message to be sent")
           .catch((err) => {
+            alert(err);
             console.log("Error invoking function: " + { err });
           });
 
         //Join a channel
         //CHANNEL = ROLE NAME
         hubConnection.invoke("JoinGroup", client.userRole).catch((err) => {
+          alert(err);
           console.log("Error invoking function: " + { err });
         });
 
@@ -177,9 +179,11 @@ function App(props) {
         hubConnection
           .invoke("DisconnectFromResource", "userId", "pageId")
           .catch((err) => {
+            alert(err);
             console.log("Error while disconnectiong from resource: " + { err });
           });
       } catch (err) {
+        alert(err);
         console.log("Error while establishing connection: " + { err });
       }
       setHubConnection(hubConnection);
@@ -194,7 +198,7 @@ function App(props) {
       ) : null} */}
 
       <div className={"sidebar " + eventPage.active}>
-        <div data-bs-toggle="collapse"data-bs-toggleActive="collapse"  className={"logo_content btn hide-" + eventPage.statusSetting}>
+        <div className={"logo_content hide-" + eventPage.statusSetting}>
           <div className="logo">
             <div className="logo_name">
               <img src={logo} />
@@ -232,9 +236,9 @@ function App(props) {
               <p onClick={toggleAbout}> &#60; Back</p>
             </div>
           </div>
-          <div class="collapse btn  ps-4 text-white" id="collapseProfile">
+          <div class="collapse text-white" id="collapseProfile">
             <p onClick={() => history.push("/homepage/about-my-account")}>My profile</p>
-            {/* <p>My notification</p> */}
+            <p>My notification</p>
 
           </div>
         </div>
@@ -265,18 +269,18 @@ function App(props) {
                   <i className="bx">
                     <img src={importLogo} />
                   </i>
-                  <span className="links_name">Goods Receipt</span>
+                  <span className="links_name">Good Recipt</span>
                 </Link>
-                <span className="tooltip">Goods Receipt</span>
+                <span className="tooltip">Good Recipt</span>
               </li>
               <li>
                 <Link to="/homepage/good-issue">
                   <i className="bx">
                     <img src={boxLogo} />
                   </i>
-                  <span className="links_name">Goods issue</span>
+                  <span className="links_name">Good issue</span>
                 </Link>
-                <span className="tooltip">Goods issue</span>
+                <span className="tooltip">Good issue</span>
               </li>
               <li>
                 <Link to="/homepage/stock-take">
@@ -355,9 +359,9 @@ function App(props) {
                   <i className="bx">
                     <img src={userLogo} />
                   </i>
-                  <span className="links_name">Purchase requisition</span>
+                  <span className="links_name">Sale man</span>
                 </Link>
-                <span className="tooltip">Purchase requisition</span>
+                <span className="tooltip">Sale man</span>
               </li>
             </nav>
           </ul>

@@ -38,6 +38,9 @@ export default function PurchaseRequisitionDetails() {
   const [returnData, setIsReturnData] = useState(false);
   const [status, setStatus] = useState("");
   const [classStatus, setClassStatus] = useState("");
+  const [eventPage, setEventPage] = useState({
+    isShowAddProduct: false,
+  });
   //todo: declare button
   const columnsEdit = [
     {
@@ -179,7 +182,7 @@ export default function PurchaseRequisitionDetails() {
         .transaction.transactionRecord,
     getDetailsPurchaseRequisitionReducer:
       state.getDetailsPurchaseRequisitionReducer,
-      submitDraftReducer: state.submitDraftReducer,
+    submitDraftReducer: state.submitDraftReducer,
     updatePRReducer: state.updatePRReducer,
     deletePRReducer: state.deletePRReducer,
   }));
@@ -252,20 +255,50 @@ export default function PurchaseRequisitionDetails() {
     dispatch(deletePRAction({ data: data, token: token }));
   }
 
-  function clickToAddProduct(productRaw) {
-    let product = {
-      id: productRaw.productId,
-      orderId: "",
-      productVariantId: productRaw.id,
-      orderQuantity: 1,
-      unit: productRaw.unit,
-      price: productRaw.price,
-      discountAmount: 0,
-      totalAmount: 1,
-      name: productRaw.name,
-    };
-    setCleanListProducts([...cleanListProducts, product]);
+  // function clickToAddProduct(productRaw) {
+  //   let product = {
+  //     id: productRaw.productId,
+  //     orderId: "",
+  //     productVariantId: productRaw.id,
+  //     orderQuantity: 1,
+  //     unit: productRaw.unit,
+  //     price: productRaw.price,
+  //     discountAmount: 0,
+  //     totalAmount: 1,
+  //     name: productRaw.name,
+  //   };
+  //   setCleanListProducts([...cleanListProducts, product]);
+  // }
+  
+  function clickToAddProduct(product) {
+    // console.log(product);
+    if (checkProductExist(product.productVariantId)) {
+      setCleanListProducts((state) =>
+        state.map((item) =>
+          item.productVariantId === product.productVariantId
+            ? {
+                ...item,
+                orderQuantity: item.orderQuantity + product.orderQuantity,
+              }
+            : item
+        )
+      );
+    } else {
+      setCleanListProducts((state) => [...state, product]);
+    }
+
+    clickSetShowAddProductPage();
   }
+  function checkProductExist(productVariantId) {
+    return cleanListProducts.some(
+      (product) => product.productVariantId === productVariantId
+    );
+  }
+
+  
+
+
+
   // function clickDeleteProduct(id) {
   //   setCleanListProducts(
   //     cleanListProducts.filter((element) => element.productVariantId !== id)
@@ -537,7 +570,11 @@ export default function PurchaseRequisitionDetails() {
       });
     }
   }, [deletePRReducer]);
-
+  function clickSetShowAddProductPage() {
+    setEventPage((state) => {
+      return { ...state, isShowAddProduct: !state.isShowAddProduct };
+    });
+  }
   useEffect(() => {
     if (statusStore === 0) {
       setStatus("Draft");
@@ -626,14 +663,26 @@ export default function PurchaseRequisitionDetails() {
                           onChange={onChangeDeadline}
                         />
                       </div>
-                      <div className="mt-2">
-                        <label for="deadline" class="form-label">
-                          Search
-                        </label>
-                        <SearchComponent
-                          clickToAddProduct={clickToAddProduct}
-                        />
-                      </div>
+                      <li class="list-group-item">
+                        {/* <h5 class="card-title">Product</h5> */}
+                        <button
+                          onClick={() => clickSetShowAddProductPage()}
+                          type="button"
+                          class="btn btn-outline-secondary"
+                        >
+                          Add product
+                        </button>
+                        {eventPage.isShowAddProduct ? (
+                          <FormAddProductModal
+                            clickSetShowAddProductPage={clickSetShowAddProductPage}
+                            clickToAddProduct={clickToAddProduct}
+                            // addGroupProduct={addGroupProduct}
+                          />
+                        ) : (
+                          ""
+                        )}
+                        {/* <SearchComponent clickToAddProduct={clickToAddProduct} /> */}
+                      </li>
                     </>
                   )}
                   <div className="mt-2">

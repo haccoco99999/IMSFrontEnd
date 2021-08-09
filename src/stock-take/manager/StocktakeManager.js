@@ -362,7 +362,7 @@ export default function () {
 
 }
   return (
-    <div className="space-top-heading">
+    <div className="space-top-heading wrapper">
       {/* title */}
       <div className="title-heading mt-2">
         <span>Stocktake Manager</span>
@@ -371,7 +371,7 @@ export default function () {
 
       {/* ////////////////EDIT FRONTEND/////////////// */}
       <div class="d-grid gap-2">
-        <div className="pb-3">
+     
 
           <StockTakeFilter
             selectStatus={selectStatus}
@@ -382,7 +382,7 @@ export default function () {
           />
 
 
-        </div>
+      
         <div class="">
           <div className="card">
             <div class="card-header text-white bg-secondary">List Stock Take</div>

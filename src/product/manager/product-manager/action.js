@@ -1,4 +1,4 @@
-import { GET_ALL_PRODUCTS_REQUEST } from "../constants";
+import { GET_ALL_PRODUCTS_REQUEST, GET_ALL_UPDATES_REQUEST } from "../constants";
 
 export function getAllProductAction({token, filter}) {
   return {
@@ -7,3 +7,11 @@ export function getAllProductAction({token, filter}) {
     filter
   };
 }
+
+export function getAllUpdateProductAction({ token }) {
+  return {
+    type: GET_ALL_UPDATES_REQUEST,
+    token,
+  };
+}
+

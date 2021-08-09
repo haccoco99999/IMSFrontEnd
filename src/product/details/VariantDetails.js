@@ -245,10 +245,12 @@ export default function VariantDetails() {
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
         }).then((result) => {
-          if (result.isConfirmed)
+          if (result.isConfirmed) {
             dispatch(
               getDetailsVariant({ id: location.state.variantId, token: token })
             );
+            setIsDisabled(true);
+          }
         });
     } else if (updateVariantReducer.errors) {
       Swal.fire({

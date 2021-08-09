@@ -216,7 +216,7 @@ function AccountManager() {
 
   };
   return (
-    <div>
+    <div class="space-top-heading wrapper">
       <div className="title-heading mt-2">
         <span>Account Manager</span>
       </div>
@@ -267,9 +267,9 @@ function AccountManager() {
           filter={accountFilter}
         />
 
-        <div class="p-3 ">
+        <div class="pb-3">
           <div className="card">
-            <div class="card-header text-white bg-secondary">List Purchase Order</div>
+            <div class="card-header text-white bg-secondary">List Accounts</div>
             <div className="card-body">
 
 

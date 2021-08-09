@@ -192,7 +192,7 @@ export default function StocktakeDetailsComponent() {
     {
       dataField: "pkgId",
       text: "Package Id",
-      hidden: true,
+      // hidden: true,
     },
     {
       // dataField: "package.productVariantId",
@@ -280,6 +280,7 @@ export default function StocktakeDetailsComponent() {
   }
 
   function onSaveClick() {
+    console.log(listCheckedItems);
     const data = {
       stockTakeGroupLocation: [
         {
@@ -287,6 +288,9 @@ export default function StocktakeDetailsComponent() {
           checkItems: listCheckedItems.map((checkItem) => {
             return {
               pkgId: checkItem.pkgId,
+              productVariantName: checkItem.variantName,
+              sku: checkItem.sku,
+              storageQuantity: checkItem.quantity,
               actualQuantity: checkItem.actualQuantity,
               note: checkItem.note,
             };
@@ -296,7 +300,21 @@ export default function StocktakeDetailsComponent() {
       stockTakeId: location.state.stocktakeId,
     };
     console.log("Data Update:", data);
-    dispatch(updateAction({ token: token, data: data }));
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to save this ?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: " #d33",
+      confirmButtonText: "Submit",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(updateAction({ token: token, data: data }));
+      }
+    });
   }
   function onRejectClick(reason) {
     hideRejectModal();
@@ -709,7 +727,7 @@ export default function StocktakeDetailsComponent() {
                   )}
                 </li>
                 <li class="list-group-item">
-                  <h5 class="card-title fw-bold">List checked items</h5>
+                  <h5 class="card-title fw-bold mb-3">List checked items</h5>
                   {isChanging && (
                     <>
                       <button
@@ -721,145 +739,93 @@ export default function StocktakeDetailsComponent() {
                       </button>
                       <button
                         type="button"
-                        class="btn btn-secondary"
+                        class="btn btn-secondary ms-1"
                         onClick={onRevertClick}
                       >
                         Revert
                       </button>
                     </>
                   )}
-                  {isLoading &&
-                    (statusStocktakeStore === 0 ? (
-                      <Table
-                        keyField="pkgId"
-                        columns={columns}
-                        data={listCheckedItems}
-                        noDataIndication="Table is Empty"
-                        cellEdit={cellEditFactory({
-                          mode: "click",
-                          blurToSave: true,
-                          beforeSaveCell(
-                            oldValue,
-                            newValue,
-                            row,
-                            column,
-                            done
-                          ) {
-                            let findEle = listCompare.find(
-                              (e) => e.pkgId === row.pkgId
-                            );
-                            if (column.dataField === "actualQuantity") {
-                              console.log("Actual quantity");
-                              let currentNote = row.note;
-                              console.log(currentNote);
-                              if (
-                                newValue !== findEle.actualQuantity ||
-                                currentNote !== findEle.note
-                              ) {
-                                setListCompare([
-                                  ...listCompare,
-                                  listCompare.map((e) =>
-                                    e === findEle ? (e.isChanging = true) : e
-                                  ),
-                                ]);
-                              } else {
-                                // if (currentNote === findEle.note)
-                                setListCompare([
-                                  ...listCompare,
-                                  listCompare.map((e) =>
-                                    e === findEle ? (e.isChanging = false) : e
-                                  ),
-                                ]);
+                  <div className="mt-3">
+                    {isLoading &&
+                      (statusStocktakeStore === 0 ? (
+                        <Table
+                          keyField="pkgId"
+                          columns={columns}
+                          data={listCheckedItems}
+                          noDataIndication="Table is Empty"
+                          cellEdit={cellEditFactory({
+                            mode: "click",
+                            blurToSave: true,
+                            beforeSaveCell(
+                              oldValue,
+                              newValue,
+                              row,
+                              column,
+                              done
+                            ) {
+                              let findEle = listCompare.find(
+                                (e) => e.pkgId === row.pkgId
+                              );
+                              if (column.dataField === "actualQuantity") {
+                                console.log("Actual quantity");
+                                let currentNote = row.note;
+                                console.log(currentNote);
+                                if (
+                                  newValue !== findEle.actualQuantity ||
+                                  currentNote !== findEle.note
+                                ) {
+                                  setListCompare([
+                                    ...listCompare,
+                                    listCompare.map((e) =>
+                                      e === findEle ? (e.isChanging = true) : e
+                                    ),
+                                  ]);
+                                } else {
+                                  // if (currentNote === findEle.note)
+                                  setListCompare([
+                                    ...listCompare,
+                                    listCompare.map((e) =>
+                                      e === findEle ? (e.isChanging = false) : e
+                                    ),
+                                  ]);
+                                }
+                              } else if (column.dataField === "note") {
+                                console.log("Note");
+                                let currentQuantity = row.actualQuantity;
+                                if (
+                                  newValue !== findEle.note ||
+                                  currentQuantity !== findEle.actualQuantity
+                                )
+                                  setListCompare([
+                                    ...listCompare,
+                                    listCompare.map((e) =>
+                                      e === findEle ? (e.isChanging = true) : e
+                                    ),
+                                  ]);
+                                else
+                                  setListCompare([
+                                    ...listCompare,
+                                    listCompare.map((e) =>
+                                      e === findEle ? (e.isChanging = false) : e
+                                    ),
+                                  ]);
                               }
-                            } else if (column.dataField === "note") {
-                              console.log("Note");
-                              let currentQuantity = row.actualQuantity;
-                              if (
-                                newValue !== findEle.note ||
-                                currentQuantity !== findEle.actualQuantity
-                              )
-                                setListCompare([
-                                  ...listCompare,
-                                  listCompare.map((e) =>
-                                    e === findEle ? (e.isChanging = true) : e
-                                  ),
-                                ]);
-                              else
-                                setListCompare([
-                                  ...listCompare,
-                                  listCompare.map((e) =>
-                                    e === findEle ? (e.isChanging = false) : e
-                                  ),
-                                ]);
-                            }
-                          },
-                        })}
-                      />
-                    ) : (
-                      <Table
-                        keyField="pkgId"
-                        columns={columnsNotProgressing}
-                        data={listCheckedItems}
-                        noDataIndication="Table is Empty"
-                      />
-                    ))}
+                            },
+                          })}
+                        />
+                      ) : (
+                        <Table
+                          keyField="pkgId"
+                          columns={columnsNotProgressing}
+                          data={listCheckedItems}
+                          noDataIndication="Table is Empty"
+                        />
+                      ))}
+                  </div>
                 </li>
               </ul>
             </div>
-
-            {/* <div className="wrapper-content shadow">
-    
-              <div className="title-heading mt-2">
-                <span>Stocktake Details</span>
-              </div>
-
-              <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                  <button
-                    class="nav-link active"
-                    id="nav-home-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nav-home"
-                    type="button"
-                    role="tab"
-                    aria-controls="nav-home"
-                    aria-selected="true"
-                  >
-                    General Information
-                  </button>
-                  <button
-                    class="nav-link"
-                    id="nav-profile-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nav-profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="nav-profile"
-                    aria-selected="false"
-                  >
-                    Checked Items
-                  </button>
-                </div>
-              </nav>
-              <div class="tab-content" id="nav-tabContent">
-                <div
-                  class="tab-pane fade show active"
-                  id="nav-home"
-                  role="tabpanel"
-                  aria-labelledby="nav-home-tab"
-                >
-                  <div className="wrapper-content shadow mt-3"></div>
-                </div>
-                <div
-                  class="tab-pane fade"
-                  id="nav-profile"
-                  role="tabpanel"
-                  aria-labelledby="nav-profile-tab"
-                >
-                  <div className="wrapper-content shadow mt-3"></div>
-                </div>
-              </div>
-            </div> */}
           </div>
         </>
       )}

@@ -247,7 +247,7 @@ export default function CreateWithVariants(props) {
           reverseButtons: true,
         }).then((result) => {
           if (result.isConfirmed) {
-            dispatch(createProduct({ data: data, token: props.token }));
+            dispatch(createProduct({ data: data, token: props.token, needCheckSku: false }));
           }
         });
       }

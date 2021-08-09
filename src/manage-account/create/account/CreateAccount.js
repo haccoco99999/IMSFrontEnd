@@ -7,6 +7,7 @@ import NavigationBar from '../../../navigation-bar-component/NavigationBar';
 import { useHistory, useLocation } from 'react-router-dom';
 import { CREATE_ACC_CLEAN, GET_DETAIL_ACC_CLEAN, SET_ACTIVE_ACC_CLEAN } from './constants';
 import Swal from 'sweetalert2'
+import { ChangePasswordAccountManagerCompoent, ChangePasswordCompoent } from '../../../components/change-password/ChangePasswordComponent';
 export default function CreateAccount() {
 
 
@@ -16,6 +17,7 @@ export default function CreateAccount() {
     isShowChangePassword: false,
 
   })
+  const [isShowPasswordModal, setIsShowPasswordModal] = useState(false)
   const confirmPassword = useRef("")
   const newPassword = useRef("")
   const [isvalidPassword, setIsvalidPassword,] = useState({
@@ -285,19 +287,15 @@ export default function CreateAccount() {
             }
             console.log(data)
             dispatch(CreateAccountAction({ data: data, token: token }));
-            newPassword.current.value = ""
-            confirmPassword.current.value = ""
-            newPassword.current.classList.remove("is-invalid", "is-valid")
-            confirmPassword.current.classList.remove("is-invalid", "is-valid")
+
+            form.classList.remove("was-validated");
 
 
           });
 
         // history.go(-1)
       }
-      else {
-        alert("ko hop le")
-      }
+
 
 
 
@@ -343,8 +341,13 @@ export default function CreateAccount() {
     setClickEdit();
   }
   function clickUpdate() {
+    const form = document.getElementById("checkValidProfile");
+    alert(form.checkValidity())
+    if (!form.checkValidity()) {
+      form.classList.add("was-validated");
 
-    if (isvalidPassword.isValidNewPassword !== false && isvalidPassword.isConfirmPassword !== false) {
+    }
+    else {
       let data = {
         userId: infoAccountState.userID,
         email: infoAccountState.email,
@@ -354,18 +357,13 @@ export default function CreateAccount() {
         dateOfBirth: infoAccountState.dateOfBirth,
         fullname: infoAccountState.fullname
       }
-      //neu data hop le //co 3 trang thai null(ko dien vao gi het) true("thi add vao update product") false("ko cho update")
-      if (isvalidPassword.isValidNewPassword && isvalidPassword.isConfirmPassword) {
-        data = { ...data, password: newPassword.current.value }
-        newPassword.current.value = ""
-        confirmPassword.current.value = ""
-        newPassword.current.classList.remove("is-invalid", "is-valid")
-        confirmPassword.current.classList.remove("is-invalid", "is-valid")
-      }
+
       dispatch(updateUserAccountDetail({ data: data, token: token }))
+      form.classList.remove("was-validated");
       setClickEdit();
     }
-    else { alert("nhap sai mat khau") }
+
+
 
   }
 
@@ -389,6 +387,25 @@ export default function CreateAccount() {
   function ClickGoBack() {
     history.go(-1)
   }
+  function closeChangePasswordModal() {
+    setIsShowPasswordModal(!isShowPasswordModal)
+  }
+  function saveChangePassword(dataPassword) {
+    console.log(dataPassword)
+    let data = {
+      userId: infoAccountState.userID,
+      email: infoAccountState.email,
+      phoneNumber: infoAccountState.phoneNumber,
+      address: infoAccountState.address,
+      roleId: infoAccountState.roleID,
+      dateOfBirth: infoAccountState.dateOfBirth,
+      fullname: infoAccountState.fullname,
+      password: dataPassword.newPassword,
+    }
+    dispatch(updateUserAccountDetail({ data: data, token: token }))
+
+    closeChangePasswordModal()
+  }
   return (
     <div>
       {/* ############################ */}
@@ -407,11 +424,11 @@ export default function CreateAccount() {
         <div class=" mt-3" >
           <div class="row g-0">
             <div class="pe-3 pt-3 col-md-4 d-flex align-items-end flex-column  ">
-              <div className="">
-                <img id="output-avatar" class="card-img-top rounded " style={{ height: "150px", width: "150px" }} src={infoDetailAccountStore.profileImageLink} alt="Card image cap" />
+              <div >
+                <img id="output-avatar" style={{ height: "150px", width: "150px" }} class="card-img-top rounded " src={infoDetailAccountStore.profileImageLink !== "" ? infoDetailAccountStore.profileImageLink : "https://image.flaticon.com/icons/png/512/3135/3135715.png"} alt="Card image cap" />
 
               </div>
-              <input name="image" id="fileaaa"  type="file" onChange={changeUploadAvatar} style={{ display: "none" }} />
+              <input name="image" id="fileaaa" type="file" onChange={changeUploadAvatar} style={{ display: "none" }} />
               <div className="btn btn-primary"> <label for="fileaaa"><i class="bi bi-camera-fill"></i>Change Avatar </label></div>
 
               <p>{infoAccountState.userRole}</p>
@@ -431,7 +448,7 @@ export default function CreateAccount() {
                       <input type="text" onChange={onchangeInputInfoAccount} required name="email" value={infoAccountState.email} disabled={statusUser !== "CREATEUSER"}
                         class="form-control" aria-describedby="helpId" placeholder="" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" />
                       <div class="invalid-feedback">
-                        Please enter a message in the textarea.
+                        Email is  invalid!
                       </div>
                     </div>
                   </div>
@@ -441,7 +458,7 @@ export default function CreateAccount() {
                       <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="fullname" value={infoAccountState.fullname}
                         class="form-control" aria-describedby="helpId" placeholder="" />
                       <div class="invalid-feedback">
-                        Please enter a message in the textarea.
+                        Please enter a fullname!
                       </div>
 
                     </div>
@@ -452,7 +469,7 @@ export default function CreateAccount() {
                       <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="phoneNumber" value={infoAccountState.phoneNumber}
                         class="form-control" id="" aria-describedby="helpId" placeholder="" pattern="((09|03|07|08|05|028|024)+([0-9]{8})\b)" />
                       <div class="invalid-feedback">
-                        Please enter a message in the textarea.
+                        Phone number is invalid!
                       </div>
 
                     </div>
@@ -463,7 +480,8 @@ export default function CreateAccount() {
                       <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="address" value={infoAccountState.address}
                         class="form-control" aria-describedby="helpId" placeholder="" />
                       <div class="invalid-feedback">
-                        Please enter a message in the textarea.
+                        Please enter a address!
+
                       </div>
 
                     </div>
@@ -471,10 +489,10 @@ export default function CreateAccount() {
                   <div class="mb-3 row">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Birthdate:</label>
                     <div class="col-sm-10">
-                      <input type="date" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="dateOfBirth" value={infoAccountState.dateOfBirth.split("T")[0]}
+                      <input type="date" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="dateOfBirth" value={infoAccountState.dateOfBirth}
                         class="form-control" aria-describedby="helpId" placeholder="" />
                       <div class="invalid-feedback">
-                        Please enter a message in the textarea.
+                        Please set a birthdate!
                       </div>
 
                     </div>
@@ -491,15 +509,14 @@ export default function CreateAccount() {
 
                       </select>
                       <div class="invalid-feedback">
-                        Please enter a message in the textarea.
+                        Please select role!
                       </div>
                     </div>
                   </div>
                 </form>
-                <form id="checkValidPassword" className="needs-validation">
+                {statusUser === "CREATEUSER" ? <form id="checkValidPassword" className="needs-validation">
                   <div className="form-text text-success" data-bs-toggle="collapse" data-bs-target="#collapseChangePassword" >
-                    {statusUser === "CREATEUSER" ? <p class="text-danger">Set password(*)</p>
-                      : <p class="text-success  dropdown-toggle" >Change password</p>}
+                    <p class="text-danger">Set password(*)</p>
                   </div>
                   <div class={statusUser === "CREATEUSER" ? " collapse show" : " collapse "} id="collapseChangePassword" >
                     <div class="mb-3 row">
@@ -508,7 +525,7 @@ export default function CreateAccount() {
                         <input type="password" required ref={newPassword} onChange={onChangePassword} disabled={eventPage.isShowEdit}
                           class="form-control" name="" id="newPassword" aria-describedby="helpId" placeholder="" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" />
                         <div class="invalid-feedback">
-                          Please enter a message in the textarea.
+                          Password is invalid!
                         </div>
                       </div>
                     </div>
@@ -518,7 +535,7 @@ export default function CreateAccount() {
                         <input type="password" ref={confirmPassword} onChange={onChangePassword} required disabled={eventPage.isShowEdit}
                           class="form-control" name="" id="confirmPassword" aria-describedby="helpId" placeholder="" />
                         <div class="invalid-feedback">
-                          Please enter a message in the textarea.
+                          Confirm password not match!
                         </div>
                       </div>
                     </div>
@@ -526,8 +543,16 @@ export default function CreateAccount() {
 
                   </div>
 
-                </form>
+                </form> :
+                  <div><p class="text-success btn dropdown-toggle" onClick={() => closeChangePasswordModal()} >Change password</p>
+                    {isShowPasswordModal ? <ChangePasswordAccountManagerCompoent closeChangePasswordModal={closeChangePasswordModal} saveChangePassword={saveChangePassword} />
+                      : ""}
 
+                  </div>
+
+
+
+                }
 
 
 

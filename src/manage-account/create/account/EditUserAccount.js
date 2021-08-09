@@ -181,8 +181,12 @@ export default function EditUserAccount() {
 
     <NavigationBar listButton={listButton} />
         <div className="container container-create-account">
+         
+
           <div class="avatar-upload-contain">
+            <div style={{width:"150px" , height:"150px"}}>
             <img   id="output-avatar" src="https://i.stack.imgur.com/l60Hf.png" class="img-fluid img-thumbnail " alt="..." />
+           </div>
             <input name="image" id="fileaaa" type="file" onChange={changeUploadAvatar} style={{display: "none"}}/>
             <div className="change-avatar-edit"> <label for="fileaaa"><i class='bx bxs-edit-alt'></i>Change Avatar </label></div>
          
