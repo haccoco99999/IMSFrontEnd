@@ -334,7 +334,7 @@ export default function GoodsReceipt() {
 
 
   return (
-    <div className="space-top-heading">
+    <div className="space-top-heading wrapper">
       {/* title  */}
       <div className="title-heading mt-2">
         <span>Goods Receipt</span>
@@ -353,7 +353,7 @@ export default function GoodsReceipt() {
         />
         <div class="">
           <div className="card">
-            <div class="card-header text-white bg-secondary">List Purchase Order</div>
+            <div class="card-header text-white bg-secondary">List Goods Receipt</div>
             <div className="card-body">
               <PagingComponent rowCountTotal={rowCountTotal} sizePerPage={goodsReceiptFilter.SizePerPage} setSizePage={setSizePage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={goodsReceiptFilter.currentPage} />
 
