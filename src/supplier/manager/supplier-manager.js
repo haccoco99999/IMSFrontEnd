@@ -174,7 +174,7 @@ const [supplierFilter, setSupplierFilter] = useState({
   }, []);
 
   return (
-    <div className="space-top-heading">
+    <div className="space-top-heading wrapper">
       {" "}
       {/* title */}
       <div className="title-heading mt-2">
@@ -193,9 +193,9 @@ const [supplierFilter, setSupplierFilter] = useState({
          submitFilter={submitsupplierFilter}
          resetFilter={resetSupplierFilter}
         />
-        <div class="p-3 ">
+        <div class="pb-3 ">
           <div className="card">
-            <div class="card-header text-white bg-secondary">List Purchase Order</div>
+            <div class="card-header text-white bg-secondary">List Suppliers</div>
             <div className="card-body">
 
 

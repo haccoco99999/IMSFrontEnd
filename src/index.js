@@ -39,6 +39,10 @@ const composeSetup = process.env.NODE_ENV !== 'production' && typeof window === 
       state = { login } 
       history.push("/login")
     }
+    if (action.type === 'CLEAN_ALL_STORE') {
+      const { login } = state
+      state = { login } 
+    }
   
     return IndexReducer(state, action);
   };

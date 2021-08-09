@@ -269,18 +269,18 @@ function App(props) {
                   <i className="bx">
                     <img src={importLogo} />
                   </i>
-                  <span className="links_name">Good Recipt</span>
+                  <span className="links_name">Goods Recipt</span>
                 </Link>
-                <span className="tooltip">Good Recipt</span>
+                <span className="tooltip">Goods Recipt</span>
               </li>
               <li>
                 <Link to="/homepage/good-issue">
                   <i className="bx">
                     <img src={boxLogo} />
                   </i>
-                  <span className="links_name">Good issue</span>
+                  <span className="links_name">Goods issue</span>
                 </Link>
-                <span className="tooltip">Good issue</span>
+                <span className="tooltip">Goods issue</span>
               </li>
               <li>
                 <Link to="/homepage/stock-take">
@@ -359,9 +359,9 @@ function App(props) {
                   <i className="bx">
                     <img src={userLogo} />
                   </i>
-                  <span className="links_name">Sale man</span>
+                  <span className="links_name">Purchase requisition</span>
                 </Link>
-                <span className="tooltip">Sale man</span>
+                <span className="tooltip">Purchase requisition</span>
               </li>
             </nav>
           </ul>

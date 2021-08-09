@@ -4,7 +4,7 @@ import { SelectRolePurchaseOrder } from '../../../search-component/SearchCompone
 export default function AccountManagementFilter(props) {
 
     return (
-        <div class="p-3">
+        <div class="pb-3">
             <div class="card">
 
 

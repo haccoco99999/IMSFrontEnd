@@ -221,9 +221,9 @@ export default function () {
         submitFilter={submitProductVariantsFilter}
         resetFilter={resetProductVariantsFilter}
       />
-      <div class="">
+      <div class="pb-3">
         <div className="card">
-          <div class="card-header text-white bg-secondary">List Purchase Order</div>
+          <div class="card-header text-white bg-secondary">List Product</div>
           <div className="card-body">
             <PagingComponent
               setSizePage={setSizePage}

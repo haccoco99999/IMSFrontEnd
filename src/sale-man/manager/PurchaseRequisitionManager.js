@@ -217,7 +217,7 @@ function resetFilter() {
 
 
   return (
-    <div className="space-top-heading">
+    <div className="space-top-heading wrapper">
       {/* title  */}
       <div className="title-heading mt-2">
         <span>Purchase Requisition</span>
@@ -235,9 +235,9 @@ function resetFilter() {
           selectStatusFilter={selectStatusFilter}
           setFilterSupplier={setFilterSupplier}
         />
-        <div class="p-3 ">
+        <div class="pb-3">
           <div className="card">
-            <div class="card-header text-white bg-secondary">List Purchase Order</div>
+            <div class="card-header text-white bg-secondary">List Orders</div>
             <div className="card-body">
 
            

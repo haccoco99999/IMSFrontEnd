@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import loginRequest from "./actions";
-import { Redirect } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
 // import Multistep from 'react-multistep'
 // import StepZilla from "react-stepzilla";
 // import { ProgressBar } from '../components/progress-bar/ProgressBar'
@@ -20,6 +20,7 @@ export default function Login(props) {
     email: "",
     password: "",
   });
+  const location = useLocation()
   const { loginStatus } = useSelector((state) => ({
     loginStatus: state.login,
   }));
@@ -41,7 +42,9 @@ export default function Login(props) {
       );
     }
   }
-
+   useEffect(() =>{
+     dispatch({type:"CLEAN_ALL_STORE"})
+   },[])
   useEffect(() => {
     if (loginStatus.requesting === true) {
       Swal.fire({

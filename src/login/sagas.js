@@ -72,7 +72,7 @@ function* loginFlow (action) {
 
     
       
-      localStorage.setItem('token', JSON.stringify(json))
+      // localStorage.setItem('token', JSON.stringify(json))
       history.push('/homepage/dashboard')
     }
     else{

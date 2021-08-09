@@ -4,7 +4,7 @@ import { SelectStatusStockTake } from '../../search-component/SearchComponentAll
 export default function StockTakeFilter(props){
 
     return (
-        <div class="">
+        <div class="pb-3">
         <div class="card">
 
 

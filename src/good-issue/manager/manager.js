@@ -237,7 +237,7 @@ function parseFilterToString(dataFilter) {
   return filterString
 }
   return (
-    <div className="space-top-heading">
+    <div className="space-top-heading wrapper">
       {/* title */}
       <div className="title-heading mt-2">
         <span>Goods Issues Requisition</span>

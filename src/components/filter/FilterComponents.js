@@ -6,11 +6,11 @@ import { SearchPurchaseOrder, SelectSupplier, SelectStatusPurchaseOrder } from '
 export function GoodReceiptFilter(props) {
 
     return (
-        <div class="">
+        <div class="pb-3">
             <div class="card">
 
 
-                <div class="card-header text-white bg-secondary">Filter Product Variant
+                <div class="card-header text-white bg-secondary">Filter 
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
                         <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
                     </svg></div>
@@ -22,7 +22,7 @@ export function GoodReceiptFilter(props) {
                     <div className="row">
                         <div class="form-group">
                             <label for="">Search:</label>
-                            <input type="text" value={props.filter.SearchQuery}
+                            <input type="text" value={props.filter.SearchQuery}  onChange={props.onChangeValueFilter}
                                 class="form-control" name="SearchQuery" id="" aria-describedby="helpId" placeholder="" />
 
                         </div>
@@ -76,11 +76,11 @@ export function GoodReceiptFilter(props) {
 export function GoodsIssueFilter(props) {
 
     return (
-        <div class="">
+        <div class="pb-3">
             <div class="card">
 
 
-                <div class="card-header text-white bg-secondary">Filter Product Variant
+                <div class="card-header text-white bg-secondary">Filter
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
                         <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
                     </svg></div>
@@ -166,7 +166,7 @@ export function GoodsIssueFilter(props) {
 }
 export function PurchaseOrderFilter(props) {
     return (
-        <div class="p-3">
+        <div class="pb-3">
             <div class="card">
 
 
@@ -294,7 +294,7 @@ export function PurchaseOrderFilter(props) {
 }
 export function SupplierFilter(props) {
     return (
-        <div class="p-3">
+        <div class="pb-3">
             <div class="card">
 
 

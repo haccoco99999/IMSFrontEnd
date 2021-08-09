@@ -528,7 +528,7 @@ export default function PurchaseQuoteOrder() {
 
 
     return (
-        <div className="purchase-quote-order">
+        <div className="purchase-quote-order wrapper">
             <div className="title-purchase-quote-order">
                 <span>Purchase requistion</span>
                 <div>6</div>
@@ -569,7 +569,7 @@ export default function PurchaseQuoteOrder() {
                     selectStatusFilter={selectStatusFilter}
                     setFilterSupplier={setFilterSupplier}
                 />
-                <div class="p-3 ">
+                <div class="pb-3 ">
                     <div className="card">
                         <div class="card-header text-white bg-secondary">List Purchase Order</div>
                         <div className="card-body">
