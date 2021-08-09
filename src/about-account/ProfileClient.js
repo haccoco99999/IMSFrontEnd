@@ -14,11 +14,12 @@ const initValue = {
 export default function ProfileClient() {
   const dispatch = useDispatch()
 
- 
-  const { infoProfileStore, updateProfileClientStatus , updateImageStatus} = useSelector(state => ({ 
+
+  const { infoProfileStore, updateProfileClientStatus, updateImageStatus } = useSelector(state => ({
     updateImageStatus: state.updateImage,
-    infoProfileStore: state.client, 
-    updateProfileClientStatus: state.updateProfileClient }))
+    infoProfileStore: state.client,
+    updateProfileClientStatus: state.updateProfileClient
+  }))
   let [isEditProfile, setIsEditProfile] = useState(false)
   let [isUpdateProfile, setIsUpdateProfile] = useState(false)
   let [infoProfile, setInfoProfile] = useState(infoProfileStore)
@@ -29,34 +30,49 @@ export default function ProfileClient() {
   }
   function cancelUpdate() {
     setInfoProfile(infoProfileStore)
+    setIsEditProfile(false); 
   }
   function saveUpdate(event) {
-    var dataUpdate = {
-
-      fullname: infoProfile.fullname,
-      phoneNumber: infoProfile.phoneNumber,
-      address: infoProfile.address,
-      dateOfBirth: infoProfile.dateOfBirth,
-    };
-    dispatch(updateRequest({ token: infoProfileStore.token, dataUpdate: dataUpdate }))
 
 
-  }
-  function saveChangePassword(dataPassword) {
-  
+    const form = document.getElementById("valid-form-update-profile");
+    alert(form.checkValidity())
+    if (!form.checkValidity()) {
+      form.classList.add("was-validated");
+
+    }
+    else {
       var dataUpdate = {
-        oldPassword: dataPassword.oldPassword,
-        newPassword: dataPassword.newPassword,
+
         fullname: infoProfile.fullname,
         phoneNumber: infoProfile.phoneNumber,
         address: infoProfile.address,
         dateOfBirth: infoProfile.dateOfBirth,
       };
       dispatch(updateRequest({ token: infoProfileStore.token, dataUpdate: dataUpdate }))
-      // confirmPassword.current.value = undefined
-      // newPassword.current.value = undefined
-      // oldPassword.current.value = undefined
-      setIsChangePassword(false)
+      form.classList.remove("was-validated");
+      setIsEditProfile(false); 
+    }
+
+
+
+
+  }
+  function saveChangePassword(dataPassword) {
+
+    var dataUpdate = {
+      oldPassword: dataPassword.oldPassword,
+      newPassword: dataPassword.newPassword,
+      fullname: infoProfile.fullname,
+      phoneNumber: infoProfile.phoneNumber,
+      address: infoProfile.address,
+      dateOfBirth: infoProfile.dateOfBirth,
+    };
+    dispatch(updateRequest({ token: infoProfileStore.token, dataUpdate: dataUpdate }))
+    // confirmPassword.current.value = undefined
+    // newPassword.current.value = undefined
+    // oldPassword.current.value = undefined
+    setIsChangePassword(false)
   }
 
   useEffect(() => {
@@ -86,7 +102,7 @@ export default function ProfileClient() {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Something went wrong!',
+        text: 'Old Password is not connnect!',
 
       })
       dispatch({ type: UPDATE_PROFILE_CLEAN })
@@ -123,50 +139,50 @@ export default function ProfileClient() {
       dispatch({ type: UPDATE_IMAGE_CLEAN })
     }
   }, [updateProfileClientStatus, updateImageStatus])
- function closeChangePasswordModal(){
-   setIsChangePassword(!isChangePassword)
- }
- async function changeUploadAvatar(event) {
-  let file = event.target.files[0];
+  function closeChangePasswordModal() {
+    setIsChangePassword(!isChangePassword)
+  }
+  async function changeUploadAvatar(event) {
+    let file = event.target.files[0];
     const formData = new FormData()
     formData.append("file", file);
-  formData.append("upload_preset", "rmwbm6go");
-  let data={
-    
+    formData.append("upload_preset", "rmwbm6go");
+    let data = {
+
       userId: infoProfileStore.id,
       profileImageLink: infoProfileStore.profileImageLink
-    
+
+    }
+    dispatch(uploadAvatarImg({ token: infoProfileStore.token, data: data, formData: formData, isUpdateUser: true }))
+
+
+    // const url = "https://api.cloudinary.com/v1_1/ims2021/upload";
+
+    // const formData = new FormData()
+
+
+
+    // formData.append("file", file);
+    // formData.append("upload_preset", "rmwbm6go");
+    // await fetch(url, {
+    //   method: "POST",
+
+    //   body: formData,
+    // })
+    //   .then((response) => {
+    //     return response.json();
+    //   }).then((json) => {
+    //     console.log(json);
+
+
+
+    //  });
+
+    // var image = document.getElementById('output');
+
+    // image.src = URL.createObjectURL(file);
+
   }
-   dispatch(uploadAvatarImg({token: infoProfileStore.token, data:data, formData: formData, isUpdateUser: true}))
-  
-  
-  // const url = "https://api.cloudinary.com/v1_1/ims2021/upload";
- 
-  // const formData = new FormData()
-
-  
- 
-  // formData.append("file", file);
-  // formData.append("upload_preset", "rmwbm6go");
-  // await fetch(url, {
-  //   method: "POST",
-    
-  //   body: formData,
-  // })
-  //   .then((response) => {
-  //     return response.json();
-  //   }).then((json) => {
-  //     console.log(json);
-  
-
-     
-  //  });
-
-  // var image = document.getElementById('output');
-  
-  // image.src = URL.createObjectURL(file);
-
-}
   return (
     <div className="home_content">
       <div className="text">
@@ -190,41 +206,59 @@ export default function ProfileClient() {
                   <img src={infoProfileStore.profileImageLink} id="output" width="200" />
                 </div>
                 <p
-              
+
                   onClick={() => setIsChangePassword(!isChangePassword)}
                   className=" text-end text-success btn"><i class="bi bi-pen"></i> Change password</p>
               </div>
-               {isChangePassword?<ChangePasswordCompoent closeChangePasswordModal={closeChangePasswordModal} saveChangePassword={saveChangePassword} />:""}
-              <div class="form-group form-group-profile-client">
-                <label for="">Email Adress</label>
-                <input type="text" disabled value={infoProfile.email}
-                  class="form-control " name="" id="" aria-describedby="helpId" placeholder="" />
-              </div>
+              {isChangePassword ? <ChangePasswordCompoent closeChangePasswordModal={closeChangePasswordModal} saveChangePassword={saveChangePassword} /> : ""}
+              <form className="needs-validation" id="valid-form-update-profile">
+                <div class="form-group form-group-profile-client">
+                  <label for="">Email Adress</label>
+                  <input type="text" disabled value={infoProfile.email} pattern="^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$" required
+                    class="form-control " name="" id="" aria-describedby="helpId" placeholder="" />
+                  <div class="invalid-feedback">
+                    Email is invalid!
+                  </div>
+                </div>
 
-              <div class="form-group form-group-profile-client">
-                <label for="">Fullname</label>
-                <input type="text" value={infoProfile.fullname} onChange={onChangeValueProfile}
-                  class="form-control" name="fullname" id="" aria-describedby="helpId" placeholder="" disabled={!isEditProfile} />
-              </div>
-              <div class="form-group form-group-profile-client">
-                <label for="">Address</label>
-                <input type="text" value={infoProfile.address} onChange={onChangeValueProfile}
-                  class="form-control" name="address" id="" aria-describedby="helpId" placeholder="" disabled={!isEditProfile} />
-              </div>
-              <div class="form-group form-group-profile-client">
-                <label for="">Phone Number</label>
-                <input type="text" value={infoProfile.phoneNumber} onChange={onChangeValueProfile}
-                  class="form-control" name="phoneNumber" id="" aria-describedby="helpId" placeholder="" disabled={!isEditProfile} />
-              </div>
-              <div class="form-group form-group-profile-client">
-                <label for="">Birthdate</label>
-                <input type="text" value={infoProfile.dateOfBirth} onChange={onChangeValueProfile}
-                  class="form-control" type="date" name="dateOfBirth" id="" aria-describedby="helpId" placeholder="" disabled={!isEditProfile} />
-              </div>
-              {isEditProfile ? "" : <button type="button" class="btn btn-primary" onClick={() => setIsEditProfile(true)}>Edit Profile</button>}
-              {isEditProfile ? <button type="button" onClick={() => { setIsEditProfile(false); cancelUpdate() }} class="btn btn-primary">Cancel</button> : ""}
-              {isEditProfile ? <button type="button" onClick={() => { setIsEditProfile(false); saveUpdate() }} class="btn btn-primary">Update Profile</button> : ""}
+                <div class="form-group form-group-profile-client">
+                  <label for="">Fullname</label>
+                  <input type="text" value={infoProfile.fullname} onChange={onChangeValueProfile} required
+                    class="form-control" name="fullname" id="" aria-describedby="helpId" placeholder="" disabled={!isEditProfile} />
+                  <div class="invalid-feedback">
+                    Please enter a fullname!
+                  </div>
+                </div>
+                <div class="form-group form-group-profile-client">
+                  <label for="">Address</label>
+                  <input type="text" value={infoProfile.address} onChange={onChangeValueProfile} required
+                    class="form-control" name="address" id="" aria-describedby="helpId" placeholder="" disabled={!isEditProfile} />
+                  <div class="invalid-feedback">
+                    Address is invalid!
+                  </div>
+                </div>
+                <div class="form-group form-group-profile-client">
+                  <label for="">Phone Number</label>
+                  <input type="text" value={infoProfile.phoneNumber} onChange={onChangeValueProfile} required pattern="((09|03|07|08|05|028|024)+([0-9]{8})\b)"
+                    class="form-control" name="phoneNumber" id="" aria-describedby="helpId" placeholder="" disabled={!isEditProfile} />
+                  <div class="invalid-feedback">
+                    Phone Number is invalid!
+                  </div>
+                </div>
+                <div class="form-group form-group-profile-client">
+                  <label for="">Birthdate</label>
+                  <input type="text" value={infoProfile.dateOfBirth} onChange={onChangeValueProfile} required
+                    class="form-control" type="date" name="dateOfBirth" id="" aria-describedby="helpId" placeholder="" disabled={!isEditProfile} />
+                  <div class="invalid-feedback">
+                    Birthdate is invalid!
+                  </div>
+                </div>
+                {isEditProfile ? "" : <button type="button" class="btn btn-primary" onClick={() => setIsEditProfile(true)}>Edit Profile</button>}
+                {isEditProfile ? <button type="button" onClick={() => { cancelUpdate() }} class="btn btn-primary">Cancel</button> : ""}
+                {isEditProfile ? <button type="button" onClick={() => { saveUpdate() }} class="btn btn-primary">Update Profile</button> : ""}
+              </form>
             </div>
+
           </div>
         </div>
 
@@ -236,7 +270,7 @@ export default function ProfileClient() {
   );
 }
 
- export function ChangePasswordCompoent(props) {
+export function ChangePasswordCompoent(props) {
   const oldPassword = useRef()
   const confirmPassword = useRef()
   const newPassword = useRef()
@@ -301,10 +335,10 @@ export default function ProfileClient() {
   function changePassword() {
     alert(isvalidPassword.isConfirmPassword && isvalidPassword.isValidNewPassword)
     if (isvalidPassword.isConfirmPassword && isvalidPassword.isValidNewPassword) {
-      alert( newPassword.current.value)
-    let dataPassword = {
-        oldPassword :  oldPassword.current.value,
-        newPassword :  newPassword.current.value
+      alert(newPassword.current.value)
+      let dataPassword = {
+        oldPassword: oldPassword.current.value,
+        newPassword: newPassword.current.value
       }
       props.saveChangePassword(dataPassword)
     }
@@ -312,52 +346,52 @@ export default function ProfileClient() {
   return (
     <div>
       <div className="modal-backdrop fade show"></div>
-    <div
-    style={{display: "block"}}
-   class="modal show">
+      <div
+        style={{ display: "block" }}
+        class="modal show">
 
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title ">Change passsword</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" onClick={() =>props.closeChangePasswordModal()} aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form class="form-signin needs-validation" id="form-valid-change-password">
-              <div class="form-group form-group-profile-client">
-                <label for="">Password</label>
-                <input type="text" ref={oldPassword} onChange={onChangePassword}
-                  class="form-control form-control-sm" required name="" id="oldPassword" aria-describedby="helpId" placeholder="" />
-                <div class="invalid-feedback">
-                  Please enter current password.
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title ">Change passsword</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" onClick={() => props.closeChangePasswordModal()} aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form class="form-signin needs-validation" id="form-valid-change-password">
+                <div class="form-group form-group-profile-client">
+                  <label for="">Password</label>
+                  <input type="password" ref={oldPassword} onChange={onChangePassword}
+                    class="form-control form-control-sm" required name="" id="oldPassword" aria-describedby="helpId" placeholder="" />
+                  <div class="invalid-feedback">
+                    Please enter current password.
+                  </div>
                 </div>
-              </div>
-              <div class="form-group form-group-profile-client">
-                <label for="">New Password</label>
-                <input type="text" ref={newPassword} onChange={onChangePassword}
-                  class="form-control form-control-sm" required name="" id="newPassword" aria-describedby="helpId" placeholder="" />
-                <div class="invalid-feedback">
-                  Please enter new password.
+                <div class="form-group form-group-profile-client">
+                  <label for="">New Password</label>
+                  <input type="password" ref={newPassword} onChange={onChangePassword}
+                    class="form-control form-control-sm" required name="" id="newPassword" aria-describedby="helpId" placeholder="" />
+                  <div class="invalid-feedback">
+                    Please enter new password.
+                  </div>
                 </div>
-              </div>
-              <div class="form-group form-group-profile-client">
-                <label for="">Confirm Password</label>
-                <input type="text" ref={confirmPassword} onChange={onChangePassword}
-                  class="form-control form-control-sm" required name="" id="confirmPassword" aria-describedby="helpId" placeholder="" />
-                <div class="invalid-feedback">
-                  Password not a match.
+                <div class="form-group form-group-profile-client">
+                  <label for="">Confirm Password</label>
+                  <input type="password" ref={confirmPassword} onChange={onChangePassword}
+                    class="form-control form-control-sm" required name="" id="confirmPassword" aria-describedby="helpId" placeholder="" />
+                  <div class="invalid-feedback">
+                    Password not a match.
+                  </div>
                 </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" onClick={() => props.closeChangePasswordModal()} data-bs-dismiss="modal">Close</button>
-            <button type="button" id="btnSubmitChangePassword" onClick={() => changePassword()} class="btn btn-primary">Save changes</button>
-          </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onClick={() => props.closeChangePasswordModal()} data-bs-dismiss="modal">Close</button>
+              <button type="button" id="btnSubmitChangePassword" onClick={() => changePassword()} class="btn btn-primary">Save changes</button>
+            </div>
 
+          </div>
         </div>
       </div>
-    </div>
     </div>
   )
 }

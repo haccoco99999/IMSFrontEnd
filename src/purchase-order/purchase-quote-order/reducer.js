@@ -4,7 +4,7 @@ import {
     GET_LIST_PURCHASE_ORDER_ERROR, GET_LIST_PURCHASE_ORDER_REQUESTING, GET_LIST_PURCHASE_ORDER_SUCCESS,
 
 } from './contants'
-
+import moment from "moment";
 
 const initalState = {
     requestingPO: false,
@@ -71,10 +71,11 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
             let listPurchaseOrder = action.json.paging.resultList.map(item => {
                 return {
                     ...item,
-                    deliveryDate: item.deliveryDate.split("T")[0],
-                    confirmedDate:item.confirmedDate.split("T")[0],
-                    createdDate:item.createdDate.split("T")[0],
-                    modifiedDate:item.modifiedDate.split("T")[0],
+                    deadline:  moment(item.deadline).add(7, "h").format("DD/MM/YYYY"),
+                    deliveryDate:  moment(item.deliveryDate).add(7, "h").format("DD/MM/YYYY"),
+                    confirmedDate:moment(item.confirmedDate).add(7, "h").format("DD/MM/YYYY"),
+                    createdDate: moment(item.createdDate).add(7, "h").format("DD/MM/YYYY "),
+                    modifiedDate: moment(item.modifiedDate).add(7, "h").format("DD/MM/YYYY"),
                 }
              })
             return {

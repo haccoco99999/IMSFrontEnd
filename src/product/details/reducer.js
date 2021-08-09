@@ -110,6 +110,8 @@ export function updateProductReducer(state = updateProductState, action) {
         messages: "",
         errors: true,
       };
+    case RESET:
+      return updateProductState;
     default:
       return state;
   }

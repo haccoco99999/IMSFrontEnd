@@ -5,7 +5,7 @@ import { getDetailPurchaseOrder, sendMailService, createPurchaseOrder, rejectPur
 // import sendMailPriceQuote from '../create-price-quote/action';
 // import InfoDetailReceipt from '../../info-detail-receipt/InfoDetailReceipt';
 import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
-
+import moment from 'moment';
 import ListProductsTable from '../../list-products-table/ListProductsTable';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -13,7 +13,8 @@ import ConfirmDateModal from './ConfirmDateModal';
 import './PriceQuote.css'
 import { SearchToAddProduct, SeachSupplier } from '../../search-component/SearchComponentAll';
 import MergePriceQuote from './MergePriceQuoteComponent';
-import FormAddProductModal from './FormAddProductModal';
+// import FormAddProductModal from './FormAddProductModal';
+import FormAddProductModal from '../../components/add-product-form/FormAddProductModal';
 import TextEditor from '../../text-editor-compoent/text-editor-compoent';
 import PreviewSendMail from './preview-quote-request';
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
@@ -21,7 +22,7 @@ import Swal from 'sweetalert2'
 import RejectReceiptModal from '../../RejectReceiptModal/RejectReceiptModal';
 import { CONFIRM_PURCHASE_ORDER_RESET, CREATE_PRICE_QUOTE_RESET, CREATE_PURCHASE_ORDER_RESET, GET_DETAIL_PURCHASE_ORDER_RESET, REJECT_PURCHASE_ORDER_CONFIRM_RESET, SEND_MAIL_SERVICE_RESET, SUBMIT_PURCHASE_ORDER_RESET } from './contants';
 import { InfoPurchaseOrderLoader, TableLoading } from '../../components/loading/loading-component';
-import NavigationBar  from '../../components/navbar/navbar-component';
+import NavigationBar from '../../components/navbar/navbar-component';
 import RejectWrapper from '../../components/reject-wrapper/reject-component';
 
 export default function PurchaseOrderConfirm() {
@@ -41,7 +42,7 @@ export default function PurchaseOrderConfirm() {
         isShowEditListProducts: false
     })
     ///Khi table not valid 
-    const [classStatus,setClassStatus] = useState("")
+    const [classStatus, setClassStatus] = useState("")
     const [disableEdit, setDisableEdit] = useState(false)
     // alert(eventPage.isShowEditListProducts)
     const [infoUserPurchaseOrder, setInfoUserPurchaseOrder] = useState({})
@@ -85,7 +86,7 @@ export default function PurchaseOrderConfirm() {
     const [nameEditText, setNameEditText] = useState()
     const [test, setTest] = useState(true);
     const [checkPriceValid, setCheckPriceValid] = useState(false)
-
+    const [subject, setSubject] = useState("")
     const columns = [
         {
             hidden: true,
@@ -122,8 +123,8 @@ export default function PurchaseOrderConfirm() {
             },
             align: (cell, row, rowIndex, colIndex) => {
                 return 'right';
-                 
-               },
+
+            },
             validator: (newValue, row, column) => {
                 if (isNaN(newValue)) {
                     setDisableEdit(true)
@@ -158,9 +159,9 @@ export default function PurchaseOrderConfirm() {
                     </div>);
             },
             align: (cell, row, rowIndex, colIndex) => {
-               return 'right';
-                
-              },
+                return 'right';
+
+            },
             validator: (newValue, row, column) => {
                 if (isNaN(newValue)) {
                     setDisableEdit(true)
@@ -189,8 +190,8 @@ export default function PurchaseOrderConfirm() {
             hidden: test,
             align: (cell, row, rowIndex, colIndex) => {
                 return 'right';
-                 
-               },
+
+            },
             formatter: (cellContent, row, rowIndex) => {
 
                 return (
@@ -262,7 +263,7 @@ export default function PurchaseOrderConfirm() {
 
             return (
                 <div >
-                    {!props.statusEdit ? <button disabled={props.disabled} onClick={() => cancelEditClick(props.nameEdit)} class="badge bg-secondary me-1">revert</button> : ""}
+                    {!props.statusEdit ? <button disabled={props.disabled} onClick={() => cancelEditClick(props.nameEdit)} class="badge bg-secondary me-1">Revert</button> : ""}
                     {props.statusEdit ? <button disabled={props.disabled} onClick={() => editClick(props.nameEdit)} class="badge bg-success me-1">Edit</button> : ""}
                     {!props.statusEdit ? <button disabled={props.disabled} onClick={(() => saveEditClick(props.nameEdit))} class="badge bg-primary me-1">Save</button> : ""}
                 </div>
@@ -294,7 +295,7 @@ export default function PurchaseOrderConfirm() {
                     isShow: true,
                     title: "Create Purchase Order",
                     action: () => clickCreatePurchaseOrder(),
-                    class:"btn btn-primary",
+                    class: "btn btn-primary",
                     disabled: disableEdit
 
 
@@ -309,7 +310,7 @@ export default function PurchaseOrderConfirm() {
                     isShow: true,
                     title: "Preview Mail",
                     action: () => clickShowPreviewSendMail(),
-                    class:"btn btn-primary",
+                    class: "btn btn-primary",
 
                     disabled: disableEdit
                 },
@@ -323,7 +324,7 @@ export default function PurchaseOrderConfirm() {
                     isShow: true,
                     title: "Reject",
                     action: () => isShowRejectModal(),
-                    class:"btn btn-danger",
+                    class: "btn btn-danger",
 
                     disabled: disableEdit
                 },
@@ -333,7 +334,7 @@ export default function PurchaseOrderConfirm() {
                     isShow: true,
                     title: "Create Price Quote",
                     action: () => clickCreatePriceQuote(),
-                    class:"btn btn-primary",
+                    class: "btn btn-primary",
                     disabled: disableEdit
 
                 },
@@ -347,7 +348,7 @@ export default function PurchaseOrderConfirm() {
                     isShow: true,
                     title: "Submit",
                     action: () => clickToSubmitPurchaseOrder(),
-                    class:"btn btn-primary",
+                    class: "btn btn-primary",
                     disabled: disableEdit
 
 
@@ -361,7 +362,7 @@ export default function PurchaseOrderConfirm() {
                     isShow: true,
                     title: "Reject",
                     action: () => isShowRejectModal(),
-                    class:"btn btn-danger",
+                    class: "btn btn-danger",
                     disabled: disableEdit
                 },
 
@@ -369,26 +370,26 @@ export default function PurchaseOrderConfirm() {
                     isShow: true,
                     title: "Confirm",
                     action: () => isShowConfirmModal(),
-                    class:"btn btn-success",
+                    class: "btn btn-success",
                     disabled: disableEdit
                 },
 
             ]
 
         }
-        else if (status === "POConfirm") {
-            return [
-                {
-                    isShow: true,
-                    title: "Create Good Receipt",
+        // else if (status === "POConfirm") {
+        //     return [
+        //         {
+        //             isShow: true,
+        //             title: "Watting  Good Receipt",
 
-                    class:"btn btn-secondary"
-                },
+        //             class: "btn btn-secondary"
+        //         },
 
 
-            ]
+        //     ]
 
-        }
+        // }
 
         return []
     }
@@ -402,7 +403,7 @@ export default function PurchaseOrderConfirm() {
         }
     }
     function clickToSubmitPurchaseOrder() {
-       
+
         if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
             let nameEditText
             if (!eventPage.isShowEditListProducts) {
@@ -429,23 +430,23 @@ export default function PurchaseOrderConfirm() {
             })
         }
         else {
-           if( checkPriceValidData()){
-            let data = {
+            if (checkPriceValidData()) {
+                let data = {
 
-                purchaseOrderNumber: purchaseOrderDataGlobal.orderId
+                    purchaseOrderNumber: purchaseOrderDataGlobal.orderId
 
+                }
+                dispatch(confirmDetailPurchaseOrder({ data: data, token, token }))
             }
-            dispatch(confirmDetailPurchaseOrder({ data: data, token, token }))
-        }
-        else{
-            Swal.fire({
-                icon: 'error',
-                title: 'Fail!...',
-                text: 'Data table is not valid!',
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Fail!...',
+                    text: 'Data table is not valid!',
 
-            })
+                })
+            }
         }
-    }
 
 
 
@@ -537,8 +538,8 @@ export default function PurchaseOrderConfirm() {
 
     }, [priceQuoteUpdateStatus])
     useEffect(() => {
-
-        if (mailOrderDataStatus.requesting === true) {
+        
+        if (mailOrderDataStatus.requesting === true && purchaseOrderDataGlobal.status ==="PriceQuote") {
             Swal.fire({
                 title: 'Mail Sending!',
                 html: 'Watting...',
@@ -554,7 +555,8 @@ export default function PurchaseOrderConfirm() {
                 }
             })
         }
-        if (mailOrderDataStatus.successful === true) {
+        if (mailOrderDataStatus.successful === true && purchaseOrderDataGlobal.status==="PriceQuote") {
+            
             Swal.fire(
                 'Send Mail Success!',
                 'Click to Close!',
@@ -563,12 +565,12 @@ export default function PurchaseOrderConfirm() {
             )
             dispatch({ type: SEND_MAIL_SERVICE_RESET })
         }
-        if (mailOrderDataStatus.errors === true) {
+        if (mailOrderDataStatus.errors === true && purchaseOrderDataGlobal.status==="PriceQuote") {
             Swal.fire({
                 icon: 'error',
                 title: 'Send Mail Fail...',
                 text: 'Something went wrong!',
-                footer: '<a href="">Why do I have this issue?</a>'
+                
             })
             dispatch({ type: SEND_MAIL_SERVICE_RESET })
         }
@@ -796,22 +798,22 @@ export default function PurchaseOrderConfirm() {
             })
         )
 
-        if (purchaseOrderDataGlobal.status === "PriceQuote" || purchaseOrderDataGlobal.status =="PurchaseOrder") {
-         
+        if (purchaseOrderDataGlobal.status === "PriceQuote" || purchaseOrderDataGlobal.status == "PurchaseOrder") {
+
             setClassStatus("bg-secondary");
-          } else if (purchaseOrderDataGlobal.status === "Requisition" || purchaseOrderDataGlobal.status === "POWaitingConfirmation") {
-          
+        } else if (purchaseOrderDataGlobal.status === "Requisition" || purchaseOrderDataGlobal.status === "POWaitingConfirmation") {
+
             setClassStatus("bg-warning");
-          } else if (purchaseOrderDataGlobal.status === "POConfirm ") {
-        
+        } else if (purchaseOrderDataGlobal.status === "POConfirm ") {
+
             setClassStatus("bg-secondary");
-          } else if (purchaseOrderDataGlobal.status === "PQCanceled" ||purchaseOrderDataGlobal.status === "POCanceled" ) {
-          
+        } else if (purchaseOrderDataGlobal.status === "PQCanceled" || purchaseOrderDataGlobal.status === "POCanceled") {
+
             setClassStatus("bg-danger");
-          } else {
-           
+        } else {
+
             setClassStatus("bg-warning text-dark");
-          }
+        }
 
         if (!["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status)) {
 
@@ -833,16 +835,16 @@ export default function PurchaseOrderConfirm() {
         }
 
     }, [purchaseOrderDataGlobal])
-    function checkPriceValidData(){
+    function checkPriceValidData() {
         let isValid = true
-            listProductPurchaseOrder.forEach(item =>{
-            if(item.price <= 0){
-                
+        listProductPurchaseOrder.forEach(item => {
+            if (item.price <= 0) {
+
                 isValid = false
             }
         })
         return isValid
-        
+
     }
     function editClick(nameEdit) {
 
@@ -961,18 +963,18 @@ export default function PurchaseOrderConfirm() {
         })
     }
     function clickShowPreviewSendMail() {
-       
-        if((mailDescription !=="<p></p>" || mailDescription !=="") && supplier.id !== undefined){
 
-        if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
-            beforeEdit()
-        } else
-            setEventPage((state) => ({
-                ...state, isPreview: !state.isPreview
-            }))
+        if ((mailDescription !== "<p></p>" || mailDescription !== "") && supplier.id !== undefined) {
+
+            if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
+                beforeEdit()
+            } else
+                setEventPage((state) => ({
+                    ...state, isPreview: !state.isPreview
+                }))
         }
-        else{
-            
+        else {
+
             Swal.fire({
                 icon: 'error',
                 title: 'Preview Mail Fail!...',
@@ -1095,13 +1097,14 @@ export default function PurchaseOrderConfirm() {
     function changeMailContent(contentEmail) {
         setMailDescription(contentEmail)
     }
+    
     function sendMailSupplier(pdf, contentMail, orderId) {
         const formData = new FormData();
 
-        formData.append('To', 'hungppse130422@fpt.edu.vn')
+        formData.append('To', supplier.email)
         formData.append('Content', contentMail)
-        formData.append('Subject', 'Gui MAil')
-        formData.append('PurchaseOrderId', orderId)
+        formData.append('Subject', "Mail from ABC Inventory")
+        formData.append('PurchaseOrderId', purchaseOrderDataGlobal.orderId )
         formData.append('pdf', pdf)
         dispatch(sendMailService({ data: formData }))
     }
@@ -1144,13 +1147,13 @@ export default function PurchaseOrderConfirm() {
             })
     })()
 
-   
+
 
 
     const listpermissionEdit = ["PriceQuote", "PurchaseOrder", "POWaitingConfirmation"]
     return (
         <div>
-            
+
             <NavigationBar
                 titleBar={purchaseOrderDataGlobal.orderId}
                 listButton={listButton}
@@ -1218,7 +1221,7 @@ export default function PurchaseOrderConfirm() {
                                                         listTransactions.map((transaction, index) => (
                                                             <tr>
                                                                 <td>{transaction.name}</td>
-                                                                <td>{transaction.date}</td>
+                                                                <td>{moment(transaction.date).add(7, "h").format("DD/MM/YYYY ")}</td>
                                                                 <td>{transaction.applicationUser.fullname}</td>
                                                             </tr>))
 
@@ -1241,6 +1244,14 @@ export default function PurchaseOrderConfirm() {
                                     </div>
                                 </div>
                             </div>
+                            {/* <li class="list-group-item">
+                                <h5 class="card-title">Supplier Information</h5>
+                                <div class="col-4">
+                                    <p><strong>Supplier:</strong> ABC Thanh Phat</p>
+                                    <p><strong>Email:</strong> tranquocanhsp@gmail.com</p>
+                                    <p><strong>Phone No:</strong> 0868677735</p>
+                                </div>
+                            </li> */}
                             <div class="card-body">
                                 <div className="row">
                                     <div className="col-md-4">
@@ -1275,7 +1286,7 @@ export default function PurchaseOrderConfirm() {
                                                 <table className="table">
                                                     <tbody> {listTransactions.map((transaction, index) => (<tr>
                                                         <td>{transaction.name}</td>
-                                                        <td>{transaction.date}</td>
+                                                        <td>{moment(transaction.date).add(7, "h").format("DD/MM/YYYY ")}</td>
                                                         <td>{transaction.applicationUser.fullname}</td>
                                                     </tr>))}
                                                     </tbody>  </table>
@@ -1285,17 +1296,21 @@ export default function PurchaseOrderConfirm() {
                                         </div>
                                     </div>
                                 </div>
-
+                                {/* <div class="form-group">
+                                    <label for="">Subject:</label>
+                                    <input type="text"
+                                        class="form-control" disabled={eventPage.isShowEditInfoOrder} value={subject} onChange={(e) => setSubject(e.target.value)} name="" id="" aria-describedby="helpId" placeholder="" />
+                                </div> */}
                                 <div className="form-text dropdown-toggle text-success" data-bs-toggle="collapse" data-bs-target="#collapseMoreCotent">
                                     Content Mail:
                                 </div>
                                 <div class="collapse show" id="collapseMoreCotent">
+
                                     <div className="card p-0">
-                                        <div className="card-header">
-                                            Content Mail:
-                                        </div>
+
                                         <div class="card-body p-0">
-                                            <TextEditor isDisabled={eventPage.isShowEditInfoOrder}  setDefault={purchaseOrderDataGlobal.mailDescription === mailDescription} contentEmail={mailDescription} changeMailContent={changeMailContent} />
+
+                                            <TextEditor isDisabled={eventPage.isShowEditInfoOrder} setDefault={purchaseOrderDataGlobal.mailDescription === mailDescription} contentEmail={mailDescription} changeMailContent={changeMailContent} />
 
                                         </div>
                                     </div>
@@ -1387,8 +1402,8 @@ export default function PurchaseOrderConfirm() {
                     clickSetShowAddProductPage={clickSetShowAddProductPage}
 
                     clickToAddProduct={clickToAddProduct}
-                    addGroupProduct={addGroupProduct}
-                    checkProductExist={checkProductExist}
+                    // addGroupProduct={addGroupProduct}
+                    // checkProductExist={checkProductExist}
 
                 /> : ""}
 
@@ -1406,6 +1421,7 @@ export default function PurchaseOrderConfirm() {
                     listProduct={listProductPurchaseOrder}
                     infoPriceQuote={detailPurchaseState}
                     clickToCLoseConfirm={clickToCLoseConfirm} /> : ""}
+                    
                 {eventPage.isPreview ? <PreviewSendMail
 
                     contentEmail={mailDescription}

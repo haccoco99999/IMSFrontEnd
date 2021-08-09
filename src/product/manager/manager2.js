@@ -7,10 +7,11 @@ import "../product.css";
 import ProductManager from "./product-manager/product-manager";
 import CategoryManager from "./category-manager/category-manager";
 import LocationManager from "./location-manager/LocationManager";
+import RequestUpdateManager from "./requestupdate-manager/manager";
 export default function Manager() {
   return (
     <>
-      <div className="space-top-heading">
+      <div className="space-top-heading wrapper">
         {/* title */}
         <div className="title-heading mt-2">
           <span>Product Manager</span>
@@ -71,10 +72,10 @@ export default function Manager() {
                 aria-controls="pills-variant"
                 aria-selected="false"
               >
-                Variant
+                Request Update
               </button>
             </li>
-            <li class="nav-item" role="presentation">
+            {/* <li class="nav-item" role="presentation">
               <button
                 class="nav-link"
                 id="pills-supplier-tab"
@@ -87,7 +88,7 @@ export default function Manager() {
               >
                 Suppliers
               </button>
-            </li>
+            </li> */}
           </ul>
           <div class="tab-content" id="pills-tabContent">
             <div
@@ -96,7 +97,7 @@ export default function Manager() {
               role="tabpanel"
               aria-labelledby="pills-product-tab"
             >
-             <ProductManager/>
+              <ProductManager />
             </div>
             <div
               class="tab-pane fade"
@@ -104,7 +105,7 @@ export default function Manager() {
               role="tabpanel"
               aria-labelledby="pills-category-tab"
             >
-             <CategoryManager/>
+              <CategoryManager />
             </div>
             <div
               class="tab-pane fade"
@@ -112,7 +113,7 @@ export default function Manager() {
               role="tabpanel"
               aria-labelledby="pills-location-tab"
             >
-               <LocationManager/>
+              <LocationManager />
             </div>
             <div
               class="tab-pane fade"
@@ -120,16 +121,16 @@ export default function Manager() {
               role="tabpanel"
               aria-labelledby="pills-variant-tab"
             >
-              ...
+              <RequestUpdateManager />
             </div>
-            <div
+            {/* <div
               class="tab-pane fade"
               id="pills-supplier"
               role="tabpanel"
               aria-labelledby="pills-supplier-tab"
             >
              ...
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

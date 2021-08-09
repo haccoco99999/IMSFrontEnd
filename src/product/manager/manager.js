@@ -23,7 +23,7 @@ export default function Manager() {
   };
 
   return (
-    <div className="space-top-heading wrapper">
+    <div className="space-top-heading">
       {" "}
       {/* title */}
       <div className="title-heading mt-2">

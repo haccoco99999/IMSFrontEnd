@@ -67,7 +67,7 @@ export default function PackageDetails() {
         <>
           <NavigationBar
             listButton={listButtons}
-            titleBar={location.state.packageId}
+            titleBar="Package details"
             actionGoBack={goBackClick}
             status=""
             home="Product"
@@ -124,7 +124,7 @@ export default function PackageDetails() {
                   </div>
                 </li>
                 <li class="list-group-item">
-                  <h5 class="card-title fw-bold"> Location Information</h5>
+                  <h5 class="card-title fw-bold"> Supplier Information</h5>
                   <div className="row g-3 justify-content-between me-3">
                     <div className="col-4">
                       {/* <p>
@@ -154,7 +154,7 @@ export default function PackageDetails() {
                   </div>
                 </li>
                 <li class="list-group-item">
-                  <h5 class="card-title fw-bold"> Supplier Information</h5>
+                  <h5 class="card-title fw-bold"> Location Information</h5>
                   <div className="row g-3 justify-content-between me-3">
                     <div className="col-4">
                       <p>

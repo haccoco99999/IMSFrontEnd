@@ -216,7 +216,7 @@ function AccountManager() {
 
   };
   return (
-    <div>
+    <div class="space-top-heading wrapper">
       <div className="title-heading mt-2">
         <span>Account Manager</span>
       </div>

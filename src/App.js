@@ -127,14 +127,12 @@ function App(props) {
         hubConnection
           .invoke("SendMessage", "username", "message to be sent")
           .catch((err) => {
-            alert(err);
             console.log("Error invoking function: " + { err });
           });
 
         //Join a channel
         //CHANNEL = ROLE NAME
         hubConnection.invoke("JoinGroup", client.userRole).catch((err) => {
-          alert(err);
           console.log("Error invoking function: " + { err });
         });
 
@@ -179,11 +177,9 @@ function App(props) {
         hubConnection
           .invoke("DisconnectFromResource", "userId", "pageId")
           .catch((err) => {
-            alert(err);
             console.log("Error while disconnectiong from resource: " + { err });
           });
       } catch (err) {
-        alert(err);
         console.log("Error while establishing connection: " + { err });
       }
       setHubConnection(hubConnection);
@@ -198,7 +194,7 @@ function App(props) {
       ) : null} */}
 
       <div className={"sidebar " + eventPage.active}>
-        <div className={"logo_content hide-" + eventPage.statusSetting}>
+        <div data-bs-toggle="collapse"data-bs-toggleActive="collapse"  className={"logo_content btn hide-" + eventPage.statusSetting}>
           <div className="logo">
             <div className="logo_name">
               <img src={logo} />
@@ -236,9 +232,9 @@ function App(props) {
               <p onClick={toggleAbout}> &#60; Back</p>
             </div>
           </div>
-          <div class="collapse text-white" id="collapseProfile">
+          <div class="collapse btn  ps-4 text-white" id="collapseProfile">
             <p onClick={() => history.push("/homepage/about-my-account")}>My profile</p>
-            <p>My notification</p>
+            {/* <p>My notification</p> */}
 
           </div>
         </div>
@@ -269,9 +265,9 @@ function App(props) {
                   <i className="bx">
                     <img src={importLogo} />
                   </i>
-                  <span className="links_name">Goods Recipt</span>
+                  <span className="links_name">Goods Receipt</span>
                 </Link>
-                <span className="tooltip">Goods Recipt</span>
+                <span className="tooltip">Goods Receipt</span>
               </li>
               <li>
                 <Link to="/homepage/good-issue">

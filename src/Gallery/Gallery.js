@@ -3,7 +3,7 @@ import 'bootstrap/js/dist/carousel'
 import './Gallery.css'
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-
+import moment from 'moment';
 class Gallery extends React.Component {
 
     constructor(props) {
@@ -56,8 +56,8 @@ class Gallery extends React.Component {
                         <div className=" container-box-order" >
                             <div className="box-order" onClick={(e) => this.props.clickQuote(quote)}>
                                 <h4 className="priceQuoteOrderNumber">No.{quote.id}</h4>
-                                <p>Deadline:  <span>{quote.deliveryDate.split("T")[0]}</span></p>
-                                <p>Create by: {quote.createdDate.split("T")[0]}</p>
+                                <p>Deadline:  <span>{moment(quote.deadline).add(7, "h").format("DD/MM/YYYY")}</span></p>
+                                <p>Created date: {moment(quote.createdDate).add(7, "h").format("DD/MM/YYYY")}</p>
                                 <p>Vender: {quote.supplierName}</p>
                                 <div className="footer-gallery">  <p>{quote.totalPrice} Product</p>
                                     {setStatusPriQuote(quote.hasSentMail, quote.status)}

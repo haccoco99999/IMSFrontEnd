@@ -7,7 +7,7 @@ export default function  handleApiErrors (response) {
     if (response.status !== 200) { 
       if(response.status === 401){
         history.push("/login", {messsages:"Sesstion time out!!!"})
-      
+        throw Error(response.statusText)
       }
       else{
         throw Error(response.statusText)

@@ -63,8 +63,8 @@ export default function Login(props) {
     if (loginStatus.errors === true) {
       Swal.fire({
         icon: "error",
-        title: "Update fail!...",
-        text: "Something went wrong!",
+        title: "Login fail!...",
+        text: "Email or Password is incorrect!",
       });
       dispatch({ type: LOGIN_CLEAN });
     }
@@ -93,7 +93,7 @@ export default function Login(props) {
               name="email"
               value={dataLogin.email}
               onChange={handleChange}
-              pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+              pattern="^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$"
               placeholder="Email"
             />
             <div class="invalid-feedback">Email invalid!</div>

@@ -145,7 +145,7 @@ export default function PreviewSendMail(props) {
                                 Subject:
                             </div>
                             <label className="form-check-label" >
-                                {"Send Price QUote"}
+                                {"Mail from ABC Inventory"}
                             </label>
                             <div className="form-text">
                                 Content:

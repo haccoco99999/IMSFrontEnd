@@ -89,7 +89,7 @@ function checkDuplicateSku(action) {
     },
     credentials: "include",
     body: JSON.stringify({
-      value: action.data.sku,
+      value: action.data.productVariants[0].sku,
     }),
   })
     .then((response) => handleApiErrors(response))
@@ -130,16 +130,25 @@ function* checkDuplicateFlow(action) {
   }
 }
 
+function* checkDuplicateSkuFlow(action) {
+  try {
+    let resultCheckDup = yield call(checkDuplicateSku, action);
+    return resultCheckDup;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: CREATE_PRODUCT_ERROR });
+  }
+}
 function* createProductFlow(action) {
   let checkName = yield call(checkDuplicateFlow, action);
   let checkSku = false;
-  if (action.needCheckSku) checkSku = yield call(checkDuplicateSku, action);
+  if (action.needCheckSku) checkSku = yield call(checkDuplicateSkuFlow, action);
 
   if (checkName.hasMatch || checkSku.hasMatch) {
     let errorMsg = "Duplicate at ";
     if (checkName.hasMatch) errorMsg += " name";
     if (checkSku.hasMatch)
-      if (checkName.hasMatch) errorMsg += "and sku";
+      if (checkName.hasMatch) errorMsg += " and sku";
       else errorMsg += " sku";
 
     try {

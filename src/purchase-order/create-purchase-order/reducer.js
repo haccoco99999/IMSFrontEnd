@@ -49,7 +49,7 @@ import {
     CONFIRM_PURCHASE_ORDER_RESET,
     SAVE_PRODUCTS_PURCHASE_ORDER_RESET
 } from './contants'
-
+import moment from 'moment'
 
 const detailPurchaseOrderInital = {
     requesting: false,
@@ -62,7 +62,7 @@ const detailPurchaseOrderInital = {
         deadline: "",
         status: "",
         supplier: {
-            
+
         },
         mergedOrderIdLists: [],
         infoUserPurchaseOrder: {},
@@ -111,29 +111,29 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
 
 
                 ///Quy trinh co thu tu. set thao tung quy trinh phieu
-                if (element.userTransactionActionType === 0 && element.typeString === "PriceQuote") {
-                    infoUserPurchaseOrder = {
-                        createDate: element.date,
-                        name: element.applicationUser.fullname,
-                        email: element.applicationUser.email,
-                        phoneNumber: element.applicationUser.phoneNumber,
-
-                    }
-                }
                 if (element.userTransactionActionType === 0 && element.typeString === "Requisition") {
                     infoUserPurchaseOrder = {
-                        createDate: element.date,
+                        createDate: moment(element.date).add(7, "h").format("DD/MM/YYYY"),
                         name: element.applicationUser.fullname,
                         email: element.applicationUser.email,
                         phoneNumber: element.applicationUser.phoneNumber,
 
                     }
                 }
+                if (element.userTransactionActionType === 0 && element.typeString === "PriceQuote") {
+                    infoUserPurchaseOrder = {
+                        createDate: moment(element.date).add(7, "h").format("DD/MM/YYYY"), name: element.applicationUser.fullname,
+                        email: element.applicationUser.email,
+                        name: element.applicationUser.fullname,
+                        phoneNumber: element.applicationUser.phoneNumber,
+
+                    }
+                }
+
 
                 if (element.userTransactionActionType === 0 && element.typeString === "Purchase") {
                     infoUserPurchaseOrder = {
-                        createDate: element.date,
-                        name: element.applicationUser.fullname,
+                        createDate: moment(element.date).add(7, "h").format("DD/MM/YYYY "), name: element.applicationUser.fullname,
                         email: element.applicationUser.email,
                         phoneNumber: element.applicationUser.phoneNumber,
 
@@ -141,8 +141,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                 }
                 if (element.userTransactionActionType === 4) {
                     infoRejectOrder = {
-                        createDate: element.date,
-                        name: element.applicationUser.fullname,
+                        createDate: moment(element.date).add(7, "h").format("DD/MM/YYYY "), name: element.applicationUser.fullname,
                         email: element.applicationUser.email,
                         phoneNumber: element.applicationUser.phoneNumber,
                         reason: element.name
@@ -186,7 +185,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                             productVariantId: product.productVariantId,
                             orderQuantity: product.orderQuantity,
                             unit: product.unit,
-                            price: product.price,
+                            price: 0,
                             discountAmount: product.discountAmount,
                             totalAmount: product.totalAmount,
                             name: product.productVariant.name,
