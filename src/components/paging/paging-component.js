@@ -31,7 +31,7 @@ export default function PagingComponent(props) {
                 </li>
               ) : (
                 <li className="page-item">
-                  <a className="page-link" href="#" onClick={props.backPagingClick}>
+                  <a className="page-link"  onClick={props.backPagingClick}>
                     Previous
                   </a>
                 </li>
@@ -45,7 +45,7 @@ export default function PagingComponent(props) {
                 </li>
               ) : (
                 <li className="page-item">
-                  <a className="page-link" href="#" onClick={props.nextPagingClick}>
+                  <a className="page-link"  onClick={props.nextPagingClick}>
                     Next
                   </a>
                 </li>

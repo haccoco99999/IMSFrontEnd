@@ -16,6 +16,7 @@ import Table from "../../../table-receipt/ListReceiptsTable";
 import AccountManagementFilter from "./AccountManagerFilter";
 import { CustomToggleList } from "../../../components/toggle-columns-table/CustomToggleList";
 import PagingComponent from "../../../components/paging/paging-component";
+import { TableLoading } from "../../../components/loading/loading-component";
 
 function AccountManager() {
   let history = useHistory();
@@ -300,7 +301,7 @@ function AccountManager() {
                         striped
                         hover
                         condensed
-                        // noDataIndication={() => <NoDataIndication />}
+                        noDataIndication={() => <TableLoading/>}
                         rowEvents={rowEvents}
 
                         //    headerClasses="table-header-receipt"

@@ -133,7 +133,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
 
                 if (element.userTransactionActionType === 0 && element.typeString === "Purchase") {
                     infoUserPurchaseOrder = {
-                        createDate: moment(element.date).add(7, "h").format("DD/MM/YYYY "), name: element.applicationUser.fullname,
+                        createDate: moment(element.date).add(7, "h").format("DD/MM/YYYY"), name: element.applicationUser.fullname,
                         email: element.applicationUser.email,
                         phoneNumber: element.applicationUser.phoneNumber,
 
@@ -141,7 +141,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                 }
                 if (element.userTransactionActionType === 4) {
                     infoRejectOrder = {
-                        createDate: moment(element.date).add(7, "h").format("DD/MM/YYYY "), name: element.applicationUser.fullname,
+                        createDate: moment(element.date).add(7, "h").format("DD/MM/YYYY"), name: element.applicationUser.fullname,
                         email: element.applicationUser.email,
                         phoneNumber: element.applicationUser.phoneNumber,
                         reason: element.name
@@ -185,7 +185,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                             productVariantId: product.productVariantId,
                             orderQuantity: product.orderQuantity,
                             unit: product.unit,
-                            price: 0,
+                            price: product.price,
                             discountAmount: product.discountAmount,
                             totalAmount: product.totalAmount,
                             name: product.productVariant.name,

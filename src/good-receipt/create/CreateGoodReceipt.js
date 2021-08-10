@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal } from "bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -196,7 +196,7 @@ export default function CreateGoodsReceiptComponent() {
       formatter: (cellContent, row, rowIndex) => {
         return (
           <div
-            className="text-danger"
+            className="text-danger btn"
             onClick={() => clickDeleteVariant(rowIndex)}
           >
             <i class="bi bi-trash"></i>
@@ -469,8 +469,20 @@ export default function CreateGoodsReceiptComponent() {
     console.log(existRedisVariantSkus.some(check));
     return existRedisVariantSkus.some(check);
   };
+  ///////////////Hung edit
+  const location = useLocation();
 
   useEffect(() => {
+    if (location.state !== undefined) {
+      if (location.state.isRedirectFromPO) {
+        dispatch(getConfirmedPOAction({ token: token }));
+        setSelectedPO(location.state.orderId)
+        setIsReturnData(true);
+
+        dispatch(checkSKUExistedAction({ id: location.state.orderId, token: token }));
+        dispatch(getConfirmedPODetailsAction({ id: location.state.orderId, token: token }));
+      }
+    }
     return () => {
       dispatch({ type: RESET });
     };
@@ -637,7 +649,7 @@ export default function CreateGoodsReceiptComponent() {
               </button>
             </li>
 
-            {isReturnData && (
+            {isReturnData && suppliers!== undefined && (
               <li class="list-group-item">
                 <p>
                   <strong>Purchase Order:</strong> {selectedPO}
