@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import Swal from "sweetalert2";
+import { Tooltip } from "bootstrap";
 //css
 import "../product.css";
 //components
@@ -11,6 +12,7 @@ import {
   updateProductAction,
   getAllBrandAction,
 } from "./action";
+import { getAllUpdateProductAction } from "../manager/product-manager/action";
 import { getCategoriesAllAction } from "../create/action";
 import { TableLoading } from "../../components/loading/loading-component";
 import { RESET } from "./constants";
@@ -32,6 +34,7 @@ export default function ProductDetails() {
     categoryDtailsStore,
     updateProductReducer,
     getDetailsProductReducer,
+    getAllUpdateRequest,
   } = useSelector((state) => ({
     token: state.client.token,
     productDetailsStore: state.getDetailsProductReducer.productDetails,
@@ -45,10 +48,10 @@ export default function ProductDetails() {
     categoryDtailsStore: state.getDetailsProductReducer.productDetails.category,
     updateProductReducer: state.updateProductReducer,
     getDetailsProductReducer: state.getDetailsProductReducer,
+    getAllUpdateRequest: state.getAllUpdateRequestReducer.productUpdateMessages,
   }));
 
-  const [isFromManagerPage, setIsFromManagerPage] = useState(true);
-  const [listVariants, setListVariants] = useState([]);
+  const [isHavingRequestSKU, setIsHavingRequestSKU] = useState(false);
   const [isReturnData, setIsReturnData] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [productDetails, setProductDetails] = useState({});
@@ -57,22 +60,76 @@ export default function ProductDetails() {
   const [brandDetails, setBrandDetails] = useState({});
   const [categoryDtails, setCategoryDtails] = useState({});
 
+  //@param:declare tooltip :
+
+  var tooltipTriggerList = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new Tooltip(tooltipTriggerEl);
+  });
+
+  //todo: declare table
+
   const columns = [
     { dataField: "id", text: "VariantID", hidden: true },
     { dataField: "name", text: "Name" },
     { dataField: "sku", text: "SKU" },
     { dataField: "barcode", text: "Barcode" },
-    { dataField: "storageQuantity", text: "Quantity", hidden: true },
-    { dataField: "price", text: "Price", hidden: true },
-    { dataField: "cost", text: "Sale Price", hidden: true },
   ];
 
+  const columnsHavingUpdateRequest = [
+    { dataField: "id", text: "VariantID", hidden: true },
+    { dataField: "name", text: "Name" },
+    { dataField: "sku", text: "SKU" },
+    { dataField: "barcode", text: "Barcode" },
+    {
+      dataField: "id",
+      text: "Note",
+      align: "center",
+      formatter: (cellContent, row) => {
+        console.log(row.id);
+        console.log(row.name);
+        const check = (element) => element.productVariantId === row.id;
+        console.log(getAllUpdateRequest.some(check));
+        if (getAllUpdateRequest.some(check)) {
+          return (
+            <div
+              className="text-danger ms-3"
+              data-bs-toggle="tooltip"
+              data-bs-placement="top"
+              title="This variant has request update sku"
+            >
+              <i class="bi bi-bell-fill"></i>
+            </div>
+          );
+        }
+      },
+    },
+  ];
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
       history.push("/homepage/product/details/variant", {
         variantId: row.id,
         productId: productDetails.id,
         variantType: productDetails.isVariantType,
+      });
+    },
+  };
+
+  const rowEventsHavingRequestUpdate = {
+    onClick: (e, row, rowIndex) => {
+      let findElement = getAllUpdateRequest.find(
+        (e) => e.productVariantId === row.id
+      );
+      console.log("SKU REQUEST:", findElement.sku);
+      
+      history.push("/homepage/product/details/variant", {
+        variantId: row.id,
+        productId: productDetails.id,
+        variantType: productDetails.isVariantType,
+        skuRequest: findElement.sku,
+        isHavingRequestSKU: true,
       });
     },
   };
@@ -118,17 +175,6 @@ export default function ProductDetails() {
     setCategoryDtails(categoryDtailsStore);
   }
   function onClickSave() {
-    // console.log(brandDetails);
-    // console.log(categoryDtails);
-
-    // if (brandSelected.name === undefined) {
-    //   setBrandSelected(brandDetails);
-    // }
-
-    // if (categorySelected.id === undefined) {
-    //   setCategorySelected(categoryDtails);
-    // }
-
     const data = {
       id: location.state.productId,
       name: productDetails.name,
@@ -139,35 +185,44 @@ export default function ProductDetails() {
     };
 
     console.log(data);
-    Swal.fire({
-      title: "Are you sure",
-      text: "Do you want to save?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: " #d33",
-      confirmButtonText: "Confirm",
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (productDetails.name !== productDetailsStore.name) {
-          dispatch(
-            updateProductAction({
-              token: token,
-              data: data,
-              needCheckName: true,
-            })
-          );
-        } else
-          dispatch(
-            updateProductAction({
-              token: token,
-              data: data,
-              needCheckName: false,
-            })
-          );
-      }
-    });
+    if (productDetails.name === "") {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Do not let name empty",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      });
+    } else
+      Swal.fire({
+        title: "Are you sure",
+        text: "Do you want to save?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: " #d33",
+        confirmButtonText: "Confirm",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (productDetails.name !== productDetailsStore.name) {
+            dispatch(
+              updateProductAction({
+                token: token,
+                data: data,
+                needCheckName: true,
+              })
+            );
+          } else
+            dispatch(
+              updateProductAction({
+                token: token,
+                data: data,
+                needCheckName: false,
+              })
+            );
+        }
+      });
   }
   function goBackClick() {
     history.replace("/homepage/product");
@@ -176,13 +231,7 @@ export default function ProductDetails() {
   function goToManagerPage() {
     history.push("/homepage/product");
   }
-  // function onClickToDetails(row) {
-  //   history.push("/homepage/product/details/variant", {
-  //     variantId: row.id,
-  //     productId: productDetails.id,
-  //     variantType: productDetails.isVariantType,
-  //   });
-  // }
+
   function onClickToAddVariant() {
     history.push("/homepage/product/details/create-variant", {
       productId: productDetails.id,
@@ -236,9 +285,6 @@ export default function ProductDetails() {
   }, []);
 
   useEffect(() => {
-    if (listVariantsStores !== null) {
-      setListVariants(listVariantsStores);
-    }
     if (productDetailsStore !== {}) {
       setProductDetails(productDetailsStore);
     }
@@ -253,6 +299,14 @@ export default function ProductDetails() {
     productBrandDetailsStore,
     categoryDtailsStore,
   ]);
+
+  useEffect(() => {
+    if (listVariantsStores !== null)
+      listVariantsStores.forEach((variant) => {
+        const check = (element) => element.productVariantId === variant.id;
+        if (getAllUpdateRequest.some(check)) setIsHavingRequestSKU(true);
+      });
+  }, [listVariantsStores]);
 
   useEffect(() => {
     setCategorySelected({
@@ -313,6 +367,7 @@ export default function ProductDetails() {
       setIsReturnData(true);
     }
   }, [getDetailsProductReducer]);
+
   return (
     <>
       {isReturnData ? (
@@ -328,7 +383,23 @@ export default function ProductDetails() {
 
           <div className=" wrapper">
             <div class="card">
-              <div class="card-header fw-bold">Product Information</div>
+              <div class="card-header fw-bold">
+                <div className="d-flex">
+                  Product Information
+                  {isHavingRequestSKU && (
+                    <>
+                      <div
+                        className="text-danger ms-3"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="You have variant to update sku, please check your request page"
+                      >
+                        <i class="bi bi-bell-fill"></i>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                   <div className="row g-3 justify-content-between me-3">
@@ -431,43 +502,37 @@ export default function ProductDetails() {
                           </select>
                         )}
                       </p>
-                      {/* {!productDetails.isVariantType && isReturnData && (
-                        <>
-                          <p>
-                            <strong>Storage Quantity:</strong>
-                            {listVariants[0].storageQuantity}
-                          </p>
-                          <p>
-                            <strong>SKU:</strong>
-                            {listVariants[0].sku}
-                          </p>
-                          <p>
-                            <strong>Barcode:</strong>
-                            {listVariants[0].barcode}
-                          </p>
-                          <p>
-                            <strong>Price:</strong>
-                            {listVariants[0].price}
-                          </p>
-                        </>
-                      )} */}
                     </div>
                   </div>
                 </li>
                 <li class="list-group-item">
                   <h5 class="card-title fw-bold">List of variants</h5>
                   <div className="mt-3">
-                    <BootstrapTable
-                      keyField="id"
-                      striped
-                      hover
-                      condensed
-                      columns={columns}
-                      headerClasses="table-header-receipt"
-                      noDataIndication="Table is Empty"
-                      data={listVariantsStores}
-                      rowEvents={rowEvents}
-                    />
+                    {isHavingRequestSKU ? (
+                      <BootstrapTable
+                        keyField="id"
+                        striped
+                        hover
+                        condensed
+                        columns={columnsHavingUpdateRequest}
+                        headerClasses="table-header-receipt"
+                        noDataIndication="Table is Empty"
+                        data={listVariantsStores}
+                        rowEvents={rowEventsHavingRequestUpdate}
+                      />
+                    ) : (
+                      <BootstrapTable
+                        keyField="id"
+                        striped
+                        hover
+                        condensed
+                        columns={columns}
+                        headerClasses="table-header-receipt"
+                        noDataIndication="Table is Empty"
+                        data={listVariantsStores}
+                        rowEvents={rowEvents}
+                      />
+                    )}
                   </div>
                   {/* {productDetails.isVariantType && (
                     <div>

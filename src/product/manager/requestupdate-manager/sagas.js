@@ -33,7 +33,7 @@ function getAllVariants(action) {
 }
 
 function agreeUpdateSku(action) {
-  const url = `${process.env.REACT_APP_APP}/product/skuaccept`;
+  const url = `${process.env.REACT_APP_API}/product/skuaccept`;
   return fetch(url, {
     method: "PUT",
     headers: {
@@ -53,7 +53,7 @@ function agreeUpdateSku(action) {
 }
 
 function rejectUpdateSKu(action) {
-  const url = `${process.env.REACT_APP_APP}/product/skureject`;
+  const url = `${process.env.REACT_APP_API}/product/skureject`;
   return (
     fetch(url, {
       method: "PUT",
