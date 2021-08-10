@@ -82,7 +82,7 @@ function App(props) {
     }
   }
   const [hubConnection, setHubConnection] = useState();
-  
+
   useEffect(() => {
     const createHubConnection = async () => {
       const hubConnection = new HubConnectionBuilder()
@@ -184,7 +184,16 @@ function App(props) {
       }
       setHubConnection(hubConnection);
     };
+   
     createHubConnection();
+    // return () => {
+    //   hubConnection
+    //     .invoke("DisconnectFromResource", client.id, "pageId")
+    //     .catch((err) => {
+    //       console.log("Error while disconnectiong from resource: " + { err });
+    //     });
+
+    // }
 
   }, []);
   return (
@@ -194,7 +203,7 @@ function App(props) {
       ) : null} */}
 
       <div className={"sidebar " + eventPage.active}>
-        <div data-bs-toggle="collapse"data-bs-toggleActive="collapse"  className={"logo_content btn hide-" + eventPage.statusSetting}>
+        <div data-bs-toggle="collapse" data-bs-toggleActive="collapse" className={"logo_content btn hide-" + eventPage.statusSetting}>
           <div className="logo">
             <div className="logo_name">
               <img src={logo} />
@@ -361,8 +370,7 @@ function App(props) {
               </li>
             </nav>
           </ul>
-          <Logout />
-
+          <Logout hubConnection={hubConnection}  id={client.id}/>
         </div>
 
       </div>
@@ -427,10 +435,18 @@ const mapStateToProps = (state) => ({
   client: state.client,
 });
 
-function Logout() {
+function Logout(props) {
   let history = useHistory();
   const dispatch = useDispatch()
+
   const logout = () => {
+
+    props.hubConnection
+    .invoke("DisconnectFromResource", props.id, "pageId")
+    .catch((err) => {
+      console.log("Error while disconnectiong from resource: " + { err });
+    });
+
     dispatch({ type: "LOGOUT_REQUESTING" })
   };
 

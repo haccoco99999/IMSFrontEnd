@@ -9,6 +9,7 @@ import { CREATE_ACC_CLEAN, GET_DETAIL_ACC_CLEAN, SET_ACTIVE_ACC_CLEAN, UPDATE_IM
 import Swal from 'sweetalert2'
 import { ChangePasswordAccountManagerCompoent, ChangePasswordCompoent } from '../../../components/change-password/ChangePasswordComponent';
 import { TableLoading } from '../../../components/loading/loading-component';
+import moment from 'moment';
 export default function CreateAccount() {
 
 
@@ -471,7 +472,7 @@ export default function CreateAccount() {
 
       <div className="card mt-2">
         <div class=" mt-3" >
-         
+
           <div class="row g-0">
             <div class="pe-3 pt-3 col-md-4 d-flex align-items-end flex-column  ">
               <div>
@@ -498,7 +499,7 @@ export default function CreateAccount() {
             </div>
 
             <div class="col-md-8">
-           
+
               <div class="card-body">
 
                 <form novalidate id="checkValidProfile" className="needs-validation">
@@ -550,7 +551,7 @@ export default function CreateAccount() {
                   <div class="mb-3 row">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Birthdate:</label>
                     <div class="col-sm-10">
-                      <input type="date" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="dateOfBirth" value={infoAccountState.dateOfBirth}
+                      <input type="date" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="dateOfBirth" value={moment(infoAccountState.dateOfBirth).format("YYYY-MM-DD")}
                         class="form-control" aria-describedby="helpId" />
                       <div class="invalid-feedback">
                         Please set a birthdate!
@@ -635,7 +636,7 @@ export default function CreateAccount() {
           </div>
         </div>
 
- 
+
 
       </div>
 

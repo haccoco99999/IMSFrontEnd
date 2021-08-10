@@ -140,13 +140,8 @@ const [filter, setFilter] = useState({
   };
 
   useEffect(() => {
-    dispatch(
-      getAllPRAction({
-        currentPage: currentPage,
-        sizePerPage: sizePerPage,
-        token: token,
-      })
-    );
+    dispatch(getAllPRAction({ filter: parseFilterToString(filter) , token:token}));
+
   }, [currentPage, sizePerPage]);
 //////////////////////////////////
 

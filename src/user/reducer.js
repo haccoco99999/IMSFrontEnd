@@ -31,7 +31,7 @@ const initialState = {
           phoneNumber:action.respone_login.applicationUser.phoneNumber,
           accessFailedCount:action.respone_login.applicationUser.accessFailedCount,
           address:action.respone_login.applicationUser.address,
-          dateOfBirth:action.respone_login.applicationUser.dateOfBirthNormalizedString,
+          dateOfBirth:action.respone_login.applicationUser.dateOfBirth,
           isActive:action.respone_login.applicationUser.isActive,
           profileImageLink:action.respone_login.applicationUser.profileImageLink,
 
@@ -48,7 +48,7 @@ const initialState = {
           phoneNumber:action.respone_login.applicationUser.phoneNumber,
           accessFailedCount:action.respone_login.applicationUser.accessFailedCount,
           address:action.respone_login.applicationUser.address,
-          dateOfBirth:action.respone_login.applicationUser.dateOfBirthNormalizedString,
+          dateOfBirth:action.respone_login.applicationUser.dateOfBirth,
           isActive:action.respone_login.applicationUser.isActive,
           profileImageLink:action.respone_login.applicationUser.profileImageLink,
         }

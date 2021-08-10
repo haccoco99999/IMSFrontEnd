@@ -58,8 +58,8 @@ class Gallery extends React.Component {
                                 <h4 className="priceQuoteOrderNumber">No.{quote.id}</h4>
                                 <p>Deadline:  <span>{moment(quote.deadline).add(7, "h").format("DD/MM/YYYY")}</span></p>
                                 <p>Created date: {moment(quote.createdDate).add(7, "h").format("DD/MM/YYYY")}</p>
-                                <p>Vender: {quote.supplierName}</p>
-                                <div className="footer-gallery">  <p>{quote.totalPrice} Product</p>
+                               {quote.supplierName  !==""?<p>Vender: {quote.supplierName}</p>:"" } 
+                                <div className="footer-gallery">  <p>{quote.totalProductAmount} Product</p>
                                     {setStatusPriQuote(quote.hasSentMail, quote.status)}
                                 </div>
                             </div>

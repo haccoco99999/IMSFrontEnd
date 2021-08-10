@@ -43,7 +43,11 @@ export default function PurchaseOrderConfirm() {
         isShowEditListProducts: false
     })
     ///Khi table not valid 
-    const [classStatus, setClassStatus] = useState("")
+
+    const [listStatus, setListStatus] = useState({
+        classStatus: "",
+        nameStatus: "",
+    })
     const [disableEdit, setDisableEdit] = useState(false)
     // alert(eventPage.isShowEditListProducts)
     const [infoUserPurchaseOrder, setInfoUserPurchaseOrder] = useState({})
@@ -295,8 +299,6 @@ export default function PurchaseOrderConfirm() {
                     action: () => clickShowPreviewSendMail(),
                     class: "btn btn-warning",
                     disabled: disableEdit
-
-
                 },
 
                 {
@@ -806,21 +808,38 @@ export default function PurchaseOrderConfirm() {
             })
         )
 
-        if (purchaseOrderDataGlobal.status === "PriceQuote" || purchaseOrderDataGlobal.status == "PurchaseOrder") {
+        if (purchaseOrderDataGlobal.status === "PriceQuote") {
 
-            setClassStatus("bg-secondary");
-        } else if (purchaseOrderDataGlobal.status === "Requisition" || purchaseOrderDataGlobal.status === "POWaitingConfirmation") {
+            setListStatus({ nameStatus: "Price Quote", classStatus: "bg-secondary" })
+        }
 
-            setClassStatus("bg-warning");
-        } else if (purchaseOrderDataGlobal.status === "POConfirm ") {
+        else if (purchaseOrderDataGlobal.status == "PurchaseOrder") {
+            setListStatus({ nameStatus: "Purchase Order", classStatus: "bg-secondary" })
+        }
+        else if (purchaseOrderDataGlobal.status === "Requisition") {
+            setListStatus({ nameStatus: "Requisition", classStatus: "bg-warning" })
 
-            setClassStatus("bg-secondary");
-        } else if (purchaseOrderDataGlobal.status === "PQCanceled" || purchaseOrderDataGlobal.status === "POCanceled") {
 
-            setClassStatus("bg-danger");
-        } else {
+        }
+        else if (purchaseOrderDataGlobal.status === "POWaitingConfirmation") {
+            setListStatus({ nameStatus: "Watting Confirmation", classStatus: "bg-warning" })
 
-            setClassStatus("bg-warning text-dark");
+        }
+        else if (purchaseOrderDataGlobal.status === "POConfirm") {
+            setListStatus({ nameStatus: "Confirmed", classStatus: "bg-secondary" })
+
+
+        } else if (purchaseOrderDataGlobal.status === "POCanceled") {
+            setListStatus({ nameStatus: "Canceled", classStatus: "bg-danger" })
+
+        }
+        else if (purchaseOrderDataGlobal.status === "Done") {
+            setListStatus({ nameStatus: "Done", classStatus: "bg-primary" })
+
+        }
+        else {
+
+            setListStatus("bg-warning text-dark");
         }
 
         if (!["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status)) {
@@ -1117,7 +1136,7 @@ export default function PurchaseOrderConfirm() {
         formData.append('Subject', "Mail from ABC Inventory")
         formData.append('PurchaseOrderId', purchaseOrderDataGlobal.orderId)
         formData.append('pdf', pdf)
-        dispatch(sendMailService({ data: formData }))
+        dispatch(sendMailService({ data: formData, token: token }))
     }
     function clickCreatePriceQuote() {
         dispatch(createPriceQuote({ data: { id: purchaseOrderDataGlobal.orderId }, token: token }))
@@ -1168,9 +1187,9 @@ export default function PurchaseOrderConfirm() {
             <NavigationBar
                 titleBar={purchaseOrderDataGlobal.orderId}
                 listButton={listButton}
-                status={detailPurchaseState.status}
+                status={listStatus.nameStatus}
                 actionGoBack={() => history.go(-1)}
-                classStatus={classStatus}
+                classStatus={listStatus.classStatus}
                 home="Purchase Order"
                 currentPage="Detail"
             />
@@ -1189,14 +1208,14 @@ export default function PurchaseOrderConfirm() {
                     {detailPurchaseState.status !== "PriceQuote" ?
                         <div class="card">
 
-                            <div class="row">
-                                <div class="card-header p-0">
-                                    <div class="d-flex ">
-                                        <div class="me-auto p-2">Info Order: </div>
 
-                                    </div>
+                            <div class="card-header p-0">
+                                <div class="d-flex ">
+                                    <div class="me-auto p-2">Info Order: </div>
+
                                 </div>
-                                <div className="card-body">
+                            </div>
+                            <div className="card-body">
                                 {purchaseOrderDetailStore.successful ?
                                     <div className="p-0">
                                         <li class="list-group-item">
@@ -1228,28 +1247,28 @@ export default function PurchaseOrderConfirm() {
                                             </div>
                                         </li>
 
-
-                                        <li class="list-group-item">
-                                            <h5 class="card-title">Supplier Information</h5>
-
-
-                                            <p>
-                                                <strong>Email:</strong> {supplier.email}
-                                            </p>
-                                            <p>
-                                                <strong>Name:</strong> {supplier.supplierName}
-                                            </p>
-                                            <p>
-                                                <strong>Phone No:</strong> {supplier.phoneNumber}
-                                            </p>
-                                            <p>
-                                                <strong>Address:</strong>   {supplier.address}
-                                            </p>
+                                        {purchaseOrderDataGlobal.status !== "Requisition" ?
+                                            <li class="list-group-item">
+                                                <h5 class="card-title">Supplier Information</h5>
 
 
+                                                <p>
+                                                    <strong>Email:</strong> {supplier.email}
+                                                </p>
+                                                <p>
+                                                    <strong>Name:</strong> {supplier.supplierName}
+                                                </p>
+                                                <p>
+                                                    <strong>Phone No:</strong> {supplier.phoneNumber}
+                                                </p>
+                                                <p>
+                                                    <strong>Address:</strong>   {supplier.address}
+                                                </p>
 
-                                        </li>
 
+
+                                            </li>
+                                            : ""}
 
 
                                     </div>
@@ -1259,17 +1278,27 @@ export default function PurchaseOrderConfirm() {
                                     <div className="collapse show " id="collapseHistory" >
                                         <div style={{ height: "250px", overflow: "auto" }} >
                                             <table className="table">
-                                                <tbody>
-                                                    {purchaseOrderDetailStore.successful ?
-                                                        listTransactions.map((transaction, index) => (
+
+
+                                                {purchaseOrderDetailStore.successful ?
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><strong>Content</strong></td>
+                                                            <td><strong>Date</strong></td>
+                                                            <td><strong>Name</strong></td>
+                                                        </tr>
+                                                        {listTransactions.map((transaction, index) => (
+
                                                             <tr>
+
                                                                 <td>{transaction.name}</td>
                                                                 <td>{moment(transaction.date).add(7, "h").format("DD/MM/YYYY ")}</td>
                                                                 <td>{transaction.applicationUser.fullname}</td>
-                                                            </tr>))
+                                                            </tr>))}
+                                                    </tbody>
 
-                                                        : <TableLoading />}
-                                                </tbody>
+                                                    : <TableLoading />}
+
                                             </table>
 
 
@@ -1277,8 +1306,8 @@ export default function PurchaseOrderConfirm() {
 
                                     </div>
                                 </li>
-                                </div>
                             </div>
+
                         </div> : <div class="card">
 
                             <div class="card-header p-0">
@@ -1349,11 +1378,18 @@ export default function PurchaseOrderConfirm() {
                                         <div className="collapse show " id="collapseHistory" >
                                             <div style={{ height: "250px", overflow: "auto" }} >
                                                 <table className="table">
-                                                    <tbody> {listTransactions.map((transaction, index) => (<tr>
-                                                        <td>{transaction.name}</td>
-                                                        <td>{moment(transaction.date).add(7, "h").format("DD/MM/YYYY ")}</td>
-                                                        <td>{transaction.applicationUser.fullname}</td>
-                                                    </tr>))}
+
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><strong>Content</strong></td>
+                                                            <td><strong>Date</strong></td>
+                                                            <td><strong>Name</strong></td>
+                                                        </tr>
+                                                        {listTransactions.map((transaction, index) => (<tr>
+                                                            <td>{transaction.name}</td>
+                                                            <td>{moment(transaction.date).add(7, "h").format("DD/MM/YYYY ")}</td>
+                                                            <td>{transaction.applicationUser.fullname}</td>
+                                                        </tr>))}
                                                     </tbody>  </table>
 
 
@@ -1458,7 +1494,7 @@ export default function PurchaseOrderConfirm() {
 
                                     </div> : ""}
 
-                                </div> : ""}
+                                </div> : ""} 
                         </div>
                     </div>
                 </div>
@@ -1493,6 +1529,7 @@ export default function PurchaseOrderConfirm() {
                 {eventPage.isPreview ? <PreviewSendMail
 
                     contentEmail={mailDescription}
+
                     listProduct={listProductPurchaseOrder}
                     infoPriceQuote={purchaseOrderDataGlobal}
                     supplierInfo={supplier}

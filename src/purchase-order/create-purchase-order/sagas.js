@@ -101,7 +101,7 @@ function createPriceQuoteAPI(action) {
 // }
 
 function sendEmailQuote(action){
-  
+    
     return fetch("https://imspublicapi.herokuapp.com/api/mailservice", {
         method: 'POST',
         headers:{
@@ -339,7 +339,7 @@ function* rejectPurchaseOrderConfirmFlow(action) {
 
 }
 function* sendMailPriceQuoteFlow(action){
-    
+     
     try{
       let  json= yield call(sendEmailQuote,action)
         yield put({type:SEND_MAIL_SERVICE_SUCCESS})

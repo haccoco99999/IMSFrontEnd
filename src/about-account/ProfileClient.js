@@ -6,7 +6,7 @@ import './profile-client.css'
 import Swal from 'sweetalert2'
 import { uploadAvatarImg } from '../manage-account/create/account/action'
 import { UPDATE_IMAGE_CLEAN } from '../manage-account/create/account/constants'
-
+import moment from 'moment'
 const initValue = {
 
 }
@@ -247,8 +247,9 @@ export default function ProfileClient() {
                 </div>
                 <div class="form-group form-group-profile-client">
                   <label for="">Birthdate</label>
-                  <input type="text" value={infoProfile.dateOfBirth} onChange={onChangeValueProfile} required
-                    class="form-control" type="date" name="dateOfBirth" id="" aria-describedby="helpId" placeholder="" disabled={!isEditProfile} />
+                  
+                  <input value={moment(infoProfile.dateOfBirth).format("YYYY-MM-DD")} onChange={onChangeValueProfile} required
+                    class="form-control" type="date" name="dateOfBirth" id=""  placeholder="" disabled={!isEditProfile} />
                   <div class="invalid-feedback">
                     Birthdate is invalid!
                   </div>
