@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import "./App.css";
-import logo from './images/Logo.png'
-import userLogo from "./images/user-2.png"
-import manufactureLogo from "./images/manufacture-2.png"
-import productLogo from "./images/product-2.png"
-import reportLogo from "./images/report-2.png"
-import shelfLogo from "./images/shelf-2.png"
-import boxLogo from "./images/box-2.png"
-import importLogo from "./images/import-2.png"
-import shoppingLogo from "./images/shopping-2.png"
-import dashboardLogo from "./images/dashboard-2.png"
+import logo from "./images/Logo.png";
+import userLogo from "./images/user-2.png";
+import manufactureLogo from "./images/manufacture-2.png";
+import productLogo from "./images/product-2.png";
+import reportLogo from "./images/report-2.png";
+import shelfLogo from "./images/shelf-2.png";
+import boxLogo from "./images/box-2.png";
+import importLogo from "./images/import-2.png";
+import shoppingLogo from "./images/shopping-2.png";
+import dashboardLogo from "./images/dashboard-2.png";
 
 import ProfileClient from "./about-account/ProfileClient";
 import AboutSoftware from "./about-software/about-software";
@@ -63,7 +63,7 @@ function App(props) {
       statusBell: !eventPage.statusBell,
     });
   }
-  const history = useHistory()
+  const history = useHistory();
   function toggleActive() {
     if (eventPage.status) {
       setEventPage({
@@ -82,7 +82,7 @@ function App(props) {
     }
   }
   const [hubConnection, setHubConnection] = useState();
-  
+
   useEffect(() => {
     const createHubConnection = async () => {
       const hubConnection = new HubConnectionBuilder()
@@ -174,11 +174,11 @@ function App(props) {
           userId: Id of user in database
           pageId: PO47OLJXKJ | GR11TUG4IZ | GO0OCT3GD0 ...
         */
-        hubConnection
-          .invoke("DisconnectFromResource", "userId", "pageId")
-          .catch((err) => {
-            console.log("Error while disconnectiong from resource: " + { err });
-          });
+        // hubConnection
+        //   .invoke("DisconnectFromResource", "userId", "pageId")
+        //   .catch((err) => {
+        //     console.log("Error while disconnectiong from resource: " + { err });
+        //   });
       } catch (err) {
         console.log("Error while establishing connection: " + { err });
       }
@@ -186,6 +186,7 @@ function App(props) {
     };
     createHubConnection();
 
+    // return () => {};
   }, []);
   return (
     <div>
@@ -194,7 +195,11 @@ function App(props) {
       ) : null} */}
 
       <div className={"sidebar " + eventPage.active}>
-        <div data-bs-toggle="collapse"data-bs-toggleActive="collapse"  className={"logo_content btn hide-" + eventPage.statusSetting}>
+        <div
+          data-bs-toggle="collapse"
+          data-bs-toggleActive="collapse"
+          className={"logo_content btn hide-" + eventPage.statusSetting}
+        >
           <div className="logo">
             <div className="logo_name">
               <img src={logo} />
@@ -206,24 +211,25 @@ function App(props) {
             onClick={toggleActive}
           />
         </div>
-        <div className="profile_content" >
+        <div className="profile_content">
           <div className={"profile hide-" + eventPage.statusSetting}>
-            <div className="profile_details" data-bs-toggle="collapse" href="#collapseProfile">
-              <img
-                src={client.profileImageLink}
-                alt=""
-              />
-              <div className="name_job" >
+            <div
+              className="profile_details"
+              data-bs-toggle="collapse"
+              href="#collapseProfile"
+            >
+              <img src={client.profileImageLink} alt="" />
+              <div className="name_job">
                 <div className="name">{client.fullname}</div>
                 <div className="job">{client.userRole}</div>
               </div>
             </div>
             <i
-              className="bx menu-icon-notification-logout dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
-
+              className="bx menu-icon-notification-logout dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
             >
               <i class="bi bi-bell"></i>
-
             </i>
             <NotificationBell />
           </div>
@@ -233,9 +239,10 @@ function App(props) {
             </div>
           </div>
           <div class="collapse btn  ps-4 text-white" id="collapseProfile">
-            <p onClick={() => history.push("/homepage/about-my-account")}>My profile</p>
+            <p onClick={() => history.push("/homepage/about-my-account")}>
+              My profile
+            </p>
             {/* <p>My notification</p> */}
-
           </div>
         </div>
         <div>
@@ -361,10 +368,8 @@ function App(props) {
               </li>
             </nav>
           </ul>
-          <Logout />
-
+          <Logout hubConnection={hubConnection} />
         </div>
-
       </div>
 
       <Switch>
@@ -427,11 +432,16 @@ const mapStateToProps = (state) => ({
   client: state.client,
 });
 
-function Logout() {
+function Logout(props) {
   let history = useHistory();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const logout = () => {
-    dispatch({ type: "LOGOUT_REQUESTING" })
+    props.hubConnection
+      .invoke("DisconnectFromResource", "userId", "pageId")
+      .catch((err) => {
+        console.log("Error while disconnectiong from resource: " + { err });
+      });
+    dispatch({ type: "LOGOUT_REQUESTING" });
   };
 
   return (
