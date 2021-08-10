@@ -219,7 +219,7 @@ function AccountManager() {
   return (
     <div class="space-top-heading wrapper">
       <div className="title-heading mt-2">
-        <span>Account Manager</span>
+        <span>Account Management</span>
       </div>
       <div class="d-grid gap-2">
         {/* <div>

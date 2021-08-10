@@ -111,7 +111,7 @@ export default function LocationManager() {
     return () => {
       dispatch({ type: RESET });
     };
-  }, []);
+  }, [currentPage, sizePerPage]);
 
   useEffect(() => {
     if (createLocationReducer.requesting) {
@@ -133,16 +133,16 @@ export default function LocationManager() {
           confirmButtonColor: "#3085d6",
         });
       } else
-      Swal.fire({
-        icon: "success",
-        title: "Your work has been saved",
-        showCancelButton: false,
-        confirmButtonColor: "#3085d6",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          hideModal();
-        }
-      });
+        Swal.fire({
+          icon: "success",
+          title: "Your work has been saved",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            hideModal();
+          }
+        });
     } else if (createLocationReducer.errors) {
       Swal.fire({
         icon: "error",
@@ -172,16 +172,16 @@ export default function LocationManager() {
           confirmButtonColor: "#3085d6",
         });
       } else
-      Swal.fire({
-        icon: "success",
-        title: "Your work has been saved",
-        showCancelButton: false,
-        confirmButtonColor: "#3085d6",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          hideModal();
-        }
-      });
+        Swal.fire({
+          icon: "success",
+          title: "Your work has been saved",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            hideModal();
+          }
+        });
     } else if (updateLocationReducer.errors) {
       Swal.fire({
         icon: "error",

@@ -13,25 +13,33 @@ import getAllAccountsReducer from "./manage-account/manager/account-manager/redu
 // import getGoodsReceiptDetailsReducer from "./good-receipt/details/reducer";
 // import getAllPurchaseRequisitionReducer from "./sale-man/manager/reducer";
 
-
-
-
 // import getAllSuppliersReducer from "./supplier/manager/reducer";
 // import getDetailsSupplierReducer from "./supplier/details/reducer";
 // import getCreatedFormPurchaseRequisitionReducer from "./sale-man/create/reducer";
 // import createProductReducer from "./product/create/reducer";
-import {createUserAccount, getUserAccountDetail, updateAccountDetail, setActiveAccount, updateImage} from "./manage-account/create/account/reducer";
-import { createRolePermission,DetailRolePermission , UpdateRolePermission } from "./manage-account/create/role/reducer";
-import { getDetailPurchaseReducer,
+import {
+  createUserAccount,
+  getUserAccountDetail,
+  updateAccountDetail,
+  setActiveAccount,
+  updateImage,
+} from "./manage-account/create/account/reducer";
+import {
+  createRolePermission,
+  DetailRolePermission,
+  UpdateRolePermission,
+} from "./manage-account/create/role/reducer";
+import {
+  getDetailPurchaseReducer,
   rejectPurchaserOrder,
-  mailOrderData, PriceQuoteUpdate ,
+  mailOrderData,
+  PriceQuoteUpdate,
   submitPurchaseOrder,
   confirmPurchaserOrder,
-   updatePurchaseOrder,
-   createPurchaserOrder,
-   createPriceQuote,
-   
-  } from "./purchase-order/create-purchase-order/reducer";
+  updatePurchaseOrder,
+  createPurchaserOrder,
+  createPriceQuote,
+} from "./purchase-order/create-purchase-order/reducer";
 // import getDetailsProductReducer from "./product/details/reducer";
 // import createSupplierReducer from "./supplier/create/reducer";
 // import getAllStocktakeReducer from "./stock-take/manager/reducer";
@@ -48,9 +56,16 @@ import notificationReducer from "./notification-component/reducer";
 //   UpdateRolePermission,
 // } from "./manage-account/create/role/reducer";
 
-
-import { GetAllGoodsIssues, getAllGoodsIssuesRequisition } from "./good-issue/manager/reducer";
-import{ DetailGoodIssue, createGoodIssue , upadateGoodIssue, RejectGoodIssue} from "./good-issue/good-issue-detail/reducer";
+import {
+  GetAllGoodsIssues,
+  getAllGoodsIssuesRequisition,
+} from "./good-issue/manager/reducer";
+import {
+  DetailGoodIssue,
+  createGoodIssue,
+  upadateGoodIssue,
+  RejectGoodIssue,
+} from "./good-issue/good-issue-detail/reducer";
 // import createStocktakeReducer from "./stock-take/create/reducer";
 // import locationManagetReducer from "./product/manager/location-manager/reducer";
 
@@ -60,7 +75,7 @@ import {
   submitPRReducer,
   getDetailsPOReducer,
   checkDuplicateSKUReducer,
-  checkSKUExistsReducer
+  checkSKUExistsReducer,
 } from "./good-receipt/create/reducer";
 import getGoodsReceiptReducer from "./good-receipt/manager/reducer";
 import getGoodsReceiptDetailsReducer from "./good-receipt/details/reducer";
@@ -70,7 +85,9 @@ import {
   updateCategoriesReducer,
   createCategoriesReducer,
 } from "./product/manager/category-manager/reducer";
-import getAllProductsReducer, {getAllUpdateRequestReducer} from "./product/manager/product-manager/reducer";
+import getAllProductsReducer, {
+  getAllUpdateRequestReducer,
+} from "./product/manager/product-manager/reducer";
 import {
   createProductReducer,
   getCategoriesCreateProductReducer,
@@ -121,7 +138,11 @@ import {
 import { createSupplierReducer } from "./supplier/create/reducer";
 //LOCATION
 import { getAllLocationsReducer } from "./components/location/reducer";
-
+//REQUEST UPDATE
+import {
+  agreeUpdateRequestSkuReducer,
+  rejectUpdateRequestSkuReducer,
+} from "./product/manager/requestupdate-manager/reducer";
 const IndexReducer = combineReducers({
   login,
   client,
@@ -130,27 +151,38 @@ const IndexReducer = combineReducers({
   getAllRoleReducer,
   getAllAccountsReducer,
 
-  createUserAccount, getUserAccountDetail, updateAccountDetail,updateImage,
+  createUserAccount,
+  getUserAccountDetail,
+  updateAccountDetail,
+  updateImage,
 
-  createRolePermission,DetailRolePermission , UpdateRolePermission , setActiveAccount,
+  createRolePermission,
+  DetailRolePermission,
+  UpdateRolePermission,
+  setActiveAccount,
 
   notificationReducer,
 
   //purchase order reducer
   getDetailPurchaseReducer,
   rejectPurchaserOrder,
-  mailOrderData, PriceQuoteUpdate ,
+  mailOrderData,
+  PriceQuoteUpdate,
   submitPurchaseOrder,
   confirmPurchaserOrder,
-   updatePurchaseOrder,
-   createPurchaserOrder,
-   createPriceQuote,
-   //Good issue
-   GetAllGoodsIssues, getAllGoodsIssuesRequisition ,
-   DetailGoodIssue, createGoodIssue , upadateGoodIssue, RejectGoodIssue,
+  updatePurchaseOrder,
+  createPurchaserOrder,
+  createPriceQuote,
+  //Good issue
+  GetAllGoodsIssues,
+  getAllGoodsIssuesRequisition,
+  DetailGoodIssue,
+  createGoodIssue,
+  upadateGoodIssue,
+  RejectGoodIssue,
 
-   //Good Receipt\
-   getGoodsReceiptReducer,
+  //Good Receipt\
+  getGoodsReceiptReducer,
   getAllConfirmedPurchaseOrderReducer,
   getGoodsReceiptDetailsReducer,
   submitPRReducer,
@@ -200,8 +232,11 @@ const IndexReducer = combineReducers({
   createSupplierReducer,
   updateSupplierReducer,
   deleteSupplierReducer,
-  //LOCATION 
-  getAllLocationsReducer
+  //LOCATION
+  getAllLocationsReducer,
+  //request update sku
+  agreeUpdateRequestSkuReducer,
+  rejectUpdateRequestSkuReducer,
 });
 
 export default IndexReducer;

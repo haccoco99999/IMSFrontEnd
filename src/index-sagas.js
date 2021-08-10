@@ -1,12 +1,8 @@
 import LoginSaga from "./login/sagas";
 import UpdateSaga from "./about-account/sagas";
 
-
 import searchPurchaseOrder from "./purchase-order/purchase-quote-order/sagas";
 import PurchaseOrderSaga from "./purchase-order/create-purchase-order/sagas";
-
-
-
 
 import getGoodsReceipt from "./good-receipt/manager/sagas";
 import getAllRole from "./manage-account/manager/role-manager/sagas";
@@ -32,6 +28,7 @@ import listGoodIssueSaga from "./good-issue/manager/sagas";
 import createStocktake from "./stock-take/create/sagas";
 import locationManagerSaga from "./product/manager/location-manager/sagas";
 import notificationSaga from "./notification-component/sagas";
+import requestUpdateManagerSaga from "./product/manager/requestupdate-manager/sagas";
 import { all } from "@redux-saga/core/effects";
 export default function* IndexSaga() {
   yield all([
@@ -65,5 +62,6 @@ export default function* IndexSaga() {
     createStocktake(),
     locationManagerSaga(),
     notificationSaga(),
+    requestUpdateManagerSaga(),
   ]);
 }

@@ -323,30 +323,35 @@ export default function CreateGoodsReceiptComponent() {
     setIsChanging(true);
   }
 
-  // function onChangeValueProduct(event) {
-  //   console.log(event.target.id + " ");
-  //   setList_BuyingProduct((state) =>
-  //     state.map((element, index) =>
-  //       index == event.target.id
-  //         ? { ...element, [event.target.name]: event.target.value }
-  //         : element
-  //     )
-  //   );
-  //   console.log(event.target.value);
-  // }
-
   function isDataInputEmpty(array) {
     const checkReceived = (element) => element.received === 0;
     const checkSKU = (element) => element.sku === "";
     if (array.some(checkReceived)) return true;
-    // const checkBarcode = (element) => element.barcode === "";
-    if (array.some(checkSKU) && array.some(checkReceived)) return true;
-    // else if (array.some(checkSKU) && !array.some(checkBarcode)) return false;
-    // else if (!array.some(checkSKU) && array.some(checkBarcode)) return false;
+    if (array.some(checkSKU) || array.some(checkReceived)) return true;
     return false;
   }
 
+  function checkForDuplicates(array, keyName) {
+    return new Set(array.map((item) => item[keyName])).size !== array.length;
+  }
+
   function saveGoodsReceipt() {
+    const Data = {
+      purchaseOrderNumber: selectedPO,
+      locationId: selectedLocation.id,
+      updateItems: list_BuyingProduct.map((product) => {
+        let temp;
+        if (product.sku !== "Validating") temp = product.sku;
+        else temp = null;
+        return {
+          productVariantId: product.productVariantId,
+          quantityReceived: product.received,
+          sku: temp,
+          // barcode: product.barcode,
+        };
+      }),
+    };
+
     if (selectedPO === "" || selectedLocation.id === "") {
       Swal.fire({
         title: "Error",
@@ -367,65 +372,38 @@ export default function CreateGoodsReceiptComponent() {
           showConfirmButton: false,
         });
       } else {
-        const Data = {
-          purchaseOrderNumber: selectedPO,
-          locationId: selectedLocation.id,
-          updateItems: list_BuyingProduct.map((product) => {
-            let temp;
-            if (product.sku !== "Validating") temp = product.sku;
-            else temp = null;
-            return {
-              productVariantId: product.productVariantId,
-              quantityReceived: product.received,
-              sku: temp,
-              // barcode: product.barcode,
-            };
-          }),
-        };
-        Swal.fire({
-          title: "Are you sure",
-          text: "Do you want to save?",
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: " #d33",
-          confirmButtonText: "Confirm",
-          reverseButtons: true,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            dispatch(createGoodsReceiptAction({ data: Data, token: token }));
-          }
-        });
+        if (checkForDuplicates(list_BuyingProduct, "sku")) {
+          console.log("Duplicate");
 
-        console.log(Data);
+          Swal.fire({
+            title: "Error",
+            text: "There is no duplicate sku in the list",
+            icon: "error",
+            showCancelButton: true,
+            cancelButtonText: "Cancel",
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            title: "Are you sure",
+            text: "Do you want to save?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: " #d33",
+            confirmButtonText: "Confirm",
+            reverseButtons: true,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              dispatch(createGoodsReceiptAction({ data: Data, token: token }));
+            }
+          });
+
+          console.log(Data);
+        }
       }
-
-      // if (!isValid) {
-      //   Swal.fire({
-      //     title: "Error",
-      //     text: "Please input valid  sku",
-      //     icon: "error",
-      //     showCancelButton: true,
-      //     cancelButtonText: "Cancel",
-      //     showConfirmButton: false,
-      //   });
-      // } else {
-
-      // }
     }
   }
-
-  // const handleChangeValue = (event) => {
-  //   event.preventDefault();
-  //   setIsChange(true);
-  //   setFormData({
-  //     name: event.target.name,
-  //     value: event.target.value,
-  //   });
-  //   dispatch(
-  //     getConfirmedPODetailsAction({ id: event.target.value, token: token })
-  //   );
-  // };
 
   function onRevertClick() {
     //revert

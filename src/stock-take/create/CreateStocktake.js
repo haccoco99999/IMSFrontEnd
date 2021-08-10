@@ -51,16 +51,16 @@ export default function CreateStocktakeComponent() {
     locationBarcode: "",
   });
   const [listCheckedItems, setListCheckedItems] = useState([
-    {
-      id: uuid(),
-      packageId: "",
-      name: "",
-      sku: "",
-      productVariantId: "",
-      quantity: "",
-      counted: "",
-      note: "",
-    },
+    // {
+    //   id: uuid(),
+    //   packageId: "",
+    //   name: "",
+    //   sku: "",
+    //   productVariantId: "",
+    //   quantity: "",
+    //   counted: "",
+    //   note: "",
+    // },
   ]);
   const [isTimeForTrigger, setIsTimeForTrigger] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
@@ -255,6 +255,7 @@ export default function CreateStocktakeComponent() {
   }
 
   function goBackClick() {
+    setIsCreating(false);
     history.goBack();
   }
 
@@ -266,6 +267,11 @@ export default function CreateStocktakeComponent() {
         locationBarcode: row.locationBarcode,
       });
     }
+  }
+
+  function isEmptyRow(array) {
+    const check = (element) => element.packageId === "";
+    return array.some(check);
   }
 
   function onClickSubmit() {
@@ -300,7 +306,7 @@ export default function CreateStocktakeComponent() {
     } else {
       if (listCheckedItems.length > 0) {
         if (listCheckedItems.length === 1) {
-          if (listCheckedItems[0].packageId === "") {
+          if (listCheckedItems[0].pkgId === "") {
             Swal.fire({
               title: "Error",
               text: "Empty list!",
@@ -328,36 +334,49 @@ export default function CreateStocktakeComponent() {
             });
           }
         } else {
-          if (checkForDuplicates(listCheckedItems, "packageId")) {
-            console.log("Duplicate");
-
+          //todo: check empty row
+          if (isEmptyRow(listCheckedItems)) {
             Swal.fire({
               title: "Error",
-              text: "There is no duplicate in the list",
+              text: "There is no empty row in the list",
               icon: "error",
               showCancelButton: true,
               cancelButtonText: "Cancel",
               showConfirmButton: false,
             });
           } else {
-            console.log("No duplicate");
+            console.log("Ko co empty");
+            if (checkForDuplicates(listCheckedItems, "packageId")) {
+              console.log("Duplicate");
 
-            console.log("Data output:", data);
+              Swal.fire({
+                title: "Error",
+                text: "There shouble be no duplicate in the list",
+                icon: "error",
+                showCancelButton: true,
+                cancelButtonText: "Cancel",
+                showConfirmButton: false,
+              });
+            } else {
+              console.log("No duplicate");
 
-            Swal.fire({
-              title: "Are you sure",
-              text: "Do you want to save?",
-              icon: "question",
-              showCancelButton: true,
-              confirmButtonColor: "#3085d6",
-              cancelButtonColor: " #d33",
-              confirmButtonText: "Confirm",
-              reverseButtons: true,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                dispatch(createStocktkaeAction({ token: token, data: data }));
-              }
-            });
+              console.log("Data output:", data);
+
+              Swal.fire({
+                title: "Are you sure",
+                text: "Do you want to save?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: " #d33",
+                confirmButtonText: "Confirm",
+                reverseButtons: true,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  // dispatch(createStocktkaeAction({ token: token, data: data }));
+                }
+              });
+            }
           }
         }
       } else {
@@ -550,15 +569,17 @@ export default function CreateStocktakeComponent() {
                       >
                         Add
                       </button>
-                      <Table
-                        keyField="id"
-                        data={listCheckedItems}
-                        columns={columns}
-                        cellEdit={cellEditFactory({
-                          mode: "click",
-                          blurToSave: true,
-                        })}
-                      />
+                      <div className="mt-3">
+                        <Table
+                          keyField="id"
+                          data={listCheckedItems}
+                          columns={columns}
+                          cellEdit={cellEditFactory({
+                            mode: "click",
+                            blurToSave: true,
+                          })}
+                        />
+                      </div>
                     </>
                   ) : (
                     <SpinnerComponent />

@@ -14,7 +14,7 @@ export default function Manager() {
       <div className="space-top-heading wrapper">
         {/* title */}
         <div className="title-heading mt-2">
-          <span>Product Manager</span>
+          <span>Product Management</span>
         </div>
 
         <div className="mt-3">
