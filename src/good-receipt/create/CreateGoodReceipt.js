@@ -188,7 +188,7 @@ export default function CreateGoodsReceiptComponent() {
         }
       },
       formatter: (cellContent, row, rowIndex) =>
-        (list_BuyingProduct[rowIndex].received = row.received),
+        (list_BuyingProduct[rowIndex].received = parseInt(row.received)),
     },
     {
       dataField: "id",
@@ -350,7 +350,7 @@ export default function CreateGoodsReceiptComponent() {
     if (selectedPO === "" || selectedLocation.id === "") {
       Swal.fire({
         title: "Error",
-        text: "You need to fulfill data",
+        text: "You need to fulfill requested field",
         icon: "error",
         showCancelButton: true,
         cancelButtonText: "Cancel",
