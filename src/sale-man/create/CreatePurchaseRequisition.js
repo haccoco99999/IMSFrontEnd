@@ -52,8 +52,8 @@ export default function CreatePurchaseRequisition() {
     {
       dataField: "orderQuantity",
       text: "Order Quantity",
-      // formatter: (cellContent, row, rowIndex) =>
-      //   (purchaseOrderProduct[rowIndex].orderQuantity = row.orderQuantity),
+      formatter: (cellContent, row, rowIndex) =>
+        (purchaseOrderProduct[rowIndex].orderQuantity = parseInt(row.orderQuantity)),
       validator: (newValue, oldValue, row) => {
         if (isNaN(newValue)) {
           return {
@@ -179,48 +179,64 @@ export default function CreatePurchaseRequisition() {
     console.log(deadline);
   }
 
+  function isDataInputEmpty(array) {
+    const checkQuantity = (element) => element.orderQuantity === 0;
+    return array.some(checkQuantity);
+  }
+
   function onSaveClick() {
     if (deadline === "" || purchaseOrderProduct.length === 0) {
       Swal.fire({
         title: "Error",
-        text: "There are invalid data!",
+        text: "You need to fulfill requested field",
         icon: "error",
         showCancelButton: true,
         cancelButtonText: "Cancel",
         showConfirmButton: false,
       });
     } else {
-      const data = {
-        // supplierId: supplierSelected.id,
-        deadline: deadline,
-        orderItems: purchaseOrderProduct.map((product) => {
-          return {
-            productVariantId: product.productVariantId,
-            orderQuantity: product.orderQuantity,
-            unit: product.unit,
-            price: 0,
-            discountAmount: product.discountAmount,
-            totalAmount: 0,
-          };
-        }),
-      };
-      console.log(data);
-      Swal.fire({
-        title: "Are you sure",
-        text: "Do you want to save?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: " #d33",
-        confirmButtonText: "Confirm",
-        reverseButtons: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          dispatch(
-            createPurchaseRequisitionAction({ data: data, token: token })
-          );
-        }
-      });
+      if (isDataInputEmpty(purchaseOrderProduct)) {
+        Swal.fire({
+          title: "Error",
+          text: "Please input your order quantity bigger than zero",
+          icon: "error",
+          showCancelButton: true,
+          cancelButtonText: "Cancel",
+          showConfirmButton: false,
+        });
+      } else {
+        const data = {
+          // supplierId: supplierSelected.id,
+          deadline: deadline,
+          orderItems: purchaseOrderProduct.map((product) => {
+            return {
+              productVariantId: product.productVariantId,
+              orderQuantity: product.orderQuantity,
+              unit: product.unit,
+              price: 0,
+              discountAmount: product.discountAmount,
+              totalAmount: 0,
+            };
+          }),
+        };
+        console.log(data);
+        Swal.fire({
+          title: "Are you sure",
+          text: "Do you want to save?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: " #d33",
+          confirmButtonText: "Confirm",
+          reverseButtons: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            dispatch(
+              createPurchaseRequisitionAction({ data: data, token: token })
+            );
+          }
+        });
+      }
     }
   }
 
@@ -376,7 +392,7 @@ export default function CreatePurchaseRequisition() {
             <li class="list-group-item">
               <h5 class="card-title">Deadline</h5>
               <input
-                type="datetime-local"
+                type="date"
                 name="deadline"
                 id="deadline"
                 class="form-control"

@@ -57,7 +57,9 @@ export default function PurchaseRequisitionDetails() {
       dataField: "orderQuantity",
       text: "Order Quantity",
       formatter: (cellContent, row, rowIndex) =>
-        (cleanListProducts[rowIndex].orderQuantity = row.orderQuantity),
+        (cleanListProducts[rowIndex].orderQuantity = parseInt(
+          row.orderQuantity
+        )),
       validator: (newValue, oldValue, row) => {
         if (isNaN(newValue)) {
           return {
@@ -269,7 +271,7 @@ export default function PurchaseRequisitionDetails() {
   //   };
   //   setCleanListProducts([...cleanListProducts, product]);
   // }
-  
+
   function clickToAddProduct(product) {
     // console.log(product);
     if (checkProductExist(product.productVariantId)) {
@@ -295,50 +297,69 @@ export default function PurchaseRequisitionDetails() {
     );
   }
 
-  
-
-
-
   // function clickDeleteProduct(id) {
   //   setCleanListProducts(
   //     cleanListProducts.filter((element) => element.productVariantId !== id)
   //   );
   // }
+  function isDataInputEmpty(array) {
+    const checkQuantity = (element) => element.orderQuantity === 0;
+    return array.some(checkQuantity);
+  }
   function onChangeDeadline(event) {
     setDeadline(moment.utc(event.target.value).format());
   }
 
   function onclickUpdate() {
-    const data = {
-      // supplierId: "50715",
-      requisitionId: location.state.purchaseRequisitionId,
-      deadline: deadline,
-      orderItems: cleanListProducts.map((product) => {
-        return {
-          productVariantId: product.productVariantId,
-          orderQuantity: product.orderQuantity,
-          unit: product.unit,
-          price: product.price,
-          discountAmount: product.discountAmount,
-          totalAmount: product.totalAmount,
-        };
-      }),
-    };
-
-    Swal.fire({
-      title: "Are you sure",
-      text: "Do you want to update?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: " #d33",
-      confirmButtonText: "Confirm",
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch(updateAction({ data: data, token: token }));
-      }
-    });
+    if (cleanListProducts.length === 0) {
+      Swal.fire({
+        title: "Error",
+        text: "You need to select product",
+        icon: "error",
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        showConfirmButton: false,
+      });
+    } else {
+      const data = {
+        requisitionId: location.state.purchaseRequisitionId,
+        deadline: deadline,
+        orderItems: cleanListProducts.map((product) => {
+          return {
+            productVariantId: product.productVariantId,
+            orderQuantity: product.orderQuantity,
+            unit: product.unit,
+            price: product.price,
+            discountAmount: product.discountAmount,
+            totalAmount: product.totalAmount,
+          };
+        }),
+      };
+      if (isDataInputEmpty(cleanListProducts)) {
+        Swal.fire({
+          title: "Error",
+          text: "Please input your order quantity bigger than zero",
+          icon: "error",
+          showCancelButton: true,
+          cancelButtonText: "Cancel",
+          showConfirmButton: false,
+        });
+      } else
+        Swal.fire({
+          title: "Are you sure",
+          text: "Do you want to update?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: " #d33",
+          confirmButtonText: "Confirm",
+          reverseButtons: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            dispatch(updateAction({ data: data, token: token }));
+          }
+        });
+    }
   }
   function clickDeleteCheckItems(rowIndex) {
     if (cleanListProducts.length === 1)
@@ -629,15 +650,15 @@ export default function PurchaseRequisitionDetails() {
                     </div>
                     <div className="col-4">
                       <p>
-                        <strong>Create date:</strong>
+                        <strong>Created date: </strong>
                         {/* {createDate.split("T")[0]} */}
                         {moment(
                           transactionRecordStore[0].date.split("T")[0]
                         ).format("DD-MM-YYYY")}
                       </p>
                       <p>
-                        <strong>Deadline:</strong>
-                        {moment(deadlineStore).format("DD-MM-YYYY HH:mm")}
+                        <strong>Deadline: </strong>
+                        {moment(deadlineStore).format("DD-MM-YYYY")}
                       </p>
                       {/* <p>
                     <strong>Submit date:</strong> 05/12/2021
@@ -651,30 +672,40 @@ export default function PurchaseRequisitionDetails() {
                 <li class="list-group-item">
                   {!isEditDisabled && (
                     <>
-                      <div className="mt-2">
-                        <label for="deadline" class="form-label">
-                          Deadline
-                        </label>
-                        <input
-                          type="datetime-local"
-                          name="deadline"
-                          defaultValue={deadline}
-                          class="form-control"
-                          onChange={onChangeDeadline}
-                        />
-                      </div>
                       <li class="list-group-item">
-                        {/* <h5 class="card-title">Product</h5> */}
-                        <button
-                          onClick={() => clickSetShowAddProductPage()}
-                          type="button"
-                          class="btn btn-outline-secondary"
-                        >
-                          Add product
-                        </button>
+                        <div className="mt-2">
+                          <label for="deadline" class="form-label">
+                            Deadline
+                          </label>
+                          <input
+                            type="date"
+                            name="deadline"
+                            // defaultValue={deadline}
+                            // value="2017-06-01"
+                            value={moment(deadline).format("YYYY-MM-DD")}
+                            class="form-control"
+                            onChange={onChangeDeadline}
+                          />
+                        </div>
+
+                        <div className="mt-2 col-4">
+                          <label for="deadline" class="form-label">
+                            Order product
+                          </label>
+                          <button
+                            onClick={() => clickSetShowAddProductPage()}
+                            type="button"
+                            class="btn btn-outline-secondary"
+                          >
+                            Add product
+                          </button>
+                        </div>
+
                         {eventPage.isShowAddProduct ? (
                           <FormAddProductModal
-                            clickSetShowAddProductPage={clickSetShowAddProductPage}
+                            clickSetShowAddProductPage={
+                              clickSetShowAddProductPage
+                            }
                             clickToAddProduct={clickToAddProduct}
                             // addGroupProduct={addGroupProduct}
                           />

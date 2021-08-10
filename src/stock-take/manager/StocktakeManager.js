@@ -68,15 +68,15 @@ export default function () {
     {
       dataField: "id",
       text: "Stocktake ID",
-      headerAlign: "center",
-      align: "center",
+      // headerAlign: "center",
+      // align: "center",
     },
     {
       dataField: "status",
       text: "Status",
       isDummyField: true,
-      headerAlign: "center",
-      align: "center",
+      // headerAlign: "center",
+      // align: "center",
       formatter: (cellContent, row) => {
         if (row.status === "Progressing")
           return <span className="badge bg-primary">{row.status}</span>;
@@ -91,12 +91,12 @@ export default function () {
     {
       dataField: "createdByName",
       text: "Created By",
-      headerAlign: "center",
-      align: "center",
+      // headerAlign: "center",
+      // align: "center",
     },
     {
       dataField: "createdDate",
-      text: "Create Date",
+      text: "Created Date",
       formatter: (cellContent, row) => {
         return <span>{moment(row.createdDate).add(7, "h").format("DD-MM-YYYY")}</span>;
       },
