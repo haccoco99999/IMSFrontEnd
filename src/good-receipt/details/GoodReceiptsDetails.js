@@ -113,7 +113,7 @@ export default function GoodsReceiptDetails() {
           <NavigationBar
             listButton={listButton}
             titleBar={location.state.goodsreceiptId}
-            actionGoBack={goBackClick}
+            actionGoBack={goToManagerPage}
             status=""
             home="Goods receipt"
             currentPage="Goods receipt details"
