@@ -24,6 +24,7 @@ import { CONFIRM_PURCHASE_ORDER_RESET, CREATE_PRICE_QUOTE_RESET, CREATE_PURCHASE
 import { InfoPurchaseOrderLoader, TableLoading } from '../../components/loading/loading-component';
 import NavigationBar from '../../components/navbar/navbar-component';
 import RejectWrapper from '../../components/reject-wrapper/reject-component';
+// import { ProgressBar } from '../../components/progress-bar/ProgressBar';
 
 export default function PurchaseOrderConfirm() {
     const dispatch = useDispatch()
@@ -273,6 +274,13 @@ export default function PurchaseOrderConfirm() {
             return ""
         }
     }
+    function redirectGoodsReceipt() {
+        history.replace("/homepage/good-receipt/create-goods-receipt", {
+            isRedirectFromPO: true,
+            orderId: purchaseOrderDataGlobal.orderId,
+
+        })
+    }
     function setListButton(status) {
         if (status === "PriceQuote" && purchaseOrderDataGlobal.hasSentMail) {
 
@@ -377,19 +385,19 @@ export default function PurchaseOrderConfirm() {
             ]
 
         }
-        // else if (status === "POConfirm") {
-        //     return [
-        //         {
-        //             isShow: true,
-        //             title: "Watting  Good Receipt",
+        else if (status === "POConfirm") {
+            return [
+                {
+                    isShow: true,
+                    title: "Create  Goods Receipt",
+                    action: () => redirectGoodsReceipt(),
+                    class: "btn btn-secondary"
+                },
 
-        //             class: "btn btn-secondary"
-        //         },
 
+            ]
 
-        //     ]
-
-        // }
+        }
 
         return []
     }
@@ -538,8 +546,8 @@ export default function PurchaseOrderConfirm() {
 
     }, [priceQuoteUpdateStatus])
     useEffect(() => {
-        
-        if (mailOrderDataStatus.requesting === true && purchaseOrderDataGlobal.status ==="PriceQuote") {
+
+        if (mailOrderDataStatus.requesting === true && purchaseOrderDataGlobal.status === "PriceQuote") {
             Swal.fire({
                 title: 'Mail Sending!',
                 html: 'Watting...',
@@ -555,8 +563,8 @@ export default function PurchaseOrderConfirm() {
                 }
             })
         }
-        if (mailOrderDataStatus.successful === true && purchaseOrderDataGlobal.status==="PriceQuote") {
-            
+        if (mailOrderDataStatus.successful === true && purchaseOrderDataGlobal.status === "PriceQuote") {
+
             Swal.fire(
                 'Send Mail Success!',
                 'Click to Close!',
@@ -565,12 +573,12 @@ export default function PurchaseOrderConfirm() {
             )
             dispatch({ type: SEND_MAIL_SERVICE_RESET })
         }
-        if (mailOrderDataStatus.errors === true && purchaseOrderDataGlobal.status==="PriceQuote") {
+        if (mailOrderDataStatus.errors === true && purchaseOrderDataGlobal.status === "PriceQuote") {
             Swal.fire({
                 icon: 'error',
                 title: 'Send Mail Fail...',
                 text: 'Something went wrong!',
-                
+
             })
             dispatch({ type: SEND_MAIL_SERVICE_RESET })
         }
@@ -873,6 +881,9 @@ export default function PurchaseOrderConfirm() {
 
             }))
         }
+        else {
+            beforeEdit()
+        }
 
     }
     function cancelEditClick(nameEdit) {
@@ -1097,14 +1108,14 @@ export default function PurchaseOrderConfirm() {
     function changeMailContent(contentEmail) {
         setMailDescription(contentEmail)
     }
-    
+
     function sendMailSupplier(pdf, contentMail, orderId) {
         const formData = new FormData();
 
         formData.append('To', supplier.email)
         formData.append('Content', contentMail)
         formData.append('Subject', "Mail from ABC Inventory")
-        formData.append('PurchaseOrderId', purchaseOrderDataGlobal.orderId )
+        formData.append('PurchaseOrderId', purchaseOrderDataGlobal.orderId)
         formData.append('pdf', pdf)
         dispatch(sendMailService({ data: formData }))
     }
@@ -1177,42 +1188,74 @@ export default function PurchaseOrderConfirm() {
                 <div className="p-3">
                     {detailPurchaseState.status !== "PriceQuote" ?
                         <div class="card">
-                            <div class="row p-5">
-                                <div className="col-md-4">
-                                    {purchaseOrderDetailStore.successful ?
-                                        <div>
-                                            <div className="form-text">
-                                                Create By:
-                                            </div>
-                                            <label className="form-check-label" >
-                                                {infoUserPurchaseOrder.name}
-                                            </label>
 
-                                            <div className="form-text">
-                                                Email:
-                                            </div>
-                                            <label className="form-check-label" >
-                                                {infoUserPurchaseOrder.email}
-                                            </label>
+                            <div class="row">
+                                <div class="card-header p-0">
+                                    <div class="d-flex ">
+                                        <div class="me-auto p-2">Info Order: </div>
 
-                                            <div className="form-text">
-                                                Phone Number:
-                                            </div>
-                                            <label className="form-check-label" >
-                                                {infoUserPurchaseOrder.phoneNumber}
-                                            </label>
-
-                                            <div className="form-text">
-                                                Create date:
-                                            </div>
-                                            <label className="form-check-label" >
-                                                {infoUserPurchaseOrder.createDate}
-                                            </label>
-                                        </div>
-                                        : <InfoPurchaseOrderLoader />}
+                                    </div>
                                 </div>
-                                <div className="col-md-8" >
-                                    <p data-bs-toggle="collapse" data-bs-target="#collapseHistory" >History</p>
+                                <div className="card-body">
+                                {purchaseOrderDetailStore.successful ?
+                                    <div className="p-0">
+                                        <li class="list-group-item">
+                                            <div className="row g-3 justify-content-between me-3">
+                                                <div className="col-4">
+
+                                                    <p>
+                                                        <strong>Purchase Order ID:</strong> {purchaseOrderDataGlobal.orderId}
+                                                    </p>
+                                                    <p>
+                                                        <strong>Created Date: </strong>{infoUserPurchaseOrder.createDate}
+
+                                                    </p>
+                                                </div>
+                                                <div className="col-4">
+
+                                                    <p>
+                                                        <strong>Email:</strong>{" "}
+                                                        {infoUserPurchaseOrder.email}
+                                                    </p>
+                                                    <p>
+                                                        <strong>Created By:</strong>{" "}
+                                                        {infoUserPurchaseOrder.name}
+                                                    </p>
+                                                    <p>
+                                                        <strong>Phone Number: </strong>    {infoUserPurchaseOrder.phoneNumber}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+
+
+                                        <li class="list-group-item">
+                                            <h5 class="card-title">Supplier Information</h5>
+
+
+                                            <p>
+                                                <strong>Email:</strong> {supplier.email}
+                                            </p>
+                                            <p>
+                                                <strong>Name:</strong> {supplier.supplierName}
+                                            </p>
+                                            <p>
+                                                <strong>Phone No:</strong> {supplier.phoneNumber}
+                                            </p>
+                                            <p>
+                                                <strong>Address:</strong>   {supplier.address}
+                                            </p>
+
+
+
+                                        </li>
+
+
+
+                                    </div>
+                                    : <InfoPurchaseOrderLoader />}
+                                <li class="list-group-item">
+                                    <p data-bs-toggle="collapse" data-bs-target="#collapseHistory" className="btn text-success" >History</p>
                                     <div className="collapse show " id="collapseHistory" >
                                         <div style={{ height: "250px", overflow: "auto" }} >
                                             <table className="table">
@@ -1231,7 +1274,9 @@ export default function PurchaseOrderConfirm() {
 
 
                                         </div>
+
                                     </div>
+                                </li>
                                 </div>
                             </div>
                         </div> : <div class="card">
@@ -1254,12 +1299,32 @@ export default function PurchaseOrderConfirm() {
                             </li> */}
                             <div class="card-body">
                                 <div className="row">
+
                                     <div className="col-md-4">
-                                        <form id="choose-supplier-form" class="row g-3 needs-validation " novalidate>
-                                            <SelectSupplier isDisabled={eventPage.isShowEditInfoOrder} supplierInfo={supplier} getDataSupplier={getDataSupplier} />
-                                        </form>
+                                        <strong>  Select Supplier:</strong>
+
+                                        <p>
+                                            <form id="choose-supplier-form" class="row g-3 needs-validation " novalidate>
+                                                <SelectSupplier isDisabled={eventPage.isShowEditInfoOrder} supplierInfo={supplier} getDataSupplier={getDataSupplier} />
+                                            </form>
+                                        </p>
 
 
+
+                                        <p>
+                                            <strong>Email:</strong> {supplier.email}
+                                        </p>
+                                        <p>
+                                            <strong>Phone No:</strong> {supplier.phoneNumber}
+                                        </p>
+                                        <p>
+                                            <strong>Address:</strong>   {supplier.address}
+                                        </p>
+
+
+
+
+                                        {/* 
                                         <div className="form-text">
                                             Email:
                                         </div>
@@ -1277,9 +1342,9 @@ export default function PurchaseOrderConfirm() {
                                         </div>
                                         <label className="form-check-label" >
                                             {supplier.address}
-                                        </label>
+                                        </label> */}
                                     </div>
-                                    <div className="col-md-8" >
+                                    <div className="col-md-6" >
                                         <p data-bs-toggle="collapse" data-bs-target="#collapseHistory" >History</p>
                                         <div className="collapse show " id="collapseHistory" >
                                             <div style={{ height: "250px", overflow: "auto" }} >
@@ -1294,6 +1359,9 @@ export default function PurchaseOrderConfirm() {
 
                                             </div>
                                         </div>
+                                    </div>
+                                    <div className="col-md-2">
+                                        {/* <ProgressBar/> */}
                                     </div>
                                 </div>
                                 {/* <div class="form-group">
@@ -1402,8 +1470,8 @@ export default function PurchaseOrderConfirm() {
                     clickSetShowAddProductPage={clickSetShowAddProductPage}
 
                     clickToAddProduct={clickToAddProduct}
-                    // addGroupProduct={addGroupProduct}
-                    // checkProductExist={checkProductExist}
+                // addGroupProduct={addGroupProduct}
+                // checkProductExist={checkProductExist}
 
                 /> : ""}
 
@@ -1421,7 +1489,7 @@ export default function PurchaseOrderConfirm() {
                     listProduct={listProductPurchaseOrder}
                     infoPriceQuote={detailPurchaseState}
                     clickToCLoseConfirm={clickToCLoseConfirm} /> : ""}
-                    
+
                 {eventPage.isPreview ? <PreviewSendMail
 
                     contentEmail={mailDescription}
@@ -1503,16 +1571,14 @@ function SelectSupplier(props) {
 
 
 
-        <div class="form-floating">
+        <div >
 
             <select disabled={props.isDisabled} onChange={onChangeValue} value={JSON.stringify(selected)} class="form-select" id="validationCustom04" required>
                 <option selected disabled value={JSON.stringify({})}>Choose...</option>
                 {listSupplier.map(supplier => <option value={JSON.stringify(supplier)} >{supplier.supplierName}</option>)}
             </select>
-            <label for="floatingSelect">Select Supplier</label>
-            <div class="invalid-feedback">
-                Please select a valid state.
-            </div>
+
+
         </div>
     )
 }

@@ -3,11 +3,12 @@ import './create-account.css'
 import RoleManagerAction from "../../manager/role-manager/action";
 import { CreateAccountAction, getUserAccountDetail, setActiveAccountAction, updateUserAccountDetail, uploadAvatarImg } from './action';
 import { useDispatch, useSelector } from 'react-redux';
-import NavigationBar from '../../../navigation-bar-component/NavigationBar';
+import NavigationBar from '../../../components/navbar/navbar-component';
 import { useHistory, useLocation } from 'react-router-dom';
-import { CREATE_ACC_CLEAN, GET_DETAIL_ACC_CLEAN, SET_ACTIVE_ACC_CLEAN } from './constants';
+import { CREATE_ACC_CLEAN, GET_DETAIL_ACC_CLEAN, SET_ACTIVE_ACC_CLEAN, UPDATE_IMAGE_CLEAN } from './constants';
 import Swal from 'sweetalert2'
 import { ChangePasswordAccountManagerCompoent, ChangePasswordCompoent } from '../../../components/change-password/ChangePasswordComponent';
+import { TableLoading } from '../../../components/loading/loading-component';
 export default function CreateAccount() {
 
 
@@ -26,13 +27,18 @@ export default function CreateAccount() {
   })
   const [base64Img, setBase64Img] = useState("")
 
-  const { token, infoDetailAccountStore, createUserAccountStatus, setActiveAccountStatus, updateAccountDetailStatus } = useSelector((state) => ({
+  const { token, infoDetailAccountStore, createUserAccountStatus,
+    setActiveAccountStatus, updateAccountDetailStatus,
+    updateImageStatus, getUserAccountDetailStore
+  } = useSelector((state) => ({
 
     token: state.client.token,
     infoDetailAccountStore: state.getUserAccountDetail.infoDetailAccount,
+    getUserAccountDetailStore: state.getUserAccountDetail,
     createUserAccountStatus: state.createUserAccount,
     setActiveAccountStatus: state.setActiveAccount,
-    updateAccountDetailStatus: state.updateAccountDetail
+    updateAccountDetailStatus: state.updateAccountDetail,
+    updateImageStatus: state.updateImage
 
   }));
 
@@ -177,10 +183,41 @@ export default function CreateAccount() {
       })
       dispatch({ type: SET_ACTIVE_ACC_CLEAN })
     }
+    if (updateImageStatus.requesting) {
+      Swal.fire({
+        title: 'Updating Avatar!',
+        html: 'Watting...',
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading()
+
+        },
+
+      })
+    }
+    else if (updateImageStatus.successful) {
+
+      Swal.fire(
+        'Update Success!',
+        'Click to Close!',
+        'success'
+
+      )
+      dispatch({ type: UPDATE_IMAGE_CLEAN })
+    }
+    else if (updateImageStatus.errors) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+
+      })
+      dispatch({ type: UPDATE_IMAGE_CLEAN })
+    }
 
 
 
-  }, [createUserAccountStatus, setActiveAccountStatus, updateAccountDetailStatus])
+  }, [createUserAccountStatus, setActiveAccountStatus, updateAccountDetailStatus, updateImageStatus])
 
   function setIsShowChangePassword() {
     setEventPage((state) => ({
@@ -247,8 +284,8 @@ export default function CreateAccount() {
 
 
     const form = document.getElementById("checkValidProfile");
-    alert(form.checkValidity())
-    if (!form.checkValidity() || !isvalidPassword.isValidNewPassword || !isvalidPassword.isConfirmPassword) {
+
+    if (!form.checkValidity() || base64Img === "" || !isvalidPassword.isValidNewPassword || !isvalidPassword.isConfirmPassword) {
       form.classList.add("was-validated");
       if (!isvalidPassword.isValidNewPassword || !isvalidPassword.isConfirmPassword) {
         newPassword.current.value = ""
@@ -256,42 +293,50 @@ export default function CreateAccount() {
         newPassword.current.classList.add("is-invalid")
         confirmPassword.current.classList.add("is-invalid")
       }
-    } else {
-      if (isvalidPassword.isValidNewPassword && isvalidPassword.isConfirmPassword) {
-        const url = "https://api.cloudinary.com/v1_1/ims2021/upload";
+      if (base64Img === "") {
 
+      }
+
+    }
+
+    else {
+      if (isvalidPassword.isValidNewPassword && isvalidPassword.isConfirmPassword) {
         const formData = new FormData()
         formData.append("file", base64Img);
         formData.append("upload_preset", "rmwbm6go");
+        const data = {
+
+          email: infoAccountState.email,
+          roleId: infoAccountState.roleID,
+          fullName: infoAccountState.fullname,
+          phoneNumber: infoAccountState.phoneNumber,
+          address: infoAccountState.address,
+          dateOfBirth: infoAccountState.dateOfBirth,
+          password: newPassword.current.value,
+          profileImageLink: "",
+        }
+        console.log(data)
+        dispatch(CreateAccountAction({ data: data, token: token, formData: formData }));
+
+        form.classList.remove("was-validated");
+        // const url = "https://api.cloudinary.com/v1_1/ims2021/upload";
 
 
-        fetch(url, {
-          method: "POST",
-
-          body: formData,
-        })
-          .then((response) => {
-            return response.json();
-          }).then((json) => {
-            console.log(json);
-            const data = {
-
-              email: infoAccountState.email,
-              roleId: infoAccountState.roleID,
-              fullName: infoAccountState.fullname,
-              phoneNumber: infoAccountState.phoneNumber,
-              address: infoAccountState.address,
-              dateOfBirth: infoAccountState.dateOfBirth,
-              password: newPassword.current.value,
-              profileImageLink: json.url,
-            }
-            console.log(data)
-            dispatch(CreateAccountAction({ data: data, token: token }));
-
-            form.classList.remove("was-validated");
 
 
-          });
+        // fetch(url, {
+        //   method: "POST",
+
+        //   body: formData,
+        // })
+        //   .then((response) => {
+        //     return response.json();
+        //   }).then((json) => {
+        //     console.log(json);
+
+
+
+        //   });
 
         // history.go(-1)
       }
@@ -415,29 +460,45 @@ export default function CreateAccount() {
     <p><label for="filexx" >Upload Image</label></p> */}
       {/* <p><img id="output" width="200" /></p> */}
 
-      <NavigationBar vigationBar listButton={listButton} actionGoBack={ClickGoBack} />
+      <NavigationBar
+        home={"Manage User"}
+        listButton={[]}
+        currentPage={"User Detail"}
+        actionGoBack={ClickGoBack} />
 
 
 
 
       <div className="card mt-2">
         <div class=" mt-3" >
+         
           <div class="row g-0">
             <div class="pe-3 pt-3 col-md-4 d-flex align-items-end flex-column  ">
-              <div >
-                <img id="output-avatar" style={{ height: "150px", width: "150px" }} class="card-img-top rounded " src={infoDetailAccountStore.profileImageLink !== "" ? infoDetailAccountStore.profileImageLink : "https://image.flaticon.com/icons/png/512/3135/3135715.png"} alt="Card image cap" />
+              <div>
+
+
+                <div class="profile-pic">
+                  <label class="-label" for="file">
+                    <span class="glyphicon glyphicon-camera"></span>
+                    <span>Change Image</span>
+                  </label>
+                  <input id="file" type="file" onChange={changeUploadAvatar} />
+                  <img id="output-avatar" width="200" src={infoDetailAccountStore.profileImageLink !== "" ? infoDetailAccountStore.profileImageLink : "https://image.flaticon.com/icons/png/512/3135/3135715.png"} />
+                </div>
+                {statusUser === "CREATEUSER" ? base64Img === "" ? <p class="text-danger text-center">Set your avatar(*)</p> : <p class="text-success text-center">Avatar is valid</p> : ""}
+
+                <p className="text-center">{infoAccountState.isActive === undefined ? "" : infoAccountState.isActive ?
+                  <span onClick={() => clickSetActiveAccount()} class="btn pe-auto text-center badge bg-success"> <i class="bi bi-pen"></i> Active</span>
+                  : <span onClick={() => clickSetActiveAccount()} class="btn pe-auto   badge bg-danger"> <i class="bi bi-pen"></i> In Active</span>}</p>
 
               </div>
-              <input name="image" id="fileaaa" type="file" onChange={changeUploadAvatar} style={{ display: "none" }} />
-              <div className="btn btn-primary"> <label for="fileaaa"><i class="bi bi-camera-fill"></i>Change Avatar </label></div>
 
-              <p>{infoAccountState.userRole}</p>
-              <p>{infoAccountState.isActive === undefined ? "" : infoAccountState.isActive ?
-                <span onClick={() => clickSetActiveAccount()} class="btn pe-auto badge bg-success"> <i class="bi bi-pen"></i> Active</span>
-                : <span onClick={() => clickSetActiveAccount()} class="btn pe-auto badge bg-danger"> <i class="bi bi-pen"></i> In Active</span>}</p>
+
 
             </div>
+
             <div class="col-md-8">
+           
               <div class="card-body">
 
                 <form novalidate id="checkValidProfile" className="needs-validation">
@@ -445,8 +506,8 @@ export default function CreateAccount() {
                   <div class="mb-3 row">
                     <label for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
                     <div class="col-sm-10">
-                      <input type="text" onChange={onchangeInputInfoAccount} required name="email" value={infoAccountState.email} disabled={statusUser !== "CREATEUSER"}
-                        class="form-control" aria-describedby="helpId" placeholder="" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" />
+                      <input placeholder="test@example.com" type="text" onChange={onchangeInputInfoAccount} required name="email" value={infoAccountState.email} disabled={statusUser !== "CREATEUSER"}
+                        class="form-control" aria-describedby="helpId" placeholder="test@example.com" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" />
                       <div class="invalid-feedback">
                         Email is  invalid!
                       </div>
@@ -456,7 +517,7 @@ export default function CreateAccount() {
                     <label for="inputPassword" class="col-sm-2 col-form-label">Fullname:</label>
                     <div class="col-sm-10">
                       <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="fullname" value={infoAccountState.fullname}
-                        class="form-control" aria-describedby="helpId" placeholder="" />
+                        class="form-control" aria-describedby="helpId" placeholder="Fullname" />
                       <div class="invalid-feedback">
                         Please enter a fullname!
                       </div>
@@ -467,7 +528,7 @@ export default function CreateAccount() {
                     <label for="inputPassword" class="col-sm-2 col-form-label">Phone Number:</label>
                     <div class="col-sm-10">
                       <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="phoneNumber" value={infoAccountState.phoneNumber}
-                        class="form-control" id="" aria-describedby="helpId" placeholder="" pattern="((09|03|07|08|05|028|024)+([0-9]{8})\b)" />
+                        class="form-control" id="" aria-describedby="helpId" placeholder="Your phone" pattern="((09|03|07|08|05|028|024)+([0-9]{8})\b)" />
                       <div class="invalid-feedback">
                         Phone number is invalid!
                       </div>
@@ -478,7 +539,7 @@ export default function CreateAccount() {
                     <label for="inputPassword" class="col-sm-2 col-form-label">Address:</label>
                     <div class="col-sm-10">
                       <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="address" value={infoAccountState.address}
-                        class="form-control" aria-describedby="helpId" placeholder="" />
+                        class="form-control" aria-describedby="helpId" placeholder="etc." />
                       <div class="invalid-feedback">
                         Please enter a address!
 
@@ -490,7 +551,7 @@ export default function CreateAccount() {
                     <label for="inputPassword" class="col-sm-2 col-form-label">Birthdate:</label>
                     <div class="col-sm-10">
                       <input type="date" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="dateOfBirth" value={infoAccountState.dateOfBirth}
-                        class="form-control" aria-describedby="helpId" placeholder="" />
+                        class="form-control" aria-describedby="helpId" />
                       <div class="invalid-feedback">
                         Please set a birthdate!
                       </div>
@@ -523,7 +584,7 @@ export default function CreateAccount() {
                       <label for="inputPassword" class="col-sm-2 col-form-label">Password:</label>
                       <div class="col-sm-10">
                         <input type="password" required ref={newPassword} onChange={onChangePassword} disabled={eventPage.isShowEdit}
-                          class="form-control" name="" id="newPassword" aria-describedby="helpId" placeholder="" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" />
+                          class="form-control" name="" id="newPassword" aria-describedby="helpId" placeholder="New passsowrd" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" />
                         <div class="invalid-feedback">
                           Password is invalid!
                         </div>
@@ -533,7 +594,7 @@ export default function CreateAccount() {
                       <label for="inputPassword" class="col-sm-2 col-form-label">Confirm Password:</label>
                       <div class="col-sm-10">
                         <input type="password" ref={confirmPassword} onChange={onChangePassword} required disabled={eventPage.isShowEdit}
-                          class="form-control" name="" id="confirmPassword" aria-describedby="helpId" placeholder="" />
+                          class="form-control" name="" id="confirmPassword" aria-describedby="helpId" placeholder="Confirm password" />
                         <div class="invalid-feedback">
                           Confirm password not match!
                         </div>
@@ -544,7 +605,7 @@ export default function CreateAccount() {
                   </div>
 
                 </form> :
-                  <div><p class="text-success btn dropdown-toggle" onClick={() => closeChangePasswordModal()} >Change password</p>
+                  <div><p class="text-success btn dropdown-toggle" onClick={() => closeChangePasswordModal()} > <i class="bi bi-pen"></i> Change password</p>
                     {isShowPasswordModal ? <ChangePasswordAccountManagerCompoent closeChangePasswordModal={closeChangePasswordModal} saveChangePassword={saveChangePassword} />
                       : ""}
 
@@ -574,34 +635,7 @@ export default function CreateAccount() {
           </div>
         </div>
 
-        {/* 
-
-        <div className="card-header">Detail Account</div>
-        <div className="row h-100">
-          <div className="w-3  d-flex justify-content-center mt-3">
-            <div class="card w-75 border-0" style={{ width: "18rem;" }}>
-              <img id="output-avatar" class="card-img-top rounded-pill" width="90px" height="300px" src="https://i.stack.imgur.com/l60Hf.png" alt="Card image cap" />
-
-
-
-
-
-
-              <div class="card-body">
-                <input name="image" id="fileaaa" type="file" onChange={changeUploadAvatar} style={{ display: "none" }} />
-                <div className="btn btn-primary"> <label for="fileaaa"><i class='bx bxs-edit-alt'></i>Change Avatar </label></div>
-
-              </div>
-              <button type="button" onClick={() => clickSetActiveAccount} class="btn btn-primary">{infoAccountState.isActive ? "Ban" : "UnBan"}</button>
-            </div>
-          </div>
-          <div className="card w-7 border-start border-end ">
-            <h3>Profile Detail</h3>
-
-
-          </div>
-
-        </div> */}
+ 
 
       </div>
 
@@ -611,80 +645,6 @@ export default function CreateAccount() {
 
 
 
-
-      {/* <div className="container container-create-account">
-        <div class="avatar-upload-contain">
-          <img id="output-avatar" src="https://i.stack.imgur.com/l60Hf.png" class="img-fluid img-thumbnail " alt="..." />
-          <input name="image" id="fileaaa" type="file" onChange={changeUploadAvatar} style={{ display: "none" }} />
-          <div className="change-avatar-edit"> <label for="fileaaa"><i class='bx bxs-edit-alt'></i>Change Avatar </label></div>
-
-        </div>
-
-
-
-
-        <div class="form-group">
-          <label for="">Full Name:</label>
-          <input type="text" onChange={onchangeInputInfoAccount} name="fullName"
-            class="form-control" aria-describedby="helpId" placeholder="" />
-          <div></div>
-        </div>
-        <div class="form-group">
-          <label for="">Email:</label>
-          <input type="text" onChange={onchangeInputInfoAccount} name="email"
-            class="form-control" aria-describedby="helpId" placeholder="" />
-
-        </div>
-        <div class="form-group">
-          <label for="">Phone Number:</label>
-          <input type="text" onChange={onchangeInputInfoAccount} name="phoneNumber"
-            class="form-control" id="" aria-describedby="helpId" placeholder="" />
-
-        </div>
-        <div class="form-group">
-          <label for="">Address:</label>
-          <input type="text" onChange={onchangeInputInfoAccount} name="address"
-            class="form-control" aria-describedby="helpId" placeholder="" />
-
-        </div>
-        <div class="form-group">
-          <label for="">Birthday</label>
-          <input type="date" onChange={onchangeInputInfoAccount} name="dateOfBirth"
-            class="form-control" aria-describedby="helpId" placeholder="" />
-
-        </div>
-        <div class="form-group">
-          <label for="">Select Role</label>
-          <select onChange={onchangeInputInfoAccount} class="form-control" name="roleId" id="">
-            <option value="" disabled selected>  -- No Selected --  </option>
-            {listRoles.map((item, index) => {
-              return (<option key={index} value={item.id}>{item.name}</option>)
-            })}
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="">Password:</label>
-          <input type="text" ref={newPassword} onChange={onChangePassword}
-            class="form-control" name="" id="" aria-describedby="helpId" placeholder="" />
-
-        </div>
-        <div class="form-group">
-          <label for="">Confirm apssword:</label>
-          <input type="text" ref={confirmPassword} onChange={onChangePassword}
-            class="form-control" name="" id="" aria-describedby="helpId" placeholder="" />
-
-        </div>
-      </div>
- */}
-
-
-      {/* 
-      <h3>Set password </h3>
-      <div className="container container-create-account">
-        
-
-
-      </div> */}
 
 
       {/* ################################# */}

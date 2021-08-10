@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal } from "bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -41,6 +41,7 @@ export default function CreateGoodsReceiptComponent() {
   const [list_BuyingProduct, setList_BuyingProduct] = useState([]);
   const [isShowSpinner, setIsShowSpinner] = useState(false);
   const [isShowTables, setIsShowTables] = useState(false);
+  const [isDeleteItem, setIsDeleteItem] = useState(false);
 
   const {
     list_ConfirmPurchaseOrderID,
@@ -196,7 +197,7 @@ export default function CreateGoodsReceiptComponent() {
       formatter: (cellContent, row, rowIndex) => {
         return (
           <div
-            className="text-danger"
+            className="text-danger btn"
             onClick={() => clickDeleteVariant(rowIndex)}
           >
             <i class="bi bi-trash"></i>
@@ -318,6 +319,7 @@ export default function CreateGoodsReceiptComponent() {
   function clickDeleteVariant(rowIndex) {
     setList_BuyingProduct((state) => state.filter((_, i) => i !== rowIndex));
     setListCompare((state) => state.filter((_, i) => i !== rowIndex));
+    setIsDeleteItem(true);
     setIsChanging(true);
   }
 
@@ -428,35 +430,42 @@ export default function CreateGoodsReceiptComponent() {
   function onRevertClick() {
     //revert
     setList_BuyingProduct(
-      list_BuyingProductStore.map((product) => {
-        return {
-          id: product.id,
-          name: product.productVariant.name,
-          productId: product.productVariant.productId,
-          productVariantId: product.productVariantId,
-          //todo: Sua lai data
-          orderQuantity: product.quantityLeftAfterReceived,
-          // orderQuantity: product.orderQuantity,
-          sku: product.productVariant.sku,
-          barcode: product.productVariant.barcode,
-          received: 0,
-        };
-      })
+      list_BuyingProductStore
+        .filter((product) => product.quantityLeftAfterReceived !== 0)
+        .map((product) => {
+          return {
+            id: product.id,
+            name: product.productVariant.name,
+            productId: product.productVariant.productId,
+            productVariantId: product.productVariantId,
+            //todo: Sua lai data
+            orderQuantity: product.quantityLeftAfterReceived,
+            // orderQuantity: product.orderQuantity,
+            sku: product.productVariant.sku,
+            barcode: product.productVariant.barcode,
+            received: 0,
+          };
+        })
     );
     setListCompare(
-      list_BuyingProductStore.map((product) => {
-        var isValid = true;
-        if (product.sku === "" && product.barcode === "") isValid = false;
+      list_BuyingProductStore
+        .filter((product) => product.quantityLeftAfterReceived !== 0)
+        .map((product) => {
+          var isValid = true;
+          if (product.sku === "" && product.barcode === "") isValid = false;
 
-        return {
-          id: product.id,
-          sku: product.productVariant.sku,
-          barcode: product.productVariant.barcode,
-          isChanging: false,
-          isValid: isValid,
-        };
-      })
+          return {
+            id: product.id,
+            sku: product.productVariant.sku,
+            barcode: product.productVariant.barcode,
+            isChanging: false,
+            isValid: isValid,
+          };
+        })
     );
+    //revert
+    setIsDeleteItem(false);
+    setIsChanging(false);
   }
 
   //@params: suppliers get details suppliers
@@ -469,8 +478,27 @@ export default function CreateGoodsReceiptComponent() {
     console.log(existRedisVariantSkus.some(check));
     return existRedisVariantSkus.some(check);
   };
+  ///////////////Hung edit
+  const location = useLocation();
 
   useEffect(() => {
+    if (location.state !== undefined) {
+      if (location.state.isRedirectFromPO) {
+        dispatch(getConfirmedPOAction({ token: token }));
+        setSelectedPO(location.state.orderId);
+        setIsReturnData(true);
+
+        dispatch(
+          checkSKUExistedAction({ id: location.state.orderId, token: token })
+        );
+        dispatch(
+          getConfirmedPODetailsAction({
+            id: location.state.orderId,
+            token: token,
+          })
+        );
+      }
+    }
     return () => {
       dispatch({ type: RESET });
     };
@@ -480,54 +508,60 @@ export default function CreateGoodsReceiptComponent() {
   useEffect(() => {
     if (list_BuyingProductStore.length > 0) {
       setList_BuyingProduct(
-        list_BuyingProductStore.map((product) => {
-          let tempSku;
-          if (checkSKUSHasExistedInCache(product.productVariantId))
-            tempSku = "Validating";
-          else tempSku = product.productVariant.sku;
-          // let hasSKU;
-          // if (tempSKU !== "") hasSKU = false;
-          // else hasSKU = true;
-          return {
-            id: product.id,
-            name: product.productVariant.name,
-            productId: product.productVariant.productId,
-            productVariantId: product.productVariantId,
+        list_BuyingProductStore
+          .filter((product) => product.quantityLeftAfterReceived !== 0)
+          .map((product) => {
+            let tempSku;
+            if (checkSKUSHasExistedInCache(product.productVariantId))
+              tempSku = "Validating";
+            else tempSku = product.productVariant.sku;
+            // let hasSKU;
+            // if (tempSKU !== "") hasSKU = false;
+            // else hasSKU = true;
+            return {
+              id: product.id,
+              name: product.productVariant.name,
+              productId: product.productVariant.productId,
+              productVariantId: product.productVariantId,
 
-            //todo: Sua lai data
-            orderQuantity: product.quantityLeftAfterReceived,
-            // orderQuantity: product.orderQuantity,
-            // sku: product.productVariant.sku,
-            sku: tempSku,
-            barcode: product.productVariant.barcode,
-            received: 0,
-            // hasSKU: product.productVariant.sku === "",
-            hasSKU: tempSku === "",
-          };
-        })
+              //todo: Sua lai data
+              orderQuantity: product.quantityLeftAfterReceived,
+              // orderQuantity: product.orderQuantity,
+              // sku: product.productVariant.sku,
+              sku: tempSku,
+              barcode: product.productVariant.barcode,
+              received: 0,
+              // hasSKU: product.productVariant.sku === "",
+              hasSKU: tempSku === "",
+            };
+          })
       );
       setListCompare(
-        list_BuyingProductStore.map((product) => {
-          var isValid = true;
-          if (product.sku === "" && product.barcode === "") isValid = false;
+        list_BuyingProductStore
+          .filter((product) => product.quantityLeftAfterReceived !== 0)
+          .map((product) => {
+            var isValid = true;
+            if (product.sku === "" && product.barcode === "") isValid = false;
 
-          return {
-            id: product.id,
-            sku: product.productVariant.sku,
-            barcode: product.productVariant.barcode,
-            isChanging: false,
-            isValid: isValid,
-          };
-        })
+            return {
+              id: product.id,
+              sku: product.productVariant.sku,
+              barcode: product.productVariant.barcode,
+              isChanging: false,
+              isValid: isValid,
+            };
+          })
       );
     }
   }, [list_BuyingProductStore]);
   useEffect(() => {
     const checkIsChanging = (element) => element.isChanging === true;
     const checkisValid = (element) => element.isValid === false;
+
     if (listCompare.length > 0) {
       if (listCompare.some(checkIsChanging)) setIsChanging(true);
-      else setIsChanging(false);
+      else if (!isDeleteItem) setIsChanging(false);
+
       console.log(isChanging);
       if (listCompare.some(checkisValid)) setIsValid(false);
       else setIsValid(true);
@@ -637,7 +671,7 @@ export default function CreateGoodsReceiptComponent() {
               </button>
             </li>
 
-            {isReturnData && (
+            {isReturnData && suppliers !== undefined && (
               <li class="list-group-item">
                 <p>
                   <strong>Purchase Order:</strong> {selectedPO}

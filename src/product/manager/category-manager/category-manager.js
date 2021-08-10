@@ -182,13 +182,6 @@ export default function CategoryManager() {
         }).then((result) => {
           if (result.isConfirmed) {
             hideModal();
-            dispatch(
-              GetAllCategoryAction({
-                currentPage: currentPage,
-                sizePerPage: sizePerPage,
-                token: token,
-              })
-            );
           }
         });
     } else if (updateCategoriesReducer.error) {
@@ -220,23 +213,16 @@ export default function CategoryManager() {
           confirmButtonColor: "#3085d6",
         });
       } else
-        Swal.fire({
-          icon: "success",
-          title: "Your work has been saved",
-          showCancelButton: false,
-          confirmButtonColor: "#3085d6",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            hideModal();
-            dispatch(
-              GetAllCategoryAction({
-                currentPage: currentPage,
-                sizePerPage: sizePerPage,
-                token: token,
-              })
-            );
-          }
-        });
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          hideModal();
+        }
+      });
     } else if (createCategoriesReducer.error) {
       Swal.fire({
         icon: "error",
@@ -326,7 +312,10 @@ function ModalFunction(props) {
   function onSaveClick() {
     // console.log(categorySelected);
 
-    if (categorySelected.categoryName === "") {
+    if (
+      categorySelected.categoryName === "" ||
+      categorySelected.categoryDescription === ""
+    ) {
       Swal.fire({
         title: "Error",
         text: "Empty Data!",
@@ -336,55 +325,19 @@ function ModalFunction(props) {
         showConfirmButton: false,
       });
     } else {
-      if (props.isCreate) {
-        Swal.fire({
-          title: "Are you sure",
-          text: "Do you want to save?",
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: " #d33",
-          confirmButtonText: "Confirm",
-          reverseButtons: true,
-        }).then((result) => {
-          if (result.isConfirmed)
-            dispatch(
-              CreateCategoryAction({
-                token: props.token,
-                data: categorySelected,
-              })
-            );
-        });
-      } else {
-        let needCheckName;
-        if (categorySelected.categoryName === props.categoryData.categoryName) {
-          needCheckName = false;
-        } else needCheckName = true;
-
+      if (props.isCreate)
+        dispatch(
+          CreateCategoryAction({ token: props.token, data: categorySelected })
+        );
+      else {
         const dataUpdate = {
           categoryId: categorySelected.id,
           categoryName: categorySelected.categoryName,
           categoryDescription: categorySelected.categoryDescription,
         };
-        Swal.fire({
-          title: "Are you sure",
-          text: "Do you want to save?",
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: " #d33",
-          confirmButtonText: "Confirm",
-          reverseButtons: true,
-        }).then((result) => {
-          if (result.isConfirmed)
-            dispatch(
-              UpdateCategoryAction({
-                token: props.token,
-                data: dataUpdate,
-                needCheckName: needCheckName,
-              })
-            );
-        });
+        dispatch(
+          UpdateCategoryAction({ token: props.token, data: dataUpdate })
+        );
       }
     }
   }

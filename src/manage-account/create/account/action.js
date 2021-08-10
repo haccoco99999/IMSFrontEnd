@@ -1,7 +1,7 @@
 import {CREATE_ACC_REQUEST, GET_DETAIL_ACC_REQUEST, SET_ACTIVE_ACC_REQUEST, UPDATE_DETAIL_ACC_REQUEST, UPDATE_IMAGE_REQUEST} from './constants'
 
-export  function CreateAccountAction({data,token}){
-    return { type:CREATE_ACC_REQUEST,data,token
+export  function CreateAccountAction({data,token, formData}){
+    return { type:CREATE_ACC_REQUEST,data,token, formData
     
     }
 }

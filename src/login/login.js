@@ -57,7 +57,13 @@ export default function Login(props) {
       });
     }
     if (loginStatus.successful === true) {
-      Swal.fire(" Success!", "Click to Close!", "success");
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Your work has been saved',
+        showConfirmButton: false,
+        timer: 600
+      })
       dispatch({ type: LOGIN_CLEAN });
     }
     if (loginStatus.errors === true) {

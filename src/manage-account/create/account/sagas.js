@@ -140,10 +140,13 @@ function setActiveAccountAPI(action) {
     });
 }
 
-function* CreateProductFlow(action) {
+function* CreateAccountFlow(action) {
   try {
 
-    // yield call(UploadImg, action);
+   let jsonCloundinary = yield call(uploadImgAPI, action);
+   action.data = {
+    ...action.data, profileImageLink: jsonCloundinary.url
+  }
     let json = yield call(createProduct, action);
 
     yield put({ type: CREATE_ACC_RESPONSE });
@@ -216,7 +219,7 @@ function* updateImageFlow(action) {
 }
 
 function* watcher() {
-  yield takeEvery(CREATE_ACC_REQUEST, CreateProductFlow);
+  yield takeEvery(CREATE_ACC_REQUEST, CreateAccountFlow);
   yield takeEvery(GET_DETAIL_ACC_REQUEST, getUserAccountDetailFlow);
   yield takeEvery(UPDATE_DETAIL_ACC_REQUEST, updateUserAccountFlow);
   yield takeEvery(SET_ACTIVE_ACC_REQUEST, setActiveAccountFlow);
