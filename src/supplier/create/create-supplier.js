@@ -26,7 +26,7 @@ export default function CreateSupplier() {
     createSupplierReducer: state.createSupplierReducer,
   }));
   function goBackClick() {
-    history.goBack();
+    history.replace("/homepage/supplier");
   }
   function checkUndifined() {
     if (formData.description === undefined)

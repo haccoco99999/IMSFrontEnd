@@ -314,7 +314,7 @@ export default function CreateGoodsReceiptComponent() {
   //todo: function
   function goBackClick() {
    
-    history.goBack(-1);
+    history.replace("/homepage/good-receipt")
   }
 
   function clickDeleteVariant(rowIndex) {

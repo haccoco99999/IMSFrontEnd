@@ -1181,7 +1181,7 @@ export default function PurchaseOrderConfirm() {
     }
 
     function goBackClick() {
-        history.goBack(-1)
+        history.replace("/homepage/good-receipt")
     }
     (function () {
         'use strict'

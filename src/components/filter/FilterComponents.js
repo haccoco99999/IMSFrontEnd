@@ -91,8 +91,8 @@ export function LocationCategoryFilter(props) {
                     <div className="row">
                         <div class="form-group">
                             <label for="">Search:</label>
-                            <input type="text" value={props.filter.SearchQuery} onChange={props.onChangeValueFilter}
-                                class="form-control" name="SearchQuery" id="" aria-describedby="helpId" placeholder="" />
+                            <input type="text" value={props.filter.searchQuery} onChange={props.onChangeValueFilter}
+                                class="form-control" name="searchQuery" id="" aria-describedby="helpId" placeholder="" />
 
                         </div>
 

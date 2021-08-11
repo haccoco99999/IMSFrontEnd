@@ -40,7 +40,7 @@ export default function SupplierDetails() {
 
   function goBackClick() {
     // history.goBack();
-    history.push("/homepage/supplier");
+    history.replace("/homepage/supplier");
   }
   function onClickEdit() {
     setIsDisabled(false);

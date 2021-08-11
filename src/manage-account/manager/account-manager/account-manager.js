@@ -275,7 +275,7 @@ function AccountManager() {
 
 
               <PagingComponent rowCountTotal={rowCountTotal} setSizePage={setSizePage} sizePerPage={accountFilter.sizePerPage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={accountFilter.currentPage} />
-              <button   onClick={redirectCreateAccount} type="button" class=" btn-sm mb-1 btn btn-primary">Add Supplier</button>
+              <button   onClick={redirectCreateAccount} type="button" class=" btn-sm mb-1 btn btn-primary">Add Account</button>
 
               <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16">

@@ -57,9 +57,9 @@ export default function PurchaseRequisitionDetails() {
       dataField: "orderQuantity",
       text: "Order Quantity",
       formatter: (cellContent, row, rowIndex) =>
-        (cleanListProducts[rowIndex].orderQuantity = parseInt(
-          row.orderQuantity
-        )),
+      (cleanListProducts[rowIndex].orderQuantity = parseInt(
+        row.orderQuantity
+      )),
       validator: (newValue, oldValue, row) => {
         if (isNaN(newValue)) {
           return {
@@ -189,7 +189,7 @@ export default function PurchaseRequisitionDetails() {
     deletePRReducer: state.deletePRReducer,
   }));
   function goBackClick() {
-    history.goBack(-1);
+    history.replace("/homepage/sale-man")
     // history.push("/homepage/sale-man");
   }
 
@@ -279,9 +279,9 @@ export default function PurchaseRequisitionDetails() {
         state.map((item) =>
           item.productVariantId === product.productVariantId
             ? {
-                ...item,
-                orderQuantity: item.orderQuantity + product.orderQuantity,
-              }
+              ...item,
+              orderQuantity: item.orderQuantity + product.orderQuantity,
+            }
             : item
         )
       );
@@ -673,20 +673,18 @@ export default function PurchaseRequisitionDetails() {
                   {!isEditDisabled && (
                     <>
                       <li class="list-group-item">
-                        <div className="mt-2">
-                          <label for="deadline" class="form-label">
-                            Deadline
-                          </label>
+                        <div class="form-group col-md-4">
+                          <label for="">Deadline</label>
                           <input
                             type="date"
                             name="deadline"
-                            // defaultValue={deadline}
-                            // value="2017-06-01"
-                            value={moment(deadline).format("YYYY-MM-DD")}
+                            id="deadline"
                             class="form-control"
+                            value={moment(deadline).format("YYYY-MM-DD")}
                             onChange={onChangeDeadline}
                           />
                         </div>
+                       
 
                         <div className="mt-2 col-4">
                           <label for="deadline" class="form-label">
@@ -707,7 +705,7 @@ export default function PurchaseRequisitionDetails() {
                               clickSetShowAddProductPage
                             }
                             clickToAddProduct={clickToAddProduct}
-                            // addGroupProduct={addGroupProduct}
+                          // addGroupProduct={addGroupProduct}
                           />
                         ) : (
                           ""

@@ -268,7 +268,7 @@ export default function StocktakeDetailsComponent() {
 
   //todo: function button
   function goBackClick() {
-    history.goBack(-1);
+    history.replace("/homepage/stock-take");
     // history.push("/homepage/stock-take");
   }
 

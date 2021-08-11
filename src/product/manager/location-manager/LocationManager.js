@@ -133,6 +133,7 @@ export default function LocationManager() {
 
   }
   function resetLocationFilter() {
+    
     dispatch(
       getAllLocationsAction({
         filter: parseFilterToString({
@@ -336,7 +337,7 @@ export default function LocationManager() {
 
       <div class="pb-3">
         <div className="card">
-          <div class="card-header text-white bg-secondary">List Products</div>
+          <div class="card-header text-white bg-secondary">Product List</div>
           <div className="card-body">
             <PagingComponent
               setSizePage={setSizePage}
@@ -345,7 +346,7 @@ export default function LocationManager() {
               backPagingClick={backPagingClick}
               currentPage={locationFilter.currentPage} />
 
-            {/* <button onClick={pushAddPage} type="button" class=" btn-sm mb-1 btn btn-primary">Add Product</button> */}
+            <button onClick={showModal} type="button" class=" btn-sm mb-3 btn btn-primary">Add Location</button>
 
             {/* <PagingComponent sizePerPage={filter.sizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
 

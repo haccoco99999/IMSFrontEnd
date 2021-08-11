@@ -80,14 +80,14 @@ export default function GoodsReceipt() {
       dataField: "createdDate",
       text: "Created Date",
       formatter: (cellContent, row, rowIndex) => {
-        return <span>{moment(row.createdDate).add(7, "h").format("DD/MM/YYYY")}</span>;
+        return <span>{moment(row.createdDate).add(7, "h").format("DD-MM-YYYY")}</span>;
       },
     },
     {
       dataField: "modifiedDate",
       text: "Modified Date",
       formatter: (cellContent, row, rowIndex) => {
-        return <span>{moment(row.modifiedDate).add(7, "h").format("DD/MM/YYYY")}</span>;
+        return <span>{moment(row.modifiedDate).add(7, "h").format("DD-MM-YYYY")}</span>;
       },
     },
   ];

@@ -14,6 +14,8 @@ import {
 } from "./action";
 import { RESET } from "../constants";
 import PagingComponent from "../../../components/paging/paging-component";
+import { TableLoading } from "../../../components/loading/loading-component";
+import { LocationCategoryFilter } from "../../../components/filter/FilterComponents";
 export default function CategoryManager() {
   let dispatch = useDispatch();
   //modal
@@ -64,6 +66,20 @@ export default function CategoryManager() {
 
     // messages: state.getAllCategoriesReducer.messages,
   }));
+
+
+
+  const categoryFilterInit = {
+
+    searchQuery: "",
+    IsLocationOnly: true
+
+  }
+  const [categoryFilter, setCategoryFilter] = useState({
+    currentPage: 1,
+    sizePerPage: 25,
+    ...categoryFilterInit
+  })
 
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
@@ -140,19 +156,95 @@ export default function CategoryManager() {
   //     [event.target.name]: event.target.value,
   //   });
   // }
+  function nextPagingClick() {
 
+
+
+    let dataFilter = { ...categoryFilter, currentPage: categoryFilter.currentPage + 1 }
+    dispatch(
+      GetAllCategoryAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setCategoryFilter(dataFilter)
+  }
+  function backPagingClick() {
+
+    let dataFilter = { ...categoryFilter, currentPage: categoryFilter.currentPage - 1 }
+    dispatch(
+      GetAllCategoryAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setCategoryFilter(dataFilter)
+  }
+  function onChangecategoryFilter(event) {
+    setCategoryFilter((state) => ({
+      ...state, [event.target.name]: event.target.value
+    }))
+  }
+  function submitcategoryFilter() {
+
+    dispatch(
+      GetAllCategoryAction({
+        filter: parseFilterToString(categoryFilter),
+        token: token,
+      })
+    );
+
+
+  }
+  function resetCategoryFilter() {
+
+    dispatch(
+      GetAllCategoryAction({
+        filter: parseFilterToString({
+          ...categoryFilter, ...categoryFilterInit
+        }),
+        token: token,
+      })
+    );
+    setCategoryFilter((state) => ({
+      ...state, ...categoryFilterInit
+    }))
+  }
+  function setSizePage(event) {
+
+    let dataFilter = { ...categoryFilter, sizePerPage: event.target.value }
+    dispatch(
+      GetAllCategoryAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setCategoryFilter(dataFilter)
+  }
+  function parseFilterToString(dataFilter) {
+    let filterString = ""
+    Object.entries(dataFilter).forEach(item => {
+      if (item[1] !== "") {
+
+
+        filterString += item[0] + "=" + item[1] + "&"
+
+
+      }
+    })
+    return filterString
+  }
   useEffect(() => {
     dispatch(
       GetAllCategoryAction({
-        currentPage: currentPage,
-        sizePerPage: sizePerPage,
+        filter: parseFilterToString(categoryFilter),
         token: token,
       })
     );
     return () => {
       dispatch({ type: RESET });
     };
-  }, [currentPage, sizePerPage]);
+  }, []);
 
   useEffect(() => {
     if (updateCategoriesReducer.requesting) {
@@ -184,8 +276,7 @@ export default function CategoryManager() {
             hideModal();
             dispatch(
               GetAllCategoryAction({
-                currentPage: currentPage,
-                sizePerPage: sizePerPage,
+                filter: parseFilterToString(categoryFilter),
                 token: token,
               })
             );
@@ -230,8 +321,7 @@ export default function CategoryManager() {
             hideModal();
             dispatch(
               GetAllCategoryAction({
-                currentPage: currentPage,
-                sizePerPage: sizePerPage,
+                filter: parseFilterToString(categoryFilter),
                 token: token,
               })
             );
@@ -253,8 +343,51 @@ export default function CategoryManager() {
   // }, [messages]);
 
   return (
-    <div className="wrapper-content shadow">
-      <ModalFunction
+    <div className="">
+      <LocationCategoryFilter
+        onChangeValueFilter={onChangecategoryFilter}
+        filter={categoryFilter}
+        submitFilter={submitcategoryFilter}
+        resetFilter={resetCategoryFilter}
+
+      />
+
+      <div class="pb-3">
+        <div className="card">
+          <div class="card-header text-white bg-secondary">Category List</div>
+          <div className="card-body">
+            <PagingComponent
+              setSizePage={setSizePage}
+              pageCount={pageCount}
+              nextPagingClick={nextPagingClick}
+              backPagingClick={backPagingClick}
+              currentPage={categoryFilter.currentPage} />
+
+            <button onClick={showModal} type="button" class=" btn-sm mb-3 btn btn-primary">Add Category</button>
+
+            {/* <PagingComponent sizePerPage={filter.sizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
+
+
+            <BootstrapTable
+              keyField="id"
+              striped
+              hover
+              condensed
+              columns={columns}
+              headerClasses="table-header-receipt"
+              data={list_Categories}
+              rowEvents={rowEvents}
+              noDataIndication={() => <TableLoading />}
+            />
+
+
+
+
+          </div>
+        </div>
+      </div>
+
+      {/* <ModalFunction
         modalRef={modalRef}
         hideModal={hideModal}
         isCreate={isCreate}
@@ -303,7 +436,7 @@ export default function CategoryManager() {
           nextPagingClick={nextPagingClick}
           backPagingClick={backPagingClick}
         />
-      </div>
+      </div> */}
     </div>
   );
 }

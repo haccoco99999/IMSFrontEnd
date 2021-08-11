@@ -431,7 +431,7 @@ export default function CreateAccount() {
   const listButton = []
   // console.log(listRoles)
   function ClickGoBack() {
-    history.goBack(-1)
+    history.replace("/homepage/manage-account")
   }
   function closeChangePasswordModal() {
     setIsShowPasswordModal(!isShowPasswordModal)
