@@ -223,7 +223,7 @@ export default function () {
       />
       <div class="pb-3">
         <div className="card">
-          <div class="card-header text-white bg-secondary">List Product</div>
+          <div class="card-header text-white bg-secondary">List Products</div>
           <div className="card-body">
             <PagingComponent
               setSizePage={setSizePage}

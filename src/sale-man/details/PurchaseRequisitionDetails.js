@@ -93,7 +93,7 @@ export default function PurchaseRequisitionDetails() {
       formatter: (cellContent, row, rowIndex) => {
         return (
           <div
-            className="text-danger"
+            className="text-danger btn"
             onClick={() => clickDeleteCheckItems(rowIndex)}
           >
             <i class="bi bi-trash"></i>

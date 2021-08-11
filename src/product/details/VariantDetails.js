@@ -4,6 +4,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import Swal from "sweetalert2";
 import moment from "moment";
+import { Tooltip } from "bootstrap";
 //css
 import "../product.css";
 //components
@@ -22,15 +23,19 @@ export default function VariantDetails() {
   const [listPackage, setListPackage] = useState([]);
   const [isReturnData, setIsReturnData] = useState(false);
 
+  //@param:declare tooltip :
+
+  var tooltipTriggerList = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new Tooltip(tooltipTriggerEl);
+  });
+
+  //todo: declare table
   const columns = [
     { dataField: "id", text: "Package ID" },
     { dataField: "quantity", text: "Quantity" },
-    // { dataField: "price", text: "Price" },
-    // { dataField: "totalPrice", text: "Total Price" },
-    // {
-    //   dataField: "locationName",
-    //   text: "Location Name",
-    // },
     {
       dataField: "importedDate",
       text: "Imported Date",
@@ -267,6 +272,7 @@ export default function VariantDetails() {
     if (getDetailsVariantReducer.successful) setIsReturnData(true);
   }, [getDetailsVariantReducer]);
 
+  console.log(location.state.skuRequest)
   // useEffect(() => {
   //   if (messages === "Update Variant success") {
   //     dispatch(
@@ -290,7 +296,25 @@ export default function VariantDetails() {
           />
           <div className="wrapper ">
             <div class="card">
-              <div class="card-header fw-bold">Variant Information</div>
+              <div class="card-header fw-bold">
+                <div className="d-flex">
+                  Variant Information
+                  {location.state.isHavingRequestSKU && (
+                    <>
+                      <div
+                        className="text-danger ms-3"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title={
+                          "Requested update sku: " + location.state.skuRequest
+                        }
+                      >
+                        <i class="bi bi-bell-fill"></i>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                   {" "}
@@ -328,14 +352,17 @@ export default function VariantDetails() {
                         <strong>SKU: </strong>
                         {isDisabled ? (
                           variant.sku
-                        ) : (
-                          <input
+                        ) : ( <>
+                        <input
                             type="text"
                             name="sku"
                             className="form-control"
                             onChange={onChangeValue}
                             value={variant.sku}
                           />
+                          {"Requested update sku: " + location.state.skuRequest}
+                        </>
+                          
                         )}
                       </p>
                       <p>

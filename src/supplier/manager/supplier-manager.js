@@ -178,7 +178,7 @@ const [supplierFilter, setSupplierFilter] = useState({
       {" "}
       {/* title */}
       <div className="title-heading mt-2">
-        <span>Supplier</span>
+        <span>Supplier Management</span>
       </div>
       {/* content block */}
       {/* <SupplierFilter/> */}

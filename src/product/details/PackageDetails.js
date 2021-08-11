@@ -118,7 +118,7 @@ export default function PackageDetails() {
                         <strong>Imported Date: </strong>
                         {moment(packageDetailsStore.importedDate)
                           .add(7, "h")
-                          .format("DD-MM-YYYY")}
+                          .format("DD/MM/YYYY")}
                       </p>
                     </div>
                   </div>

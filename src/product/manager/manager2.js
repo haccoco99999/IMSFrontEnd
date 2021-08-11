@@ -7,14 +7,14 @@ import "../product.css";
 import ProductManager from "./product-manager/product-manager";
 import CategoryManager from "./category-manager/category-manager";
 import LocationManager from "./location-manager/LocationManager";
-import RequestUpdateManager from "./requestupdate-manager/manager";
+import RequestUpdateManager from "./requestupdate-manager/RequestUpdateManager";
 export default function Manager() {
   return (
     <>
       <div className="space-top-heading wrapper">
         {/* title */}
         <div className="title-heading mt-2">
-          <span>Product Manager</span>
+          <span>Product Management</span>
         </div>
 
         <div className="mt-3">

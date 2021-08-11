@@ -13,7 +13,7 @@ import {
 import handleApiErrors from "../../../auth/api-errors";
 
 function getAllProducts(action) {
-  const getAllProductsURL = `http://imspublicapi.herokuapp.com/api/product/search?${action.filter}`;
+  const getAllProductsURL = `${process.env.REACT_APP_API}/product/search?${action.filter}`;
 
   return fetch(getAllProductsURL, {
     method: "GET",

@@ -365,7 +365,7 @@ export default function () {
     <div className="space-top-heading wrapper">
       {/* title */}
       <div className="title-heading mt-2">
-        <span>Stocktake Manager</span>
+        <span>Stocktake Management</span>
       </div>
       {/* content block  */}
 
