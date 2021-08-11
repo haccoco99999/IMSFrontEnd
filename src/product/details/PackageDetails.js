@@ -38,7 +38,7 @@ export default function PackageDetails() {
   const [isReturnData, setIsReturnData] = useState(false);
 
   function goBackClick() {
-    history.goBack();
+    history.goBack(-1);
   }
 
   const listButtons = setListButtonNav();

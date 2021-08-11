@@ -313,7 +313,7 @@ export default function CreateGoodsReceiptComponent() {
 
   //todo: function
   function goBackClick() {
-    history.goBack();
+    history.goBack(-1);
   }
 
   function clickDeleteVariant(rowIndex) {

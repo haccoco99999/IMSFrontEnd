@@ -41,8 +41,8 @@ export default function CreateNoVariants(props) {
   };
 
   function goBackClick() {
-    // history.goBack();
-    props.prevStep();
+    history.goBack(-1);
+    // props.prevStep();
   }
   function checkUndifined() {
     if (props.formData.sku === undefined) {

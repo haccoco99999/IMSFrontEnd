@@ -189,8 +189,8 @@ export default function PurchaseRequisitionDetails() {
     deletePRReducer: state.deletePRReducer,
   }));
   function goBackClick() {
-    // history.goBack();
-    history.push("/homepage/sale-man");
+    history.goBack(-1);
+    // history.push("/homepage/sale-man");
   }
 
   function goToManagerPage() {

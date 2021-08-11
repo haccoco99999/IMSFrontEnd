@@ -256,7 +256,7 @@ export default function CreateStocktakeComponent() {
 
   function goBackClick() {
     setIsCreating(false);
-    history.goBack();
+    history.goBack(-1);
   }
 
   function handleOnSelect(row, isSelect) {

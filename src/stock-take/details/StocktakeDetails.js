@@ -268,8 +268,8 @@ export default function StocktakeDetailsComponent() {
 
   //todo: function button
   function goBackClick() {
-    // history.goBack();
-    history.push("/homepage/stock-take");
+    history.goBack(-1);
+    // history.push("/homepage/stock-take");
   }
 
   function clickDeleteCheckItems(rowIndex) {

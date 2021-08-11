@@ -88,7 +88,7 @@ export default function GoodsReceiptDetails() {
   }, []);
 
   function goBackClick() {
-    history.goBack();
+    history.goBack(-1);
   }
 
   function goToManagerPage() {

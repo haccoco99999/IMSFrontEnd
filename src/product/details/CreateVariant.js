@@ -54,7 +54,7 @@ export default function CreateVariant() {
   }
 
   function goBackClick() {
-    history.goBack();
+    history.goBack(-1);
   }
 
   function onClickSave(event) {

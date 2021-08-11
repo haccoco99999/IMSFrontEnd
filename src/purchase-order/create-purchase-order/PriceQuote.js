@@ -1181,7 +1181,7 @@ export default function PurchaseOrderConfirm() {
     }
 
     function goBackClick() {
-        history.go(-1)
+        history.goBack(-1)
     }
     (function () {
         'use strict'
@@ -1214,7 +1214,7 @@ export default function PurchaseOrderConfirm() {
                 titleBar={purchaseOrderDataGlobal.orderId}
                 listButton={listButton}
                 status={listStatus.nameStatus}
-                actionGoBack={() => history.go(-1)}
+                actionGoBack={goBackClick}
                 classStatus={listStatus.classStatus}
                 home="Purchase Order"
                 currentPage="Detail"

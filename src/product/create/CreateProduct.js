@@ -129,7 +129,7 @@ export default function CreateProductComponent(props) {
     // });
   }
   function goBackClick() {
-    history.goBack();
+    history.goBack(-1);
   }
 
   // function checkUndifined() {

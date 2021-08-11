@@ -196,7 +196,8 @@ export default function CreateWithVariants(props) {
   }
 
   function goBackClick() {
-    props.prevStep();
+    history.goBack(-1)
+    // props.prevStep();
   }
 
   function isEmptyVariantNameRow(array) {

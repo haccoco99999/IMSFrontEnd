@@ -81,7 +81,7 @@ export default function VariantDetails() {
   };
 
   function goBackClick() {
-    history.goBack();
+    history.goBack(-1);
   }
 
   // function onClickToDetails(row) {

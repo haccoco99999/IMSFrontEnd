@@ -225,7 +225,8 @@ export default function ProductDetails() {
       });
   }
   function goBackClick() {
-    history.replace("/homepage/product");
+    // history.replace("/homepage/product");
+    history.goBack(-1)
   }
 
   function goToManagerPage() {
