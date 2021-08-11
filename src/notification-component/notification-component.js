@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "./notification-component.css";
 //components
 import { getAllLocationsAction } from "./action";
-import { useHistory } from "react-router-dom";
+import { Route, useHistory } from "react-router-dom";
 import moment from "moment";
 
 export default function NotificationBellComponents(props) {
@@ -29,16 +29,16 @@ export default function NotificationBellComponents(props) {
       <div class="notification-heading bg-light text-center"><p class="menu-title">Notifications</p>
       </div>
       <div className="notifications-wrapper">
-        {listNotificationStore.map((notification) => {
+        {listNotificationStore.map((notification,index) => {
           var stringCheckTime = notification.message.split("at:");
           var newMessage =
             stringCheckTime[0] +
             "at:" +
             moment(stringCheckTime[1]).add(7, "h").format("DD/MM/YYYY HH:mm");
           return (
-            <li onClick={() => redirectDetail(notification)} key={notification.id} class=" list-group-item d-flex justify-content-between align-items-center">
-
-              <span class="d-inline-block text-truncate" >
+            <li key={index} onClick={() => redirectDetail(notification)} key={notification.id} class=" list-group-item d-flex justify-content-between align-items-center">
+              
+              <span class="lh-1" >
                 {newMessage}
 
               </span>

@@ -1,6 +1,6 @@
 import React from 'react'
 import filter from '../../good-receipt/filter'
-import { SelectGoodsIssueStatus } from '../../search-component/SearchComponentAll'
+import { SelectGoodsIssueStatus, SelectStatusPurchaseRequisition } from '../../search-component/SearchComponentAll'
 import { SearchPurchaseOrder, SelectSupplier, SelectStatusPurchaseOrder } from '../../search-component/SearchComponentAll'
 
 export function GoodReceiptFilter(props) {
@@ -60,7 +60,7 @@ export function GoodReceiptFilter(props) {
                     <div className="row">
 
                         <div className="">
-                            <button className="btn btn-primary me-md-2 btn-sm" type="button" onClick={() => props.resetFilter()}>Reset Filter</button>
+                            <button className="btn btn-primary me-md-2 btn-sm" type="button" onClick={() => props.resetFilter()}>Reset</button>
                             <button className="btn btn-primary btn-sm" type="button" onClick={() => props.submitFilter()}>Filter</button>
                         </div>
 
@@ -152,7 +152,7 @@ export function GoodsIssueFilter(props) {
                     <div className="row">
 
                         <div className="">
-                            <button className="btn btn-primary me-md-2 btn-sm" type="button" onClick={() => props.resetFilter()}>Reset Filter</button>
+                            <button className="btn btn-primary me-md-2 btn-sm" type="button" onClick={() => props.resetFilter()}>Reset</button>
                             <button className="btn btn-primary btn-sm" type="button" onClick={() => props.submitFilter()}>Filter</button>
                         </div>
 
@@ -196,8 +196,8 @@ export function PurchaseOrderFilter(props) {
                             </div>
                             <div class="form-group">
                                 <label for="">Select Status</label>
-
-                                <SelectStatusPurchaseOrder selectStatus={props.selectStatusFilter} selected={props.filter.Statuses} />
+                                   {props.isRequisition?<SelectStatusPurchaseRequisition selectStatus={props.selectStatusFilter} selected={props.filter.Statuses} />:   <SelectStatusPurchaseOrder selectStatus={props.selectStatusFilter} selected={props.filter.Statuses} />} 
+                              
                             </div>
                             <div className="row">
                                 <label for="">Price:</label>
@@ -224,13 +224,13 @@ export function PurchaseOrderFilter(props) {
                                 <label for="">Create Date:</label>
                                 <div class="form-group col-md-6" >
 
-                                    <input type="date"
+                                    <input type="date"   max={props.filter.ToCreatedDate}
                                         onChange={props.onChangeValueFilter} value={props.filter.FromCreatedDate}
                                         class="form-control" name="FromCreatedDate" id="" aria-describedby="helpId" placeholder="" />
                                 </div>
                                 <div class="form-group col-md-6">
 
-                                    <input type="date"
+                                    <input type="date"  min={props.filter.FromCreatedDate} 
                                         onChange={props.onChangeValueFilter} value={props.filter.ToCreatedDate}
                                         class="form-control" name="ToCreatedDate" id="" aria-describedby="helpId" placeholder="" />
                                 </div>
@@ -239,13 +239,13 @@ export function PurchaseOrderFilter(props) {
                                 <label for="">Confirmed Date:</label>
                                 <div class="form-group col-md-6" >
 
-                                    <input type="date"
+                                    <input type="date" max={props.filter.ToConfirmedDate}
                                         onChange={props.onChangeValueFilter} value={props.filter.FromConfirmedDate}
                                         class="form-control" name="FromConfirmedDate" id="" aria-describedby="helpId" placeholder="None date" />
                                 </div>
                                 <div class="form-group col-md-6">
 
-                                    <input type="date"
+                                    <input type="date" min={props.filter.FromConfirmedDate}
                                         onChange={props.onChangeValueFilter} value={props.filter.ToConfirmedDate}
                                         class="form-control" name="ToConfirmedDate" id="" aria-describedby="helpId" placeholder="None date" />
                                 </div>
@@ -254,13 +254,13 @@ export function PurchaseOrderFilter(props) {
                                 <label for="">Modified Date:</label>
                                 <div class="form-group col-md-6" >
 
-                                    <input type="date"
+                                    <input type="date" max={props.filter.ToModifiedDate} max={props.filter.ToModifiedDate}
                                         onChange={props.onChangeValueFilter} value={props.filter.FromModifiedDate}
                                         class="form-control" name="FromModifiedDate" id="" aria-describedby="helpId" placeholder="" />
                                 </div>
                                 <div class="form-group col-md-6">
 
-                                    <input type="date"
+                                    <input type="date" min={props.filter.FromModifiedDate} min={props.filter.FromModifiedDate}
                                         onChange={props.onChangeValueFilter} value={props.filter.ToModifiedDate}
                                         class="form-control" name="ToModifiedDate" id="" aria-describedby="helpId" placeholder="" />
                                 </div>
@@ -279,7 +279,7 @@ export function PurchaseOrderFilter(props) {
                     <div className="row">
 
                         <div className="">
-                            <button className="btn btn-primary me-md-2 btn-sm" type="button" onClick={() => props.resetFilter()}>Reset Filter</button>
+                            <button className="btn btn-primary me-md-2 btn-sm" type="button" onClick={() => props.resetFilter()}>Reset</button>
                             <button className="btn btn-primary btn-sm" type="button" onClick={() => props.submitFilter()}>Filter</button>
                         </div>
 
@@ -329,7 +329,7 @@ export function SupplierFilter(props) {
                     <div className="row">
 
                         <div className="">
-                            <button className="btn btn-primary me-md-2 btn-sm" type="button" onClick={() => props.resetFilter()}>Reset Filter</button>
+                            <button className="btn btn-primary me-md-2 btn-sm" type="button" onClick={() => props.resetFilter()}>Reset</button>
                             <button className="btn btn-primary btn-sm" type="button" onClick={() => props.submitFilter()}>Filter</button>
                         </div>
 

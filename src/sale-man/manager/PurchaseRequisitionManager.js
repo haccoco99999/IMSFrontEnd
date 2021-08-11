@@ -21,19 +21,21 @@ export default function PurchaseRequisitionManager() {
 
     SearchQuery: "",
     Statuses: [
-        { key: "PurchaseOrder", value: "Draft" },
-        { key: "POWaitingConfirmation", value: "Watting Confirm" },
-        { key: "POConfirm", value: "Confirmed" },
-        { key: "Done", value: "Done" },
-        { key: "POCanceled", value: "Canceled" },
+      { key: 0, value: "Draft" },
+      { key: 1, value: "Merge" },
+      { key: 2, value: "Waiting Confirm" },
+      { key: 3, value: "Price Quote" },
+      { key: 4, value: "Purchase Order" },
+      { key: 5, value: "Done" },
+      { key: 6, value: "Cancel" },
 
     ],
     supplier: {
-        id: "",
-        address: "",
-        supplierName: "",
-        phoneNumber: "",
-        email: "",
+      id: "",
+      address: "",
+      supplierName: "",
+      phoneNumber: "",
+      email: "",
     },
 
     FromTotalOrderPrice: "",
@@ -48,15 +50,15 @@ export default function PurchaseRequisitionManager() {
     FromModifiedDate: "",
     ToModifiedDate: "",
 
-}
-const [filter, setFilter] = useState({
+  }
+  const [filter, setFilter] = useState({
 
     currentPage: 1,
     SizePerPage: 25,
 
     ...purchaserOrderFilterInit
 
-})
+  })
   //todo: declare  bootstrap table
   const columns = [
     {
@@ -140,75 +142,104 @@ const [filter, setFilter] = useState({
   };
 
   useEffect(() => {
-    dispatch(getAllPRAction({ filter: parseFilterToString(filter) , token:token}));
+    dispatch(getAllPRAction({ filter: parseFilterToString(filter), token: token }));
 
   }, [currentPage, sizePerPage]);
-//////////////////////////////////
+  //////////////////////////////////
 
-function nextPagingClick() {
-  let dataFilter = { ...filter, currentPage: filter.currentPage + 1 }
-  dispatch(getAllPRAction({ filter: parseFilterToString(dataFilter) , token:token}))
-  setFilter(dataFilter)
-}
-function backPagingClick() {
-  let dataFilter = { ...filter, currentPage: filter.currentPage - 1 }
-  dispatch(getAllPRAction({ filter: parseFilterToString(dataFilter), token:token }))
-  setFilter(dataFilter)
-}
-function setSizePage(event) {
-  console.log(event.target.value)
-  let dataFilter = { ...filter, SizePerPage: event.target.value }
-  dispatch(getAllPRAction({ filter: parseFilterToString(dataFilter), token: token }))
-  setFilter(dataFilter)
-}
-function onChangeValueFilter(event) {
-  setFilter(state => ({ ...state, [event.target.name]: event.target.value }))
+  function nextPagingClick() {
+    let dataFilter = { ...filter, currentPage: filter.currentPage + 1 }
+    dispatch(getAllPRAction({ filter: parseFilterToString(dataFilter), token: token }))
+    setFilter(dataFilter)
+  }
+  function backPagingClick() {
+    let dataFilter = { ...filter, currentPage: filter.currentPage - 1 }
+    dispatch(getAllPRAction({ filter: parseFilterToString(dataFilter), token: token }))
+    setFilter(dataFilter)
+  }
+  function setSizePage(event) {
+    console.log(event.target.value)
+    let dataFilter = { ...filter, SizePerPage: event.target.value }
+    dispatch(getAllPRAction({ filter: parseFilterToString(dataFilter), token: token }))
+    setFilter(dataFilter)
+  }
+  function onChangeValueFilter(event) {
+    setFilter(state => ({ ...state, [event.target.name]: event.target.value }))
 
-}
-function setFilterSupplier(supplierValue) {
+  }
+  function setFilterSupplier(supplierValue) {
 
-  setFilter(state => ({ ...state, supplier: supplierValue }))
+    setFilter(state => ({ ...state, supplier: supplierValue }))
 
-}
-function selectStatusFilter(selected) {
-  setFilter(state => ({ ...state, Statuses: selected.map(item => item) }))
+  }
+  function selectStatusFilter(selected) {
+    setFilter(state => ({ ...state, Statuses: selected.map(item => item) }))
 
-}
-function parseFilterToString(dataFilter) {
-  let filterString = ""
-  Object.entries(dataFilter).forEach(item => {
+  }
+  function parseFilterToString(dataFilter) {
+    let filterString = ""
+
+
+
+    Object.entries(dataFilter).forEach(item => {
       if (item[1] !== "") {
 
-          if (item[0] === "supplier") {
+        if (item[0] === "supplier") {
 
-              if (item[1]["id"] !== "") filterString += "SupplierId=" + item[1]["id"] + "&"
-          }
-          else if (item[0] === "Statuses") {
-              item[1].forEach(status => filterString += item[0] + "=" + status.key + "&")
+          if (item[1]["id"] !== "") filterString += "SupplierId=" + item[1]["id"] + "&"
+        }
+        else if (item[0] === "Statuses") {
+          // filterString += item[0] + "=" + status.key + "&"
+          item[1].forEach(status => {
+            if (status.key === 0) {
+              filterString += item[0] + "=RequisitionCreated&"
 
-          }
-      
-          else {
 
-              filterString += item[0] + "=" + item[1] + "&"
-          }
+
+            }
+            else if (status.key === 1) {
+
+            }
+            else if (status.key === 2) {
+              filterString += item[0] + "=Requisition&"
+            }
+            else if (status.key === 3) {
+              filterString += item[0] + "=PriceQuote&"
+            }
+            else if (status.key === 4) {
+              filterString += item[0] + "=PurchaseOrder&POWaitingConfirmation&POConfirm&"
+            }
+            else if (status.key === 5) {
+              filterString += item[0] + "=Done&"
+            }
+            else if (status.key === 6) {
+              filterString += item[0] + "=PQCanceled&RequisitionCanceled&POCanceled"
+            }
+          })
+
+        }
+
+        else {
+
+          filterString += item[0] + "=" + item[1] + "&"
+        }
 
       }
-  })
-  return filterString
-}
-function submitFilter() {
+    })
+    return filterString
+  }
+  function submitFilter() {
 
 
 
-  dispatch(getAllPRAction({ filter: parseFilterToString(filter) , token:token}))
+    dispatch(getAllPRAction({ filter: parseFilterToString(filter), token: token }))
 
-}
-function resetFilter() {
+  }
+  function resetFilter() {
 
-  setFilter(state => ({ ...state, ...purchaserOrderFilterInit }))
-  dispatch(getAllPRAction({ filter: parseFilterToString({ ...filter, ...purchaserOrderFilterInit }), token: token }))
-}
+    setFilter(state => ({ ...state, ...purchaserOrderFilterInit }))
+    dispatch(getAllPRAction({ filter: parseFilterToString({ ...filter, ...purchaserOrderFilterInit }), token: token }))
+  }
 
 
   return (
@@ -219,10 +250,11 @@ function resetFilter() {
       </div>
 
       {/* content block  */}
-    
+
       <div class="d-grid gap-2">
 
         <PurchaseOrderFilter
+          isRequisition={true}
           filter={filter}
           submitFilter={submitFilter}
           resetFilter={resetFilter}
@@ -235,7 +267,7 @@ function resetFilter() {
             <div class="card-header text-white bg-secondary">List Orders</div>
             <div className="card-body">
 
-           
+
 
               <PagingComponent rowCountTotal={rowCountTotal} sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.currentPage} />
               <p onClick={pushAddPage}><i class="bi bi-file-earmark-plus"></i>Add</p>

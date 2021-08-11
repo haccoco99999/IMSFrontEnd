@@ -253,9 +253,9 @@ export default function CreatePurchaseRequisition() {
         state.map((item) =>
           item.productVariantId === product.productVariantId
             ? {
-                ...item,
-                orderQuantity: item.orderQuantity + product.orderQuantity,
-              }
+              ...item,
+              orderQuantity: item.orderQuantity + product.orderQuantity,
+            }
             : item
         )
       );
@@ -390,14 +390,18 @@ export default function CreatePurchaseRequisition() {
               {/* <SearchComponent clickToAddProduct={clickToAddProduct} /> */}
             </li>
             <li class="list-group-item">
-              <h5 class="card-title">Deadline</h5>
-              <input
-                type="date"
-                name="deadline"
-                id="deadline"
-                class="form-control"
-                onChange={onChangeDeadline}
-              />
+              <div class="form-group col-md-4">
+                <label for="">Deadline</label>
+                <input
+                  type="date"
+                  name="deadline"
+                  id="deadline"
+                  class="form-control"
+                  onChange={onChangeDeadline}
+                />
+              </div>
+
+
             </li>
             <li class="list-group-item">
               <h5 class="card-title">List of products</h5>

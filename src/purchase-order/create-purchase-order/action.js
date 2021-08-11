@@ -52,10 +52,10 @@ export function saveProductsPurchaseOrder({data, token}){
         token
     }
 }
-export function confirmPurchaseORderByManager({data, token}){
+export function confirmPurchaseORderByManager({data, token, formData}){
     return {
         type: CONFIRM_PURCHASE_ORDER_REQUEST,
-        data,
+        data,formData,
         token
     }
 }

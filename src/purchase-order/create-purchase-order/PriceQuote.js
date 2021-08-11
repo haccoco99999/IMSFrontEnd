@@ -412,6 +412,7 @@ export default function PurchaseOrderConfirm() {
             }))
         }
     }
+
     function clickToSubmitPurchaseOrder() {
 
         if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
@@ -496,6 +497,31 @@ export default function PurchaseOrderConfirm() {
             }
             dispatch(confirmPurchaseORderByManager({ data: data, token: token }))
             // goBackClick()
+        }
+        setEventPage((state) => ({
+            ...state, isShowConfirm: !state.isShowConfirm,
+        }))
+    }
+    function confirmPurchaseOrder(isSendMail, pdf, note) {
+        let data = {
+            purchaseOrderNumber: detailPurchaseState.orderId
+        }
+        if (isSendMail) {
+            const formData = new FormData();
+
+            formData.append('To', supplier.email)
+            formData.append('Content', note)
+            formData.append('Subject', "Mail from ABC Inventory")
+            formData.append('PurchaseOrderId', purchaseOrderDataGlobal.orderId)
+            formData.append('pdf', pdf)
+
+            dispatch(confirmPurchaseORderByManager({ data: data, token: token, formData: formData }))
+
+        }
+        else {
+
+            dispatch(confirmPurchaseORderByManager({ data: data, token: token, formData: undefined }))
+
         }
         setEventPage((state) => ({
             ...state, isShowConfirm: !state.isShowConfirm,
@@ -1196,14 +1222,7 @@ export default function PurchaseOrderConfirm() {
 
             <div class="d-grid gap-2">
 
-                {purchaseOrderDataGlobal.status === "POCanceled" ? <div class="card text-white alert-danger mb-3" >
-                    <RejectWrapper
-                        name={infoRejectOrder.name}
-                        email={infoRejectOrder.email}
-                        reason={infoRejectOrder.reason}
-                        phoneNumber={infoRejectOrder.phoneNumber}
-                    />
-                </div> : ""}
+
                 <div className="p-3">
                     {detailPurchaseState.status !== "PriceQuote" ?
                         <div class="card">
@@ -1216,6 +1235,14 @@ export default function PurchaseOrderConfirm() {
                                 </div>
                             </div>
                             <div className="card-body">
+                                {purchaseOrderDataGlobal.status === "POCanceled" ? <div class="card text-white alert-danger mb-3" >
+                                    <RejectWrapper
+                                        name={infoRejectOrder.name}
+                                        email={infoRejectOrder.email}
+                                        reason={infoRejectOrder.reason}
+                                        phoneNumber={infoRejectOrder.phoneNumber}
+                                    />
+                                </div> : ""}
                                 {purchaseOrderDetailStore.successful ?
                                     <div className="p-0">
                                         <li class="list-group-item">
@@ -1318,14 +1345,7 @@ export default function PurchaseOrderConfirm() {
                                     </div>
                                 </div>
                             </div>
-                            {/* <li class="list-group-item">
-                                <h5 class="card-title">Supplier Information</h5>
-                                <div class="col-4">
-                                    <p><strong>Supplier:</strong> ABC Thanh Phat</p>
-                                    <p><strong>Email:</strong> tranquocanhsp@gmail.com</p>
-                                    <p><strong>Phone No:</strong> 0868677735</p>
-                                </div>
-                            </li> */}
+
                             <div class="card-body">
                                 <div className="row">
 
@@ -1338,17 +1358,19 @@ export default function PurchaseOrderConfirm() {
                                             </form>
                                         </p>
 
+                                        {supplier.email !== undefined ? <div>
 
+                                            <p>
+                                                <strong>Email:</strong> {supplier.email}
+                                            </p>
+                                            <p>
+                                                <strong>Phone No:</strong> {supplier.phoneNumber}
+                                            </p>
+                                            <p>
+                                                <strong>Address:</strong>   {supplier.address}
+                                            </p>
 
-                                        <p>
-                                            <strong>Email:</strong> {supplier.email}
-                                        </p>
-                                        <p>
-                                            <strong>Phone No:</strong> {supplier.phoneNumber}
-                                        </p>
-                                        <p>
-                                            <strong>Address:</strong>   {supplier.address}
-                                        </p>
+                                        </div> : ""}
 
 
 
@@ -1494,7 +1516,7 @@ export default function PurchaseOrderConfirm() {
 
                                     </div> : ""}
 
-                                </div> : ""} 
+                                </div> : ""}
                         </div>
                     </div>
                 </div>
@@ -1521,10 +1543,13 @@ export default function PurchaseOrderConfirm() {
 
                 {eventPage.isShowReject ? <RejectReceiptModal clickToCLoseReject={clickToCLoseReject} /> : ""}
                 {eventPage.isShowConfirm ? <ConfirmDateModal
-
+                    confirmPurchaseOrder={confirmPurchaseOrder}
                     listProduct={listProductPurchaseOrder}
                     infoPriceQuote={detailPurchaseState}
-                    clickToCLoseConfirm={clickToCLoseConfirm} /> : ""}
+                    supplier={supplier}
+                    closeConfirmModal={isShowConfirmModal}
+                // clickToCLoseConfirm={clickToCLoseConfirm} 
+                /> : ""}
 
                 {eventPage.isPreview ? <PreviewSendMail
 

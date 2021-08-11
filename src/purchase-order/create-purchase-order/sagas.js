@@ -311,12 +311,13 @@ function* saveProductsPurchaseOrderFlow(action) {
 function* confirmPurchaseOrderFlow(action) {
 
     try {
-
-       
+        if(action.formdata !== undefined){
+            yield call(sendEmailQuote,action)
+        }
+     
           let  json= yield call(confirmByManagerAPI,action)
           
             yield put({type:CONFIRM_PURCHASE_ORDER_SUCCESS})
-            console.log(json)
             yield put({type:GET_DETAIL_PURCHASE_ORDER_SUCCESS, json})
     } catch (error) {
      

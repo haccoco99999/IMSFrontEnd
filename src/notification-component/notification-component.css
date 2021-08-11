@@ -4,6 +4,6 @@
  overflow: hidden;
 }
 .notifications-wrapper{
-  
+  height: 500px;
   overflow-y: auto;
 }

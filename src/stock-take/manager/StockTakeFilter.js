@@ -25,12 +25,7 @@ export default function StockTakeFilter(props){
                     </div>
                     <div className="col-md-6">
 
-                     <div class="form-group">
-                       <label for="">Create By Name:</label>
-                       <input type="text" onChange={props.onChangeValueFilter} value={props.filter.CreatedByName}
-                         class="form-control" name="CreatedByName" id="" aria-describedby="helpId" placeholder=""/>
-                      
-                     </div>
+                    
                     
                      <div class="form-group">
                      <label for="">Select Status</label>
@@ -74,21 +69,7 @@ export default function StockTakeFilter(props){
                                     class="form-control" name="ToModifiedDate" id="" aria-describedby="helpId" placeholder="" />
                             </div>
                         </div>
-                        <div className="row">
-                            <label for="">Delivery Date:</label>
-                            <div class="form-group col-md-6" >
-
-                                <input type="date"
-                                    onChange={props.onChangeValueFilter} value={props.filter.FromDeliveryDate}
-                                    class="form-control" name="FromDeliveryDate" id="" aria-describedby="helpId" placeholder="" />
-                            </div>
-                            <div class="form-group col-md-6">
-
-                                <input type="date"
-                                    onChange={props.onChangeValueFilter} value={props.filter.ToDeliveryDate}
-                                    class="form-control" name="ToDeliveryDate" id="" aria-describedby="helpId" placeholder="" />
-                            </div>
-                        </div>
+                      
 
 
                     </div>

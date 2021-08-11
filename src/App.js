@@ -345,6 +345,15 @@ function App(props) {
                 <span className="tooltip">Supplier</span>
               </li>
               <li>
+                <Link to="/homepage/notification">
+                  <i className="bx">
+                    <img src={manufactureLogo} />
+                  </i>
+                  <span className="links_name">Notification</span>
+                </Link>
+                <span className="tooltip">Supplier</span>
+              </li>
+              <li>
                 <Link to="/homepage/manage-account">
                   <i className="bx">
                     <img src={userLogo} />

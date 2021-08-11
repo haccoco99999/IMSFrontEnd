@@ -54,7 +54,7 @@ export function SearchToAddProduct(props) {
           onClick={() => props.getInfoProduct(option.product)}
           key={option.id}
         >
-          
+
           <div>
             <strong>Name Product:{option.name}</strong> SKU:{option.sku}
           </div>
@@ -168,6 +168,37 @@ export function SelectStatusPurchaseOrder(props) {
     { key: "Done", value: "Done" },
     { key: "POCanceled", value: "Canceled" },
 
+    
+
+  ]
+
+
+  const [options, setOptions] = useState([...optionsInit])
+  function handelOnChanged(selected) {
+    props.selectStatus(selected)
+  }
+  return (
+    <Typeahead
+      id="public-methods-example"
+      labelKey="value"
+      multiple
+      options={options}
+      selected={props.selected}
+      placeholder="Choose a state..."
+      onChange={handelOnChanged}
+    />
+  )
+}
+export function SelectStatusPurchaseRequisition(props) {
+  const optionsInit = [
+    { key: 0, value: "Draft" },
+    { key: 1, value: "Merge" },
+    { key: 2, value: "Waiting Confirm" },
+    { key: 3, value: "Price Quote" },
+    { key: 4, value: "Purchase Order" },
+    { key: 5, value: "Done" },
+    { key: 6, value: "Cancel" },
+ 
   ]
 
 
@@ -478,7 +509,7 @@ export function SeachSupplier(props) {
         credentials: "include",
       }
 
-    ) .then((resp) => handleApiErrors(resp))
+    ).then((resp) => handleApiErrors(resp))
       .then((resp) => resp.json())
       .then((json) => {
 
@@ -494,7 +525,7 @@ export function SeachSupplier(props) {
         setOptions(options);
         setIsLoading(false);
       }).catch((error) => {
-        
+
       });
   };
   const filterBy = () => true;
@@ -582,7 +613,7 @@ export function SelectSupplier(props) {
 
 
         }).catch((error) => {
-         
+
         });
 
     } catch (error) {
