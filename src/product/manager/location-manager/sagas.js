@@ -80,7 +80,7 @@ function checkDupLocation(action) {
     },
     credentials: "include",
     body: JSON.stringify({
-      value: action.data.name,
+      value: action.data.locationName,
     }),
   })
     .then((response) => handleApiErrors(response))
@@ -113,7 +113,7 @@ function* checkDupLocationFlow(action, flow) {
 }
 
 function* createLocationFlow(action) {
-  let check = yield call(checkDupLocationFlow, "create");
+  let check = yield call(checkDupLocationFlow, action, "create");
   try {
     if (!check.hasMatch) {
       let json = yield call(createLocation, action);
@@ -126,15 +126,25 @@ function* createLocationFlow(action) {
 }
 
 function* updateLocationFlow(action) {
-  let check = yield call(checkDupLocationFlow, "update");
-  try {
-    if (!check.hasMatch) {
+  if (action.needCheckName) {
+    let check = yield call(checkDupLocationFlow, action, "update");
+    try {
+      if (!check.hasMatch) {
+        let json = yield call(updateLocation, action);
+        yield put({ type: UPDATE_LOCATION_RESPONSE, json });
+      } else yield put({ type: UPDATE_LOCATION_RESPONSE });
+    } catch (error) {
+      console.log(error);
+      yield put({ type: UPDATE_LOCATION_ERROR });
+    }
+  } else {
+    try {
       let json = yield call(updateLocation, action);
       yield put({ type: UPDATE_LOCATION_RESPONSE, json });
-    } else yield put({ type: UPDATE_LOCATION_RESPONSE });
-  } catch (error) {
-    console.log(error);
-    yield put({ type: UPDATE_LOCATION_ERROR });
+    } catch (error) {
+      console.log(error);
+      yield put({ type: UPDATE_LOCATION_ERROR });
+    }
   }
 }
 

@@ -17,6 +17,6 @@ export function CreateCategoryAction({ data, token }) {
   return { type: CREATE_CATEGORY_REQUEST, data, token };
 }
 
-export function UpdateCategoryAction({ data, token }) {
-  return { type: UPDATE_CATEGORY_REQUEST, data, token };
+export function UpdateCategoryAction({ data, token,needCheckName }) {
+  return { type: UPDATE_CATEGORY_REQUEST, data, token ,needCheckName};
 }
