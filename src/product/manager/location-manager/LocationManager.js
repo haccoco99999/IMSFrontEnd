@@ -141,6 +141,13 @@ export default function LocationManager() {
         }).then((result) => {
           if (result.isConfirmed) {
             hideModal();
+            dispatch(
+              getAllLocationsAction({
+                token: token,
+                currentPage: currentPage,
+                sizePerPage: sizePerPage,
+              })
+            );
           }
         });
     } else if (createLocationReducer.errors) {
@@ -180,6 +187,13 @@ export default function LocationManager() {
         }).then((result) => {
           if (result.isConfirmed) {
             hideModal();
+            dispatch(
+              getAllLocationsAction({
+                token: token,
+                currentPage: currentPage,
+                sizePerPage: sizePerPage,
+              })
+            );
           }
         });
     } else if (updateLocationReducer.errors) {
@@ -280,20 +294,36 @@ function ModalFunction(props) {
           locationName: locationSelected.locationName,
         };
         console.log(data);
-        dispatch(createLocationAction({ token: props.token, data: data }));
+        Swal.fire({
+          title: "Are you sure",
+          text: "Do you want to save?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: " #d33",
+          confirmButtonText: "Confirm",
+          reverseButtons: true,
+        }).then((result) => {
+          if (result.isConfirmed)
+            dispatch(createLocationAction({ token: props.token, data: data }));
+        });
       } else {
         const dataUpdate = {
           locationId: locationSelected.id,
           locationName: locationSelected.locationName,
         };
         console.log(dataUpdate);
-        // const dataUpdate = {
-        //   categoryId: categorySelected.id,
-        //   categoryName: categorySelected.categoryName,
-        //   categoryDescription: categorySelected.categoryDescription,
-        // };
+        let needCheckName;
+        if (locationSelected.locationName === props.locationData.locationName)
+          needCheckName = false;
+        else needCheckName = true;
+
         dispatch(
-          updateLocationAction({ token: props.token, data: dataUpdate })
+          updateLocationAction({
+            token: props.token,
+            data: dataUpdate,
+            needCheckName: needCheckName,
+          })
         );
       }
     }
@@ -307,10 +337,6 @@ function ModalFunction(props) {
   }
 
   function onChangeValue(event) {
-    // setCategorySelected({
-    //   ...categorySelected,
-    //   [event.target.name]: event.target.value,
-    // });
     setLocationSelected({
       ...locationSelected,
       [event.target.name]: event.target.value,

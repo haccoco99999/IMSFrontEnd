@@ -10,6 +10,6 @@ export function getAllLocationsAction({ token, currentPage, sizePerPage }) {
 export function createLocationAction({ token, data }) {
   return { type: CREATE_LOCATION_REQUEST, token, data };
 }
-export function updateLocationAction({ token, data }) {
-  return { type: UPDATE_LOCATION_REQUEST, token, data };
+export function updateLocationAction({ token, data,needCheckName }) {
+  return { type: UPDATE_LOCATION_REQUEST, token, data,needCheckName };
 }
