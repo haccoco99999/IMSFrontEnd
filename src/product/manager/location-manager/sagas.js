@@ -14,7 +14,7 @@ import {
 } from "../constants";
 
 function getAllLocations(action) {
-  const url = `${process.env.REACT_APP_API}/package?IsLocationOnly=true&CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+  const url = `${process.env.REACT_APP_API}/package?${action.filter}`;
   return fetch(url, {
     method: "GET",
     headers: {
