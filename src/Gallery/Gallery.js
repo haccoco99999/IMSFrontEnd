@@ -112,9 +112,9 @@ export function GalleryGoodIssue(props) {
             {props.listData.map((quote, index) =>
                 <div className=" container-box-order" >
                     <div className="box-order" onClick={(e) => props.clickGoodIssueRequisition(quote)}>
-                        <h3 className="priceQuoteOrderNumber">No.{quote.id}</h3>
+                        <h4 className="priceQuoteOrderNumber">No.{quote.id}</h4>
                         <p>Deadline:  <span>{quote.deliveryDate.split("T")[0]}</span></p>
-                        <p>Create by: {quote.createdDate.split("T")[0]}</p>
+                        <p>Created date: {quote.createdDate.split("T")[0]}</p>
                         {/* <p>Vender: {quote.supplierName}</p>
                         <p>{quote.totalPrice} Product</p> */}
                     </div>

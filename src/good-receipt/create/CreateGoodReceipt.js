@@ -313,6 +313,7 @@ export default function CreateGoodsReceiptComponent() {
 
   //todo: function
   function goBackClick() {
+   
     history.goBack(-1);
   }
 

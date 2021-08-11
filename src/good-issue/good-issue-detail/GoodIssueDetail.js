@@ -255,11 +255,11 @@ export default function DetailGoodIssue() {
         setEvenPage((state) => ({
             reject: !state.reject
         }))
-        // backPage()
+      
     }
     function ClickCreateGoodIssue() {
         dispatch(createGoodIssue({ data: { issueNumber: GoodIssueDetail.infoGoodIssueDetail.id }, token: token }))
-        backPage()
+       
     }
 
 
@@ -429,7 +429,7 @@ export default function DetailGoodIssue() {
         }
 
         dispatch(updateGoodIssue({ data: data, token: token }))
-        backPage()
+      
     }
     function clickToConfirm() {
         let data = {
@@ -439,7 +439,7 @@ export default function DetailGoodIssue() {
 
         }
         dispatch(updateGoodIssue({ data: data, token: token }))
-        backPage()
+      
     }
 
     const listButton = setListButtonNav(status)
@@ -561,10 +561,10 @@ export default function DetailGoodIssue() {
                             <div className="col-md-9">
                                 {status === "IssueRequisition" ?
                                     <div className="info-detai-receipt">
-                                        <p className="fw-bold">Create by: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.fullname}</span></p>
+                                        <p className="fw-bold">Create by: <span className="fw-normal">Rock</span></p>
                                         <div>
-                                            <p className="fw-bold">Email : <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.email}</span></p>
-                                            <p className="fw-bold">Phone No: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.phoneNumber}</span></p>
+                                            <p className="fw-bold">Email : <span className="fw-normal">ahunka@gkcis.cob</span></p>
+                                            <p className="fw-bold">Phone No: <span className="fw-normal">02849952958</span></p>
                                         </div>
 
                                     </div>

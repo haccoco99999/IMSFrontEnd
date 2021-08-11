@@ -48,10 +48,10 @@ export default function () {
     ToModifiedDate:"",
     Statuses: [
       { key: "Cancel", value: "Cancel" },
-      { key: "Adjusted", value: "Adjusted" },
+      { key: "AwaitingAdjustment", value: "Validating" },
       { key: "Completed", value: "Completed" },
       { key: "Progressing", value: "Progressing" },
-
+    
 
   ]
 

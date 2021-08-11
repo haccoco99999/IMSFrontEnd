@@ -66,11 +66,11 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
     case GET_GOOD_ISSUE_DETAIL_SUCCESS:
       console.log(action.json.goodsIssueOrder.transaction)
       let infoRejectOrder
-      let transaction
+      // let transaction
       action.json.goodsIssueOrder.transaction.transactionRecord.forEach(element => {
-        if (element.userTransactionActionType === 0) {
-          transaction = element
-        }
+        // if (element.userTransactionActionType === 0) {
+        //   transaction = element
+        // }
         if (element.userTransactionActionType === 4) {
 
           infoRejectOrder = {
@@ -132,12 +132,12 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
           customerPhoneNumber: action.json.goodsIssueOrder.customerPhoneNumber,
           deliveryDate: action.json.goodsIssueOrder.deliveryDate.split("T")[0],
           deliverMethod: action.json.goodsIssueOrder.deliveryMethod,
-          createdDate: transaction.date.split("T")[0],
+          createdDate: "10/20/20",
           infoCreater: {
-            fullname: transaction.applicationUser.fullname,
-            address: transaction.applicationUser.address,
-            phoneNumber: transaction.applicationUser.phoneNumber,
-            email: transaction.applicationUser.email
+            fullname: "transaction.applicationUser.fullname",
+            address: "transaction.applicationUser.address",
+            phoneNumber:" transaction.applicationUser.phoneNumber",
+            email: "transaction.applicationUser.email"
           },
           infoRejectOrder:infoRejectOrder,
           listGoodIssueProducts: listProducts
@@ -164,7 +164,7 @@ const initalGoodIssueState = {
   requesting: false,
   successful: false,
   messages: "",
-  errors: "",
+  errors: false,
 
 };
 
@@ -176,7 +176,7 @@ export const createGoodIssue = function createGoodIssue(state = initalGoodIssueS
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
 
       };
     case CREATE_GOOD_ISSUE_SUCCESS:
@@ -185,7 +185,7 @@ export const createGoodIssue = function createGoodIssue(state = initalGoodIssueS
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
+        errors: false,
 
       };
     case CREATE_GOOD_ISSUE_ERROR:
@@ -194,7 +194,7 @@ export const createGoodIssue = function createGoodIssue(state = initalGoodIssueS
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
 
       };
     case CREATE_GOOD_ISSUE_CLEAN:
@@ -253,7 +253,7 @@ const rejectGoodIssueState = {
   requesting: false,
   successful: false,
   messages: "",
-  errors: "",
+  errors: false,
 
 };
 export const RejectGoodIssue = function rejectGoodIssueReducer(state = rejectGoodIssueState, action) {
@@ -264,7 +264,7 @@ export const RejectGoodIssue = function rejectGoodIssueReducer(state = rejectGoo
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
 
       };
     case REJECT_GOOD_ISSUE_SUCCESS:
@@ -273,7 +273,7 @@ export const RejectGoodIssue = function rejectGoodIssueReducer(state = rejectGoo
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
+        errors: false,
 
       };
     case REJECT_GOOD_ISSUE_ERROR:
@@ -282,7 +282,7 @@ export const RejectGoodIssue = function rejectGoodIssueReducer(state = rejectGoo
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
 
       };
     case REJECT_GOOD_ISSUE_CLEAN:

@@ -42,7 +42,7 @@ function   loadDataRequest(){
   function redirectDetail(notification) {
     // history.push('/homepage/purchase')
 
-    history.replace("/homepage/purchase/PriceQuote", { orderId: notification.typeID, status: "" });
+    // history.replace("/homepage/purchase/PriceQuote", { orderId: notification.typeID, status: "" });
   }
   
 

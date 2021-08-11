@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "./notification-component.css";
 //components
 import { getAllLocationsAction } from "./action";
-import { Route, useHistory } from "react-router-dom";
+import {  useHistory } from "react-router-dom";
 import moment from "moment";
 
 export default function NotificationBellComponents(props) {
@@ -19,9 +19,9 @@ export default function NotificationBellComponents(props) {
     dispatch(getAllLocationsAction({ token: token ,userRole: userRole }));
   }, []);
   function redirectDetail(notification) {
-    // history.push('/homepage/purchase')
+    history.push('/homepage/purchase')
 
-    // history.replace("/homepage/purchase/PriceQuote", { orderId: notification.typeID, status: "" });
+    history.replace("/homepage/purchase/PriceQuote", { orderId: notification.typeID, status: "" });
   }
   console.log(listNotificationStore)
   return (

@@ -439,7 +439,6 @@ const mapStateToProps = (state) => ({
 });
 
 function Logout(props) {
-  let history = useHistory();
   const dispatch = useDispatch();
   const logout = () => {
     props.hubConnection

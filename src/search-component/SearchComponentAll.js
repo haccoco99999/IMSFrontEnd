@@ -168,7 +168,7 @@ export function SelectStatusPurchaseOrder(props) {
     { key: "Done", value: "Done" },
     { key: "POCanceled", value: "Canceled" },
 
-    
+
 
   ]
 
@@ -198,7 +198,7 @@ export function SelectStatusPurchaseRequisition(props) {
     { key: 4, value: "Purchase Order" },
     { key: 5, value: "Done" },
     { key: 6, value: "Cancel" },
- 
+
   ]
 
 
@@ -274,9 +274,10 @@ export function SelectRolePurchaseOrder(props) {
 export function SelectStatusStockTake(props) {
   const optionsInit = [
     { key: "Cancel", value: "Cancel" },
-    { key: "Adjusted", value: "Adjusted" },
+    { key: "AwaitingAdjustment", value: "Validating" },
     { key: "Completed", value: "Completed" },
     { key: "Progressing", value: "Progressing" },
+
 
 
   ]
