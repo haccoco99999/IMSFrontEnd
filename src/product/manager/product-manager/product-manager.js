@@ -35,7 +35,7 @@ export default function () {
     ToModifiedDate: "",
     CreatedByName: "",
     ModifiedByName: "",
-   
+
     Brand: "",
   }
   const [productVariantsFilter, setProductVariantsFilter] = useState({
@@ -106,7 +106,7 @@ export default function () {
 
     dispatch(
       getAllProductAction({
-        filter:  parseFilterToString(productVariantsFilter),
+        filter: parseFilterToString(productVariantsFilter),
         token: token,
       })
     );
@@ -134,11 +134,11 @@ export default function () {
       .catch((error) => { throw error })
   }
 
- 
+
   function nextPagingClick() {
 
-  
-   
+
+
     let dataFilter = { ...productVariantsFilter, currentPage: productVariantsFilter.currentPage + 1 }
     dispatch(
       getAllProductAction({
@@ -149,7 +149,7 @@ export default function () {
     setProductVariantsFilter(dataFilter)
   }
   function backPagingClick() {
-   
+
     let dataFilter = { ...productVariantsFilter, currentPage: productVariantsFilter.currentPage - 1 }
     dispatch(
       getAllProductAction({
@@ -165,15 +165,15 @@ export default function () {
     }))
   }
   function submitProductVariantsFilter() {
-   
+
     dispatch(
       getAllProductAction({
         filter: parseFilterToString(productVariantsFilter),
         token: token,
       })
     );
-  
-   
+
+
   }
   function resetProductVariantsFilter() {
     dispatch(
@@ -189,7 +189,7 @@ export default function () {
     }))
   }
   function setSizePage(event) {
-  
+
     let dataFilter = { ...productVariantsFilter, SizePerPage: event.target.value }
     dispatch(
       getAllProductAction({
@@ -205,8 +205,8 @@ export default function () {
       if (item[1] !== "") {
 
 
-          filterString += item[0] + "=" + item[1] + "&"
-      
+        filterString += item[0] + "=" + item[1] + "&"
+
 
       }
     })
@@ -232,7 +232,7 @@ export default function () {
               backPagingClick={backPagingClick}
               currentPage={productVariantsFilter.currentPage} />
 
-            <p onClick={pushAddPage}><i class="bi bi-file-earmark-plus"></i>Add</p>
+            <button onClick={pushAddPage} type="button" class=" btn-sm mb-1 btn btn-primary">Add Product</button>
 
             {/* <PagingComponent sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
             <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseGoodReceipt" aria-expanded="false" aria-controls="collapseExample">

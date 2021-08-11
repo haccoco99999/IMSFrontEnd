@@ -54,9 +54,8 @@ function   loadDataRequest(){
         <div className="p-3">
 
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-              class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+            <h1 class="h3 mb-0 text-gray-800">Notification</h1>
+           
           </div>
           <div >
             <div id="list" class="list-group">
@@ -65,11 +64,11 @@ function   loadDataRequest(){
 
               {console.log(listNotificationStore[0])}
               {listNotificationStore.map((item,index) =>
-                <a key={index} onClick={() =>redirectDetail(item)} class="list-group-item list-group-item-action" aria-current="true">
+                <a key={index} onClick={() =>redirectDetail(item)} className="list-group-item btn list-group-item-action" aria-current="true">
                   <i class="bi bi-chat-left-quote"></i>
                   <div class="d-flex w-100 justify-content-between">
                     <p class="mb-1">{item.message}</p>
-                    <small>{moment().diff(moment(item.createdDate), "days") === 0 ?moment().diff(moment(item.createdDate), "h") + " hours ago": moment().diff(moment(item.createdDate), "days") + " 3 days ago"  }</small>
+                    <small>{moment().diff(moment(item.createdDate), "days") === 0 ?moment().diff(moment(item.createdDate), "h") + " hours ago": moment().diff(moment(item.createdDate), "days") + " days ago"  }</small>
                   </div>
 
                   <small>{moment(item.createdDate)

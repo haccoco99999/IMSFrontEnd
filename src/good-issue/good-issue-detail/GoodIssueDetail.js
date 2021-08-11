@@ -35,7 +35,7 @@ export default function DetailGoodIssue() {
     const [eventPage, setEvenPage] = useState({
         reject: false,
     })
-    const [classStatus,setClassStatus] = useState("")
+    const [classStatus, setClassStatus] = useState("")
     const [status, setStatus] = useState("")
     const dispatch = useDispatch()
     console.log(status)
@@ -51,26 +51,26 @@ export default function DetailGoodIssue() {
         setlistGoodIssueProducts(
             GoodIssueDetail.infoGoodIssueDetail.listGoodIssueProducts
         )
-        setInfoRejectOrder({...GoodIssueDetail.infoGoodIssueDetail.infoRejectOrder})
+        setInfoRejectOrder({ ...GoodIssueDetail.infoGoodIssueDetail.infoRejectOrder })
         setStatus(GoodIssueDetail.infoGoodIssueDetail.status)
     }, [GoodIssueDetail])
- useEffect(()=>{
-       
+    useEffect(() => {
+
         if (status === "IssueRequisition") {
-          setClassStatus("bg-secondary");
-          } else if ( status === "Packing") {
-          
-            setClassStatus("bg-warning");
-          } else if (status === "Completed") {
-        
             setClassStatus("bg-secondary");
-          } else if (status === "Shipping"  ||status === "Cancel" ) {
-          
+        } else if (status === "Packing") {
+
+            setClassStatus("bg-warning");
+        } else if (status === "Completed") {
+
+            setClassStatus("bg-secondary");
+        } else if (status === "Shipping" || status === "Cancel") {
+
             setClassStatus("bg-danger");
-          } else {
-           
+        } else {
+
             setClassStatus("bg-warning text-dark");
-          }
+        }
 
     }, [status])
     useEffect(() => {
@@ -127,7 +127,6 @@ export default function DetailGoodIssue() {
                 'success'
 
             )
-            dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
             dispatch({ type: CREATE_GOOD_ISSUE_CLEAN })
         }
         else if (createGoodIssueStatus.errors) {
@@ -192,14 +191,14 @@ export default function DetailGoodIssue() {
                     isShow: true,
                     title: "Reject",
                     action: () => clickReject(),
-                    class:"btn-danger"
+                    class: "btn-danger"
                 },
 
                 {
                     isShow: true,
                     title: "Create good issue",
                     action: () => ClickCreateGoodIssue(),
-                    class:"btn-primary",
+                    class: "btn-primary",
                 },
             ]
         }
@@ -209,13 +208,13 @@ export default function DetailGoodIssue() {
                     isShow: true,
                     title: "Shipping",
                     action: () => clickToShipping(),
-                    class:"btn-warning",
+                    class: "btn-warning",
                 },
                 {
                     isShow: true,
                     title: "print",
                     action: () => printDeliverNote(),
-                    class:"btn-secondary",
+                    class: "btn-secondary",
                 },
             ]
 
@@ -226,7 +225,7 @@ export default function DetailGoodIssue() {
                     isShow: true,
                     title: "Confirm",
                     action: () => clickToConfirm(),
-                    class:"btn-primary"
+                    class: "btn-primary"
                 },
             ]
         }
@@ -534,22 +533,22 @@ export default function DetailGoodIssue() {
                 titleBar={GoodIssueDetail.infoGoodIssueDetail.id}
                 actionGoBack={backPage}
                 classStatus={classStatus}
-                status={status} 
-                currentPage ={"Detail Good Issue"}
-                home ={"Goods Issue"}
-                
-                />
+                status={status}
+                currentPage={"Detail Good Issue"}
+                home={"Goods Issue"}
+
+            />
 
             <div class="d-grid gap-2">
-              {status === "Cancel"? <RejectWrapper 
-              name={infoRejectOrder.name}
-              phoneNumber={infoRejectOrder.phoneNumber}
-              email={infoRejectOrder.email}
-              reason={infoRejectOrder.reason}
-              data={infoRejectOrder.createdDate}
+                {status === "Cancel" ? <RejectWrapper
+                    name={infoRejectOrder.name}
+                    phoneNumber={infoRejectOrder.phoneNumber}
+                    email={infoRejectOrder.email}
+                    reason={infoRejectOrder.reason}
+                    data={infoRejectOrder.createdDate}
 
-              
-              />: "" }  
+
+                /> : ""}
                 <div className="p-3">
                     <div className="card">
                         <div class="card-header p-0">
@@ -648,7 +647,7 @@ export default function DetailGoodIssue() {
             /> */}
 
             {/* <PrintReceipt isShowPrintReceipt={true}/> */}
-         {  eventPage.reject ? <RejectReceiptModal clickToCLoseReject={clickReject} /> : ""}
+            {eventPage.reject ? <RejectReceiptModal clickToCLoseReject={clickReject} /> : ""}
 
 
             {/* <RejectReceiptModal

@@ -357,9 +357,7 @@ export default function GoodsReceipt() {
             <div className="card-body">
               <PagingComponent rowCountTotal={rowCountTotal} sizePerPage={goodsReceiptFilter.SizePerPage} setSizePage={setSizePage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={goodsReceiptFilter.currentPage} />
 
-              <p onClick={handleClick}><i class="bi bi-file-earmark-plus"></i>Add</p>
-
-              {/* <PagingComponent sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
+          <button   onClick={handleClick} type="button" class=" btn-sm mb-1 btn btn-primary">Add Goods Receipt</button>
               <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseGoodReceipt" aria-expanded="false" aria-controls="collapseExample">
                 <i class="bi bi-sliders"></i> Setting Colum
               </p>

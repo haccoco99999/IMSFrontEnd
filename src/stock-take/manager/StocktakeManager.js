@@ -396,9 +396,8 @@ export default function () {
               backPagingClick={backPagingClick} 
               currentPage={stockTakeFilter.currentPage} />
 
-              <p onClick={pushAddPage}><i class="bi bi-file-earmark-plus"></i>Add</p>
+              <button   onClick={pushAddPage} type="button" class=" btn-sm mb-1 btn btn-primary">Add Stock take</button>
 
-              {/* <PagingComponent sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
               <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseGoodReceipt" aria-expanded="false" aria-controls="collapseExample">
                 <i class="bi bi-sliders"></i> Setting Colum
               </p>

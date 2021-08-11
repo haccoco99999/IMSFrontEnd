@@ -200,7 +200,8 @@ const [supplierFilter, setSupplierFilter] = useState({
 
 
               <PagingComponent rowCountTotal={rowCountTotal} sizePerPage={supplierFilter.SizePerPage} setSizePage={setSizePage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={supplierFilter.currentPage} />
-              <p onClick={pushAddPage}><i class="bi bi-file-earmark-plus"></i>Add</p>
+              {/* <p onClick={pushAddPage}><i class="bi bi-file-earmark-plus"></i>Add</p> */}
+              <button   onClick={pushAddPage} type="button" class=" btn-sm mb-1 btn btn-primary">Add Supplier</button>
 
               <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16">
