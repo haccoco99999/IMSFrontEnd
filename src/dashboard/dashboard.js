@@ -1,53 +1,21 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ProgressBar } from "../components/progress-bar/ProgressBar";
+import { getListDashBoard } from "./actions";
 import './dashboard.css'
 export default function DashboardComponent() {
-
-
-  const CardItem = () => {
-    return (
-      <div class="card shadow p-2 bg-body rounded">
-        <div class="row flex-nowrap align-items-center">
-          <div className="col-md-1">
-            <i class="bi bi-window"></i>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle-fill" viewBox="0 0 16 16">
-              <circle cx="8" cy="8" r="8" />
-            </svg>
-          </div>
-          <div className="col-md-7" >
-            <p class="fw-bold mb-0">QUantyt</p>
-            <span className="text-muted fw-lighter">365161</span>
-          </div>
-
-
-          <div className="col-md-4 align-middle">
-
-            <table className="h-100">
-              <tbody>
-                <tr>
-
-                  <td class="align-middle fs-4"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
-                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
-                    <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
-                  </svg></td>
-
-                </tr>
-              </tbody>
-            </table>
-
-
-
-          </div>
-
-        </div>
-
-      </div>
-    )
-  }
+  const { token, valueDashboardStore } = useSelector(state => ({
+    token: state.client.token,
+    valueDashboardStore: state.getValueDashboard
+  }))
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getListDashBoard({ token: token }))
+  }, [])
 
   return (
     <div className="home_content">
-    
+
       {/* ############################ */}
       {/* <div className="row d-flex align-items-center">
           
@@ -86,8 +54,8 @@ export default function DashboardComponent() {
                     <div class="row no-gutters align-items-center">
                       <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                          Earnings (Monthly)</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                          Import Quantity</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"> {valueDashboardStore.dataDashBoard.importQuantity}</div>
                       </div>
                       <div class="col-auto">
                         <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -103,8 +71,40 @@ export default function DashboardComponent() {
                     <div class="row no-gutters align-items-center">
                       <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                          Earnings (Annual)</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                          Export Quantity</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"> {valueDashboardStore.dataDashBoard.exportQuantity}</div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                          Sum Quantity Products</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"> {valueDashboardStore.dataDashBoard.sumInventoryCountThisMonth}</div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                          Inventory Cost This Month</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">$ {valueDashboardStore.dataDashBoard.inventoryCostThisMonth}</div>
                       </div>
                       <div class="col-auto">
                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -114,51 +114,7 @@ export default function DashboardComponent() {
                 </div>
               </div>
 
-              <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-info shadow h-100 py-2">
-                  <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                      <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                        </div>
-                        <div class="row no-gutters align-items-center">
-                          <div class="col-auto">
-                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                          </div>
-                          <div class="col">
-                            <div class="progress progress-sm mr-2">
-                              <div class="progress-bar bg-info" role="progressbar"
-                                style={{ width: "50%" }} aria-valuenow="50" aria-valuemin="0"
-                                aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-auto">
-                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-
-              <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
-                  <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                      <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                          Pending Requests</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                      </div>
-                      <div class="col-auto">
-                        <i class="fas fa-comments fa-2x text-gray-300"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
 
 
@@ -201,7 +157,7 @@ export default function DashboardComponent() {
 
                   <div
                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Top 5 sell this month</h6>
                     <div class="dropdown no-arrow">
                       <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -220,12 +176,78 @@ export default function DashboardComponent() {
 
                   <div class="card-body">
                     <div class="chart-pie pt-4 pb-2">
-                      <canvas id="myPieChart"></canvas>
+                      <table class="table">
+                        <thead>
+                          <tr>
+
+                            <th scope="col">Product</th>
+                            <th scope="col">Total Sold</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {valueDashboardStore.dataDashBoard.top5SellingMonth.map(item => (
+                            <tr>
+                              {/* <th scope="row">3</th> */}
+                              <td >{item.productName}</td>
+                              <td>{item.totalSold}</td>
+                            </tr>
+                          ))}
+
+
+                        </tbody>
+                      </table>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="card shadow mb-4">
+
+                  <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Top 5 sell this year</h6>
+                    <div class="dropdown no-arrow">
+                      <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                        aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Dropdown Header:</div>
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Total Sold</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {valueDashboardStore.dataDashBoard.top5SellingMonth.map(item => (
+                            <tr>
+                              {/* <th scope="row">3</th> */}
+                              <td >{item.productName}</td>
+                              <td>{item.totalSold}</td>
+                            </tr>
+                          ))}
+
+
+                        </tbody>
+                      </table>
                     </div>
 
                   </div>
                 </div>
               </div>
+            
             </div>
 
 

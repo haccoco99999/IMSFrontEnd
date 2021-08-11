@@ -17,6 +17,7 @@ import getAllAccountsReducer from "./manage-account/manager/account-manager/redu
 // import getDetailsSupplierReducer from "./supplier/details/reducer";
 // import getCreatedFormPurchaseRequisitionReducer from "./sale-man/create/reducer";
 // import createProductReducer from "./product/create/reducer";
+import { getValueDashboard } from "./dashboard/reducer";
 import {
   createUserAccount,
   getUserAccountDetail,
@@ -237,6 +238,8 @@ const IndexReducer = combineReducers({
   //request update sku
   agreeUpdateRequestSkuReducer,
   rejectUpdateRequestSkuReducer,
+  //DashBoard
+  getValueDashboard
 });
 
 export default IndexReducer;

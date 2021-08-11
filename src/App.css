@@ -294,6 +294,9 @@ body{
   overflow-x: hidden;
   height: 560px;
 }
+.nav-side-bar::-webkit-scrollbar {
+  display: none;
+}
 
 .hide-true{
   display: none;

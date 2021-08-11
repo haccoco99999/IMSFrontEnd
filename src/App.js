@@ -218,6 +218,7 @@ function App(props) {
               href="#collapseProfile"
             >
               <img src={client.profileImageLink} alt="" />
+              
               <div className="name_job">
                 <div className="name">{client.fullname}</div>
                 <div className="job">{client.userRole}</div>

@@ -19,9 +19,9 @@ export default function NotificationBellComponents(props) {
     dispatch(getAllLocationsAction({ token: token ,userRole: userRole }));
   }, []);
   function redirectDetail(notification) {
-    history.push('/homepage/purchase')
+    // history.push('/homepage/purchase')
 
-    history.replace("/homepage/purchase/PriceQuote", { orderId: notification.typeID, status: "" });
+    // history.replace("/homepage/purchase/PriceQuote", { orderId: notification.typeID, status: "" });
   }
   console.log(listNotificationStore)
   return (

@@ -29,6 +29,9 @@ import createStocktake from "./stock-take/create/sagas";
 import locationManagerSaga from "./product/manager/location-manager/sagas";
 import notificationSaga from "./notification-component/sagas";
 import requestUpdateManagerSaga from "./product/manager/requestupdate-manager/sagas";
+
+import dashboardSaga from './dashboard/sagas'
+
 import { all } from "@redux-saga/core/effects";
 export default function* IndexSaga() {
   yield all([
@@ -63,5 +66,8 @@ export default function* IndexSaga() {
     locationManagerSaga(),
     notificationSaga(),
     requestUpdateManagerSaga(),
+
+    //Dashboard
+    dashboardSaga(),
   ]);
 }
