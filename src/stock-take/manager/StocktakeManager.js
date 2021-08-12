@@ -70,6 +70,7 @@ export default function () {
       text: "Stocktake ID",
       // headerAlign: "center",
       // align: "center",
+
     },
     {
       dataField: "status",
@@ -100,6 +101,10 @@ export default function () {
       formatter: (cellContent, row) => {
         return <span>{moment(row.createdDate).add(7, "h").format("DD-MM-YYYY")}</span>;
       },
+      align: (cell, row, rowIndex, colIndex) => {
+        return 'right';
+
+    },
     },
     // {
     //   dataField:"modifiedDate"
@@ -398,7 +403,7 @@ export default function () {
 
               <button   onClick={pushAddPage} type="button" class=" btn-sm mb-1 btn btn-primary">Add Stock take</button>
 
-              <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseGoodReceipt" aria-expanded="false" aria-controls="collapseExample">
+              <p className="dropdown-toggle pointer" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 <i class="bi bi-sliders"></i> Setting Colum
               </p>
 
@@ -422,6 +427,7 @@ export default function () {
                         striped
                         hover
                         condensed
+                        rowClasses="pointer"
                         noDataIndication={() => <TableLoading />}
                         //  noDataIndication="Table is Empty"
                         rowEvents={rowEvents}

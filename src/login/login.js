@@ -48,8 +48,8 @@ export default function Login(props) {
   useEffect(() => {
     if (loginStatus.requesting === true) {
       Swal.fire({
-        title: "Login!",
-        html: "Watting...",
+        title: "Progressing",
+        html: "Waiting...",
         timerProgressBar: true,
         didOpen: () => {
           Swal.showLoading();
@@ -69,7 +69,7 @@ export default function Login(props) {
     if (loginStatus.errors === true) {
       Swal.fire({
         icon: "error",
-        title: "Login fail!...",
+        title: "Error",
         text: "Email or Password is incorrect!",
       });
       dispatch({ type: LOGIN_CLEAN });

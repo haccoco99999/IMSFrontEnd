@@ -165,8 +165,8 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                     mergedOrderIdLists: action.json.mergedOrderIdLists !== undefined ? action.json.mergedOrderIdLists : [],
                     infoUserPurchaseOrder: { ...infoUserPurchaseOrder },
                     infoRejectOrder: { ...infoRejectOrder },
-                    deliveryDate: action.json.purchaseOrder.deliveryDate.split("T")[0],
-                    deadline: action.json.purchaseOrder.deadline.split("T")[0],
+                    deadline:  moment(action.json.purchaseOrder.deadline).format("DD-MM-YYYY"),
+
                     supplier: action.json.purchaseOrder.supplier !== null ? {
                         id: action.json.purchaseOrder.supplier.id,
                         address: action.json.purchaseOrder.supplier.address,

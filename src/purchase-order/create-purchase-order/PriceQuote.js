@@ -228,6 +228,10 @@ export default function PurchaseOrderConfirm() {
     ];
 
     function clickCreatePurchaseOrder() {
+
+
+
+
         if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
             let nameEditText
             if (!eventPage.isShowEditListProducts) {
@@ -257,7 +261,22 @@ export default function PurchaseOrderConfirm() {
             let data = {
                 orderNumber: purchaseOrderDataGlobal.orderId
             }
-            dispatch(createPurchaseOrder({ data: data, token: token }))
+
+            Swal.fire({
+                title: "Are you sure",
+                text: "Do you want to save?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: " #d33",
+                confirmButtonText: "Confirm",
+                reverseButtons: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    dispatch(createPurchaseOrder({ data: data, token: token }))
+                }
+            });
+
         }
 
 
@@ -393,7 +412,7 @@ export default function PurchaseOrderConfirm() {
                     isShow: true,
                     title: "Create  Goods Receipt",
                     action: () => redirectGoodsReceipt(),
-                    class: "btn btn-secondary"
+                    class: "btn btn-primary"
                 },
 
 
@@ -407,6 +426,7 @@ export default function PurchaseOrderConfirm() {
         if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
             beforeEdit()
         } else {
+
             setEventPage((state) => ({
                 ...state, isShowConfirm: !state.isShowConfirm,
             }))
@@ -447,7 +467,23 @@ export default function PurchaseOrderConfirm() {
                     purchaseOrderNumber: purchaseOrderDataGlobal.orderId
 
                 }
-                dispatch(confirmDetailPurchaseOrder({ data: data, token, token }))
+
+                Swal.fire({
+                    title: "Are you sure",
+                    text: "Do you want to save?",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: " #d33",
+                    confirmButtonText: "Confirm",
+                    reverseButtons: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        dispatch(confirmDetailPurchaseOrder({ data: data, token, token }))
+                    }
+                });
+
+
             }
             else {
                 Swal.fire({
@@ -541,8 +577,8 @@ export default function PurchaseOrderConfirm() {
 
         if (priceQuoteUpdateStatus.requesting === true) {
             Swal.fire({
-                title: 'Updating!',
-                html: 'Watting...',
+                title: 'Processing!',
+                html: 'Waiting...',
                 timerProgressBar: true,
                 didOpen: () => {
                     Swal.showLoading()
@@ -552,19 +588,18 @@ export default function PurchaseOrderConfirm() {
             })
         }
         if (priceQuoteUpdateStatus.successful === true) {
-
-            Swal.fire(
-                'Update Success!',
-                'Click to Close!',
-                'success'
-
-            )
+            Swal.fire({
+                icon: "success",
+                title: "Your work has been saved",
+                showCancelButton: false,
+                confirmButtonColor: "#3085d6",
+              })
             dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
         }
         if (priceQuoteUpdateStatus.errors === true) {
             Swal.fire({
                 icon: 'error',
-                title: 'Update fail!...',
+                title: 'Error...',
                 text: 'Something went wrong!',
 
             })
@@ -577,8 +612,8 @@ export default function PurchaseOrderConfirm() {
 
         if (mailOrderDataStatus.requesting === true && purchaseOrderDataGlobal.status === "PriceQuote") {
             Swal.fire({
-                title: 'Mail Sending!',
-                html: 'Watting...',
+                title: 'Progressing',
+                html: 'Waiting...',
                 timerProgressBar: true,
                 didOpen: () => {
                     Swal.showLoading()
@@ -592,19 +627,18 @@ export default function PurchaseOrderConfirm() {
             })
         }
         if (mailOrderDataStatus.successful === true && purchaseOrderDataGlobal.status === "PriceQuote") {
-
-            Swal.fire(
-                'Send Mail Success!',
-                'Click to Close!',
-                'success'
-
-            )
+            Swal.fire({
+                icon: "success",
+                title: "Email has been sent",
+                showCancelButton: false,
+                confirmButtonColor: "#3085d6",
+              })
             dispatch({ type: SEND_MAIL_SERVICE_RESET })
         }
         if (mailOrderDataStatus.errors === true && purchaseOrderDataGlobal.status === "PriceQuote") {
             Swal.fire({
                 icon: 'error',
-                title: 'Send Mail Fail...',
+                title: 'Error...',
                 text: 'Something went wrong!',
 
             })
@@ -617,8 +651,8 @@ export default function PurchaseOrderConfirm() {
 
         if (createPriceQuoteStatus.requesting === true) {
             Swal.fire({
-                title: 'Creating!',
-                html: 'Watting...',
+                title: 'Progressing',
+                html: 'Waiting...',
                 timerProgressBar: true,
                 didOpen: () => {
                     Swal.showLoading()
@@ -627,23 +661,23 @@ export default function PurchaseOrderConfirm() {
 
             }).then((result) => {
                 if (result.dismiss === Swal.DismissReason.timer) {
-                    console.log('I was closed by the timer')
+                  
                 }
             })
         }
         if (createPriceQuoteStatus.successful === true) {
-            Swal.fire(
-                'Create Price Quote Success!',
-                'Click to Close!',
-                'success'
-
-            )
+            Swal.fire({
+                icon: "success",
+                title: "Your work has been created",
+                showCancelButton: false,
+                confirmButtonColor: "#3085d6",
+              })
             dispatch({ type: CREATE_PRICE_QUOTE_RESET })
         }
         if (createPriceQuoteStatus.errors === true) {
             Swal.fire({
                 icon: 'error',
-                title: 'Create Price Quote fail!...',
+                title: 'Error...',
                 text: 'Something went wrong!',
 
             })
@@ -656,8 +690,8 @@ export default function PurchaseOrderConfirm() {
 
         if (confirmPurchaserOrderStatus.requesting === true) {
             Swal.fire({
-                title: 'Confirming!',
-                html: 'Watting...',
+                title: 'Progressing',
+                html: 'Waiting...',
                 timerProgressBar: true,
                 didOpen: () => {
                     Swal.showLoading()
@@ -671,18 +705,18 @@ export default function PurchaseOrderConfirm() {
             })
         }
         else if (confirmPurchaserOrderStatus.successful === true) {
-            Swal.fire(
-                'Confirm Success!',
-                'Click to Close!',
-                'success'
-
-            )
+            Swal.fire({
+                icon: "success",
+                title: "Your work has been confirmed",
+                showCancelButton: false,
+                confirmButtonColor: "#3085d6",
+              })
             dispatch({ type: CONFIRM_PURCHASE_ORDER_RESET })
         }
         else if (confirmPurchaserOrderStatus.errors === true) {
             Swal.fire({
                 icon: 'error',
-                title: 'Confirm fail!...',
+                title: 'Error...',
                 text: 'Something went wrong!',
 
             })
@@ -696,8 +730,8 @@ export default function PurchaseOrderConfirm() {
 
         if (createPurchaserOrderStatus.requesting === true) {
             Swal.fire({
-                title: 'Creating!',
-                html: 'Watting...',
+                title: 'Progressing',
+                html: 'Waiting...',
                 timerProgressBar: true,
                 didOpen: () => {
                     Swal.showLoading()
@@ -711,19 +745,19 @@ export default function PurchaseOrderConfirm() {
             })
         }
         else if (createPurchaserOrderStatus.successful === true) {
-            Swal.fire(
-                'Create Purchase Order Success!',
-                'Click to Close!',
-                'success'
-
-            )
+            Swal.fire({
+                icon: "success",
+                title: "Your work has been created",
+                showCancelButton: false,
+                confirmButtonColor: "#3085d6",
+              })
 
             dispatch({ type: CREATE_PURCHASE_ORDER_RESET })
         }
         else if (createPurchaserOrderStatus.errors === true) {
             Swal.fire({
                 icon: 'error',
-                title: 'Create Purchase Order Failed...',
+                title: 'Error...',
                 text: 'Something went wrong!',
 
             })
@@ -738,8 +772,8 @@ export default function PurchaseOrderConfirm() {
 
         if (submitPurchaseOrderStatus.requesting === true) {
             Swal.fire({
-                title: 'Submiting!',
-                html: 'Watting...',
+                title: 'Progressing',
+                html: 'Waiting...',
                 timerProgressBar: true,
                 didOpen: () => {
                     Swal.showLoading()
@@ -753,18 +787,18 @@ export default function PurchaseOrderConfirm() {
             })
         }
         else if (submitPurchaseOrderStatus.successful === true) {
-            Swal.fire(
-                'Submit Success!',
-                'Click to Close!',
-                'success'
-
-            )
+            Swal.fire({
+                icon: "success",
+                title: "Your work has been submitted",
+                showCancelButton: false,
+                confirmButtonColor: "#3085d6",
+              })
             dispatch({ type: SUBMIT_PURCHASE_ORDER_RESET })
         }
         else if (submitPurchaseOrderStatus.errors === true) {
             Swal.fire({
                 icon: 'error',
-                title: 'Submit fail!...',
+                title: 'Error',
                 text: 'Something went wrong!',
 
             })
@@ -779,8 +813,8 @@ export default function PurchaseOrderConfirm() {
 
         if (rejectPurchaserOrderStatus.requesting === true) {
             Swal.fire({
-                title: 'Rejecting!',
-                html: 'Watting...',
+                title: 'Progressing',
+                html: 'Waiting...',
                 timerProgressBar: true,
                 didOpen: () => {
                     Swal.showLoading()
@@ -790,18 +824,18 @@ export default function PurchaseOrderConfirm() {
             })
         }
         else if (rejectPurchaserOrderStatus.successful === true) {
-            Swal.fire(
-                'Reject Success!',
-                'Click to Close!',
-                'success'
-
-            )
+            Swal.fire({
+                icon: "success",
+                title: "Your work has been rejected",
+                showCancelButton: false,
+                confirmButtonColor: "#3085d6",
+              })
             dispatch({ type: REJECT_PURCHASE_ORDER_CONFIRM_RESET })
         }
         else if (rejectPurchaserOrderStatus.errors === true) {
             Swal.fire({
                 icon: 'error',
-                title: 'Reject fail!...',
+                title: 'Error...',
                 text: 'Something went wrong!',
 
             })
@@ -848,7 +882,7 @@ export default function PurchaseOrderConfirm() {
 
         }
         else if (purchaseOrderDataGlobal.status === "POWaitingConfirmation") {
-            setListStatus({ nameStatus: "Watting Confirmation", classStatus: "bg-warning" })
+            setListStatus({ nameStatus: "Waiting Confirm", classStatus: "bg-warning" })
 
         }
         else if (purchaseOrderDataGlobal.status === "POConfirm") {
@@ -1020,6 +1054,8 @@ export default function PurchaseOrderConfirm() {
     }
     function clickShowPreviewSendMail() {
 
+
+
         if ((mailDescription !== "<p></p>" || mailDescription !== "") && supplier.id !== undefined) {
 
             if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
@@ -1165,7 +1201,22 @@ export default function PurchaseOrderConfirm() {
         dispatch(sendMailService({ data: formData, token: token }))
     }
     function clickCreatePriceQuote() {
-        dispatch(createPriceQuote({ data: { id: purchaseOrderDataGlobal.orderId }, token: token }))
+
+        Swal.fire({
+            title: "Are you sure",
+            text: "Do you want to save?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: " #d33",
+            confirmButtonText: "Confirm",
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                dispatch(createPriceQuote({ data: { id: purchaseOrderDataGlobal.orderId }, token: token }))
+            }
+        });
+
     }
     function clostPreviewSendMail(pdf) {
 
@@ -1253,7 +1304,8 @@ export default function PurchaseOrderConfirm() {
                                                         <strong>Purchase Order ID:</strong> {purchaseOrderDataGlobal.orderId}
                                                     </p>
                                                     <p>
-                                                        <strong>Created Date: </strong>{infoUserPurchaseOrder.createDate}
+                                                        <strong>Created Date: </strong>{ moment(infoUserPurchaseOrder.createDate).format("DD-MM-YYYY")}
+                                                       
 
                                                     </p>
                                                 </div>
@@ -1319,7 +1371,7 @@ export default function PurchaseOrderConfirm() {
                                                             <tr>
 
                                                                 <td>{transaction.name}</td>
-                                                                <td>{moment(transaction.date).add(7, "h").format("DD/MM/YYYY ")}</td>
+                                                                <td>{moment(transaction.date).add(7, "h").format("DD-MM-YYYY ")}</td>
                                                                 <td>{transaction.applicationUser.fullname}</td>
                                                             </tr>))}
                                                     </tbody>
@@ -1409,7 +1461,7 @@ export default function PurchaseOrderConfirm() {
                                                         </tr>
                                                         {listTransactions.map((transaction, index) => (<tr>
                                                             <td>{transaction.name}</td>
-                                                            <td>{moment(transaction.date).add(7, "h").format("DD/MM/YYYY ")}</td>
+                                                            <td>{moment(transaction.date).add(7, "h").format("DD-MM-YYYY")}</td>
                                                             <td>{transaction.applicationUser.fullname}</td>
                                                         </tr>))}
                                                     </tbody>  </table>

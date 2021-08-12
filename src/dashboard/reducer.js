@@ -13,7 +13,6 @@ const initalState = {
 export function getValueDashboard(state = initalState, action){
     switch(action.type){
         case GET_VALUE_DASHBOARD_REQUESTING:
-            console.log("okkkkkkk")
             return{
                 requesting: true,
                 successful: false,
@@ -31,7 +30,15 @@ export function getValueDashboard(state = initalState, action){
                 successful: true,
                 messages: "",
                 errors: false,
-                dataDashBoard: action.json.dataDashBoard
+                dataDashBoard: {
+                    inventoryCostThisMonth: action.json.inventoryCostThisMonth,
+                    sumInventoryCountThisMonth: action.json.sumInventoryCountThisMonth,
+                    importQuantity: action.json.importQuantity,
+                    exportQuantity: action.json.exportQuantity,
+                    top5SellingMonth: action.json.topSellingMonthPaging.resultList,
+                    top5SellingYear:action.json.topSellingYearPaging.resultList,
+                }
+
                         
             }
         case GET_VALUE_DASHBOARD_ERROR:

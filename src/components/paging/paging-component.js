@@ -10,7 +10,7 @@ export default function PagingComponent(props) {
 
         <div class="d-flex  mb-3">
           <div class=" p-2 ">
-            <select value={props.sizePerPage} onChange={props.setSizePage} class="form-select col-auto justify-content-start" aria-label="Default select example">
+            <select value={props.sizePerPage} onChange={props.setSizePage} class="form-select pointer col-auto justify-content-start" aria-label="Default select example">
 
               <option value={25}>25</option>
               <option value={50}>50</option>
@@ -26,11 +26,11 @@ export default function PagingComponent(props) {
           <div class=" ms-auto p-2 ">
             <ul className="pagination ">
               {props.currentPage === 1 ? (
-                <li class="page-item disabled">
+                <li class="  page-item disabled">
                   <span class="page-link">Previous</span>
                 </li>
               ) : (
-                <li className="page-item">
+                <li className="pointer page-item">
                   <a className="page-link"  onClick={props.backPagingClick}>
                     Previous
                   </a>
@@ -40,11 +40,11 @@ export default function PagingComponent(props) {
                 <span class="page-link">{props.currentPage}</span>
               </li>
               {props.currentPage === props.pageCount ? (
-                <li class="page-item disabled">
+                <li class="  page-item disabled">
                   <span class="page-link">Next</span>
                 </li>
               ) : (
-                <li className="page-item">
+                <li className=" pointer page-item">
                   <a className="page-link"  onClick={props.nextPagingClick}>
                     Next
                   </a>

@@ -235,7 +235,7 @@ export default function () {
             <button onClick={pushAddPage} type="button" class=" btn-sm mb-1 btn btn-primary">Add Product</button>
 
             {/* <PagingComponent sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
-            <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            <p className="dropdown-toggle pointer" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
               <i class="bi bi-sliders"></i> Setting Colum
             </p>
 
@@ -263,6 +263,7 @@ export default function () {
                       data={listProducstStore}
                       rowEvents={rowEvents}
                       {...props.baseProps}
+                      rowClasses="pointer"
                       noDataIndication={() => <TableLoading />}
                     />
                   </div>

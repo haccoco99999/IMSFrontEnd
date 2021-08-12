@@ -40,6 +40,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CLIENT_UNSET } from "./user/constants";
 import { LOGOUT_REQUESTING } from "./login/constants";
+import Swal from "sweetalert2";
 function App(props) {
   const [eventPage, setEventPage] = useState({
     hide: "bx-menu",
@@ -225,7 +226,7 @@ function App(props) {
               </div>
             </div>
             <i
-              className="bx  menu-icon-notification-logout"
+              className="bx pointer menu-icon-notification-logout"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
@@ -440,18 +441,39 @@ const mapStateToProps = (state) => ({
 
 function Logout(props) {
   const dispatch = useDispatch();
-  const logout = () => {
-    props.hubConnection
-      .invoke("DisconnectFromResource", "userId", "pageId")
-      .catch((err) => {
-        console.log("Error while disconnectiong from resource: " + { err });
-      });
-    dispatch({ type: "LOGOUT_REQUESTING" });
+  const logout = async () => {
+
+
+    // let isLogout = false
+    // await Swal.fire({
+    //   title: "Are you sure",
+    //   text: "Do you want to logout?",
+    //   icon: "question",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#3085d6",
+    //   cancelButtonColor: " #d33",
+    //   confirmButtonText: "Confirm",
+    //   reverseButtons: true,
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     isLogout = true
+    //   }
+    // });
+    // if(isLogout)
+      dispatch({ type: "LOGOUT_REQUESTING" });
+
+    // props.hubConnection
+    //   .invoke("DisconnectFromResource", "userId", "pageId")
+    //   .catch((err) => {
+    //     console.log("Error while disconnectiong from resource: " + { err });
+    //   });
+  
   };
 
   return (
     <div className="profile_content logout_content">
-      <div className="profile">
+      
+      <div className="pointer profile">
         <i
           onClick={logout}
           className="bi bi-box-arrow-left menu-icon-notification-logout"

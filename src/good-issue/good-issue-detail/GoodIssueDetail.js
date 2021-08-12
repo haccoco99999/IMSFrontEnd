@@ -76,8 +76,8 @@ export default function DetailGoodIssue() {
     useEffect(() => {
         if (RejectGoodIssueStatus.requesting) {
             Swal.fire({
-                title: 'Rejecting!',
-                html: 'Watting...',
+                title: 'Progressing',
+                html: 'Waiting...',
                 timerProgressBar: true,
                 didOpen: () => {
                     Swal.showLoading()
@@ -88,19 +88,19 @@ export default function DetailGoodIssue() {
         }
         else if (RejectGoodIssueStatus.successful) {
 
-            Swal.fire(
-                'Reject Success!',
-                'Click to Close!',
-                'success'
-
-            )
+            Swal.fire({
+                icon: "success",
+                title: "Your work has been saved",
+                showCancelButton: false,
+                confirmButtonColor: "#3085d6",
+            })
             dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
             dispatch({ type: REJECT_GOOD_ISSUE_CLEAN })
         }
         else if (RejectGoodIssueStatus.errors) {
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
+                title: 'Error',
                 text: 'Something went wrong, cannot reject!',
 
             })
@@ -109,8 +109,8 @@ export default function DetailGoodIssue() {
         ///Show Create Good Issue
         if (createGoodIssueStatus.requesting) {
             Swal.fire({
-                title: 'Creating Goods Issue !',
-                html: 'Watting...',
+                title: 'Progressing',
+                html: 'Waiting...',
                 timerProgressBar: true,
                 didOpen: () => {
                     Swal.showLoading()
@@ -121,12 +121,12 @@ export default function DetailGoodIssue() {
         }
         else if (createGoodIssueStatus.successful) {
 
-            Swal.fire(
-                'Create Goods Issue Success!',
-                'Click to Close!',
-                'success'
-
-            )
+            Swal.fire({
+                icon: "success",
+                title: "Your work has been saved",
+                showCancelButton: false,
+                confirmButtonColor: "#3085d6",
+            })
             dispatch({ type: CREATE_GOOD_ISSUE_CLEAN })
         }
         else if (createGoodIssueStatus.errors) {
@@ -150,8 +150,8 @@ export default function DetailGoodIssue() {
         }
         if (upadateGoodIssueStatus.requesting) {
             Swal.fire({
-                title: `Creating ${nameStatus} !`,
-                html: 'Watting...',
+                title: 'Progressing',
+                html: 'Waiting...',
                 timerProgressBar: true,
                 didOpen: () => {
                     Swal.showLoading()
@@ -161,13 +161,12 @@ export default function DetailGoodIssue() {
             })
         }
         else if (upadateGoodIssueStatus.successful) {
-
-            Swal.fire(
-                ` ${nameStatus} Success!`,
-                'Click to Close!',
-                'success'
-
-            )
+            Swal.fire({
+                icon: "success",
+                title: "Your work has been saved",
+                showCancelButton: false,
+                confirmButtonColor: "#3085d6",
+              })
             dispatch({ type: UPDATE_GOOD_ISSUE_CLEAN })
 
         }
@@ -212,7 +211,7 @@ export default function DetailGoodIssue() {
                 },
                 {
                     isShow: true,
-                    title: "print",
+                    title: "Print",
                     action: () => printDeliverNote(),
                     class: "btn-secondary",
                 },
@@ -255,11 +254,11 @@ export default function DetailGoodIssue() {
         setEvenPage((state) => ({
             reject: !state.reject
         }))
-      
+
     }
     function ClickCreateGoodIssue() {
         dispatch(createGoodIssue({ data: { issueNumber: GoodIssueDetail.infoGoodIssueDetail.id }, token: token }))
-       
+
     }
 
 
@@ -429,7 +428,7 @@ export default function DetailGoodIssue() {
         }
 
         dispatch(updateGoodIssue({ data: data, token: token }))
-      
+
     }
     function clickToConfirm() {
         let data = {
@@ -439,7 +438,7 @@ export default function DetailGoodIssue() {
 
         }
         dispatch(updateGoodIssue({ data: data, token: token }))
-      
+
     }
 
     const listButton = setListButtonNav(status)
@@ -561,7 +560,7 @@ export default function DetailGoodIssue() {
                             <div className="col-md-9">
                                 {status === "IssueRequisition" ?
                                     <div className="info-detai-receipt">
-                                        <p className="fw-bold">Create by: <span className="fw-normal">Rock</span></p>
+                                        <p className="fw-bold">Created by: <span className="fw-normal">Rock</span></p>
                                         <div>
                                             <p className="fw-bold">Email : <span className="fw-normal">ahunka@gkcis.cob</span></p>
                                             <p className="fw-bold">Phone No: <span className="fw-normal">02849952958</span></p>
@@ -579,7 +578,7 @@ export default function DetailGoodIssue() {
 
                                 </div>
                                 <div className="info-detai-receipt">
-                                    <p className="fw-bold">Create Date: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.createdDate}</span></p>
+                                    <p className="fw-bold">Created Date: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.createdDate}</span></p>
                                     <p className="fw-bold">Delivery Date: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.deliveryDate}</span></p>
 
 

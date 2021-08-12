@@ -236,11 +236,11 @@ export function PurchaseOrderFilter(props) {
                         </div>
 
                         <div className="col-md-6">
-
-                            <div class="form-group ">
-
+                            {props.isSaleMan?"" :<div class="form-group ">
+                                
                                 <SelectSupplier isDisabled={false} supplierInfo={props.filter.supplier} getDataSupplier={props.setFilterSupplier} />
-                            </div>
+                            </div>}
+                            
                             <div class="form-group">
                                 <label for="">Select Status</label>
                                 {props.isRequisition ? <SelectStatusPurchaseRequisition selectStatus={props.selectStatusFilter} selected={props.filter.Statuses} /> : <SelectStatusPurchaseOrder selectStatus={props.selectStatusFilter} selected={props.filter.Statuses} />}
