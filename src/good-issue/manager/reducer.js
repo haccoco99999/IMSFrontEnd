@@ -3,7 +3,7 @@ import {GET_ALL_GOOD_ISSUE_ERROR,GET_ALL_GOOD_ISSUE_REQUESTING,GET_ALL_GOOD_ISSU
 GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS, GET_ALL_GOOD_ISSUE_REQUISITION_ERROR
 } from './contants'
 
-
+import moment from 'moment';
   const initalListGoodIssuesState = {
     requesting: false,
     successful: false,
@@ -52,8 +52,8 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
                     deliveryMethod: item.deliveryMethod,
                     status: item.status,
                     createdByName: item.createdByName,
-                    deliveryDate: item.deliveryDate.split("T")[0],
-                    createdDate: item.createdDate.split("T")[0],  
+                    deliveryDate:moment(item.deliveryDate).format("DD-MM-YYYY"),
+                    createdDate:moment(item.createdDate).format("DD-MM-YYYY") 
                 }
             })),
             currentPage: action.json.paging.currentPage,
@@ -132,8 +132,8 @@ GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING,GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS
                     deliveryMethod: item.deliveryMethod,
                     status: item.status,
                     createdByName: item.createdByName,
-                    deliveryDate: item.deliveryDate.split("T")[0],
-                    createdDate: item.createdDate.split("T")[0],  
+                    deliveryDate:moment(item.deliveryDate).format("DD-MM-YYYY"),
+                    createdDate:moment(item.createdDate).format("DD-MM-YYYY") 
                 }
             })),
             currentPage: action.json.paging.currentPage,

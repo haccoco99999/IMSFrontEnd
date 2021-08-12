@@ -223,7 +223,7 @@ export default function () {
       />
       <div class="pb-3">
         <div className="card">
-          <div class="card-header text-white bg-secondary">List Products</div>
+          <div class="card-header text-white bg-secondary">Product List</div>
           <div className="card-body">
             <PagingComponent
               setSizePage={setSizePage}
@@ -235,7 +235,7 @@ export default function () {
             <button onClick={pushAddPage} type="button" class=" btn-sm mb-1 btn btn-primary">Add Product</button>
 
             {/* <PagingComponent sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
-            <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseGoodReceipt" aria-expanded="false" aria-controls="collapseExample">
+            <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
               <i class="bi bi-sliders"></i> Setting Colum
             </p>
 

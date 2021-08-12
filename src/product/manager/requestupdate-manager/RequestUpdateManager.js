@@ -170,18 +170,33 @@ export default function RequestUpdateManager() {
   }, [rejectUpdateRequestSkuReducer]);
   return (
     <>
-      <div className="wrapper-content shadow">
-        <BootstrapTable
+
+<div class="pb-3">
+        <div className="card">
+          <div class="card-header text-white bg-secondary">Request Update List</div>
+          <div className="card-body">
+      
+
+
+            {/* <PagingComponent sizePerPage={filter.sizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
+
+            <BootstrapTable
           keyField="productVariantId"
           striped
           hover
           condensed
           columns={columnsProductUpdate}
-          headerClasses="table-header-receipt"
           noDataIndication={() => <TableLoading />}
           data={getAllUpdateRequest}
         />
+
+
+
+          </div>
+        </div>
       </div>
+
+      
     </>
   );
 }

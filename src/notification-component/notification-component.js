@@ -49,7 +49,7 @@ export default function NotificationBellComponents(props) {
         })}
       </div>
 
-      <div class="notification-footer bg-light fixed-bottom text-center"><p class="menu-title">View all</p></div>
+      <div class="notification-footer bg-light fixed-bottom text-center"><p onClick={() =>history.replace("/homepage/notification")} class=" menu-title">View all</p></div>
 
     </ul>
   );

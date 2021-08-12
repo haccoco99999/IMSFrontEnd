@@ -88,12 +88,10 @@ export default function GoodsReceiptDetails() {
   }, []);
 
   function goBackClick() {
-    history.goBack(-1);
+    history.replace("/homepage/good-receipt");
   }
 
-  function goToManagerPage() {
-    history.push("/homepage/good-receipt/");
-  }
+
   //todo: function navBar button
   const listButton = setListButtonNav();
 

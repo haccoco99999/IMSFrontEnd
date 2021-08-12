@@ -225,7 +225,7 @@ function App(props) {
               </div>
             </div>
             <i
-              className="bx menu-icon-notification-logout dropdown-toggle"
+              className="bx  menu-icon-notification-logout"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >

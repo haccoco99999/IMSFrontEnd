@@ -16,7 +16,7 @@ import {
 import handleApiErrors from "../../../auth/api-errors";
 
 function getAllCategory(action) {
-  const url = `${process.env.REACT_APP_API}/category?CurrentPage=${action.currentPage}&SizePerPage=${action.sizePerPage}`;
+  const url = `${process.env.REACT_APP_API}/category?${action.filter}`;
 
   return fetch(url, {
     method: "GET",

@@ -256,7 +256,7 @@ export default function CreateStocktakeComponent() {
 
   function goBackClick() {
     setIsCreating(false);
-    history.goBack(-1);
+    history.replace("/homepage/stock-take");
   }
 
   function handleOnSelect(row, isSelect) {

@@ -133,7 +133,7 @@ export default function CreatePurchaseRequisition() {
 
   //todo: go back click
   function goBackClick() {
-    history.goBack(-1);
+    history.replace("/homepage/sale-man");
   }
 
   function clickDeleteCheckItems(rowIndex) {

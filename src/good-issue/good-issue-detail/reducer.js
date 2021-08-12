@@ -1,4 +1,4 @@
-
+import moment from 'moment';
 import {
   GET_GOOD_ISSUE_DETAIL_REQUEST,
   GET_GOOD_ISSUE_DETAIL_SUCCESS,
@@ -74,7 +74,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
         if (element.userTransactionActionType === 4) {
 
           infoRejectOrder = {
-            createDate: element.date,
+            createDate: moment(element.date).format("DD-MM-YYYY") ,
             name: element.applicationUser.fullname,
             email: element.applicationUser.email,
             phoneNumber: element.applicationUser.phoneNumber,
@@ -130,9 +130,9 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
           status: action.json.goodsIssueOrder.goodsIssueOrderStatusString,
           customerName: action.json.goodsIssueOrder.customerName,
           customerPhoneNumber: action.json.goodsIssueOrder.customerPhoneNumber,
-          deliveryDate: action.json.goodsIssueOrder.deliveryDate.split("T")[0],
+          deliveryDate:moment( action.json.goodsIssueOrder.deliveryDate).format("DD-MM-YYYY"),
           deliverMethod: action.json.goodsIssueOrder.deliveryMethod,
-          createdDate: "10/20/20",
+          createdDate: "10-02-2021",
           infoCreater: {
             fullname: "transaction.applicationUser.fullname",
             address: "transaction.applicationUser.address",

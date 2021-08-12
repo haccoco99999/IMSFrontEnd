@@ -4,11 +4,10 @@ import {
   UPDATE_CATEGORY_REQUEST,
 } from "../constants";
 
-export function GetAllCategoryAction({ currentPage, sizePerPage, token }) {
+export function GetAllCategoryAction({ filter, token }) {
   return {
     type: GET_ALL_CATEGORY_REQUEST,
-    currentPage,
-    sizePerPage,
+    filter,
     token,
   };
 }

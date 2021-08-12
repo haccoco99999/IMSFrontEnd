@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Modal } from "bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
 import Swal from "sweetalert2";
+import { TableLoading } from "../../../components/loading/loading-component";
 //css
 import "../../product.css";
 //components
@@ -13,11 +14,12 @@ import {
   updateLocationAction,
 } from "./action";
 import { RESET } from "../constants";
+import { LocationCategoryFilter } from "../../../components/filter/FilterComponents";
 export default function LocationManager() {
   let dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(5);
+  // const [sizePerPage, setsizePerPage] = useState(5);
   const [isCreate, setIsCreate] = useState(true);
   const [locationData, setLocationData] = useState({
     id: "",
@@ -48,7 +50,17 @@ export default function LocationManager() {
       locationBarcode: "",
     });
   };
+  const locationFilterInit = {
+  
+    searchQuery: "",
+    IsLocationOnly: true
 
+  }
+  const [locationFilter, setLocationFilter] = useState({
+    currentPage: 1,
+    sizePerPage: 25,
+    ...locationFilterInit
+  })
   //todo:Store
   const {
     listLocationsStore,
@@ -81,12 +93,82 @@ export default function LocationManager() {
   ];
 
   function nextPagingClick() {
-    console.log("forward");
-    setCurrentPage(currentPage + 1);
+
+
+
+    let dataFilter = { ...locationFilter, currentPage: locationFilter.currentPage + 1 }
+    dispatch(
+      getAllLocationsAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setLocationFilter(dataFilter)
   }
   function backPagingClick() {
-    console.log("backWard");
-    setCurrentPage(currentPage - 1);
+
+    let dataFilter = { ...locationFilter, currentPage: locationFilter.currentPage - 1 }
+    dispatch(
+      getAllLocationsAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setLocationFilter(dataFilter)
+  }
+  function onChangeLocationFilter(event) {
+    setLocationFilter((state) => ({
+      ...state, [event.target.name]: event.target.value
+    }))
+  }
+  function submitLocationFilter() {
+
+    dispatch(
+      getAllLocationsAction({
+        filter: parseFilterToString(locationFilter),
+        token: token,
+      })
+    );
+
+
+  }
+  function resetLocationFilter() {
+    
+    dispatch(
+      getAllLocationsAction({
+        filter: parseFilterToString({
+          ...locationFilter, ...locationFilterInit
+        }),
+        token: token,
+      })
+    );
+    setLocationFilter((state) => ({
+      ...state, ...locationFilterInit
+    }))
+  }
+  function setSizePage(event) {
+
+    let dataFilter = { ...locationFilter, sizePerPage: event.target.value }
+    dispatch(
+      getAllLocationsAction({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setLocationFilter(dataFilter)
+  }
+  function parseFilterToString(dataFilter) {
+    let filterString = ""
+    Object.entries(dataFilter).forEach(item => {
+      if (item[1] !== "") {
+
+
+        filterString += item[0] + "=" + item[1] + "&"
+
+
+      }
+    })
+    return filterString
   }
 
   const rowEvents = {
@@ -103,15 +185,14 @@ export default function LocationManager() {
   useEffect(() => {
     dispatch(
       getAllLocationsAction({
+        filter: parseFilterToString(locationFilter),
         token: token,
-        currentPage: currentPage,
-        sizePerPage: sizePerPage,
       })
     );
     return () => {
       dispatch({ type: RESET });
     };
-  }, [currentPage, sizePerPage]);
+  }, []);
 
   useEffect(() => {
     if (createLocationReducer.requesting) {
@@ -143,9 +224,8 @@ export default function LocationManager() {
             hideModal();
             dispatch(
               getAllLocationsAction({
+                filter: parseFilterToString(locationFilter),
                 token: token,
-                currentPage: currentPage,
-                sizePerPage: sizePerPage,
               })
             );
           }
@@ -189,9 +269,8 @@ export default function LocationManager() {
             hideModal();
             dispatch(
               getAllLocationsAction({
+                filter: parseFilterToString(locationFilter),
                 token: token,
-                currentPage: currentPage,
-                sizePerPage: sizePerPage,
               })
             );
           }
@@ -206,7 +285,7 @@ export default function LocationManager() {
   }, [updateLocationReducer]);
   return (
     <>
-      <div className="wrapper-content shadow">
+      {/* <div className="wrapper-content shadow">
         <div className="ms-5">
           <a
             className="btn btn-default me-md-2 add"
@@ -246,15 +325,62 @@ export default function LocationManager() {
             backPagingClick={backPagingClick}
           />
         </div>
+      </div> */}
+
+      <LocationCategoryFilter
+        onChangeValueFilter={onChangeLocationFilter}
+        filter={locationFilter}
+        submitFilter={submitLocationFilter}
+        resetFilter={resetLocationFilter}
+
+      />
+
+      <div class="pb-3">
+        <div className="card">
+          <div class="card-header text-white bg-secondary">Product List</div>
+          <div className="card-body">
+            <PagingComponent
+              setSizePage={setSizePage}
+              pageCount={pageCount}
+              nextPagingClick={nextPagingClick}
+              backPagingClick={backPagingClick}
+              currentPage={locationFilter.currentPage} />
+
+            <button onClick={showModal} type="button" class=" btn-sm mb-3 btn btn-primary">Add Location</button>
+
+            {/* <PagingComponent sizePerPage={filter.sizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
+
+
+            <BootstrapTable
+
+
+              keyField="id"
+              striped
+              hover
+              condensed
+              columns={columns}
+              data={listLocationsStore}
+              rowEvents={rowEvents}
+              noDataIndication={() => <TableLoading />}
+            />
+
+
+
+
+          </div>
+        </div>
       </div>
+
+
+
       <ModalFunction
         modalRef={modalRef}
         hideModal={hideModal}
         isCreate={isCreate}
         locationData={locationData}
         token={token}
-        // messaages={messages}
-        // onChangeValue={onChangeValue}
+      // messaages={messages}
+      // onChangeValue={onChangeValue}
       />
     </>
   );
@@ -265,7 +391,7 @@ function ModalFunction(props) {
 
   const [isDisabled, setIsDisabled] = useState(true);
   const [locationSelected, setLocationSelected] = useState({});
-  // const [categorySelected, setCategorySelected] = useState({});
+  // const [categorySelected, setCategorySelected] = useState({ });
 
   function onCancelClick() {
     // setCategorySelected(props.categoryData);

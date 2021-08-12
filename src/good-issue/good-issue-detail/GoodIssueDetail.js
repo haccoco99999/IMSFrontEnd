@@ -492,7 +492,7 @@ export default function DetailGoodIssue() {
         // }
     };
     function backPage() {
-        history.go(-1)
+        history.replace("/homepage/good-issue")
     }
 
 

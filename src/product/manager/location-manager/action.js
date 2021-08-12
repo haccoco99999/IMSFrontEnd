@@ -4,8 +4,8 @@ import {
   UPDATE_LOCATION_REQUEST,
 } from "../constants";
 
-export function getAllLocationsAction({ token, currentPage, sizePerPage }) {
-  return { type: GET_ALL_LOCATIONS_REQUEST, token, currentPage, sizePerPage };
+export function getAllLocationsAction({ token, filter }) {
+  return { type: GET_ALL_LOCATIONS_REQUEST, token, filter};
 }
 export function createLocationAction({ token, data }) {
   return { type: CREATE_LOCATION_REQUEST, token, data };

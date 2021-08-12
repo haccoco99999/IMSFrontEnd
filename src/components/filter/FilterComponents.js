@@ -10,7 +10,7 @@ export function GoodReceiptFilter(props) {
             <div class="card">
 
 
-                <div class="card-header text-white bg-secondary">Filter 
+                <div class="card-header text-white bg-secondary">Filter
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
                         <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
                     </svg></div>
@@ -22,7 +22,7 @@ export function GoodReceiptFilter(props) {
                     <div className="row">
                         <div class="form-group">
                             <label for="">Search:</label>
-                            <input type="text" value={props.filter.SearchQuery}  onChange={props.onChangeValueFilter}
+                            <input type="text" value={props.filter.SearchQuery} onChange={props.onChangeValueFilter}
                                 class="form-control" name="SearchQuery" id="" aria-describedby="helpId" placeholder="" />
 
                         </div>
@@ -50,6 +50,53 @@ export function GoodReceiptFilter(props) {
 
 
                         </div>
+
+                    </div>
+
+
+
+                </div>
+                <div className="card-body">
+                    <div className="row">
+
+                        <div className="">
+                            <button className="btn btn-primary me-md-2 btn-sm" type="button" onClick={() => props.resetFilter()}>Reset</button>
+                            <button className="btn btn-primary btn-sm" type="button" onClick={() => props.submitFilter()}>Filter</button>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    )
+}
+export function LocationCategoryFilter(props) {
+
+    return (
+        <div class="pb-3">
+            <div class="card">
+
+
+                <div class="card-header text-white bg-secondary">Filter
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                        <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+                    </svg></div>
+                <div class="card-body">
+
+
+
+
+                    <div className="row">
+                        <div class="form-group">
+                            <label for="">Search:</label>
+                            <input type="text" value={props.filter.searchQuery} onChange={props.onChangeValueFilter}
+                                class="form-control" name="searchQuery" id="" aria-describedby="helpId" placeholder="" />
+
+                        </div>
+
+
 
                     </div>
 
@@ -196,8 +243,8 @@ export function PurchaseOrderFilter(props) {
                             </div>
                             <div class="form-group">
                                 <label for="">Select Status</label>
-                                   {props.isRequisition?<SelectStatusPurchaseRequisition selectStatus={props.selectStatusFilter} selected={props.filter.Statuses} />:   <SelectStatusPurchaseOrder selectStatus={props.selectStatusFilter} selected={props.filter.Statuses} />} 
-                              
+                                {props.isRequisition ? <SelectStatusPurchaseRequisition selectStatus={props.selectStatusFilter} selected={props.filter.Statuses} /> : <SelectStatusPurchaseOrder selectStatus={props.selectStatusFilter} selected={props.filter.Statuses} />}
+
                             </div>
                             <div className="row">
                                 <label for="">Price:</label>
@@ -224,13 +271,13 @@ export function PurchaseOrderFilter(props) {
                                 <label for="">Create Date:</label>
                                 <div class="form-group col-md-6" >
 
-                                    <input type="date"   max={props.filter.ToCreatedDate}
+                                    <input type="date" max={props.filter.ToCreatedDate}
                                         onChange={props.onChangeValueFilter} value={props.filter.FromCreatedDate}
                                         class="form-control" name="FromCreatedDate" id="" aria-describedby="helpId" placeholder="" />
                                 </div>
                                 <div class="form-group col-md-6">
 
-                                    <input type="date"  min={props.filter.FromCreatedDate} 
+                                    <input type="date" min={props.filter.FromCreatedDate}
                                         onChange={props.onChangeValueFilter} value={props.filter.ToCreatedDate}
                                         class="form-control" name="ToCreatedDate" id="" aria-describedby="helpId" placeholder="" />
                                 </div>
