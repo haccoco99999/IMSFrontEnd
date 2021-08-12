@@ -67,19 +67,15 @@ export default function CategoryManager() {
     // messages: state.getAllCategoriesReducer.messages,
   }));
 
-
-
   const categoryFilterInit = {
-
     searchQuery: "",
-    IsLocationOnly: true
-
-  }
+    IsLocationOnly: true,
+  };
   const [categoryFilter, setCategoryFilter] = useState({
     currentPage: 1,
     sizePerPage: 25,
-    ...categoryFilterInit
-  })
+    ...categoryFilterInit,
+  });
 
   const [currentPage, setCurrentPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(5);
@@ -157,82 +153,78 @@ export default function CategoryManager() {
   //   });
   // }
   function nextPagingClick() {
-
-
-
-    let dataFilter = { ...categoryFilter, currentPage: categoryFilter.currentPage + 1 }
+    let dataFilter = {
+      ...categoryFilter,
+      currentPage: categoryFilter.currentPage + 1,
+    };
     dispatch(
       GetAllCategoryAction({
         filter: parseFilterToString(dataFilter),
         token: token,
       })
     );
-    setCategoryFilter(dataFilter)
+    setCategoryFilter(dataFilter);
   }
   function backPagingClick() {
-
-    let dataFilter = { ...categoryFilter, currentPage: categoryFilter.currentPage - 1 }
+    let dataFilter = {
+      ...categoryFilter,
+      currentPage: categoryFilter.currentPage - 1,
+    };
     dispatch(
       GetAllCategoryAction({
         filter: parseFilterToString(dataFilter),
         token: token,
       })
     );
-    setCategoryFilter(dataFilter)
+    setCategoryFilter(dataFilter);
   }
   function onChangecategoryFilter(event) {
     setCategoryFilter((state) => ({
-      ...state, [event.target.name]: event.target.value
-    }))
+      ...state,
+      [event.target.name]: event.target.value,
+    }));
   }
   function submitcategoryFilter() {
-
     dispatch(
       GetAllCategoryAction({
         filter: parseFilterToString(categoryFilter),
         token: token,
       })
     );
-
-
   }
   function resetCategoryFilter() {
-
     dispatch(
       GetAllCategoryAction({
         filter: parseFilterToString({
-          ...categoryFilter, ...categoryFilterInit
+          ...categoryFilter,
+          ...categoryFilterInit,
         }),
         token: token,
       })
     );
     setCategoryFilter((state) => ({
-      ...state, ...categoryFilterInit
-    }))
+      ...state,
+      ...categoryFilterInit,
+    }));
   }
   function setSizePage(event) {
-
-    let dataFilter = { ...categoryFilter, sizePerPage: event.target.value }
+    let dataFilter = { ...categoryFilter, sizePerPage: event.target.value };
     dispatch(
       GetAllCategoryAction({
         filter: parseFilterToString(dataFilter),
         token: token,
       })
     );
-    setCategoryFilter(dataFilter)
+    setCategoryFilter(dataFilter);
   }
   function parseFilterToString(dataFilter) {
-    let filterString = ""
-    Object.entries(dataFilter).forEach(item => {
+    let filterString = "";
+    Object.entries(dataFilter).forEach((item) => {
       if (item[1] !== "") {
-
-
-        filterString += item[0] + "=" + item[1] + "&"
-
-
+        filterString += item[0] + "=" + item[1] + "&";
       }
-    })
-    return filterString
+    });
+    return filterString;
   }
   useEffect(() => {
     dispatch(
@@ -349,7 +341,6 @@ export default function CategoryManager() {
         filter={categoryFilter}
         submitFilter={submitcategoryFilter}
         resetFilter={resetCategoryFilter}
-
       />
 
       <div class="pb-3">
@@ -361,12 +352,18 @@ export default function CategoryManager() {
               pageCount={pageCount}
               nextPagingClick={nextPagingClick}
               backPagingClick={backPagingClick}
-              currentPage={categoryFilter.currentPage} />
+              currentPage={categoryFilter.currentPage}
+            />
 
-            <button onClick={showModal} type="button" class=" btn-sm mb-3 btn btn-primary">Add Category</button>
+            <button
+              onClick={showModal}
+              type="button"
+              class=" btn-sm mb-3 btn btn-primary"
+            >
+              Add Category
+            </button>
 
             {/* <PagingComponent sizePerPage={filter.sizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
-
 
             <BootstrapTable
               keyField="id"
@@ -380,12 +377,17 @@ export default function CategoryManager() {
               rowClasses="pointer"
               noDataIndication={() => <TableLoading />}
             />
-
-
-
-
           </div>
         </div>
+        <ModalFunction
+          modalRef={modalRef}
+          hideModal={hideModal}
+          isCreate={isCreate}
+          categoryData={categoryData}
+          // onChangeValue={onChangeValue}
+          token={token}
+          // messaages={messages}
+        />
       </div>
 
       {/* <ModalFunction
