@@ -361,6 +361,7 @@ export default function LocationManager() {
               columns={columns}
               data={listLocationsStore}
               rowEvents={rowEvents}
+              rowClasses="pointer"
               noDataIndication={() => <TableLoading />}
             />
 

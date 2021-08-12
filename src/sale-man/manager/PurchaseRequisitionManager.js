@@ -68,7 +68,7 @@ export default function PurchaseRequisitionManager() {
     {
       dataField: "status",
       text: "Status",
-      align: "center",
+    
       isDummyField: true,
       formatter: (cellContent, row) => {
         if (row.status === "RequisitionCreated")
@@ -88,11 +88,19 @@ export default function PurchaseRequisitionManager() {
             <span class="badge bg-warning text-dark">Waiting confirm</span>
           );
       },
+      align: (cell, row, rowIndex, colIndex) => {
+        return 'left';
+
+    },
     },
     {
       dataField: "createdByName",
       text: "Created By",
       hidden: true,
+      align: (cell, row, rowIndex, colIndex) => {
+        return 'left';
+
+    },
     },
     {
       dataField: "createdDate",
@@ -256,6 +264,7 @@ export default function PurchaseRequisitionManager() {
         <PurchaseOrderFilter
           isRequisition={true}
           filter={filter}
+          isSaleMan={true}
           submitFilter={submitFilter}
           resetFilter={resetFilter}
           onChangeValueFilter={onChangeValueFilter}
@@ -271,7 +280,7 @@ export default function PurchaseRequisitionManager() {
 
               <PagingComponent rowCountTotal={rowCountTotal} sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.currentPage} />
               <button   onClick={pushAddPage} type="button" class=" btn-sm mb-1 btn btn-primary">Add Purchase Requistition</button>
-              <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+              <p className="dropdown-toggle pointer" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16">
                   <path fill-rule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z" />
                 </svg> Setting Colum
@@ -299,6 +308,7 @@ export default function PurchaseRequisitionManager() {
                         rowEvents={rowEvents}
                         noDataIndication={() => <TableLoading />}
                         // rowEvents={rowEvents}
+                        rowClasses="pointer"
 
                         //    headerClasses="table-header-receipt"
                         {...props.baseProps}

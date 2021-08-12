@@ -377,6 +377,7 @@ export default function CategoryManager() {
               headerClasses="table-header-receipt"
               data={list_Categories}
               rowEvents={rowEvents}
+              rowClasses="pointer"
               noDataIndication={() => <TableLoading />}
             />
 

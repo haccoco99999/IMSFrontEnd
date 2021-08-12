@@ -90,8 +90,8 @@ export default function CreateAccount() {
   useEffect(() => {
     if (createUserAccountStatus.requesting) {
       Swal.fire({
-        title: 'Creating!',
-        html: 'Watting...',
+        title: 'Progressing',
+        html: 'Waiting...',
         timerProgressBar: true,
         didOpen: () => {
           Swal.showLoading()
@@ -102,28 +102,28 @@ export default function CreateAccount() {
     }
     else if (createUserAccountStatus.successful) {
 
-      Swal.fire(
-        'Create Success!',
-        'Click to Close!',
-        'success'
-
-      )
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      })
       dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
       dispatch({ type: CREATE_ACC_CLEAN })
     }
     else if (createUserAccountStatus.errors) {
       Swal.fire({
         icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong, cannot reject!',
+        title: 'Error',
+        text: 'Something went wrong!',
 
       })
       dispatch({ type: CREATE_ACC_CLEAN })
     }
     if (setActiveAccountStatus.requesting) {
       Swal.fire({
-        title: '!',
-        html: 'Watting...',
+        title: 'Progressing',
+        html: 'Waiting...',
         timerProgressBar: true,
         didOpen: () => {
           Swal.showLoading()
@@ -134,19 +134,19 @@ export default function CreateAccount() {
     }
     else if (setActiveAccountStatus.successful) {
 
-      Swal.fire(
-        ' Success!',
-        'Click to Close!',
-        'success'
-
-      )
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      })
       dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
       dispatch({ type: SET_ACTIVE_ACC_CLEAN })
     }
     else if (setActiveAccountStatus.errors) {
       Swal.fire({
         icon: 'error',
-        title: 'Oops...',
+        title: 'Error',
         text: 'Something went wrong !',
 
       })
@@ -154,8 +154,8 @@ export default function CreateAccount() {
     }
     if (updateAccountDetailStatus.requesting) {
       Swal.fire({
-        title: 'Updating!',
-        html: 'Watting...',
+        title: 'Progressing!',
+        html: 'Waiting...',
         timerProgressBar: true,
         didOpen: () => {
           Swal.showLoading()
@@ -166,19 +166,19 @@ export default function CreateAccount() {
     }
     else if (updateAccountDetailStatus.successful) {
 
-      Swal.fire(
-        'Update Success!',
-        'Click to Close!',
-        'success'
-
-      )
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      })
       dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
       dispatch({ type: SET_ACTIVE_ACC_CLEAN })
     }
     else if (updateAccountDetailStatus.errors) {
       Swal.fire({
         icon: 'error',
-        title: 'Oops...',
+        title: 'Error',
         text: 'Something went wrong !',
 
       })
@@ -186,8 +186,8 @@ export default function CreateAccount() {
     }
     if (updateImageStatus.requesting) {
       Swal.fire({
-        title: 'Updating Avatar!',
-        html: 'Watting...',
+        title: 'Progressing',
+        html: 'Waiting...',
         timerProgressBar: true,
         didOpen: () => {
           Swal.showLoading()
@@ -198,18 +198,18 @@ export default function CreateAccount() {
     }
     else if (updateImageStatus.successful) {
 
-      Swal.fire(
-        'Update Success!',
-        'Click to Close!',
-        'success'
-
-      )
+      Swal.fire({
+        icon: "success",
+        title: "Your work has been saved",
+        showCancelButton: false,
+        confirmButtonColor: "#3085d6",
+      })
       dispatch({ type: UPDATE_IMAGE_CLEAN })
     }
     else if (updateImageStatus.errors) {
       Swal.fire({
         icon: 'error',
-        title: 'Oops...',
+        title: 'Error',
         text: 'Something went wrong!',
 
       })

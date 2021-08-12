@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Typeahead, AsyncTypeahead } from "react-bootstrap-typeahead";
+import React, { useCallback, useEffect, useState } from "react";
+import { Fragment } from "react";
+import { Typeahead, AsyncTypeahead, Highlighter } from "react-bootstrap-typeahead";
 import { useSelector } from "react-redux";
 import handleApiErrors from "../auth/api-errors";
 
@@ -9,9 +10,20 @@ export function SearchToAddProduct(props) {
   }));
   const SEARCH_URI =
     "https://imspublicapi.herokuapp.com/api/productvariant/search";
-
+  const [activeIndex, setActiveIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
+  const onKeyDown = useCallback(
+    (e) => {
+      console.log(e.keyCode)
+      // Check whether the 'enter' key was pressed, and also make sure that
+      // no menu items are highlighted.
+      if (e.keyCode === 13 && activeIndex === -1) {
+        console.log(activeIndex)
+      }
+    },
+    [activeIndex]
+  );
   const handleSearch = (query) => {
     setIsLoading(true);
 
@@ -23,7 +35,7 @@ export function SearchToAddProduct(props) {
         Origin: "",
       },
       credentials: "include",
-    })
+    }). then((res) => handleApiErrors(res)) 
       .then((resp) => resp.json())
       .then((items) => {
         console.log(items);
@@ -36,7 +48,7 @@ export function SearchToAddProduct(props) {
 
         setOptions(options);
         setIsLoading(false);
-      });
+      }).catch((error) => {})
   };
   const filterBy = () => true;
 
@@ -44,23 +56,37 @@ export function SearchToAddProduct(props) {
     <AsyncTypeahead
       filterBy={filterBy}
       id="async-example"
-      labelKey="filter"
+      labelKey="name"
       minLength={1}
       onSearch={handleSearch}
       options={options}
+      onKeyDown={onKeyDown}
       placeholder="Search product..."
-      renderMenuItemChildren={(option) => (
-        <div
+      isLoading={isLoading}
+      renderMenuItemChildren={(option, { text }, index) => (
+        <div className="p-0 m-0"
+          onKeyDown={() => { alert("okkk") }}
           onClick={() => props.getInfoProduct(option.product)}
-          key={option.id}
-        >
-
-          <div>
-            <strong>Name Product:{option.name}</strong> SKU:{option.sku}
-          </div>
+          key={option.id}>
+          <Fragment
+          >
+            <Highlighter >
+              Name: {option.name}
+            </Highlighter>
+            <div>
+              <small>
+                SKU: {option.sku}
+              </small>
+            </div>
+          </Fragment>
         </div>
+        
       )}
-    />
+    >
+      {(state) =>{
+       
+        setActiveIndex(state.activeIndex)}}
+    </AsyncTypeahead>
   );
 }
 export function Search() {

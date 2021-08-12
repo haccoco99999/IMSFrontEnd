@@ -16,23 +16,6 @@ export default function DashboardComponent() {
   return (
     <div className="home_content">
 
-      {/* ############################ */}
-      {/* <div className="row d-flex align-items-center">
-          
-          <div className="col-md-3 ">
-          <CardItem/>
-          </div>
-          <div className="col-md-3 ">
-          <CardItem/>
-          </div>
-          <div className="col-md-3 ">
-          <CardItem/>
-          </div>
-          <div className="col-md-3 ">
-          <CardItem/>
-          </div>
-
-        </div> */}
       <div class="d-grid gap-2">
         <div className="p-3">
           <div class="container-fluid">
@@ -104,7 +87,7 @@ export default function DashboardComponent() {
                       <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                           Inventory Cost This Month</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">$ {valueDashboardStore.dataDashBoard.inventoryCostThisMonth}</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{valueDashboardStore.dataDashBoard.inventoryCostThisMonth} VNĐ</div>
                       </div>
                       <div class="col-auto">
                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>

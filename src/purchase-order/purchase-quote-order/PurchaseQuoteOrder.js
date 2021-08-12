@@ -19,7 +19,7 @@ import ProductVariantsFilter from './ProductVariantsFilter'
 import StockTakeFilter from './StockTakeFilter'
 import { Cloudinary } from "@cloudinary/base";
 import { PurchaseOrderFilter } from '../../components/filter/FilterComponents'
-
+import moment  from 'moment'
 export default function PurchaseQuoteOrder() {
     // const cld = new Cloudinary({
     //     cloud: {
@@ -89,8 +89,8 @@ export default function PurchaseQuoteOrder() {
     })
     useEffect(() => {
 
-        dispatch(searchPurchaseOrder({ filter: parseFilterToString(filter), token:token }))
-        dispatch(getListQuote({token: token}))
+        dispatch(searchPurchaseOrder({ filter: parseFilterToString(filter), token: token }))
+        dispatch(getListQuote({ token: token }))
     }, [])
 
     useEffect(() => {
@@ -113,16 +113,29 @@ export default function PurchaseQuoteOrder() {
         {
             dataField: 'id',
             text: 'Order ID',
+            align: (cell, row, rowIndex, colIndex) => {
+                return 'left';
+
+            },
         },
         {
             dataField: 'createdByName',
-            text: 'Create By ',
-            hidden: true
+            text: 'Created By ',
+            hidden: true,
+            align: (cell, row, rowIndex, colIndex) => {
+                return 'left';
+
+            },
+
         },
         {
             dataField: 'status',
             text: 'Status',
             align: 'center',
+            align: (cell, row, rowIndex, colIndex) => {
+                return 'left';
+
+            },
             formatter: (cell, row, rowIndex, extraData) => {
 
                 if (row.status === "PurchaseOrder") {
@@ -153,7 +166,18 @@ export default function PurchaseQuoteOrder() {
                 }
                 return row.status
 
-            }
+            },
+            align: (cell, row, rowIndex, colIndex) => {
+                return 'left';
+
+            },
+
+        },
+        {
+            dataField: 'supplierName',
+            text: 'Supplier Name',
+            
+
         },
         {
             dataField: 'createdDate',
@@ -162,6 +186,9 @@ export default function PurchaseQuoteOrder() {
                 return 'right';
 
             },
+            formatter:(cell) =>{
+                return moment(cell).format("DD-MM-YYYY")
+            }
         },
         {
             dataField: 'deliveryDate',
@@ -170,12 +197,11 @@ export default function PurchaseQuoteOrder() {
                 return 'right';
 
             },
+            formatter:(cell) =>{
+                return moment(cell).format("DD-MM-YYYY")
+            }
         },
-        {
-            dataField: 'supplierName',
-            text: 'Supplier Name',
-     
-        },
+
         {
             dataField: 'totalPrice',
             text: 'Total Price',
@@ -183,8 +209,14 @@ export default function PurchaseQuoteOrder() {
                 return 'right';
 
             },
+            formatter: (cell, row, rowIndex, colIndex) => {
+                return cell.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+
+
+            },
+
         },
-      
+
 
 
     ];
@@ -268,12 +300,12 @@ export default function PurchaseQuoteOrder() {
     }
     function nextPagingClick() {
         let dataFilter = { ...filter, currentPage: filter.currentPage + 1 }
-        dispatch(searchPurchaseOrder({ filter: parseFilterToString(dataFilter) , token:token}))
+        dispatch(searchPurchaseOrder({ filter: parseFilterToString(dataFilter), token: token }))
         setFilter(dataFilter)
     }
     function backPagingClick() {
         let dataFilter = { ...filter, currentPage: filter.currentPage - 1 }
-        dispatch(searchPurchaseOrder({ filter: parseFilterToString(dataFilter), token:token }))
+        dispatch(searchPurchaseOrder({ filter: parseFilterToString(dataFilter), token: token }))
         setFilter(dataFilter)
     }
     function setSizePage(event) {
@@ -287,7 +319,7 @@ export default function PurchaseQuoteOrder() {
 
     }
     function setFilterSupplier(supplierValue) {
-   
+
         setFilter(state => ({ ...state, supplier: supplierValue }))
 
     }
@@ -308,7 +340,7 @@ export default function PurchaseQuoteOrder() {
                     item[1].forEach(status => filterString += item[0] + "=" + status.key + "&")
 
                 }
-            
+
                 else {
 
                     filterString += item[0] + "=" + item[1] + "&"
@@ -322,7 +354,7 @@ export default function PurchaseQuoteOrder() {
 
 
 
-        dispatch(searchPurchaseOrder({ filter: parseFilterToString(filter) , token:token}))
+        dispatch(searchPurchaseOrder({ filter: parseFilterToString(filter), token: token }))
 
     }
     function resetFilter() {
@@ -529,7 +561,7 @@ export default function PurchaseQuoteOrder() {
         <div className="purchase-quote-order wrapper">
             <div className="title-purchase-quote-order">
                 <span>Purchase requistion</span>
-              
+
             </div>
 
 
@@ -574,7 +606,7 @@ export default function PurchaseQuoteOrder() {
 
 
                             <PagingComponent rowCountTotal={infoTablePage.rowCountTotal} sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.currentPage} />
-                            <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            <p  className="dropdown-toggle pointer" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z" />
                                 </svg> Setting Colum
@@ -600,7 +632,7 @@ export default function PurchaseQuoteOrder() {
                                                 condensed
                                                 noDataIndication={() => <NoDataIndication />}
                                                 rowEvents={rowEvents}
-
+                                                rowClasses="pointer"
                                                 //    headerClasses="table-header-receipt"
                                                 {...props.baseProps}
                                             />

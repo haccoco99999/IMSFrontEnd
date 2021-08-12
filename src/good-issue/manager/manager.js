@@ -26,7 +26,7 @@ export default function Manager(props) {
     goodIssueRequisition: state.getAllGoodsIssuesRequisition,
     token: state.client.token
   }))
- 
+
   let [listGoodIssues, setListGoodIssues] = useState([])
   let [listGoodIssueRequisition, setListGoodIssueRequisition] = useState([])
   const dispatch = useDispatch()
@@ -38,23 +38,23 @@ export default function Manager(props) {
       { key: "Shipping", value: "Shipping " },
       { key: "Completed", value: "Completed" },
       { key: "Cancel", value: "Cancel" },
-   ]
-  ,
+    ]
+    ,
     fromCreatedDate: "",
     toCreatedDate: "",
     fromDeliveryDate: "",
     toDeliveryDate: "",
 
-}
-const [goodsIssueFilter, setGoodsIssueFilter] = useState({
+  }
+  const [goodsIssueFilter, setGoodsIssueFilter] = useState({
     currentPage: 1,
     SizePerPage: 25,
     ...goodsIssueFilterInit
-})
+  })
 
   useEffect(() => {
-    dispatch(getAllGoodsIssue({filter:parseFilterToString(goodsIssueFilter), token: token}))
-    dispatch(getAllGoodsIssueRequisition({token: token}))
+    dispatch(getAllGoodsIssue({ filter: parseFilterToString(goodsIssueFilter), token: token }))
+    dispatch(getAllGoodsIssueRequisition({ token: token }))
   }, [])
   useEffect(() => {
     setListGoodIssues(
@@ -75,6 +75,10 @@ const [goodsIssueFilter, setGoodsIssueFilter] = useState({
       dataField: 'status',
       text: 'Status',
       align: 'center',
+      align: (cell, row, rowIndex, colIndex) => {
+        return 'left';
+
+      },
       formatter: (cell, row, rowIndex, extraData) => {
 
         if (row.status === "Packing") {
@@ -103,39 +107,34 @@ const [goodsIssueFilter, setGoodsIssueFilter] = useState({
     },
     {
       dataField: 'createdByName',
-      text: 'Create By'
+      text: 'Created By'
+    },
+
+    {
+      dataField: 'deliveryMethod',
+      text: 'Delivery Method',
+
     },
     {
       dataField: 'deliveryDate',
-      text: 'Delivery Date'
+      text: 'Delivery Date',
+      align: (cell, row, rowIndex, colIndex) => {
+        return 'right';
+
+      },
     },
     {
       dataField: 'createdDate',
-      text: 'Create Date'
+      text: 'Created Date',
+      align: (cell, row, rowIndex, colIndex) => {
+        return 'right';
+
+      },
     },
-    {
-      dataField: 'deliveryMethod',
-      text: 'Delivery Method'
-    }
+
 
   ];
-  const products = [
-    {
-      id: 1,
-      name: "hung",
-      price: 1000
-    },
-    {
-      id: 2,
-      name: "hung",
-      price: 1000
-    },
-    {
-      id: 3,
-      name: "hung",
-      price: 1000
-    }
-  ];
+
 
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
@@ -152,102 +151,102 @@ const [goodsIssueFilter, setGoodsIssueFilter] = useState({
   const hiddenRowKeys = [-1, -3];
   const { ToggleList } = ColumnToggle;
 
-function onChangeGoodsIssueFilter(event) {
+  function onChangeGoodsIssueFilter(event) {
     setGoodsIssueFilter((state) => ({
-        ...state, [event.target.name]: event.target.value
+      ...state, [event.target.name]: event.target.value
     }))
-}
-function submitgoodsIssueFilter() {
-  dispatch(
-    getAllGoodsIssue({
-      filter: parseFilterToString(goodsIssueFilter),
-      token: token,
-    })
-  );
+  }
+  function submitgoodsIssueFilter() {
+    dispatch(
+      getAllGoodsIssue({
+        filter: parseFilterToString(goodsIssueFilter),
+        token: token,
+      })
+    );
 
-  
-    
-}
-function resetGoodsIssueFilter() {
-  let dataDefault = {  ...goodsIssueFilter, ...goodsIssueFilterInit}
-  dispatch(
-    getAllGoodsIssue({
-      filter: parseFilterToString(dataDefault),
-      token: token,
-    })
-  );
+
+
+  }
+  function resetGoodsIssueFilter() {
+    let dataDefault = { ...goodsIssueFilter, ...goodsIssueFilterInit }
+    dispatch(
+      getAllGoodsIssue({
+        filter: parseFilterToString(dataDefault),
+        token: token,
+      })
+    );
     setGoodsIssueFilter(dataDefault)
-}
-function selectStatusFilter(selected) {
-  setGoodsIssueFilter(state => ({ ...state, statuses: selected.map(item => item) }))
+  }
+  function selectStatusFilter(selected) {
+    setGoodsIssueFilter(state => ({ ...state, statuses: selected.map(item => item) }))
 
-}
-function nextPagingClick() {
-   
-  let dataFilter = { ...goodsIssueFilter, currentPage: goodsIssueFilter.currentPage + 1 }
-  dispatch(
-    getAllGoodsIssue({
-      filter: parseFilterToString(dataFilter),
-      token: token,
-    })
-  );
-  setGoodsIssueFilter(dataFilter)
-}
-function backPagingClick() {
-  
-  let dataFilter = { ...goodsIssueFilter, currentPage: goodsIssueFilter.currentPage - 1 }
-  dispatch(
-    getAllGoodsIssue({
-      filter: parseFilterToString(dataFilter),
-      token: token,
-    })
-  );
-  setGoodsIssueFilter(dataFilter)
-}
-function setSizePage(event) {
+  }
+  function nextPagingClick() {
 
-  let dataFilter = { ...goodsIssueFilter, SizePerPage: event.target.value }
-  dispatch(
-    getAllGoodsIssue({
-      filter: parseFilterToString(dataFilter),
-      token: token,
-    })
-  );
-  setGoodsIssueFilter(dataFilter)
-}
+    let dataFilter = { ...goodsIssueFilter, currentPage: goodsIssueFilter.currentPage + 1 }
+    dispatch(
+      getAllGoodsIssue({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setGoodsIssueFilter(dataFilter)
+  }
+  function backPagingClick() {
 
-function parseFilterToString(dataFilter) {
-  let filterString = ""
-  Object.entries(dataFilter).forEach(item => {
+    let dataFilter = { ...goodsIssueFilter, currentPage: goodsIssueFilter.currentPage - 1 }
+    dispatch(
+      getAllGoodsIssue({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setGoodsIssueFilter(dataFilter)
+  }
+  function setSizePage(event) {
+
+    let dataFilter = { ...goodsIssueFilter, SizePerPage: event.target.value }
+    dispatch(
+      getAllGoodsIssue({
+        filter: parseFilterToString(dataFilter),
+        token: token,
+      })
+    );
+    setGoodsIssueFilter(dataFilter)
+  }
+
+  function parseFilterToString(dataFilter) {
+    let filterString = ""
+    Object.entries(dataFilter).forEach(item => {
       if (item[1] !== "") {
 
-        
-           if (item[0] === "statuses") {
-           
-              item[1].forEach(status => filterString += item[0] + "=" + status.key + "&")
 
-          }
-          else {
+        if (item[0] === "statuses") {
 
-              filterString += item[0] + "=" + item[1] + "&"
-          }
+          item[1].forEach(status => filterString += item[0] + "=" + status.key + "&")
+
+        }
+        else {
+
+          filterString += item[0] + "=" + item[1] + "&"
+        }
 
       }
-  })
-  return filterString
-}
+    })
+    return filterString
+  }
   return (
     <div className="space-top-heading wrapper">
       {/* title */}
       <div className="title-heading mt-2">
         <span>Goods Issues Requisition</span>
       </div>
-      {goodIssueRequisition.successful?  <GalleryGoodIssue listData={listGoodIssueRequisition}
+      {goodIssueRequisition.successful ? <GalleryGoodIssue listData={listGoodIssueRequisition}
         clickGoodIssueRequisition={clickGoodIssueRequisition}
-      />:  <GalleryLoading/>}
-     
-   
-    
+      /> : <GalleryLoading />}
+
+
+
 
       <div className="title-heading mt-2">
         <span>Goods Issues</span>
@@ -256,26 +255,26 @@ function parseFilterToString(dataFilter) {
 
       <div class="d-grid gap-2">
         <GoodsIssueFilter filter={goodsIssueFilter}
-        selectStatusFilter={selectStatusFilter}
-        resetFilter={resetGoodsIssueFilter}
-        submitFilter={submitgoodsIssueFilter}
-        onChangeValueFilter={onChangeGoodsIssueFilter}
+          selectStatusFilter={selectStatusFilter}
+          resetFilter={resetGoodsIssueFilter}
+          submitFilter={submitgoodsIssueFilter}
+          onChangeValueFilter={onChangeGoodsIssueFilter}
         />
         <div class="">
           <div className="card">
             <div class="card-header text-white bg-secondary">List Goods Issue</div>
             <div className="card-body">
-            
-              <PagingComponent pageCount={  goodIssueStore.infoListGoodIssue.pageCount} 
-              setSizePage={setSizePage}
-              nextPagingClick={nextPagingClick} 
-              backPagingClick={backPagingClick} 
-              currentPage={goodsIssueFilter.currentPage} />
+
+              <PagingComponent pageCount={goodIssueStore.infoListGoodIssue.pageCount}
+                setSizePage={setSizePage}
+                nextPagingClick={nextPagingClick}
+                backPagingClick={backPagingClick}
+                currentPage={goodsIssueFilter.currentPage} />
 
               {/* <p onClick={handleClick}><i class="bi bi-file-earmark-plus"></i>Add</p> */}
 
               {/* <PagingComponent sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
-              <p className="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+              <p className="dropdown-toggle pointer" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 <i class="bi bi-sliders"></i> Setting Colum
               </p>
 
@@ -306,7 +305,7 @@ function parseFilterToString(dataFilter) {
                         data={listGoodIssues}
                         rowEvents={rowEvents}
                         {...props.baseProps}
-
+                        rowClasses="pointer"
                         noDataIndication={() => <TableLoading />}
                       />
                     </div>
