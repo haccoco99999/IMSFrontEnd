@@ -54,7 +54,10 @@ export default function CreateVariant() {
   }
 
   function goBackClick() {
-    history.goBack(-1);
+    // history.goBack(-1);
+    history.push("/homepage/product/details", {
+      productId: location.state.productId,
+    });
   }
 
   function onClickSave(event) {
@@ -103,7 +106,7 @@ export default function CreateVariant() {
               data: data,
               needCheckName: true,
               needCheckSku: needCheckSku,
-              page:"Create"
+              page: "Create",
             })
           );
       });

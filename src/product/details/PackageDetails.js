@@ -38,7 +38,22 @@ export default function PackageDetails() {
   const [isReturnData, setIsReturnData] = useState(false);
 
   function goBackClick() {
-    history.goBack(-1);
+    // history.goBack(-1);
+    if (location.state.isHavingRequestSKU)
+      history.push("/homepage/product/details/variant", {
+        variantId: location.state.variantId,
+        productId: location.state.productId,
+        variantType: location.state.variantType,
+        skuRequest: location.state.skuRequest,
+        isHavingRequestSKU: true,
+      });
+    else
+      history.push("/homepage/product/details/variant", {
+        variantId: location.state.variantId,
+        productId: location.state.productId,
+        variantType: location.state.variantType,
+        isHavingRequestSKU: false,
+      });
   }
 
   const listButtons = setListButtonNav();
