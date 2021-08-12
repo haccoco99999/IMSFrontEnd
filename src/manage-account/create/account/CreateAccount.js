@@ -5,7 +5,7 @@ import { CreateAccountAction, getUserAccountDetail, setActiveAccountAction, upda
 import { useDispatch, useSelector } from 'react-redux';
 import NavigationBar from '../../../components/navbar/navbar-component';
 import { useHistory, useLocation } from 'react-router-dom';
-import { CREATE_ACC_CLEAN, GET_DETAIL_ACC_CLEAN, SET_ACTIVE_ACC_CLEAN, UPDATE_IMAGE_CLEAN } from './constants';
+import { CREATE_ACC_CLEAN, GET_DETAIL_ACC_CLEAN, SET_ACTIVE_ACC_CLEAN, UPDATE_DETAIL_ACC_CLEAN, UPDATE_IMAGE_CLEAN } from './constants';
 import Swal from 'sweetalert2'
 import { ChangePasswordAccountManagerCompoent, ChangePasswordCompoent } from '../../../components/change-password/ChangePasswordComponent';
 import { TableLoading } from '../../../components/loading/loading-component';
@@ -173,7 +173,7 @@ export default function CreateAccount() {
         confirmButtonColor: "#3085d6",
       })
       dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
-      dispatch({ type: SET_ACTIVE_ACC_CLEAN })
+      dispatch({ type: UPDATE_DETAIL_ACC_CLEAN })
     }
     else if (updateAccountDetailStatus.errors) {
       Swal.fire({
@@ -182,7 +182,7 @@ export default function CreateAccount() {
         text: 'Something went wrong !',
 
       })
-      dispatch({ type: SET_ACTIVE_ACC_CLEAN })
+      dispatch({ type: UPDATE_DETAIL_ACC_CLEAN })
     }
     if (updateImageStatus.requesting) {
       Swal.fire({
@@ -276,6 +276,9 @@ export default function CreateAccount() {
     setInfoAccountState(state => ({
       ...state, [event.target.name]: event.target.value
     }))
+    if(statusUser ==="EDITUSER"){
+      clickUpdate()
+    }
   }
 
 
@@ -388,7 +391,6 @@ export default function CreateAccount() {
   }
   function clickUpdate() {
     const form = document.getElementById("checkValidProfile");
-    alert(form.checkValidity())
     if (!form.checkValidity()) {
       form.classList.add("was-validated");
 
@@ -406,7 +408,7 @@ export default function CreateAccount() {
 
       dispatch(updateUserAccountDetail({ data: data, token: token }))
       form.classList.remove("was-validated");
-      setClickEdit();
+      // setClickEdit();
     }
 
 
@@ -562,7 +564,7 @@ export default function CreateAccount() {
                   <div class="mb-3 row">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Select Role:</label>
                     <div class="col-sm-10">
-                      <select onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} value={infoAccountState.roleID} class="form-control" name="roleID" id="">
+                      <select onChange={onchangeInputInfoAccount} required  value={infoAccountState.roleID} class="form-control" name="roleID" id="">
                         <option value="" disabled selected>  -- No Selected --  </option>
                         <option value="IMS_MN" >Manager</option>
                         <option value="IMS_AC" >Accountant</option>
@@ -605,12 +607,12 @@ export default function CreateAccount() {
 
                   </div>
 
-                </form> :
-                  <div><p class="text-success btn dropdown-toggle" onClick={() => closeChangePasswordModal()} > <i class="bi bi-pen"></i> Change password</p>
-                    {isShowPasswordModal ? <ChangePasswordAccountManagerCompoent closeChangePasswordModal={closeChangePasswordModal} saveChangePassword={saveChangePassword} />
-                      : ""}
+                </form> : ""
+                  // <div><p class="text-success btn dropdown-toggle" onClick={() => closeChangePasswordModal()} > <i class="bi bi-pen"></i> Change password</p>
+                  //   {isShowPasswordModal ? <ChangePasswordAccountManagerCompoent closeChangePasswordModal={closeChangePasswordModal} saveChangePassword={saveChangePassword} />
+                  //     : ""}
 
-                  </div>
+                  // </div>
 
 
 
@@ -618,7 +620,7 @@ export default function CreateAccount() {
 
 
 
-                {statusUser === "EDITUSER" ? infoAccountState.isActive ?
+                {/* {statusUser === "EDITUSER" ? infoAccountState.isActive ?
                   <div>
                     {eventPage.isShowEdit ? <button onClick={() => setClickEdit()} type="button" class="btn btn-primary">EDIT</button> :
 
@@ -629,7 +631,11 @@ export default function CreateAccount() {
 
                     }
 
-                  </div> : <p className="text-danger">You must unblock account </p> : <button type="button" onClick={() => createAccountInfo()} class="btn btn-primary">Create User</button>}
+                  </div> : <p className="text-danger">You must unblock account </p> : <button type="button" onClick={() => createAccountInfo()} class="btn btn-primary">Create User</button>
+                  } */}
+        
+                
+                  
 
               </div>
             </div>

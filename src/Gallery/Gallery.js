@@ -55,13 +55,13 @@ class Gallery extends React.Component {
                     {this.props.listData.map((quote, index) =>
                         <div className=" container-box-order pointer" >
                             <div className="box-order" onClick={(e) => this.props.clickQuote(quote)}>
-                                <h4 className="priceQuoteOrderNumber">No.{quote.id}</h4>
+                                <h4  className="priceQuoteOrderNumber m-0">No.{quote.id}</h4>
                                 <p>Deadline:  <span>{moment(quote.deadline).add(7, "h").format("DD-MM-YYYY")}</span></p>
                                 <p>Created date: {moment(quote.createdDate).add(7, "h").format("DD-MM-YYYY")}</p>
                                {quote.supplierName !==""?<p>Vender: {quote.supplierName}</p>:"" } 
-                                <div className="footer-gallery">  <p>{quote.totalProductAmount} Product</p>
-                                    {setStatusPriQuote(quote.hasSentMail, quote.status)}
-                                </div>
+                                <p>{quote.totalProductAmount} Product</p>
+                                  <div className="sticky-bottom">  {setStatusPriQuote(quote.hasSentMail, quote.status)}</div>
+                             
                             </div>
                         </div>)}
 
