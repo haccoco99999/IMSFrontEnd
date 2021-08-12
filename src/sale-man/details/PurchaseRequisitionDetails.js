@@ -57,9 +57,9 @@ export default function PurchaseRequisitionDetails() {
       dataField: "orderQuantity",
       text: "Order Quantity",
       formatter: (cellContent, row, rowIndex) =>
-      (cleanListProducts[rowIndex].orderQuantity = parseInt(
-        row.orderQuantity
-      )),
+        (cleanListProducts[rowIndex].orderQuantity = parseInt(
+          row.orderQuantity
+        )),
       validator: (newValue, oldValue, row) => {
         if (isNaN(newValue)) {
           return {
@@ -189,7 +189,7 @@ export default function PurchaseRequisitionDetails() {
     deletePRReducer: state.deletePRReducer,
   }));
   function goBackClick() {
-    history.replace("/homepage/sale-man")
+    history.replace("/homepage/sale-man");
     // history.push("/homepage/sale-man");
   }
 
@@ -279,9 +279,9 @@ export default function PurchaseRequisitionDetails() {
         state.map((item) =>
           item.productVariantId === product.productVariantId
             ? {
-              ...item,
-              orderQuantity: item.orderQuantity + product.orderQuantity,
-            }
+                ...item,
+                orderQuantity: item.orderQuantity + product.orderQuantity,
+              }
             : item
         )
       );
@@ -684,12 +684,8 @@ export default function PurchaseRequisitionDetails() {
                             onChange={onChangeDeadline}
                           />
                         </div>
-                       
 
-                        <div className="mt-2 col-4">
-                          <label for="deadline" class="form-label">
-                            Order product
-                          </label>
+                        <div className="mt-2">
                           <button
                             onClick={() => clickSetShowAddProductPage()}
                             type="button"
@@ -705,7 +701,7 @@ export default function PurchaseRequisitionDetails() {
                               clickSetShowAddProductPage
                             }
                             clickToAddProduct={clickToAddProduct}
-                          // addGroupProduct={addGroupProduct}
+                            // addGroupProduct={addGroupProduct}
                           />
                         ) : (
                           ""
