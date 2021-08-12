@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -12,7 +12,7 @@ import {
   updateProductAction,
   getAllBrandAction,
 } from "./action";
-import { getAllUpdateProductAction } from "../manager/product-manager/action";
+// import { getAllUpdateProductAction } from "../manager/product-manager/action";
 import { getCategoriesAllAction } from "../create/action";
 import { TableLoading } from "../../components/loading/loading-component";
 import { RESET } from "./constants";
@@ -113,6 +113,7 @@ export default function ProductDetails() {
         variantId: row.id,
         productId: productDetails.id,
         variantType: productDetails.isVariantType,
+        isHavingRequestSKU: false,
       });
     },
   };
@@ -122,7 +123,6 @@ export default function ProductDetails() {
       let findElement = getAllUpdateRequest.find(
         (e) => e.productVariantId === row.id
       );
-      console.log("SKU REQUEST:", findElement.sku);
       
       history.push("/homepage/product/details/variant", {
         variantId: row.id,
@@ -376,7 +376,7 @@ export default function ProductDetails() {
           <NavigationBar
             listButton={listButtons}
             titleBar="Product details"
-            actionGoBack={goBackClick}
+            actionGoBack={goToManagerPage}
             status=""
             home="Product"
             currentPage="Product details"

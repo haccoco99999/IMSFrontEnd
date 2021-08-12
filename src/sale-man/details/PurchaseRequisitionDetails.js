@@ -16,7 +16,7 @@ import {
   updateAction,
   deletePRAction,
 } from "./action";
-import SearchComponent from "../../search-component/SearchComponent";
+import RejectWrapper from "../../components/reject-wrapper/reject-component";
 import NavigationBar from "../../components/navbar/navbar-component";
 import { TableLoading } from "../../components/loading/loading-component";
 import { CLEAR_MESSAGE } from "./constants";
@@ -26,7 +26,7 @@ export default function PurchaseRequisitionDetails() {
   let history = useHistory();
   let dispatch = useDispatch();
   let location = useLocation();
-  const [isFromManagerPage, setIsFromManagerPage] = useState(true);
+  const [reject, setReject] = useState({});
   const [isEditDisabled, setIsEditDisabled] = useState(true);
   const [deadline, setDeadline] = useState("");
   const [isCancel, setIsCancel] = useState(false);
@@ -57,9 +57,9 @@ export default function PurchaseRequisitionDetails() {
       dataField: "orderQuantity",
       text: "Order Quantity",
       formatter: (cellContent, row, rowIndex) =>
-      (cleanListProducts[rowIndex].orderQuantity = parseInt(
-        row.orderQuantity
-      )),
+        (cleanListProducts[rowIndex].orderQuantity = parseInt(
+          row.orderQuantity
+        )),
       validator: (newValue, oldValue, row) => {
         if (isNaN(newValue)) {
           return {
@@ -168,6 +168,7 @@ export default function PurchaseRequisitionDetails() {
     submitDraftReducer,
     updatePRReducer,
     deletePRReducer,
+    transactionRecordCompacts,
   } = useSelector((state) => ({
     statusStore:
       state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
@@ -187,9 +188,12 @@ export default function PurchaseRequisitionDetails() {
     submitDraftReducer: state.submitDraftReducer,
     updatePRReducer: state.updatePRReducer,
     deletePRReducer: state.deletePRReducer,
+    transactionRecordCompacts:
+      state.getDetailsPurchaseRequisitionReducer.purchaseRequisitionDetails
+        .transaction.transactionRecordCompacts,
   }));
   function goBackClick() {
-    history.replace("/homepage/sale-man")
+    history.replace("/homepage/sale-man");
     // history.push("/homepage/sale-man");
   }
 
@@ -254,7 +258,21 @@ export default function PurchaseRequisitionDetails() {
       id: location.state.purchaseRequisitionId,
       cancelReason: "Delete purchase requisition status 0",
     };
-    dispatch(deletePRAction({ data: data, token: token }));
+
+    Swal.fire({
+      title: "Are you sure",
+      text: "Do you want to delete this?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: " #d33",
+      confirmButtonText: "Confirm",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deletePRAction({ data: data, token: token }));
+      }
+    });
   }
 
   // function clickToAddProduct(productRaw) {
@@ -279,9 +297,9 @@ export default function PurchaseRequisitionDetails() {
         state.map((item) =>
           item.productVariantId === product.productVariantId
             ? {
-              ...item,
-              orderQuantity: item.orderQuantity + product.orderQuantity,
-            }
+                ...item,
+                orderQuantity: item.orderQuantity + product.orderQuantity,
+              }
             : item
         )
       );
@@ -609,6 +627,7 @@ export default function PurchaseRequisitionDetails() {
     } else if (statusStore < 0) {
       setStatus("Canceled");
       setClassStatus("bg-danger");
+      setReject(transactionRecordCompacts.pop());
     } else {
       setStatus("Waiting confirm");
       setClassStatus("bg-warning text-dark");
@@ -633,6 +652,18 @@ export default function PurchaseRequisitionDetails() {
                 Purchase Requisition Details
               </div>
               <ul class="list-group list-group-flush">
+                {statusStore < 0 && (
+                  <RejectWrapper
+                    name={transactionRecordStore[0].applicationUser.fullname}
+                    email={transactionRecordStore[0].applicationUser.email}
+                    phoneNumber={
+                      transactionRecordStore[0].applicationUser.phoneNumber
+                    }
+                    reason={reject.transactionName}
+                    date={moment(reject.date).add(7, "h").format("DD-MM-YYYY")}
+                  />
+                )}
+                <li className="list-group-item"></li>
                 <li class="list-group-item">
                   <div className="row g-3 justify-content-between me-3">
                     <div className="col-4">
@@ -684,12 +715,8 @@ export default function PurchaseRequisitionDetails() {
                             onChange={onChangeDeadline}
                           />
                         </div>
-                       
 
-                        <div className="mt-2 col-4">
-                          <label for="deadline" class="form-label">
-                            Order product
-                          </label>
+                        <div className="mt-2">
                           <button
                             onClick={() => clickSetShowAddProductPage()}
                             type="button"
@@ -705,7 +732,7 @@ export default function PurchaseRequisitionDetails() {
                               clickSetShowAddProductPage
                             }
                             clickToAddProduct={clickToAddProduct}
-                          // addGroupProduct={addGroupProduct}
+                            // addGroupProduct={addGroupProduct}
                           />
                         ) : (
                           ""

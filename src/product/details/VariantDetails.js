@@ -50,9 +50,23 @@ export default function VariantDetails() {
   ];
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
-      history.push("/homepage/product/details/package", {
-        packageId: row.id,
-      });
+      if (location.state.isHavingRequestSKU)
+        history.push("/homepage/product/details/package", {
+          packageId: row.id,
+          variantId: location.state.variantId,
+          productId: location.state.productId,
+          variantType: location.state.variantType,
+          skuRequest: location.state.skuRequest,
+          isHavingRequestSKU: true,
+        });
+      else
+        history.push("/homepage/product/details/package", {
+          packageId: row.id,
+          variantId: location.state.variantId,
+          productId: location.state.productId,
+          variantType: location.state.variantType,
+          isHavingRequestSKU: false,
+        });
     },
   };
 
@@ -81,7 +95,10 @@ export default function VariantDetails() {
   };
 
   function goBackClick() {
-    history.goBack(-1);
+    // history.goBack(-1);
+    history.push("/homepage/product/details", {
+      productId: location.state.productId,
+    });
   }
 
   // function onClickToDetails(row) {
@@ -272,7 +289,7 @@ export default function VariantDetails() {
     if (getDetailsVariantReducer.successful) setIsReturnData(true);
   }, [getDetailsVariantReducer]);
 
-  console.log(location.state.skuRequest)
+  console.log(location.state.skuRequest);
   // useEffect(() => {
   //   if (messages === "Update Variant success") {
   //     dispatch(
@@ -352,17 +369,18 @@ export default function VariantDetails() {
                         <strong>SKU: </strong>
                         {isDisabled ? (
                           variant.sku
-                        ) : ( <>
-                        <input
-                            type="text"
-                            name="sku"
-                            className="form-control"
-                            onChange={onChangeValue}
-                            value={variant.sku}
-                          />
-                          {"Requested update sku: " + location.state.skuRequest}
-                        </>
-                          
+                        ) : (
+                          <>
+                            <input
+                              type="text"
+                              name="sku"
+                              className="form-control"
+                              onChange={onChangeValue}
+                              value={variant.sku}
+                            />
+                            {"Requested update sku: " +
+                              location.state.skuRequest}
+                          </>
                         )}
                       </p>
                       <p>

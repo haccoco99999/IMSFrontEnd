@@ -78,7 +78,7 @@ export default function PurchaseRequisitionManager() {
         } else if (row.status === "Done") {
           return <span class="badge bg-primary">Done</span>;
         } else if (
-          row.status === "POCanceled" ||
+          row.status === "PQCanceled" ||
           row.status === "RequisitionCanceled" ||
           row.status === "POCanceled"
         ) {
