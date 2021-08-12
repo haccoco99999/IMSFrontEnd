@@ -378,8 +378,9 @@ export default function VariantDetails() {
                               onChange={onChangeValue}
                               value={variant.sku}
                             />
-                            {"Requested update sku: " +
-                              location.state.skuRequest}
+                            {location.state.isHavingRequestSKU &&
+                              "Requested update sku: " +
+                                location.state.skuRequest}
                           </>
                         )}
                       </p>
