@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import "./App.css";
 import logo from "./images/Logo.png";
-import userLogo from "./images/user-2.png";
-import manufactureLogo from "./images/manufacture-2.png";
-import productLogo from "./images/product-2.png";
-import reportLogo from "./images/report-2.png";
-import shelfLogo from "./images/shelf-2.png";
-import boxLogo from "./images/box-2.png";
-import importLogo from "./images/import-2.png";
-import shoppingLogo from "./images/shopping-2.png";
-import dashboardLogo from "./images/dashboard-2.png";
+import userLogo from "./images/user.svg";
+import manufactureLogo from "./images/manufacture.svg";
+import productLogo from "./images/Product.svg";
+import reportLogo from "./images/report.svg";
+import shelfLogo from "./images/shelf.svg";
+import boxLogo from "./images/box.svg";
+import importLogo from "./images/import.svg";
+import shoppingLogo from "./images/shopping.svg";
+import dashboardLogo from "./images/dashboard.svg";
 
 import ProfileClient from "./about-account/ProfileClient";
 import AboutSoftware from "./about-software/about-software";
@@ -219,7 +219,7 @@ function App(props) {
               href="#collapseProfile"
             >
               <img src={client.profileImageLink} alt="" />
-              
+
               <div className="name_job">
                 <div className="name">{client.fullname}</div>
                 <div className="job">{client.userRole}</div>
@@ -239,81 +239,84 @@ function App(props) {
               <p onClick={toggleAbout}> &#60; Back</p>
             </div>
           </div>
-          <div class="collapse btn  ps-4 text-white" id="collapseProfile">
-            <p onClick={() => history.push("/homepage/about-my-account")}>
+          
+            <ul className="collapse text-white ps-5 list-item-account w-100" id="collapseProfile">
+              <li onClick={() => history.push("/homepage/about-my-account")} className="item-name">My Profile</li>
+              <li  onClick={() => history.push("/homepage/notification")} className="item-name">Notification</li>
+             
+            </ul>
+            {/* <p >
               My profile
-            </p>
-            {/* <p>My notification</p> */}
-          </div>
+            </p> */}
         </div>
-        <div>
-          <ul className="nav_list">
-            <nav className="nav-side-bar">
-              <li>
-                <Link to="/homepage/dashboard">
-                  <i className="bx">
-                    <img src={dashboardLogo} />
-                  </i>
-                  <span className="links_name">Dashboard</span>
-                </Link>
-                <span className="tooltip">Dashboard</span>
-              </li>
 
-              <li>
-                <Link to="/homepage/purchase">
-                  <i className="bx">
-                    <img src={shoppingLogo} />
-                  </i>
-                  <span className="links_name">Purchase order</span>
-                </Link>
-                <span className="tooltip">Purchase</span>
-              </li>
-              <li>
-                <Link to="/homepage/good-receipt">
-                  <i className="bx">
-                    <img src={importLogo} />
-                  </i>
-                  <span className="links_name">Goods Receipt</span>
-                </Link>
-                <span className="tooltip">Goods Receipt</span>
-              </li>
-              <li>
-                <Link to="/homepage/good-issue">
-                  <i className="bx">
-                    <img src={boxLogo} />
-                  </i>
-                  <span className="links_name">Goods issue</span>
-                </Link>
-                <span className="tooltip">Goods issue</span>
-              </li>
-              <li>
-                <Link to="/homepage/stock-take">
-                  <i className="bx">
-                    <img src={shelfLogo} />
-                  </i>
-                  <span className="links_name">Stock take</span>
-                </Link>
-                <span className="tooltip">Stock take</span>
-              </li>
-              <li>
-                <Link to="/homepage/report">
-                  <i className="bx">
-                    <img src={reportLogo} />
-                  </i>
-                  <span className="links_name">Report</span>
-                </Link>
-                <span className="tooltip">Report</span>
-              </li>
-              <li>
-                <Link to="/homepage/product">
-                  <i className="bx">
-                    <img src={productLogo} />
-                  </i>
-                  <span className="links_name">Product Manger</span>
-                </Link>
-                <span className="tooltip">Product Manger</span>
-              </li>
-              {/* <li onClick={() => setEventPage({
+        <ul className="nav_list">
+
+          <li>
+            <Link to="/homepage/dashboard">
+              <i className="bx">
+                <img src={dashboardLogo} />
+              </i>
+              <span className="links_name">Dashboard</span>
+            </Link>
+            <span className="tooltip">Dashboard</span>
+          </li>
+
+          <li>
+            <Link to="/homepage/purchase">
+              <i className="bx">
+                <img src={shoppingLogo} />
+              </i>
+              <span className="links_name">Purchase order</span>
+            </Link>
+            <span className="tooltip">Purchase</span>
+          </li>
+          <li>
+            <Link to="/homepage/good-receipt">
+              <i className="bx">
+                <img src={importLogo} />
+              </i>
+              <span className="links_name">Goods Receipt</span>
+            </Link>
+            <span className="tooltip">Goods Receipt</span>
+          </li>
+          <li>
+            <Link to="/homepage/good-issue">
+              <i className="bx">
+                <img src={boxLogo} />
+              </i>
+              <span className="links_name">Goods issue</span>
+            </Link>
+            <span className="tooltip">Goods issue</span>
+          </li>
+          <li>
+            <Link to="/homepage/stock-take">
+              <i className="bx">
+                <img src={shelfLogo} />
+              </i>
+              <span className="links_name">Stock take</span>
+            </Link>
+            <span className="tooltip">Stock take</span>
+          </li>
+          <li>
+            <Link to="/homepage/report">
+              <i className="bx">
+                <img src={reportLogo} />
+              </i>
+              <span className="links_name">Report</span>
+            </Link>
+            <span className="tooltip">Report</span>
+          </li>
+          <li>
+            <Link to="/homepage/product">
+              <i className="bx">
+                <img src={productLogo} />
+              </i>
+              <span className="links_name">Product Manger</span>
+            </Link>
+            <span className="tooltip">Product Manger</span>
+          </li>
+          {/* <li onClick={() => setEventPage({
                 hide: "",
                 isShowing: "bx-menu-alt-right",
                 active: "active",
@@ -337,46 +340,38 @@ function App(props) {
                   <li className="list-child-item ps-5"><span>Text</span></li>
                 </ul>
               </li> */}
-              <li>
-                <Link to="/homepage/supplier">
-                  <i className="bx">
-                    <img src={manufactureLogo} />
-                  </i>
-                  <span className="links_name">Supplier</span>
-                </Link>
-                <span className="tooltip">Supplier</span>
-              </li>
-              <li>
-                <Link to="/homepage/notification">
-                  <i className="bx">
-                    <img src={manufactureLogo} />
-                  </i>
-                  <span className="links_name">Notification</span>
-                </Link>
-                <span className="tooltip">Supplier</span>
-              </li>
-              <li>
-                <Link to="/homepage/manage-account">
-                  <i className="bx">
-                    <img src={userLogo} />
-                  </i>
-                  <span className="links_name">Account</span>
-                </Link>
-                <span className="tooltip">Account</span>
-              </li>
-              <li>
-                <Link to="/homepage/sale-man">
-                  <i className="bx">
-                    <img src={userLogo} />
-                  </i>
-                  <span className="links_name">Purchase requisition</span>
-                </Link>
-                <span className="tooltip">Purchase requisition</span>
-              </li>
-            </nav>
-          </ul>
-          <Logout hubConnection={hubConnection} />
-        </div>
+          <li>
+            <Link to="/homepage/supplier">
+              <i className="bx">
+                <img src={manufactureLogo} />
+              </i>
+              <span className="links_name">Supplier</span>
+            </Link>
+            <span className="tooltip">Supplier</span>
+          </li>
+          
+          <li>
+            <Link to="/homepage/manage-account">
+              <i className="bx">
+                <img src={userLogo} />
+              </i>
+              <span className="links_name">Account</span>
+            </Link>
+            <span className="tooltip">Account</span>
+          </li>
+          <li>
+            <Link to="/homepage/sale-man">
+              <i className="bx">
+                <img src={userLogo} />
+              </i>
+              <span className="links_name">Purchase requisition</span>
+            </Link>
+            <span className="tooltip">Purchase requisition</span>
+          </li>
+
+        </ul>
+        <Logout hubConnection={hubConnection} />
+
       </div>
 
       <Switch>
@@ -460,19 +455,19 @@ function Logout(props) {
     //   }
     // });
     // if(isLogout)
-      dispatch({ type: "LOGOUT_REQUESTING" });
+    dispatch({ type: "LOGOUT_REQUESTING" });
 
     // props.hubConnection
     //   .invoke("DisconnectFromResource", "userId", "pageId")
     //   .catch((err) => {
     //     console.log("Error while disconnectiong from resource: " + { err });
     //   });
-  
+
   };
 
   return (
     <div className="profile_content logout_content">
-      
+
       <div className="pointer profile">
         <i
           onClick={logout}
