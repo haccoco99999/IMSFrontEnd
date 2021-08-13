@@ -113,7 +113,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                 ///Quy trinh co thu tu. set thao tung quy trinh phieu
                 if (element.userTransactionActionType === 0 && element.typeString === "Requisition") {
                     infoUserPurchaseOrder = {
-                        createDate: moment(element.date).add(7, "h").format("DD/MM/YYYY"),
+                        createDate: moment(element.date).add(7, "h").format("DD-MM-YYYY"),
                         name: element.applicationUser.fullname,
                         email: element.applicationUser.email,
                         phoneNumber: element.applicationUser.phoneNumber,
@@ -122,7 +122,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                 }
                 if (element.userTransactionActionType === 0 && element.typeString === "PriceQuote") {
                     infoUserPurchaseOrder = {
-                        createDate: moment(element.date).add(7, "h").format("DD/MM/YYYY"), name: element.applicationUser.fullname,
+                        createDate: moment(element.date).add(7, "h").format("DD-MM-YYYY"), name: element.applicationUser.fullname,
                         email: element.applicationUser.email,
                         name: element.applicationUser.fullname,
                         phoneNumber: element.applicationUser.phoneNumber,
@@ -133,7 +133,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
 
                 if (element.userTransactionActionType === 0 && element.typeString === "Purchase") {
                     infoUserPurchaseOrder = {
-                        createDate: moment(element.date).add(7, "h").format("DD/MM/YYYY"), name: element.applicationUser.fullname,
+                        createDate: moment(element.date).add(7, "h").format("DD-MM-YYYY"), name: element.applicationUser.fullname,
                         email: element.applicationUser.email,
                         phoneNumber: element.applicationUser.phoneNumber,
 
@@ -141,7 +141,7 @@ export const getDetailPurchaseReducer = function getDetailPurchaseOrderReducer(s
                 }
                 if (element.userTransactionActionType === 4) {
                     infoRejectOrder = {
-                        createDate: moment(element.date).add(7, "h").format("DD/MM/YYYY"), name: element.applicationUser.fullname,
+                        createDate: moment(element.date).add(7, "h").format("DD-MM-YYYY"), name: element.applicationUser.fullname,
                         email: element.applicationUser.email,
                         phoneNumber: element.applicationUser.phoneNumber,
                         reason: element.name

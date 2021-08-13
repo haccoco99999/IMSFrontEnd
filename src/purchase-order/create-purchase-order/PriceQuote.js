@@ -135,14 +135,14 @@ export default function PurchaseOrderConfirm() {
                     setDisableEdit(true)
                     return {
                         valid: false,
-                        message: 'Price should be numeric'
+                        message: 'Quantity should be numeric'
                     };
                 }
                 if (newValue <= 0) {
                     setDisableEdit(true)
                     return {
                         valid: false,
-                        message: 'Price should bigger than 0'
+                        message: 'Quantity should bigger than 0'
                     };
                 }
 
@@ -593,7 +593,7 @@ export default function PurchaseOrderConfirm() {
                 title: "Your work has been saved",
                 showCancelButton: false,
                 confirmButtonColor: "#3085d6",
-              })
+            })
             dispatch({ type: "EDIT_PRICE_QUOTE_RESET" })
         }
         if (priceQuoteUpdateStatus.errors === true) {
@@ -632,7 +632,7 @@ export default function PurchaseOrderConfirm() {
                 title: "Email has been sent",
                 showCancelButton: false,
                 confirmButtonColor: "#3085d6",
-              })
+            })
             dispatch({ type: SEND_MAIL_SERVICE_RESET })
         }
         if (mailOrderDataStatus.errors === true && purchaseOrderDataGlobal.status === "PriceQuote") {
@@ -661,7 +661,7 @@ export default function PurchaseOrderConfirm() {
 
             }).then((result) => {
                 if (result.dismiss === Swal.DismissReason.timer) {
-                  
+
                 }
             })
         }
@@ -671,7 +671,7 @@ export default function PurchaseOrderConfirm() {
                 title: "Your work has been created",
                 showCancelButton: false,
                 confirmButtonColor: "#3085d6",
-              })
+            })
             dispatch({ type: CREATE_PRICE_QUOTE_RESET })
         }
         if (createPriceQuoteStatus.errors === true) {
@@ -710,7 +710,7 @@ export default function PurchaseOrderConfirm() {
                 title: "Your work has been confirmed",
                 showCancelButton: false,
                 confirmButtonColor: "#3085d6",
-              })
+            })
             dispatch({ type: CONFIRM_PURCHASE_ORDER_RESET })
         }
         else if (confirmPurchaserOrderStatus.errors === true) {
@@ -750,7 +750,7 @@ export default function PurchaseOrderConfirm() {
                 title: "Your work has been created",
                 showCancelButton: false,
                 confirmButtonColor: "#3085d6",
-              })
+            })
 
             dispatch({ type: CREATE_PURCHASE_ORDER_RESET })
         }
@@ -792,7 +792,7 @@ export default function PurchaseOrderConfirm() {
                 title: "Your work has been submitted",
                 showCancelButton: false,
                 confirmButtonColor: "#3085d6",
-              })
+            })
             dispatch({ type: SUBMIT_PURCHASE_ORDER_RESET })
         }
         else if (submitPurchaseOrderStatus.errors === true) {
@@ -829,7 +829,7 @@ export default function PurchaseOrderConfirm() {
                 title: "Your work has been rejected",
                 showCancelButton: false,
                 confirmButtonColor: "#3085d6",
-              })
+            })
             dispatch({ type: REJECT_PURCHASE_ORDER_CONFIRM_RESET })
         }
         else if (rejectPurchaserOrderStatus.errors === true) {
@@ -886,7 +886,7 @@ export default function PurchaseOrderConfirm() {
 
         }
         else if (purchaseOrderDataGlobal.status === "POConfirm") {
-            setListStatus({ nameStatus: "Confirmed", classStatus: "bg-secondary" })
+            setListStatus({ nameStatus: "Confirmed", classStatus: "bg-success" })
 
 
         } else if (purchaseOrderDataGlobal.status === "POCanceled") {
@@ -1304,8 +1304,8 @@ export default function PurchaseOrderConfirm() {
                                                         <strong>Purchase Order ID:</strong> {purchaseOrderDataGlobal.orderId}
                                                     </p>
                                                     <p>
-                                                        <strong>Created Date: </strong>{ moment(infoUserPurchaseOrder.createDate).format("DD-MM-YYYY")}
-                                                       
+                                                        <strong>Created Date: </strong>{infoUserPurchaseOrder.createDate}
+
 
                                                     </p>
                                                 </div>
