@@ -653,17 +653,21 @@ export default function PurchaseRequisitionDetails() {
               </div>
               <ul class="list-group list-group-flush">
                 {statusStore < 0 && (
-                  <RejectWrapper
-                    name={transactionRecordStore[0].applicationUser.fullname}
-                    email={transactionRecordStore[0].applicationUser.email}
-                    phoneNumber={
-                      transactionRecordStore[0].applicationUser.phoneNumber
-                    }
-                    reason={reject.transactionName}
-                    date={moment(reject.date).add(7, "h").format("DD-MM-YYYY")}
-                  />
+                  <li className="list-group-item">
+                    <RejectWrapper
+                      name={transactionRecordStore[0].applicationUser.fullname}
+                      email={transactionRecordStore[0].applicationUser.email}
+                      phoneNumber={
+                        transactionRecordStore[0].applicationUser.phoneNumber
+                      }
+                      reason={reject.transactionName}
+                      date={moment(reject.date)
+                        .add(7, "h")
+                        .format("DD-MM-YYYY")}
+                    />
+                  </li>
                 )}
-                <li className="list-group-item"></li>
+
                 <li class="list-group-item">
                   <div className="row g-3 justify-content-between me-3">
                     <div className="col-4">

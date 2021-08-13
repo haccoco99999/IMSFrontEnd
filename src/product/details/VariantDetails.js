@@ -22,7 +22,7 @@ export default function VariantDetails() {
   const [variant, setVariant] = useState({});
   const [listPackage, setListPackage] = useState([]);
   const [isReturnData, setIsReturnData] = useState(false);
-
+  const [isHavingRequestSKU,setIsHavingRequestSKU] = useState(false)
   //@param:declare tooltip :
 
   var tooltipTriggerList = [].slice.call(
@@ -239,6 +239,7 @@ export default function VariantDetails() {
         })
       );
     }
+    setIsHavingRequestSKU(location.state.isHavingRequestSKU)
   }, [variantStore, listPackageStore]);
 
   useEffect(() => {
@@ -297,6 +298,15 @@ export default function VariantDetails() {
   //     );
   //   }
   // }, [messages]);
+  useEffect(() => {
+    if (
+      location.state.isHavingRequestSKU === true &&
+      location.state.skuRequest === variant.sku
+    ) {
+      // location.state.isHavingRequestSKU = false;
+      setIsHavingRequestSKU(false)
+    }
+  }, [variant.sku]);
   return (
     <div>
       {isReturnData ? (
@@ -316,7 +326,7 @@ export default function VariantDetails() {
               <div class="card-header fw-bold">
                 <div className="d-flex">
                   Variant Information
-                  {location.state.isHavingRequestSKU && (
+                  {isHavingRequestSKU && (
                     <>
                       <div
                         className="text-danger ms-3"
@@ -378,7 +388,7 @@ export default function VariantDetails() {
                               onChange={onChangeValue}
                               value={variant.sku}
                             />
-                            {location.state.isHavingRequestSKU &&
+                            {isHavingRequestSKU &&
                               "Requested update sku: " +
                                 location.state.skuRequest}
                           </>
