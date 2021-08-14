@@ -65,6 +65,25 @@
       "react-app/jest"
     ]
   },
+  "build": {
+    "appId": "ybksdklfjsd.cslk",
+    "productName": "IMS Inventory",
+    "directories": {
+      "buildResources": "build"
+    },
+    "files": [
+      "**/*",
+      "build/*",
+      "build/**/*"
+    ],
+    "win": {},
+    "nsis": {
+      "installerIcon": "build/inventory.ico",
+      "installerHeaderIcon": "build/inventory.ico",
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
+    }
+  },
   "browserslist": {
     "production": [
       ">0.2%",

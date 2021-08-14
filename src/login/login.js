@@ -42,9 +42,9 @@ export default function Login(props) {
       );
     }
   }
-   useEffect(() =>{
-     dispatch({type:"CLEAN_ALL_STORE"})
-   },[])
+  useEffect(() => {
+    dispatch({ type: "CLEAN_ALL_STORE" })
+  }, [])
   useEffect(() => {
     if (loginStatus.requesting === true) {
       Swal.fire({
@@ -75,72 +75,131 @@ export default function Login(props) {
       dispatch({ type: LOGIN_CLEAN });
     }
   }, [loginStatus]);
+  async function resetPassword() {
+    // const { value: email } = await Swal.fire({
+    //   title: 'Reset your password',
+    //   input: 'email',
+    //   inputLabel: 'Your email address',
+    //   inputPlaceholder: 'Enter your email address',
+    //   showCancelButton: true,
+    // })
 
-  return (
-    <div className=" container-login">
-      <div className="left-side">
-        <img src={logo} className="logo-inventory" />
-        <img src={logoShrink} className="logo-bottom-inventory" />
-      </div>
-      <div className="right-side">
-        <p>Welcome to IMS</p>
-        <h2>Login into your </h2>
-        <h2>Account</h2>
-        {/* <div className={"alert alert-danger error-login " + this.props.login.errors} role="alert">{this.props.login.messages}</div> */}
-        <form class="row g-3 needs-validation" id="valid-form-login" noValidate>
-          {/* <form onSubmit={this.handleSubmit} > */}
+    // if (email) {
+    //   Swal.fire(`Entered email: ${email}`)
+    // }
 
-          <div className="form-group login-form-group">
-            <label>Email address</label>
-            <input
-              type="text"
-              className="form-control input-login"
-              required
-              name="email"
-              value={dataLogin.email}
-              onChange={handleChange}
-              pattern="^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$"
-              placeholder="Email"
-            />
-            <div class="invalid-feedback">Email invalid!</div>
-            <div className="icon-contain-login">
-              <img className="icon-input-login" src={userregular} alt="icon" />
-            </div>
+    Swal.fire({
+      title: 'Reset your password',
+      input: 'email',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Send',
+      showLoaderOnConfirm: true,
+      preConfirm: (email) => {
+        return fetch(`http://imspublicapi.herokuapp.com/api/resetlead`, {
+          
 
-            {/* <small id="helpId" className={"form-text text-muted status-valid-email-" + this.state.emailIsvalid}>Invalid email address</small> */}
-          </div>
-          <div className="form-group login-form-group">
-            <label>Password</label>
+            method: 'POST',
+            headers: {
+              "Content-Type": "application/json",
+              'Origin': '',
+            },
 
-            {/* <label className="lb-reset-password">Reset password</label> */}
-            <input
-              type="password"
-              className="form-control input-login "
-              required
-              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
-              name="password"
-              value={dataLogin.password}
-              onChange={handleChange}
-              placeholder="Password"
-            />
-            <div class="invalid-feedback">Password invalid!</div>
-            <div className="icon-contain-login">
-              <img className="icon-input-login" src={key} alt="icon" />
-            </div>
+            credentials: "include",
 
-            {/* <small id="helpId" className={"form-text text-muted status-valid-password-" + this.state.passwordIsvalid}>Password is not valid</small> */}
-          </div>
-          <button
-            type="button"
-            onClick={() => submitLogin()}
-            className="btn btn-primary  btn-signin"
-          >
-            {" "}
-            Sign in
-          </button>
-        </form>
-      </div>
-      {/* {this.props.login.successful ? <Redirect to="/homepage" /> : null} */}
+            body: JSON.stringify({ email }),
+          }
+        )
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(response.statusText)
+        }
+        return response.json()
+      })
+      .catch(error => {
+        Swal.showValidationMessage(
+          `Request failed: ${error}`
+        )
+      })
+  },
+  allowOutsideClick: () => !Swal.isLoading()
+}).then((result) => {
+  if (result.isConfirmed) {
+    Swal.fire(
+      'Good job!',
+      'You clicked the button!',
+      'success'
+    )
+  }
+})
+  }
+return (
+  <div className=" container-login">
+    <div className="left-side">
+      <img src={logo} className="logo-inventory" />
+      <img src={logoShrink} className="logo-bottom-inventory" />
     </div>
-  );
+    <div className="right-side">
+      <p>Welcome to IMS</p>
+      <h2>Login into your </h2>
+      <h2>Account</h2>
+      {/* <div className={"alert alert-danger error-login " + this.props.login.errors} role="alert">{this.props.login.messages}</div> */}
+      <form class="row g-3 needs-validation" id="valid-form-login" noValidate>
+        {/* <form onSubmit={this.handleSubmit} > */}
+
+        <div className="form-group login-form-group">
+          <label>Email address</label>
+          <input
+            type="text"
+            className="form-control input-login"
+            required
+            name="email"
+            value={dataLogin.email}
+            onChange={handleChange}
+            pattern="^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$"
+            placeholder="Email"
+          />
+          <div class="invalid-feedback">Email invalid!</div>
+          <div className="icon-contain-login">
+            <img className="icon-input-login" src={userregular} alt="icon" />
+          </div>
+
+          {/* <small id="helpId" className={"form-text text-muted status-valid-email-" + this.state.emailIsvalid}>Invalid email address</small> */}
+        </div>
+        <div className="form-group login-form-group">
+          <label>Password</label>
+
+          <label onClick={() => resetPassword()} className="lb-reset-password pointer">Reset password</label>
+          <input
+            type="password"
+            className="form-control input-login "
+            required
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+            name="password"
+            value={dataLogin.password}
+            onChange={handleChange}
+            placeholder="Password"
+          />
+          <div class="invalid-feedback">Password invalid!</div>
+          <div className="icon-contain-login">
+            <img className="icon-input-login" src={key} alt="icon" />
+          </div>
+
+          {/* <small id="helpId" className={"form-text text-muted status-valid-password-" + this.state.passwordIsvalid}>Password is not valid</small> */}
+        </div>
+        <button
+          type="button"
+          onClick={() => submitLogin()}
+          className="btn btn-primary  btn-signin"
+        >
+          {" "}
+          Sign in
+        </button>
+      </form>
+    </div>
+    {/* {this.props.login.successful ? <Redirect to="/homepage" /> : null} */}
+  </div>
+);
 }
