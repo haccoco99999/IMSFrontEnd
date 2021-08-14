@@ -370,7 +370,7 @@ function App(props) {
           </li>
 
         </ul>
-        <Logout hubConnection={hubConnection} />
+        <Logout hubConnection={hubConnection} client={client}/>
 
       </div>
 
@@ -436,7 +436,7 @@ const mapStateToProps = (state) => ({
 
 function Logout(props) {
   const dispatch = useDispatch();
-  const logout = async () => {
+  const logout =  () => {
 
 
     // let isLogout = false
@@ -457,11 +457,11 @@ function Logout(props) {
     // if(isLogout)
     dispatch({ type: "LOGOUT_REQUESTING" });
 
-    // props.hubConnection
-    //   .invoke("DisconnectFromResource", "userId", "pageId")
-    //   .catch((err) => {
-    //     console.log("Error while disconnectiong from resource: " + { err });
-    //   });
+    props.hubConnection
+      .invoke("RemoveFromGroup",props.client.userRole)
+      .catch((err) => {
+        console.log("Error while disconnectiong from resource: " + { err });
+      });
 
   };
 

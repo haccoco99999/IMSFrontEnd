@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
+import ToolkitProvider from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import { TableLoading } from "../../components/loading/loading-component";
 import moment from "moment";
 // css
@@ -10,7 +10,7 @@ import "../goodreceipt.css";
 import "./good-receipt-manager.css";
 
 //component
-import ListReceiptTable from "../../table-receipt/ListReceiptsTable";
+// import ListReceiptTable from "../../table-receipt/ListReceiptsTable";
 import { searchGoodsReceiptAction } from "./action";
 import PagingComponent from "../../components/paging/paging-component";
 import { GoodReceiptFilter } from "../../components/filter/FilterComponents";

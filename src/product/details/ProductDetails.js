@@ -520,6 +520,7 @@ export default function ProductDetails() {
                         noDataIndication="Table is Empty"
                         data={listVariantsStores}
                         rowEvents={rowEventsHavingRequestUpdate}
+                        rowClasses="pointer"
                       />
                     ) : (
                       <BootstrapTable
@@ -532,6 +533,7 @@ export default function ProductDetails() {
                         noDataIndication="Table is Empty"
                         data={listVariantsStores}
                         rowEvents={rowEvents}
+                        rowClasses="pointer"
                       />
                     )}
                   </div>

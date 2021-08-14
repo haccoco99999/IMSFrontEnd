@@ -413,6 +413,7 @@ export default function VariantDetails() {
                     noDataIndication="Table is Empty"
                     data={listPackage}
                     rowEvents={rowEvents}
+                    rowClasses="pointer"
                   />
                 </li>
               </ul>
