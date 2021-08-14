@@ -118,6 +118,7 @@ export default function CreateAccount() {
         text: 'Something went wrong!',
 
       })
+     
       dispatch({ type: CREATE_ACC_CLEAN })
     }
     if (setActiveAccountStatus.requesting) {
@@ -182,6 +183,7 @@ export default function CreateAccount() {
         text: 'Something went wrong !',
 
       })
+      setInfoAccountState(infoDetailAccountStore)
       dispatch({ type: UPDATE_DETAIL_ACC_CLEAN })
     }
     if (updateImageStatus.requesting) {
@@ -193,6 +195,7 @@ export default function CreateAccount() {
           Swal.showLoading()
 
         },
+
 
       })
     }
@@ -273,12 +276,25 @@ export default function CreateAccount() {
   // }));
   const dispatch = useDispatch()
   function onchangeInputInfoAccount(event) {
+
+
+    let data = {
+      userId: infoAccountState.userID,
+      email: infoAccountState.email,
+      phoneNumber: infoAccountState.phoneNumber,
+      address: infoAccountState.address,
+      roleId: event.target.value,
+      dateOfBirth: infoAccountState.dateOfBirth,
+      fullname: infoAccountState.fullname
+    }
+
+    dispatch(updateUserAccountDetail({ data: data, token: token }))
+
+
     setInfoAccountState(state => ({
       ...state, [event.target.name]: event.target.value
     }))
-    if(statusUser ==="EDITUSER"){
-      clickUpdate()
-    }
+
   }
 
 
@@ -389,31 +405,7 @@ export default function CreateAccount() {
     setInfoAccountState(infoDetailAccountStore)
     setClickEdit();
   }
-  function clickUpdate() {
-    const form = document.getElementById("checkValidProfile");
-    if (!form.checkValidity()) {
-      form.classList.add("was-validated");
 
-    }
-    else {
-      let data = {
-        userId: infoAccountState.userID,
-        email: infoAccountState.email,
-        phoneNumber: infoAccountState.phoneNumber,
-        address: infoAccountState.address,
-        roleId: infoAccountState.roleID,
-        dateOfBirth: infoAccountState.dateOfBirth,
-        fullname: infoAccountState.fullname
-      }
-
-      dispatch(updateUserAccountDetail({ data: data, token: token }))
-      form.classList.remove("was-validated");
-      // setClickEdit();
-    }
-
-
-
-  }
 
   function clickSetActiveAccount() {
 
@@ -456,12 +448,7 @@ export default function CreateAccount() {
   }
   return (
     <div>
-      {/* ############################ */}
-      {/* <input  type="text" accept="image/*" name="image" id="fileaaa" onchange={changeUploadAvatar} /> */}
-
-      {/* <p><input type="file" accept="image/*" name="image" id="filexx" onchange={changeUploadAvatar}/></p>
-    <p><label for="filexx" >Upload Image</label></p> */}
-      {/* <p><img id="output" width="200" /></p> */}
+    
 
       <NavigationBar
         home={"Manage User"}
@@ -553,6 +540,7 @@ export default function CreateAccount() {
                   <div class="mb-3 row">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Birthdate:</label>
                     <div class="col-sm-10">
+
                       <input type="date" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="dateOfBirth" value={moment(infoAccountState.dateOfBirth).format("YYYY-MM-DD")}
                         class="form-control" aria-describedby="helpId" />
                       <div class="invalid-feedback">
@@ -564,12 +552,12 @@ export default function CreateAccount() {
                   <div class="mb-3 row">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Select Role:</label>
                     <div class="col-sm-10">
-                      <select onChange={onchangeInputInfoAccount} required  value={infoAccountState.roleID} class="form-control" name="roleID" id="">
-                        <option value="" disabled selected>  -- No Selected --  </option>
-                        <option value="IMS_MN" >Manager</option>
-                        <option value="IMS_AC" >Accountant</option>
-                        <option value="IMS_SK" >StockKeeper</option>
-                        <option value="IMS_SM" >Saleman</option>
+                      <select onChange={onchangeInputInfoAccount} required value={infoAccountState.roleID} class="form-control" name="roleID" id="">
+                        {statusUser === "CREATEUSER" ? <option value="" disabled selected>  -- No Selected --  </option> : ""}
+                        <option value="IMS_MN" disabled={infoAccountState.roleID === "IMS_MN"} >Manager</option>
+                        <option value="IMS_AC" disabled={infoAccountState.roleID === "IMS_AC"} >Accountant</option>
+                        <option value="IMS_SK" disabled={infoAccountState.roleID === "IMS_SK"}>StockKeeper</option>
+                        <option value="IMS_SM" disabled={infoAccountState.roleID === "IMS_SM"} >Saleman</option>
 
                       </select>
                       <div class="invalid-feedback">
@@ -619,7 +607,7 @@ export default function CreateAccount() {
                 }
 
 
-
+                {statusUser === "CREATEUSER" ? <button type="button" onClick={() => createAccountInfo()} class="btn btn-primary">Create User</button> : ""}
                 {/* {statusUser === "EDITUSER" ? infoAccountState.isActive ?
                   <div>
                     {eventPage.isShowEdit ? <button onClick={() => setClickEdit()} type="button" class="btn btn-primary">EDIT</button> :
@@ -633,9 +621,9 @@ export default function CreateAccount() {
 
                   </div> : <p className="text-danger">You must unblock account </p> : <button type="button" onClick={() => createAccountInfo()} class="btn btn-primary">Create User</button>
                   } */}
-        
-                
-                  
+
+
+
 
               </div>
             </div>

@@ -41,6 +41,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { CLIENT_UNSET } from "./user/constants";
 import { LOGOUT_REQUESTING } from "./login/constants";
 import Swal from "sweetalert2";
+import CompanyInfo from "./about-company/CompanyInfo";
 function App(props) {
   const [eventPage, setEventPage] = useState({
     hide: "bx-menu",
@@ -243,6 +244,7 @@ function App(props) {
             <ul className="collapse text-white ps-5 list-item-account w-100" id="collapseProfile">
               <li onClick={() => history.push("/homepage/about-my-account")} className="item-name">My Profile</li>
               <li  onClick={() => history.push("/homepage/notification")} className="item-name">Notification</li>
+              <li  onClick={() => history.push("/homepage/company-info")} className="item-name">Company Information</li>
              
             </ul>
             {/* <p >
@@ -366,7 +368,7 @@ function App(props) {
               </i>
               <span className="links_name">Purchase requisition</span>
             </Link>
-            <span className="tooltip">Purchase requisition</span>
+            <span className="tooltip"> requisition</span>
           </li>
 
         </ul>
@@ -413,6 +415,9 @@ function App(props) {
         </Route>
         <Route path="/homepage/notification">
           <Notification />
+        </Route>
+        <Route path="/homepage/company-info">
+          <CompanyInfo/>
         </Route>
       </Switch>
 

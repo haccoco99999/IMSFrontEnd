@@ -1,4 +1,4 @@
-import { CLIENT_SET, CLIENT_UNSET, CLIENT_UPDATE } from './constants'
+import { CLIENT_SET, CLIENT_UNSET, CLIENT_UPDATE, CLIENT_UPDATE_COMPANY } from './constants'
 
 const initialState = {  
     id:null,
@@ -14,7 +14,10 @@ const initialState = {
     isActive:null,
     userRole:null,
     pageAuthorized:[],
-    profileImageLink:null
+    profileImageLink:null,
+    companyInfo:{
+
+    }
   }
 
   const reducer = function clientReducer (state = initialState, action) {  
@@ -34,6 +37,7 @@ const initialState = {
           dateOfBirth:action.respone_login.applicationUser.dateOfBirth,
           isActive:action.respone_login.applicationUser.isActive,
           profileImageLink:action.respone_login.applicationUser.profileImageLink,
+          companyInfo:action.respone_login.companyInfo,
 
           userRole:action.respone_login.userRole,
           pageAuthorized:action.respone_login.pageAuthorized,
@@ -52,10 +56,15 @@ const initialState = {
           isActive:action.respone_login.applicationUser.isActive,
           profileImageLink:action.respone_login.applicationUser.profileImageLink,
         }
-  
+        case CLIENT_UPDATE_COMPANY:
+         
+          return{
+            ...state,
+            companyInfo: action.json
+          }
       case CLIENT_UNSET:
         return initialState
-  
+        
       default:
         return state
     }
