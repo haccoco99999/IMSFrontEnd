@@ -144,6 +144,7 @@ import {
   agreeUpdateRequestSkuReducer,
   rejectUpdateRequestSkuReducer,
 } from "./product/manager/requestupdate-manager/reducer";
+import {updateCompany} from "./about-company/reducer";
 const IndexReducer = combineReducers({
   login,
   client,
@@ -239,7 +240,9 @@ const IndexReducer = combineReducers({
   agreeUpdateRequestSkuReducer,
   rejectUpdateRequestSkuReducer,
   //DashBoard
-  getValueDashboard
+  getValueDashboard,
+  //Company
+  updateCompany
 });
 
 export default IndexReducer;

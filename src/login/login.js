@@ -89,7 +89,7 @@ export default function Login(props) {
     // }
 
     Swal.fire({
-      title: 'Reset your password',
+      title: 'Enter your email',
       input: 'email',
       inputAttributes: {
         autocapitalize: 'off'
@@ -128,8 +128,8 @@ export default function Login(props) {
 }).then((result) => {
   if (result.isConfirmed) {
     Swal.fire(
-      'Good job!',
-      'You clicked the button!',
+      'Success!',
+      
       'success'
     )
   }
@@ -176,7 +176,7 @@ return (
             type="password"
             className="form-control input-login "
             required
-            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$"
             name="password"
             value={dataLogin.password}
             onChange={handleChange}

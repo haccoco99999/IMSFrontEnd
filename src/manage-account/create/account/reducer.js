@@ -161,7 +161,7 @@ export function getUserAccountDetail(state = initalGetDetailAccountState, action
           phoneNumber: action.json.userAndRole.imsUser.phoneNumber,
           fullname: action.json.userAndRole.imsUser.fullname,
           address: action.json.userAndRole.imsUser.address,
-          dateOfBirth: moment(action.json.userAndRole.imsUser.dateOfBirth).add(7, "h").format("DD/MM/YYYY "),
+          dateOfBirth: action.json.userAndRole.imsUser.dateOfBirth,
           isActive: action.json.userAndRole.imsUser.isActive,
           roleID: action.json.userAndRole.roleID,
           userRole: action.json.userAndRole.userRole,
