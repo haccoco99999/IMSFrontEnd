@@ -441,7 +441,7 @@ const mapStateToProps = (state) => ({
 
 function Logout(props) {
   const dispatch = useDispatch();
-  const logout =  () => {
+  const logout = async () => {
 
 
     // let isLogout = false
