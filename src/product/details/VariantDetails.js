@@ -123,7 +123,7 @@ export default function VariantDetails() {
       return [
         {
           isShow: true,
-          title: "Cancel",
+          title: "Revert",
           action: () => onClickCancel(),
           class: "btn-secondary",
         },

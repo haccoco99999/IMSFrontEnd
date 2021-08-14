@@ -179,7 +179,7 @@ export default function StocktakeDetailsComponent() {
         // </div>
 
         <div
-          className="text-danger"
+          className="text-danger btn"
           onClick={() => clickDeleteCheckItems(rowIndex)}
         >
           <i class="bi bi-trash"></i>

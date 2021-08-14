@@ -263,7 +263,7 @@ export default function ProductDetails() {
       return [
         {
           isShow: true,
-          title: "Cancel",
+          title: "Revert",
           action: () => onClickCancel(),
           class: "btn-secondary",
         },

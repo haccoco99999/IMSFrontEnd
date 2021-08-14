@@ -157,7 +157,7 @@ export default function SupplierDetails() {
         // },
         {
           isShow: true,
-          title: "Cancel",
+          title: "Revert",
           action: () => onClickCancel(),
           // action: () => testSWAL(),
           class: "btn-secondary ",

@@ -439,7 +439,7 @@ export default function PurchaseRequisitionDetails() {
         return [
           {
             isShow: true,
-            title: "Cancel",
+            title: "Revert",
             action: () => onCancelClick(),
             class: "btn-secondary",
           },
