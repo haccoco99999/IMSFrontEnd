@@ -313,8 +313,7 @@ export default function CreateGoodsReceiptComponent() {
 
   //todo: function
   function goBackClick() {
-   
-    history.replace("/homepage/good-receipt")
+    history.replace("/homepage/good-receipt");
   }
 
   function clickDeleteVariant(rowIndex) {
@@ -352,55 +351,67 @@ export default function CreateGoodsReceiptComponent() {
         };
       }),
     };
-
-    if (selectedPO === "" || selectedLocation.id === "") {
+    if (list_BuyingProduct.length === 0) {
       Swal.fire({
         title: "Error",
-        text: "You need to fulfill requested field",
+        text: "There is no data in the list of items!",
         icon: "error",
         showCancelButton: true,
         cancelButtonText: "Cancel",
         showConfirmButton: false,
       });
     } else {
-      if (isDataInputEmpty(list_BuyingProduct)) {
+      if (selectedPO === "" || selectedLocation.id === "") {
         Swal.fire({
           title: "Error",
-          text: "Please input valid  sku or number should be bigger than zero",
+          text: "You need to fulfill requested field",
           icon: "error",
           showCancelButton: true,
           cancelButtonText: "Cancel",
           showConfirmButton: false,
         });
       } else {
-        if (checkForDuplicates(list_BuyingProduct, "sku")) {
-          console.log("Duplicate");
-
+        if (isDataInputEmpty(list_BuyingProduct)) {
           Swal.fire({
             title: "Error",
-            text: "There is no duplicate sku in the list",
+            text: "Please input valid  sku or number should be bigger than zero",
             icon: "error",
             showCancelButton: true,
             cancelButtonText: "Cancel",
             showConfirmButton: false,
           });
         } else {
-          Swal.fire({
-            title: "Are you sure",
-            text: "Do you want to save?",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: " #d33",
-            confirmButtonText: "Confirm",
-            reverseButtons: true,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              dispatch(createGoodsReceiptAction({ data: Data, token: token }));
-            }
-          });
+          if (checkForDuplicates(list_BuyingProduct, "sku")) {
+            console.log("Duplicate");
 
-          console.log(Data);
+            Swal.fire({
+              title: "Error",
+              text: "There is no duplicate sku in the list",
+              icon: "error",
+              showCancelButton: true,
+              cancelButtonText: "Cancel",
+              showConfirmButton: false,
+            });
+          } else {
+            Swal.fire({
+              title: "Are you sure",
+              text: "Do you want to save?",
+              icon: "question",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: " #d33",
+              confirmButtonText: "Confirm",
+              reverseButtons: true,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                dispatch(
+                  createGoodsReceiptAction({ data: Data, token: token })
+                );
+              }
+            });
+
+            console.log(Data);
+          }
         }
       }
     }
