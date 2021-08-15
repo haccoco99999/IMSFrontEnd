@@ -254,9 +254,10 @@ export default function ProfileClient() {
                     Birthdate is invalid!
                   </div>
                 </div>
-                {isEditProfile ? "" : <button type="button" class="btn btn-primary" onClick={() => setIsEditProfile(true)}>Edit Profile</button>}
-                {isEditProfile ? <button type="button" onClick={() => { cancelUpdate() }} class="btn btn-primary">Cancel</button> : ""}
-                {isEditProfile ? <button type="button" onClick={() => { saveUpdate() }} class="btn btn-primary">Update Profile</button> : ""}
+                
+                {isEditProfile ? "" : <button type="button" class="btn btn-sm btn-primary" onClick={() => setIsEditProfile(true)}>Edit</button>}
+                {isEditProfile ? <button type="button" onClick={() => { cancelUpdate() }} class="btn btn-sm btn-primary btn-danger me-2">Cancel</button> : ""}
+                {isEditProfile ? <button type="button" onClick={() => { saveUpdate() }} class="btn btn-sm btn-primary btn-success">Update</button> : ""}
               </form>
             </div>
 
@@ -334,9 +335,7 @@ export function ChangePasswordCompoent(props) {
     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)
   }
   function changePassword() {
-    alert(isvalidPassword.isConfirmPassword && isvalidPassword.isValidNewPassword)
     if (isvalidPassword.isConfirmPassword && isvalidPassword.isValidNewPassword) {
-      alert(newPassword.current.value)
       let dataPassword = {
         oldPassword: oldPassword.current.value,
         newPassword: newPassword.current.value

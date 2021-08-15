@@ -2,7 +2,8 @@ import React from 'react'
 import filter from '../../good-receipt/filter'
 import { SelectGoodsIssueStatus, SelectStatusPurchaseRequisition } from '../../search-component/SearchComponentAll'
 import { SearchPurchaseOrder, SelectSupplier, SelectStatusPurchaseOrder } from '../../search-component/SearchComponentAll'
-
+import accounting from 'accounting-js'
+import { number_to_price, pasePrice, price_to_number } from '../../purchase-order/parsePrice'
 export function GoodReceiptFilter(props) {
 
     return (
@@ -212,6 +213,7 @@ export function GoodsIssueFilter(props) {
     )
 }
 export function PurchaseOrderFilter(props) {
+    let number = 1000000000
     return (
         <div class="pb-3">
             <div class="card">
@@ -250,14 +252,31 @@ export function PurchaseOrderFilter(props) {
                                 <label for="">Price:</label>
                                 <div class="form-group col-md-6" >
 
-                                    <input type="text"
-                                        onChange={props.onChangeValueFilter} step="0.01" value={props.filter.FromTotalOrderPrice}
+                                    <input type="text" 
+                                        onChange={(e) =>
+                                           {   
+                                            // if(price_to_number(e.target.value) <= price_to_number(props.filter.ToTotalOrderPrice)){
+                                           
+                                            // }
+                                            e.target.value = price_to_number(e.target.value)
+                                            props.onChangeValueFilter(e)}
+                                        
+                                        } value={pasePrice(props.filter.FromTotalOrderPrice)}
                                         class="form-control" name="FromTotalOrderPrice" id="" aria-describedby="helpId" placeholder="" />
                                 </div>
                                 <div class="form-group col-md-6">
 
                                     <input type="text" step="0.01"
-                                        onChange={props.onChangeValueFilter} value={props.filter.ToTotalOrderPrice}
+                                        onChange={(e) =>{
+                                            // if(price_to_number(e.target.value) >= price_to_number(props.filter.FromTotalOrderPrice)){
+                                 
+                                            // }
+                                            e.target.value = price_to_number(e.target.value)
+                                            props.onChangeValueFilter(e)
+                                            }
+                                            }
+                                           
+                                             value={pasePrice(props.filter.ToTotalOrderPrice)}
                                         class="form-control" name="ToTotalOrderPrice" id="" aria-describedby="helpId" placeholder="" />
                                 </div>
                             </div>

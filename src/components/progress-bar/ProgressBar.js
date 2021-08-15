@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Timeline, Bookmark , Marker} from 'react-vertical-timeline';
+// import { Timeline, Bookmark , Marker} from 'react-vertical-timeline';
 import './progress-bar.css'
 export function ProgressBar(props) {
     const [state, setState] = useState({progress: 50} )

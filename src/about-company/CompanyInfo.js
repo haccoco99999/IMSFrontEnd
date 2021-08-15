@@ -36,7 +36,10 @@ export default function CompanyInfo() {
     )
   }
   function cancelUpdate() {
-    setCompanyInfoState(false);
+    setCompanyInfoState(
+      companyInfo
+    )
+    setIsEditProfile(false);
   }
   function saveUpdate(event) {
 
@@ -173,10 +176,10 @@ export default function CompanyInfo() {
                     Phone Number is invalid!
                   </div>
                 </div>
-
-                {isEditProfile ? "" : <button type="button" class="btn btn-primary" onClick={() => setIsEditProfile(true)}>Edit</button>}
-                {isEditProfile ? <button type="button" onClick={() => { cancelUpdate() }} class="btn btn-primary">Cancel</button> : ""}
-                {isEditProfile ? <button type="button" onClick={() => { saveUpdate() }} class="btn btn-primary">Update</button> : ""}
+               
+                {isEditProfile ? "" : <button type="button" class="btn btn-sm btn-primary" onClick={() => setIsEditProfile(true)}>Edit</button>}
+                {isEditProfile ? <button type="button" onClick={() => { cancelUpdate() }} class="btn btn-sm btn-primary btn-danger me-2">Cancel</button> : ""}
+                {isEditProfile ? <button type="button" onClick={() => { saveUpdate() }} class="btn btn-sm btn-primary btn-success">Update</button> : ""}
               </form>
             </div>
 

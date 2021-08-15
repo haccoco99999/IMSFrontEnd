@@ -7,7 +7,9 @@ const initalState = {
     errors: true,
     dataDashBoard:{
         top5SellingMonth:[],
-        top5SellingYear:[]
+        top5SellingYear:[],
+        inventoryCostThisMonth : 0,
+     
     }
 }
 export function getValueDashboard(state = initalState, action){
@@ -20,7 +22,9 @@ export function getValueDashboard(state = initalState, action){
                 errors: false,
                 dataDashBoard:{
                     top5SellingMonth:[],
-                    top5SellingYear:[]
+                    top5SellingYear:[],
+                    inventoryCostThisMonth : 0,
+        
                 }
             }
         case GET_VALUE_DASHBOARD_SUCCESS:
