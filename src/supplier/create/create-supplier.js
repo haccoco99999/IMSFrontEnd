@@ -182,7 +182,7 @@ export default function CreateSupplier() {
                 </div>
                 <div className="mt-3">
                   <label for="search" class="form-label">
-                    Seller Name
+                    Seller Name <span class="text-secondary" >(optional) </span>
                   </label>
                   <input
                     type="text"
@@ -260,7 +260,7 @@ export default function CreateSupplier() {
               </form>
               <div class="mb-3 mt-3">
                 <label for="description" class="form-label">
-                  Description (optional)
+                  Description <span class="text-secondary" >(optional) </span>
                 </label>
                 <textarea
                   class="form-control"

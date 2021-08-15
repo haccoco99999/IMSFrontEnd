@@ -188,7 +188,7 @@ export default function CreateVariant() {
                 >
                   <div class="col">
                     <label for="name" class="col-form-label">
-                      Variant Name
+                      Variant Name 
                     </label>
                     <input
                       type="text"
@@ -221,7 +221,7 @@ export default function CreateVariant() {
 
                 <div class="col">
                   <label for="name" class="col-form-label">
-                    SKU (optional)
+                    SKU  <span class="text-secondary" >(optional) </span>
                   </label>
                   <input
                     type="text"
