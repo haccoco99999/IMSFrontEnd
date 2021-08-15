@@ -277,7 +277,7 @@ export default function CreateAccount() {
   const dispatch = useDispatch()
   function onchangeInputInfoAccount(event) {
 
-
+    if(statusUser ==="EDITUSER"){
     let data = {
       userId: infoAccountState.userID,
       email: infoAccountState.email,
@@ -290,7 +290,7 @@ export default function CreateAccount() {
 
     dispatch(updateUserAccountDetail({ data: data, token: token }))
 
-
+  }
     setInfoAccountState(state => ({
       ...state, [event.target.name]: event.target.value
     }))
