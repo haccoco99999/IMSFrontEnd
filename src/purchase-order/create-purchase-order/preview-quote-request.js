@@ -148,7 +148,7 @@ export default function PreviewSendMail(props) {
                                 {"Mail from ABC Inventory"}
                             </label>
                             <div className="form-text">
-                                Content:
+                                Content: 
                             </div>
                             <label className="form-check-label" >
                             <div dangerouslySetInnerHTML={{ __html: `${html}` }} />

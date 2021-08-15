@@ -20,13 +20,13 @@
    width: .8em;
    height: .8em;
 }
-.current{
-  content: "";
-   position: absolute;
-   z-index: 1;
-   left: 0;
-   height: 100%;
-   border-left: 1px rgb(48, 199, 204) solid !important;
+ .done::after{
+ 
+  background: 1px #198754    !important;
+}
+.done::before{
+
+   border-left: 1px #198754   solid !important;
 }
 
 
@@ -49,7 +49,7 @@
    font-weight: bolder;
 }
 
-.events { margin: 1em; width: 50%; }
+.events { margin: 1em;  }
 .events, 
 .events *::before, 
 .events *::after { box-sizing: border-box; font-family: arial; }

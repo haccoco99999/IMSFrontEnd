@@ -94,7 +94,21 @@ function AccountManager() {
 
       dataField: 'isActive',
       text: 'Status ',
+      formatter: (cell, row, rowIndex, extraData) => {
+        console.log(cell)
+        if (cell === "Active") {
+          return <span class="badge bg-success ext-dark">Active</span>
 
+        }
+        else if (cell === "Deactive") {
+          return <span class="badge bg-danger">Deactive</span>
+
+
+        }
+     
+        return cell
+
+      }
 
     },
     {

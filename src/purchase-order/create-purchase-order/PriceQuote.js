@@ -24,6 +24,7 @@ import { CONFIRM_PURCHASE_ORDER_RESET, CREATE_PRICE_QUOTE_RESET, CREATE_PURCHASE
 import { InfoPurchaseOrderLoader, TableLoading } from '../../components/loading/loading-component';
 import NavigationBar from '../../components/navbar/navbar-component';
 import RejectWrapper from '../../components/reject-wrapper/reject-component';
+import { ProgressBar } from '../../components/progress-bar/ProgressBar';
 // import { ProgressBar } from '../../components/progress-bar/ProgressBar';
 
 export default function PurchaseOrderConfirm() {
@@ -119,11 +120,11 @@ export default function PurchaseOrderConfirm() {
                 type: Type.TEXT,
 
             },
-            editable: !eventPage.isShowEditListProducts,
+            editable: eventPage.isShowEdit,
             formatter: (cellContent, row, rowIndex) => {
                 return (
                     <div>
-                        {!eventPage.isShowEditListProducts ? <input className="form-control" defaultValue={row.orderQuantity} type="text" /> : row.orderQuantity}
+                        {eventPage.isShowEdit ? <input className="form-control" defaultValue={row.orderQuantity} type="text" /> : row.orderQuantity}
                     </div>);
             },
             align: (cell, row, rowIndex, colIndex) => {
@@ -156,11 +157,11 @@ export default function PurchaseOrderConfirm() {
             text: 'Unit Price',
             hidden: test,
 
-            editable: !eventPage.isShowEditListProducts,
+            editable: eventPage.isShowEdit,
             formatter: (cellContent, row, rowIndex) => {
                 return (
                     <div>
-                        {!eventPage.isShowEditListProducts ? <input className="form-control" defaultValue={row.price} type="text" /> : row.price}
+                        {eventPage.isShowEdit ? <input className="form-control" defaultValue={row.price} type="text" /> : row.price}
                     </div>);
             },
             align: (cell, row, rowIndex, colIndex) => {
@@ -309,11 +310,37 @@ export default function PurchaseOrderConfirm() {
 
             return [
 
+                {
+                    isShow: !eventPage.isShowEdit,
+                    title: "Edit",
+                    action: () => editClick(),
+                    class: "btn btn-warning",
+                    disabled: disableEdit
+                },
+
+                {
+                    isShow: eventPage.isShowEdit,
+                    title: "Revert",
+                    action: () => cancelEditClick(),
+                    class: "btn btn-secondary",
+                    disabled: disableEdit
+
+
+                },
+                {
+                    isShow: eventPage.isShowEdit,
+                    title: "Save",
+                    action: () => saveEditClick(),
+                    class: "btn btn-primary",
+                    disabled: disableEdit
+
+
+                },
 
 
 
                 {
-                    isShow: true,
+                    isShow: !eventPage.isShowEdit,
                     title: "Re-sent Supplier",
                     action: () => clickShowPreviewSendMail(),
                     class: "btn btn-warning",
@@ -321,7 +348,7 @@ export default function PurchaseOrderConfirm() {
                 },
 
                 {
-                    isShow: true,
+                    isShow: !eventPage.isShowEdit,
                     title: "Create Purchase Order",
                     action: () => clickCreatePurchaseOrder(),
                     class: "btn btn-primary",
@@ -334,9 +361,35 @@ export default function PurchaseOrderConfirm() {
         else if (status === "PriceQuote" && purchaseOrderDataGlobal.hasSentMail === false) {
             return [
 
+                {
+                    isShow: !eventPage.isShowEdit,
+                    title: "Edit",
+                    action: () => editClick(),
+                    class: "btn btn-warning",
+                    disabled: disableEdit
+                },
 
                 {
-                    isShow: true,
+                    isShow: eventPage.isShowEdit,
+                    title: "Revert",
+                    action: () => cancelEditClick(),
+                    class: "btn btn-secondary",
+                    disabled: disableEdit
+
+
+                },
+                {
+                    isShow: eventPage.isShowEdit,
+                    title: "Save",
+                    action: () => saveEditClick(),
+                    class: "btn btn-primary",
+                    disabled: disableEdit
+
+
+                },
+
+                {
+                    isShow: !eventPage.isShowEdit,
                     title: "Preview Mail",
                     action: () => clickShowPreviewSendMail(),
                     class: "btn btn-primary",
@@ -374,7 +427,36 @@ export default function PurchaseOrderConfirm() {
             return [
 
                 {
-                    isShow: true,
+                    isShow: !eventPage.isShowEdit,
+                    title: "Edit",
+                    action: () => editClick(),
+                    class: "btn btn-warning",
+                    disabled: disableEdit
+                },
+
+                {
+                    isShow: eventPage.isShowEdit,
+                    title: "Revert",
+                    action: () => cancelEditClick(),
+                    class: "btn btn-secondary",
+                    disabled: disableEdit
+
+
+                },
+                {
+                    isShow: eventPage.isShowEdit,
+                    title: "Save",
+                    action: () => saveEditClick(),
+                    class: "btn btn-primary",
+                    disabled: disableEdit
+
+
+                },
+
+
+
+                {
+                    isShow: !eventPage.isShowEdit,
                     title: "Submit",
                     action: () => clickToSubmitPurchaseOrder(),
                     class: "btn btn-primary",
@@ -386,9 +468,36 @@ export default function PurchaseOrderConfirm() {
         } else if (status === "POWaitingConfirmation") {
             return [
 
+                {
+                    isShow: !eventPage.isShowEdit,
+                    title: "Edit",
+                    action: () => editClick(),
+                    class: "btn btn-warning",
+                    disabled: disableEdit
+                },
 
                 {
-                    isShow: true,
+                    isShow: eventPage.isShowEdit,
+                    title: "Revert",
+                    action: () => cancelEditClick(),
+                    class: "btn btn-secondary",
+                    disabled: disableEdit
+
+
+                },
+                {
+                    isShow: eventPage.isShowEdit,
+                    title: "Save",
+                    action: () => saveEditClick(),
+                    class: "btn btn-primary",
+                    disabled: disableEdit
+
+
+                },
+
+
+                {
+                    isShow: !eventPage.isShowEdit,
                     title: "Reject",
                     action: () => isShowRejectModal(),
                     class: "btn btn-danger",
@@ -396,7 +505,7 @@ export default function PurchaseOrderConfirm() {
                 },
 
                 {
-                    isShow: true,
+                    isShow: !eventPage.isShowEdit,
                     title: "Confirm",
                     action: () => isShowConfirmModal(),
                     class: "btn btn-success",
@@ -933,39 +1042,41 @@ export default function PurchaseOrderConfirm() {
         return isValid
 
     }
-    function editClick(nameEdit) {
+    function editClick() {
 
 
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        setEventPage(state => ({
+            ...state, isShowEdit: !state.isShowEdit
+        }))
 
 
+        // if (nameEdit === "listProducts" && eventPage.isShowEditInfoOrder) {
 
-        if (nameEdit === "listProducts" && eventPage.isShowEditInfoOrder) {
+        //     setEventPage((state) => ({
+        //         ...state,
 
-            setEventPage((state) => ({
-                ...state,
+        //         isCreatePO: false,
+        //         isShowEditListProducts: !state.isShowEditListProducts
 
-                isCreatePO: false,
-                isShowEditListProducts: !state.isShowEditListProducts
+        //     }))
+        // }
+        // else if (nameEdit === "infoOrder" && eventPage.isShowEditListProducts) {
+        //     setEventPage((state) => ({
+        //         ...state,
 
-            }))
-        }
-        else if (nameEdit === "infoOrder" && eventPage.isShowEditListProducts) {
-            setEventPage((state) => ({
-                ...state,
+        //         isCreatePO: false,
 
-                isCreatePO: false,
+        //         isShowEditInfoOrder: !state.isShowEditInfoOrder,
 
-                isShowEditInfoOrder: !state.isShowEditInfoOrder,
-
-            }))
-        }
-        else {
-            beforeEdit()
-        }
+        //     }))
+        // }
+        // else {
+        //     beforeEdit()
+        // }
 
     }
-    function cancelEditClick(nameEdit) {
+    function cancelEditClick() {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -989,7 +1100,7 @@ export default function PurchaseOrderConfirm() {
                 })
                 setMailDescription(purchaseOrderDataGlobal.mailDescription)
                 setSupplier(purchaseOrderDataGlobal.supplier)
-                editClick(nameEdit)
+                editClick()
                 Swal.fire(
                     'Reverted!',
                     'Your edit has been reverted.',
@@ -1002,7 +1113,7 @@ export default function PurchaseOrderConfirm() {
 
     }
 
-    function saveEditClick(nameEdit) {
+    function saveEditClick() {
 
         let data = {
             purchaseOrderNumber: purchaseOrderDataGlobal.orderId,
@@ -1024,7 +1135,7 @@ export default function PurchaseOrderConfirm() {
             })
         }
         dispatch(editPriceQuote({ data: data, token: token }))
-        editClick(nameEdit)
+        editClick()
 
     }
     function beforeEdit() {
@@ -1045,9 +1156,9 @@ export default function PurchaseOrderConfirm() {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
 
-                saveEditClick(nameEditText)
+                saveEditClick()
             } else if (result.isDenied) {
-                cancelEditClick(nameEditText)
+                cancelEditClick()
 
             }
         })
@@ -1232,7 +1343,7 @@ export default function PurchaseOrderConfirm() {
     }
 
     function goBackClick() {
-        history.replace("/homepage/good-receipt")
+        history.replace("/homepage/purchase")
     }
     (function () {
         'use strict'
@@ -1393,7 +1504,7 @@ export default function PurchaseOrderConfirm() {
                                 <div class="d-flex ">
                                     <div class="me-auto p-2">Info Order: </div>
                                     <div class="p-2 pe-4 ">
-                                        <ListEdit statusEdit={eventPage.isShowEditInfoOrder} nameEdit="infoOrder" />
+                                        {/* <ListEdit statusEdit={eventPage.isShowEditInfoOrder} nameEdit="infoOrder" /> */}
                                     </div>
                                 </div>
                             </div>
@@ -1406,7 +1517,7 @@ export default function PurchaseOrderConfirm() {
 
                                         <p>
                                             <form id="choose-supplier-form" class="row g-3 needs-validation " novalidate>
-                                                <SelectSupplier isDisabled={eventPage.isShowEditInfoOrder} supplierInfo={supplier} getDataSupplier={getDataSupplier} />
+                                                <SelectSupplier isDisabled={!eventPage.isShowEdit} supplierInfo={supplier} getDataSupplier={getDataSupplier} />
                                             </form>
                                         </p>
 
@@ -1471,7 +1582,7 @@ export default function PurchaseOrderConfirm() {
                                         </div>
                                     </div>
                                     <div className="col-md-2">
-                                        {/* <ProgressBar/> */}
+                                        <ProgressBar/>
                                     </div>
                                 </div>
                                 {/* <div class="form-group">
@@ -1488,7 +1599,7 @@ export default function PurchaseOrderConfirm() {
 
                                         <div class="card-body p-0">
 
-                                            <TextEditor isDisabled={eventPage.isShowEditInfoOrder} setDefault={purchaseOrderDataGlobal.mailDescription === mailDescription} contentEmail={mailDescription} changeMailContent={changeMailContent} />
+                                            <TextEditor isDisabled={!eventPage.isShowEdit} setDefault={purchaseOrderDataGlobal.mailDescription === mailDescription} contentEmail={mailDescription} changeMailContent={changeMailContent} />
 
                                         </div>
                                     </div>
@@ -1525,9 +1636,9 @@ export default function PurchaseOrderConfirm() {
                     <div className="card">
                         <div class="card-header p-0">
                             <div class="d-flex ">
-                                <div class="me-auto p-2">Info Order:</div>
+                                <div class="me-auto p-2">Product List:</div>
                                 <div class="p-2 pe-4 ">
-                                    {listpermissionEdit.includes(detailPurchaseState.status) ? <ListEdit disabled={disableEdit} statusEdit={eventPage.isShowEditListProducts} nameEdit="listProducts" /> : ""}
+                                    {/* {listpermissionEdit.includes(detailPurchaseState.status) ? <ListEdit disabled={disableEdit} statusEdit={eventPage.isShowEditListProducts} nameEdit="listProducts" /> : ""} */}
 
                                 </div>
                             </div>
@@ -1549,7 +1660,7 @@ export default function PurchaseOrderConfirm() {
                                 cellEdit={cellEditFactory({
                                     mode: "click",
                                     blurToSave: true,
-                                    afterSaveCell: (oldValue, newValue, row, column) => { row.totalAmount = row.orderQuantity * row.price }
+                                    afterSaveCell: (oldValue, newValue, row, column) => { row.totalAmount = Number(row.orderQuantity) * Number(row.price) }
                                 })}
 
                                 headerClasses="table-header-receipt"

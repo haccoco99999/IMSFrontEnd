@@ -17,7 +17,8 @@ const initialState = {
     profileImageLink:null,
     companyInfo:{
 
-    }
+    },
+    pageAuthorized:[]
   }
 
   const reducer = function clientReducer (state = initialState, action) {  
