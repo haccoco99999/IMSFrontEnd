@@ -480,6 +480,9 @@ function Logout(props) {
 
     props.hubConnection
       .invoke("RemoveFromGroup", props.client.userRole)
+      .then(() => {
+        console.log("Dang log out");
+      })
       .catch((err) => {
         console.log("Error while disconnectiong from resource: " + { err });
       });

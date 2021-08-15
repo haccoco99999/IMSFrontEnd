@@ -376,11 +376,12 @@ export default function VariantDetails() {
                         )}
                       </p>
                       <p>
-                        <strong>SKU: </strong>
+                       
                         {isDisabled ? (
-                          variant.sku
+                         <> <strong>SKU: </strong>{variant.sku} </> 
                         ) : (
                           <>
+                           <strong>SKU: </strong> <span class="text-secondary" >(optional) </span>
                             <input
                               type="text"
                               name="sku"

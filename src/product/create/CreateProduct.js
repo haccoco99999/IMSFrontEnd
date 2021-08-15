@@ -320,7 +320,7 @@ export default function CreateProductComponent(props) {
                 <div class="row g-3 align-items-center">
                   <div class="col">
                     <label for="sku" class="col-form-label">
-                      SKU (optional)
+                      SKU <span class="text-secondary" >(optional) </span>
                     </label>
                     <input
                       type="text"

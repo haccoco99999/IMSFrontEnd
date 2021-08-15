@@ -312,7 +312,7 @@ export default function SupplierDetails() {
                     </div>
                     <div className="mt-3">
                       <label for="search" class="form-label">
-                        Seller Name
+                        Seller Name <span class="text-secondary" >(optional) </span>
                       </label>
                       <input
                         type="text"
@@ -376,7 +376,7 @@ export default function SupplierDetails() {
                     </div>
                     <div className="mb-3 mt-3">
                       <label for="note" class="form-label">
-                        Address
+                        Address 
                       </label>
                       <input
                         type="text"
@@ -393,7 +393,7 @@ export default function SupplierDetails() {
                   {/* Note  */}
                   <div class="mb-3 mt-3">
                     <label for="note" class="form-label">
-                      Note
+                      Note <span class="text-secondary" >(optional) </span>
                     </label>
                     <textarea
                       class="form-control"
