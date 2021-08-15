@@ -64,7 +64,7 @@ export default function PurchaseAcceptModal(props) {
                   <div>
                     <SearchBar {...props.searchProps} />
                     <hr />
-                    <Table selectRow={selectRow} {...props.baseProps} />
+                    <Table selectRow={selectRow} rowClasses="pointer" {...props.baseProps} />
                   </div>
                 )}
               </ToolkitProvider>

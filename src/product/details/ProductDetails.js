@@ -263,7 +263,7 @@ export default function ProductDetails() {
       return [
         {
           isShow: true,
-          title: "Cancel",
+          title: "Revert",
           action: () => onClickCancel(),
           class: "btn-secondary",
         },
@@ -520,6 +520,7 @@ export default function ProductDetails() {
                         noDataIndication="Table is Empty"
                         data={listVariantsStores}
                         rowEvents={rowEventsHavingRequestUpdate}
+                        rowClasses="pointer"
                       />
                     ) : (
                       <BootstrapTable
@@ -532,6 +533,7 @@ export default function ProductDetails() {
                         noDataIndication="Table is Empty"
                         data={listVariantsStores}
                         rowEvents={rowEvents}
+                        rowClasses="pointer"
                       />
                     )}
                   </div>

@@ -123,7 +123,7 @@ export default function VariantDetails() {
       return [
         {
           isShow: true,
-          title: "Cancel",
+          title: "Revert",
           action: () => onClickCancel(),
           class: "btn-secondary",
         },
@@ -413,6 +413,7 @@ export default function VariantDetails() {
                     noDataIndication="Table is Empty"
                     data={listPackage}
                     rowEvents={rowEvents}
+                    rowClasses="pointer"
                   />
                 </li>
               </ul>

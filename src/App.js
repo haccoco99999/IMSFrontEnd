@@ -100,9 +100,9 @@ function App(props) {
 */
 
         //Receive notification all channel global
-        hubConnection.on("NotificationMessage", (user, message) => {
-          console.log("NotificationMessage", user, message);
-        });
+        // hubConnection.on("NotificationMessage", (user, message) => {
+        //   console.log("NotificationMessage", user, message);
+        // });
 
         //Receive notification from a specific channel:
         hubConnection.on("NotificationGroupMessage", (message) => {
@@ -125,11 +125,15 @@ function App(props) {
 
         //Send a notification to all
         //SendMessage(string user, string message)
-        hubConnection
-          .invoke("SendMessage", "username", "message to be sent")
-          .catch((err) => {
-            console.log("Error invoking function: " + { err });
-          });
+        // hubConnection
+        //   .invoke("SendMessage", "username", "message to be sent")
+        //   .then(() => {
+        //     console.log("SendMessage", "Dang send message");
+        //   })
+
+        //   .catch((err) => {
+        //     console.log("Error invoking function: " + { err });
+        //   });
 
         //Join a channel
         //CHANNEL = ROLE NAME
@@ -240,20 +244,36 @@ function App(props) {
               <p onClick={toggleAbout}> &#60; Back</p>
             </div>
           </div>
-          
-            <ul className="collapse text-white ps-5 list-item-account w-100" id="collapseProfile">
-              <li onClick={() => history.push("/homepage/about-my-account")} className="item-name">My Profile</li>
-              <li  onClick={() => history.push("/homepage/notification")} className="item-name">Notification</li>
-              <li  onClick={() => history.push("/homepage/company-info")} className="item-name">Company Information</li>
-             
-            </ul>
-            {/* <p >
+
+          <ul
+            className="collapse text-white ps-5 list-item-account w-100"
+            id="collapseProfile"
+          >
+            <li
+              onClick={() => history.push("/homepage/about-my-account")}
+              className="item-name"
+            >
+              My Profile
+            </li>
+            <li
+              onClick={() => history.push("/homepage/notification")}
+              className="item-name"
+            >
+              Notification
+            </li>
+            <li
+              onClick={() => history.push("/homepage/company-info")}
+              className="item-name"
+            >
+              Company Information
+            </li>
+          </ul>
+          {/* <p >
               My profile
             </p> */}
         </div>
 
         <ul className="nav_list">
-
           <li>
             <Link to="/homepage/dashboard">
               <i className="bx">
@@ -351,7 +371,7 @@ function App(props) {
             </Link>
             <span className="tooltip">Supplier</span>
           </li>
-          
+
           <li>
             <Link to="/homepage/manage-account">
               <i className="bx">
@@ -370,10 +390,8 @@ function App(props) {
             </Link>
             <span className="tooltip"> requisition</span>
           </li>
-
         </ul>
-        <Logout hubConnection={hubConnection} />
-
+        <Logout hubConnection={hubConnection} client={client} />
       </div>
 
       <Switch>
@@ -417,7 +435,7 @@ function App(props) {
           <Notification />
         </Route>
         <Route path="/homepage/company-info">
-          <CompanyInfo/>
+          <CompanyInfo />
         </Route>
       </Switch>
 
@@ -442,8 +460,6 @@ const mapStateToProps = (state) => ({
 function Logout(props) {
   const dispatch = useDispatch();
   const logout = async () => {
-
-
     // let isLogout = false
     // await Swal.fire({
     //   title: "Are you sure",
@@ -462,17 +478,15 @@ function Logout(props) {
     // if(isLogout)
     dispatch({ type: "LOGOUT_REQUESTING" });
 
-    // props.hubConnection
-    //   .invoke("DisconnectFromResource", "userId", "pageId")
-    //   .catch((err) => {
-    //     console.log("Error while disconnectiong from resource: " + { err });
-    //   });
-
+    props.hubConnection
+      .invoke("RemoveFromGroup", props.client.userRole)
+      .catch((err) => {
+        console.log("Error while disconnectiong from resource: " + { err });
+      });
   };
 
   return (
     <div className="profile_content logout_content">
-
       <div className="pointer profile">
         <i
           onClick={logout}

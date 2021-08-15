@@ -69,6 +69,7 @@ export default function ListLocationsModal(props) {
                     <Table
                       noDataIndication="Table is Empty"
                       selectRow={selectRow}
+                      rowClasses="pointer"
                       {...props.baseProps}
                     />
                   </div>
