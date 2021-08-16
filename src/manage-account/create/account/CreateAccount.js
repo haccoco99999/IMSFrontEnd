@@ -118,7 +118,7 @@ export default function CreateAccount() {
         text: 'Something went wrong!',
 
       })
-     
+
       dispatch({ type: CREATE_ACC_CLEAN })
     }
     if (setActiveAccountStatus.requesting) {
@@ -277,20 +277,20 @@ export default function CreateAccount() {
   const dispatch = useDispatch()
   function onchangeInputInfoAccount(event) {
 
-    if(statusUser ==="EDITUSER"){
-    let data = {
-      userId: infoAccountState.userID,
-      email: infoAccountState.email,
-      phoneNumber: infoAccountState.phoneNumber,
-      address: infoAccountState.address,
-      roleId: event.target.value,
-      dateOfBirth: infoAccountState.dateOfBirth,
-      fullname: infoAccountState.fullname
+    if (statusUser === "EDITUSER") {
+      let data = {
+        userId: infoAccountState.userID,
+        email: infoAccountState.email,
+        phoneNumber: infoAccountState.phoneNumber,
+        address: infoAccountState.address,
+        roleId: event.target.value,
+        dateOfBirth: infoAccountState.dateOfBirth,
+        fullname: infoAccountState.fullname
+      }
+
+      dispatch(updateUserAccountDetail({ data: data, token: token }))
+
     }
-
-    dispatch(updateUserAccountDetail({ data: data, token: token }))
-
-  }
     setInfoAccountState(state => ({
       ...state, [event.target.name]: event.target.value
     }))
@@ -448,7 +448,7 @@ export default function CreateAccount() {
   }
   return (
     <div>
-    
+
 
       <NavigationBar
         home={"Manage User"}
@@ -490,82 +490,161 @@ export default function CreateAccount() {
             <div class="col-md-8">
 
               <div class="card-body">
+                {statusUser === "EDITUSER" && getUserAccountDetailStore.successful ?
+                  <form novalidate id="checkValidProfile" className="needs-validation">
 
-                <form novalidate id="checkValidProfile" className="needs-validation">
-
-                  <div class="mb-3 row">
-                    <label for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
-                    <div class="col-sm-10">
-                      <input placeholder="test@example.com" type="text" onChange={onchangeInputInfoAccount} required name="email" value={infoAccountState.email} disabled={statusUser !== "CREATEUSER"}
-                        class="form-control" aria-describedby="helpId" placeholder="test@example.com" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" />
-                      <div class="invalid-feedback">
-                        Email is  invalid!
+                    <div class="mb-3 row">
+                      <label for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
+                      <div class="col-sm-10">
+                        <input placeholder="test@example.com" type="text" onChange={onchangeInputInfoAccount} required name="email" value={infoAccountState.email} disabled={statusUser !== "CREATEUSER"}
+                          class="form-control" aria-describedby="helpId" placeholder="test@example.com" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" />
+                        <div class="invalid-feedback">
+                          Email is  invalid!
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Fullname:</label>
-                    <div class="col-sm-10">
-                      <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="fullname" value={infoAccountState.fullname}
-                        class="form-control" aria-describedby="helpId" placeholder="Fullname" />
-                      <div class="invalid-feedback">
-                        Please enter a fullname!
-                      </div>
-
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Phone Number:</label>
-                    <div class="col-sm-10">
-                      <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="phoneNumber" value={infoAccountState.phoneNumber}
-                        class="form-control" id="" aria-describedby="helpId" placeholder="Your phone" pattern="((09|03|07|08|05|028|024)+([0-9]{8})\b)" />
-                      <div class="invalid-feedback">
-                        Phone number is invalid!
-                      </div>
-
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Address:</label>
-                    <div class="col-sm-10">
-                      <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="address" value={infoAccountState.address}
-                        class="form-control" aria-describedby="helpId" placeholder="etc." />
-                      <div class="invalid-feedback">
-                        Please enter a address!
+                    <div class="mb-3 row">
+                      <label for="inputPassword" class="col-sm-2 col-form-label">Fullname:</label>
+                      <div class="col-sm-10">
+                        <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="fullname" value={infoAccountState.fullname}
+                          class="form-control" aria-describedby="helpId" placeholder="Fullname" />
+                        <div class="invalid-feedback">
+                          Please enter a fullname!
+                        </div>
 
                       </div>
-
                     </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Birthdate:</label>
-                    <div class="col-sm-10">
+                    <div class="mb-3 row">
+                      <label for="inputPassword" class="col-sm-2 col-form-label">Phone Number:</label>
+                      <div class="col-sm-10">
+                        <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="phoneNumber" value={infoAccountState.phoneNumber}
+                          class="form-control" id="" aria-describedby="helpId" placeholder="Your phone" pattern="((09|03|07|08|05|028|024)+([0-9]{8})\b)" />
+                        <div class="invalid-feedback">
+                          Phone number is invalid!
+                        </div>
 
-                      <input type="date" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="dateOfBirth" value={moment(infoAccountState.dateOfBirth).format("YYYY-MM-DD")}
-                        class="form-control" aria-describedby="helpId" />
-                      <div class="invalid-feedback">
-                        Please set a birthdate!
-                      </div>
-
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Select Role:</label>
-                    <div class="col-sm-10">
-                      <select onChange={onchangeInputInfoAccount} required value={infoAccountState.roleID} class="form-control" name="roleID" id="">
-                        {statusUser === "CREATEUSER" ? <option value="" disabled selected>  -- No Selected --  </option> : ""}
-                        <option value="IMS_MN" disabled={infoAccountState.roleID === "IMS_MN"} >Manager</option>
-                        <option value="IMS_AC" disabled={infoAccountState.roleID === "IMS_AC"} >Accountant</option>
-                        <option value="IMS_SK" disabled={infoAccountState.roleID === "IMS_SK"}>StockKeeper</option>
-                        <option value="IMS_SM" disabled={infoAccountState.roleID === "IMS_SM"} >Saleman</option>
-
-                      </select>
-                      <div class="invalid-feedback">
-                        Please select role!
                       </div>
                     </div>
-                  </div>
-                </form>
+                    <div class="mb-3 row">
+                      <label for="inputPassword" class="col-sm-2 col-form-label">Address:</label>
+                      <div class="col-sm-10">
+                        <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="address" value={infoAccountState.address}
+                          class="form-control" aria-describedby="helpId" placeholder="etc." />
+                        <div class="invalid-feedback">
+                          Please enter a address!
+
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label for="inputPassword" class="col-sm-2 col-form-label">Birthdate:</label>
+                      <div class="col-sm-10">
+
+                        <input type="date" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="dateOfBirth" value={moment(infoAccountState.dateOfBirth).format("YYYY-MM-DD")}
+                          class="form-control" aria-describedby="helpId" />
+                        <div class="invalid-feedback">
+                          Please set a birthdate!
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label for="inputPassword" class="col-sm-2 col-form-label">Select Role:</label>
+                      <div class="col-sm-10">
+                        <select onChange={onchangeInputInfoAccount} required value={infoAccountState.roleID} class="form-control" name="roleID" id="">
+                          {statusUser === "CREATEUSER" ? <option value="" disabled selected>  -- No Selected --  </option> : ""}
+                          <option value="IMS_MN" disabled={infoAccountState.roleID === "IMS_MN"} >Manager</option>
+                          <option value="IMS_AC" disabled={infoAccountState.roleID === "IMS_AC"} >Accountant</option>
+                          <option value="IMS_SK" disabled={infoAccountState.roleID === "IMS_SK"}>StockKeeper</option>
+                          <option value="IMS_SM" disabled={infoAccountState.roleID === "IMS_SM"} >Saleman</option>
+
+                        </select>
+                        <div class="invalid-feedback">
+                          Please select role!
+                        </div>
+                      </div>
+                    </div>
+                  </form> : statusUser === "CREATEUSER" ?
+                    <form novalidate id="checkValidProfile" className="needs-validation">
+
+                      <div class="mb-3 row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
+                        <div class="col-sm-10">
+                          <input placeholder="test@example.com" type="text" onChange={onchangeInputInfoAccount} required name="email" value={infoAccountState.email} disabled={statusUser !== "CREATEUSER"}
+                            class="form-control" aria-describedby="helpId" placeholder="test@example.com" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" />
+                          <div class="invalid-feedback">
+                            Email is  invalid!
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-3 row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Fullname:</label>
+                        <div class="col-sm-10">
+                          <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="fullname" value={infoAccountState.fullname}
+                            class="form-control" aria-describedby="helpId" placeholder="Fullname" />
+                          <div class="invalid-feedback">
+                            Please enter a fullname!
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="mb-3 row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Phone Number:</label>
+                        <div class="col-sm-10">
+                          <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="phoneNumber" value={infoAccountState.phoneNumber}
+                            class="form-control" id="" aria-describedby="helpId" placeholder="Your phone" pattern="((09|03|07|08|05|028|024)+([0-9]{8})\b)" />
+                          <div class="invalid-feedback">
+                            Phone number is invalid!
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="mb-3 row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Address:</label>
+                        <div class="col-sm-10">
+                          <input type="text" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="address" value={infoAccountState.address}
+                            class="form-control" aria-describedby="helpId" placeholder="etc." />
+                          <div class="invalid-feedback">
+                            Please enter a address!
+
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="mb-3 row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Birthdate:</label>
+                        <div class="col-sm-10">
+
+                          <input type="date" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="dateOfBirth" value={moment(infoAccountState.dateOfBirth).format("YYYY-MM-DD")}
+                            class="form-control" aria-describedby="helpId" />
+                          <div class="invalid-feedback">
+                            Please set a birthdate!
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="mb-3 row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Select Role:</label>
+                        <div class="col-sm-10">
+                          <select onChange={onchangeInputInfoAccount} required value={infoAccountState.roleID} class="form-control" name="roleID" id="">
+                            {statusUser === "CREATEUSER" ? <option value="" disabled selected>  -- No Selected --  </option> : ""}
+                            <option value="IMS_MN" disabled={infoAccountState.roleID === "IMS_MN"} >Manager</option>
+                            <option value="IMS_AC" disabled={infoAccountState.roleID === "IMS_AC"} >Accountant</option>
+                            <option value="IMS_SK" disabled={infoAccountState.roleID === "IMS_SK"}>StockKeeper</option>
+                            <option value="IMS_SM" disabled={infoAccountState.roleID === "IMS_SM"} >Saleman</option>
+
+                          </select>
+                          <div class="invalid-feedback">
+                            Please select role!
+                          </div>
+                        </div>
+                      </div>
+                    </form> : <TableLoading />}
+
+
+
+
                 {statusUser === "CREATEUSER" ? <form id="checkValidPassword" className="needs-validation">
                   <div className="form-text text-success" data-bs-toggle="collapse" data-bs-target="#collapseChangePassword" >
                     <p class="text-danger">Set password(*)</p>
@@ -596,31 +675,13 @@ export default function CreateAccount() {
                   </div>
 
                 </form> : ""
-                  // <div><p class="text-success btn dropdown-toggle" onClick={() => closeChangePasswordModal()} > <i class="bi bi-pen"></i> Change password</p>
-                  //   {isShowPasswordModal ? <ChangePasswordAccountManagerCompoent closeChangePasswordModal={closeChangePasswordModal} saveChangePassword={saveChangePassword} />
-                  //     : ""}
-
-                  // </div>
-
 
 
                 }
 
 
                 {statusUser === "CREATEUSER" ? <button type="button" onClick={() => createAccountInfo()} class="btn btn-primary">Create User</button> : ""}
-                {/* {statusUser === "EDITUSER" ? infoAccountState.isActive ?
-                  <div>
-                    {eventPage.isShowEdit ? <button onClick={() => setClickEdit()} type="button" class="btn btn-primary">EDIT</button> :
 
-                      <div>
-                        <button type="button" onClick={() => clickCancel()} class="btn btn-primary">CANCEL</button>
-                        <button type="button" onClick={() => clickUpdate()} class="btn btn-primary">SAVE</button>
-                      </div>
-
-                    }
-
-                  </div> : <p className="text-danger">You must unblock account </p> : <button type="button" onClick={() => createAccountInfo()} class="btn btn-primary">Create User</button>
-                  } */}
 
 
 
