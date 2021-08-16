@@ -4,12 +4,12 @@ import './progress-bar.css'
 export function ProgressBar(props) {
   const [state, setState] = useState({ progress: 50 })
   const listDone = [
-    { name: "Create" , status:"done"},
-    { name: "Preview" , status:"done"},
-    { name: "Sent" , status:"done"},
-    { name: "Confirm" , status:"done"},
-    { name: "Goods Receipt" , status:"done"},
-    { name: "Done", status:"done" }
+    { name: "Create", status: "done" },
+    { name: "Preview", status: "done" },
+    { name: "Sent", status: "done" },
+    { name: "Confirm", status: "done" },
+    { name: "Goods Receipt", status: "done" },
+    { name: "Done", status: "done" }
   ]
   return (
     <ul class="events m-0 p-0">
@@ -21,7 +21,7 @@ export function ProgressBar(props) {
 
       ))}
 
- 
+
     </ul>
 
 
@@ -33,4 +33,20 @@ export function ProgressBar(props) {
     //     <Steps.Item title="Waiting" description="Description" />
     // </Steps>
   );
+}
+export function ProgressBarNav(props) {
+  return (
+    <ol class="progress-bar">
+      <li class="is-active"><span>Objective &amp; Template</span></li>
+      <li><span>Options</span></li>
+      <li><span>Step</span></li>
+      <li><span>In a Nutshell</span></li>
+      <li><span>Step</span></li>
+      <li><span>Step</span></li>
+      <li><span>Launch Date</span></li>
+      <li><span>Step</span></li>
+      <li><span>Step</span></li>
+      <li><span>Agreement</span></li>
+    </ol>
+  )
 }
