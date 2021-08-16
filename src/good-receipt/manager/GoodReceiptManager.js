@@ -14,16 +14,19 @@ import "./good-receipt-manager.css";
 import { searchGoodsReceiptAction } from "./action";
 import PagingComponent from "../../components/paging/paging-component";
 import { GoodReceiptFilter } from "../../components/filter/FilterComponents";
+import { setStatusLoadingTable } from "../../helper/loadDataHelper";
 
 export default function GoodsReceipt() {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  const { listGoodsReceipt, pageCount,rowCountTotal, token } = useSelector((state) => ({
+  const { listGoodsReceipt, pageCount,rowCountTotal, token, pageAuthorized, getGoodsReceiptReducer } = useSelector((state) => ({
     listGoodsReceipt: state.getGoodsReceiptReducer.listGoodsReceipt,
     pageCount: state.getGoodsReceiptReducer.pageCount,
     rowCountTotal: state.getGoodsReceiptReducer.rowCountTotal,
     token: state.client.token,
+    pageAuthorized: state.client.pageAuthorized,
+    getGoodsReceiptReducer: state.getGoodsReceiptReducer,
   }));
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -357,7 +360,7 @@ export default function GoodsReceipt() {
             <div className="card-body">
               <PagingComponent rowCountTotal={rowCountTotal} sizePerPage={goodsReceiptFilter.SizePerPage} setSizePage={setSizePage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={goodsReceiptFilter.currentPage} />
 
-          <button   onClick={handleClick} type="button" class=" btn-sm mb-1 btn btn-primary">Add Goods Receipt</button>
+          {pageAuthorized.includes("CreateGoodsReceipt")? <button   onClick={handleClick} type="button" class=" btn-sm mb-1 btn btn-primary">Add Goods Receipt</button>:"" }
               <p className="dropdown-toggle pointer"  data-bs-toggle="collapse" data-bs-target="#collapseGoodReceipt" aria-expanded="false" aria-controls="collapseExample">
                 <i class="bi bi-sliders"></i> Setting Colum
               </p>
@@ -385,7 +388,7 @@ export default function GoodsReceipt() {
                         rowEvents={rowEvents}
                         {...props.baseProps}
                         rowClasses="pointer"
-                        noDataIndication={() => <TableLoading />}
+                        noDataIndication={() =>setStatusLoadingTable({requesting: getGoodsReceiptReducer.requesting , successful:getGoodsReceiptReducer.successful}) }
                       />
                     </div>
                   )

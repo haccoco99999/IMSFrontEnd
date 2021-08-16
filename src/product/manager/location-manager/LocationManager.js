@@ -15,6 +15,7 @@ import {
 } from "./action";
 import { RESET } from "../constants";
 import { LocationCategoryFilter } from "../../../components/filter/FilterComponents";
+import { setStatusLoadingTable } from "../../../helper/loadDataHelper";
 export default function LocationManager() {
   let dispatch = useDispatch();
 
@@ -68,8 +69,10 @@ export default function LocationManager() {
     pageCount,
     createLocationReducer,
     updateLocationReducer,
+    locationManagerReducerStatus,
   } = useSelector((state) => ({
     listLocationsStore: state.locationManagerReducer.listLocations,
+    locationManagerReducerStatus: state.locationManagerReducer,
     token: state.client.token,
     pageCount: state.locationManagerReducer.pageCount,
     // messages: state.locationManagetReducer.messages,
@@ -337,7 +340,7 @@ export default function LocationManager() {
 
       <div class="pb-3">
         <div className="card">
-          <div class="card-header text-white bg-secondary">Product List</div>
+          <div class="card-header text-white bg-secondary">Location List</div>
           <div className="card-body">
             <PagingComponent
               setSizePage={setSizePage}
@@ -362,7 +365,7 @@ export default function LocationManager() {
               data={listLocationsStore}
               rowEvents={rowEvents}
               rowClasses="pointer"
-              noDataIndication={() => <TableLoading />}
+              noDataIndication={() =>setStatusLoadingTable({requesting: locationManagerReducerStatus.requesting , successful:locationManagerReducerStatus.successful}) }
             />
 
 

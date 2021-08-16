@@ -13,14 +13,16 @@ import { getAllProductAction } from "./action";
 import Table from "../../../table-receipt/ListReceiptsTable";
 import PagingComponent from "../../../components/paging/paging-component"
 import ProductVariantsFilter from "./ProductVariantsFilter";
+import { setStatusLoadingTable } from "../../../helper/loadDataHelper";
 export default function () {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  const { listProducstStore, token, pageCount } = useSelector((state) => ({
+  const { listProducstStore, token, pageCount, getAllProductsReducerStatus } = useSelector((state) => ({
     token: state.client.token,
     listProducstStore: state.getAllProductsReducer.listProducts,
     pageCount: state.getAllProductsReducer.pageCount,
+    getAllProductsReducerStatus: state.getAllProductsReducer
   }));
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -264,7 +266,7 @@ export default function () {
                       rowEvents={rowEvents}
                       {...props.baseProps}
                       rowClasses="pointer"
-                      noDataIndication={() => <TableLoading />}
+                      noDataIndication={() => setStatusLoadingTable({requesting: getAllProductsReducerStatus.requesting , successful:getAllProductsReducerStatus.successful})}
                     />
                   </div>
                 )

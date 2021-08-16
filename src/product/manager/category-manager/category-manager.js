@@ -16,6 +16,7 @@ import { RESET } from "../constants";
 import PagingComponent from "../../../components/paging/paging-component";
 import { TableLoading } from "../../../components/loading/loading-component";
 import { LocationCategoryFilter } from "../../../components/filter/FilterComponents";
+import { setStatusLoadingTable } from "../../../helper/loadDataHelper";
 export default function CategoryManager() {
   let dispatch = useDispatch();
   //modal
@@ -57,9 +58,11 @@ export default function CategoryManager() {
     pageCount,
     updateCategoriesReducer,
     createCategoriesReducer,
+    getAllCategoriesReducerStatus,
   } = useSelector((state) => ({
     list_Categories: state.getAllCategoriesReducer.listCategories,
     token: state.client.token,
+    getAllCategoriesReducerStatus: state.getAllCategoriesReducer,
     pageCount: state.getAllCategoriesReducer.pageCount,
     updateCategoriesReducer: state.updateCategoriesReducer,
     createCategoriesReducer: state.createCategoriesReducer,
@@ -375,7 +378,7 @@ export default function CategoryManager() {
               data={list_Categories}
               rowEvents={rowEvents}
               rowClasses="pointer"
-              noDataIndication={() => <TableLoading />}
+              noDataIndication={() => setStatusLoadingTable({requesting: getAllCategoriesReducerStatus.requesting , successful:getAllCategoriesReducerStatus.successful})}
             />
           </div>
         </div>

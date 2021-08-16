@@ -20,6 +20,7 @@ import StockTakeFilter from './StockTakeFilter'
 import { Cloudinary } from "@cloudinary/base";
 import { PurchaseOrderFilter } from '../../components/filter/FilterComponents'
 import moment  from 'moment'
+import { setStatusLoadingTable } from '../../helper/loadDataHelper'
 export default function PurchaseQuoteOrder() {
     // const cld = new Cloudinary({
     //     cloud: {
@@ -186,9 +187,9 @@ export default function PurchaseQuoteOrder() {
                 return 'right';
 
             },
-            formatter:(cell) =>{
-                return moment(cell).format("DD-MM-YYYY")
-            }
+            // formatter:(cell) =>{
+            //     return moment(cell).format("DD-MM-YYYY")
+            // }
         },
         {
             dataField: 'deliveryDate',
@@ -197,9 +198,9 @@ export default function PurchaseQuoteOrder() {
                 return 'right';
 
             },
-            formatter:(cell) =>{
-                return moment(cell).format("DD-MM-YYYY")
-            }
+            // formatter:(cell) =>{
+            //     return moment(cell).format("DD-MM-YYYY")
+            // }
         },
 
         {
@@ -260,36 +261,6 @@ export default function PurchaseQuoteOrder() {
 
 
 
-    // function setListTablePaging(event) {
-
-
-    //     dispatch(searchPurchaseOrder({ filter: { ...purchaseOrderFilter, [event.target.name]: event.target.value, currentPage: 1 } }))
-    // }
-    // function pagingPurchaseOrder(index) {
-    //     dispatch(searchPurchaseOrder({ filter: { ...purchaseOrderFilter, currentPage: purchaseOrderFilter.currentPage + index } }))
-    // }
-    // function submitFilter(listselectFilter, filter) {
-    //     setListKeyArrayFilter([...listselectFilter])
-    //     setShowFilter()
-    //     dispatch(searchPurchaseOrder({ filter: filter, token: token }))
-
-    // }
-    // function searchKeyWordPurchaseOrder(searchKey) {
-    //     dispatch(searchPurchaseOrder({ filter: { ...purchaseOrderFilter, SearchQuery: searchKey } }))
-    // }
-    function searchKeyWordPurchaseOrder(searchKey) {
-        console.log(searchKey)
-        setFilter(state => ({ ...state, SearchQuery: searchKey }))
-
-    }
-    // function reloadTable() {
-    //     searchKeyWordPurchaseOrder("")
-    // }
-    // function resetFilter() {
-    //     setListKeyArrayFilter([])
-    //     setShowFilter()
-    //     dispatch(searchPurchaseOrder({ filter: { ...purchaseOrderFilter, ...purchaserOrderFilterReset } }))
-    // }
     function setListKeyWordArrayFilter(value) {
         setListKeyArrayFilter([...value])
     }
@@ -396,25 +367,7 @@ export default function PurchaseQuoteOrder() {
             }
         </div>
     );
-    const NoDataIndication = () => {
 
-        return (<ContentLoader
-            speed={2}
-            width={"100%"}
-            height={400}
-            viewBox="0 0 100% 400"
-            backgroundColor="#c2c2c2"
-            foregroundColor="#ecebeb"
-
-        >
-            {/* {console.log(arr.map((_,i) => ( <rect x="-33" y={i*35} rx="3" ry="3" width="634" height="20" /> )))} */}
-            {Array.apply(null, Array(20)).map((val, idx) => (<rect x="-33" y={idx * 40} rx="3" ry="3" width="100%" height="30" />))}
-
-
-
-        </ContentLoader>
-        )
-    };
 
 
     /////////////////////////////////////////////////////////
@@ -630,7 +583,7 @@ export default function PurchaseQuoteOrder() {
                                                 striped
                                                 hover
                                                 condensed
-                                                noDataIndication={() => <NoDataIndication />}
+                                                noDataIndication={() =>setStatusLoadingTable({requesting: purchaseOrderStore.requestingPO , successful:purchaseOrderStore.successfulPO})}
                                                 rowEvents={rowEvents}
                                                 rowClasses="pointer"
                                                 //    headerClasses="table-header-receipt"

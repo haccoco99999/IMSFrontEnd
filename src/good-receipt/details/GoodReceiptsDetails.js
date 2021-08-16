@@ -11,7 +11,7 @@ import "../goodreceipt.css";
 // import { getConfirmedPODetailsAction } from "../create/action";
 import NavigationBar from "../../components/navbar/navbar-component";
 import GetDetailsAction from "./action";
-import { TableLoading } from "../../components/loading/loading-component";
+import { InfoPurchaseOrderLoader, TableLoading } from "../../components/loading/loading-component";
 import { RESET } from "./constants";
 export default function GoodsReceiptDetails() {
   let history = useHistory();
@@ -106,20 +106,22 @@ export default function GoodsReceiptDetails() {
   }, [getGoodsReceiptDetailsReducer]);
   return (
     <div>
-      {returnData ? (
-        <>
-          <NavigationBar
-            listButton={listButton}
-            titleBar={location.state.goodsreceiptId}
-            actionGoBack={goBackClick}
-            status=""
-            home="Goods receipt"
-            currentPage="Goods receipt details"
-          />
-          <div className="wrapper">
-            <div class="card">
-              <div class="card-header fw-bold">Goods receipt Information</div>
-              <ul class="list-group list-group-flush">
+
+      <>
+        <NavigationBar
+          listButton={listButton}
+          titleBar={location.state.goodsreceiptId}
+          actionGoBack={goBackClick}
+          status=""
+          home="Goods receipt"
+          currentPage="Goods receipt details"
+        />
+        <div className="wrapper">
+          <div class="card">
+            <div class="card-header fw-bold">Goods receipt Information</div>
+
+            <ul class="list-group list-group-flush">
+              {returnData ? <div>
                 <li class="list-group-item">
                   <div className="row g-3 justify-content-between me-3">
                     <div className="col-4">
@@ -175,22 +177,29 @@ export default function GoodsReceiptDetails() {
                     </p>
                   </div>
                 </li>
-                <li class="list-group-item">
-                  <h5 class="card-title">List of received products</h5>
-                  <BootstrapTable
-                    keyField="productVariantId"
-                    noDataIndication="Table is Empty"
-                    columns={columns}
-                    data={listProductsStore}
-                  />
-                </li>
-              </ul>
+              </div> : <InfoPurchaseOrderLoader />}
+
+
+            </ul>
+            <div class="card">
+              <div className="card-header">List of received products</div>
+              <div className="card-body">  {returnData ?
+                <BootstrapTable
+                  keyField="productVariantId"
+                  noDataIndication="Table is Empty"
+                  columns={columns}
+                  data={listProductsStore}
+                />
+                : <InfoPurchaseOrderLoader />}</div>
+
+
+
+
             </div>
           </div>
-        </>
-      ) : (
-        <TableLoading />
-      )}
+        </div>
+      </>
+
     </div>
   );
 }

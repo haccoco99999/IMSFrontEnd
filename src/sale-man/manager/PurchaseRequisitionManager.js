@@ -14,6 +14,7 @@ import { CustomToggleList } from "../../components/toggle-columns-table/CustomTo
 import { PurchaseOrderFilter } from "../../components/filter/FilterComponents";
 import { TableLoading } from "../../components/loading/loading-component";
 import PagingComponent from "../../components/paging/paging-component";
+import { setStatusLoadingTable } from "../../helper/loadDataHelper";
 export default function PurchaseRequisitionManager() {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -124,10 +125,11 @@ export default function PurchaseRequisitionManager() {
   const [sizePerPage, setSizePerPage] = useState(5);
   const [returnData, setReturnData] = useState(false)
 
-  const { listData, pageCount, rowCountTotal, token } = useSelector((state) => ({
+  const { listData, pageCount, rowCountTotal, token , getAllPurchaseRequisitionReducerStatus} = useSelector((state) => ({
     listData: state.getAllPurchaseRequisitionReducer.listPurchaseRequisition,
     pageCount: state.getAllPurchaseRequisitionReducer.pageCount,
     rowCountTotal: state.getAllPurchaseRequisitionReducer.rowCountTotal,
+    getAllPurchaseRequisitionReducerStatus: state.getAllPurchaseRequisitionReducer,
     token: state.client.token,
   }));
 
@@ -306,7 +308,7 @@ export default function PurchaseRequisitionManager() {
                         columns={columns}
                         data={listData}
                         rowEvents={rowEvents}
-                        noDataIndication={() => <TableLoading />}
+                        noDataIndication={() => setStatusLoadingTable({requesting: getAllPurchaseRequisitionReducerStatus.requesting, successful : getAllPurchaseRequisitionReducerStatus.successful})}
                         // rowEvents={rowEvents}
                         rowClasses="pointer"
 

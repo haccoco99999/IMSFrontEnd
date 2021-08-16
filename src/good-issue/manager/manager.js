@@ -18,13 +18,15 @@ import { GalleryLoading, TableLoading } from "../../components/loading/loading-c
 import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { GoodsIssueFilter } from "../../components/filter/FilterComponents";
 import PagingComponent from "../../components/paging/paging-component";
+import { setStatusLoadingTable } from "../../helper/loadDataHelper";
 export default function Manager(props) {
 
   let history = useHistory()
-  const { goodIssueStore, goodIssueRequisition, token } = useSelector(state => ({
+  const { goodIssueStore, goodIssueRequisition, token , pageAuthorized} = useSelector(state => ({
     goodIssueStore: state.GetAllGoodsIssues,
     goodIssueRequisition: state.getAllGoodsIssuesRequisition,
-    token: state.client.token
+    token: state.client.token,
+    pageAuthorized: state.client.pageAuthorized
   }))
 
   let [listGoodIssues, setListGoodIssues] = useState([])
@@ -238,12 +240,15 @@ export default function Manager(props) {
   return (
     <div className="space-top-heading wrapper">
       {/* title */}
-      <div className="title-heading mt-2">
-        <span>Goods Issues Requisition</span>
-      </div>
-      {goodIssueRequisition.successful ? <GalleryGoodIssue listData={listGoodIssueRequisition}
-        clickGoodIssueRequisition={clickGoodIssueRequisition}
-      /> : <GalleryLoading />}
+      {pageAuthorized.includes("IssueRequisition") ? <div>
+        <div className="title-heading mt-2">
+          <span>Goods Issues Requisition</span>
+        </div>
+        {goodIssueRequisition.successful ? <GalleryGoodIssue listData={listGoodIssueRequisition}
+          clickGoodIssueRequisition={clickGoodIssueRequisition}
+        /> : <GalleryLoading />}
+      </div> : ""}
+
 
 
 
@@ -306,7 +311,7 @@ export default function Manager(props) {
                         rowEvents={rowEvents}
                         {...props.baseProps}
                         rowClasses="pointer"
-                        noDataIndication={() => <TableLoading />}
+                        noDataIndication={() => setStatusLoadingTable({requesting: goodIssueRequisition.requesting , successful:goodIssueRequisition.successful})}
                       />
                     </div>
                   )

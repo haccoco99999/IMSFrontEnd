@@ -12,7 +12,7 @@ import {
 } from "./action";
 import { CLEAR_MESSAGE } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
-import { TableLoading } from "../../components/loading/loading-component";
+import { InfoPurchaseOrderLoader, TableLoading } from "../../components/loading/loading-component";
 export default function SupplierDetails() {
   let history = useHistory();
   let location = useLocation();
@@ -270,7 +270,7 @@ export default function SupplierDetails() {
 
   return (
     <div>
-      {returnData ? (
+   
         <>
           <NavigationBar
             listButton={listButton}
@@ -284,6 +284,7 @@ export default function SupplierDetails() {
           <div className="wrapper">
             <div className="card">
               <div class="card-header">Supplier Information</div>
+              {returnData ? (
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                   <form
@@ -406,13 +407,11 @@ export default function SupplierDetails() {
                     ></textarea>
                   </div>
                 </li>
-              </ul>
+              </ul> ) : (<> <InfoPurchaseOrderLoader /> </>)}
             </div>
           </div>
         </>
-      ) : (
-        <TableLoading />
-      )}
+    
     </div>
   );
 }

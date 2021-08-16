@@ -4,7 +4,7 @@ const initialState = {
   requesting: false,
   successful: false,
   messages: "",
-  errors: "",
+  errors: false,
   currentPage: 0,
   pageCount: 0,
   sizePerPage: 0,
@@ -20,7 +20,7 @@ export default function reducer(state = initialState, action) {
         requesting: true,
         successful: false,
         messages: "",
-        errors: "",
+        errors: false,
       };
 
     case GET_SP_RESPONSE:
@@ -29,7 +29,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: "",
-        errors: "",
+        errors: false,
         listSuppliers: action.json.paging.resultList,
         currentPage: action.json.paging.currentPage,
         pageCount: action.json.paging.pageCount,
@@ -43,7 +43,7 @@ export default function reducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: "",
-        errors: "",
+        errors: true,
         
       };
 

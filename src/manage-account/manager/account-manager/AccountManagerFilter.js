@@ -31,7 +31,14 @@ export default function AccountManagementFilter(props) {
                         </div>
                         <div className="col-md-6">
 
-
+                    <div class="form-group">
+                      <label for="">Status</label>
+                      <select  onChange={props.onChangeAccountFilter} class="form-control" name="status" id="">
+                        <option value="">All</option>
+                        <option value={true}>Active</option>
+                        <option value={false}>DeActive</option>
+                      </select>
+                    </div>
 
                         </div>
 

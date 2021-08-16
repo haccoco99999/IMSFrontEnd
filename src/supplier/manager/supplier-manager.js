@@ -14,6 +14,7 @@ import PagingComponent from "../../components/paging/paging-component";
 import { SupplierFilter } from "../../components/filter/FilterComponents";
 import { CustomToggleList } from "../../components/toggle-columns-table/CustomToggleList";
 import { TableLoading } from "../../components/loading/loading-component";
+import { setStatusLoadingTable } from "../../helper/loadDataHelper";
 
 export default function SupplierManager() {
   let history = useHistory();
@@ -63,8 +64,9 @@ const [supplierFilter, setSupplierFilter] = useState({
     { dataField: "phoneNumber", text: "Phone Number" },
   ];
 
-  const { listData, pageCount, rowCountTotal,token } = useSelector((state) => ({
+  const { listData, pageCount, rowCountTotal,token , getAllSuppliersReducerStatus} = useSelector((state) => ({
     listData: state.getAllSuppliersReducer.listSuppliers,
+    getAllSuppliersReducerStatus: state.getAllSuppliersReducer,
     pageCount: state.getAllSuppliersReducer.pageCount,
     rowCountTotal: state.getAllSuppliersReducer.rowCountTotal,
     token: state.client.token,
@@ -234,7 +236,7 @@ const [supplierFilter, setSupplierFilter] = useState({
                         data={listData}
                         rowEvents={rowEvents}
                         rowClasses="pointer"
-                        noDataIndication={() => <TableLoading />}
+                        noDataIndication={() => setStatusLoadingTable({requesting: getAllSuppliersReducerStatus.requesting, successful : getAllSuppliersReducerStatus.successful})}
                         // rowEvents={rowEvents}
                         rowClasses="pointer"
 

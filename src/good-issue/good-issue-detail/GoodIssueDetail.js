@@ -22,12 +22,13 @@ import RejectWrapper from '../../components/reject-wrapper/reject-component';
 export default function DetailGoodIssue() {
     const doc = new jsPDF();
     const location = useLocation()
-    const { GoodIssueDetail, token, RejectGoodIssueStatus, createGoodIssueStatus, upadateGoodIssueStatus } = useSelector(state => ({
+    const { GoodIssueDetail, token, RejectGoodIssueStatus, createGoodIssueStatus, upadateGoodIssueStatus, pageAuthorized } = useSelector(state => ({
         RejectGoodIssueStatus: state.RejectGoodIssue,
         createGoodIssueStatus: state.createGoodIssue,
         upadateGoodIssueStatus: state.upadateGoodIssue,
         GoodIssueDetail: state.DetailGoodIssue,
-        token: state.client.token
+        token: state.client.token,
+        pageAuthorized: state.client.pageAuthorized,
     }))
     const history = useHistory()
     const [infoRejectOrder, setInfoRejectOrder] = useState({})
@@ -184,7 +185,7 @@ export default function DetailGoodIssue() {
 
 
     function setListButtonNav(status) {
-        if (status === "IssueRequisition") {
+        if (status === "IssueRequisition" && pageAuthorized.includes(status) ) {
             return [
                 {
                     isShow: true,
@@ -201,7 +202,7 @@ export default function DetailGoodIssue() {
                 },
             ]
         }
-        else if (status === "Packing") {
+        else if (status === "Packing" && pageAuthorized.includes(status)) {
             return [
                 {
                     isShow: true,
@@ -218,7 +219,7 @@ export default function DetailGoodIssue() {
             ]
 
         }
-        else if (status === "Shipping") {
+        else if (status === "Shipping" && pageAuthorized.includes(status)) {
             return [
                 {
                     isShow: true,

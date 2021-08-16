@@ -17,6 +17,7 @@ import AccountManagementFilter from "./AccountManagerFilter";
 import { CustomToggleList } from "../../../components/toggle-columns-table/CustomToggleList";
 import PagingComponent from "../../../components/paging/paging-component";
 import { TableLoading } from "../../../components/loading/loading-component";
+import { setStatusLoadingTable } from "../../../helper/loadDataHelper";
 
 function AccountManager() {
   let history = useHistory();
@@ -33,8 +34,8 @@ function AccountManager() {
       { key: "Manager", value: "Manager" },
 
 
-    ]
-
+    ],
+    status:""
 
 
   }
@@ -46,9 +47,10 @@ function AccountManager() {
 
 
 
-  const { data, token, pageCount, rowCountTotal } = useSelector((state) => ({
+  const { data, token, pageCount, rowCountTotal,getAllAccountsReducerStatus } = useSelector((state) => ({
     data: state.getAllAccountsReducer.listAccounts,
     token: state.client.token,
+    getAllAccountsReducerStatus : state.getAllAccountsReducer,
     pageCount: state.getAllAccountsReducer.pageCount,
     rowCountTotal: state.getAllAccountsReducer.rowCountTotal,
   }));
@@ -315,7 +317,7 @@ function AccountManager() {
                         striped
                         hover
                         condensed
-                        noDataIndication={() => <TableLoading/>}
+                        noDataIndication={() => setStatusLoadingTable({requesting: getAllAccountsReducerStatus.requesting , successful:getAllAccountsReducerStatus.successful})}
                         rowEvents={rowEvents}
                         rowClasses="pointer"
                         //    headerClasses="table-header-receipt"

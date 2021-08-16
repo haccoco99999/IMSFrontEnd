@@ -17,7 +17,7 @@ import {
   updateAction,
 } from "./action";
 import { RESET } from "./constants";
-import { TableLoading } from "../../components/loading/loading-component";
+import { InfoPurchaseOrderLoader, TableLoading } from "../../components/loading/loading-component";
 import NavigationBar from "../../components/navbar/navbar-component";
 import RejectModal from "../components/reject-component";
 import AdjustModal from "../components/adjust-component";
@@ -54,8 +54,10 @@ export default function StocktakeDetailsComponent() {
     rejectStocktakeReducer,
     adjustStocktakeReducer,
     submitStocktakeReducer,
+    pageAuthorized,
   } = useSelector((state) => ({
     token: state.client.token,
+    pageAuthorized: state.client.pageAuthorized,
     role: state.client.userRole,
     stocktakeDetailsStore: state.getDetailsStocktakeReducer,
     groupLocationStore:
@@ -222,7 +224,7 @@ export default function StocktakeDetailsComponent() {
   //todo: function Nav Button
   const listButton = setListButtonNav(statusStocktakeStore);
   function setListButtonNav(status) {
-    if (status === 0) {
+    if (status === 0 && pageAuthorized.includes(status === 0 ? "Progressing":undefined)) {
       return [
         {
           isShow: true,
@@ -243,7 +245,7 @@ export default function StocktakeDetailsComponent() {
           disabled: isChecking,
         },
       ];
-    } else if (status === 2 && role === "Manager") {
+    } else if (status === 2 && pageAuthorized.includes(status === 2 ? "AwaitingAdjustment":undefined)) {
       return [
         {
           isShow: true,
@@ -665,9 +667,7 @@ export default function StocktakeDetailsComponent() {
   }, [stocktakeDetailsStore]);
   return (
     <div>
-      {showLoader ? (
-        <TableLoading />
-      ) : (
+      
         <>
           <NavigationBar
             listButton={listButton}
@@ -683,6 +683,7 @@ export default function StocktakeDetailsComponent() {
             <div class="card">
               <div class="card-header fw-bold">Stocktake Information</div>
               <ul class="list-group list-group-flush">
+                { !showLoader ? 
                 <li class="list-group-item">
                   {isLoading && statusStocktakeStore === -1 && (
                     <RejectWrapper
@@ -725,9 +726,12 @@ export default function StocktakeDetailsComponent() {
                       </div>
                     </div>
                   )}
-                </li>
+                </li> : <InfoPurchaseOrderLoader/>}
                 <li class="list-group-item">
+                  
                   <h5 class="card-title fw-bold mb-3">List checked items</h5>
+                  {!showLoader ? 
+                  <div>
                   {isChanging && (
                     <>
                       <button
@@ -745,7 +749,7 @@ export default function StocktakeDetailsComponent() {
                         Revert
                       </button>
                     </>
-                  )}
+                  )} 
                   <div className="mt-3">
                     {isLoading &&
                       (statusStocktakeStore === 0 ? (
@@ -823,13 +827,13 @@ export default function StocktakeDetailsComponent() {
                         />
                       ))}
                   </div>
+                  </div> : <InfoPurchaseOrderLoader/> }
                 </li>
               </ul>
             </div>
           </div>
         </>
-      )}
-
+   
       <RejectModal
         modalRef={modalRef}
         hideModal={hideRejectModal}

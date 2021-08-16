@@ -17,16 +17,20 @@ import { getAllStocktakeAction } from "./action";
 import PagingComponent from "../../components/paging/paging-component";
 import { CustomToggleList } from "../../components/toggle-columns-table/CustomToggleList";
 import moment from "moment";
+import { setStatusLoadingTable } from "../../helper/loadDataHelper";
 
 export default function () {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  const { listStocktakeStore, pageCount,rowCountTotal,  token } = useSelector((state) => ({
+  const { listStocktakeStore, pageCount,rowCountTotal,  token, pageAuthorized, getAllStocktakeReducer } = useSelector((state) => ({
     listStocktakeStore: state.getAllStocktakeReducer.listStocktakes,
     pageCount: state.getAllStocktakeReducer.pageCount,
     rowCountTotal: state.getAllStocktakeReducer.rowCountTotal,
     token: state.client.token,
+    pageAuthorized: state.client.pageAuthorized,
+    getAllStocktakeReducer: state.getAllStocktakeReducer,
+
   }));
 
 
@@ -401,7 +405,7 @@ export default function () {
               backPagingClick={backPagingClick} 
               currentPage={stockTakeFilter.currentPage} />
 
-              <button   onClick={pushAddPage} type="button" class=" btn-sm mb-1 btn btn-primary">Add Stock take</button>
+            {pageAuthorized.includes( "CreateStocktake" )?<button   onClick={pushAddPage} type="button" class=" btn-sm mb-1 btn btn-primary">Add Stock take</button>:""}  
 
               <p className="dropdown-toggle pointer" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 <i class="bi bi-sliders"></i> Setting Colum
@@ -428,7 +432,7 @@ export default function () {
                         hover
                         condensed
                         rowClasses="pointer"
-                        noDataIndication={() => <TableLoading />}
+                        noDataIndication={() =>setStatusLoadingTable({requesting: getAllStocktakeReducer.requesting , successful:getAllStocktakeReducer.successful}) }
                         //  noDataIndication="Table is Empty"
                         rowEvents={rowEvents}
                         {...props.baseProps}

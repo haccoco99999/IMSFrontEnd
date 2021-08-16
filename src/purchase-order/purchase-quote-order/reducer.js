@@ -19,32 +19,7 @@ const initalState = {
     
     listPurchaseOrder: [],
     listQuote: [],
-    // purchaserOrderFilter:{
-    //     SearchQuery:"",
-    //     CurrentPage: 1,
-    //     SizePerPage: 10,
-    //     FromStatus: 4,
-    //     ToStatus: 6,
-    //     Statuses:["PurchaseOrder","POWaitingConfirmation","POConfirm","Done","POCanceled"],
-    //     // HideMerged: true
-    //     supplier:{
-    //         SupplierId:"",
-    //         supplierName: "",
-    //     },
-       
-    //     FromTotalOrderPrice:"",
-    //     ToTotalOrderPrice:"",
-    //     FromDeliveryDate:"",
-    //     ToDeliveryDate:"",
-    //     FromConfirmedDate:"",
-    //     ToConfirmedDate:"",
-    //     ConfirmedByName:"",
-    //     FromCreatedDate:"",
-    //     ToCreatedDate:"",
-    //     FromModifiedDate:"",
-    //     ToModifiedDate:"",
-     
-    // },
+  
     infoTablePage:{
         currentPage: 0,
         pageCount: 0,
@@ -71,11 +46,11 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
             let listPurchaseOrder = action.json.paging.resultList.map(item => {
                 return {
                     ...item,
-                    deadline:  moment(item.deadline).add(7, "h").format("DD/MM/YYYY"),
-                    deliveryDate:  moment(item.deliveryDate).add(7, "h").format("DD/MM/YYYY"),
-                    confirmedDate:moment(item.confirmedDate).add(7, "h").format("DD/MM/YYYY"),
-                    createdDate: moment(item.createdDate).add(7, "h").format("DD/MM/YYYY "),
-                    modifiedDate: moment(item.modifiedDate).add(7, "h").format("DD/MM/YYYY"),
+                    deadline:  moment(item.deadline).add(7, "h").format("DD-MM-YYYY"),
+                    deliveryDate:  moment(item.deliveryDate).add(7, "h").format("DD-MM-YYYY"),
+                    confirmedDate:moment(item.confirmedDate).add(7, "h").format("DD-MM-YYYY"),
+                    createdDate: moment(item.createdDate).add(7, "h").format("DD-MM-YYYY "),
+                    modifiedDate: moment(item.modifiedDate).add(7, "h").format("DD-MM-YYYY"),
                 }
              })
             return {
@@ -137,3 +112,4 @@ const reducer = function searchPurchaseOrderReducer(state = initalState, action)
     }
 }
 export default reducer
+

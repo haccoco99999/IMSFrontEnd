@@ -64,11 +64,12 @@ export default function PurchaseOrderConfirm() {
         confirmPurchaserOrderStatus,
         createPurchaserOrderStatus,
         purchaseOrderDetailStore,
-
+        pageAuthorized,
     } = useSelector(state => ({
         purchaseOrderDataGlobal: state.getDetailPurchaseReducer.detailPurchaseOrder,
         purchaseOrderDetailStore: state.getDetailPurchaseReducer,
         token: state.client.token,
+        pageAuthorized: state.client.pageAuthorized,
         priceQuoteUpdateStatus: state.PriceQuoteUpdate,
         createPriceQuoteStatus: state.createPriceQuote,
         mailOrderDataStatus: state.mailOrderData,
@@ -306,7 +307,7 @@ export default function PurchaseOrderConfirm() {
         })
     }
     function setListButton(status) {
-        if (status === "PriceQuote" && purchaseOrderDataGlobal.hasSentMail) {
+        if (status === "PriceQuote" && purchaseOrderDataGlobal.hasSentMail  && pageAuthorized.includes(status) ) {
 
             return [
 
@@ -315,7 +316,8 @@ export default function PurchaseOrderConfirm() {
                     title: "Edit",
                     action: () => editClick(),
                     class: "btn btn-warning",
-                    disabled: disableEdit
+                    disabled: disableEdit,
+                    
                 },
 
                 {
@@ -358,7 +360,7 @@ export default function PurchaseOrderConfirm() {
                 },
             ]
         }
-        else if (status === "PriceQuote" && purchaseOrderDataGlobal.hasSentMail === false) {
+        else if (status === "PriceQuote" && purchaseOrderDataGlobal.hasSentMail === false && pageAuthorized.includes(status)) {
             return [
 
                 {
@@ -398,7 +400,7 @@ export default function PurchaseOrderConfirm() {
                 },
             ]
         }
-        else if (status === "Requisition") {
+        else if (status === "Requisition" && pageAuthorized.includes(status)) {
 
             return [
 
@@ -422,7 +424,7 @@ export default function PurchaseOrderConfirm() {
                 },
             ]
         }
-        else if (status === "PurchaseOrder") {
+        else if (status === "PurchaseOrder" && pageAuthorized.includes(status) ) {
 
             return [
 
@@ -465,7 +467,7 @@ export default function PurchaseOrderConfirm() {
 
                 }
             ]
-        } else if (status === "POWaitingConfirmation") {
+        } else if (status === "POWaitingConfirmation" && pageAuthorized.includes(status) ) {
             return [
 
                 {
@@ -515,7 +517,7 @@ export default function PurchaseOrderConfirm() {
             ]
 
         }
-        else if (status === "POConfirm") {
+        else if (status === "POConfirm" && pageAuthorized.includes(status) ) {
             return [
                 {
                     isShow: true,
