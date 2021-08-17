@@ -64,7 +64,7 @@ export default function DetailGoodIssue() {
             setClassStatus("bg-warning");
         } else if (status === "Completed") {
 
-            setClassStatus("bg-secondary");
+            setClassStatus("bg-success");
         } else if (status === "Shipping" || status === "Cancel") {
 
             setClassStatus("bg-danger");

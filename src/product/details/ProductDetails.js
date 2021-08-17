@@ -14,7 +14,7 @@ import {
 } from "./action";
 // import { getAllUpdateProductAction } from "../manager/product-manager/action";
 import { getCategoriesAllAction } from "../create/action";
-import { TableLoading } from "../../components/loading/loading-component";
+import { InfoPurchaseOrderLoader, TableLoading } from "../../components/loading/loading-component";
 import { RESET } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
 
@@ -371,7 +371,7 @@ export default function ProductDetails() {
 
   return (
     <>
-      {isReturnData ? (
+    
         <>
           <NavigationBar
             listButton={listButtons}
@@ -401,6 +401,7 @@ export default function ProductDetails() {
                   )}
                 </div>
               </div>
+              {isReturnData ? 
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                   <div className="row g-3 justify-content-between me-3">
@@ -543,13 +544,11 @@ export default function ProductDetails() {
                     </div>
                   )} */}
                 </li>
-              </ul>
+              </ul> : <InfoPurchaseOrderLoader/> }
             </div>
           </div>
         </>
-      ) : (
-        <TableLoading />
-      )}
+    
     </>
   );
 }

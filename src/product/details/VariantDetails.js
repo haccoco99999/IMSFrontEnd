@@ -12,7 +12,7 @@ import "../product.css";
 import { getDetailsVariant, updateVariantAction } from "./action";
 import { RESET } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
-import { TableLoading } from "../../components/loading/loading-component";
+import { InfoOrderLoader, TableLoading } from "../../components/loading/loading-component";
 export default function VariantDetails() {
   let history = useHistory();
   let location = useLocation();
@@ -309,7 +309,6 @@ export default function VariantDetails() {
   }, [variant.sku]);
   return (
     <div>
-      {isReturnData ? (
         <>
           <NavigationBar
             listButton={listButtons}
@@ -342,6 +341,8 @@ export default function VariantDetails() {
                   )}
                 </div>
               </div>
+              {isReturnData ? 
+
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                   {" "}
@@ -417,13 +418,11 @@ export default function VariantDetails() {
                     rowClasses="pointer"
                   />
                 </li>
-              </ul>
+              </ul> : <InfoOrderLoader row={50}/> }
             </div>
           </div>
         </>
-      ) : (
-        <TableLoading />
-      )}
+  
     </div>
   );
 }

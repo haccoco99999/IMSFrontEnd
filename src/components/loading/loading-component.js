@@ -37,19 +37,35 @@ export const GalleryLoading = () => {
         </ContentLoader>
     )
 }
-export const InfoPurchaseOrderLoader = (props) => (<ContentLoader
-    speed={2}
-    width={"100%"}
-    height={400}
-    viewBox="0 0 100% 400"
-    backgroundColor="#c2c2c2"
-    foregroundColor="#ecebeb"
+export const InfoPurchaseOrderLoader = () => (
+    <ContentLoader
+        speed={2}
+        width={"100%"}
+        height={400}
+        viewBox="0 0 100% 400"
+        backgroundColor="#c2c2c2"
+        foregroundColor="#ecebeb"
 
->
-    {/* {console.log(arr.map((_,i) => ( <rect x="-33" y={i*35} rx="3" ry="3" width="634" height="20" /> )))} */}
-    {Array.apply(null, Array(15)).map((val, idx) => (<rect x="-33" y={idx * 20} rx="3" ry="3" width="100%" height="18" />))}
+    >
+        {Array.apply(null, Array(15)).map((val, idx) => (<rect x="-33" y={idx * 20} rx="3" ry="3" width="100%" height="18" />))}
 
 
 
-</ContentLoader>
+    </ContentLoader>
+)
+export const InfoOrderLoader = (props) => (
+    <ContentLoader
+        speed={2}
+        width={"100%"}
+        height={400}
+        viewBox="0 0 100% 400"
+        backgroundColor="#c2c2c2"
+        foregroundColor="#ecebeb"
+
+    >
+        {Array.apply(null, Array(props.row)).map((val, idx) => (<rect x="-33" y={idx * 20} rx="3" ry="3" width="100%" height="18" />))}
+
+
+
+    </ContentLoader>
 )

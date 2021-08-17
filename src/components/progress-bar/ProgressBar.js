@@ -36,17 +36,12 @@ export function ProgressBar(props) {
 }
 export function ProgressBarNav(props) {
   return (
-    <ol class="progress-bar">
-      <li class="is-active"><span>Objective &amp; Template</span></li>
-      <li><span>Options</span></li>
-      <li><span>Step</span></li>
-      <li><span>In a Nutshell</span></li>
-      <li><span>Step</span></li>
-      <li><span>Step</span></li>
-      <li><span>Launch Date</span></li>
-      <li><span>Step</span></li>
-      <li><span>Step</span></li>
-      <li><span>Agreement</span></li>
-    </ol>
+    <ul class="progressbar">
+  <li class="complete">Step 1</li>
+  <li class="complete">Step 2</li>
+  <li class="active">Step 3</li>
+  <li>Step 4</li>
+  <li>Step 5</li>
+</ul>
   )
 }

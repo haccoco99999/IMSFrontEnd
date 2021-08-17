@@ -8,7 +8,7 @@ import "../product.css";
 import { getDetailsPackageAction } from "./action";
 import { RESET } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
-import { TableLoading } from "../../components/loading/loading-component";
+import { InfoOrderLoader, TableLoading } from "../../components/loading/loading-component";
 export default function PackageDetails() {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -78,7 +78,7 @@ export default function PackageDetails() {
   }, [gePackageReducer]);
   return (
     <div>
-      {isReturnData ? (
+     
         <>
           <NavigationBar
             listButton={listButtons}
@@ -95,6 +95,8 @@ export default function PackageDetails() {
           <div className="wrapper mb-3">
             <div class="card">
               <div class="card-header fw-bold">Package Information</div>
+              {isReturnData ? 
+
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                   <h5 class="card-title fw-bold"> General Information</h5>
@@ -187,13 +189,11 @@ export default function PackageDetails() {
                     </div>
                   </div>
                 </li>
-              </ul>
+              </ul> : <InfoOrderLoader row={30}/> }
             </div>
           </div>
         </>
-      ) : (
-        <TableLoading />
-      )}
+  
     </div>
   );
 }

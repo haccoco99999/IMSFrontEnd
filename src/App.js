@@ -323,9 +323,9 @@ function App(props) {
                 <i className="bx">
                   <img src={shelfLogo} />
                 </i>
-                <span className="links_name">Stock take</span>
+                <span className="links_name">Stocktake</span>
               </Link>
-              <span className="tooltip">Stock take</span>
+              <span className="tooltip">Stocktake</span>
             </li>
             : ""}
           {client.pageAuthorized.includes("Report") ?
