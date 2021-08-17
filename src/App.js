@@ -191,7 +191,9 @@ function App(props) {
     };
     createHubConnection();
 
-    // return () => {};
+    return () => {
+      setHubConnection(null);
+    };
   }, []);
   return (
     <div>
@@ -261,13 +263,16 @@ function App(props) {
             >
               Notification
             </li>
-            {client.pageAuthorized.includes("CompanyInfo") ?
-            <li
-              onClick={() => history.push("/homepage/company-info")}
-              className="item-name"
-            >
-              Company Information
-            </li> :""}
+            {client.pageAuthorized.includes("CompanyInfo") ? (
+              <li
+                onClick={() => history.push("/homepage/company-info")}
+                className="item-name"
+              >
+                Company Information
+              </li>
+            ) : (
+              ""
+            )}
           </ul>
           {/* <p >
               My profile
@@ -284,7 +289,7 @@ function App(props) {
             </Link>
             <span className="tooltip">Dashboard</span>
           </li>
-          {client.pageAuthorized.includes("PurchaseOrderMenu") ?
+          {client.pageAuthorized.includes("PurchaseOrderMenu") ? (
             <li>
               <Link to="/homepage/purchase">
                 <i className="bx">
@@ -294,8 +299,10 @@ function App(props) {
               </Link>
               <span className="tooltip">Purchase</span>
             </li>
-            : ""}
-          {client.pageAuthorized.includes("GoodsReceipt") ?
+          ) : (
+            ""
+          )}
+          {client.pageAuthorized.includes("GoodsReceipt") ? (
             <li>
               <Link to="/homepage/good-receipt">
                 <i className="bx">
@@ -305,8 +312,10 @@ function App(props) {
               </Link>
               <span className="tooltip">Goods Receipt</span>
             </li>
-            : ""}
-          {client.pageAuthorized.includes("GoodsIssue") ?
+          ) : (
+            ""
+          )}
+          {client.pageAuthorized.includes("GoodsIssue") ? (
             <li>
               <Link to="/homepage/good-issue">
                 <i className="bx">
@@ -316,8 +325,10 @@ function App(props) {
               </Link>
               <span className="tooltip">Goods issue</span>
             </li>
-            : ""}
-          {client.pageAuthorized.includes("Stocktake") ?
+          ) : (
+            ""
+          )}
+          {client.pageAuthorized.includes("Stocktake") ? (
             <li>
               <Link to="/homepage/stock-take">
                 <i className="bx">
@@ -327,8 +338,10 @@ function App(props) {
               </Link>
               <span className="tooltip">Stocktake</span>
             </li>
-            : ""}
-          {client.pageAuthorized.includes("Report") ?
+          ) : (
+            ""
+          )}
+          {client.pageAuthorized.includes("Report") ? (
             <li>
               <Link to="/homepage/report">
                 <i className="bx">
@@ -338,8 +351,10 @@ function App(props) {
               </Link>
               <span className="tooltip">Report</span>
             </li>
-            : ""}
-          {client.pageAuthorized.includes("Product") ?
+          ) : (
+            ""
+          )}
+          {client.pageAuthorized.includes("Product") ? (
             <li>
               <Link to="/homepage/product">
                 <i className="bx">
@@ -349,7 +364,9 @@ function App(props) {
               </Link>
               <span className="tooltip">Product Manger</span>
             </li>
-            : ""}
+          ) : (
+            ""
+          )}
           {/* <li onClick={() => setEventPage({
                 hide: "",
                 isShowing: "bx-menu-alt-right",
@@ -374,7 +391,7 @@ function App(props) {
                   <li className="list-child-item ps-5"><span>Text</span></li>
                 </ul>
               </li> */}
-          {client.pageAuthorized.includes("Supplier") ?
+          {client.pageAuthorized.includes("Supplier") ? (
             <li>
               <Link to="/homepage/supplier">
                 <i className="bx">
@@ -384,8 +401,10 @@ function App(props) {
               </Link>
               <span className="tooltip">Supplier</span>
             </li>
-            : ""}
-          {client.pageAuthorized.includes("Account") ?
+          ) : (
+            ""
+          )}
+          {client.pageAuthorized.includes("Account") ? (
             <li>
               <Link to="/homepage/manage-account">
                 <i className="bx">
@@ -395,8 +414,10 @@ function App(props) {
               </Link>
               <span className="tooltip">Account</span>
             </li>
-            : ""}
-          {client.pageAuthorized.includes("PurchaseRequistion") ?
+          ) : (
+            ""
+          )}
+          {client.pageAuthorized.includes("PurchaseRequistion") ? (
             <li>
               <Link to="/homepage/sale-man">
                 <i className="bx">
@@ -406,7 +427,9 @@ function App(props) {
               </Link>
               <span className="tooltip"> requisition</span>
             </li>
-            : ""}
+          ) : (
+            ""
+          )}
         </ul>
         <Logout hubConnection={hubConnection} client={client} />
       </div>
