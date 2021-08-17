@@ -89,7 +89,7 @@ function App(props) {
     const createHubConnection = async () => {
       const hubConnection = new HubConnectionBuilder()
 
-        .withUrl("https://imspublicapi.herokuapp.com/notiHub")
+        .withUrl(`${process.env.REACT_APP_SIGNALR}`)
         .withAutomaticReconnect()
         .build();
       try {
