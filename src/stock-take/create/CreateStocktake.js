@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Modal, Toast } from "bootstrap";
+import { Modal } from "bootstrap";
 import Table from "react-bootstrap-table-next";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 // import paginationFactory from "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
@@ -35,6 +35,7 @@ export default function CreateStocktakeComponent() {
     createStocktakeStore,
     getDetailsPackageReducer,
     getAllLocationsReducer,
+    // getDetailsPackageReducer
   } = useSelector((state) => ({
     token: state.client.token,
     listLocationsStore: state.getAllLocationsReducer.listLocations,
@@ -42,6 +43,7 @@ export default function CreateStocktakeComponent() {
     getDetailsPackageReducer: state.getDetailsPackageReducer,
     createStocktakeStore: state.createStocktakeReducer,
     getAllLocationsReducer: state.getAllLocationsReducer,
+    // getDetailsPackageReducer:state.getDetailsPackageReducer
   }));
 
   const [isLoading, setIsLoading] = useState(false);
@@ -306,10 +308,11 @@ export default function CreateStocktakeComponent() {
     } else {
       if (listCheckedItems.length > 0) {
         if (listCheckedItems.length === 1) {
-          if (listCheckedItems[0].pkgId === "") {
+          console.log("CHECK TABLE:",listCheckedItems)
+          if (listCheckedItems[0].packageId === "") {
             Swal.fire({
               title: "Error",
-              text: "Empty list!",
+              text: "You need to input data into the table!",
               icon: "error",
               showCancelButton: true,
               cancelButtonText: "Cancel",
@@ -317,7 +320,7 @@ export default function CreateStocktakeComponent() {
             });
           } else {
             console.log("Data output:", data);
-
+            console.log("CHECK TABLE:",listCheckedItems)
             Swal.fire({
               title: "Are you sure",
               text: "Do you want to save?",
@@ -396,7 +399,7 @@ export default function CreateStocktakeComponent() {
     hideModal();
     console.log("Data dang search:", selectedLocation.id);
     //reset
-    setIsLoading(false);
+    // setIsLoading(false);
     setListCheckedItems([
       {
         id: uuid(),
@@ -428,13 +431,15 @@ export default function CreateStocktakeComponent() {
     );
   }
 
-  useEffect(() => {
-    if (listPackagesStore.length > 0) {
-      setIsLoading(true);
-      setIsCreating(true);
-      // console.log("Check:", isLoading);
-    }
-  }, [listPackagesStore]);
+  // useEffect(() => {
+  //   if (listPackagesStore.length > 0) {
+  //     setIsLoading(true);
+  //     setIsCreating(true);
+  //     // console.log("Check:", isLoading);
+  //   }
+  // }, [listPackagesStore]);
+
+
   //todo: createStocktakeStore
   useEffect(() => {
     if (createStocktakeStore.requesting === true) {
@@ -470,7 +475,14 @@ export default function CreateStocktakeComponent() {
 
   //todo: getDetailsPackageReducer check error
   useEffect(() => {
-    if (getDetailsPackageReducer.errors) {
+    if(getDetailsPackageReducer.requesting){
+      setIsCreating(true);
+      setIsLoading(false);
+    }else if(getDetailsPackageReducer.successful)
+  {
+    setIsLoading(true);
+  }
+    else if (getDetailsPackageReducer.errors) {
       setIsCreating(false);
       Swal.fire({
         icon: "error",
@@ -500,22 +512,10 @@ export default function CreateStocktakeComponent() {
   useEffect(() => {
     return () => {
       dispatch({ type: RESET });
+      setIsCreating(false)
     };
   }, []);
-  //todo: toast
-  // const toastRef = useRef();
-  // const showToast = () => {
-  //   const toastEle = toastRef.current;
-  //   const bsToast = new Toast(toastEle, {
-  //     autohide: false,
-  //   });
-  //   bsToast.show();
-  // };
-  // const hideToast = () => {
-  //   const toastEle = toastRef.current;
-  //   const bsToast = Toast.getInstance(toastEle);
-  //   bsToast.hide();
-  // };
+  console.log("ISCREING",isCreating)
   return (
     <div>
       <NavigationBar

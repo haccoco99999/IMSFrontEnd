@@ -89,6 +89,8 @@ export function getDetailsPackageReducer(state = getDetailsPackage, action) {
         errors: "",
         listPackages: [],
       };
+      case RESET:
+        return getDetailsPackage
     default:
       return state;
   }
