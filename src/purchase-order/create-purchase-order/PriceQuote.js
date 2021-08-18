@@ -209,7 +209,7 @@ export default function PurchaseOrderConfirm() {
         {   //neu duoc isShowEdit true thi khong duoc delete
             dataField: 'action',
             text: 'action',
-            hidden: eventPage.isShowEditListProducts,
+            hidden: !eventPage.isShowEdit,
             editable: false,
             formatter: (cellContent, row, rowIndex) => {
                 return (
@@ -307,7 +307,7 @@ export default function PurchaseOrderConfirm() {
         })
     }
     function setListButton(status) {
-        if (status === "PriceQuote" && purchaseOrderDataGlobal.hasSentMail  && pageAuthorized.includes(status) ) {
+        if (status === "PriceQuote" && purchaseOrderDataGlobal.hasSentMail && pageAuthorized.includes(status)) {
 
             return [
 
@@ -317,7 +317,7 @@ export default function PurchaseOrderConfirm() {
                     action: () => editClick(),
                     class: "btn btn-warning",
                     disabled: disableEdit,
-                    
+
                 },
 
                 {
@@ -362,7 +362,13 @@ export default function PurchaseOrderConfirm() {
         }
         else if (status === "PriceQuote" && purchaseOrderDataGlobal.hasSentMail === false && pageAuthorized.includes(status)) {
             return [
-
+                {
+                    isShow: !eventPage.isShowEdit,
+                    title: "Delete",
+                    action: () => isShowRejectModal(),
+                    class: "btn btn-danger",
+                    disabled: disableEdit
+                },
                 {
                     isShow: !eventPage.isShowEdit,
                     title: "Edit",
@@ -389,6 +395,7 @@ export default function PurchaseOrderConfirm() {
 
 
                 },
+
 
                 {
                     isShow: !eventPage.isShowEdit,
@@ -424,10 +431,16 @@ export default function PurchaseOrderConfirm() {
                 },
             ]
         }
-        else if (status === "PurchaseOrder" && pageAuthorized.includes(status) ) {
+        else if (status === "PurchaseOrder" && pageAuthorized.includes(status)) {
 
             return [
-
+                {
+                    isShow: !eventPage.isShowEdit,
+                    title: "Delete",
+                    action: () => isShowRejectModal(),
+                    class: "btn btn-danger",
+                    disabled: disableEdit
+                },
                 {
                     isShow: !eventPage.isShowEdit,
                     title: "Edit",
@@ -455,7 +468,7 @@ export default function PurchaseOrderConfirm() {
 
                 },
 
-
+             
 
                 {
                     isShow: !eventPage.isShowEdit,
@@ -467,9 +480,15 @@ export default function PurchaseOrderConfirm() {
 
                 }
             ]
-        } else if (status === "POWaitingConfirmation" && pageAuthorized.includes(status) ) {
+        } else if (status === "POWaitingConfirmation" && pageAuthorized.includes(status)) {
             return [
-
+                {
+                    isShow: !eventPage.isShowEdit,
+                    title: "Reject",
+                    action: () => isShowRejectModal(),
+                    class: "btn btn-danger",
+                    disabled: disableEdit
+                },
                 {
                     isShow: !eventPage.isShowEdit,
                     title: "Edit",
@@ -498,13 +517,7 @@ export default function PurchaseOrderConfirm() {
                 },
 
 
-                {
-                    isShow: !eventPage.isShowEdit,
-                    title: "Reject",
-                    action: () => isShowRejectModal(),
-                    class: "btn btn-danger",
-                    disabled: disableEdit
-                },
+                
 
                 {
                     isShow: !eventPage.isShowEdit,
@@ -517,7 +530,7 @@ export default function PurchaseOrderConfirm() {
             ]
 
         }
-        else if (status === "POConfirm" && pageAuthorized.includes(status) ) {
+        else if (status === "POConfirm" && pageAuthorized.includes(status)) {
             return [
                 {
                     isShow: true,
@@ -1584,7 +1597,7 @@ export default function PurchaseOrderConfirm() {
                                         </div>
                                     </div>
                                     <div className="col-md-2">
-                                        <ProgressBar/>
+                                        <ProgressBar />
                                     </div>
                                 </div>
                                 {/* <div class="form-group">
@@ -1670,7 +1683,7 @@ export default function PurchaseOrderConfirm() {
 
 
 
-                            {eventPage.isShowEditListProducts === false && listpermissionEdit.includes(detailPurchaseState.status) ?
+                            {eventPage.isShowEdit && listpermissionEdit.includes(detailPurchaseState.status) ?
                                 <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                                     <div class="btn-group me-2" role="group" aria-label="First group">
                                         <button type="button" class="btn btn-outline-primary" onClick={clickSetShowAddProductPage}>Add Product</button>
