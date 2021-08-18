@@ -39,6 +39,7 @@ export default function MergePriceQuote(props) {
           isChecked: false,
           haveProduct: false,
           orderId: priceQuote.id,
+          
           listProductOrder: []
         }
       })
@@ -108,7 +109,7 @@ export default function MergePriceQuote(props) {
           <div className="modal-dialog modal-dialog-merge-pirce-quote" >
             <div className="modal-content modal-content-merge-pirce-quote">
               <div className="modal-header">
-                <h5 className="modal-title">Filter</h5>
+                <h5 className="modal-title">Purchase Requistion</h5>
                 <button
                   onClick={() => props.clickSetEventMergePriceQuote()}
                   className="btn-close"

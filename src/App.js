@@ -111,7 +111,7 @@ function App(props) {
           var newMessage =
             stringCheckTime[0] +
             "at:" +
-            moment(stringCheckTime[1]).add(7, "h").format("DD/MM/YYYY HH:mm");
+            moment(stringCheckTime[1]).add(7, "h").format("DD-MM-YYYY HH:mm");
           toast(newMessage, {
             position: "bottom-right",
             autoClose: false,
