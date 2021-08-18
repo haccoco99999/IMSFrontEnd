@@ -58,67 +58,99 @@
 
 
 
-.progressbar {
-  counter-reset: step;
-  padding: 0;
-  
-  /* for demo */
-  margin: 100px auto 0;
-  max-width: 800px;
-}
-
-.progressbar li {
-  float: left;
-  list-style: none;
+.progress-customize {
   position: relative;
-  text-align: center;
-  width: calc(100% / 5);
+  display: flex;
 }
-
-.progressbar li:before {
-  background: #fff;
-  border: 2px solid #bebebe;
-  border-radius: 50%;
-  color: #bebebe;
-  content: counter(step);
-  counter-increment: step;
-  display: block;
-  font-weight: 700;
-  height: 30px;
-  line-height: 27px;
-  margin: 0 auto 10px;
-  text-align: center;
-  width: 30px;
-}
-
-.progressbar li:after {
-  background: #979797;
-  content: '';
-  height: 3px;
-  left: -50%;
+.progress-customize .progress-customize-track {
   position: absolute;
-  top: 15px;
+  top: 5px;
   width: 100%;
-  z-index: -1;
+  height: 5px;
+  background-color: #dfe3e4;
+  z-index: 0;
 }
-
-.progressbar li:first-child:after {
-  content: none;
+.progress-customize .progress-customize-step {
+  position: relative;
+  width: 100%;
+  font-size: 12px;
+  text-align: center;
 }
-
-.progressbar li.active:after,
-.progressbar li.complete:after {
-  background: #3aac5d;
+.progress-customize .progress-customize-step:last-child:after {
+  display: none;
 }
-
-.progressbar li.active:before,
-.progressbar li.complete:before {
-  background: #3aac5d;
-  border-color: #3aac5d;
-  color: #fff;
+.progress-customize .progress-customize-step:before {
+  content: "\f00c";
+  display: flex;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border: 4px solid #dfe3e4;
+  border-radius: 100%;
+  color: transparent;
+  box-sizing: unset;
 }
-
-.progressbar li.active {
-  color: #3aac5d;
-  font-weight: 700;
+.progress-customize .progress-customize-step:after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 0%;
+  transition: width 1s ease-in;
+  height: 5px;
+  background: #dfe3e4;
+  z-index: 0;
+}
+.progress-customize .progress-customize-step.is-active {
+  color: #2183dd;
+}
+.progress-customize .progress-customize-step.is-active:before {
+  border: 4px solid #777;
+  animation: pulse 2s infinite;
+  
+}
+.progress-customize .progress-customize-step.is-complete {
+  color: #090;
+}
+.progress-customize .progress-customize-step.is-complete:before {
+ 
+  font-size: 10px;
+  
+  background: #090;
+  border: 4px solid transparent;
+}
+.progress-customize .progress-customize-step.is-complete:after {
+  background: #090;
+  animation: nextStep 1s;
+  animation-fill-mode: forwards;
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(33, 131, 221, 0.4);
+ }
+  70% {
+    box-shadow: 0 0 0 10px rgba(33, 131, 221, 0);
+ }
+  100% {
+    box-shadow: 0 0 0 0 rgba(33, 131, 221, 0);
+ }
+}
+@keyframes nextStep {
+  0% {
+    width: 0%;
+ }
+  100% {
+    width: 100%;
+ }
+}
+.progress-customize-container {
+  width: 350px;
+}
+button {
+  position: absolute;
+  right: 50px;
+  bottom: 20px;
+  cursor: pointer;
 }

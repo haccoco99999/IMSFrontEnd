@@ -35,13 +35,30 @@ export function ProgressBar(props) {
   );
 }
 export function ProgressBarNav(props) {
+  const listDone = [
+    { name: "Create", status: "is-complete" },
+    { name: "Preview", status: "is-complete" },
+    { name: "Sent", status: "is-complete" },
+    { name: "Confirm", status: "is-complete" },
+    { name: "Goods Receipt", status: "is-complete" },
+    { name: "Done", status: "is-active" }
+  ]
   return (
-    <ul class="progressbar">
-  <li class="complete">Step 1</li>
-  <li class="complete">Step 2</li>
-  <li class="active">Step 3</li>
-  <li>Step 4</li>
-  <li>Step 5</li>
-</ul>
+    <div className="progress-customize-container">
+      <div class="progress-customize">
+
+        <div class="progress-customize-track"></div>
+        {listDone.map(item => (
+         <div id="step1" class={`progress-customize-step ${item.status}`}>
+         {item.name}
+       </div>
+
+
+      ))}
+
+    
+        
+      </div>
+    </div>
   )
 }

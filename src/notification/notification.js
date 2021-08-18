@@ -17,34 +17,62 @@ export default function NotificationComponents(props) {
   useEffect(() => {
     dispatch(getAllLocationsAction({ token: token, userRole: userRole }));
     const list = document.getElementById('list')
-    list.addEventListener('scroll',() => {
+    list.addEventListener('scroll', () => {
       console.log("tao scroll")
     });
     return () => {
-        window.removeEventListener('scroll', loadDataRequest);
+      window.removeEventListener('scroll', loadDataRequest);
     }
-   
+
   }, []);
 
-  useState(()=>{
- 
-    setLoadMore(false)
-  },[loadMore])
+  useState(() => {
 
-function   loadDataRequest(){
- 
+    setLoadMore(false)
+  }, [loadMore])
+
+  function loadDataRequest() {
+
     if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement.scrollHeight) {
-        // Do load more content here!
-        setLoadMore(true);
+      // Do load more content here!
+      setLoadMore(true);
     }
   }
 
   function redirectDetail(notification) {
-    // history.push('/homepage/purchase')
+    let url = ""
+    if (notification.type === "PriceQuoteOrder" || notification.type === "PurchaseOrder"  || notification.type === "Requisition" ) {
+      history.push('/homepage/purchase')
+      setTimeout(() => {
+        history.push(`/homepage/purchase/PriceQuote`, { orderId: notification.typeID, status: "" });
+      });
+    }
+    else if (notification.type === "GoodsReceipt") {
+      history.push('/homepage/good-receipt')
+      setTimeout(() => {
+        history.push("/homepage/good-receipt/details", {
+          goodsreceiptId: notification.typeID,
+          fromPage: "ManagerPage",
+        });
+      });
+    }
+    else if (notification.type === "StockTakeOrder") {
+      history.push('/homepage/stock-take')
+      setTimeout(() => {
+        history.push("/homepage/stock-take/details", {
+          stocktakeId: notification.typeID,
+        });
+      });
+    }
+    else if (notification.type === "GoodsIssue") {
+      history.push('/homepage/good-issue')
+      setTimeout(() => {
+        history.push("/homepage/good-issue/detail", { id: notification.typeID, status: ""})
+      });
+    }
 
-    // history.replace("/homepage/purchase/PriceQuote", { orderId: notification.typeID, status: "" });
   }
-  
+
 
 
 
@@ -55,7 +83,7 @@ function   loadDataRequest(){
 
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Notification</h1>
-           
+
           </div>
           <div >
             <div id="list" class="list-group">
@@ -63,12 +91,12 @@ function   loadDataRequest(){
 
 
               {console.log(listNotificationStore[0])}
-              {listNotificationStore.map((item,index) =>
-                <a key={index} onClick={() =>redirectDetail(item)} className="list-group-item btn list-group-item-action" aria-current="true">
+              {listNotificationStore.map((item, index) =>
+                <a key={index} onClick={() => redirectDetail(item)} className="list-group-item btn list-group-item-action" aria-current="true">
                   <i class="bi bi-chat-left-quote"></i>
                   <div class="d-flex w-100 justify-content-between">
                     <p class="mb-1">{item.message}</p>
-                    <small>{moment().diff(moment(item.createdDate), "days") === 0 ?moment().diff(moment(item.createdDate), "h") + " hours ago": moment().diff(moment(item.createdDate), "days") + " days ago"  }</small>
+                    <small>{moment().diff(moment(item.createdDate), "days") === 0 ? moment().diff(moment(item.createdDate), "h") + " hours ago" : moment().diff(moment(item.createdDate), "days") + " days ago"}</small>
                   </div>
 
                   <small>{moment(item.createdDate)

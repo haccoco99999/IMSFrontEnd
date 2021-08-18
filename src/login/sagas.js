@@ -76,7 +76,7 @@ function* loginFlow (action) {
       history.push('/homepage/dashboard')
     }
     else{
-      yield put({type: LOGIN_BANNED})
+      // yield put({type: LOGIN_ERROR, {error:""}})
     }
   
   } catch (error) {

@@ -188,7 +188,7 @@ export default function CreateVariant() {
                 >
                   <div class="col">
                     <label for="name" class="col-form-label">
-                      Variant Name 
+                      Variant Name
                     </label>
                     <input
                       type="text"
@@ -203,21 +203,7 @@ export default function CreateVariant() {
                     <div class="invalid-feedback">Please input valid name</div>
                   </div>
                 </form>
-                {/* <div class="col">
-                    <label for="name" class="col-form-label">
-                      Price
-                    </label>{" "}
-                    <input
-                      type="number"
-                      id="price"
-                      class="form-control"
-                      name="price"
-                      value={formData.price || ""}
-                      onChange={handleChangeValue}
-                      required
-                    />
-                    <div class="invalid-feedback">Please input valid price</div>
-                  </div> */}
+
 
                 <div class="col">
                   <label for="name" class="col-form-label">
@@ -232,19 +218,7 @@ export default function CreateVariant() {
                     onChange={handleChangeValue}
                   />
                 </div>
-                {/* <div class="col">
-                  <label for="name" class="col-form-label">
-                    Barcode
-                  </label>{" "}
-                  <input
-                    type="text"
-                    id="barcode"
-                    class="form-control"
-                    name="barcode"
-                    value={formData.barcode || ""}
-                    onChange={handleChangeValue}
-                  />
-                </div> */}
+
               </div>
             </div>
           </div>

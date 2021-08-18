@@ -167,7 +167,7 @@ export default function DetailGoodIssue() {
                 title: "Your work has been saved",
                 showCancelButton: false,
                 confirmButtonColor: "#3085d6",
-              })
+            })
             dispatch({ type: UPDATE_GOOD_ISSUE_CLEAN })
 
         }
@@ -185,7 +185,7 @@ export default function DetailGoodIssue() {
 
 
     function setListButtonNav(status) {
-        if (status === "IssueRequisition" && pageAuthorized.includes(status) ) {
+        if (status === "IssueRequisition" && pageAuthorized.includes(status)) {
             return [
                 {
                     isShow: true,
@@ -258,7 +258,22 @@ export default function DetailGoodIssue() {
 
     }
     function ClickCreateGoodIssue() {
-        dispatch(createGoodIssue({ data: { issueNumber: GoodIssueDetail.infoGoodIssueDetail.id }, token: token }))
+
+        Swal.fire({
+            title: "Are you sure",
+            text: "Do you want to save?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: " #d33",
+            confirmButtonText: "Confirm",
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                dispatch(createGoodIssue({ data: { issueNumber: GoodIssueDetail.infoGoodIssueDetail.id }, token: token }))
+            }
+        });
+
 
     }
 
@@ -421,24 +436,56 @@ export default function DetailGoodIssue() {
 
 
     function clickToShipping() {
-        let data = {
 
-            issueNumber: GoodIssueDetail.infoGoodIssueDetail.id,
-            changeStatusTo: "Shipping"
 
-        }
+        Swal.fire({
+            title: "Are you sure",
+            text: "Do you want to save?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: " #d33",
+            confirmButtonText: "Confirm",
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let data = {
 
-        dispatch(updateGoodIssue({ data: data, token: token }))
+                    issueNumber: GoodIssueDetail.infoGoodIssueDetail.id,
+                    changeStatusTo: "Shipping"
+
+                }
+
+                dispatch(updateGoodIssue({ data: data, token: token }))
+            }
+        });
+
 
     }
     function clickToConfirm() {
-        let data = {
 
-            issueNumber: GoodIssueDetail.infoGoodIssueDetail.id,
-            changeStatusTo: "Confirm"
+        Swal.fire({
+            title: "Are you sure",
+            text: "Do you want to save?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: " #d33",
+            confirmButtonText: "Confirm",
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let data = {
 
-        }
-        dispatch(updateGoodIssue({ data: data, token: token }))
+                    issueNumber: GoodIssueDetail.infoGoodIssueDetail.id,
+                    changeStatusTo: "Confirm"
+
+                }
+                dispatch(updateGoodIssue({ data: data, token: token }))
+            }
+        });
+
+
 
     }
 

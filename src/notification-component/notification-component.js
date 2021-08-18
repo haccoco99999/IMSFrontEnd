@@ -20,8 +20,10 @@ export default function NotificationBellComponents(props) {
   }, []);
   function redirectDetail(notification) {
     history.push('/homepage/purchase')
-
-    history.replace("/homepage/purchase/PriceQuote", { orderId: notification.typeID, status: "" });
+    setTimeout(() => {
+      history.push(`/homepage/purchase/PriceQuote`, { orderId: notification.typeID, status: "" });
+    });
+    
   }
   console.log(listNotificationStore)
   return (

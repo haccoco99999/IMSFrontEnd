@@ -35,7 +35,7 @@ const reducer = function loginReducer(state = initalState, action) {
             
             return {
                 errors: true,
-                messages: ["Account was Banned"],
+                messages: "Account was Banned",
                 requesting: false,
                 successful: false,
             }
