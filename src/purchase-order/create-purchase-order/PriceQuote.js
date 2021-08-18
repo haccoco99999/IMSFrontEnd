@@ -209,7 +209,7 @@ export default function PurchaseOrderConfirm() {
         {   //neu duoc isShowEdit true thi khong duoc delete
             dataField: 'action',
             text: 'action',
-            hidden: eventPage.isShowEditListProducts,
+            hidden: !eventPage.isShowEdit,
             editable: false,
             formatter: (cellContent, row, rowIndex) => {
                 return (
@@ -1670,7 +1670,7 @@ export default function PurchaseOrderConfirm() {
 
 
 
-                            {eventPage.isShowEditListProducts === false && listpermissionEdit.includes(detailPurchaseState.status) ?
+                            {!eventPage.isShowEdit === false && listpermissionEdit.includes(detailPurchaseState.status) ?
                                 <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                                     <div class="btn-group me-2" role="group" aria-label="First group">
                                         <button type="button" class="btn btn-outline-primary" onClick={clickSetShowAddProductPage}>Add Product</button>
