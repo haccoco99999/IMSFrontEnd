@@ -137,9 +137,11 @@ function App(props) {
 
         //Join a channel
         //CHANNEL = ROLE NAME
-        hubConnection.invoke("JoinGroup", client.userRole).catch((err) => {
-          console.log("Error invoking function: " + { err });
-        });
+        await hubConnection
+          .invoke("JoinGroup", client.userRole)
+          .catch((err) => {
+            console.log("Error invoking function: " + { err });
+          });
 
         //Send a message to a channel
         //SendMessageToGroup(string groupName, string message)
@@ -190,11 +192,30 @@ function App(props) {
       setHubConnection(hubConnection);
     };
     createHubConnection();
-
-    return () => {
-      setHubConnection(null);
-    };
   }, []);
+
+  const closeConnection = async () => {
+    try {
+      await hubConnection
+        .invoke("RemoveFromGroup", client.userRole)
+        .then(() => {
+          console.log("Dang log out");
+        })
+        .catch((err) => {
+          console.log("Error while disconnectiong from resource: " + { err });
+        });
+      await hubConnection.stop();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // useEffect(() => {
+  //   return () => {
+  //     // setHubConnection(null);
+  //     closeConnection();
+  //   };
+  // }, []);
   return (
     <div>
       {/* {eventPage.statusBell ? (
@@ -431,7 +452,9 @@ function App(props) {
             ""
           )}
         </ul>
-        <Logout hubConnection={hubConnection} client={client} />
+        {/* <Logout hubConnection={hubConnection} client={client} /> */}
+        <Logout closeConnection={closeConnection} />
+        {/* <DisconnectSignalR closeConnection={closeConnection}/> */}
       </div>
 
       <Switch>
@@ -517,15 +540,8 @@ function Logout(props) {
     // });
     // if(isLogout)
     dispatch({ type: "LOGOUT_REQUESTING" });
-
-    props.hubConnection
-      .invoke("RemoveFromGroup", props.client.userRole)
-      .then(() => {
-        console.log("Dang log out");
-      })
-      .catch((err) => {
-        console.log("Error while disconnectiong from resource: " + { err });
-      });
+    props.closeConnection();
+    // props.hubConnection.stop();
   };
 
   return (
