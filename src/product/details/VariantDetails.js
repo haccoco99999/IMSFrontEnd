@@ -10,9 +10,13 @@ import "../product.css";
 //components
 // import ListPackageTable from "../../table-receipt/ListReceiptsTable";
 import { getDetailsVariant, updateVariantAction } from "./action";
+import { getAllUpdateProductAction } from "../manager/product-manager/action";
 import { RESET } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
-import { InfoOrderLoader, TableLoading } from "../../components/loading/loading-component";
+import {
+  InfoOrderLoader,
+  TableLoading,
+} from "../../components/loading/loading-component";
 export default function VariantDetails() {
   let history = useHistory();
   let location = useLocation();
@@ -22,14 +26,14 @@ export default function VariantDetails() {
   const [variant, setVariant] = useState({});
   const [listPackage, setListPackage] = useState([]);
   const [isReturnData, setIsReturnData] = useState(false);
-  const [isHavingRequestSKU,setIsHavingRequestSKU] = useState(false)
+  const [isHavingRequestSKU, setIsHavingRequestSKU] = useState(false);
   //@param:declare tooltip :
 
   var tooltipTriggerList = [].slice.call(
     document.querySelectorAll('[data-bs-toggle="tooltip"]')
   );
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new Tooltip(tooltipTriggerEl);
+    return new Tooltip(tooltipTriggerEl, { trigger: "hover" });
   });
 
   //todo: declare table
@@ -50,14 +54,14 @@ export default function VariantDetails() {
   ];
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
-      if (location.state.isHavingRequestSKU)
+      if (isHavingRequestSKU)
         history.push("/homepage/product/details/package", {
           packageId: row.id,
           variantId: location.state.variantId,
           productId: location.state.productId,
           variantType: location.state.variantType,
           skuRequest: location.state.skuRequest,
-          isHavingRequestSKU: true,
+          // isHavingRequestSKU: true,
         });
       else
         history.push("/homepage/product/details/package", {
@@ -65,7 +69,7 @@ export default function VariantDetails() {
           variantId: location.state.variantId,
           productId: location.state.productId,
           variantType: location.state.variantType,
-          isHavingRequestSKU: false,
+          // isHavingRequestSKU: false,
         });
     },
   };
@@ -76,13 +80,14 @@ export default function VariantDetails() {
     token,
     updateVariantReducer,
     getDetailsVariantReducer,
+    getAllUpdateRequest,
   } = useSelector((state) => ({
     variantStore: state.getDetailsVariantReducer.productVariant,
     listPackageStore: state.getDetailsVariantReducer.productVariant.packages,
     token: state.client.token,
     updateVariantReducer: state.updateVariantReducer,
     getDetailsVariantReducer: state.getDetailsVariantReducer,
-    // messages: state.getDetailsProductReducer.messages,
+    getAllUpdateRequest: state.getAllUpdateRequestReducer.productUpdateMessages,
   }));
 
   const onChangeValue = (event) => {
@@ -144,6 +149,7 @@ export default function VariantDetails() {
     setIsDisabled(true);
     //reset
     setVariant(variantStore);
+    // setIsHavingRequestSKU(true)
   }
 
   function onClickSave() {
@@ -215,6 +221,12 @@ export default function VariantDetails() {
   }
   useEffect(() => {
     dispatch(getDetailsVariant({ id: location.state.variantId, token: token }));
+    // if (
+    //   location.state.isHavingRequestSKU === true &&
+    //   location.state.skuRequest === variant.sku
+    // ) {
+    //   setIsHavingRequestSKU(false);
+    // }
     return () => {
       dispatch({ type: RESET });
     };
@@ -239,8 +251,12 @@ export default function VariantDetails() {
         })
       );
     }
-    setIsHavingRequestSKU(location.state.isHavingRequestSKU)
-  }, [variantStore, listPackageStore]);
+    // setIsHavingRequestSKU(location.state.isHavingRequestSKU);
+
+    const check = (element) =>
+      element.productVariantId === location.state.variantId;
+    setIsHavingRequestSKU(getAllUpdateRequest.some(check));
+  }, [variantStore, listPackageStore, getAllUpdateRequest]);
 
   useEffect(() => {
     if (updateVariantReducer.requesting) {
@@ -269,9 +285,12 @@ export default function VariantDetails() {
           confirmButtonColor: "#3085d6",
         }).then((result) => {
           if (result.isConfirmed) {
+            setIsReturnData(false);
             dispatch(
               getDetailsVariant({ id: location.state.variantId, token: token })
             );
+            dispatch(getAllUpdateProductAction({ token: token }));
+
             setIsDisabled(true);
           }
         });
@@ -287,62 +306,50 @@ export default function VariantDetails() {
   }, [updateVariantReducer]);
 
   useEffect(() => {
+    // if(getDetailsVariantReducer.requesting) setIsReturnData(false);
     if (getDetailsVariantReducer.successful) setIsReturnData(true);
   }, [getDetailsVariantReducer]);
 
   console.log(location.state.skuRequest);
+
   // useEffect(() => {
-  //   if (messages === "Update Variant success") {
-  //     dispatch(
-  //       getDetailsVariant({ id: location.state.variantId, token: token })
-  //     );
-  //   }
-  // }, [messages]);
-  useEffect(() => {
-    if (
-      location.state.isHavingRequestSKU === true &&
-      location.state.skuRequest === variant.sku
-    ) {
-      // location.state.isHavingRequestSKU = false;
-      setIsHavingRequestSKU(false)
-    }
-  }, [variant.sku]);
+
+  // }, []);
   return (
     <div>
-        <>
-          <NavigationBar
-            listButton={listButtons}
-            titleBar="Variant details"
-            actionGoBack={goBackClick}
-            status=""
-            home="Product"
-            currentPage="Product details"
-            level3={true}
-            level3Page="Variant details"
-          />
-          <div className="wrapper ">
-            <div class="card">
-              <div class="card-header fw-bold">
-                <div className="d-flex">
-                  Variant Information
-                  {isHavingRequestSKU && (
-                    <>
-                      <div
-                        className="text-danger ms-3"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title={
-                          "Requested update sku: " + location.state.skuRequest
-                        }
-                      >
-                        <i class="bi bi-bell-fill"></i>
-                      </div>
-                    </>
-                  )}
-                </div>
+      <>
+        <NavigationBar
+          listButton={listButtons}
+          titleBar="Variant details"
+          actionGoBack={goBackClick}
+          status=""
+          home="Product"
+          currentPage="Product details"
+          level3={true}
+          level3Page="Variant details"
+        />
+        <div className="wrapper ">
+          <div class="card">
+            <div class="card-header fw-bold">
+              <div className="d-flex">
+                Variant Information
+                {isHavingRequestSKU && (
+                  <>
+                    <div
+                      className="text-danger ms-3"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title={
+                        "Requested update sku: " + location.state.skuRequest
+                      }
+                    >
+                      <i class="bi bi-bell-fill"></i>
+                    </div>
+                  </>
+                )}
               </div>
-              {isReturnData ? 
-
+            </div>
+            {isReturnData ? (
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                   {" "}
@@ -377,18 +384,23 @@ export default function VariantDetails() {
                         )}
                       </p>
                       <p>
-                       
                         {isDisabled ? (
-                         <> <strong>SKU: </strong>{variant.sku} </> 
+                          <>
+                            {" "}
+                            <strong>SKU: </strong>
+                            {variant.sku}{" "}
+                          </>
                         ) : (
                           <>
-                           <strong>SKU: </strong> <span class="text-secondary" >(optional) </span>
+                            <strong>SKU: </strong>{" "}
+                            <span class="text-secondary">(optional) </span>
                             <input
                               type="text"
                               name="sku"
                               className="form-control"
                               onChange={onChangeValue}
                               value={variant.sku}
+                              autocomplete="off"
                             />
                             {isHavingRequestSKU &&
                               "Requested update sku: " +
@@ -418,11 +430,13 @@ export default function VariantDetails() {
                     rowClasses="pointer"
                   />
                 </li>
-              </ul> : <InfoOrderLoader row={50}/> }
-            </div>
+              </ul>
+            ) : (
+              <InfoOrderLoader row={50} />
+            )}
           </div>
-        </>
-  
+        </div>
+      </>
     </div>
   );
 }

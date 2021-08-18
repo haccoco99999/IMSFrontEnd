@@ -29,26 +29,28 @@ export default function CreateWithVariants(props) {
       formatter: (cellContent, row, rowIndex) =>
         (props.variantValues[rowIndex].name = row.name),
       validator: (newValue, oldValue, row, done) => {
-        let check = false;
-        checkDuplicateValue(newValue).then((result) => {
-          console.log(result);
-          if (result.hasMatch) {
-            setIsChecking(true);
-            check = true;
-          } else {
-            setIsChecking(false);
-          }
-        });
-        setTimeout(() => {
-          if (check)
-            return done({
-              valid: false,
-              message: "Name has existed",
-            });
-          return done();
-        }, 2000);
+        if (newValue !== "") {
+          let check = false;
+          checkDuplicateValue(newValue).then((result) => {
+            console.log(result);
+            if (result.hasMatch) {
+              setIsChecking(true);
+              check = true;
+            } else {
+              setIsChecking(false);
+            }
+          });
+          setTimeout(() => {
+            if (check)
+              return done({
+                valid: false,
+                message: "Name has existed",
+              });
+            return done();
+          }, 2000);
 
-        return { async: true };
+          return { async: true };
+        }
       },
     },
     {
@@ -58,26 +60,28 @@ export default function CreateWithVariants(props) {
       formatter: (cellContent, row, rowIndex) =>
         (props.variantValues[rowIndex].sku = row.sku),
       validator: (newValue, oldValue, row, done) => {
-        let check = false;
-        checkDuplicateValue(newValue).then((result) => {
-          console.log(result);
-          if (result.hasMatch) {
-            setIsChecking(true);
-            check = true;
-          } else {
-            setIsChecking(false);
-          }
-        });
-        setTimeout(() => {
-          if (check)
-            return done({
-              valid: false,
-              message: "SKU has existed",
-            });
-          return done();
-        }, 2000);
+        if (newValue !== "") {
+          let check = false;
+          checkDuplicateValue(newValue).then((result) => {
+            console.log(result);
+            if (result.hasMatch) {
+              setIsChecking(true);
+              check = true;
+            } else {
+              setIsChecking(false);
+            }
+          });
+          setTimeout(() => {
+            if (check)
+              return done({
+                valid: false,
+                message: "SKU has existed",
+              });
+            return done();
+          }, 2000);
 
-        return { async: true };
+          return { async: true };
+        }
       },
     },
     // {
@@ -125,7 +129,7 @@ export default function CreateWithVariants(props) {
       formatter: (cellContent, row, rowIndex) => {
         return (
           <div
-            className="text-danger"
+            className="text-danger btn"
             onClick={() => props.clickDeleteVariant(rowIndex)}
           >
             <i class="bi bi-trash"></i>
@@ -248,7 +252,13 @@ export default function CreateWithVariants(props) {
           reverseButtons: true,
         }).then((result) => {
           if (result.isConfirmed) {
-            dispatch(createProduct({ data: data, token: props.token, needCheckSku: false }));
+            dispatch(
+              createProduct({
+                data: data,
+                token: props.token,
+                needCheckSku: false,
+              })
+            );
           }
         });
       }

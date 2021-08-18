@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -14,7 +14,11 @@ import {
 } from "./action";
 // import { getAllUpdateProductAction } from "../manager/product-manager/action";
 import { getCategoriesAllAction } from "../create/action";
-import { InfoPurchaseOrderLoader, TableLoading } from "../../components/loading/loading-component";
+import { getAllUpdateProductAction } from "../manager/product-manager/action";
+import {
+  InfoPurchaseOrderLoader,
+  TableLoading,
+} from "../../components/loading/loading-component";
 import { RESET } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
 
@@ -61,12 +65,13 @@ export default function ProductDetails() {
   const [categoryDtails, setCategoryDtails] = useState({});
 
   //@param:declare tooltip :
-
+  const tooltipRef = useRef()
   var tooltipTriggerList = [].slice.call(
     document.querySelectorAll('[data-bs-toggle="tooltip"]')
   );
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new Tooltip(tooltipTriggerEl);
+    return new Tooltip(tooltipTriggerEl,
+    )
   });
 
   //todo: declare table
@@ -96,9 +101,10 @@ export default function ProductDetails() {
           return (
             <div
               className="text-danger ms-3"
-              data-bs-toggle="tooltip"
-              data-bs-placement="top"
-              title="This variant has request update sku"
+              // data-bs-toggle="tooltip"
+              // data-bs-placement="top"
+              // data-bs-delay='{"show":"500", "hide":"100"}'
+              // title="This variant has request update sku"
             >
               <i class="bi bi-bell-fill"></i>
             </div>
@@ -120,17 +126,30 @@ export default function ProductDetails() {
 
   const rowEventsHavingRequestUpdate = {
     onClick: (e, row, rowIndex) => {
-      let findElement = getAllUpdateRequest.find(
-        (e) => e.productVariantId === row.id
-      );
-      
-      history.push("/homepage/product/details/variant", {
-        variantId: row.id,
-        productId: productDetails.id,
-        variantType: productDetails.isVariantType,
-        skuRequest: findElement.sku,
-        isHavingRequestSKU: true,
-      });
+      // tooltipList.dispose()
+      // tooltipList.hide()
+      const check = (element) => element.productVariantId === row.id;
+      console.log(getAllUpdateRequest.some(check));
+      if (getAllUpdateRequest.some(check)) {
+        let findElement = getAllUpdateRequest.find(
+          (e) => e.productVariantId === row.id
+        );
+
+        history.push("/homepage/product/details/variant", {
+          variantId: row.id,
+          productId: productDetails.id,
+          variantType: productDetails.isVariantType,
+          skuRequest: findElement.sku,
+          // isHavingRequestSKU: true,
+        });
+      } else {
+        history.push("/homepage/product/details/variant", {
+          variantId: row.id,
+          productId: productDetails.id,
+          variantType: productDetails.isVariantType,
+          // isHavingRequestSKU: false,
+        });
+      }
     },
   };
   //todo: function
@@ -226,10 +245,11 @@ export default function ProductDetails() {
   }
   function goBackClick() {
     // history.replace("/homepage/product");
-    history.goBack(-1)
+    history.goBack(-1);
   }
 
   function goToManagerPage() {
+    // tooltipList.dispose()
     history.push("/homepage/product");
   }
 
@@ -280,8 +300,12 @@ export default function ProductDetails() {
     dispatch(
       getDetailsProductAction({ id: location.state.productId, token: token })
     );
+    dispatch(getAllUpdateProductAction({ token: token }));
+
     return () => {
       dispatch({ type: RESET });
+      // tooltipList.hide()
+      // tooltipTriggerList.dispose
     };
   }, []);
 
@@ -371,37 +395,36 @@ export default function ProductDetails() {
 
   return (
     <>
-    
-        <>
-          <NavigationBar
-            listButton={listButtons}
-            titleBar="Product details"
-            actionGoBack={goToManagerPage}
-            status=""
-            home="Product"
-            currentPage="Product details"
-          />
+      <>
+        <NavigationBar
+          listButton={listButtons}
+          titleBar="Product details"
+          actionGoBack={goToManagerPage}
+          status=""
+          home="Product"
+          currentPage="Product details"
+        />
 
-          <div className=" wrapper">
-            <div class="card">
-              <div class="card-header fw-bold">
-                <div className="d-flex">
-                  Product Information
-                  {isHavingRequestSKU && (
-                    <>
-                      <div
-                        className="text-danger ms-3"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="You have variant to update sku, please check your request page"
-                      >
-                        <i class="bi bi-bell-fill"></i>
-                      </div>
-                    </>
-                  )}
-                </div>
+        <div className=" wrapper">
+          <div class="card">
+            <div class="card-header fw-bold">
+              <div className="d-flex">
+                Product Information
+                {isHavingRequestSKU && (
+                  <>
+                    <div
+                      className="text-danger ms-3"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="You have variant to update sku, please check your request page"
+                    >
+                      <i class="bi bi-bell-fill"></i>
+                    </div>
+                  </>
+                )}
               </div>
-              {isReturnData ? 
+            </div>
+            {isReturnData ? (
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                   <div className="row g-3 justify-content-between me-3">
@@ -544,11 +567,13 @@ export default function ProductDetails() {
                     </div>
                   )} */}
                 </li>
-              </ul> : <InfoPurchaseOrderLoader/> }
-            </div>
+              </ul>
+            ) : (
+              <InfoPurchaseOrderLoader />
+            )}
           </div>
-        </>
-    
+        </div>
+      </>
     </>
   );
 }

@@ -308,7 +308,7 @@ export default function CreateStocktakeComponent() {
     } else {
       if (listCheckedItems.length > 0) {
         if (listCheckedItems.length === 1) {
-          console.log("CHECK TABLE:",listCheckedItems)
+          console.log("CHECK TABLE:", listCheckedItems);
           if (listCheckedItems[0].packageId === "") {
             Swal.fire({
               title: "Error",
@@ -320,7 +320,7 @@ export default function CreateStocktakeComponent() {
             });
           } else {
             console.log("Data output:", data);
-            console.log("CHECK TABLE:",listCheckedItems)
+            console.log("CHECK TABLE:", listCheckedItems);
             Swal.fire({
               title: "Are you sure",
               text: "Do you want to save?",
@@ -376,7 +376,7 @@ export default function CreateStocktakeComponent() {
                 reverseButtons: true,
               }).then((result) => {
                 if (result.isConfirmed) {
-                  // dispatch(createStocktkaeAction({ token: token, data: data }));
+                  dispatch(createStocktkaeAction({ token: token, data: data }));
                 }
               });
             }
@@ -439,7 +439,6 @@ export default function CreateStocktakeComponent() {
   //   }
   // }, [listPackagesStore]);
 
-
   //todo: createStocktakeStore
   useEffect(() => {
     if (createStocktakeStore.requesting === true) {
@@ -475,14 +474,12 @@ export default function CreateStocktakeComponent() {
 
   //todo: getDetailsPackageReducer check error
   useEffect(() => {
-    if(getDetailsPackageReducer.requesting){
+    if (getDetailsPackageReducer.requesting) {
       setIsCreating(true);
       setIsLoading(false);
-    }else if(getDetailsPackageReducer.successful)
-  {
-    setIsLoading(true);
-  }
-    else if (getDetailsPackageReducer.errors) {
+    } else if (getDetailsPackageReducer.successful) {
+      setIsLoading(true);
+    } else if (getDetailsPackageReducer.errors) {
       setIsCreating(false);
       Swal.fire({
         icon: "error",
@@ -512,10 +509,10 @@ export default function CreateStocktakeComponent() {
   useEffect(() => {
     return () => {
       dispatch({ type: RESET });
-      setIsCreating(false)
+      setIsCreating(false);
     };
   }, []);
-  console.log("ISCREING",isCreating)
+  console.log("ISCREING", isCreating);
   return (
     <div>
       <NavigationBar

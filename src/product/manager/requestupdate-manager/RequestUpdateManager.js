@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import "../../product.css";
 //components
 import {
-  getAllProductAction,
+  // getAllProductAction,
   getAllUpdateProductAction,
 } from "../product-manager/action";
 
@@ -78,14 +78,14 @@ export default function RequestUpdateManager() {
               className="text-success btn"
               onClick={() => agreeToUpdateRequest(row.productVariantId)}
             >
-              <i class="bi bi-check-circle-fill"></i>
+              <i class="bi bi-check-circle-fill me-1 "></i>
               Accept
             </div>
             <div
               className="text-danger btn"
               onClick={() => rejectUpdateRequest(row.productVariantId)}
             >
-              <i class="bi bi-x-circle-fill"></i>
+              <i class="bi bi-x-circle-fill me-1 "></i>
               Reject
             </div>
           </>
