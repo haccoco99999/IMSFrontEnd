@@ -425,7 +425,7 @@ function App(props) {
                 </i>
                 <span className="links_name">Purchase requisition</span>
               </Link>
-              <span className="tooltip"> requisition</span>
+              <span className="tooltip"> Requisition</span>
             </li>
           ) : (
             ""
