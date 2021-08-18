@@ -148,9 +148,3 @@
 .progress-customize-container {
   width: 350px;
 }
-button {
-  position: absolute;
-  right: 50px;
-  bottom: 20px;
-  cursor: pointer;
-}
