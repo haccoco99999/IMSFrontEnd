@@ -509,7 +509,7 @@ export default function CreateStocktakeComponent() {
   useEffect(() => {
     return () => {
       dispatch({ type: RESET });
-      setIsCreating(false);
+      // setIsCreating(false);
     };
   }, []);
   console.log("ISCREING", isCreating);
@@ -522,6 +522,8 @@ export default function CreateStocktakeComponent() {
         listButton={listButton}
         home="Stocktake"
         currentPage="Create stocktake"
+        isShowProgressBarStocktake={true}
+        currentStep={0}
       />
       {/* content */}
       <div className="wrapper">

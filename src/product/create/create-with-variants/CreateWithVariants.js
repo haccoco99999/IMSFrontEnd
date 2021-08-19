@@ -300,6 +300,8 @@ export default function CreateWithVariants(props) {
         currentPage="Create product"
         level3={true}
         level3Page="Create variants"
+        isShowCreateProductWithVariant={true}
+        currentStep={1}
       />
       {/* content */}
       <div className="wrapper">
