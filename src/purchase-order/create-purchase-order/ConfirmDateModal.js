@@ -3,12 +3,16 @@ import './confirm-date-modal.css'
 import { jsPDF } from 'jspdf'
 import 'jspdf-autotable'
 import supplier from '../../supplier/supplier';
+import { useSelector } from 'react-redux';
 export default function ConfirmDateModal(props) {
   // if (props.isConfirm) {
   const doc = new jsPDF();
+  const {companyInfo}= useSelector((state) =>({
+    client: state.client.companyInfo
+  }))
   function print() {
-
-
+  
+  
     doc.autoTable({
       styles: {},
       pageBreak: 'avoid',
@@ -18,13 +22,13 @@ export default function ConfirmDateModal(props) {
       margin: {},
       tableWidth: 90,
       theme: 'plain',
-      head: [['INVENTORY ABC']],
+      head: [[companyInfo.companyName]],
       body: [
         ['Street Address'],
-        ['City, ST, Zip'],
-        ['Phone:(098)) 456489-54'],
-        ['Fax: (849) 080-5656'],
-        ['Website'],
+        [companyInfo.address],
+        [`Phone: ${companyInfo.phoneNumber}`],
+     
+     
 
       ],
     })
@@ -130,37 +134,8 @@ export default function ConfirmDateModal(props) {
         props.listProduct.map(product => product)
     })
     var finalY = doc.lastAutoTable.finalY + 5 || 10
-    doc.autoTable({
-      startY: finalY,
-      styles: { halign: 'right' },
-      headStyles: { fillColor: [41, 128, 186], textColor: 'white' },
-      columnStyles: { 0: { halign: 'right', cellWidth: 25 } }, // Cells in first column centered and green
-      margin: { left: 135, },
-      tableWidth: 60,
-      theme: "plain",
+    
 
-      body: [
-        ["SUBTOTAL", ""],
-        ["TAX"],
-        ["SHIPPING", ""],
-        ["OTHER", ""],
-        ["TOTAL", ""],
-      ],
-    })
-    doc.autoTable({
-      startY: finalY,
-      styles: { halign: 'center' },
-      head: [['Comments or Special Instructions']],
-      headStyles: { fillColor: 'gray', textColor: 'white' },
-      columnStyles: { 0: { halign: 'left', cellWidth: 100, minCellHeight: 30, } }, // Cells in first column centered and green
-      margin: {},
-      tableWidth: 60,
-      theme: "grid",
-
-      body: [
-        ["lorem ipsum dolor sit amet consectetur adipiscing elit. aliquam tincidunt elementum sem non luctus lorem ipsum dolor sit amet consectetur adipiscing elit. aliquam tincidunt elementum sem non luctus"]
-      ],
-    })
     var finalY = doc.lastAutoTable.finalY || 10
     console.log(finalY)
     doc.setFontSize(11)

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import "./App.css";
 import logo from "./images/Logo.png";
@@ -60,6 +60,7 @@ function App(props) {
       statusSetting: !eventPage.statusSetting,
     });
   }
+  const profileRef = useRef()
   function toggleBell() {
     setEventPage({
       statusBell: !eventPage.statusBell,
@@ -67,6 +68,7 @@ function App(props) {
   }
   const history = useHistory();
   function toggleActive() {
+    profileRef.current.classList.remove("show");
     if (eventPage.status) {
       setEventPage({
         hide: "",
@@ -270,6 +272,7 @@ function App(props) {
           </div>
 
           <ul
+          ref={profileRef}
             className="collapse text-white ps-5 list-item-account w-100"
             id="collapseProfile"
           >
@@ -301,7 +304,7 @@ function App(props) {
             </p> */}
         </div>
 
-        <ul className="nav_list">
+        <ul className="nav_list"  id="pills-menu-tab">
           <li>
             <Link to="/homepage/dashboard">
               <i className="bx">
@@ -389,30 +392,7 @@ function App(props) {
           ) : (
             ""
           )}
-          {/* <li onClick={() => setEventPage({
-                hide: "",
-                isShowing: "bx-menu-alt-right",
-                active: "active",
-                status: !eventPage.status,
-              })} data-bs-toggle="collapse" href="#collapseListMenuProductManager">
-                <a href="#">
-                  <i className="bx">
-                    <img src={window.location.origin + "/images/product-2.png"} />
-                  </i>
-                  <span className="links_name">Product</span>
-                </a>
-                <span className="tooltip">Product</span>
-              </li>
-              <li class="collapse text-white" id="collapseListMenuProductManager">
-                <ul>
-                  <li className="list-child-item ps-5">
-                    <Link to="/homepage/product">Product</Link>
-                  </li>
-                  <li className="list-child-item ps-5"><span>Text</span></li>
-                  <li className="list-child-item ps-5"><span>Text</span></li>
-                  <li className="list-child-item ps-5"><span>Text</span></li>
-                </ul>
-              </li> */}
+       
           {client.pageAuthorized.includes("Supplier") ? (
             <li>
               <Link to="/homepage/supplier">

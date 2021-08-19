@@ -110,7 +110,7 @@ function sendEmailQuote(action){
             // "Content-Type": "multipart/form-data; boundary=------WebKitFormBoundaryVrJDc11fejgsDoAs",
             
         },
-        body: action.data,
+        body: action.formData,
         credentials: "include",
         
     })
@@ -311,7 +311,7 @@ function* saveProductsPurchaseOrderFlow(action) {
 function* confirmPurchaseOrderFlow(action) {
 
     try {
-        if(action.formdata !== undefined){
+        if(action.formData !== undefined){
             yield call(sendEmailQuote,action)
         }
      

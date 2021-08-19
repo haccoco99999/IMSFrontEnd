@@ -29,11 +29,11 @@ export function createPurchaseOrder({data, token}){
     }
 }
 
-export  function sendMailService({data, token}){
+export  function sendMailService({formData, token}){
     
     return{
         type:SEND_MAIL_SERVICE_REQUEST,
-        data,
+        formData,
         token,
     }
 }

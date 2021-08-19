@@ -674,7 +674,7 @@ export default function PurchaseOrderConfirm() {
             formData.append('Subject', "Mail from ABC Inventory")
             formData.append('PurchaseOrderId', purchaseOrderDataGlobal.orderId)
             formData.append('pdf', pdf)
-
+            
             dispatch(confirmPurchaseORderByManager({ data: data, token: token, formData: formData }))
 
         }
@@ -1324,7 +1324,7 @@ export default function PurchaseOrderConfirm() {
         formData.append('Subject', "Mail from ABC Inventory")
         formData.append('PurchaseOrderId', purchaseOrderDataGlobal.orderId)
         formData.append('pdf', pdf)
-        dispatch(sendMailService({ data: formData, token: token }))
+        dispatch(sendMailService({ formData: formData, token: token }))
     }
     function clickCreatePriceQuote() {
 
