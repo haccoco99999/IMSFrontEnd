@@ -23,7 +23,7 @@ export function GoodReceiptFilter(props) {
                         <div class="form-group">
                             <label for="">Search:</label>
                             <input type="text" value={props.filter.SearchQuery} onChange={props.onChangeValueFilter}
-                                class="form-control" name="SearchQuery" id="" aria-describedby="helpId" placeholder="" />
+                                class="form-control" name="SearchQuery" id="" aria-describedby="helpId" placeholder="Search goods receipt" />
 
                         </div>
 
@@ -161,13 +161,13 @@ export function GoodsIssueFilter(props) {
 
                                     <input type="date"
                                         onChange={props.onChangeValueFilter} value={props.filter.fromCreatedDate}
-                                        class="form-control" name="fromCreatedDate" id="" aria-describedby="helpId" placeholder="" />
+                                        class="form-control" name="fromCreatedDate" id="" aria-describedby="helpId" placeholder="From date" />
                                 </div>
                                 <div class="form-group col-md-6">
 
                                     <input type="date"
                                         onChange={props.onChangeValueFilter} value={props.filter.toCreatedDate}
-                                        class="form-control" name="toCreatedDate" id="" aria-describedby="helpId" placeholder="" />
+                                        class="form-control" name="toCreatedDate" id="" aria-describedby="helpId" placeholder="To date" />
                                 </div>
                             </div>
 
@@ -177,13 +177,13 @@ export function GoodsIssueFilter(props) {
 
                                     <input type="date"
                                         onChange={props.onChangeValueFilter} value={props.filter.fromDeliveryDate}
-                                        class="form-control" name="fromDeliveryDate" id="" aria-describedby="helpId" placeholder="" />
+                                        class="form-control" name="fromDeliveryDate" id="" aria-describedby="helpId" placeholder="From date" />
                                 </div>
                                 <div class="form-group col-md-6">
 
                                     <input type="date"
                                         onChange={props.onChangeValueFilter} value={props.filter.toDeliveryDate}
-                                        class="form-control" name="toDeliveryDate" id="" aria-describedby="helpId" placeholder="" />
+                                        class="form-control" name="toDeliveryDate" id="" aria-describedby="helpId" placeholder="To date" />
                                 </div>
                             </div>
 
@@ -233,7 +233,7 @@ export function PurchaseOrderFilter(props) {
                             {/* <SearchPurchaseOrder searchKeyWordPurchaseOrder={searchKeyWordPurchaseOrder} /> */}
                             <input type="text"
                                 onChange={props.onChangeValueFilter} value={props.filter.SearchQuery}
-                                class="form-control" name="SearchQuery" id="" aria-describedby="helpId" placeholder="" />
+                                class="form-control" name="SearchQuery" id="" aria-describedby="helpId" placeholder="Search by ID" />
                         </div>
 
                         <div className="col-md-6">
@@ -261,7 +261,7 @@ export function PurchaseOrderFilter(props) {
                                             props.onChangeValueFilter(e)}
                                         
                                         } value={pasePrice(props.filter.FromTotalOrderPrice)}
-                                        class="form-control" name="FromTotalOrderPrice" id="" aria-describedby="helpId" placeholder="" />
+                                        class="form-control" name="FromTotalOrderPrice" id="" aria-describedby="helpId" placeholder="From price" />
                                 </div>
                                 <div class="form-group col-md-6">
 
@@ -276,7 +276,7 @@ export function PurchaseOrderFilter(props) {
                                             }
                                            
                                              value={pasePrice(props.filter.ToTotalOrderPrice)}
-                                        class="form-control" name="ToTotalOrderPrice" id="" aria-describedby="helpId" placeholder="" />
+                                        class="form-control" name="ToTotalOrderPrice" id="" aria-describedby="helpId" placeholder="To price" />
                                 </div>
                             </div>
 
@@ -291,13 +291,13 @@ export function PurchaseOrderFilter(props) {
 
                                     <input type="date" max={props.filter.ToCreatedDate}
                                         onChange={props.onChangeValueFilter} value={props.filter.FromCreatedDate}
-                                        class="form-control" name="FromCreatedDate" id="" aria-describedby="helpId" placeholder="" />
+                                        class="form-control" name="FromCreatedDate" id="" aria-describedby="helpId" placeholder="From date" />
                                 </div>
                                 <div class="form-group col-md-6">
 
                                     <input type="date" min={props.filter.FromCreatedDate}
                                         onChange={props.onChangeValueFilter} value={props.filter.ToCreatedDate}
-                                        class="form-control" name="ToCreatedDate" id="" aria-describedby="helpId" placeholder="" />
+                                        class="form-control" name="ToCreatedDate" id="" aria-describedby="helpId" placeholder="To date" />
                                 </div>
                             </div>
                             <div className="row">
@@ -306,13 +306,13 @@ export function PurchaseOrderFilter(props) {
 
                                     <input type="date" max={props.filter.ToConfirmedDate}
                                         onChange={props.onChangeValueFilter} value={props.filter.FromConfirmedDate}
-                                        class="form-control" name="FromConfirmedDate" id="" aria-describedby="helpId" placeholder="None date" />
+                                        class="form-control" name="FromConfirmedDate" id="" aria-describedby="helpId" placeholder="From date" />
                                 </div>
                                 <div class="form-group col-md-6">
 
                                     <input type="date" min={props.filter.FromConfirmedDate}
                                         onChange={props.onChangeValueFilter} value={props.filter.ToConfirmedDate}
-                                        class="form-control" name="ToConfirmedDate" id="" aria-describedby="helpId" placeholder="None date" />
+                                        class="form-control" name="ToConfirmedDate" id="" aria-describedby="helpId" placeholder="To date" />
                                 </div>
                             </div>
                             <div className="row">
@@ -378,7 +378,7 @@ export function SupplierFilter(props) {
                             {/* <SearchPurchaseOrder searchKeyWordPurchaseOrder={searchKeyWordPurchaseOrder} /> */}
                             <input type="text"
                                 onChange={props.onChangeValueFilter} value={props.filter.SearchQuery}
-                                class="form-control" name="SearchQuery" id="" aria-describedby="helpId" placeholder="" />
+                                class="form-control" name="SearchQuery" id="" aria-describedby="helpId" placeholder="Search by name, email or phone number" />
                         </div>
 
 
