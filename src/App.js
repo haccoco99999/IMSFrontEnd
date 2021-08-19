@@ -212,7 +212,38 @@ function App(props) {
       console.log(e);
     }
   };
+  var actualCode = '(' + function () {
+    let arrow = document.getElementsByClassName("clicked-menu");
+    for (var i = 0; i < arrow.length; i++) {
+      let temp = arrow[i]
+      arrow[i].addEventListener("click", (e)=>{
+        
+        for (var j = 0; j < arrow.length; j++) {
+          if(j !== i){
+           
+            arrow[j].classList.remove("show-clicked-menu")
+          }
+     
+        
 
+
+        }
+        temp.classList.add("show-clicked-menu")
+    
+    //  arrowParent.classList.add("show-clicked-menu");
+     
+      });
+      
+
+    }
+
+    
+
+
+  } + ')();';
+  var script = document.createElement('script');
+  script.textContent = actualCode;
+  document.body.appendChild(script);
   // useEffect(() => {
   //   return () => {
   //     // setHubConnection(null);
@@ -305,7 +336,7 @@ function App(props) {
         </div>
 
         <ul className="nav_list"  id="pills-menu-tab">
-          <li>
+          <li className="clicked-menu">
             <Link to="/homepage/dashboard">
               <i className="bx">
                 <img src={dashboardLogo} />
@@ -315,7 +346,7 @@ function App(props) {
             <span className="tooltip">Dashboard</span>
           </li>
           {client.pageAuthorized.includes("PurchaseOrderMenu") ? (
-            <li>
+            <li className="clicked-menu">
               <Link to="/homepage/purchase">
                 <i className="bx">
                   <img src={shoppingLogo} />
@@ -328,7 +359,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("GoodsReceipt") ? (
-            <li>
+            <li className="clicked-menu">
               <Link to="/homepage/good-receipt">
                 <i className="bx">
                   <img src={importLogo} />
@@ -341,7 +372,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("GoodsIssue") ? (
-            <li>
+            <li className="clicked-menu">
               <Link to="/homepage/good-issue">
                 <i className="bx">
                   <img src={boxLogo} />
@@ -354,7 +385,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("Stocktake") ? (
-            <li>
+            <li className="clicked-menu">
               <Link to="/homepage/stock-take">
                 <i className="bx">
                   <img src={shelfLogo} />
@@ -367,7 +398,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("Report") ? (
-            <li>
+            <li className="clicked-menu">
               <Link to="/homepage/report">
                 <i className="bx">
                   <img src={reportLogo} />
@@ -380,7 +411,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("Product") ? (
-            <li>
+            <li className="clicked-menu">
               <Link to="/homepage/product">
                 <i className="bx">
                   <img src={productLogo} />
@@ -394,7 +425,7 @@ function App(props) {
           )}
        
           {client.pageAuthorized.includes("Supplier") ? (
-            <li>
+            <li className="clicked-menu">
               <Link to="/homepage/supplier">
                 <i className="bx">
                   <img src={manufactureLogo} />
@@ -407,7 +438,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("Account") ? (
-            <li>
+            <li className="clicked-menu">
               <Link to="/homepage/manage-account">
                 <i className="bx">
                   <img src={userLogo} />
@@ -420,7 +451,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("PurchaseRequistion") ? (
-            <li>
+            <li className="clicked-menu">
               <Link to="/homepage/sale-man">
                 <i className="bx">
                   <img src={userLogo} />

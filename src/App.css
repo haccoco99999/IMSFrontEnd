@@ -159,6 +159,16 @@ body{
 
 
 }
+.show-clicked-menu  a{
+  color: #042333 !important;
+  background: #fff;
+ }
+
+.show-clicked-menu  a i img{
+   filter: invert(9%) sepia(12%) saturate(6753%) hue-rotate(172deg) brightness(101%) contrast(97%) !important;
+ 
+}
+
 .sidebar ul li a img{
   filter: brightness(0) invert(1)
 

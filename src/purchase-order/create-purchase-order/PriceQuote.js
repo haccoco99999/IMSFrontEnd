@@ -469,7 +469,7 @@ export default function PurchaseOrderConfirm() {
 
                 },
 
-             
+
 
                 {
                     isShow: !eventPage.isShowEdit,
@@ -518,7 +518,7 @@ export default function PurchaseOrderConfirm() {
                 },
 
 
-                
+
 
                 {
                     isShow: !eventPage.isShowEdit,
@@ -675,7 +675,7 @@ export default function PurchaseOrderConfirm() {
             formData.append('Subject', "Mail from ABC Inventory")
             formData.append('PurchaseOrderId', purchaseOrderDataGlobal.orderId)
             formData.append('pdf', pdf)
-            
+
             dispatch(confirmPurchaseORderByManager({ data: data, token: token, formData: formData }))
 
         }
@@ -1389,6 +1389,8 @@ export default function PurchaseOrderConfirm() {
         <div>
 
             <NavigationBar
+                isShowProgressBar={true}
+                currentStep={detailPurchaseState.status}
                 titleBar={purchaseOrderDataGlobal.orderId}
                 listButton={listButton}
                 status={listStatus.nameStatus}

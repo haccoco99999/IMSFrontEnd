@@ -127,8 +127,11 @@ export function ProgressBarCreateProduct(props) {
 }
 
 export function ProgressBarPurchaseOrder(props){
-  const [listStep] = [
-    {name:"Purchase Order Draft",status:"is-complete"},
+  const listStep = [
+    {value:"PurchaseOrder",name:"Created",status:"is-complete"},
+    {value:"POWaitingConfirmation",name:"Waiting Confirm",status:"is-complete"},
+    {value:"POConfirm",name:"Confirmed",status:"is-complete"},
+    {value:"Done",name:"Done",status:"is-complete"},
 
 ]
   return (
@@ -136,18 +139,13 @@ export function ProgressBarPurchaseOrder(props){
       <div class="progress-customize">
         <div class="progress-customize-track"></div>
         {listStep.map((item, index) => {
-          if (index === props.currentStep)
+          if (item.value === props.currentStep)
             return (
               <div id="step1" class={`progress-customize-step is-active`}>
                 {item.name}
               </div>
             );
-          else if (index > props.currentStep)
-            return (
-              <div id="step1" class={`progress-customize-step `}>
-                {item.name}
-              </div>
-            );
+       
           else
             return (
               <div id="step1" class={`progress-customize-step ${item.status}`}>
