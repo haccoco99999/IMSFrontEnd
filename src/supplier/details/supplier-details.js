@@ -220,12 +220,12 @@ export default function SupplierDetails() {
           confirmButtonColor: "#3085d6",
         }).then((result) => {
           if (result.isConfirmed)
-            dispatch(
+           { dispatch(
               getDetailsSupplierAction({
                 id: location.state.supplierId,
                 token: token,
               })
-            );
+            );  setIsDisabled(true);}
         });
     } else if (updateSupplierReducer.errors) {
       Swal.fire({
