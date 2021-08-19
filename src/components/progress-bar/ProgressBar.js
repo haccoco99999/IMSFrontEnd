@@ -127,7 +127,7 @@ export function ProgressBarCreateProduct(props) {
 }
 
 export function ProgressBarPurchaseOrder(props){
-  const [listStep] = []
+  const [listStep] = [{name:"",status:""}]
   return (
     <div className="progress-customize-container">
       <div class="progress-customize">

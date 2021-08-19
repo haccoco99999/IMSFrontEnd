@@ -67,15 +67,15 @@ export default function NavigationBar(props) {
             </div>
           </div>
         </div>
-        //todo: progress bar
+        {/* progress bar  */}
         {props.isShowProgressBarStocktake && (
           <ProgressBarStocktake currentStep={props.currentStep} />
         )}
         {props.isShowCreateProductWithVariant && (
           <ProgressBarCreateProduct currentStep={props.currentStep} />
         )}
-        {props.isShowProgressBar} &&{" "}
-        <ProgressBarPurchaseOrder currentStep={props.currentStep} />
+        {props.isShowProgressBar && <ProgressBarPurchaseOrder currentStep={props.currentStep} />} 
+        
         <form class="d-flex">
           {props.listButton.map((button) => {
             // let classButton =
