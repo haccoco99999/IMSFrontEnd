@@ -25,6 +25,7 @@ import { InfoPurchaseOrderLoader, TableLoading } from '../../components/loading/
 import NavigationBar from '../../components/navbar/navbar-component';
 import RejectWrapper from '../../components/reject-wrapper/reject-component';
 import { ProgressBar } from '../../components/progress-bar/ProgressBar';
+import { parseNumberToPrice } from '../../helper/parsePrice';
 // import { ProgressBar } from '../../components/progress-bar/ProgressBar';
 
 export default function PurchaseOrderConfirm() {
@@ -162,7 +163,7 @@ export default function PurchaseOrderConfirm() {
             formatter: (cellContent, row, rowIndex) => {
                 return (
                     <div>
-                        {eventPage.isShowEdit ? <input className="form-control" defaultValue={row.price} type="text" /> : row.price}
+                        {eventPage.isShowEdit ? <input className="form-control" defaultValue={row.price} type="text" /> : parseNumberToPrice(row.price) + " VNĐ"}
                     </div>);
             },
             align: (cell, row, rowIndex, colIndex) => {
@@ -202,7 +203,7 @@ export default function PurchaseOrderConfirm() {
             formatter: (cellContent, row, rowIndex) => {
 
                 return (
-                    row.orderQuantity * row.price
+                    parseNumberToPrice(Number(row.orderQuantity) * Number(row.price)) + " VNĐ"
                 );
             },
         },

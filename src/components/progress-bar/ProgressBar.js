@@ -127,7 +127,10 @@ export function ProgressBarCreateProduct(props) {
 }
 
 export function ProgressBarPurchaseOrder(props){
-  const [listStep] = [{name:"",status:""}]
+  const [listStep] = [
+    {name:"Purchase Order Draft",status:"is-complete"},
+
+]
   return (
     <div className="progress-customize-container">
       <div class="progress-customize">

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ProgressBar, ProgressBarNav } from "../components/progress-bar/ProgressBar";
 import { getListDashBoard } from "./actions";
 import './dashboard.css'
 export default function DashboardComponent() {
@@ -15,17 +14,16 @@ export default function DashboardComponent() {
 
   return (
     <div className="home_content">
-
-      <div class="d-grid gap-2">
-        <div className="p-3">
+        <div className="space-top-heading wrapper">
+      {/* title  */}
+      <div className="title-heading mt-2">
+        <span>Dashboard</span>
+      </div>
+      <div class="d-grid">
+        <div className="">
           <div class="container-fluid">
-    <ProgressBarNav/>
 
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-              <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-              <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-            </div>
+
 
 
             <div class="row">
@@ -230,16 +228,17 @@ export default function DashboardComponent() {
                   </div>
                 </div>
               </div>
-            
+
             </div>
 
 
-     
+
 
           </div>
         </div>
         {/* ################################# */}
       </div>
+    </div>
     </div>
   );
 }

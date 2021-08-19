@@ -21,6 +21,7 @@ import { Cloudinary } from "@cloudinary/base";
 import { PurchaseOrderFilter } from '../../components/filter/FilterComponents'
 import moment  from 'moment'
 import { setStatusLoadingTable } from '../../helper/loadDataHelper'
+import { parseNumberToPrice } from '../../helper/parsePrice'
 export default function PurchaseQuoteOrder() {
     // const cld = new Cloudinary({
     //     cloud: {
@@ -187,21 +188,9 @@ export default function PurchaseQuoteOrder() {
                 return 'right';
 
             },
-            // formatter:(cell) =>{
-            //     return moment(cell).format("DD-MM-YYYY")
-            // }
+           
         },
-        {
-            dataField: 'deliveryDate',
-            text: 'Delivery Date',
-            align: (cell, row, rowIndex, colIndex) => {
-                return 'right';
-
-            },
-            // formatter:(cell) =>{
-            //     return moment(cell).format("DD-MM-YYYY")
-            // }
-        },
+       
 
         {
             dataField: 'totalPrice',
@@ -211,7 +200,7 @@ export default function PurchaseQuoteOrder() {
 
             },
             formatter: (cell, row, rowIndex, colIndex) => {
-                return cell.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                return parseNumberToPrice(cell) +" VND"
 
 
             },

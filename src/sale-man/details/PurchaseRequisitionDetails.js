@@ -700,78 +700,78 @@ export default function PurchaseRequisitionDetails() {
             <div class="card-header fw-bold">
               Product List
             </div>
-            { returnData?<>
-            < li class="list-group-item">
+            {returnData ? <>
+              < li class="list-group-item">
 
-            {!isEditDisabled && (
-              <>
-                <li class="list-group-item">
-                  <div class="form-group col-md-4">
-                    <label for="">Deadline</label>
-                    <input
-                      type="date"
-                      name="deadline"
-                      id="deadline"
-                      class="form-control"
-                      value={moment(deadline).format("YYYY-MM-DD")}
-                      onChange={onChangeDeadline}
-                    />
-                  </div>
+                {!isEditDisabled && (
+                  <>
+                    <li class="list-group-item">
+                      <div class="form-group col-md-4">
+                        <label for="">Deadline</label>
+                        <input
+                          type="date"
+                          name="deadline"
+                          id="deadline"
+                          class="form-control"
+                          value={moment(deadline).format("YYYY-MM-DD")}
+                          onChange={onChangeDeadline}
+                        />
+                      </div>
 
-                  <div className="mt-2">
-                    <button
-                      onClick={() => clickSetShowAddProductPage()}
-                      type="button"
-                      class="btn btn-outline-secondary"
-                    >
-                      Add product
-                    </button>
-                  </div>
+                      <div className="mt-2">
+                        <button
+                          onClick={() => clickSetShowAddProductPage()}
+                          type="button"
+                          class="btn btn-outline-secondary"
+                        >
+                          Add product
+                        </button>
+                      </div>
 
-                  {eventPage.isShowAddProduct ? (
-                    <FormAddProductModal
-                      clickSetShowAddProductPage={
-                        clickSetShowAddProductPage
-                      }
-                      clickToAddProduct={clickToAddProduct}
-                    // addGroupProduct={addGroupProduct}
+                      {eventPage.isShowAddProduct ? (
+                        <FormAddProductModal
+                          clickSetShowAddProductPage={
+                            clickSetShowAddProductPage
+                          }
+                          clickToAddProduct={clickToAddProduct}
+                        // addGroupProduct={addGroupProduct}
+                        />
+                      ) : (
+                        ""
+                      )}
+                      {/* <SearchComponent clickToAddProduct={clickToAddProduct} /> */}
+                    </li>
+                  </>
+                )}
+                <div className="mt-2">
+                  {isEditDisabled ? (
+                    <BootstrapTable
+                      keyField="productVariantId"
+                      data={cleanListProducts}
+                      columns={columnsShow}
+                      noDataIndication="Table is Empty"
                     />
                   ) : (
-                    ""
-                  )}
-                  {/* <SearchComponent clickToAddProduct={clickToAddProduct} /> */}
-                </li>
-              </>
-            )}
-            <div className="mt-2">
-              {isEditDisabled ? (
-                <BootstrapTable
-                  keyField="productVariantId"
-                  data={cleanListProducts}
-                  columns={columnsShow}
-                  noDataIndication="Table is Empty"
-                />
-              ) : (
-                <BootstrapTable
-                  keyField="productVariantId"
-                  data={cleanListProducts}
-                  columns={columnsEdit}
-                  noDataIndication="Table is Empty"
-                  cellEdit={cellEditFactory({
-                    mode: "click",
-                    blurToSave: true,
+                    <BootstrapTable
+                      keyField="productVariantId"
+                      data={cleanListProducts}
+                      columns={columnsEdit}
+                      noDataIndication="Table is Empty"
+                      cellEdit={cellEditFactory({
+                        mode: "click",
+                        blurToSave: true,
 
-                    afterSaveCell: (oldValue, newValue, row, column) => {
-                      row.totalAmount = row.orderQuantity * row.price;
-                    },
-                  })}
-                />
-              )}
-            </div>
-            </li>
-             </> : <InfoPurchaseOrderLoader/>}
+                        afterSaveCell: (oldValue, newValue, row, column) => {
+                          row.totalAmount = row.orderQuantity * row.price;
+                        },
+                      })}
+                    />
+                  )}
+                </div>
+              </li>
+            </> : <InfoPurchaseOrderLoader />}
           </ul>
-    </div>
+        </div>
       </div >
 
 

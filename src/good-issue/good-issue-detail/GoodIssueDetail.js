@@ -204,7 +204,7 @@ export default function DetailGoodIssue() {
                 },
             ]
         }
-        else if (status === "Packing" && pageAuthorized.includes(status) && GoodIssueDetail.infoGoodIssueDetail.isShipping !==false) {
+        else if (status === "Packing" && pageAuthorized.includes(status) && GoodIssueDetail.infoGoodIssueDetail.isShipping !== false) {
             return [
                 {
                     isShow: true,
@@ -221,7 +221,7 @@ export default function DetailGoodIssue() {
             ]
 
         }
-        else if (status === "Packing" && pageAuthorized.includes(status) && GoodIssueDetail.infoGoodIssueDetail.isShipping ===false) {
+        else if (status === "Packing" && pageAuthorized.includes(status) && GoodIssueDetail.infoGoodIssueDetail.isShipping === false) {
             return [
                 {
                     isShow: true,
@@ -599,15 +599,7 @@ export default function DetailGoodIssue() {
             />
 
             <div class="d-grid gap-2">
-                {status === "Cancel" ? <RejectWrapper
-                    name={infoRejectOrder.name}
-                    phoneNumber={infoRejectOrder.phoneNumber}
-                    email={infoRejectOrder.email}
-                    reason={infoRejectOrder.reason}
-                    data={moment(infoRejectOrder.createdDate).add(7, "h").format("DD-MM-YYYY HH:mm") }
 
-
-                /> : ""}
                 <div className="p-3">
                     <div className="card">
                         <div class="card-header p-0">
@@ -617,6 +609,15 @@ export default function DetailGoodIssue() {
                             </div>
                         </div>
                         {GoodIssueDetail.successful ? <div class="card-body row">
+                            {status === "Cancel" ? <RejectWrapper
+                                name={infoRejectOrder.name}
+                                phoneNumber={infoRejectOrder.phoneNumber}
+                                email={infoRejectOrder.email}
+                                reason={infoRejectOrder.reason}
+                                date={moment(infoRejectOrder.createdDate).add(7, "h").format("DD-MM-YYYY HH:mm")}
+
+
+                            /> : ""}
                             <div className="col-md-9">
                                 {status === "IssueRequisition" ?
                                     <div className="info-detai-receipt">
@@ -638,8 +639,8 @@ export default function DetailGoodIssue() {
 
                                 </div>
                                 <div className="info-detai-receipt">
-                                    <p className="fw-bold">Created Date: <span className="fw-normal">{ moment(GoodIssueDetail.infoGoodIssueDetail.createdDate).add(7, "h").format("DD-MM-YYYY ")}</span></p>
-                                    <p className="fw-bold">Delivery Date: <span className="fw-normal">{ moment(GoodIssueDetail.infoGoodIssueDetail.deliveryDate).add(7, "h").format("DD-MM-YYYY ")}</span></p>
+                                    <p className="fw-bold">Created Date: <span className="fw-normal">{moment(GoodIssueDetail.infoGoodIssueDetail.createdDate).add(7, "h").format("DD-MM-YYYY ")}</span></p>
+                                    <p className="fw-bold">Delivery Date: <span className="fw-normal">{moment(GoodIssueDetail.infoGoodIssueDetail.deliveryDate).add(7, "h").format("DD-MM-YYYY ")}</span></p>
 
 
                                 </div>

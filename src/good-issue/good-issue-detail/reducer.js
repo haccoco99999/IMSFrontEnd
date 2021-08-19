@@ -72,9 +72,9 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
           transaction = element
         }
         if (element.userTransactionActionType === 4) {
-
+          
           infoRejectOrder = {
-            createDate: element.date,
+            createdDate: element.date,
             name: element.applicationUser.fullname,
             email: element.applicationUser.email,
             phoneNumber: element.applicationUser.phoneNumber,
@@ -148,7 +148,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
             phoneNumber: transaction.applicationUser.phoneNumber,
             email: transaction.applicationUser.email
           },
-          isShipping: isShipping,
+          infoGoodIssueDetail: isShipping,
           infoRejectOrder: infoRejectOrder,
           listGoodIssueProducts: listProducts
         }

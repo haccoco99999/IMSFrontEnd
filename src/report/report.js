@@ -14,7 +14,7 @@ export default function () {
           <div class="card">
               
                 <div class="card-body">
-                  <iframe width="100%" height="850" src="https://datastudio.google.com/embed/reporting/fbfb7534-6e92-409b-9c97-5abcba98a937/page/A8TUC" frameborder="0" allowfullscreen></iframe>
+                  <iframe width="100%" height="1500" src="https://datastudio.google.com/embed/reporting/fbfb7534-6e92-409b-9c97-5abcba98a937/page/A8TUC" frameborder="0" allowfullscreen></iframe>
 
                 </div>
               </div>
