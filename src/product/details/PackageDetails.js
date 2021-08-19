@@ -9,6 +9,7 @@ import { getDetailsPackageAction } from "./action";
 import { RESET } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
 import { InfoOrderLoader, TableLoading } from "../../components/loading/loading-component";
+import { parseNumberToPrice } from '../../helper/parsePrice'
 export default function PackageDetails() {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -113,11 +114,11 @@ export default function PackageDetails() {
                     </div>
                     <div className="col-4">
                       <p>
-                        <strong>Price: </strong> {packageDetailsStore.price}
+                        <strong>Unit Price: </strong> { parseNumberToPrice(packageDetailsStore.price) +" VND" }
                       </p>
                       <p>
                         <strong>Total Price: </strong>{" "}
-                        {packageDetailsStore.totalPrice}
+                        {parseNumberToPrice(packageDetailsStore.totalPrice) +" VND"}
                       </p>
                     </div>
                   </div>
@@ -161,7 +162,7 @@ export default function PackageDetails() {
                         <strong>Email:</strong> {supplierDetailsStore.email}
                       </p>
                       <p>
-                        <strong>Phone</strong>{" "}
+                        <strong>Phone:</strong>{" "}
                         {supplierDetailsStore.phoneNumber}
                       </p>
                       <p>

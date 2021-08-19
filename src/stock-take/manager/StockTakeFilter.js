@@ -21,7 +21,7 @@ export default function StockTakeFilter(props){
                     <div class="form-group">
                       <label for="">Search:</label>
                       <input type="text" onChange={props.onChangeValueFilter} value={props.filter.SearchQuery}
-                        class="form-control" name="SearchQuery" id="" aria-describedby="helpId" placeholder=""/>    
+                        class="form-control" name="SearchQuery" id="" aria-describedby="helpId" placeholder="Search by ID"/>    
                     </div>
                     <div className="col-md-6">
 
@@ -83,7 +83,7 @@ export default function StockTakeFilter(props){
                 <div className="row">
 
                     <div className="">
-                        <button className="btn btn-primary me-md-2 btn-sm" type="button"  onClick={() => props.resetFilter()}>Reset Filter</button>
+                        <button className="btn btn-primary me-md-2 btn-sm" type="button"  onClick={() => props.resetFilter()}>Reset </button>
                         <button className="btn btn-primary btn-sm" type="button" onClick={() => props.submitFilter()}>Filter</button>
                     </div>
 
