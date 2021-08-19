@@ -18,16 +18,18 @@ import QRCode from 'qrcode'
 import { CREATE_GOOD_ISSUE_CLEAN, GET_GOOD_ISSUE_DETAIL_CLEAN, REJECT_GOOD_ISSUE_CLEAN, UPDATE_GOOD_ISSUE_CLEAN } from './contants';
 import { InfoPurchaseOrderLoader, TableLoading } from '../../components/loading/loading-component';
 import RejectWrapper from '../../components/reject-wrapper/reject-component';
+import moment from 'moment';
 
 export default function DetailGoodIssue() {
     const doc = new jsPDF();
     const location = useLocation()
-    const { GoodIssueDetail, token, RejectGoodIssueStatus, createGoodIssueStatus, upadateGoodIssueStatus, pageAuthorized } = useSelector(state => ({
+    const { GoodIssueDetail, token, RejectGoodIssueStatus, createGoodIssueStatus, upadateGoodIssueStatus, pageAuthorized, companyInfo } = useSelector(state => ({
         RejectGoodIssueStatus: state.RejectGoodIssue,
         createGoodIssueStatus: state.createGoodIssue,
         upadateGoodIssueStatus: state.upadateGoodIssue,
         GoodIssueDetail: state.DetailGoodIssue,
         token: state.client.token,
+        companyInfo: state.client.companyInfo,
         pageAuthorized: state.client.pageAuthorized,
     }))
     const history = useHistory()
@@ -202,7 +204,7 @@ export default function DetailGoodIssue() {
                 },
             ]
         }
-        else if (status === "Packing" && pageAuthorized.includes(status)) {
+        else if (status === "Packing" && pageAuthorized.includes(status) && GoodIssueDetail.infoGoodIssueDetail.isShipping !==false) {
             return [
                 {
                     isShow: true,
@@ -215,6 +217,17 @@ export default function DetailGoodIssue() {
                     title: "Print",
                     action: () => printDeliverNote(),
                     class: "btn-secondary",
+                },
+            ]
+
+        }
+        else if (status === "Packing" && pageAuthorized.includes(status) && GoodIssueDetail.infoGoodIssueDetail.isShipping ===false) {
+            return [
+                {
+                    isShow: true,
+                    title: "Reject",
+                    action: () => clickReject(),
+                    class: "btn-danger"
                 },
             ]
 
@@ -300,12 +313,11 @@ export default function DetailGoodIssue() {
             margin: {},
             tableWidth: 90,
             theme: 'plain',
-            head: [['INVENTORY ABC']],
+            head: [[companyInfo.companyName]],
             body: [
                 ['Street Address'],
-                ['HCM, QUAN 1, 1111'],
-                ['Phone:(086) 111-8596'],
-                ['Fax: (189) 856-4258'],
+                [companyInfo.address],
+                [`Phone: ${companyInfo.phoneNumber}`],
                 ['Email: Inventory@gmail.com'],
 
             ],
@@ -592,7 +604,7 @@ export default function DetailGoodIssue() {
                     phoneNumber={infoRejectOrder.phoneNumber}
                     email={infoRejectOrder.email}
                     reason={infoRejectOrder.reason}
-                    data={infoRejectOrder.createdDate}
+                    data={moment(infoRejectOrder.createdDate).add(7, "h").format("DD-MM-YYYY HH:mm") }
 
 
                 /> : ""}
@@ -626,8 +638,8 @@ export default function DetailGoodIssue() {
 
                                 </div>
                                 <div className="info-detai-receipt">
-                                    <p className="fw-bold">Created Date: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.createdDate}</span></p>
-                                    <p className="fw-bold">Delivery Date: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.deliveryDate}</span></p>
+                                    <p className="fw-bold">Created Date: <span className="fw-normal">{ moment(GoodIssueDetail.infoGoodIssueDetail.createdDate).add(7, "h").format("DD-MM-YYYY ")}</span></p>
+                                    <p className="fw-bold">Delivery Date: <span className="fw-normal">{ moment(GoodIssueDetail.infoGoodIssueDetail.deliveryDate).add(7, "h").format("DD-MM-YYYY ")}</span></p>
 
 
                                 </div>
@@ -656,12 +668,11 @@ export default function DetailGoodIssue() {
                         }
                     </div>
                 </div>
-
                 <div className="p-3">
                     <div className="card">
                         <div class="card-header p-0">
                             <div class="d-flex ">
-                                <div class="me-auto p-2">List Products Order:</div>
+                                <div class="me-auto p-2">Product list:</div>
 
                             </div>
                         </div>

@@ -19,6 +19,7 @@ import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { GoodsIssueFilter } from "../../components/filter/FilterComponents";
 import PagingComponent from "../../components/paging/paging-component";
 import { setStatusLoadingTable } from "../../helper/loadDataHelper";
+import moment from "moment";
 export default function Manager(props) {
 
   let history = useHistory()
@@ -124,14 +125,21 @@ export default function Manager(props) {
         return 'right';
 
       },
+      formatter:(cell) =>{
+        return moment(cell).add(7, "h").format("DD-MM-YYYY")
+      }
     },
     {
+    
       dataField: 'createdDate',
       text: 'Created Date',
       align: (cell, row, rowIndex, colIndex) => {
         return 'right';
 
       },
+      formatter:(cell) =>{
+        return moment(cell).add(7, "h").format("DD-MM-YYYY")
+      }
     },
 
 

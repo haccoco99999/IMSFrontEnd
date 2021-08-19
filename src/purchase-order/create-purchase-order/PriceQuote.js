@@ -530,19 +530,19 @@ export default function PurchaseOrderConfirm() {
             ]
 
         }
-        else if (status === "POConfirm" && pageAuthorized.includes(status)) {
-            return [
-                {
-                    isShow: true,
-                    title: "Create  Goods Receipt",
-                    action: () => redirectGoodsReceipt(),
-                    class: "btn btn-primary"
-                },
+        // else if (status === "POConfirm" && pageAuthorized.includes(status)) {
+        //     return [
+        //         {
+        //             isShow: true,
+        //             title: "Create  Goods Receipt",
+        //             action: () => redirectGoodsReceipt(),
+        //             class: "btn btn-primary"
+        //         },
 
 
-            ]
+        //     ]
 
-        }
+        // }
 
         return []
     }
@@ -1723,7 +1723,7 @@ export default function PurchaseOrderConfirm() {
                 {eventPage.isShowConfirm ? <ConfirmDateModal
                     confirmPurchaseOrder={confirmPurchaseOrder}
                     listProduct={listProductPurchaseOrder}
-                    infoPriceQuote={detailPurchaseState}
+                    infoPurchaseOrder={detailPurchaseState}
                     supplier={supplier}
                     closeConfirmModal={isShowConfirmModal}
                 // clickToCLoseConfirm={clickToCLoseConfirm} 

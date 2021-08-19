@@ -4,15 +4,16 @@ import { jsPDF } from 'jspdf'
 import 'jspdf-autotable'
 import supplier from '../../supplier/supplier';
 import { useSelector } from 'react-redux';
+import { number_to_price, pasePrice } from '../parsePrice';
 export default function ConfirmDateModal(props) {
   // if (props.isConfirm) {
   const doc = new jsPDF();
-  const {companyInfo}= useSelector((state) =>({
-    client: state.client.companyInfo
+  const { companyInfo } = useSelector((state) => ({
+    companyInfo: state.client.companyInfo
   }))
   function print() {
-  
-  
+
+
     doc.autoTable({
       styles: {},
       pageBreak: 'avoid',
@@ -27,8 +28,8 @@ export default function ConfirmDateModal(props) {
         ['Street Address'],
         [companyInfo.address],
         [`Phone: ${companyInfo.phoneNumber}`],
-     
-     
+
+
 
       ],
     })
@@ -43,7 +44,7 @@ export default function ConfirmDateModal(props) {
       theme: 'plain',
       head: [['PURCHASE ORDER']],
       body: [
-        [`ORDER ID ${props.infoPriceQuote.orderId}`],
+        [`ORDER ID: ${props.infoPurchaseOrder.orderId}`],
         ['04/26/2021'],
         // ['CUSTOMER ID:31654648'],
 
@@ -68,7 +69,7 @@ export default function ConfirmDateModal(props) {
 
         [`Street Address ${props.supplier.address}`],
 
-        [`Phone Number: ${props.supplier.phoneNumber}`],
+        [`Phone: ${props.supplier.phoneNumber}`],
         [`Email: ${props.supplier.email}`],
         // ['Fax: (000) 000-0000'],
 
@@ -87,12 +88,12 @@ export default function ConfirmDateModal(props) {
 
       head: [['DELIVERY ADDRESS']],
       body: [
-        ['Company Name'],
-        ['Contact or Department'],
+     
+      
         ['Street Address'],
-        ['City, ST, Zip'],
-        ['Phone:(000) 000-0000'],
-        ['Fax: (000) 000-0000'],
+        [companyInfo.address],
+        [`Phone: ${companyInfo.phoneNumber} `],
+       
 
       ],
     })
@@ -101,19 +102,19 @@ export default function ConfirmDateModal(props) {
 
 
 
-    doc.autoTable({
-      styles: {},
-      headStyles: { fillColor: [41, 128, 186], textColor: 'white' },
-      columnStyles: { 0: { halign: 'center' } }, // Cells in first column centered and green
-      margin: { top: 90, },
-      tableWidth: 180,
-      theme: "grid",
-      head: [['DELIVERY DATE', 'REQUESTED BY', 'APPROVED BY', 'DEPARTMENT']],
-      body: [
-        ['', '', '', ''],
+    // doc.autoTable({
+    //   styles: {},
+    //   headStyles: { fillColor: [41, 128, 186], textColor: 'white' },
+    //   columnStyles: { 0: { halign: 'center' } }, // Cells in first column centered and green
+    //   margin: { top: 90, },
+    //   tableWidth: 180,
+    //   theme: "grid",
+    //   head: [['DELIVERY DATE', 'REQUESTED BY', 'APPROVED BY', 'DEPARTMENT']],
+    //   body: [
+    //     ['', '', '', ''],
 
-      ],
-    })
+    //   ],
+    // })
 
     doc.autoTable({
       styles: {},
@@ -131,16 +132,18 @@ export default function ConfirmDateModal(props) {
 
       ],
       body:
-        props.listProduct.map(product => product)
+        props.listProduct.map(product => ({
+          ...product, price: pasePrice(product.price), totalAmount: pasePrice(product.totalAmount)
+        }))
     })
     var finalY = doc.lastAutoTable.finalY + 5 || 10
-    
+
 
     var finalY = doc.lastAutoTable.finalY || 10
     console.log(finalY)
     doc.setFontSize(11)
     doc.text("For questions concerning this invoice, please contact", 105, doc.internal.pageSize.height - 10, "center")
-    doc.text("Name,[321] 456-789 EMail: Inventory@gmail.com", 105, doc.internal.pageSize.height - 5, "center")
+    doc.text(`${props.infoPurchaseOrder.infoUserPurchaseOrder.name}, ${props.infoPurchaseOrder.infoUserPurchaseOrder.phoneNumber} EMail: ${props.infoPurchaseOrder.infoUserPurchaseOrder.email}`, 105, doc.internal.pageSize.height - 5, "center")
 
 
 
@@ -148,11 +151,12 @@ export default function ConfirmDateModal(props) {
 
     // sendEmailQuote(doc.output('blob'))
   }
-  function onChangeValue(event){
-    setContentMail(event.target.value)
-  }
+  // function onChangeValue(event) {
+  //   setContentMail(event.target.value)
+  // }
+
   const [isSendMail, setIsSendMail] = useState(false)
-  const [contentMail, setContentMail] = useState("")
+  const contentMail = useRef("")
   return (
 
     <div class="modal model-confirm-date" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-modal="true" role="dialog">
@@ -182,7 +186,7 @@ export default function ConfirmDateModal(props) {
 
               <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Content:</label>
-                <textarea onChange={contentMail} onChange={(e) => onChangeValue(e)} class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+                <textarea  ref={contentMail} class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
               </div>
 
               <iframe width="100%" height="800" class="embed-responsive-item" src={print() + "#toolbar=0"}></iframe></div>) : ""}
@@ -192,7 +196,7 @@ export default function ConfirmDateModal(props) {
           </div>
           <div class="modal-footer">
             <button type="button" onClick={() => props.closeConfirmModal()} class="btn btn-secondary btn-cancel-preview" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" onClick={() => props.confirmPurchaseOrder(isSendMail, print(), contentMail)} class="btn btn-primary">Confirm</button>
+            <button type="button" onClick={() => props.confirmPurchaseOrder(isSendMail, print(), contentMail.current.value)} class="btn btn-primary">Confirm</button>
           </div>
         </div>
       </div>
@@ -201,3 +205,4 @@ export default function ConfirmDateModal(props) {
   // }
   // return null
 }
+

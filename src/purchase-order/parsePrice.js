@@ -21,7 +21,7 @@ export function pasePrice(value) {
 
 
     // Get the value.
-    var input = value;
+    var input = value.toString();
 
     var input = input.replace(/[\D\s\._\-]+/g, "");
     input = input ? parseInt(input, 10) : 0;

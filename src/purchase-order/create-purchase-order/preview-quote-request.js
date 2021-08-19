@@ -14,12 +14,11 @@ export default function PreviewSendMail(props) {
     // const contentBlock = htmlToDraft(props.mailDescription)
 
     // if (props.statusSendMail) {
-        const user = useSelector((state) => state.client)
+        const {companyInfo} = useSelector((state) =>({ companyInfo: state.client.companyInfo}))
         const doc = new jsPDF();
-        console.log(user)
         function print() {
 
-
+            
             doc.autoTable({
                 styles: {},
                 pageBreak: 'avoid',
@@ -29,13 +28,13 @@ export default function PreviewSendMail(props) {
                 margin: {},
                 tableWidth: 90,
                 theme: 'plain',
-                head: [['INVENTORY ABC']],
+                head: [[companyInfo.companyName]],
                 body: [
-                    ['Street Address'],
-                    ['HCM, QUAN 1, 1111'],
-                    ['Phone:(086) 111-8596'],
-                    ['Fax: (189) 856-4258'],
-                    ['Email: Inventory@gmail.com'],
+                    ['Street Address:'],
+                    [companyInfo.address],
+                    [`Phone: ${companyInfo.phoneNumber}`],
+               
+                  
 
                 ],
             })
@@ -52,7 +51,7 @@ export default function PreviewSendMail(props) {
                 body: [
                     ['Quote #:' + props.infoPriceQuote.orderId],
                     ['Date: ' + new Date().toISOString().slice(0, 10)],
-                    ['Request By: ' + user.fullname],
+                    ['Request By: ' + props.infoPriceQuote.infoUserPurchaseOrder.name],
                    
 
                 ],
@@ -103,7 +102,7 @@ export default function PreviewSendMail(props) {
             console.log(finalY)
             doc.setFontSize(11)
             doc.text("For questions concerning this invoice, please contact", 105, doc.internal.pageSize.height - 10, "center")
-            doc.text("Name,[321] 456-789 EMail: Inventory@gmail.com", 105, doc.internal.pageSize.height - 5, "center")
+            doc.text(`${props.infoPriceQuote.infoUserPurchaseOrder.name}, ${props.infoPriceQuote.infoUserPurchaseOrder.phoneNumber} Email: ${props.infoPriceQuote.infoUserPurchaseOrder.email}`, 105, doc.internal.pageSize.height - 5, "center")
 
 
             return doc.output('datauristring')
@@ -168,10 +167,7 @@ export default function PreviewSendMail(props) {
                 </div>
             </div>
         )
-    // }
-    // else {
-    //     return "";
-    // }
+  
 
 }
-// doc.output('blob')
+

@@ -48,7 +48,8 @@ const initalGoodIssueDetailState = {
       //   listPackages: []
       // }
 
-    ]
+    ],
+    isShipping: false
   }
 };
 
@@ -64,17 +65,16 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
 
       };
     case GET_GOOD_ISSUE_DETAIL_SUCCESS:
-      console.log(action.json.goodsIssueOrder.transaction)
       let infoRejectOrder
-      // let transaction
+      let transaction
       action.json.goodsIssueOrder.transaction.transactionRecord.forEach(element => {
-        // if (element.userTransactionActionType === 0) {
-        //   transaction = element
-        // }
+        if (element.userTransactionActionType === 0) {
+          transaction = element
+        }
         if (element.userTransactionActionType === 4) {
 
           infoRejectOrder = {
-            createDate: moment(element.date).format("DD-MM-YYYY") ,
+            createDate: element.date,
             name: element.applicationUser.fullname,
             email: element.applicationUser.email,
             phoneNumber: element.applicationUser.phoneNumber,
@@ -85,9 +85,11 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
         }
 
       })
+   
       let listProducts
       if (action.json.productPackageFIFO !== undefined) {
         listProducts = action.json.productPackageFIFO.map(item => {
+          let checkQuantity = 0
           return {
             discountAmount: item.orderItem.discountAmount,
             sku: item.orderItem.productVariant.sku,
@@ -95,6 +97,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
             price: item.orderItem.price,
             nameProduct: item.orderItem.productVariant.name,
             listPackages: item.packagesAndQuantitiesToGet.map(packageItem => {
+              checkQuantity+= packageItem.quantityToGet
               return {
 
                 locationName: packageItem.packageToGet.location.locationName,
@@ -103,7 +106,8 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
 
 
               }
-            })
+            }),
+            totalPackages: checkQuantity,
           }
         })
       }
@@ -119,7 +123,12 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
           }
         })
       }
-
+      let isShipping = true
+      listProducts.forEach((product) =>{
+        if(product.quantity > product.totalPackages ){
+          isShipping = false
+        }
+      })
       return {
         requesting: false,
         successful: true,
@@ -130,16 +139,17 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
           status: action.json.goodsIssueOrder.goodsIssueOrderStatusString,
           customerName: action.json.goodsIssueOrder.customerName,
           customerPhoneNumber: action.json.goodsIssueOrder.customerPhoneNumber,
-          deliveryDate:moment( action.json.goodsIssueOrder.deliveryDate).format("DD-MM-YYYY"),
+          deliveryDate: action.json.goodsIssueOrder.deliveryDate,
           deliverMethod: action.json.goodsIssueOrder.deliveryMethod,
-          createdDate: "10-02-2021",
+          createdDate: transaction.date,
           infoCreater: {
-            fullname: "transaction.applicationUser.fullname",
-            address: "transaction.applicationUser.address",
-            phoneNumber:" transaction.applicationUser.phoneNumber",
-            email: "transaction.applicationUser.email"
+            fullname: transaction.applicationUser.fullname,
+            address: transaction.applicationUser.address,
+            phoneNumber: transaction.applicationUser.phoneNumber,
+            email: transaction.applicationUser.email
           },
-          infoRejectOrder:infoRejectOrder,
+          isShipping: isShipping,
+          infoRejectOrder: infoRejectOrder,
           listGoodIssueProducts: listProducts
         }
       }

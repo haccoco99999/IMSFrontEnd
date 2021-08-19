@@ -52,8 +52,8 @@ import moment from 'moment';
                     deliveryMethod: item.deliveryMethod,
                     status: item.status,
                     createdByName: item.createdByName,
-                    deliveryDate:moment(item.deliveryDate).format("DD-MM-YYYY"),
-                    createdDate:moment(item.createdDate).format("DD-MM-YYYY") 
+                    deliveryDate:item.deliveryDate,
+                    createdDate:item.createdDate
                 }
             })),
             currentPage: action.json.paging.currentPage,
@@ -132,8 +132,8 @@ import moment from 'moment';
                     deliveryMethod: item.deliveryMethod,
                     status: item.status,
                     createdByName: item.createdByName,
-                    deliveryDate:moment(item.deliveryDate).format("DD-MM-YYYY"),
-                    createdDate:moment(item.createdDate).format("DD-MM-YYYY") 
+                    deliveryDate:item.deliveryDate,
+                    createdDate:item.createdDate 
                 }
             })),
             currentPage: action.json.paging.currentPage,
