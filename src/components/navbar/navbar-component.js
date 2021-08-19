@@ -1,6 +1,12 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import "./navbar.css";
+import {
+  ProgressBarNav,
+  ProgressBarStocktake,
+  ProgressBarCreateProduct,
+  ProgressBarPurchaseOrder,
+} from "../progress-bar/ProgressBar";
 export default function NavigationBar(props) {
   return (
     <nav class="navbar py-0 mb-4 sticky-top navbar-light shadow  bg-white">
@@ -61,6 +67,15 @@ export default function NavigationBar(props) {
             </div>
           </div>
         </div>
+        //todo: progress bar
+        {props.isShowProgressBarStocktake && (
+          <ProgressBarStocktake currentStep={props.currentStep} />
+        )}
+        {props.isShowCreateProductWithVariant && (
+          <ProgressBarCreateProduct currentStep={props.currentStep} />
+        )}
+        {props.isShowProgressBar} &&{" "}
+        <ProgressBarPurchaseOrder currentStep={props.currentStep} />
         <form class="d-flex">
           {props.listButton.map((button) => {
             // let classButton =
@@ -88,7 +103,7 @@ export default function NavigationBar(props) {
   );
 }
 export function NavigationBarTest(props) {
-  const history = useHistory()
+  const history = useHistory();
   return (
     <nav class="navbar py-0 mb-4 sticky-top navbar-light shadow  bg-white">
       <div class="container-fluid">
@@ -100,9 +115,12 @@ export function NavigationBarTest(props) {
                 aria-label="breadcrumb"
               >
                 <ol className="breadcrumb m-0 mt-2">
-
-                  <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Library</li>
+                  <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                  </li>
+                  <li class="breadcrumb-item active" aria-current="page">
+                    Library
+                  </li>
                 </ol>
               </nav>
               <div className="d-sm-flex align-items-sm-center ">

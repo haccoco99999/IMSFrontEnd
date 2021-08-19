@@ -669,6 +669,8 @@ export default function StocktakeDetailsComponent() {
     <div>
       
         <>
+        {
+          statusStocktakeStore === -1 &&
           <NavigationBar
             listButton={listButton}
             titleBar={IDStocktakeStore}
@@ -678,6 +680,48 @@ export default function StocktakeDetailsComponent() {
             currentPage="Stocktake details "
             classStatus={classStatus}
           />
+        }
+        {
+          statusStocktakeStore === 1 &&
+          <NavigationBar
+          listButton={listButton}
+          titleBar={IDStocktakeStore}
+          actionGoBack={goBackClick}
+          status={titleStatus}
+          home="Stocktake"
+          currentPage="Stocktake details "
+          classStatus={classStatus}
+          isShowProgressBarStocktake={true}
+          // currentStep={3}
+        />
+        }
+        {
+           statusStocktakeStore === 2 &&
+           <NavigationBar
+           listButton={listButton}
+           titleBar={IDStocktakeStore}
+           actionGoBack={goBackClick}
+           status={titleStatus}
+           home="Stocktake"
+           currentPage="Stocktake details "
+           classStatus={classStatus}
+           isShowProgressBarStocktake={true}
+           currentStep={2}/>
+        }
+       {
+           statusStocktakeStore === 0 &&
+           <NavigationBar
+           listButton={listButton}
+           titleBar={IDStocktakeStore}
+           actionGoBack={goBackClick}
+           status={titleStatus}
+           home="Stocktake"
+           currentPage="Stocktake details "
+           classStatus={classStatus}
+           isShowProgressBarStocktake={true}
+           currentStep={1}/>
+        }
+         
 
           <div className="wrapper">
             <div class="card">

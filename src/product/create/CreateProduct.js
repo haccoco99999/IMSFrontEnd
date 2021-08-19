@@ -198,14 +198,28 @@ export default function CreateProductComponent(props) {
   };
   return (
     <div>
-      <NavigationBar
-        listButton={listButtons}
-        titleBar="Create product"
-        actionGoBack={goBackClick}
-        status=""
-        home="Product"
-        currentPage="Create product"
-      />
+      {props.isSelectVariantType ? (
+        <NavigationBar
+          listButton={listButtons}
+          titleBar="Create product"
+          actionGoBack={goBackClick}
+          status=""
+          home="Product"
+          currentPage="Create product"
+          isShowCreateProductWithVariant={true}
+          currentStep={0}
+        />
+      ) : (
+        <NavigationBar
+          listButton={listButtons}
+          titleBar="Create product"
+          actionGoBack={goBackClick}
+          status=""
+          home="Product"
+          currentPage="Create product"
+        />
+      )}
+
       <div className="wrapper">
         {/* content 1 */}
         <div class="card">
@@ -320,7 +334,7 @@ export default function CreateProductComponent(props) {
                 <div class="row g-3 align-items-center">
                   <div class="col">
                     <label for="sku" class="col-form-label">
-                      SKU <span class="text-secondary" >(optional) </span>
+                      SKU <span class="text-secondary">(optional) </span>
                     </label>
                     <input
                       type="text"
