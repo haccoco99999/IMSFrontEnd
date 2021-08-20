@@ -70,7 +70,7 @@ export default function Login(props) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Email or Password is incorrect!",
+        text: loginStatus.messages,
       });
       dispatch({ type: LOGIN_CLEAN });
     }

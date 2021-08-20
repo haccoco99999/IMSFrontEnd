@@ -16,7 +16,7 @@ const initalState = {
 const reducer = function loginReducer(state = initalState, action) {
     switch (action.type) {
         case LOGIN_REQUESTING:
-            
+
             return {
                 requesting: true,
                 successful: false,
@@ -24,7 +24,7 @@ const reducer = function loginReducer(state = initalState, action) {
                 errors: false,
             }
         case LOGIN_SUCCESS:
-           
+
             return {
                 requesting: false,
                 successful: true,
@@ -32,7 +32,7 @@ const reducer = function loginReducer(state = initalState, action) {
                 errors: false,
             }
         case LOGIN_BANNED:
-            
+
             return {
                 errors: true,
                 messages: "Account was Banned",
@@ -40,11 +40,20 @@ const reducer = function loginReducer(state = initalState, action) {
                 successful: false,
             }
         case LOGIN_ERROR:
-            // console.log(action.error.toString())
-           
+            // console.log(action.json)
+            // let meessage = ""
+            // if (action.json.verbose === null) {
+            //     meessage = "Username or password is not correct"
+            // }
+            // else if (action.json.verbose === "User access has been denied by system") {
+            //     meessage = "User access has been denied by system"
+            // }
+            // else {
+            //     meessage = "Please check your connection"
+            // }
             return {
                 errors: true,
-                messages: "Username or password is not correct!",
+                messages: "Username or password is not correct",
                 requesting: false,
                 successful: false,
             }

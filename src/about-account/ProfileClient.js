@@ -30,28 +30,45 @@ export default function ProfileClient() {
   }
   function cancelUpdate() {
     setInfoProfile(infoProfileStore)
-    setIsEditProfile(false); 
+    setIsEditProfile(false);
   }
   function saveUpdate(event) {
 
 
     const form = document.getElementById("valid-form-update-profile");
-    alert(form.checkValidity())
     if (!form.checkValidity()) {
       form.classList.add("was-validated");
 
     }
     else {
-      var dataUpdate = {
 
-        fullname: infoProfile.fullname,
-        phoneNumber: infoProfile.phoneNumber,
-        address: infoProfile.address,
-        dateOfBirth: infoProfile.dateOfBirth,
-      };
-      dispatch(updateRequest({ token: infoProfileStore.token, dataUpdate: dataUpdate }))
-      form.classList.remove("was-validated");
-      setIsEditProfile(false); 
+
+      Swal.fire({
+        title: "Are you sure",
+        text: "Do you want to save?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: " #d33",
+        confirmButtonText: "Confirm",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          var dataUpdate = {
+
+            fullname: infoProfile.fullname,
+            phoneNumber: infoProfile.phoneNumber,
+            address: infoProfile.address,
+            dateOfBirth: infoProfile.dateOfBirth,
+          };
+          dispatch(updateRequest({ token: infoProfileStore.token, dataUpdate: dataUpdate }))
+          form.classList.remove("was-validated");
+          setIsEditProfile(false);
+        }
+      });
+
+
+
     }
 
 
@@ -69,9 +86,7 @@ export default function ProfileClient() {
       dateOfBirth: infoProfile.dateOfBirth,
     };
     dispatch(updateRequest({ token: infoProfileStore.token, dataUpdate: dataUpdate }))
-    // confirmPassword.current.value = undefined
-    // newPassword.current.value = undefined
-    // oldPassword.current.value = undefined
+
     setIsChangePassword(false)
   }
 
@@ -143,17 +158,33 @@ export default function ProfileClient() {
     setIsChangePassword(!isChangePassword)
   }
   async function changeUploadAvatar(event) {
-    let file = event.target.files[0];
-    const formData = new FormData()
-    formData.append("file", file);
-    formData.append("upload_preset", "rmwbm6go");
-    let data = {
 
-      userId: infoProfileStore.id,
-      profileImageLink: infoProfileStore.profileImageLink
+    Swal.fire({
+      title: "Are you sure",
+      text: "Do you want to save?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: " #d33",
+      confirmButtonText: "Confirm",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
 
-    }
-    dispatch(uploadAvatarImg({ token: infoProfileStore.token, data: data, formData: formData, isUpdateUser: true }))
+        let file = event.target.files[0];
+        const formData = new FormData()
+        formData.append("file", file);
+        formData.append("upload_preset", "rmwbm6go");
+        let data = {
+
+          userId: infoProfileStore.id,
+          profileImageLink: infoProfileStore.profileImageLink
+
+        }
+        dispatch(uploadAvatarImg({ token: infoProfileStore.token, data: data, formData: formData, isUpdateUser: true }))
+      }
+    });
+
 
 
     // const url = "https://api.cloudinary.com/v1_1/ims2021/upload";
@@ -247,14 +278,14 @@ export default function ProfileClient() {
                 </div>
                 <div class="form-group form-group-profile-client">
                   <label for="">Birthdate</label>
-                  
+
                   <input value={moment(infoProfile.dateOfBirth).format("YYYY-MM-DD")} onChange={onChangeValueProfile} required
-                    class="form-control" type="date" name="dateOfBirth" id=""  placeholder="" disabled={!isEditProfile} />
+                    class="form-control" type="date" name="dateOfBirth" id="" placeholder="" disabled={!isEditProfile} />
                   <div class="invalid-feedback">
                     Birthdate is invalid!
                   </div>
                 </div>
-                
+
                 {isEditProfile ? "" : <button type="button" class="btn btn-sm btn-primary" onClick={() => setIsEditProfile(true)}>Edit</button>}
                 {isEditProfile ? <button type="button" onClick={() => { cancelUpdate() }} class="btn btn-sm btn-primary btn-danger me-2">Cancel</button> : ""}
                 {isEditProfile ? <button type="button" onClick={() => { saveUpdate() }} class="btn btn-sm btn-primary btn-success">Update</button> : ""}

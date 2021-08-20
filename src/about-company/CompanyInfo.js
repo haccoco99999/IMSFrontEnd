@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import  { updateCompany } from './action'
+import { updateCompany } from './action'
 import { UPDATE_COMPANY_CLEAN, UPDATE_PROFILE_CLEAN } from './contants'
 import './companyInfo.css'
 import Swal from 'sweetalert2'
@@ -16,23 +16,24 @@ export default function CompanyInfo() {
 
 
   const { companyInfo, token, companyInfoStatus } = useSelector(state => ({
-    companyInfo : state.client.companyInfo,
-    token : state.client.token,
+    companyInfo: state.client.companyInfo,
+    token: state.client.token,
     companyInfoStatus: state.updateCompany
   }))
   let [isEditProfile, setIsEditProfile] = useState(false)
   // let [isUpdateProfile, setIsUpdateProfile] = useState(false)
   let [companyInfoState, setCompanyInfoState] = useState(companyInfo)
   // const [isChangePassword, setIsChangePassword] = useState(false)
-  useEffect(() =>{
+  useEffect(() => {
     setCompanyInfoState(
       companyInfo
     )
-  },[companyInfo])
+  }, [companyInfo])
   function onChangeCompanyInfo(event) {
     setCompanyInfoState(
-      (state) =>({
-      ...state, [event.target.name] :  event.target.value })
+      (state) => ({
+        ...state, [event.target.name]: event.target.value
+      })
     )
   }
   function cancelUpdate() {
@@ -50,19 +51,35 @@ export default function CompanyInfo() {
 
     }
     else {
-      var dataUpdate = {
-        
-        companyName: companyInfoState.companyName,
-        phoneNumber: companyInfoState.phoneNumber,
-        address: companyInfoState.address,
-        companyProfilePic:companyInfoState.companyProfilePic
-      };
-      dispatch(updateCompany({ token: token, data: dataUpdate, formData: undefined }))
-      form.classList.remove("was-validated");
-      setIsEditProfile(false);
-     }
 
- }
+      Swal.fire({
+        title: "Are you sure",
+        text: "Do you want to save?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: " #d33",
+        confirmButtonText: "Confirm",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          var dataUpdate = {
+
+            companyName: companyInfoState.companyName,
+            phoneNumber: companyInfoState.phoneNumber,
+            address: companyInfoState.address,
+            companyProfilePic: companyInfoState.companyProfilePic
+          };
+          dispatch(updateCompany({ token: token, data: dataUpdate, formData: undefined }))
+          form.classList.remove("was-validated");
+          setIsEditProfile(false);
+        }
+      });
+
+
+    }
+
+  }
 
 
   useEffect(() => {
@@ -97,29 +114,45 @@ export default function CompanyInfo() {
       })
       dispatch({ type: UPDATE_COMPANY_CLEAN })
     }
-   
+
   }, [companyInfoStatus])
 
   async function changeUploadAvatar(event) {
-    let file = event.target.files[0];
-    const formData = new FormData()
-    formData.append("file", file);
-    formData.append("upload_preset", "rmwbm6go");
-    let data = {
-    
-        
-        companyName: companyInfoState.companyName,
-        phoneNumber: companyInfoState.phoneNumber,
-        address: companyInfoState.address,
-        companyProfilePic:companyInfoState.companyProfilePic
-    
 
-    }
-    dispatch(updateCompany({ data: data, formData: formData, token:token }))
+    Swal.fire({
+      title: "Are you sure",
+      text: "Do you want to save?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: " #d33",
+      confirmButtonText: "Confirm",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let file = event.target.files[0];
+        const formData = new FormData()
+        formData.append("file", file);
+        formData.append("upload_preset", "rmwbm6go");
+        let data = {
 
-   
-  
-   
+
+          companyName: companyInfoState.companyName,
+          phoneNumber: companyInfoState.phoneNumber,
+          address: companyInfoState.address,
+          companyProfilePic: companyInfoState.companyProfilePic
+
+
+        }
+        dispatch(updateCompany({ data: data, formData: formData, token: token }))
+      }
+    });
+
+
+
+
+
+
 
   }
   return (
@@ -142,7 +175,7 @@ export default function CompanyInfo() {
                     <span>Change Image</span>
                   </label>
                   <input id="file" type="file" onChange={changeUploadAvatar} />
-                  <img  id="output" width="200" src={companyInfoState.companyProfilePic} />
+                  <img id="output" width="200" src={companyInfoState.companyProfilePic} />
                 </div>
 
 
@@ -151,10 +184,10 @@ export default function CompanyInfo() {
               <form className="needs-validation" id="valid-form-update-profile">
 
 
-                
+
                 <div class="form-group form-group-profile-client">
                   <label for="">Company Name:</label>
-                  <input type="text"  onChange={onChangeCompanyInfo} required value={companyInfoState.companyName}
+                  <input type="text" onChange={onChangeCompanyInfo} required value={companyInfoState.companyName}
                     class="form-control" name="companyName" id="" aria-describedby="helpId" placeholder="" disabled={!isEditProfile} />
                   <div class="invalid-feedback">
                     Please enter company name
@@ -162,10 +195,10 @@ export default function CompanyInfo() {
                 </div>
                 <div class="form-group form-group-profile-client">
                   <label for="">Address</label>
-                  <input type="text"  onChange={onChangeCompanyInfo} required value={companyInfoState.address}
+                  <input type="text" onChange={onChangeCompanyInfo} required value={companyInfoState.address}
                     class="form-control" name="address" id="" aria-describedby="helpId" placeholder="" disabled={!isEditProfile} />
                   <div class="invalid-feedback">
-                  Please enter address
+                    Please enter address
                   </div>
                 </div>
                 <div class="form-group form-group-profile-client">
@@ -176,7 +209,7 @@ export default function CompanyInfo() {
                     Phone Number is invalid!
                   </div>
                 </div>
-               
+
                 {isEditProfile ? "" : <button type="button" class="btn btn-sm btn-primary" onClick={() => setIsEditProfile(true)}>Edit</button>}
                 {isEditProfile ? <button type="button" onClick={() => { cancelUpdate() }} class="btn btn-sm btn-primary btn-danger me-2">Cancel</button> : ""}
                 {isEditProfile ? <button type="button" onClick={() => { saveUpdate() }} class="btn btn-sm btn-primary btn-success">Update</button> : ""}

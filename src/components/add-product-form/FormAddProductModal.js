@@ -162,7 +162,7 @@ export default function FormAddProductModal(props) {
               ></button>
             </div>
             <div className="modal-body modal-body-merge-price-quote">
-              <nav>
+              {/* <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                   <button
                     onClick={(e) => changeNavTabs(e)}
@@ -178,7 +178,7 @@ export default function FormAddProductModal(props) {
                   >
                     One Product
                   </button>
-                  {/* <button
+                  <button
                     onClick={(e) => changeNavTabs(e)}
                     name="addGroupProduct"
                     class="nav-link customize-nav-tabs"
@@ -191,9 +191,9 @@ export default function FormAddProductModal(props) {
                     aria-selected="false"
                   >
                     Group Product
-                  </button> */}
+                  </button>
                 </div>
-              </nav>
+              </nav> */}
               <div class="tab-content" id="nav-tabContent">
                 {eventNavTabs.addOneProduct ? (
                   <div>

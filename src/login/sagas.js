@@ -64,7 +64,7 @@ function* loginFlow (action) {
 
     json = yield call(loginApi, action.email, action.password)
 
-    if(json.result){
+   
       yield put(setClient(json))
 
 
@@ -74,13 +74,12 @@ function* loginFlow (action) {
       
       localStorage.setItem('token', JSON.stringify(json))
       history.push('/homepage/dashboard')
-    }
-    else{
-      // yield put({type: LOGIN_ERROR, {error:""}})
-    }
+    
+  
   
   } catch (error) {
-    
+
+    // error.response.then(response => response.json).then(json => console.log(json))
     yield put({ type: LOGIN_ERROR, error })
   } finally {
     if (yield cancelled()) {

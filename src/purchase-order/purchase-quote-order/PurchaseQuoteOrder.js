@@ -184,10 +184,7 @@ export default function PurchaseQuoteOrder() {
         {
             dataField: 'createdDate',
             text: 'Created Date',
-            align: (cell, row, rowIndex, colIndex) => {
-                return 'right';
-
-            },
+          
            
         },
        
@@ -195,12 +192,9 @@ export default function PurchaseQuoteOrder() {
         {
             dataField: 'totalPrice',
             text: 'Total Price',
-            align: (cell, row, rowIndex, colIndex) => {
-                return 'right';
-
-            },
+           
             formatter: (cell, row, rowIndex, colIndex) => {
-                return parseNumberToPrice(cell) +" VND"
+                return parseNumberToPrice(cell) +" VNĐ"
 
 
             },

@@ -54,6 +54,7 @@ export default function CreateAccount() {
   const location = useLocation()
   const [statusUser, setStatusUser] = useState("")
   useEffect(() => {
+    setStatusUser(location.state.status)
     if (location.state.status === "EDITUSER") {
 
       dispatch(
@@ -65,6 +66,12 @@ export default function CreateAccount() {
 
     else {
 
+
+      setEventPage(state => ({
+        ...state, isShowEdit: false, isShowChangePassword: true
+      }))
+      setStatusUser("CREATEUSER")
+
     }
     return () => {
       dispatch({ type: GET_DETAIL_ACC_CLEAN })
@@ -72,19 +79,16 @@ export default function CreateAccount() {
   }, [])
 
   useEffect(() => {
+
     setInfoAccountState(infoDetailAccountStore)
     if (infoDetailAccountStore.isActive !== undefined) {
+
       setEventPage(state => ({
         ...state, isShowEdit: true, isShowChangePassword: false
       }))
       setStatusUser("EDITUSER")
     }
-    else {
-      setEventPage(state => ({
-        ...state, isShowEdit: false, isShowChangePassword: true
-      }))
-      setStatusUser("CREATEUSER")
-    }
+
   }, [infoDetailAccountStore])
 
   useEffect(() => {
@@ -278,17 +282,31 @@ export default function CreateAccount() {
   function onchangeInputInfoAccount(event) {
 
     if (statusUser === "EDITUSER") {
-      let data = {
-        userId: infoAccountState.userID,
-        email: infoAccountState.email,
-        phoneNumber: infoAccountState.phoneNumber,
-        address: infoAccountState.address,
-        roleId: event.target.value,
-        dateOfBirth: infoAccountState.dateOfBirth,
-        fullname: infoAccountState.fullname
-      }
+      Swal.fire({
+        title: "Are you sure",
+        text: "Do you want to save?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: " #d33",
+        confirmButtonText: "Confirm",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let data = {
+            userId: infoAccountState.userID,
+            email: infoAccountState.email,
+            phoneNumber: infoAccountState.phoneNumber,
+            address: infoAccountState.address,
+            roleId: event.target.value,
+            dateOfBirth: infoAccountState.dateOfBirth,
+            fullname: infoAccountState.fullname
+          }
 
-      dispatch(updateUserAccountDetail({ data: data, token: token }))
+          dispatch(updateUserAccountDetail({ data: data, token: token }))
+        }
+      });
+
 
     }
     setInfoAccountState(state => ({
@@ -339,26 +357,7 @@ export default function CreateAccount() {
         dispatch(CreateAccountAction({ data: data, token: token, formData: formData }));
 
         form.classList.remove("was-validated");
-        // const url = "https://api.cloudinary.com/v1_1/ims2021/upload";
 
-
-
-
-        // fetch(url, {
-        //   method: "POST",
-
-        //   body: formData,
-        // })
-        //   .then((response) => {
-        //     return response.json();
-        //   }).then((json) => {
-        //     console.log(json);
-
-
-
-        //   });
-
-        // history.go(-1)
       }
 
 
@@ -397,30 +396,28 @@ export default function CreateAccount() {
 
 
   }
-  function clickCancel() {
-    newPassword.current.value = ""
-    confirmPassword.current.value = ""
-    newPassword.current.classList.remove("is-invalid", "is-valid")
-    confirmPassword.current.classList.remove("is-invalid", "is-valid")
-    setInfoAccountState(infoDetailAccountStore)
-    setClickEdit();
-  }
-
 
   function clickSetActiveAccount() {
+    Swal.fire({
+      title: "Are you sure",
+      text: "Do you want to save?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: " #d33",
+      confirmButtonText: "Confirm",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const data = {
+          userId: infoDetailAccountStore.userID,
+          isDeactivated: !infoDetailAccountStore.isActive
+        }
+        dispatch(setActiveAccountAction({ data: data, token: token }))
+      }
+    });
 
-    const data = {
-      userId: infoDetailAccountStore.userID,
-      isDeactivated: !infoDetailAccountStore.isActive
-    }
-    dispatch(setActiveAccountAction({ data: data, token: token }))
   }
-  function setClickEdit() {
-    setEventPage((state) => ({
-      ...state, isShowEdit: !state.isShowEdit
-    }))
-  }
-
 
   const listButton = []
   // console.log(listRoles)
@@ -468,11 +465,12 @@ export default function CreateAccount() {
 
 
                 <div class="profile-pic">
-                  <label class="-label" for="file">
+
+                  <label style={statusUser === "EDITUSER" ? { opacity: " 0", cursor: "default" } : {}} class="-label" for="file">
                     <span class="glyphicon glyphicon-camera"></span>
                     <span>Change Image</span>
                   </label>
-                  <input id="file" type="file" onChange={changeUploadAvatar} />
+                  <input disabled={statusUser === "EDITUSER"} id="file" type="file" onChange={changeUploadAvatar} />
                   <img id="output-avatar" width="200" src={infoDetailAccountStore.profileImageLink !== "" ? infoDetailAccountStore.profileImageLink : "https://image.flaticon.com/icons/png/512/3135/3135715.png"} />
                 </div>
                 {statusUser === "CREATEUSER" ? base64Img === "" ? <p class="text-danger text-center">Set your avatar(*)</p> : <p class="text-success text-center">Avatar is valid</p> : ""}
