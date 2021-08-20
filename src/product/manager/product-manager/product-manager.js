@@ -260,7 +260,7 @@ export default function () {
                       striped
                       hover
                       condensed
-                      // headerClasses="table-header-receipt"
+                      headerClasses="table-header-receipt"
                       columns={columns}
                       data={listProducstStore}
                       rowEvents={rowEvents}

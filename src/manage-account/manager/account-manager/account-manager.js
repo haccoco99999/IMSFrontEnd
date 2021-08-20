@@ -312,6 +312,7 @@ function AccountManager() {
                       <hr />
                       <BootstrapTable
                         keyField='email'
+                        headerClasses="table-header-receipt"
                         data={data}
                         columns={columns}
                         striped

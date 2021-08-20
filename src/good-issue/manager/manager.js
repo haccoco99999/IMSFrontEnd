@@ -1,170 +1,163 @@
 import React, { useEffect, useState } from "react";
-import { Typeahead, AsyncTypeahead } from 'react-bootstrap-typeahead';
+import { Typeahead, AsyncTypeahead } from "react-bootstrap-typeahead";
 import "../goodissue.css";
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import Progress from "../progress/progressing";
-import BootstrapTable from 'react-bootstrap-table-next';
-import { getAllGoodsIssue, getAllGoodsIssueRequisition } from './action'
+import BootstrapTable from "react-bootstrap-table-next";
+import { getAllGoodsIssue, getAllGoodsIssueRequisition } from "./action";
 import { useDispatch, useSelector } from "react-redux";
 import DetailGoodIssue from "../good-issue-detail/GoodIssueDetail";
-import 'react-bootstrap-typeahead/css/Typeahead.css';
+import "react-bootstrap-typeahead/css/Typeahead.css";
 import SearchTest from "./search";
 import { useHistory } from "react-router-dom";
 import Gallery from "../../Gallery/Gallery";
 import { GalleryGoodIssue } from "../../Gallery/Gallery";
-import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
+import ToolkitProvider, {
+  ColumnToggle,
+} from "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit";
 import { CustomToggleList } from "../../components/toggle-columns-table/CustomToggleList";
-import { GalleryLoading, TableLoading } from "../../components/loading/loading-component";
+import {
+  GalleryLoading,
+  TableLoading,
+} from "../../components/loading/loading-component";
 import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { GoodsIssueFilter } from "../../components/filter/FilterComponents";
 import PagingComponent from "../../components/paging/paging-component";
 import { setStatusLoadingTable } from "../../helper/loadDataHelper";
 import moment from "moment";
 export default function Manager(props) {
+  let history = useHistory();
+  const { goodIssueStore, goodIssueRequisition, token, pageAuthorized } =
+    useSelector((state) => ({
+      goodIssueStore: state.GetAllGoodsIssues,
+      goodIssueRequisition: state.getAllGoodsIssuesRequisition,
+      token: state.client.token,
+      pageAuthorized: state.client.pageAuthorized,
+    }));
 
-  let history = useHistory()
-  const { goodIssueStore, goodIssueRequisition, token , pageAuthorized} = useSelector(state => ({
-    goodIssueStore: state.GetAllGoodsIssues,
-    goodIssueRequisition: state.getAllGoodsIssuesRequisition,
-    token: state.client.token,
-    pageAuthorized: state.client.pageAuthorized
-  }))
-
-  let [listGoodIssues, setListGoodIssues] = useState([])
-  let [listGoodIssueRequisition, setListGoodIssueRequisition] = useState([])
-  const dispatch = useDispatch()
+  let [listGoodIssues, setListGoodIssues] = useState([]);
+  let [listGoodIssueRequisition, setListGoodIssueRequisition] = useState([]);
+  const dispatch = useDispatch();
   const goodsIssueFilterInit = {
-
     searchQuery: "",
     statuses: [
       { key: "Packing", value: "Packing" },
       { key: "Shipping", value: "Shipping " },
       { key: "Completed", value: "Completed" },
       { key: "Cancel", value: "Cancel" },
-    ]
-    ,
+    ],
     fromCreatedDate: "",
     toCreatedDate: "",
     fromDeliveryDate: "",
     toDeliveryDate: "",
-
-  }
+  };
   const [goodsIssueFilter, setGoodsIssueFilter] = useState({
     currentPage: 1,
     SizePerPage: 25,
-    ...goodsIssueFilterInit
-  })
+    ...goodsIssueFilterInit,
+  });
 
   useEffect(() => {
-    dispatch(getAllGoodsIssue({ filter: parseFilterToString(goodsIssueFilter), token: token }))
-    dispatch(getAllGoodsIssueRequisition({ token: token }))
-  }, [])
+    dispatch(
+      getAllGoodsIssue({
+        filter: parseFilterToString(goodsIssueFilter),
+        token: token,
+      })
+    );
+    dispatch(getAllGoodsIssueRequisition({ token: token }));
+  }, []);
   useEffect(() => {
-    setListGoodIssues(
-      goodIssueStore.infoListGoodIssue.listGoodIssue
-    )
+    setListGoodIssues(goodIssueStore.infoListGoodIssue.listGoodIssue);
     setListGoodIssueRequisition(
       goodIssueRequisition.infoListGoodIssueRequisition.listGoodIssueRequisition
-    )
-  }, [goodIssueStore, goodIssueRequisition])
-  console.log(listGoodIssues)
+    );
+  }, [goodIssueStore, goodIssueRequisition]);
+  console.log(listGoodIssues);
   const columns = [
     {
-      dataField: 'goodsIssueNumber',
-      text: 'Goods Issue Request ID',
-
+      dataField: "goodsIssueNumber",
+      text: "Goods Issue Request ID",
     },
     {
-      dataField: 'status',
-      text: 'Status',
-      align: 'center',
+      dataField: "status",
+      text: "Status",
+      align: "center",
       align: (cell, row, rowIndex, colIndex) => {
-        return 'left';
-
+        return "left";
       },
       formatter: (cell, row, rowIndex, extraData) => {
-
         if (row.status === "Packing") {
-          return <span class="badge bg-warning text-dark">Packing</span>
-
+          return <span class="badge bg-warning text-dark">Packing</span>;
         }
         if (row.status === "Shipping") {
-          return <span class="badge bg-primary">Shipping</span>
-
-
+          return <span class="badge bg-primary">Shipping</span>;
         }
         if (row.status === "Completed") {
-          return <span class="badge bg-success">Completed</span>
-
-
+          return <span class="badge bg-success">Completed</span>;
         }
 
         if (row.status === "Cancel") {
-          return <span class="badge bg-danger">Canceled</span>
-
-
+          return <span class="badge bg-danger">Canceled</span>;
         }
-        return row.status
-
-      }
-    },
-    {
-      dataField: 'createdByName',
-      text: 'Created By'
-    },
-
-    {
-      dataField: 'deliveryMethod',
-      text: 'Delivery Method',
-
-    },
-    {
-      dataField: 'deliveryDate',
-      text: 'Delivery Date',
-      align: (cell, row, rowIndex, colIndex) => {
-        return 'right';
-
+        return row.status;
       },
-      formatter:(cell) =>{
-        return moment(cell).add(7, "h").format("DD-MM-YYYY")
-      }
     },
     {
-    
-      dataField: 'createdDate',
-      text: 'Created Date',
-      align: (cell, row, rowIndex, colIndex) => {
-        return 'right';
-
-      },
-      formatter:(cell) =>{
-        return moment(cell).add(7, "h").format("DD-MM-YYYY")
-      }
+      dataField: "createdByName",
+      text: "Created By",
     },
 
-
+    {
+      dataField: "deliveryMethod",
+      text: "Delivery Method",
+    },
+    {
+      dataField: "deliveryDate",
+      text: "Delivery Date",
+      align: (cell, row, rowIndex, colIndex) => {
+        return "right";
+      },
+      formatter: (cell) => {
+        return moment(cell).add(7, "h").format("DD-MM-YYYY");
+      },
+    },
+    {
+      dataField: "createdDate",
+      text: "Created Date",
+      align: (cell, row, rowIndex, colIndex) => {
+        return "right";
+      },
+      formatter: (cell) => {
+        return moment(cell).add(7, "h").format("DD-MM-YYYY");
+      },
+    },
   ];
-
 
   const rowEvents = {
     onClick: (e, row, rowIndex) => {
-      history.push("/homepage/good-issue/detail", { id: row.id, status: row.status })
-
+      history.push("/homepage/good-issue/detail", {
+        id: row.id,
+        status: row.status,
+      });
     },
     // onMouseEnter: (e, row, rowIndex) => {
     //   console.log(`enter on row with index: ${rowIndex}`);
     // }
   };
   function clickGoodIssueRequisition(data) {
-    history.push("/homepage/good-issue/detail", { id: data.id, status: data.status })
+    history.push("/homepage/good-issue/detail", {
+      id: data.id,
+      status: data.status,
+    });
   }
   const hiddenRowKeys = [-1, -3];
   const { ToggleList } = ColumnToggle;
 
   function onChangeGoodsIssueFilter(event) {
     setGoodsIssueFilter((state) => ({
-      ...state, [event.target.name]: event.target.value
-    }))
+      ...state,
+      [event.target.name]: event.target.value,
+    }));
   }
   function submitgoodsIssueFilter() {
     dispatch(
@@ -173,93 +166,95 @@ export default function Manager(props) {
         token: token,
       })
     );
-
-
-
   }
   function resetGoodsIssueFilter() {
-    let dataDefault = { ...goodsIssueFilter, ...goodsIssueFilterInit }
+    let dataDefault = { ...goodsIssueFilter, ...goodsIssueFilterInit };
     dispatch(
       getAllGoodsIssue({
         filter: parseFilterToString(dataDefault),
         token: token,
       })
     );
-    setGoodsIssueFilter(dataDefault)
+    setGoodsIssueFilter(dataDefault);
   }
   function selectStatusFilter(selected) {
-    setGoodsIssueFilter(state => ({ ...state, statuses: selected.map(item => item) }))
-
+    setGoodsIssueFilter((state) => ({
+      ...state,
+      statuses: selected.map((item) => item),
+    }));
   }
   function nextPagingClick() {
-
-    let dataFilter = { ...goodsIssueFilter, currentPage: goodsIssueFilter.currentPage + 1 }
+    let dataFilter = {
+      ...goodsIssueFilter,
+      currentPage: goodsIssueFilter.currentPage + 1,
+    };
     dispatch(
       getAllGoodsIssue({
         filter: parseFilterToString(dataFilter),
         token: token,
       })
     );
-    setGoodsIssueFilter(dataFilter)
+    setGoodsIssueFilter(dataFilter);
   }
   function backPagingClick() {
-
-    let dataFilter = { ...goodsIssueFilter, currentPage: goodsIssueFilter.currentPage - 1 }
+    let dataFilter = {
+      ...goodsIssueFilter,
+      currentPage: goodsIssueFilter.currentPage - 1,
+    };
     dispatch(
       getAllGoodsIssue({
         filter: parseFilterToString(dataFilter),
         token: token,
       })
     );
-    setGoodsIssueFilter(dataFilter)
+    setGoodsIssueFilter(dataFilter);
   }
   function setSizePage(event) {
-
-    let dataFilter = { ...goodsIssueFilter, SizePerPage: event.target.value }
+    let dataFilter = { ...goodsIssueFilter, SizePerPage: event.target.value };
     dispatch(
       getAllGoodsIssue({
         filter: parseFilterToString(dataFilter),
         token: token,
       })
     );
-    setGoodsIssueFilter(dataFilter)
+    setGoodsIssueFilter(dataFilter);
   }
 
   function parseFilterToString(dataFilter) {
-    let filterString = ""
-    Object.entries(dataFilter).forEach(item => {
+    let filterString = "";
+    Object.entries(dataFilter).forEach((item) => {
       if (item[1] !== "") {
-
-
         if (item[0] === "statuses") {
-
-          item[1].forEach(status => filterString += item[0] + "=" + status.key + "&")
-
+          item[1].forEach(
+            (status) => (filterString += item[0] + "=" + status.key + "&")
+          );
+        } else {
+          filterString += item[0] + "=" + item[1] + "&";
         }
-        else {
-
-          filterString += item[0] + "=" + item[1] + "&"
-        }
-
       }
-    })
-    return filterString
+    });
+    return filterString;
   }
   return (
     <div className="space-top-heading wrapper">
       {/* title */}
-      {pageAuthorized.includes("IssueRequisition") ? <div>
-        <div className="title-heading mt-2">
-          <span>Goods Issues Requisition</span>
+      {pageAuthorized.includes("IssueRequisition") ? (
+        <div>
+          <div className="title-heading mt-2">
+            <span>Goods Issues Requisition</span>
+          </div>
+          {goodIssueRequisition.successful ? (
+            <GalleryGoodIssue
+              listData={listGoodIssueRequisition}
+              clickGoodIssueRequisition={clickGoodIssueRequisition}
+            />
+          ) : (
+            <GalleryLoading />
+          )}
         </div>
-        {goodIssueRequisition.successful ? <GalleryGoodIssue listData={listGoodIssueRequisition}
-          clickGoodIssueRequisition={clickGoodIssueRequisition}
-        /> : <GalleryLoading />}
-      </div> : ""}
-
-
-
-
+      ) : (
+        ""
+      )}
 
       <div className="title-heading mt-2">
         <span>Goods Issues</span>
@@ -267,7 +262,8 @@ export default function Manager(props) {
       {/* content block  */}
 
       <div class="d-grid gap-2">
-        <GoodsIssueFilter filter={goodsIssueFilter}
+        <GoodsIssueFilter
+          filter={goodsIssueFilter}
           selectStatusFilter={selectStatusFilter}
           resetFilter={resetGoodsIssueFilter}
           submitFilter={submitgoodsIssueFilter}
@@ -275,22 +271,30 @@ export default function Manager(props) {
         />
         <div class="">
           <div className="card">
-            <div class="card-header text-white bg-secondary">List Goods Issue</div>
+            <div class="card-header text-white bg-secondary">
+              List Goods Issue
+            </div>
             <div className="card-body">
-
-              <PagingComponent pageCount={goodIssueStore.infoListGoodIssue.pageCount}
+              <PagingComponent
+                pageCount={goodIssueStore.infoListGoodIssue.pageCount}
                 setSizePage={setSizePage}
                 nextPagingClick={nextPagingClick}
                 backPagingClick={backPagingClick}
-                currentPage={goodsIssueFilter.currentPage} />
+                currentPage={goodsIssueFilter.currentPage}
+              />
 
               {/* <p onClick={handleClick}><i class="bi bi-file-earmark-plus"></i>Add</p> */}
 
               {/* <PagingComponent sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
-              <p className="dropdown-toggle pointer" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+              <p
+                className="dropdown-toggle pointer"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseExample"
+                aria-expanded="false"
+                aria-controls="collapseExample"
+              >
                 <i class="bi bi-sliders"></i> Setting Colum
               </p>
-
 
               <ToolkitProvider
                 keyField="id"
@@ -298,49 +302,40 @@ export default function Manager(props) {
                 columns={columns}
                 columnToggle
               >
-                {
-                  props => (
-                    <div>
-                      <CustomToggleList {...props.columnToggleProps} />
-                      <hr />
-                      <BootstrapTable
-
-
-
-
-                        keyField="id"
-                        striped
-                        hover
-                        condensed
-                        // headerClasses="table-header-receipt"
-                        noDataIndication="Table is Empty"
-                        columns={columns}
-                        data={listGoodIssues}
-                        rowEvents={rowEvents}
-                        {...props.baseProps}
-                        rowClasses="pointer"
-                        noDataIndication={() => setStatusLoadingTable({requesting: goodIssueRequisition.requesting , successful:goodIssueRequisition.successful})}
-                      />
-                    </div>
-                  )
-                }
+                {(props) => (
+                  <div>
+                    <CustomToggleList {...props.columnToggleProps} />
+                    <hr />
+                    <BootstrapTable
+                      keyField="id"
+                      striped
+                      hover
+                      condensed
+                      headerClasses="table-header-receipt"
+                      noDataIndication="Table is Empty"
+                      columns={columns}
+                      data={listGoodIssues}
+                      rowEvents={rowEvents}
+                      {...props.baseProps}
+                      rowClasses="pointer"
+                      noDataIndication={() =>
+                        setStatusLoadingTable({
+                          requesting: goodIssueRequisition.requesting,
+                          successful: goodIssueRequisition.successful,
+                        })
+                      }
+                    />
+                  </div>
+                )}
               </ToolkitProvider>
-
-
-
-
             </div>
           </div>
         </div>
-
-
       </div>
       {/* <Filter /> */}
     </div>
-
   );
 }
-
 
 // <div className="wrapper-content shadow">
 // {/* list nut bam  */}
@@ -387,8 +382,6 @@ export default function Manager(props) {
 //     </svg>
 //     Filter
 //   </a>
-
-
 
 //   <BootstrapTable classes="foo"
 //     keyField='id'

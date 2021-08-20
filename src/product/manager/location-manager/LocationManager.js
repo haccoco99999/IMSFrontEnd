@@ -52,16 +52,14 @@ export default function LocationManager() {
     });
   };
   const locationFilterInit = {
-  
     searchQuery: "",
-    IsLocationOnly: true
-
-  }
+    IsLocationOnly: true,
+  };
   const [locationFilter, setLocationFilter] = useState({
     currentPage: 1,
     sizePerPage: 25,
-    ...locationFilterInit
-  })
+    ...locationFilterInit,
+  });
   //todo:Store
   const {
     listLocationsStore,
@@ -96,82 +94,78 @@ export default function LocationManager() {
   ];
 
   function nextPagingClick() {
-
-
-
-    let dataFilter = { ...locationFilter, currentPage: locationFilter.currentPage + 1 }
+    let dataFilter = {
+      ...locationFilter,
+      currentPage: locationFilter.currentPage + 1,
+    };
     dispatch(
       getAllLocationsAction({
         filter: parseFilterToString(dataFilter),
         token: token,
       })
     );
-    setLocationFilter(dataFilter)
+    setLocationFilter(dataFilter);
   }
   function backPagingClick() {
-
-    let dataFilter = { ...locationFilter, currentPage: locationFilter.currentPage - 1 }
+    let dataFilter = {
+      ...locationFilter,
+      currentPage: locationFilter.currentPage - 1,
+    };
     dispatch(
       getAllLocationsAction({
         filter: parseFilterToString(dataFilter),
         token: token,
       })
     );
-    setLocationFilter(dataFilter)
+    setLocationFilter(dataFilter);
   }
   function onChangeLocationFilter(event) {
     setLocationFilter((state) => ({
-      ...state, [event.target.name]: event.target.value
-    }))
+      ...state,
+      [event.target.name]: event.target.value,
+    }));
   }
   function submitLocationFilter() {
-
     dispatch(
       getAllLocationsAction({
         filter: parseFilterToString(locationFilter),
         token: token,
       })
     );
-
-
   }
   function resetLocationFilter() {
-    
     dispatch(
       getAllLocationsAction({
         filter: parseFilterToString({
-          ...locationFilter, ...locationFilterInit
+          ...locationFilter,
+          ...locationFilterInit,
         }),
         token: token,
       })
     );
     setLocationFilter((state) => ({
-      ...state, ...locationFilterInit
-    }))
+      ...state,
+      ...locationFilterInit,
+    }));
   }
   function setSizePage(event) {
-
-    let dataFilter = { ...locationFilter, sizePerPage: event.target.value }
+    let dataFilter = { ...locationFilter, sizePerPage: event.target.value };
     dispatch(
       getAllLocationsAction({
         filter: parseFilterToString(dataFilter),
         token: token,
       })
     );
-    setLocationFilter(dataFilter)
+    setLocationFilter(dataFilter);
   }
   function parseFilterToString(dataFilter) {
-    let filterString = ""
-    Object.entries(dataFilter).forEach(item => {
+    let filterString = "";
+    Object.entries(dataFilter).forEach((item) => {
       if (item[1] !== "") {
-
-
-        filterString += item[0] + "=" + item[1] + "&"
-
-
+        filterString += item[0] + "=" + item[1] + "&";
       }
-    })
-    return filterString
+    });
+    return filterString;
   }
 
   const rowEvents = {
@@ -335,7 +329,6 @@ export default function LocationManager() {
         filter={locationFilter}
         submitFilter={submitLocationFilter}
         resetFilter={resetLocationFilter}
-
       />
 
       <div class="pb-3">
@@ -347,16 +340,21 @@ export default function LocationManager() {
               pageCount={pageCount}
               nextPagingClick={nextPagingClick}
               backPagingClick={backPagingClick}
-              currentPage={locationFilter.currentPage} />
+              currentPage={locationFilter.currentPage}
+            />
 
-            <button onClick={showModal} type="button" class=" btn-sm mb-3 btn btn-primary">Add Location</button>
+            <button
+              onClick={showModal}
+              type="button"
+              class=" btn-sm mb-3 btn btn-primary"
+            >
+              Add Location
+            </button>
 
             {/* <PagingComponent sizePerPage={filter.sizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
 
-
             <BootstrapTable
-
-
+              headerClasses="table-header-receipt"
               keyField="id"
               striped
               hover
@@ -365,17 +363,16 @@ export default function LocationManager() {
               data={listLocationsStore}
               rowEvents={rowEvents}
               rowClasses="pointer"
-              noDataIndication={() =>setStatusLoadingTable({requesting: locationManagerReducerStatus.requesting , successful:locationManagerReducerStatus.successful}) }
+              noDataIndication={() =>
+                setStatusLoadingTable({
+                  requesting: locationManagerReducerStatus.requesting,
+                  successful: locationManagerReducerStatus.successful,
+                })
+              }
             />
-
-
-
-
           </div>
         </div>
       </div>
-
-
 
       <ModalFunction
         modalRef={modalRef}
@@ -383,8 +380,8 @@ export default function LocationManager() {
         isCreate={isCreate}
         locationData={locationData}
         token={token}
-      // messaages={messages}
-      // onChangeValue={onChangeValue}
+        // messaages={messages}
+        // onChangeValue={onChangeValue}
       />
     </>
   );

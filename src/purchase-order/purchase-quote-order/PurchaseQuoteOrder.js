@@ -567,6 +567,7 @@ export default function PurchaseQuoteOrder() {
                                             <hr />
                                             <BootstrapTable
                                                 keyField='id'
+                                                headerClasses="table-header-receipt"
                                                 data={listPurchaseOrder}
                                                 columns={columns}
                                                 striped

@@ -182,6 +182,7 @@ export default function RequestUpdateManager() {
 
             <BootstrapTable
           keyField="productVariantId"
+          headerClasses="table-header-receipt"
           striped
           hover
           condensed

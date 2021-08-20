@@ -139,7 +139,7 @@ export function GoodsIssueFilter(props) {
                         <div class="form-group">
                             <label for="">Search</label>
                             <input type="text" onChange={props.onChangeValueFilter} value={props.filter.searchQuery}
-                                class="form-control" name="searchQuery" id="" aria-describedby="helpId" placeholder="" />
+                                class="form-control" name="searchQuery" id="" aria-describedby="helpId" placeholder="Searcg by ID" />
                         </div>
                         <div className="col-md-6">
 
