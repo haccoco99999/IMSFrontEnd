@@ -189,12 +189,7 @@ export default function DetailGoodIssue() {
     function setListButtonNav(status) {
         if (status === "IssueRequisition" && pageAuthorized.includes(status)) {
             return [
-                {
-                    isShow: true,
-                    title: "Reject",
-                    action: () => clickReject(),
-                    class: "btn-danger"
-                },
+             
 
                 {
                     isShow: true,

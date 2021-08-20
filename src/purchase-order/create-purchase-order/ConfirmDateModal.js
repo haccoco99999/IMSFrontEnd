@@ -88,12 +88,12 @@ export default function ConfirmDateModal(props) {
 
       head: [['DELIVERY ADDRESS']],
       body: [
-     
-      
+
+
         ['Street Address'],
         [companyInfo.address],
         [`Phone: ${companyInfo.phoneNumber} `],
-       
+
 
       ],
     })
@@ -146,7 +146,7 @@ export default function ConfirmDateModal(props) {
     doc.text(`${props.infoPurchaseOrder.infoUserPurchaseOrder.name}, ${props.infoPurchaseOrder.infoUserPurchaseOrder.phoneNumber} EMail: ${props.infoPurchaseOrder.infoUserPurchaseOrder.email}`, 105, doc.internal.pageSize.height - 5, "center")
 
 
-
+    // doc.output('blob')
     return doc.output('datauristring')
 
     // sendEmailQuote(doc.output('blob'))
@@ -154,7 +154,26 @@ export default function ConfirmDateModal(props) {
   // function onChangeValue(event) {
   //   setContentMail(event.target.value)
   // }
+  function checkForm() {
+    if (isSendMail) {
+      const form = document.getElementById("validContentMail");
+      if (!form.checkValidity()) {
 
+        form.classList.add("was-validated");
+      }
+      else {
+        // let content = contentMail.current.value + "</br>" + `<iframe width="100%"  class="embed-responsive-item" src=${print() + "#toolbar=0"}></iframe>`
+        props.confirmPurchaseOrder(isSendMail,doc.output('blob'), contentMail.current.value)
+
+      }
+    }
+    else {
+      props.confirmPurchaseOrder(isSendMail,"", "")
+
+    }
+
+
+  }
   const [isSendMail, setIsSendMail] = useState(false)
   const contentMail = useRef("")
   return (
@@ -183,12 +202,16 @@ export default function ConfirmDateModal(props) {
                 <label for="exampleFormControlInput1" class="form-label">To email address</label>
                 <input type="email" class="form-control" disabled id="exampleFormControlInput1" value={props.supplier.email} placeholder="name@example.com" />
               </div>
+              <form id="validContentMail" className="needs-validation">
+                <div class="mb-3">
+                  <label for="validationTextarea" class="form-label">Textarea</label>
+                  <textarea class="form-control" ref={contentMail} id="validationTextarea" placeholder="Required example textarea" rows="5" required></textarea>
+                  <div class="invalid-feedback">
+                    Please enter a message in the content mail.
+                  </div>
+                </div>
 
-              <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Content:</label>
-                <textarea  ref={contentMail} class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
-              </div>
-
+              </form>
               <iframe width="100%" height="800" class="embed-responsive-item" src={print() + "#toolbar=0"}></iframe></div>) : ""}
 
 
@@ -196,7 +219,7 @@ export default function ConfirmDateModal(props) {
           </div>
           <div class="modal-footer">
             <button type="button" onClick={() => props.closeConfirmModal()} class="btn btn-secondary btn-cancel-preview" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" onClick={() => props.confirmPurchaseOrder(isSendMail, print(), contentMail.current.value)} class="btn btn-primary">Confirm</button>
+            <button type="button" onClick={() => checkForm()} class="btn btn-primary">Confirm</button>
           </div>
         </div>
       </div>
@@ -205,4 +228,4 @@ export default function ConfirmDateModal(props) {
   // }
   // return null
 }
-
+// props.confirmPurchaseOrder(isSendMail, print(), contentMail.current === null ? "" : contentMail.current.value)

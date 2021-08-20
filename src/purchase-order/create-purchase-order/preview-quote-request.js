@@ -161,7 +161,7 @@ export default function PreviewSendMail(props) {
                         </div>
                         <div class="modal-footer">
                             <button type="button" onClick={() => props.closePreview()} class="btn btn-secondary btn-cancel-preview" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" onClick={() => props.clostPreviewSendMail(doc.output('blob'), props.isResend)} class="btn btn-primary">Send email to vendor</button>
+                            <button type="button" onClick={() => props.clostPreviewSendMail(doc.output('blob'))} class="btn btn-primary">Send email to vendor</button>
                         </div>
                     </div>
                 </div>

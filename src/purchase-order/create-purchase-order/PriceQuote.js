@@ -675,13 +675,12 @@ export default function PurchaseOrderConfirm() {
             formData.append('Subject', "Mail from ABC Inventory")
             formData.append('PurchaseOrderId', purchaseOrderDataGlobal.orderId)
             formData.append('pdf', pdf)
-
             dispatch(confirmPurchaseORderByManager({ data: data, token: token, formData: formData }))
 
         }
         else {
 
-            dispatch(confirmPurchaseORderByManager({ data: data, token: token, formData: undefined }))
+            // dispatch(confirmPurchaseORderByManager({ data: data, token: token, formData: undefined }))
 
         }
         setEventPage((state) => ({
@@ -1093,14 +1092,18 @@ export default function PurchaseOrderConfirm() {
 
     }
     function cancelEditClick() {
+
+
+        
         Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
+            title: "Are you sure",
+            text: "Do you want to save?",
+            icon: "question",
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: " #d33",
+            confirmButtonText: "Confirm",
+            reverseButtons: true,
         }).then((result) => {
             if (result.isConfirmed) {
 
@@ -1130,28 +1133,41 @@ export default function PurchaseOrderConfirm() {
     }
 
     function saveEditClick() {
-
-        let data = {
-            purchaseOrderNumber: purchaseOrderDataGlobal.orderId,
-            supplierId: supplier.id,
-            mergedRequisitionIds: [
-                ...mergedRequisitionIds.filter(id => id !== purchaseOrderDataGlobal.orderId)
-            ],
-            deadline: "2021-07-11T05:37:29.052Z",
-            mailDescription: mailDescription,
-            orderItemInfos: listProductPurchaseOrder.map(product => {
-                return {
-                    productVariantId: product.productVariantId,
-                    orderQuantity: product.orderQuantity,
-                    unit: product.unit,
-                    price: product.price,
-                    discountAmount: product.discountAmount,
-                    totalAmount: product.totalAmount,
+        Swal.fire({
+            title: "Are you sure",
+            text: "Do you want to save?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: " #d33",
+            confirmButtonText: "Confirm",
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let data = {
+                    purchaseOrderNumber: purchaseOrderDataGlobal.orderId,
+                    supplierId: supplier.id,
+                    mergedRequisitionIds: [
+                        ...mergedRequisitionIds.filter(id => id !== purchaseOrderDataGlobal.orderId)
+                    ],
+                    deadline: "2021-07-11T05:37:29.052Z",
+                    mailDescription: mailDescription,
+                    orderItemInfos: listProductPurchaseOrder.map(product => {
+                        return {
+                            productVariantId: product.productVariantId,
+                            orderQuantity: product.orderQuantity,
+                            unit: product.unit,
+                            price: product.price,
+                            discountAmount: product.discountAmount,
+                            totalAmount: product.totalAmount,
+                        }
+                    })
                 }
-            })
-        }
-        dispatch(editPriceQuote({ data: data, token: token }))
-        editClick()
+                dispatch(editPriceQuote({ data: data, token: token }))
+                editClick()
+            }
+        });
+
 
     }
     function beforeEdit() {
@@ -1349,6 +1365,10 @@ export default function PurchaseOrderConfirm() {
 
 
 
+        //  `<iframe width="100%"  class="embed-responsive-item" src=${pdfbase64 + "#toolbar=0"}></iframe>`
+
+
+
         sendMailSupplier(pdf, mailDescription, purchaseOrderDataGlobal.orderId)
 
 
@@ -1389,7 +1409,7 @@ export default function PurchaseOrderConfirm() {
         <div>
 
             <NavigationBar
-                isShowProgressBar={["PurchaseOrder", "POWaitingConfirmation","POConfirm","Done"].includes(detailPurchaseState.status)}
+                isShowProgressBar={["PurchaseOrder", "POWaitingConfirmation", "POConfirm", "Done"].includes(detailPurchaseState.status)}
                 currentStep={detailPurchaseState.status}
                 titleBar={purchaseOrderDataGlobal.orderId}
                 listButton={listButton}
@@ -1576,7 +1596,7 @@ export default function PurchaseOrderConfirm() {
                                             {supplier.address}
                                         </label> */}
                                     </div>
-                                    <div className="col-md-6" >
+                                    <div className="col-md-8" >
                                         <p data-bs-toggle="collapse" data-bs-target="#collapseHistory" >History</p>
                                         <div className="collapse show " id="collapseHistory" >
                                             <div style={{ height: "250px", overflow: "auto" }} >
@@ -1599,9 +1619,7 @@ export default function PurchaseOrderConfirm() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-md-2">
-                                        <ProgressBar />
-                                    </div>
+
                                 </div>
                                 {/* <div class="form-group">
                                     <label for="">Subject:</label>
