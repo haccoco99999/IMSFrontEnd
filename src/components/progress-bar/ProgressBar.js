@@ -129,32 +129,35 @@ export function ProgressBarCreateProduct(props) {
 export function ProgressBarPurchaseOrder(props){
   const listStep = [
     {value:"PurchaseOrder",name:"Created",status:"is-complete"},
-    {value:"POWaitingConfirmation",name:"Waiting Confirm",status:"is-complete"},
-    {value:"POConfirm",name:"Confirmed",status:"is-complete"},
-    {value:"Done",name:"Done",status:"is-complete"},
+    {value:"POWaitingConfirmation",name:"Confirm",status:"is-complete"},
+    {value:"POConfirm",name:"Done",status:"is-complete"},
+    // {value:"Done",name:"Done",status:"is-complete"},
 
 ]
+let check = false
   return (
     <div className="progress-customize-container">
       <div class="progress-customize">
         <div class="progress-customize-track"></div>
         {listStep.map((item, index) => {
-          if (item.value === props.currentStep)
-            return (
-              <div id="step1" class={`progress-customize-step is-active`}>
-                {item.name}
-              </div>
-            );
-         else if (item.value !== "Done")
+          if (item.value !== props.currentStep && check === false)
             return (
               <div id="step1" class={`progress-customize-step is-complete`}>
                 {item.name}
               </div>
             );
-       
-          else
+         else if (item.value === props.currentStep)
+         {
+           check= true
             return (
-              <div id="step1" class={`progress-customize-step ${item.status}`}>
+              <div id="step1" class={`progress-customize-step is-active`}>
+                {item.name}
+              </div>
+            );
+            }
+          else if((item.value !== props.currentStep && check === true))
+            return (
+              <div id="step1" class={`progress-customize-step `}>
                 {item.name}
               </div>
             );
