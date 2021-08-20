@@ -9,7 +9,7 @@ export default function BrandModalComponent(props) {
   const columns = [
     // { dataField: "id", text: "ID" },
     { dataField: "brandName", text: "Brand Name" },
-    { dataField: "brandDescription", text: "Brand Description" },
+    // { dataField: "brandDescription", text: "Brand Description" },
   ];
   const selectRow = {
     mode: "radio",
@@ -53,7 +53,14 @@ export default function BrandModalComponent(props) {
                   <div>
                     <SearchBar {...props.searchProps} />
                     <hr />
-                    <Table selectRow={selectRow} {...props.baseProps} />
+                    <Table
+                      striped
+                      hover
+                      condensed
+                      headerClasses="table-header-receipt"
+                      selectRow={selectRow}
+                      {...props.baseProps}
+                    />
                   </div>
                 )}
               </ToolkitProvider>

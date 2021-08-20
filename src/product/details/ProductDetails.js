@@ -484,7 +484,6 @@ export default function ProductDetails() {
                           <select
                             name="brand"
                             class="form-select"
-                            // aria-label="Default select example"
                             defaultValue={brandDetails.brandName}
                             onChange={handleChangeBrand}
                           >

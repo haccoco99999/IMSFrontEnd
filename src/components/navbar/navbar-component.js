@@ -19,10 +19,11 @@ export default function NavigationBar(props) {
                 aria-label="breadcrumb"
               >
                 <ol className="breadcrumb m-0 mt-2">
-                  <li className="me-3">
-                    <div className="text-dark " onClick={props.actionGoBack}>
-                      <i className="bi bi-arrow-left fw-bold icon-size"></i>
-                    </div>
+                  <li className="me-1">
+                    {/* <div className=" text-dark " onClick={props.actionGoBack}>
+                      <i className=" bi bi-arrow-left fw-bold icon-size"></i>
+                    </div> */}
+                    <button className="btn p-0" onClick={props.actionGoBack}><i className=" bi bi-arrow-left fw-bold icon-size"></i></button>
                   </li>
                   <li
                     class="breadcrumb-item active text-dark"

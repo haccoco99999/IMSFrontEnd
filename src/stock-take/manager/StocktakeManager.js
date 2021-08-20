@@ -427,6 +427,7 @@ export default function () {
                       <Table
                         keyField="id"
                         data={listStocktakeStore}
+                        headerClasses="table-header-receipt"
                         columns={columns}
                         striped
                         hover

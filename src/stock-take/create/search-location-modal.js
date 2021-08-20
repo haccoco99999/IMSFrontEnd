@@ -73,11 +73,17 @@ export default function ListLocationsModal(props) {
                   <div>
                     <SearchBar {...props.searchProps} />
                     <hr />
-                    <Table selectRow={selectRow} {...props.baseProps} />
+                    <Table
+                      striped
+                      hover
+                      condensed
+                      headerClasses="table-header-receipt"
+                      selectRow={selectRow}
+                      {...props.baseProps}
+                    />
                   </div>
                 )}
               </ToolkitProvider>
-
             </div>
             <div className="modal-footer">
               <button

@@ -68,6 +68,10 @@ export default function ListLocationsModal(props) {
                     <hr />
                     <Table
                       noDataIndication="Table is Empty"
+                      striped
+                      hover
+                      condensed
+                      headerClasses="table-header-receipt"
                       selectRow={selectRow}
                       rowClasses="pointer"
                       {...props.baseProps}
