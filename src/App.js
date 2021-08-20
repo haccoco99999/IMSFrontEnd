@@ -122,7 +122,7 @@ function App(props) {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-           
+
           });
         });
 
@@ -216,28 +216,28 @@ function App(props) {
     let arrow = document.getElementsByClassName("clicked-menu");
     for (var i = 0; i < arrow.length; i++) {
       let temp = arrow[i]
-      arrow[i].addEventListener("click", (e)=>{
-        
+      arrow[i].addEventListener("click", (e) => {
+
         for (var j = 0; j < arrow.length; j++) {
-          if(j !== i){
-           
+          if (j !== i) {
+
             arrow[j].classList.remove("show-clicked-menu")
           }
-     
-        
+
+
 
 
         }
         temp.classList.add("show-clicked-menu")
-    
-    //  arrowParent.classList.add("show-clicked-menu");
-     
+
+        //  arrowParent.classList.add("show-clicked-menu");
+
       });
-      
+
 
     }
 
-    
+
 
 
   } + ')();';
@@ -303,7 +303,7 @@ function App(props) {
           </div>
 
           <ul
-          ref={profileRef}
+            ref={profileRef}
             className="collapse text-white ps-5 list-item-account w-100"
             id="collapseProfile"
           >
@@ -335,8 +335,8 @@ function App(props) {
             </p> */}
         </div>
 
-        <ul className="nav_list"  id="pills-menu-tab">
-          <li className="clicked-menu">
+        <ul className="nav_list" id="pills-menu-tab">
+          <li className="clicked-menu show-clicked-menu">
             <Link to="/homepage/dashboard">
               <i className="bx">
                 <img src={dashboardLogo} />
@@ -423,7 +423,7 @@ function App(props) {
           ) : (
             ""
           )}
-       
+
           {client.pageAuthorized.includes("Supplier") ? (
             <li className="clicked-menu">
               <Link to="/homepage/supplier">

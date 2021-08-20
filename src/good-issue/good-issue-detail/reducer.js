@@ -124,11 +124,14 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
         })
       }
       let isShipping = true
+     
       listProducts.forEach((product) =>{
+        console.log(product.quantity  +" va "+product.totalPackages)
         if(product.quantity > product.totalPackages ){
           isShipping = false
         }
       })
+   
       return {
         requesting: false,
         successful: true,
@@ -148,7 +151,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
             phoneNumber: transaction.applicationUser.phoneNumber,
             email: transaction.applicationUser.email
           },
-          infoGoodIssueDetail: isShipping,
+          isShipping: isShipping,
           infoRejectOrder: infoRejectOrder,
           listGoodIssueProducts: listProducts
         }
