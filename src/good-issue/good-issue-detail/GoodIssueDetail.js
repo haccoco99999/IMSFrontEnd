@@ -318,7 +318,7 @@ export default function DetailGoodIssue() {
                 ['Street Address'],
                 [companyInfo.address],
                 [`Phone: ${companyInfo.phoneNumber}`],
-                ['Email: Inventory@gmail.com'],
+                ['Email: imssystemmail@gmail.com'],
 
             ],
         })
@@ -357,12 +357,11 @@ export default function DetailGoodIssue() {
             theme: 'plain',
             head: [['From:']],
             body: [
-                ['CompanContacty Name'],
-                [' or Department'],
+                [companyInfo.companyName],
+                
                 ['Street Address'],
-                ['City, ST, Zip'],
-                ['Phone:(595) 855-8556'],
-                ['Fax: (8945) 4884-58845'],
+                [companyInfo.address],
+                [`Phone: ${companyInfo.phoneNumber}`],
 
             ],
         })

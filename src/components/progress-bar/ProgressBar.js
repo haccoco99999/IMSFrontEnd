@@ -145,6 +145,12 @@ export function ProgressBarPurchaseOrder(props){
                 {item.name}
               </div>
             );
+         else if (item.value !== "Done")
+            return (
+              <div id="step1" class={`progress-customize-step is-complete`}>
+                {item.name}
+              </div>
+            );
        
           else
             return (

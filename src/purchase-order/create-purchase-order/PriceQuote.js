@@ -1389,8 +1389,8 @@ export default function PurchaseOrderConfirm() {
         <div>
 
             <NavigationBar
-                isShowProgressBar={true}
-                currentStep={detailPurchaseState.status}
+                // isShowProgressBar={true}
+                // currentStep={detailPurchaseState.status}
                 titleBar={purchaseOrderDataGlobal.orderId}
                 listButton={listButton}
                 status={listStatus.nameStatus}
