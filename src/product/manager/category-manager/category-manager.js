@@ -340,6 +340,7 @@ export default function CategoryManager() {
   return (
     <div className="">
       <LocationCategoryFilter
+        placeholderSearch={"Search by name"}
         onChangeValueFilter={onChangecategoryFilter}
         filter={categoryFilter}
         submitFilter={submitcategoryFilter}

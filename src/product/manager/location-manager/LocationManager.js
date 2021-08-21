@@ -325,6 +325,7 @@ export default function LocationManager() {
       </div> */}
 
       <LocationCategoryFilter
+       placeholderSearch={"Search By Id, name, barcode"}
         onChangeValueFilter={onChangeLocationFilter}
         filter={locationFilter}
         submitFilter={submitLocationFilter}
