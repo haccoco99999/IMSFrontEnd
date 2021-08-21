@@ -1028,7 +1028,7 @@ export default function PurchaseOrderConfirm() {
             setListStatus({ nameStatus: "Confirmed", classStatus: "bg-success" })
 
 
-        } else if (purchaseOrderDataGlobal.status === "POCanceled") {
+        } else if (["POCanceled","RequisitionCanceled","PQCanceled"].includes(purchaseOrderDataGlobal.status) ) {
             setListStatus({ nameStatus: "Canceled", classStatus: "bg-danger" })
 
         }
@@ -1041,7 +1041,7 @@ export default function PurchaseOrderConfirm() {
             setListStatus("bg-warning text-dark");
         }
 
-        if (!["Requisition", "PriceQuote"].includes(purchaseOrderDataGlobal.status)) {
+        if (!["Requisition", "PriceQuote", "PQCanceled", "RequisitionCanceled"].includes(purchaseOrderDataGlobal.status)) {
 
             setTest((state) => (false))
         }
@@ -1433,10 +1433,10 @@ export default function PurchaseOrderConfirm() {
                 currentPage="Detail"
             />
 
-            <div class="d-grid gap-2">
+            <div class="d-grid gap-2 wrapper">
 
 
-                <div className="p-3">
+                <div >
                     {detailPurchaseState.status !== "PriceQuote" ?
                         <div class="card">
 
@@ -1448,12 +1448,14 @@ export default function PurchaseOrderConfirm() {
                                 </div>
                             </div>
                             <div className="card-body">
-                                {purchaseOrderDataGlobal.status === "POCanceled"  || purchaseOrderDataGlobal.status === "PQCanceled" || purchaseOrderDataGlobal.status === "RequisitionCanceled"  ? <div class="card text-white alert-danger mb-3" >
+                                {purchaseOrderDataGlobal.status === "POCanceled" || purchaseOrderDataGlobal.status === "PQCanceled" || purchaseOrderDataGlobal.status === "RequisitionCanceled" ? <div  >
                                     <RejectWrapper
                                         name={infoRejectOrder.name}
                                         email={infoRejectOrder.email}
                                         reason={infoRejectOrder.reason}
                                         phoneNumber={infoRejectOrder.phoneNumber}
+                                        date={infoRejectOrder.createDate}
+                                        
                                     />
                                 </div> : ""}
                                 {purchaseOrderDetailStore.successful ?
@@ -1488,7 +1490,7 @@ export default function PurchaseOrderConfirm() {
                                             </div>
                                         </li>
 
-                                        {purchaseOrderDataGlobal.status !== "Requisition" ?
+                                        {purchaseOrderDataGlobal.status !== "Requisition" && supplier.email !== undefined ?
                                             <li class="list-group-item">
                                                 <h5 class="card-title">Supplier Information</h5>
 
@@ -1589,25 +1591,8 @@ export default function PurchaseOrderConfirm() {
 
 
 
-                                        {/* 
-                                        <div className="form-text">
-                                            Email:
-                                        </div>
-                                        <label className="form-check-label" >
-                                            {supplier.email}
-                                        </label>
-                                        <div className="form-text">
-                                            Phone Number:
-                                        </div>
-                                        <label className="form-check-label" >
-                                            {supplier.phoneNumber}
-                                        </label>
-                                        <div className="form-text">
-                                            Address:
-                                        </div>
-                                        <label className="form-check-label" >
-                                            {supplier.address}
-                                        </label> */}
+
+
                                     </div>
                                     <div className="col-md-8" >
                                         <p data-bs-toggle="collapse" data-bs-target="#collapseHistory" >History</p>
@@ -1681,7 +1666,7 @@ export default function PurchaseOrderConfirm() {
                 </div>
                 {/* <p>Supplier <SeachSupplier supplierInfo={supplier} getDataSupplier={getDataSupplier} /> </p> */}
 
-                <div className="p-3">
+                <div >
                     <div className="card">
                         <div class="card-header p-0">
                             <div class="d-flex ">

@@ -105,10 +105,7 @@ export default function () {
       formatter: (cellContent, row) => {
         return <span>{moment(row.createdDate).add(7, "h").format("DD-MM-YYYY")}</span>;
       },
-      align: (cell, row, rowIndex, colIndex) => {
-        return 'right';
-
-    },
+      
     },
     // {
     //   dataField:"modifiedDate"
