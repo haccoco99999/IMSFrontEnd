@@ -1,9 +1,10 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import Swal from "sweetalert2";
-import { Tooltip } from "bootstrap";
+import { Tooltip, Modal } from "bootstrap";
+import BrandSelectModal from "../components/brand-component";
 //css
 import "../product.css";
 //components
@@ -65,14 +66,48 @@ export default function ProductDetails() {
   const [categoryDtails, setCategoryDtails] = useState({});
 
   //@param:declare tooltip :
-  const tooltipRef = useRef()
+  const tooltipRef = useRef();
   var tooltipTriggerList = [].slice.call(
     document.querySelectorAll('[data-bs-toggle="tooltip"]')
   );
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new Tooltip(tooltipTriggerEl,
-    )
+    return new Tooltip(tooltipTriggerEl);
   });
+
+  //todo: declare modal
+  const modalRef = useRef();
+  const showModal = () => {
+    const modalEle = modalRef.current;
+    const bsModal = new Modal(modalEle, {
+      backdrop: "static",
+      keyboard: false,
+    });
+    bsModal.show();
+  };
+  const hideModal = () => {
+    const modalEle = modalRef.current;
+    const bsModal = Modal.getInstance(modalEle);
+    bsModal.hide();
+  };
+
+  function onSelectBrandClick() {
+    hideModal();
+    setBrandDetails(brandSelected);
+  }
+  function handleOnSelectBrand(row, isSelect) {
+    if (isSelect) {
+      setBrandSelected({
+        id: row.id,
+        brandName: row.brandName,
+        brandDescription: row.brandDescription,
+      });
+    }
+  }
+
+  //todo: handle change
+  const handleChangeInputTypeBrand = (e) => {
+    setBrandDetails({ ...brandDetails, [e.target.name]: e.target.value });
+  };
 
   //todo: declare table
 
@@ -183,8 +218,8 @@ export default function ProductDetails() {
 
   function onClickEdit() {
     setIsDisabled(false);
-    dispatch(getCategoriesAllAction({ token: token }));
-    dispatch(getAllBrandAction({ token: token }));
+    // dispatch(getCategoriesAllAction({ token: token }));
+    // dispatch(getAllBrandAction({ token: token }));
   }
   function onClickCancel() {
     setIsDisabled(true);
@@ -193,56 +228,64 @@ export default function ProductDetails() {
     setBrandDetails(productBrandDetailsStore);
     setCategoryDtails(categoryDtailsStore);
   }
-  function onClickSave() {
-    const data = {
-      id: location.state.productId,
-      name: productDetails.name,
-      brandName: brandSelected.name,
-      brandDescription: "",
-      categoryId: categorySelected.id,
-      unit: productDetails.unit,
-    };
+  const onClickSave = (event) => {
+    event.preventDefault();
+    const form = document.getElementById("productDetailsForm");
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    } else {
+      const data = {
+        id: location.state.productId,
+        name: productDetails.name,
+        brandName: brandSelected.name,
+        brandDescription: "",
+        categoryId: categorySelected.id,
+        unit: productDetails.unit,
+      };
 
-    console.log(data);
-    if (productDetails.name === "") {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Do not let name empty",
-        showCancelButton: false,
-        confirmButtonColor: "#3085d6",
-      });
-    } else
-      Swal.fire({
-        title: "Are you sure",
-        text: "Do you want to save?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: " #d33",
-        confirmButtonText: "Confirm",
-        reverseButtons: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          if (productDetails.name !== productDetailsStore.name) {
-            dispatch(
-              updateProductAction({
-                token: token,
-                data: data,
-                needCheckName: true,
-              })
-            );
-          } else
-            dispatch(
-              updateProductAction({
-                token: token,
-                data: data,
-                needCheckName: false,
-              })
-            );
-        }
-      });
-  }
+      console.log(data);
+      if (productDetails.name === "") {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Do not let name empty",
+          showCancelButton: false,
+          confirmButtonColor: "#3085d6",
+        });
+      } else
+        Swal.fire({
+          title: "Are you sure",
+          text: "Do you want to save?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: " #d33",
+          confirmButtonText: "Confirm",
+          reverseButtons: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            if (productDetails.name !== productDetailsStore.name) {
+              dispatch(
+                updateProductAction({
+                  token: token,
+                  data: data,
+                  needCheckName: true,
+                })
+              );
+            } else
+              dispatch(
+                updateProductAction({
+                  token: token,
+                  data: data,
+                  needCheckName: false,
+                })
+              );
+          }
+        });
+    }
+    form.classList.add("was-validated");
+  };
   function goBackClick() {
     // history.replace("/homepage/product");
     history.goBack(-1);
@@ -290,7 +333,7 @@ export default function ProductDetails() {
         {
           isShow: true,
           title: "Save",
-          action: () => onClickSave(),
+          action: (e) => onClickSave(e),
           class: "btn-primary",
         },
       ];
@@ -301,7 +344,8 @@ export default function ProductDetails() {
       getDetailsProductAction({ id: location.state.productId, token: token })
     );
     dispatch(getAllUpdateProductAction({ token: token }));
-
+    dispatch(getCategoriesAllAction({ token: token }));
+    dispatch(getAllBrandAction({ token: token }));
     return () => {
       dispatch({ type: RESET });
       // tooltipList.hide()
@@ -357,7 +401,7 @@ export default function ProductDetails() {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Duplicate",
+          text: "Duplicate name",
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
         });
@@ -427,77 +471,57 @@ export default function ProductDetails() {
             {isReturnData ? (
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                  <div className="row g-3 justify-content-between me-3">
+                  <form
+                    id="productDetailsForm"
+                    class="row g-3 justify-content-between me-3 needs-validation "
+                    noValidate
+                  >
                     <div className="col-4">
-                      {/* <p>
-                        <strong>Product ID:</strong> {productDetails.id}
-                      </p> */}
+                      {" "}
                       <p>
                         <strong>Name:</strong>{" "}
                         {isDisabled ? (
                           productDetails.name
                         ) : (
-                          <input
-                            type="text"
-                            name="name"
-                            className="form-control"
-                            onChange={handleChangeProductDetails}
-                            value={productDetails.name}
-                          />
+                          <>
+                            {" "}
+                            <input
+                              type="text"
+                              name="name"
+                              className="form-control"
+                              onChange={handleChangeProductDetails}
+                              value={productDetails.name}
+                              required
+                            />
+                            <div class="invalid-feedback">
+                              Please choose a product name
+                            </div>{" "}
+                          </>
                         )}
                       </p>
                       <p>
-                        <strong>Unit:</strong>
+                        <strong>Unit: </strong>
                         {isDisabled ? (
                           productDetails.unit
                         ) : (
-                          <input
-                            type="text"
-                            name="unit"
-                            className="form-control"
-                            onChange={handleChangeProductDetails}
-                            value={productDetails.unit}
-                          />
+                          <>
+                            {" "}
+                            <input
+                              type="text"
+                              name="unit"
+                              className="form-control"
+                              onChange={handleChangeProductDetails}
+                              value={productDetails.unit}
+                              required
+                            />
+                            <div className="invalid-feedback">
+                              Please choose a unit
+                            </div>
+                          </>
                         )}
                       </p>
-
-                      {/* <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          value={""}
-                          name="isVariantType"
-                          checked={productDetails.isVariantType}
-                          disabled={isDisabled}
-                        />
-                        <label class="form-check-label" for="flexCheckDefault">
-                          <strong>Products has many attribute</strong>
-                        </label>
-                      </div> */}
                     </div>
                     <div className="col-4">
-                      <p>
-                        <strong>Brand:</strong>
-                        {isDisabled ? (
-                          brandDetails.brandName
-                        ) : (
-                          <select
-                            name="brand"
-                            class="form-select"
-                            defaultValue={brandDetails.brandName}
-                            onChange={handleChangeBrand}
-                          >
-                            <option value="" disabled>
-                              Select brand
-                            </option>
-                            {listBrandStore.map((brand) => (
-                              <option id={brand.id} value={brand.brandName}>
-                                {brand.brandName}
-                              </option>
-                            ))}
-                          </select>
-                        )}
-                      </p>
                       <p>
                         <strong>Category:</strong>{" "}
                         {isDisabled ? (
@@ -526,8 +550,38 @@ export default function ProductDetails() {
                           </select>
                         )}
                       </p>
+                      <p>
+                        <strong>Brand: </strong>
+                        {isDisabled ? (
+                          brandDetails.brandName
+                        ) : (
+                          <div className="input-group has-validation">
+                            <input
+                              name="brandName"
+                              type="text"
+                              id="brand"
+                              className="form-control"
+                              value={brandDetails.brandName}
+                              onChange={handleChangeInputTypeBrand}
+                              placeholder="eg. Nike"
+                              required
+                            />
+                            <button
+                              className="btn btn-outline-secondary"
+                              type="button"
+                              id="button-addon2"
+                              onClick={showModal}
+                            >
+                              Search more
+                            </button>
+                            <div className="invalid-feedback">
+                              Please select a brand
+                            </div>
+                          </div>
+                        )}
+                      </p>
                     </div>
-                  </div>
+                  </form>
                 </li>
                 <li class="list-group-item">
                   <h5 class="card-title fw-bold">List of variants</h5>
@@ -573,6 +627,13 @@ export default function ProductDetails() {
           </div>
         </div>
       </>
+      <BrandSelectModal
+        modalRef={modalRef}
+        hideModal={hideModal}
+        listBrand={listBrandStore}
+        onSelectLocationClick={onSelectBrandClick}
+        handleOnSelect={handleOnSelectBrand}
+      />
     </>
   );
 }
