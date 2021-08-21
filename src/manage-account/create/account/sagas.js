@@ -44,6 +44,27 @@ function createProduct(action) {
       throw error;
     });
 }
+
+function checkDuplicateAPI(action) {
+  const url = "http://imspublicapi.herokuapp.com/api/dupcheck/accountemail";
+
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + action.token,
+      "Content-Type": "application/json",
+      Origin: "",
+    },
+    credentials: "include",
+    body: JSON.stringify( {value :action.data.email}),
+  })
+    .then((response) => handleApiErrors(response))
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      throw error;
+    });
+}
 function uploadImgAPI(action) {
   const url = "https://api.cloudinary.com/v1_1/ims2021/upload";
 
@@ -142,11 +163,12 @@ function setActiveAccountAPI(action) {
 
 function* CreateAccountFlow(action) {
   try {
-
-   let jsonCloundinary = yield call(uploadImgAPI, action);
-   action.data = {
-    ...action.data, profileImageLink: jsonCloundinary.url
-  }
+  let jsonCheck = yield call(checkDuplicateAPI, action)
+  if(!jsonCheck.hasMatch){
+    let jsonCloundinary = yield call(uploadImgAPI, action);
+    action.data = {
+      ...action.data, profileImageLink: jsonCloundinary.url
+    }
     let json = yield call(createProduct, action);
 
     yield put({ type: CREATE_ACC_RESPONSE });
@@ -156,8 +178,13 @@ function* CreateAccountFlow(action) {
     else {
       throw Error
     }
+  }
+  else{
+    yield put({ type: CREATE_ACC_ERR, messages: "Duplicate Email!" });
+  }
+ 
   } catch (error) {
-    yield put({ type: CREATE_ACC_ERR });
+    yield put({ type: CREATE_ACC_ERR, messages:"Something was wrong!" });
   }
 }
 function* updateUserAccountFlow(action) {

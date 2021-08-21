@@ -119,7 +119,7 @@ export default function CreateAccount() {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Something went wrong!',
+        text: createUserAccountStatus.messages,
 
       })
 
@@ -300,7 +300,9 @@ export default function CreateAccount() {
             address: infoAccountState.address,
             roleId: event.target.value,
             dateOfBirth: infoAccountState.dateOfBirth,
-            fullname: infoAccountState.fullname
+            fullname: infoAccountState.fullname,
+            profileImageLink: infoAccountState.profileImageLink,
+
           }
 
           dispatch(updateUserAccountDetail({ data: data, token: token }))
@@ -332,7 +334,12 @@ export default function CreateAccount() {
         confirmPassword.current.classList.add("is-invalid")
       }
       if (base64Img === "") {
-
+        Swal.fire({
+          icon: 'error',
+          title: 'Set your avatar',
+         
+          
+        })
       }
 
     }

@@ -205,9 +205,12 @@ function AccountManager() {
 
 
         if (item[0] === "role") {
-
+          if(item[1].length === 0){
+            accountFilterInit.role.forEach(role => filterString += item[0] + "=" + role.key + "&")
+          }
+          else{ 
           item[1].forEach(role => filterString += item[0] + "=" + role.key + "&")
-
+          }
         }
         else {
 

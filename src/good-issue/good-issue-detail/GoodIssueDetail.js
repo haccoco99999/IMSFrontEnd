@@ -580,15 +580,15 @@ export default function DetailGoodIssue() {
 
     const rowStyle2 = (row, rowIndex) => {
         const style = {};
-      
-        if ( row.quantity > row.totalPackages) {
-          style.backgroundColor = '#ffc107';
-        } 
-      
-        
-      
+
+        if (row.quantity > row.totalPackages) {
+            style.backgroundColor = '#ffc107';
+        }
+
+
+
         return style;
-      };
+    };
 
     return (
 
@@ -628,10 +628,10 @@ export default function DetailGoodIssue() {
                             <div className="col-md-9">
                                 {status === "IssueRequisition" ?
                                     <div className="info-detai-receipt">
-                                        <p className="fw-bold">Created by: <span className="fw-normal">Rock</span></p>
+                                        <p className="fw-bold">Created by: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.fullname}</span></p>
                                         <div>
-                                            <p className="fw-bold">Email : <span className="fw-normal">ahunka@gkcis.cob</span></p>
-                                            <p className="fw-bold">Phone No: <span className="fw-normal">02849952958</span></p>
+                                            <p className="fw-bold">Email : <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.email}</span></p>
+                                            <p className="fw-bold">Phone No: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.phoneNumber}</span></p>
                                         </div>
 
                                     </div>
@@ -692,7 +692,7 @@ export default function DetailGoodIssue() {
                                 data={listGoodIssueProducts}
                                 columns={columns}
                                 expandRow={expandRow}
-                                rowStyle={ rowStyle2 }
+                                rowStyle={rowStyle2}
                                 noDataIndication={() => <TableLoading />}
                             />
 

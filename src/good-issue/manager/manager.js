@@ -221,9 +221,16 @@ export default function Manager(props) {
     Object.entries(dataFilter).forEach((item) => {
       if (item[1] !== "") {
         if (item[0] === "statuses") {
-          item[1].forEach(
-            (status) => (filterString += item[0] + "=" + status.key + "&")
-          );
+          if(item[1].length === 0){
+            goodsIssueFilterInit.statuses.forEach(status => filterString += item[0] + "=" + status.key + "&")
+
+          }
+          else{
+            item[1].forEach(
+              (status) => (filterString += item[0] + "=" + status.key + "&")
+            );
+          }
+          
         } else {
           filterString += item[0] + "=" + item[1] + "&";
         }

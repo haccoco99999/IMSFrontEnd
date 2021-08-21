@@ -199,7 +199,37 @@ export default function PurchaseRequisitionManager() {
           if (item[1]["id"] !== "") filterString += "SupplierId=" + item[1]["id"] + "&"
         }
         else if (item[0] === "Statuses") {
-          // filterString += item[0] + "=" + status.key + "&"
+          if(item[1].length === 0){
+            purchaserOrderFilterInit.Statuses.forEach(status => {
+              if (status.key === 0) {
+                filterString += item[0] + "=RequisitionCreated&"
+  
+  
+  
+              }
+              else if (status.key === 1) {
+                filterString += item[0] + "=RequisitionMerged&"
+              }
+              else if (status.key === 2) {
+                filterString += item[0] + "=Requisition&"
+              }
+              else if (status.key === 3) {
+                filterString += item[0] + "=PriceQuote&"
+              }
+              else if (status.key === 4) {
+                filterString += item[0] + `=PurchaseOrder&${item[0]}=POWaitingConfirmation&${item[0]}=POConfirm&`
+              }
+              else if (status.key === 5) {
+                filterString += item[0] + "=Done&"
+              }
+              else if (status.key === 6) {
+                filterString += item[0] + `=PQCanceled&${item[0]}=RequisitionCanceled&${item[0]}=POCanceled`
+              }
+            })
+          }
+          else{
+
+          
           item[1].forEach(status => {
             if (status.key === 0) {
               filterString += item[0] + "=RequisitionCreated&"
@@ -208,6 +238,7 @@ export default function PurchaseRequisitionManager() {
 
             }
             else if (status.key === 1) {
+              filterString += item[0] + "=RequisitionMerged&"
 
             }
             else if (status.key === 2) {
@@ -217,15 +248,16 @@ export default function PurchaseRequisitionManager() {
               filterString += item[0] + "=PriceQuote&"
             }
             else if (status.key === 4) {
-              filterString += item[0] + "=PurchaseOrder&POWaitingConfirmation&POConfirm&"
+              filterString += item[0] + `=PurchaseOrder&${item[0]}=POWaitingConfirmation&${item[0]}=POConfirm&`
             }
             else if (status.key === 5) {
               filterString += item[0] + "=Done&"
             }
             else if (status.key === 6) {
-              filterString += item[0] + "=PQCanceled&RequisitionCanceled&POCanceled"
+              filterString += item[0] + `=PQCanceled&${item[0]}=RequisitionCanceled&${item[0]}=POCanceled`
             }
           })
+        }
 
         }
 
