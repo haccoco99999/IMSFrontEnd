@@ -139,7 +139,7 @@ export function GoodsIssueFilter(props) {
                         <div class="form-group">
                             <label for="">Search</label>
                             <input type="text" onChange={props.onChangeValueFilter} value={props.filter.searchQuery}
-                                class="form-control" name="searchQuery" id="" aria-describedby="helpId" placeholder="Searcg by ID" />
+                                class="form-control" name="searchQuery" id="" aria-describedby="helpId" placeholder="Search by ID" />
                         </div>
                         <div className="col-md-6">
 
@@ -247,6 +247,7 @@ export function PurchaseOrderFilter(props) {
                                 {props.isRequisition ? <SelectStatusPurchaseRequisition selectStatus={props.selectStatusFilter} selected={props.filter.Statuses} /> : <SelectStatusPurchaseOrder selectStatus={props.selectStatusFilter} selected={props.filter.Statuses} />}
 
                             </div>
+                            {!props.isSaleMan?
                             <div className="row">
                                 <label for="">Price:</label>
                                 <div class="form-group col-md-6" >
@@ -278,7 +279,7 @@ export function PurchaseOrderFilter(props) {
                                              value={pasePrice(props.filter.ToTotalOrderPrice)}
                                         class="form-control" name="ToTotalOrderPrice" id="" aria-describedby="helpId" placeholder="To price" />
                                 </div>
-                            </div>
+                            </div> : ""}
 
 
                         </div>

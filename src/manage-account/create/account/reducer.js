@@ -55,7 +55,7 @@ export const createUserAccount = function createUserAccountReducer(state = inita
       return {
         requesting: false,
         successful: false,
-        messages: "",
+        messages: action.messages,
         errors: true,
        
       };

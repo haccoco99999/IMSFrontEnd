@@ -351,8 +351,12 @@ export default function () {
       if (item[1] !== "") {
 
         if (item[0] === "Statuses") {
+          if(item[1].length === 0){
+            stockTakeFilterInit.Statuses.forEach(status => filterString += item[0] + "=" + status.key + "&")
+          }
+          else{
           item[1].forEach(status => filterString += item[0] + "=" + status.key + "&")
-
+          }
         }
         else {
 

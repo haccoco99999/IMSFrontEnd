@@ -57,7 +57,7 @@ export default function PurchaseQuoteOrder() {
             { key: "POWaitingConfirmation", value: "Watting Confirm" },
             { key: "POConfirm", value: "Confirmed" },
             { key: "Done", value: "Done" },
-            { key: "POCanceled", value: "Canceled" },
+            { key: "POCanceled", value: "Cancel" },
 
         ],
         supplier: {
@@ -291,7 +291,13 @@ export default function PurchaseQuoteOrder() {
                     if (item[1]["id"] !== "") filterString += "SupplierId=" + item[1]["id"] + "&"
                 }
                 else if (item[0] === "Statuses") {
-                    item[1].forEach(status => filterString += item[0] + "=" + status.key + "&")
+                    if(item[1].length === 0){
+                        purchaserOrderFilterInit.Statuses.forEach(status => filterString += item[0] + "=" + status.key + "&")
+                    }
+                    else{
+                        item[1].forEach(status => filterString += item[0] + "=" + status.key + "&")
+                    }
+                 
 
                 }
 

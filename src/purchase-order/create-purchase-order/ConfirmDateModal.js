@@ -5,6 +5,7 @@ import 'jspdf-autotable'
 import supplier from '../../supplier/supplier';
 import { useSelector } from 'react-redux';
 import { number_to_price, pasePrice } from '../parsePrice';
+import moment from 'moment';
 export default function ConfirmDateModal(props) {
   // if (props.isConfirm) {
   const doc = new jsPDF();
@@ -45,7 +46,7 @@ export default function ConfirmDateModal(props) {
       head: [['PURCHASE ORDER']],
       body: [
         [`ORDER ID: ${props.infoPurchaseOrder.orderId}`],
-        ['04/26/2021'],
+        ['Date: ' + moment().format("DD-MM-YYYY")]
         // ['CUSTOMER ID:31654648'],
 
 
@@ -143,7 +144,7 @@ export default function ConfirmDateModal(props) {
     console.log(finalY)
     doc.setFontSize(11)
     doc.text("For questions concerning this invoice, please contact", 105, doc.internal.pageSize.height - 10, "center")
-    doc.text(`${props.infoPurchaseOrder.infoUserPurchaseOrder.name}, ${props.infoPurchaseOrder.infoUserPurchaseOrder.phoneNumber} EMail: ${props.infoPurchaseOrder.infoUserPurchaseOrder.email}`, 105, doc.internal.pageSize.height - 5, "center")
+    doc.text(`${companyInfo.phoneNumber} Email: imssystemmail@gmail.com`, 105, doc.internal.pageSize.height - 5, "center")
 
 
     // doc.output('blob')

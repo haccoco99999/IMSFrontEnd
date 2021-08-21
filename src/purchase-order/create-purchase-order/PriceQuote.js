@@ -66,10 +66,12 @@ export default function PurchaseOrderConfirm() {
         createPurchaserOrderStatus,
         purchaseOrderDetailStore,
         pageAuthorized,
+        companyInfo,
     } = useSelector(state => ({
         purchaseOrderDataGlobal: state.getDetailPurchaseReducer.detailPurchaseOrder,
         purchaseOrderDetailStore: state.getDetailPurchaseReducer,
         token: state.client.token,
+        companyInfo: state.client.companyInfo,
         pageAuthorized: state.client.pageAuthorized,
         priceQuoteUpdateStatus: state.PriceQuoteUpdate,
         createPriceQuoteStatus: state.createPriceQuote,
@@ -690,7 +692,7 @@ export default function PurchaseOrderConfirm() {
 
             formData.append('To', supplier.email)
             formData.append('Content', note)
-            formData.append('Subject', "Mail from ABC Inventory")
+            formData.append('Subject', `Purchase Order From ${companyInfo.companyName} ${moment().format("DD-MM-YYYY")}`)
             formData.append('PurchaseOrderId', purchaseOrderDataGlobal.orderId)
             formData.append('pdf', pdf)
             dispatch(confirmPurchaseORderByManager({ data: data, token: token, formData: formData }))
@@ -1354,7 +1356,7 @@ export default function PurchaseOrderConfirm() {
 
         formData.append('To', supplier.email)
         formData.append('Content', contentMail)
-        formData.append('Subject', "Mail from ABC Inventory")
+        formData.append('Subject', `Price Quote Request From ${companyInfo.companyName} ${moment().format("DD-MM-YYYY")}`)
         formData.append('PurchaseOrderId', purchaseOrderDataGlobal.orderId)
         formData.append('pdf', pdf)
         dispatch(sendMailService({ formData: formData, token: token }))

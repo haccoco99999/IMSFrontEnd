@@ -192,7 +192,7 @@ export function SelectStatusPurchaseOrder(props) {
     { key: "POWaitingConfirmation", value: "Watting Confirm" },
     { key: "POConfirm", value: "Confirmed" },
     { key: "Done", value: "Done" },
-    { key: "POCanceled", value: "Canceled" },
+    { key: "POCanceled", value: "Cancel" },
 
 
 
