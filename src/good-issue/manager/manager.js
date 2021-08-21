@@ -114,9 +114,7 @@ export default function Manager(props) {
     {
       dataField: "deliveryDate",
       text: "Delivery Date",
-      align: (cell, row, rowIndex, colIndex) => {
-        return "right";
-      },
+      
       formatter: (cell) => {
         return moment(cell).add(7, "h").format("DD-MM-YYYY");
       },
@@ -124,9 +122,7 @@ export default function Manager(props) {
     {
       dataField: "createdDate",
       text: "Created Date",
-      align: (cell, row, rowIndex, colIndex) => {
-        return "right";
-      },
+     
       formatter: (cell) => {
         return moment(cell).add(7, "h").format("DD-MM-YYYY");
       },

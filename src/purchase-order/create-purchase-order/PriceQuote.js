@@ -122,17 +122,14 @@ export default function PurchaseOrderConfirm() {
                 type: Type.TEXT,
 
             },
-            editable: eventPage.isShowEdit,
+            editable: eventPage.isShowEdit && purchaseOrderDataGlobal.status === "PriceQuote",
             formatter: (cellContent, row, rowIndex) => {
                 return (
                     <div>
                         {eventPage.isShowEdit ? <input className="form-control" defaultValue={row.orderQuantity} type="text" /> : row.orderQuantity}
                     </div>);
             },
-            align: (cell, row, rowIndex, colIndex) => {
-                return 'right';
 
-            },
             validator: (newValue, row, column) => {
                 if (isNaN(newValue)) {
                     setDisableEdit(true)
@@ -166,10 +163,7 @@ export default function PurchaseOrderConfirm() {
                         {eventPage.isShowEdit ? <input className="form-control" defaultValue={row.price} type="text" /> : parseNumberToPrice(row.price) + " VNĐ"}
                     </div>);
             },
-            align: (cell, row, rowIndex, colIndex) => {
-                return 'right';
 
-            },
             validator: (newValue, row, column) => {
                 if (isNaN(newValue)) {
                     setDisableEdit(true)
@@ -196,10 +190,7 @@ export default function PurchaseOrderConfirm() {
             editable: false,
 
             hidden: test,
-            align: (cell, row, rowIndex, colIndex) => {
-                return 'right';
 
-            },
             formatter: (cellContent, row, rowIndex) => {
 
                 return (
@@ -366,7 +357,7 @@ export default function PurchaseOrderConfirm() {
                 {
                     isShow: !eventPage.isShowEdit,
                     title: "Delete",
-                    action: () => isShowRejectModal(),
+                    action: () => clickTodelete(),
                     class: "btn btn-danger",
                     disabled: disableEdit
                 },
@@ -438,7 +429,7 @@ export default function PurchaseOrderConfirm() {
                 {
                     isShow: !eventPage.isShowEdit,
                     title: "Delete",
-                    action: () => isShowRejectModal(),
+                    action: () => clickTodelete(),
                     class: "btn btn-danger",
                     disabled: disableEdit
                 },
@@ -624,24 +615,48 @@ export default function PurchaseOrderConfirm() {
 
     }
     function isShowRejectModal() {
-        if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
-            beforeEdit()
-        } else {
-            setEventPage((state) => ({
-                ...state, isShowReject: !state.isShowReject,
-            }))
-        }
+
+        setEventPage((state) => ({
+            ...state, isShowReject: !state.isShowReject,
+        }))
+
+    }
+    function clickTodelete() {
+
+
+        Swal.fire({
+            title: "Are you sure",
+            text: "Do you want to delete?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: " #d33",
+            confirmButtonText: "Confirm",
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+
+                let data = {
+                    id: detailPurchaseState.orderId,
+                    cancelReason: "",
+                }
+                dispatch(rejectPurchaseOrderConfirm({ data: data, token: token }))
+
+            }
+        })
+
+
+
     }
     function clickToCLoseReject(cancelReason) {
-        if (cancelReason !== undefined) {
-            console.log(cancelReason)
-            let data = {
-                id: detailPurchaseState.orderId,
-                cancelReason: cancelReason,
-            }
-            dispatch(rejectPurchaseOrderConfirm({ data: data, token: token }))
-            // goBackClick()
+        let data = {
+            id: detailPurchaseState.orderId,
+            cancelReason: cancelReason,
         }
+        dispatch(rejectPurchaseOrderConfirm({ data: data, token: token }))
+        // goBackClick()
+
         setEventPage((state) => ({
             ...state, isShowReject: !state.isShowReject,
         }))
@@ -1094,10 +1109,10 @@ export default function PurchaseOrderConfirm() {
     function cancelEditClick() {
 
 
-        
+
         Swal.fire({
             title: "Are you sure",
-            text: "Do you want to save?",
+            text: "Do you want to revert?",
             icon: "question",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -1120,11 +1135,11 @@ export default function PurchaseOrderConfirm() {
                 setMailDescription(purchaseOrderDataGlobal.mailDescription)
                 setSupplier(purchaseOrderDataGlobal.supplier)
                 editClick()
-                Swal.fire(
-                    'Reverted!',
-                    'Your edit has been reverted.',
-                    'success'
-                )
+                // Swal.fire(
+                //     'Reverted!',
+                //     'Your edit has been reverted.',
+                //     'success'
+                // )
 
             }
         })
@@ -1201,12 +1216,9 @@ export default function PurchaseOrderConfirm() {
 
         if ((mailDescription !== "<p></p>" || mailDescription !== "") && supplier.id !== undefined) {
 
-            if (!eventPage.isShowEditListProducts || !eventPage.isShowEditInfoOrder) {
-                beforeEdit()
-            } else
-                setEventPage((state) => ({
-                    ...state, isPreview: !state.isPreview
-                }))
+            setEventPage((state) => ({
+                ...state, isPreview: !state.isPreview
+            }))
         }
         else {
 
@@ -1228,6 +1240,7 @@ export default function PurchaseOrderConfirm() {
 
         ))
     }
+
 
     function mergePriceQuote(listDataPriceQuote) {
 
@@ -1435,7 +1448,7 @@ export default function PurchaseOrderConfirm() {
                                 </div>
                             </div>
                             <div className="card-body">
-                                {purchaseOrderDataGlobal.status === "POCanceled" ? <div class="card text-white alert-danger mb-3" >
+                                {purchaseOrderDataGlobal.status === "POCanceled"  || purchaseOrderDataGlobal.status === "PQCanceled" || purchaseOrderDataGlobal.status === "RequisitionCanceled"  ? <div class="card text-white alert-danger mb-3" >
                                     <RejectWrapper
                                         name={infoRejectOrder.name}
                                         email={infoRejectOrder.email}

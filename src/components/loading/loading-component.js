@@ -69,3 +69,16 @@ export const InfoOrderLoader = (props) => (
 
     </ContentLoader>
 )
+export const DashboardItemLoading = (props) => (
+    <ContentLoader
+        speed={2}
+        width={345}
+        height={104}
+        viewBox="0 0 345 104"
+        backgroundColor="#c2c2c2"
+        foregroundColor="#ecebeb"
+        {...props}
+    >
+        <rect x="11" y="8" rx="3" ry="3" width="345" height="104" />
+    </ContentLoader>
+)

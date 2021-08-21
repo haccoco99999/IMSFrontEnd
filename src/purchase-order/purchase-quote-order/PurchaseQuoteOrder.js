@@ -397,99 +397,15 @@ export default function PurchaseQuoteOrder() {
         ...productVariantFilterInit
     })
 
-    function onChangeProductVariantFilter(event) {
-        setProductVariantsFilter((state) => ({
-            ...state, [event.target.name]: event.target.value
-        }))
-    }
-    function submitProductVariantsFilter() {
-        let filterString = ""
-        Object.entries(productVariantsFilter).forEach(item => {
-            if (item[1] !== "") {
-                filterString += item[0] + "=" + item[1] + "&"
-            }
-        })
-        let json = productVariantsFilterAPI(filterString)
-        console.log(json)
-    }
-    function resetProductVariantsFilter() {
-        setProductVariantsFilter((state) => ({
-            ...state, ...productVariantFilterInit
-        }))
-    }
-
-    //COMPONENT SEARCH PRODUCT VARIANTS
-
-    // <ProductVariantsFilter 
-    // onChangeValueFilter={onChangeProductVariantFilter}
-    //  filter={productVariantsFilter} 
-    //  submitFilter={submitProductVariantsFilter}
-    //  resetFilter={resetProductVariantsFilter}
-    //  />
+  
+ 
+   
 
 
 
+   
+ 
 
-    ////////////////////////////////////////////////////////
-    ///SEARCH LOCATION
-
-
-    // const stockTakeFilterInit = {
-    //     IsLocationOnly: true,
-    //     SearchQuery: "",
-    //     FromImportedDate:"",
-    //     ToImportedDate:"",
-    //     ProductVariantID:"",
-    //     FromTotalPrice:"",
-    //     ToTotalPrice:"",
-    //     FromPrice:"",
-    //     ToPrice:"",
-    //     LocationId:"",
-    //     FromQuantity:"",
-    //     ToQuantity:"",
-    // }
-    const stockTakeFilterInit = {
-
-        SearchQuery: "",
-        FromStatus: "",
-        ToStatus: "",
-        FromCreatedDate: "",
-        ToCreatedDate: "",
-        ToTotalPrice: "",
-        CreatedByName: "",
-        DeliveryMethod: "",
-        FromDeliveryDate: "",
-        ToDeliveryDate: "",
-
-    }
-    const [stockTakeFilter, setStockTakeFilter] = useState({
-        currentPage: 1,
-        SizePerPage: 25,
-        ...stockTakeFilterInit
-    })
-
-    function onChangeStockTaketFilter(event) {
-        setStockTakeFilter((state) => ({
-            ...state, [event.target.name]: event.target.value
-        }))
-    }
-    function submitStockTakeFilter() {
-        let filterString = ""
-        Object.entries(stockTakeFilter).forEach(item => {
-            if (item[1] !== "") {
-                filterString += item[0] + "=" + item[1] + "&"
-            }
-        })
-        alert(filterString)
-    }
-    function resetStockTakeFilter() {
-
-        setStockTakeFilter((state) => ({
-            ...state, ...stockTakeFilterInit
-        }))
-    }
-
-    //////////////////////////////////////////////////////
 
 
 

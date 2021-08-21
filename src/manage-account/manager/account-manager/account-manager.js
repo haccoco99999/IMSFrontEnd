@@ -88,7 +88,7 @@ function AccountManager() {
     {
 
       dataField: 'fullname',
-      text: 'Fullname ',
+      text: 'Full Name ',
 
 
     },
@@ -286,7 +286,7 @@ function AccountManager() {
 
         <div class="pb-3">
           <div className="card">
-            <div class="card-header text-white bg-secondary">List Accounts</div>
+            <div class="card-header text-white bg-secondary">Account List</div>
             <div className="card-body">
 
 

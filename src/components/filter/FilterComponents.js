@@ -35,13 +35,13 @@ export function GoodReceiptFilter(props) {
                                 <div class="form-group col-md-6" >
 
                                     <input type="date"
-                                        onChange={props.onChangeValueFilter} value={props.filter.FromCreatedDate}
+                                        onChange={props.onChangeValueFilter} value={props.filter.FromCreatedDate} max={props.filter.ToCreatedDate}
                                         class="form-control" name="FromCreatedDate" id="" aria-describedby="helpId" placeholder="" />
                                 </div>
                                 <div class="form-group col-md-6">
 
                                     <input type="date"
-                                        onChange={props.onChangeValueFilter} value={props.filter.ToCreatedDate}
+                                        onChange={props.onChangeValueFilter} value={props.filter.ToCreatedDate} min={props.filter.FromCreatedDate}
                                         class="form-control" name="ToCreatedDate" id="" aria-describedby="helpId" placeholder="" />
                                 </div>
                             </div>
@@ -160,13 +160,13 @@ export function GoodsIssueFilter(props) {
                                 <div class="form-group col-md-6" >
 
                                     <input type="date"
-                                        onChange={props.onChangeValueFilter} value={props.filter.fromCreatedDate}
+                                        onChange={props.onChangeValueFilter} value={props.filter.fromCreatedDate} max={props.filter.toCreatedDate}
                                         class="form-control" name="fromCreatedDate" id="" aria-describedby="helpId" placeholder="From date" />
                                 </div>
                                 <div class="form-group col-md-6">
 
                                     <input type="date"
-                                        onChange={props.onChangeValueFilter} value={props.filter.toCreatedDate}
+                                        onChange={props.onChangeValueFilter} value={props.filter.toCreatedDate} min={props.filter.fromCreatedDate}
                                         class="form-control" name="toCreatedDate" id="" aria-describedby="helpId" placeholder="To date" />
                                 </div>
                             </div>
@@ -176,13 +176,13 @@ export function GoodsIssueFilter(props) {
                                 <div class="form-group col-md-6" >
 
                                     <input type="date"
-                                        onChange={props.onChangeValueFilter} value={props.filter.fromDeliveryDate}
+                                        onChange={props.onChangeValueFilter} value={props.filter.fromDeliveryDate} max={props.filter.toDeliveryDate}
                                         class="form-control" name="fromDeliveryDate" id="" aria-describedby="helpId" placeholder="From date" />
                                 </div>
                                 <div class="form-group col-md-6">
 
                                     <input type="date"
-                                        onChange={props.onChangeValueFilter} value={props.filter.toDeliveryDate}
+                                        onChange={props.onChangeValueFilter} value={props.filter.toDeliveryDate} min={props.filter.fromDeliveryDate}
                                         class="form-control" name="toDeliveryDate" id="" aria-describedby="helpId" placeholder="To date" />
                                 </div>
                             </div>

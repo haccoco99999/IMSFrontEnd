@@ -43,12 +43,12 @@ export default function StockTakeFilter(props){
                             <div class="form-group col-md-6" >
 
                                 <input type="date"
-                                    onChange={props.onChangeValueFilter}  value={props.filter.FromCreatedDate}
+                                    onChange={props.onChangeValueFilter}  value={props.filter.FromCreatedDate} max={props.filter.ToCreatedDate}
                                     class="form-control" name="FromCreatedDate" id="" aria-describedby="helpId" placeholder="" />
                             </div>
                             <div class="form-group col-md-6">
 
-                                <input type="date" value={props.filter.ToCreatedDate}
+                                <input type="date" value={props.filter.ToCreatedDate} min={props.filter.FromCreatedDate}
                                     onChange={props.onChangeValueFilter}
                                     class="form-control" name="ToCreatedDate" id="" aria-describedby="helpId" placeholder="" />
                             </div>
@@ -59,13 +59,13 @@ export default function StockTakeFilter(props){
                             <div class="form-group col-md-6" >
 
                                 <input type="date"
-                                    onChange={props.onChangeValueFilter} value={props.filter.FromModifiedDate}
+                                    onChange={props.onChangeValueFilter} value={props.filter.FromModifiedDate} max={props.filter.ToModifiedDate}
                                     class="form-control" name="FromModifiedDate" id="" aria-describedby="helpId" placeholder="" />
                             </div>
                             <div class="form-group col-md-6">
 
                                 <input type="date"
-                                    onChange={props.onChangeValueFilter} value={props.filter.ToModifiedDate}
+                                    onChange={props.onChangeValueFilter} value={props.filter.ToModifiedDate} min={props.filter.FromModifiedDate}
                                     class="form-control" name="ToModifiedDate" id="" aria-describedby="helpId" placeholder="" />
                             </div>
                         </div>
