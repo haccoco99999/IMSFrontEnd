@@ -397,6 +397,7 @@ export default function CreatePurchaseRequisition() {
                   name="deadline"
                   id="deadline"
                   class="form-control"
+                  min={moment().format("YYYY-MM-DD")}
                   onChange={onChangeDeadline}
                 />
               </div>
