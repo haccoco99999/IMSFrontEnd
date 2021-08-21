@@ -34,11 +34,11 @@ const composeSetup = process.env.NODE_ENV !== 'production' && typeof window === 
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose
 
   const rootReducer = (state, action) => {
-    if (action.type === 'LOGOUT_REQUESTING') {
-      const { login } = state
-      state = { login } 
-      history.push("/login")
-    }
+    // if (action.type === 'LOGOUT_REQUESTING') {
+    //   const { login } = state
+    //   state = { login } 
+    //   history.push("/login")
+    // }
     if (action.type === 'CLEAN_ALL_STORE') {
       const { login } = state
       state = { login } 

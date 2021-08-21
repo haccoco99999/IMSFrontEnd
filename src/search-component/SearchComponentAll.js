@@ -218,8 +218,8 @@ export function SelectStatusPurchaseOrder(props) {
 export function SelectStatusPurchaseRequisition(props) {
   const optionsInit = [
     { key: 0, value: "Draft" },
-    { key: 1, value: "Merge" },
-    { key: 2, value: "Waiting Confirm" },
+    { key: 1, value: "Merged" },
+    { key: 2, value: "Waiting to accept" },
     { key: 3, value: "Price Quote" },
     { key: 4, value: "Purchase Order" },
     { key: 5, value: "Done" },

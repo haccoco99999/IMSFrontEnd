@@ -23,8 +23,8 @@ export default function PurchaseRequisitionManager() {
     SearchQuery: "",
     Statuses: [
       { key: 0, value: "Draft" },
-      { key: 1, value: "Merge" },
-      { key: 2, value: "Waiting Confirm" },
+      { key: 1, value: "Merged" },
+      { key: 2, value: "Waiting to accept" },
       { key: 3, value: "Price Quote" },
       { key: 4, value: "Purchase Order" },
       { key: 5, value: "Done" },
@@ -69,14 +69,22 @@ export default function PurchaseRequisitionManager() {
     {
       dataField: "status",
       text: "Status",
-    
+
       isDummyField: true,
       formatter: (cellContent, row) => {
         if (row.status === "RequisitionCreated")
           return <span className="badge bg-secondary">Draft</span>;
-        else if (row.status === "POConfirm") {
-          return <span class="badge bg-success">Confirmed</span>;
-        } else if (row.status === "Done") {
+        else if (row.status === "RequisitionMerged") {
+          return <span class="badge bg-success">Merged</span>;
+        }
+    
+        else if (row.status === "PriceQuote") {
+          return <span class="badge bg-warning">Price Quote</span>;
+        }
+        else if (["POConfirm","POWaitingConfirmation","PurchaseOrder"].includes(row.status)) {
+          return <span class="badge bg-success">Purchase Order</span>;
+        }
+        else if (row.status === "Done") {
           return <span class="badge bg-primary">Done</span>;
         } else if (
           row.status === "PQCanceled" ||
@@ -86,13 +94,13 @@ export default function PurchaseRequisitionManager() {
           return <span class="badge bg-danger">Canceled</span>;
         } else
           return (
-            <span class="badge bg-warning text-dark">Waiting confirm</span>
+            <span class="badge bg-warning text-dark">Waiting to accept</span>
           );
       },
       align: (cell, row, rowIndex, colIndex) => {
         return 'left';
 
-    },
+      },
     },
     {
       dataField: "createdByName",
@@ -101,7 +109,7 @@ export default function PurchaseRequisitionManager() {
       align: (cell, row, rowIndex, colIndex) => {
         return 'left';
 
-    },
+      },
     },
     {
       dataField: "createdDate",
@@ -125,7 +133,7 @@ export default function PurchaseRequisitionManager() {
   const [sizePerPage, setSizePerPage] = useState(5);
   const [returnData, setReturnData] = useState(false)
 
-  const { listData, pageCount, rowCountTotal, token , getAllPurchaseRequisitionReducerStatus} = useSelector((state) => ({
+  const { listData, pageCount, rowCountTotal, token, getAllPurchaseRequisitionReducerStatus } = useSelector((state) => ({
     listData: state.getAllPurchaseRequisitionReducer.listPurchaseRequisition,
     pageCount: state.getAllPurchaseRequisitionReducer.pageCount,
     rowCountTotal: state.getAllPurchaseRequisitionReducer.rowCountTotal,
@@ -199,13 +207,13 @@ export default function PurchaseRequisitionManager() {
           if (item[1]["id"] !== "") filterString += "SupplierId=" + item[1]["id"] + "&"
         }
         else if (item[0] === "Statuses") {
-          if(item[1].length === 0){
+          if (item[1].length === 0) {
             purchaserOrderFilterInit.Statuses.forEach(status => {
               if (status.key === 0) {
                 filterString += item[0] + "=RequisitionCreated&"
-  
-  
-  
+
+
+
               }
               else if (status.key === 1) {
                 filterString += item[0] + "=RequisitionMerged&"
@@ -227,37 +235,37 @@ export default function PurchaseRequisitionManager() {
               }
             })
           }
-          else{
-
-          
-          item[1].forEach(status => {
-            if (status.key === 0) {
-              filterString += item[0] + "=RequisitionCreated&"
+          else {
 
 
+            item[1].forEach(status => {
+              if (status.key === 0) {
+                filterString += item[0] + "=RequisitionCreated&"
 
-            }
-            else if (status.key === 1) {
-              filterString += item[0] + "=RequisitionMerged&"
 
-            }
-            else if (status.key === 2) {
-              filterString += item[0] + "=Requisition&"
-            }
-            else if (status.key === 3) {
-              filterString += item[0] + "=PriceQuote&"
-            }
-            else if (status.key === 4) {
-              filterString += item[0] + `=PurchaseOrder&${item[0]}=POWaitingConfirmation&${item[0]}=POConfirm&`
-            }
-            else if (status.key === 5) {
-              filterString += item[0] + "=Done&"
-            }
-            else if (status.key === 6) {
-              filterString += item[0] + `=PQCanceled&${item[0]}=RequisitionCanceled&${item[0]}=POCanceled`
-            }
-          })
-        }
+
+              }
+              else if (status.key === 1) {
+                filterString += item[0] + "=RequisitionMerged&"
+
+              }
+              else if (status.key === 2) {
+                filterString += item[0] + "=Requisition&"
+              }
+              else if (status.key === 3) {
+                filterString += item[0] + "=PriceQuote&"
+              }
+              else if (status.key === 4) {
+                filterString += item[0] + `=PurchaseOrder&${item[0]}=POWaitingConfirmation&${item[0]}=POConfirm&`
+              }
+              else if (status.key === 5) {
+                filterString += item[0] + "=Done&"
+              }
+              else if (status.key === 6) {
+                filterString += item[0] + `=PQCanceled&${item[0]}=RequisitionCanceled&${item[0]}=POCanceled`
+              }
+            })
+          }
 
         }
 
@@ -313,7 +321,7 @@ export default function PurchaseRequisitionManager() {
 
 
               <PagingComponent rowCountTotal={rowCountTotal} sizePerPage={filter.SizePerPage} setSizePage={setSizePage} pageCount={pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.currentPage} />
-              <button   onClick={pushAddPage} type="button" class=" btn-sm mb-1 btn btn-primary">Add Purchase Requistition</button>
+              <button onClick={pushAddPage} type="button" class=" btn-sm mb-1 btn btn-primary">Add Purchase Requistition</button>
               <p className="dropdown-toggle pointer" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16">
                   <path fill-rule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z" />
@@ -340,7 +348,7 @@ export default function PurchaseRequisitionManager() {
                         columns={columns}
                         data={listData}
                         rowEvents={rowEvents}
-                        noDataIndication={() => setStatusLoadingTable({requesting: getAllPurchaseRequisitionReducerStatus.requesting, successful : getAllPurchaseRequisitionReducerStatus.successful})}
+                        noDataIndication={() => setStatusLoadingTable({ requesting: getAllPurchaseRequisitionReducerStatus.requesting, successful: getAllPurchaseRequisitionReducerStatus.successful })}
                         // rowEvents={rowEvents}
                         rowClasses="pointer"
 

@@ -32,7 +32,6 @@ export function checkIndexAuthorization ({ dispatch }) {
       return next()
     }
 
-    // Otherwise let's take them to login!
     replace('login')
     return next()
   }

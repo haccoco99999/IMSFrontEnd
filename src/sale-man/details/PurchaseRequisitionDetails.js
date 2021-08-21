@@ -618,8 +618,21 @@ export default function PurchaseRequisitionDetails() {
     if (statusStore === 0) {
       setStatus("Draft");
       setClassStatus("bg-secondary");
-    } else if (statusStore === 6) {
-      setStatus("Confirmed");
+    }
+    else if (statusStore === 1) {
+      setStatus("Merged");
+      setClassStatus("bg-success");
+    }
+    else if (statusStore === 2) {
+      setStatus("Waiting to accept ");
+      setClassStatus("bg-warning text-dark");
+    }
+    else if (statusStore === 3) {
+      setStatus("Price Quote ");
+      setClassStatus("bg-warning");
+    }
+    else if ( [4,5,6].includes(statusStore)) {
+      setStatus("Purchase Order");
       setClassStatus("bg-success");
     } else if (statusStore === 7) {
       setStatus("Done");

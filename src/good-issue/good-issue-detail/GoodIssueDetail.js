@@ -193,7 +193,7 @@ export default function DetailGoodIssue() {
 
                 {
                     isShow: true,
-                    title: "Create good issue",
+                    title: "Create goods issue",
                     action: () => ClickCreateGoodIssue(),
                     class: "btn-primary",
                 },

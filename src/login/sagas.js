@@ -50,11 +50,11 @@ function loginApi (email, password) {
 
 function* logout () {  
  
-  yield put(unsetClient())
+  yield put({type: "CLEAN_ALL_STORE"})
 
   
   localStorage.removeItem('token')
-  history.push('/login')
+  history.replace('/login')
 }
 
 function* loginFlow (action) {  
@@ -95,7 +95,7 @@ function* loginFlow (action) {
 function* loginWatcher () {  
  
   yield takeEvery(LOGIN_REQUESTING,loginFlow )
-//  yield takeEvery(LOGOUT_REQUESTING, logout)
+ yield takeEvery(LOGOUT_REQUESTING, logout)
   // while (true) {
    
   //   const { email, password } = yield take(LOGIN_REQUESTING)

@@ -43,6 +43,7 @@ import { LOGOUT_REQUESTING } from "./login/constants";
 import Swal from "sweetalert2";
 import CompanyInfo from "./about-company/CompanyInfo";
 function App(props) {
+  const dispatch = useDispatch()
   const [eventPage, setEventPage] = useState({
     hide: "bx-menu",
     isShowing: "",
@@ -198,6 +199,9 @@ function App(props) {
       setHubConnection(hubConnection);
     };
     createHubConnection();
+    return()=>{
+    dispatch({ type: "CLEAN_ALL_STORE" })
+}
   }, []);
 
   const closeConnection = async () => {
@@ -540,22 +544,22 @@ function Logout(props) {
   const dispatch = useDispatch();
   const logout = async () => {
     // let isLogout = false
-    // await Swal.fire({
-    //   title: "Are you sure",
-    //   text: "Do you want to logout?",
-    //   icon: "question",
-    //   showCancelButton: true,
-    //   confirmButtonColor: "#3085d6",
-    //   cancelButtonColor: " #d33",
-    //   confirmButtonText: "Confirm",
-    //   reverseButtons: true,
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     isLogout = true
-    //   }
-    // });
+    await Swal.fire({
+      title: "Are you sure",
+      text: "Do you want to logout?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: " #d33",
+      confirmButtonText: "Confirm",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch({ type: "LOGOUT_REQUESTING" });
+      }
+    });
     // if(isLogout)
-    dispatch({ type: "LOGOUT_REQUESTING" });
+  
     props.closeConnection();
     // props.hubConnection.stop();
   };

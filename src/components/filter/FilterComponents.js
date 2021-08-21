@@ -212,7 +212,6 @@ export function GoodsIssueFilter(props) {
     )
 }
 export function PurchaseOrderFilter(props) {
-    let number = 1000000000
     return (
         <div class="pb-3">
             <div class="card">

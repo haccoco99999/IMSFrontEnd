@@ -700,7 +700,7 @@ export default function PurchaseOrderConfirm() {
         }
         else {
 
-            // dispatch(confirmPurchaseORderByManager({ data: data, token: token, formData: undefined }))
+            dispatch(confirmPurchaseORderByManager({ data: data, token: token, formData: undefined }))
 
         }
         setEventPage((state) => ({

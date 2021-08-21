@@ -42,9 +42,9 @@ export default function Login(props) {
       );
     }
   }
-  useEffect(() => {
-    dispatch({ type: "CLEAN_ALL_STORE" })
-  }, [])
+  // useEffect(() => {
+  //   dispatch({ type: "CLEAN_ALL_STORE" })
+  // }, [])
   useEffect(() => {
     if (loginStatus.requesting === true) {
       Swal.fire({
