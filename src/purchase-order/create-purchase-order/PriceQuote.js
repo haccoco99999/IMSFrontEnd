@@ -650,12 +650,15 @@ export default function PurchaseOrderConfirm() {
 
     }
     function clickToCLoseReject(cancelReason) {
-        let data = {
-            id: detailPurchaseState.orderId,
-            cancelReason: cancelReason,
+        if (cancelReason !== undefined) {
+            let data = {
+                id: detailPurchaseState.orderId,
+                cancelReason: cancelReason,
+            }
+            dispatch(rejectPurchaseOrderConfirm({ data: data, token: token }))
         }
-        dispatch(rejectPurchaseOrderConfirm({ data: data, token: token }))
-        // goBackClick()
+
+
 
         setEventPage((state) => ({
             ...state, isShowReject: !state.isShowReject,
@@ -1028,7 +1031,7 @@ export default function PurchaseOrderConfirm() {
             setListStatus({ nameStatus: "Confirmed", classStatus: "bg-success" })
 
 
-        } else if (["POCanceled","RequisitionCanceled","PQCanceled"].includes(purchaseOrderDataGlobal.status) ) {
+        } else if (["POCanceled", "RequisitionCanceled", "PQCanceled"].includes(purchaseOrderDataGlobal.status)) {
             setListStatus({ nameStatus: "Canceled", classStatus: "bg-danger" })
 
         }
@@ -1455,7 +1458,7 @@ export default function PurchaseOrderConfirm() {
                                         reason={infoRejectOrder.reason}
                                         phoneNumber={infoRejectOrder.phoneNumber}
                                         date={infoRejectOrder.createDate}
-                                        
+
                                     />
                                 </div> : ""}
                                 {purchaseOrderDetailStore.successful ?

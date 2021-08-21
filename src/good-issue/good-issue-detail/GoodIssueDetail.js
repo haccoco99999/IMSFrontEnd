@@ -189,7 +189,7 @@ export default function DetailGoodIssue() {
     function setListButtonNav(status) {
         if (status === "IssueRequisition" && pageAuthorized.includes(status)) {
             return [
-             
+
 
                 {
                     isShow: true,
@@ -329,11 +329,10 @@ export default function DetailGoodIssue() {
             head: [['DELIVERY NOTE']],
             body: [
 
-                ['Order #' + ['Created Date' + GoodIssueDetail.infoGoodIssueDetail.id],],
-                ['Created Date' + GoodIssueDetail.infoGoodIssueDetail.createdDate],
-                ['Delivery Date' + GoodIssueDetail.infoGoodIssueDetail.deliveryDate],
-
-                ['Delivery Method' + GoodIssueDetail.infoGoodIssueDetail.deliverMethod],
+                ['Order #' + GoodIssueDetail.infoGoodIssueDetail.id],
+                ['Created Date: ' + GoodIssueDetail.infoGoodIssueDetail.createdDate],
+                ['Delivery Date: ' + GoodIssueDetail.infoGoodIssueDetail.deliveryDate],
+                ['Delivery Method: ' + GoodIssueDetail.infoGoodIssueDetail.deliverMethod],
 
 
             ],
@@ -353,7 +352,7 @@ export default function DetailGoodIssue() {
             head: [['From:']],
             body: [
                 [companyInfo.companyName],
-                
+
                 ['Street Address'],
                 [companyInfo.address],
                 [`Phone: ${companyInfo.phoneNumber}`],
@@ -372,12 +371,12 @@ export default function DetailGoodIssue() {
             theme: 'plain',
             head: [['To']],
             body: [
-                ['Customer Name ' + GoodIssueDetail.infoGoodIssueDetail.customerName],
+                ['Customer Name: ' + GoodIssueDetail.infoGoodIssueDetail.customerName],
 
-                ['Street Address Vo VAn Kiet, HCMC'],
+                ['Street Address'],
+                [GoodIssueDetail.infoGoodIssueDetail.deliveryAddress],
 
-                ['Phone:' + GoodIssueDetail.infoGoodIssueDetail.customerPhoneNumber],
-                ['Fax:' + GoodIssueDetail.infoGoodIssueDetail.customerPhoneNumber],
+                ['Phone: ' + GoodIssueDetail.infoGoodIssueDetail.customerPhoneNumber],
 
             ],
         })
@@ -415,7 +414,7 @@ export default function DetailGoodIssue() {
         console.log(finalY)
         doc.setFontSize(11)
         doc.text("For questions concerning this invoice, please contact", 105, doc.internal.pageSize.height - 10, "center")
-        doc.text("Name,[321] 456-789 EMail: Inventory@gmail.com", 105, doc.internal.pageSize.height - 5, "center")
+        doc.text(`${companyInfo.phoneNumber} Email: imssystemmail@gmail.com`, 105, doc.internal.pageSize.height - 5, "center")
 
 
 
@@ -578,6 +577,19 @@ export default function DetailGoodIssue() {
     //     </div>
 
     // </div>
+
+    const rowStyle2 = (row, rowIndex) => {
+        const style = {};
+      
+        if ( row.quantity > row.totalPackages) {
+          style.backgroundColor = '#ffc107';
+        } 
+      
+        
+      
+        return style;
+      };
+
     return (
 
 
@@ -587,6 +599,7 @@ export default function DetailGoodIssue() {
                 actionGoBack={backPage}
                 classStatus={classStatus}
                 status={status}
+
                 currentPage={"Detail Good Issue"}
                 home={"Goods Issue"}
 
@@ -639,7 +652,8 @@ export default function DetailGoodIssue() {
 
                                 </div>
                                 <div className="info-detai-receipt">
-                                    <p className="fw-bold">Delivery method: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.deliverMethod}</span></p>
+                                    <p className="fw-bold">Delivery Address: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.deliveryAddress}</span></p>
+                                    <p className="fw-bold">Delivery Method: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.deliverMethod}</span></p>
 
                                 </div>
 
@@ -678,6 +692,7 @@ export default function DetailGoodIssue() {
                                 data={listGoodIssueProducts}
                                 columns={columns}
                                 expandRow={expandRow}
+                                rowStyle={ rowStyle2 }
                                 noDataIndication={() => <TableLoading />}
                             />
 

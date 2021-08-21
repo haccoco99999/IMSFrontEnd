@@ -18,7 +18,7 @@ export default function RejectReceiptModal(props){
                 <button
                  
                   className="btn-close"
-                    onClick={() => props.clickToCLoseReject()}
+                    onClick={() => props.clickToCLoseReject(undefined)}
                   aria-label="Close"
                 ></button>
               </div>
@@ -32,7 +32,7 @@ export default function RejectReceiptModal(props){
               </div>
               <div className="modal-footer">
                 <button
-                 onClick={() => props.clickToCLoseReject()}
+                 onClick={() => props.clickToCLoseReject(undefined)}
                   type="button"
                   className="btn btn-default">
                   Cancel

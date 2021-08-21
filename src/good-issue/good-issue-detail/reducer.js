@@ -30,6 +30,7 @@ const initalGoodIssueDetailState = {
     deliveryDate: "",
     deliverMethod: "",
     createdDate: "",
+    deliveryAddress:"",
     status: "",
     infoCreater: {
       fullname: "",
@@ -126,7 +127,6 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
       let isShipping = true
      
       listProducts.forEach((product) =>{
-        console.log(product.quantity  +" va "+product.totalPackages)
         if(product.quantity > product.totalPackages ){
           isShipping = false
         }
@@ -144,6 +144,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
           customerPhoneNumber: action.json.goodsIssueOrder.customerPhoneNumber,
           deliveryDate: action.json.goodsIssueOrder.deliveryDate,
           deliverMethod: action.json.goodsIssueOrder.deliveryMethod,
+          deliveryAddress: action.json.goodsIssueOrder.deliveryAddress,
           createdDate: transaction.date,
           infoCreater: {
             fullname: transaction.applicationUser.fullname,
