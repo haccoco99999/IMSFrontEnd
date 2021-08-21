@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux'
-import { useHistory, useLocation, withRouter } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { getDetailPurchaseOrder, sendMailService, createPurchaseOrder, rejectPurchaseOrderConfirm, createPriceQuote, confirmDetailPurchaseOrder, confirmPurchaseORderByManager, saveProductsPurchaseOrder, editPriceQuote } from './action'
 // import sendMailPriceQuote from '../create-price-quote/action';
 // import InfoDetailReceipt from '../../info-detail-receipt/InfoDetailReceipt';
-import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
+// import ToolkitProvider, { ColumnToggle } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import moment from 'moment';
-import ListProductsTable from '../../list-products-table/ListProductsTable';
+// import ListProductsTable from '../../list-products-table/ListProductsTable';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ConfirmDateModal from './ConfirmDateModal';
 import './PriceQuote.css'
-import { SearchToAddProduct, SeachSupplier } from '../../search-component/SearchComponentAll';
+// import { SearchToAddProduct, SeachSupplier } from '../../search-component/SearchComponentAll';
 import MergePriceQuote from './MergePriceQuoteComponent';
 // import FormAddProductModal from './FormAddProductModal';
 import FormAddProductModal from '../../components/add-product-form/FormAddProductModal';
@@ -24,7 +24,7 @@ import { CONFIRM_PURCHASE_ORDER_RESET, CREATE_PRICE_QUOTE_RESET, CREATE_PURCHASE
 import { InfoPurchaseOrderLoader, TableLoading } from '../../components/loading/loading-component';
 import NavigationBar from '../../components/navbar/navbar-component';
 import RejectWrapper from '../../components/reject-wrapper/reject-component';
-import { ProgressBar } from '../../components/progress-bar/ProgressBar';
+// import { ProgressBar } from '../../components/progress-bar/ProgressBar';
 import { parseNumberToPrice } from '../../helper/parsePrice';
 // import { ProgressBar } from '../../components/progress-bar/ProgressBar';
 
@@ -258,7 +258,7 @@ export default function PurchaseOrderConfirm() {
 
             Swal.fire({
                 title: "Are you sure",
-                text: "Do you want to save?",
+                text: "Do you want to create purchase order?",
                 icon: "question",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -586,7 +586,7 @@ export default function PurchaseOrderConfirm() {
 
                 Swal.fire({
                     title: "Are you sure",
-                    text: "Do you want to save?",
+                    text: "Do you want to submit?",
                     icon: "question",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
@@ -1115,7 +1115,7 @@ export default function PurchaseOrderConfirm() {
 
         Swal.fire({
             title: "Are you sure",
-            text: "Do you want to revert?",
+            text: "Do you want to revert ?",
             icon: "question",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -1628,7 +1628,7 @@ export default function PurchaseOrderConfirm() {
                                         class="form-control" disabled={eventPage.isShowEditInfoOrder} value={subject} onChange={(e) => setSubject(e.target.value)} name="" id="" aria-describedby="helpId" placeholder="" />
                                 </div> */}
                                 <div className="form-text dropdown-toggle text-success" data-bs-toggle="collapse" data-bs-target="#collapseMoreCotent">
-                                    Content Mail:
+                                     Email content
                                 </div>
                                 <div class="collapse show" id="collapseMoreCotent">
 

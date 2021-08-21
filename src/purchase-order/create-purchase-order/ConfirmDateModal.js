@@ -186,7 +186,7 @@ export default function ConfirmDateModal(props) {
 
 
             <div class="form-check">
-              <p>Do you want to send purchase order for supplier ?</p>
+              <p>Do you want to send purchase order to supplier ?</p>
               <label class="form-check-label">
                 <input type="checkbox" class="form-check-input" value={isSendMail} onChange={() => setIsSendMail(!isSendMail)} id="" />
                 I agree
@@ -199,13 +199,13 @@ export default function ConfirmDateModal(props) {
                 <input disabled value={props.supplier.supplierName} class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
               </div>
               <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">To email address</label>
+                <label for="exampleFormControlInput1" class="form-label">To email address:</label>
                 <input type="email" class="form-control" disabled id="exampleFormControlInput1" value={props.supplier.email} placeholder="name@example.com" />
               </div>
               <form id="validContentMail" className="needs-validation">
                 <div class="mb-3">
-                  <label for="validationTextarea" class="form-label">Textarea</label>
-                  <textarea class="form-control" ref={contentMail} id="validationTextarea" placeholder="Required example textarea" rows="5" required></textarea>
+                  <label for="validationTextarea" class="form-label">Email content:</label>
+                  <textarea class="form-control" ref={contentMail} id="validationTextarea" placeholder="Input your email content" rows="5" required></textarea>
                   <div class="invalid-feedback">
                     Please enter a message in the content mail.
                   </div>
