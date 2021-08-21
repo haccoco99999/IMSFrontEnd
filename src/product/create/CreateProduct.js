@@ -129,7 +129,8 @@ export default function CreateProductComponent(props) {
     // });
   }
   function goBackClick() {
-    history.goBack(-1);
+    // history.goBack(-1);
+    history.push('/homepage/product')
   }
 
   // function checkUndifined() {
