@@ -131,28 +131,28 @@ export default function CreateGoodsReceiptComponent() {
       },
       // editable: true,
       validator: (newValue, oldValue, row, done) => {
-        if(newValue!=="")
-        {
-        let check = false;
-        checkDuplicateSKU(newValue).then((result) => {
-          console.log(result);
-          if (result.hasMatch) {
-            setIsCheckingNumeric(true);
-            check = true;
-          } else {
-            setIsCheckingNumeric(false);
-          }
-        });
-        setTimeout(() => {
-          if (check)
-            return done({
-              valid: false,
-              message: "SKU has existed",
-            });
-          return done();
-        }, 2000);
+        if (newValue !== "") {
+          let check = false;
+          checkDuplicateSKU(newValue).then((result) => {
+            console.log(result);
+            if (result.hasMatch) {
+              setIsCheckingNumeric(true);
+              check = true;
+            } else {
+              setIsCheckingNumeric(false);
+            }
+          });
+          setTimeout(() => {
+            if (check)
+              return done({
+                valid: false,
+                message: "SKU has existed",
+              });
+            return done();
+          }, 2000);
 
-        return { async: true };}
+          return { async: true };
+        }
       },
     },
     {
@@ -337,6 +337,11 @@ export default function CreateGoodsReceiptComponent() {
     return new Set(array.map((item) => item[keyName])).size !== array.length;
   }
 
+  function checkForHavingValidatingSKU(array) {
+    const check = (element) => element.sku === "Validating";
+    return array.some(check);
+  }
+
   function saveGoodsReceipt() {
     const Data = {
       purchaseOrderNumber: selectedPO,
@@ -383,7 +388,18 @@ export default function CreateGoodsReceiptComponent() {
             showConfirmButton: false,
           });
         } else {
-          if (checkForDuplicates(list_BuyingProduct, "sku")) {
+          let listChecking;
+          // console.log("CHECK CO SKU HAY KO:" , checkForHavingValidatingSKU(list_BuyingProduct))
+          if (checkForHavingValidatingSKU(list_BuyingProduct)) {
+            listChecking = list_BuyingProduct.filter(
+              (item) => item.sku !== "Validating"
+            );
+          } else listChecking = list_BuyingProduct;
+          // console.log(listChecking)
+          // console.log("AAA:",list_BuyingProduct.filter(
+          //   (item) => item.sku !== "Validating"
+          // ))
+          if (checkForDuplicates(listChecking, "sku")) {
             console.log("Duplicate");
 
             Swal.fire({
@@ -426,28 +442,28 @@ export default function CreateGoodsReceiptComponent() {
         .filter((product) => product.quantityLeftAfterReceived !== 0)
         .map((product) => {
           let tempSku;
-            if (checkSKUSHasExistedInCache(product.productVariantId))
-              tempSku = "Validating";
-            else tempSku = product.productVariant.sku;
-            // let hasSKU;
-            // if (tempSKU !== "") hasSKU = false;
-            // else hasSKU = true;
-            return {
-              id: product.id,
-              name: product.productVariant.name,
-              productId: product.productVariant.productId,
-              productVariantId: product.productVariantId,
+          if (checkSKUSHasExistedInCache(product.productVariantId))
+            tempSku = "Validating";
+          else tempSku = product.productVariant.sku;
+          // let hasSKU;
+          // if (tempSKU !== "") hasSKU = false;
+          // else hasSKU = true;
+          return {
+            id: product.id,
+            name: product.productVariant.name,
+            productId: product.productVariant.productId,
+            productVariantId: product.productVariantId,
 
-              //todo: Sua lai data
-              orderQuantity: product.quantityLeftAfterReceived,
-              // orderQuantity: product.orderQuantity,
-              // sku: product.productVariant.sku,
-              sku: tempSku,
-              barcode: product.productVariant.barcode,
-              received: 0,
-              // hasSKU: product.productVariant.sku === "",
-              hasSKU: tempSku === "",
-            };
+            //todo: Sua lai data
+            orderQuantity: product.quantityLeftAfterReceived,
+            // orderQuantity: product.orderQuantity,
+            // sku: product.productVariant.sku,
+            sku: tempSku,
+            barcode: product.productVariant.barcode,
+            received: 0,
+            // hasSKU: product.productVariant.sku === "",
+            hasSKU: tempSku === "",
+          };
         })
     );
     setListCompare(
