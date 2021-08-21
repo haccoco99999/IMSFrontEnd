@@ -145,7 +145,7 @@ export default function PurchaseQuoteOrder() {
 
                 }
                 if (row.status === "POWaitingConfirmation") {
-                    return <span class="badge bg-warning text-dark">Watinng confirm</span>
+                    return <span class="badge bg-warning text-dark">Waiting confirm</span>
 
 
 

@@ -128,7 +128,7 @@ export function ProgressBarCreateProduct(props) {
 
 export function ProgressBarPurchaseOrder(props){
   const listStep = [
-    {value:"PurchaseOrder",name:"Created",status:"is-complete"},
+    {value:"PurchaseOrder",name:"Create",status:"is-complete"},
     {value:"POWaitingConfirmation",name:"Confirm",status:"is-complete"},
     {value:"POConfirm",name:"Done",status:"is-complete"},
     // {value:"Done",name:"Done",status:"is-complete"},

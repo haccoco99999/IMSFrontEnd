@@ -9,7 +9,7 @@ import './GoodIssueDetail.css'
 import NavigationBar from '../../components/navbar/navbar-component';
 import RejectReceiptModal from '../../RejectReceiptModal/RejectReceiptModal';
 import { createGoodIssue, updateGoodIssue, reactjsGoodIssue } from './action'
-import PrintReceipt from './PrinterReceipt';
+// import PrintReceipt from './PrinterReceipt';
 import Swal from 'sweetalert2'
 
 import { jsPDF } from 'jspdf'
@@ -269,7 +269,7 @@ export default function DetailGoodIssue() {
 
         Swal.fire({
             title: "Are you sure",
-            text: "Do you want to save?",
+            text: "Do you want to create goods issue?",
             icon: "question",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -446,7 +446,7 @@ export default function DetailGoodIssue() {
 
         Swal.fire({
             title: "Are you sure",
-            text: "Do you want to save?",
+            text: "Do you want to ship?",
             icon: "question",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",

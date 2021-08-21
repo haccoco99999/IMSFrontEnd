@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import './preview-quote-request.css'
 // import {clickToPrevewPriceQuote, clickToSendMailPriceQuote} from '../action'
 import { useDispatch, useSelector } from 'react-redux'
-import htmlToDraft from 'html-to-draftjs';
-import draftToMarkdown from 'draftjs-to-markdown';
+// import htmlToDraft from 'html-to-draftjs';
+// import draftToMarkdown from 'draftjs-to-markdown';
 
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
+// import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { jsPDF } from 'jspdf'
 import 'jspdf-autotable'
 export default function PreviewSendMail(props) {
@@ -51,7 +51,7 @@ export default function PreviewSendMail(props) {
                 body: [
                     ['Quote #:' + props.infoPriceQuote.orderId],
                     ['Date: ' + new Date().toISOString().slice(0, 10)],
-                    ['Request By: ' + props.infoPriceQuote.infoUserPurchaseOrder.name],
+                    ['Requested By: ' + props.infoPriceQuote.infoUserPurchaseOrder.name],
                    
 
                 ],
@@ -161,7 +161,7 @@ export default function PreviewSendMail(props) {
                         </div>
                         <div class="modal-footer">
                             <button type="button" onClick={() => props.closePreview()} class="btn btn-secondary btn-cancel-preview" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" onClick={() => props.clostPreviewSendMail(doc.output('blob'))} class="btn btn-primary">Send email to vendor</button>
+                            <button type="button" onClick={() => props.clostPreviewSendMail(doc.output('blob'))} class="btn btn-primary">Send email to Supplier</button>
                         </div>
                     </div>
                 </div>
