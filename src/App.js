@@ -11,6 +11,7 @@ import boxLogo from "./images/box.svg";
 import importLogo from "./images/import.svg";
 import shoppingLogo from "./images/shopping.svg";
 import dashboardLogo from "./images/dashboard.svg";
+import salemanLogo from "./images/delivery-man.svg";
 
 import ProfileClient from "./about-account/ProfileClient";
 import AboutSoftware from "./about-software/about-software";
@@ -462,7 +463,7 @@ function App(props) {
             <li className="clicked-menu" onClick={()=>hideProfile()}>
               <Link to="/homepage/sale-man">
                 <i className="bx">
-                  <img src={userLogo} />
+                  <img src={salemanLogo} />
                 </i>
                 <span className="links_name">Purchase requisition</span>
               </Link>
