@@ -97,19 +97,13 @@ export default function PurchaseRequisitionManager() {
             <span class="badge bg-warning text-dark">Waiting to accept</span>
           );
       },
-      align: (cell, row, rowIndex, colIndex) => {
-        return 'left';
-
-      },
+    
     },
     {
       dataField: "createdByName",
       text: "Created By",
       hidden: true,
-      align: (cell, row, rowIndex, colIndex) => {
-        return 'left';
-
-      },
+    
     },
     {
       dataField: "createdDate",

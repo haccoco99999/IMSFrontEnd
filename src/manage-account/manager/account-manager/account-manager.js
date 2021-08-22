@@ -47,9 +47,10 @@ function AccountManager() {
 
 
 
-  const { data, token, pageCount, rowCountTotal,getAllAccountsReducerStatus } = useSelector((state) => ({
+  const { data, token, pageCount, rowCountTotal,getAllAccountsReducerStatus, email } = useSelector((state) => ({
     data: state.getAllAccountsReducer.listAccounts,
     token: state.client.token,
+    email: state.client.email,
     getAllAccountsReducerStatus : state.getAllAccountsReducer,
     pageCount: state.getAllAccountsReducer.pageCount,
     rowCountTotal: state.getAllAccountsReducer.rowCountTotal,
@@ -235,6 +236,7 @@ function AccountManager() {
     },
 
   };
+  
   return (
     <div class="space-top-heading wrapper">
       <div className="title-heading mt-2">
@@ -323,6 +325,7 @@ function AccountManager() {
                         condensed
                         noDataIndication={() => setStatusLoadingTable({requesting: getAllAccountsReducerStatus.requesting , successful:getAllAccountsReducerStatus.successful})}
                         rowEvents={rowEvents}
+                        hiddenRows={[email]}
                         rowClasses="pointer"
                         //    headerClasses="table-header-receipt"
                         {...props.baseProps}
