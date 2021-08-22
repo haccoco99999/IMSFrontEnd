@@ -429,6 +429,7 @@ export default function StocktakeDetailsComponent() {
             };
           })
         );
+        setIsChanging(false)
       }
     });
   }
