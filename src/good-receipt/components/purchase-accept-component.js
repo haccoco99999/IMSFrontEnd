@@ -11,7 +11,7 @@ export default function PurchaseAcceptModal(props) {
     { dataField: "supplierName", text: "Supplier" },
     {
       dataField: "modifiedDate",
-      text: "Modified Date",
+      text: "Confirmed Date",
       formatter: (cellContent, row, rowIndex) => {
         return (
           <span>
