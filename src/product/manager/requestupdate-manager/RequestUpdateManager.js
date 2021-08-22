@@ -115,6 +115,7 @@ export default function RequestUpdateManager() {
         title: "Your work has been saved",
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           dispatch(getAllUpdateProductAction({ token: token }));
@@ -170,34 +171,27 @@ export default function RequestUpdateManager() {
   }, [rejectUpdateRequestSkuReducer]);
   return (
     <>
-
-<div class="pb-3">
+      <div class="pb-3">
         <div className="card">
-          <div class="card-header text-white bg-secondary">Request Update List</div>
+          <div class="card-header text-white bg-secondary">
+            Request Update List
+          </div>
           <div className="card-body">
-      
-
-
             {/* <PagingComponent sizePerPage={filter.sizePerPage} setSizePage={setSizePage} pageCount={infoTablePage.pageCount} nextPagingClick={nextPagingClick} backPagingClick={backPagingClick} currentPage={filter.CurrentPage} /> */}
 
             <BootstrapTable
-          keyField="productVariantId"
-          headerClasses="table-header-receipt"
-          striped
-          hover
-          condensed
-          columns={columnsProductUpdate}
-          noDataIndication={() => <TableLoading />}
-          data={getAllUpdateRequest}
-        />
-
-
-
+              keyField="productVariantId"
+              headerClasses="table-header-receipt"
+              striped
+              hover
+              condensed
+              columns={columnsProductUpdate}
+              noDataIndication={() => <TableLoading />}
+              data={getAllUpdateRequest}
+            />
           </div>
         </div>
       </div>
-
-      
     </>
   );
 }

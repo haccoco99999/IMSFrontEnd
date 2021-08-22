@@ -42,7 +42,7 @@ export default function VariantDetails() {
     { dataField: "quantity", text: "Quantity" },
     {
       dataField: "importedDate",
-      text: "Imported Date",
+      text: "Imported Date", sort:true,
       formatter: (cellContent, row) => {
         return (
           <span>
@@ -204,6 +204,7 @@ export default function VariantDetails() {
           cancelButtonColor: " #d33",
           confirmButtonText: "Confirm",
           reverseButtons: true,
+          allowOutsideClick: false,
         }).then((result) => {
           if (result.isConfirmed) {
             dispatch(
@@ -310,11 +311,10 @@ export default function VariantDetails() {
     if (getDetailsVariantReducer.successful) setIsReturnData(true);
   }, [getDetailsVariantReducer]);
 
-  console.log(location.state.skuRequest);
-
-  // useEffect(() => {
-
-  // }, []);
+  const defaultSorted = [{
+    dataField: 'importedDate',
+    order: 'asc'
+  }];
   return (
     <div>
       <>
@@ -428,6 +428,9 @@ export default function VariantDetails() {
                     data={listPackage}
                     rowEvents={rowEvents}
                     rowClasses="pointer"
+                    defaultSorted = {
+                      defaultSorted
+                    }
                   />
                 </li>
               </ul>

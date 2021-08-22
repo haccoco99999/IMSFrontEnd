@@ -17,7 +17,10 @@ import {
   updateAction,
 } from "./action";
 import { RESET } from "./constants";
-import { InfoPurchaseOrderLoader, TableLoading } from "../../components/loading/loading-component";
+import {
+  InfoPurchaseOrderLoader,
+  TableLoading,
+} from "../../components/loading/loading-component";
 import NavigationBar from "../../components/navbar/navbar-component";
 import RejectModal from "../components/reject-component";
 import AdjustModal from "../components/adjust-component";
@@ -224,7 +227,10 @@ export default function StocktakeDetailsComponent() {
   //todo: function Nav Button
   const listButton = setListButtonNav(statusStocktakeStore);
   function setListButtonNav(status) {
-    if (status === 0 && pageAuthorized.includes(status === 0 ? "Progressing":undefined)) {
+    if (
+      status === 0 &&
+      pageAuthorized.includes(status === 0 ? "Progressing" : undefined)
+    ) {
       return [
         {
           isShow: true,
@@ -245,7 +251,10 @@ export default function StocktakeDetailsComponent() {
           disabled: isChecking,
         },
       ];
-    } else if (status === 2 && pageAuthorized.includes(status === 2 ? "AwaitingAdjustment":undefined)) {
+    } else if (
+      status === 2 &&
+      pageAuthorized.includes(status === 2 ? "AwaitingAdjustment" : undefined)
+    ) {
       return [
         {
           isShow: true,
@@ -542,6 +551,7 @@ export default function StocktakeDetailsComponent() {
         title: "Your work has been saved",
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed)
           dispatch(
@@ -576,6 +586,7 @@ export default function StocktakeDetailsComponent() {
         title: "Your work has been saved",
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed)
           dispatch(
@@ -610,6 +621,7 @@ export default function StocktakeDetailsComponent() {
         title: "Quantity has been adjusted",
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed)
           dispatch(
@@ -644,6 +656,7 @@ export default function StocktakeDetailsComponent() {
         title: "Your work has been submitted",
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed)
           dispatch(
@@ -667,10 +680,8 @@ export default function StocktakeDetailsComponent() {
   }, [stocktakeDetailsStore]);
   return (
     <div>
-      
-        <>
-        {
-          statusStocktakeStore === -1 &&
+      <>
+        {statusStocktakeStore === -1 && (
           <NavigationBar
             listButton={listButton}
             titleBar={IDStocktakeStore}
@@ -680,54 +691,52 @@ export default function StocktakeDetailsComponent() {
             currentPage="Stocktake details "
             classStatus={classStatus}
           />
-        }
-        {
-          statusStocktakeStore === 1 &&
+        )}
+        {statusStocktakeStore === 1 && (
           <NavigationBar
-          listButton={listButton}
-          titleBar={IDStocktakeStore}
-          actionGoBack={goBackClick}
-          status={titleStatus}
-          home="Stocktake"
-          currentPage="Stocktake details "
-          classStatus={classStatus}
-          isShowProgressBarStocktake={true}
-          // currentStep={3}
-        />
-        }
-        {
-           statusStocktakeStore === 2 &&
-           <NavigationBar
-           listButton={listButton}
-           titleBar={IDStocktakeStore}
-           actionGoBack={goBackClick}
-           status={titleStatus}
-           home="Stocktake"
-           currentPage="Stocktake details "
-           classStatus={classStatus}
-           isShowProgressBarStocktake={true}
-           currentStep={2}/>
-        }
-       {
-           statusStocktakeStore === 0 &&
-           <NavigationBar
-           listButton={listButton}
-           titleBar={IDStocktakeStore}
-           actionGoBack={goBackClick}
-           status={titleStatus}
-           home="Stocktake"
-           currentPage="Stocktake details "
-           classStatus={classStatus}
-           isShowProgressBarStocktake={true}
-           currentStep={1}/>
-        }
-         
+            listButton={listButton}
+            titleBar={IDStocktakeStore}
+            actionGoBack={goBackClick}
+            status={titleStatus}
+            home="Stocktake"
+            currentPage="Stocktake details "
+            classStatus={classStatus}
+            isShowProgressBarStocktake={true}
+            // currentStep={3}
+          />
+        )}
+        {statusStocktakeStore === 2 && (
+          <NavigationBar
+            listButton={listButton}
+            titleBar={IDStocktakeStore}
+            actionGoBack={goBackClick}
+            status={titleStatus}
+            home="Stocktake"
+            currentPage="Stocktake details "
+            classStatus={classStatus}
+            isShowProgressBarStocktake={true}
+            currentStep={2}
+          />
+        )}
+        {statusStocktakeStore === 0 && (
+          <NavigationBar
+            listButton={listButton}
+            titleBar={IDStocktakeStore}
+            actionGoBack={goBackClick}
+            status={titleStatus}
+            home="Stocktake"
+            currentPage="Stocktake details "
+            classStatus={classStatus}
+            isShowProgressBarStocktake={true}
+            currentStep={1}
+          />
+        )}
 
-          <div className="wrapper">
-            <div class="card">
-              <div class="card-header fw-bold">Stocktake Information</div>
-              <ul class="list-group list-group-flush">
-                { !showLoader ? 
+        <div className="wrapper">
+          <div class="card">
+            <div class="card-header fw-bold">Stocktake Information</div>
+            <ul class="list-group list-group-flush">
+              {!showLoader ? (
                 <li class="list-group-item">
                   {isLoading && statusStocktakeStore === -1 && (
                     <RejectWrapper
@@ -770,114 +779,127 @@ export default function StocktakeDetailsComponent() {
                       </div>
                     </div>
                   )}
-                </li> : <InfoPurchaseOrderLoader/>}
-                <li class="list-group-item">
-                  
-                  <h5 class="card-title fw-bold mb-3">List checked items</h5>
-                  {!showLoader ? 
-                  <div>
-                  {isChanging && (
-                    <>
-                      <button
-                        type="button"
-                        class="btn btn-primary"
-                        onClick={onSaveClick}
-                      >
-                        Save
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-secondary ms-1"
-                        onClick={onRevertClick}
-                      >
-                        Revert
-                      </button>
-                    </>
-                  )} 
-                  <div className="mt-3">
-                    {isLoading &&
-                      (statusStocktakeStore === 0 ? (
-                        <Table
-                          keyField="pkgId"
-                          columns={columns}
-                          data={listCheckedItems}
-                          noDataIndication="Table is Empty"
-                          cellEdit={cellEditFactory({
-                            mode: "click",
-                            blurToSave: true,
-                            beforeSaveCell(
-                              oldValue,
-                              newValue,
-                              row,
-                              column,
-                              done
-                            ) {
-                              let findEle = listCompare.find(
-                                (e) => e.pkgId === row.pkgId
-                              );
-                              if (column.dataField === "actualQuantity") {
-                                console.log("Actual quantity");
-                                let currentNote = row.note;
-                                console.log(currentNote);
-                                if (
-                                  newValue !== findEle.actualQuantity ||
-                                  currentNote !== findEle.note
-                                ) {
-                                  setListCompare([
-                                    ...listCompare,
-                                    listCompare.map((e) =>
-                                      e === findEle ? (e.isChanging = true) : e
-                                    ),
-                                  ]);
-                                } else {
-                                  // if (currentNote === findEle.note)
-                                  setListCompare([
-                                    ...listCompare,
-                                    listCompare.map((e) =>
-                                      e === findEle ? (e.isChanging = false) : e
-                                    ),
-                                  ]);
-                                }
-                              } else if (column.dataField === "note") {
-                                console.log("Note");
-                                let currentQuantity = row.actualQuantity;
-                                if (
-                                  newValue !== findEle.note ||
-                                  currentQuantity !== findEle.actualQuantity
-                                )
-                                  setListCompare([
-                                    ...listCompare,
-                                    listCompare.map((e) =>
-                                      e === findEle ? (e.isChanging = true) : e
-                                    ),
-                                  ]);
-                                else
-                                  setListCompare([
-                                    ...listCompare,
-                                    listCompare.map((e) =>
-                                      e === findEle ? (e.isChanging = false) : e
-                                    ),
-                                  ]);
-                              }
-                            },
-                          })}
-                        />
-                      ) : (
-                        <Table
-                          keyField="pkgId"
-                          columns={columnsNotProgressing}
-                          data={listCheckedItems}
-                          noDataIndication="Table is Empty"
-                        />
-                      ))}
-                  </div>
-                  </div> : <InfoPurchaseOrderLoader/> }
                 </li>
-              </ul>
-            </div>
+              ) : (
+                <InfoPurchaseOrderLoader />
+              )}
+              <li class="list-group-item">
+                <h5 class="card-title fw-bold mb-3">List checked items</h5>
+                {!showLoader ? (
+                  <div>
+                    {isChanging && (
+                      <>
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          onClick={onSaveClick}
+                        >
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-secondary ms-1"
+                          onClick={onRevertClick}
+                        >
+                          Revert
+                        </button>
+                      </>
+                    )}
+                    <div className="mt-3">
+                      {isLoading &&
+                        (statusStocktakeStore === 0 ? (
+                          <Table
+                            keyField="pkgId"
+                            columns={columns}
+                            data={listCheckedItems}
+                            noDataIndication="Table is Empty"
+                            cellEdit={cellEditFactory({
+                              mode: "click",
+                              blurToSave: true,
+                              beforeSaveCell(
+                                oldValue,
+                                newValue,
+                                row,
+                                column,
+                                done
+                              ) {
+                                let findEle = listCompare.find(
+                                  (e) => e.pkgId === row.pkgId
+                                );
+                                if (column.dataField === "actualQuantity") {
+                                  console.log("Actual quantity");
+                                  let currentNote = row.note;
+                                  console.log(currentNote);
+                                  if (
+                                    newValue !== findEle.actualQuantity ||
+                                    currentNote !== findEle.note
+                                  ) {
+                                    setListCompare([
+                                      ...listCompare,
+                                      listCompare.map((e) =>
+                                        e === findEle
+                                          ? (e.isChanging = true)
+                                          : e
+                                      ),
+                                    ]);
+                                  } else {
+                                    // if (currentNote === findEle.note)
+                                    setListCompare([
+                                      ...listCompare,
+                                      listCompare.map((e) =>
+                                        e === findEle
+                                          ? (e.isChanging = false)
+                                          : e
+                                      ),
+                                    ]);
+                                  }
+                                } else if (column.dataField === "note") {
+                                  console.log("Note");
+                                  let currentQuantity = row.actualQuantity;
+                                  if (
+                                    newValue !== findEle.note ||
+                                    currentQuantity !== findEle.actualQuantity
+                                  )
+                                    setListCompare([
+                                      ...listCompare,
+                                      listCompare.map((e) =>
+                                        e === findEle
+                                          ? (e.isChanging = true)
+                                          : e
+                                      ),
+                                    ]);
+                                  else
+                                    setListCompare([
+                                      ...listCompare,
+                                      listCompare.map((e) =>
+                                        e === findEle
+                                          ? (e.isChanging = false)
+                                          : e
+                                      ),
+                                    ]);
+                                }
+                              },
+                            })}
+                          />
+                        ) : (
+                          <Table
+                            keyField="pkgId"
+                            columns={columnsNotProgressing}
+                            data={listCheckedItems}
+                            noDataIndication="Table is Empty"
+                          />
+                        ))}
+                    </div>
+                  </div>
+                ) : (
+                  <InfoPurchaseOrderLoader />
+                )}
+              </li>
+            </ul>
           </div>
-        </>
-   
+        </div>
+      </>
+
       <RejectModal
         modalRef={modalRef}
         hideModal={hideRejectModal}

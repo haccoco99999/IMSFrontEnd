@@ -44,7 +44,7 @@ import { LOGOUT_REQUESTING } from "./login/constants";
 import Swal from "sweetalert2";
 import CompanyInfo from "./about-company/CompanyInfo";
 function App(props) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [eventPage, setEventPage] = useState({
     hide: "bx-menu",
     isShowing: "",
@@ -62,7 +62,7 @@ function App(props) {
       statusSetting: !eventPage.statusSetting,
     });
   }
-  const profileRef = useRef()
+  const profileRef = useRef();
   function toggleBell() {
     setEventPage({
       statusBell: !eventPage.statusBell,
@@ -73,7 +73,7 @@ function App(props) {
     profileRef.current.classList.remove("show");
   }
   function toggleActive() {
-    hideProfile()
+    hideProfile();
     if (eventPage.status) {
       setEventPage({
         hide: "",
@@ -127,7 +127,6 @@ function App(props) {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-
           });
         });
 
@@ -220,36 +219,26 @@ function App(props) {
       console.log(e);
     }
   };
-  var actualCode = '(' + function () {
-    let arrow = document.getElementsByClassName("clicked-menu");
-    for (var i = 0; i < arrow.length; i++) {
-      let temp = arrow[i]
-      arrow[i].addEventListener("click", (e) => {
-
-        for (var j = 0; j < arrow.length; j++) {
-          if (j !== i) {
-
-            arrow[j].classList.remove("show-clicked-menu")
+  var actualCode =
+    "(" +
+    function () {
+      let arrow = document.getElementsByClassName("clicked-menu");
+      for (var i = 0; i < arrow.length; i++) {
+        let temp = arrow[i];
+        arrow[i].addEventListener("click", (e) => {
+          for (var j = 0; j < arrow.length; j++) {
+            if (j !== i) {
+              arrow[j].classList.remove("show-clicked-menu");
+            }
           }
+          temp.classList.add("show-clicked-menu");
 
-
-
-
-        }
-        temp.classList.add("show-clicked-menu")
-
-        //  arrowParent.classList.add("show-clicked-menu");
-
-      });
-
-
-    }
-
-
-
-
-  } + ')();';
-  var script = document.createElement('script');
+          //  arrowParent.classList.add("show-clicked-menu");
+        });
+      }
+    } +
+    ")();";
+  var script = document.createElement("script");
   script.textContent = actualCode;
   document.body.appendChild(script);
   // useEffect(() => {
@@ -316,7 +305,6 @@ function App(props) {
             id="collapseProfile"
           >
             <li
-
               onClick={() => history.push("/homepage/about-my-account")}
               className="item-name"
             >

@@ -266,6 +266,7 @@ export default function CategoryManager() {
           title: "Your work has been saved",
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
+          allowOutsideClick: false,
         }).then((result) => {
           if (result.isConfirmed) {
             hideModal();
@@ -379,7 +380,12 @@ export default function CategoryManager() {
               data={list_Categories}
               rowEvents={rowEvents}
               rowClasses="pointer"
-              noDataIndication={() => setStatusLoadingTable({requesting: getAllCategoriesReducerStatus.requesting , successful:getAllCategoriesReducerStatus.successful})}
+              noDataIndication={() =>
+                setStatusLoadingTable({
+                  requesting: getAllCategoriesReducerStatus.requesting,
+                  successful: getAllCategoriesReducerStatus.successful,
+                })
+              }
             />
           </div>
         </div>
