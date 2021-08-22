@@ -12,7 +12,10 @@ import {
 } from "./action";
 import { CLEAR_MESSAGE } from "./constants";
 import NavigationBar from "../../components/navbar/navbar-component";
-import { InfoPurchaseOrderLoader, TableLoading } from "../../components/loading/loading-component";
+import {
+  InfoPurchaseOrderLoader,
+  TableLoading,
+} from "../../components/loading/loading-component";
 export default function SupplierDetails() {
   let history = useHistory();
   let location = useLocation();
@@ -218,14 +221,17 @@ export default function SupplierDetails() {
           title: "Your work has been saved",
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
+          allowOutsideClick: false,
         }).then((result) => {
-          if (result.isConfirmed)
-           { dispatch(
+          if (result.isConfirmed) {
+            dispatch(
               getDetailsSupplierAction({
                 id: location.state.supplierId,
                 token: token,
               })
-            );  setIsDisabled(true);}
+            );
+            setIsDisabled(true);
+          }
         });
     } else if (updateSupplierReducer.errors) {
       Swal.fire({
@@ -270,21 +276,20 @@ export default function SupplierDetails() {
 
   return (
     <div>
-   
-        <>
-          <NavigationBar
-            listButton={listButton}
-            titleBar="Supplier details"
-            actionGoBack={goBackClick}
-            status=""
-            home="Supplier"
-            currentPage="Supplier details"
-          />
+      <>
+        <NavigationBar
+          listButton={listButton}
+          titleBar="Supplier details"
+          actionGoBack={goBackClick}
+          status=""
+          home="Supplier"
+          currentPage="Supplier details"
+        />
 
-          <div className="wrapper">
-            <div className="card">
-              <div class="card-header">Supplier Information</div>
-              {returnData ? (
+        <div className="wrapper">
+          <div className="card">
+            <div class="card-header">Supplier Information</div>
+            {returnData ? (
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                   <form
@@ -313,7 +318,8 @@ export default function SupplierDetails() {
                     </div>
                     <div className="mt-3">
                       <label for="search" class="form-label">
-                        Seller Name <span class="text-secondary" >(optional) </span>
+                        Seller Name{" "}
+                        <span class="text-secondary">(optional) </span>
                       </label>
                       <input
                         type="text"
@@ -377,7 +383,7 @@ export default function SupplierDetails() {
                     </div>
                     <div className="mb-3 mt-3">
                       <label for="note" class="form-label">
-                        Address 
+                        Address
                       </label>
                       <input
                         type="text"
@@ -394,7 +400,7 @@ export default function SupplierDetails() {
                   {/* Note  */}
                   <div class="mb-3 mt-3">
                     <label for="note" class="form-label">
-                      Note <span class="text-secondary" >(optional) </span>
+                      Note <span class="text-secondary">(optional) </span>
                     </label>
                     <textarea
                       class="form-control"
@@ -407,11 +413,16 @@ export default function SupplierDetails() {
                     ></textarea>
                   </div>
                 </li>
-              </ul> ) : (<> <InfoPurchaseOrderLoader /> </>)}
-            </div>
+              </ul>
+            ) : (
+              <>
+                {" "}
+                <InfoPurchaseOrderLoader />{" "}
+              </>
+            )}
           </div>
-        </>
-    
+        </div>
+      </>
     </div>
   );
 }

@@ -261,6 +261,7 @@ export default function LocationManager() {
           title: "Your work has been saved",
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
+          allowOutsideClick: false,
         }).then((result) => {
           if (result.isConfirmed) {
             hideModal();
@@ -325,7 +326,7 @@ export default function LocationManager() {
       </div> */}
 
       <LocationCategoryFilter
-       placeholderSearch={"Search By Id, name, barcode"}
+        placeholderSearch={"Search By Id, name, barcode"}
         onChangeValueFilter={onChangeLocationFilter}
         filter={locationFilter}
         submitFilter={submitLocationFilter}

@@ -84,7 +84,6 @@ export default function CreateProductManager() {
   }
 
   function clickDeleteVariant(rowIndex) {
-
     setVariantValues((state) => state.filter((_, i) => i !== rowIndex));
   }
   function uuid() {
@@ -128,6 +127,7 @@ export default function CreateProductManager() {
           title: "Your work has been saved",
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
+          allowOutsideClick: false,
         }).then((result) => {
           if (result.isConfirmed) {
             history.push("/homepage/product/details", {

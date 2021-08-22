@@ -411,6 +411,7 @@ export default function ProductDetails() {
           title: "Your work has been saved",
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
+          allowOutsideClick: false,
         }).then((result) => {
           if (result.isConfirmed) {
             dispatch(

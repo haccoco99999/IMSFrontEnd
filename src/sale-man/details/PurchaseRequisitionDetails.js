@@ -18,7 +18,10 @@ import {
 } from "./action";
 import RejectWrapper from "../../components/reject-wrapper/reject-component";
 import NavigationBar from "../../components/navbar/navbar-component";
-import { InfoPurchaseOrderLoader, TableLoading } from "../../components/loading/loading-component";
+import {
+  InfoPurchaseOrderLoader,
+  TableLoading,
+} from "../../components/loading/loading-component";
 import { CLEAR_MESSAGE } from "./constants";
 import FormAddProductModal from "../../components/add-product-form/FormAddProductModal";
 
@@ -57,9 +60,9 @@ export default function PurchaseRequisitionDetails() {
       dataField: "orderQuantity",
       text: "Order Quantity",
       formatter: (cellContent, row, rowIndex) =>
-      (cleanListProducts[rowIndex].orderQuantity = parseInt(
-        row.orderQuantity
-      )),
+        (cleanListProducts[rowIndex].orderQuantity = parseInt(
+          row.orderQuantity
+        )),
       validator: (newValue, oldValue, row) => {
         if (isNaN(newValue)) {
           return {
@@ -297,9 +300,9 @@ export default function PurchaseRequisitionDetails() {
         state.map((item) =>
           item.productVariantId === product.productVariantId
             ? {
-              ...item,
-              orderQuantity: item.orderQuantity + product.orderQuantity,
-            }
+                ...item,
+                orderQuantity: item.orderQuantity + product.orderQuantity,
+              }
             : item
         )
       );
@@ -514,6 +517,7 @@ export default function PurchaseRequisitionDetails() {
         title: "Your work has been saved",
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           dispatch(
@@ -551,6 +555,7 @@ export default function PurchaseRequisitionDetails() {
         title: "Your work has been saved",
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           dispatch(
@@ -589,6 +594,7 @@ export default function PurchaseRequisitionDetails() {
         title: "Your work has been saved",
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           dispatch(
@@ -618,20 +624,16 @@ export default function PurchaseRequisitionDetails() {
     if (statusStore === 0) {
       setStatus("Draft");
       setClassStatus("bg-secondary");
-    }
-    else if (statusStore === 1) {
+    } else if (statusStore === 1) {
       setStatus("Merged");
       setClassStatus("bg-success");
-    }
-    else if (statusStore === 2) {
+    } else if (statusStore === 2) {
       setStatus("Waiting to accept ");
       setClassStatus("bg-warning text-dark");
-    }
-    else if (statusStore === 3) {
+    } else if (statusStore === 3) {
       setStatus("Price Quote ");
       setClassStatus("bg-warning");
-    }
-    else if ( [4,5,6].includes(statusStore)) {
+    } else if ([4, 5, 6].includes(statusStore)) {
       setStatus("Purchase Order");
       setClassStatus("bg-success");
     } else if (statusStore === 7) {
@@ -648,7 +650,6 @@ export default function PurchaseRequisitionDetails() {
   }, [statusStore]);
   return (
     <div>
-
       <NavigationBar
         listButton={listButtons}
         titleBar={location.state.purchaseRequisitionId}
@@ -660,134 +661,132 @@ export default function PurchaseRequisitionDetails() {
       />
       <div className="wrapper">
         <div class="card">
-          <div class="card-header fw-bold">
-            Purchase Requisition Details
-          </div>
+          <div class="card-header fw-bold">Purchase Requisition Details</div>
 
           <ul class="list-group list-group-flush">
-            {returnData ? <>
-              {statusStore < 0 && (
-                <li className="list-group-item">
-                  <RejectWrapper
-                    name={transactionRecordStore[0].applicationUser.fullname}
-                    email={transactionRecordStore[0].applicationUser.email}
-                    phoneNumber={
-                      transactionRecordStore[0].applicationUser.phoneNumber
-                    }
-                    reason={reject.transactionName}
-                    date={moment(reject.date)
-                      .add(7, "h")
-                      .format("DD-MM-YYYY")}
-                  />
-                </li>
-              )}
-
-              <li class="list-group-item">
-                <div className="row g-3 justify-content-between me-3">
-                  <div className="col-4">
-                    <p>
-                      <strong>Created by:</strong>
-                      {/* {createdBy} */}
-                      {transactionRecordStore[0].applicationUser.fullname}
-                    </p>
-
-                  </div>
-                  <div className="col-4">
-                    <p>
-                      <strong>Created date: </strong>
-                      {/* {createDate.split("T")[0]} */}
-                      {moment(
-                        transactionRecordStore[0].date.split("T")[0]
-                      ).format("DD-MM-YYYY")}
-                    </p>
-                    <p>
-                      <strong>Deadline: </strong>
-                      {moment(deadlineStore).format("DD-MM-YYYY")}
-                    </p>
-
-                  </div>
-                </div>
-              </li> </>
-              : <InfoPurchaseOrderLoader />}
-
-            <div class="card-header fw-bold">
-              Product List
-            </div>
-            {returnData ? <>
-              < li class="list-group-item">
-
-                {!isEditDisabled && (
-                  <>
-                    <li class="list-group-item">
-                      <div class="form-group col-md-4">
-                        <label for="">Deadline</label>
-                        <input
-                          type="date"
-                          name="deadline"
-                          id="deadline"
-                          class="form-control"
-                          value={moment(deadline).format("YYYY-MM-DD")}
-                          onChange={onChangeDeadline}
-                        />
-                      </div>
-
-                      <div className="mt-2">
-                        <button
-                          onClick={() => clickSetShowAddProductPage()}
-                          type="button"
-                          class="btn btn-outline-secondary"
-                        >
-                          Add product
-                        </button>
-                      </div>
-
-                      {eventPage.isShowAddProduct ? (
-                        <FormAddProductModal
-                          clickSetShowAddProductPage={
-                            clickSetShowAddProductPage
-                          }
-                          clickToAddProduct={clickToAddProduct}
-                        // addGroupProduct={addGroupProduct}
-                        />
-                      ) : (
-                        ""
-                      )}
-                      {/* <SearchComponent clickToAddProduct={clickToAddProduct} /> */}
-                    </li>
-                  </>
+            {returnData ? (
+              <>
+                {statusStore < 0 && (
+                  <li className="list-group-item">
+                    <RejectWrapper
+                      name={transactionRecordStore[0].applicationUser.fullname}
+                      email={transactionRecordStore[0].applicationUser.email}
+                      phoneNumber={
+                        transactionRecordStore[0].applicationUser.phoneNumber
+                      }
+                      reason={reject.transactionName}
+                      date={moment(reject.date)
+                        .add(7, "h")
+                        .format("DD-MM-YYYY")}
+                    />
+                  </li>
                 )}
-                <div className="mt-2">
-                  {isEditDisabled ? (
-                    <BootstrapTable
-                      keyField="productVariantId"
-                      data={cleanListProducts}
-                      columns={columnsShow}
-                      noDataIndication="Table is Empty"
-                    />
-                  ) : (
-                    <BootstrapTable
-                      keyField="productVariantId"
-                      data={cleanListProducts}
-                      columns={columnsEdit}
-                      noDataIndication="Table is Empty"
-                      cellEdit={cellEditFactory({
-                        mode: "click",
-                        blurToSave: true,
+                <li class="list-group-item">
+                  <div className="row g-3 justify-content-between me-3">
+                    <div className="col-4">
+                      <p>
+                        <strong>Created by:</strong>
+                        {/* {createdBy} */}
+                        {transactionRecordStore[0].applicationUser.fullname}
+                      </p>
+                    </div>
+                    <div className="col-4">
+                      <p>
+                        <strong>Created date: </strong>
+                        {/* {createDate.split("T")[0]} */}
+                        {moment(
+                          transactionRecordStore[0].date.split("T")[0]
+                        ).format("DD-MM-YYYY")}
+                      </p>
+                      <p>
+                        <strong>Deadline: </strong>
+                        {moment(deadlineStore).format("DD-MM-YYYY")}
+                      </p>
+                    </div>
+                  </div>
+                </li>{" "}
+              </>
+            ) : (
+              <InfoPurchaseOrderLoader />
+            )}
 
-                        afterSaveCell: (oldValue, newValue, row, column) => {
-                          row.totalAmount = row.orderQuantity * row.price;
-                        },
-                      })}
-                    />
+            <div class="card-header fw-bold">Product List</div>
+            {returnData ? (
+              <>
+                <li class="list-group-item">
+                  {!isEditDisabled && (
+                    <>
+                      <li class="list-group-item">
+                        <div class="form-group col-md-4">
+                          <label for="">Deadline</label>
+                          <input
+                            type="date"
+                            name="deadline"
+                            id="deadline"
+                            class="form-control"
+                            value={moment(deadline).format("YYYY-MM-DD")}
+                            onChange={onChangeDeadline}
+                          />
+                        </div>
+
+                        <div className="mt-2">
+                          <button
+                            onClick={() => clickSetShowAddProductPage()}
+                            type="button"
+                            class="btn btn-outline-secondary"
+                          >
+                            Add product
+                          </button>
+                        </div>
+
+                        {eventPage.isShowAddProduct ? (
+                          <FormAddProductModal
+                            clickSetShowAddProductPage={
+                              clickSetShowAddProductPage
+                            }
+                            clickToAddProduct={clickToAddProduct}
+                            // addGroupProduct={addGroupProduct}
+                          />
+                        ) : (
+                          ""
+                        )}
+                        {/* <SearchComponent clickToAddProduct={clickToAddProduct} /> */}
+                      </li>
+                    </>
                   )}
-                </div>
-              </li>
-            </> : <InfoPurchaseOrderLoader />}
+                  <div className="mt-2">
+                    {isEditDisabled ? (
+                      <BootstrapTable
+                        keyField="productVariantId"
+                        data={cleanListProducts}
+                        columns={columnsShow}
+                        noDataIndication="Table is Empty"
+                      />
+                    ) : (
+                      <BootstrapTable
+                        keyField="productVariantId"
+                        data={cleanListProducts}
+                        columns={columnsEdit}
+                        noDataIndication="Table is Empty"
+                        cellEdit={cellEditFactory({
+                          mode: "click",
+                          blurToSave: true,
+
+                          afterSaveCell: (oldValue, newValue, row, column) => {
+                            row.totalAmount = row.orderQuantity * row.price;
+                          },
+                        })}
+                      />
+                    )}
+                  </div>
+                </li>
+              </>
+            ) : (
+              <InfoPurchaseOrderLoader />
+            )}
           </ul>
         </div>
-      </div >
-
-
-    </div >
+      </div>
+    </div>
   );
 }

@@ -53,7 +53,9 @@ export default function CreatePurchaseRequisition() {
       dataField: "orderQuantity",
       text: "Order Quantity",
       formatter: (cellContent, row, rowIndex) =>
-        (purchaseOrderProduct[rowIndex].orderQuantity = parseInt(row.orderQuantity)),
+        (purchaseOrderProduct[rowIndex].orderQuantity = parseInt(
+          row.orderQuantity
+        )),
       validator: (newValue, oldValue, row) => {
         if (isNaN(newValue)) {
           return {
@@ -253,9 +255,9 @@ export default function CreatePurchaseRequisition() {
         state.map((item) =>
           item.productVariantId === product.productVariantId
             ? {
-              ...item,
-              orderQuantity: item.orderQuantity + product.orderQuantity,
-            }
+                ...item,
+                orderQuantity: item.orderQuantity + product.orderQuantity,
+              }
             : item
         )
       );
@@ -326,6 +328,7 @@ export default function CreatePurchaseRequisition() {
         title: "Your work has been saved",
         showCancelButton: false,
         confirmButtonColor: "#3085d6",
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           history.push("/homepage/sale-man/details", {
@@ -401,8 +404,6 @@ export default function CreatePurchaseRequisition() {
                   onChange={onChangeDeadline}
                 />
               </div>
-
-
             </li>
             <li class="list-group-item">
               <h5 class="card-title">List of products</h5>

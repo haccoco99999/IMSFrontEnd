@@ -60,6 +60,7 @@ export default function CreateSupplier() {
         cancelButtonColor: " #d33",
         confirmButtonText: "Confirm",
         reverseButtons: true,
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) {
           dispatch(createSupplierAction({ token: token, data: data }));
@@ -123,6 +124,7 @@ export default function CreateSupplier() {
           title: "Your work has been saved",
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
+          allowOutsideClick: false,
         }).then((result) => {
           if (result.isConfirmed)
             history.push("/homepage/supplier/details", {
@@ -182,7 +184,7 @@ export default function CreateSupplier() {
                 </div>
                 <div className="mt-3">
                   <label for="search" class="form-label">
-                    Seller Name <span class="text-secondary" >(optional) </span>
+                    Seller Name <span class="text-secondary">(optional) </span>
                   </label>
                   <input
                     type="text"
@@ -260,7 +262,7 @@ export default function CreateSupplier() {
               </form>
               <div class="mb-3 mt-3">
                 <label for="description" class="form-label">
-                  Description <span class="text-secondary" >(optional) </span>
+                  Description <span class="text-secondary">(optional) </span>
                 </label>
                 <textarea
                   class="form-control"
