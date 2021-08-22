@@ -6,7 +6,7 @@ import{
     UPDATE_PROFILE_ERROR
 } from './contants'
 import {updateClient} from '../user/actions'
-const updateUrl="https://imspublicapi.herokuapp.com/api/accountedit"
+const updateUrl=`${process.env.REACT_APP_API}/accountedit`
 
 function updateApi(dataUpdate,token){
     // console.log(JSON.stringify(dataUpdate))

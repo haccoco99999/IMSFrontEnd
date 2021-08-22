@@ -9,7 +9,7 @@ import {
 } from "../../constants";
 
 function getAllAccount(action) {
-  const getAllAccountURL = `http://imspublicapi.herokuapp.com/api/users?${action.filter}`;
+  const getAllAccountURL = `${process.env.REACT_APP_API}/users?${action.filter}`;
   const authorization = "Bearer " + action.token;
 
   return fetch(getAllAccountURL, {

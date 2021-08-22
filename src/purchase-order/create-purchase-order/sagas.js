@@ -47,7 +47,7 @@ import handleApiErrors from '../../auth/api-errors'
 import action from "../../good-receipt/details/action"
 let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjUxNWNjLTcyZjQtNDI3Ni1iOWE5LThhM2EzMTA0MTUwMiIsIm5iZiI6MTYyNDE3NDUzNywiZXhwIjoxNjI0MzQ3MzM3LCJpYXQiOjE2MjQxNzQ1Mzd9.rKQllv-JADJYAYcBoIkGxRnSwgMKknKk1xlZTJwxXmc"
 function getPurchaseOderAPI(action) {
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/number/"
+    const updateUrl = `${process.env.REACT_APP_API}/purchaseorder/number/`
     return fetch(updateUrl + action.orderID, {
         method: 'GET',
         headers: {
@@ -64,7 +64,7 @@ function getPurchaseOderAPI(action) {
         .catch((error) => { throw error })
 }
 function createPriceQuoteAPI(action) {
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/pricequote/create"
+    const updateUrl = `${process.env.REACT_APP_API}/pricequote/create`
 
     return fetch(updateUrl , {
         method: 'POST',
@@ -102,7 +102,7 @@ function createPriceQuoteAPI(action) {
 
 function sendEmailQuote(action){
     
-    return fetch("https://imspublicapi.herokuapp.com/api/mailservice", {
+    return fetch(`${process.env.REACT_APP_API}/mailservice`, {
         method: 'POST',
         headers:{
             
@@ -120,7 +120,7 @@ function sendEmailQuote(action){
     .catch((error) => {throw error})
 }
 function submitPurchaseOrderAPI(action) {
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/submit"
+    const updateUrl = `${process.env.REACT_APP_API}/purchaseorder/submit`
     return fetch(updateUrl, {
         method: 'POST',
         headers: {
@@ -138,7 +138,7 @@ function submitPurchaseOrderAPI(action) {
         .catch((error) => { throw error })
 }
 function editPriceQuoteAPI(action) {
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/pricequote/edit"
+    const updateUrl = `${process.env.REACT_APP_API}/pricequote/edit`
     return fetch(updateUrl, {
         method: 'PUT',
         headers: {
@@ -157,7 +157,7 @@ function editPriceQuoteAPI(action) {
 
 function createPurchaseOrderAPI(action) {
 
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/pricequote/submit"
+    const updateUrl = `${process.env.REACT_APP_API}/pricequote/submit`
     return fetch(updateUrl, {
         method: 'POST',
         headers: {
@@ -175,7 +175,7 @@ function createPurchaseOrderAPI(action) {
         .catch((error) => { throw error })
 }
 function rejectPurchaseOrderConfirmAPI(action) {
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/reject"
+    const updateUrl = `${process.env.REACT_APP_API}/purchaseorder/reject`
     return fetch(updateUrl, {
         method: 'PUT',
         headers: {
@@ -192,7 +192,7 @@ function rejectPurchaseOrderConfirmAPI(action) {
         .catch((error) => { throw error })
 }
 function confirmByManagerAPI(action) {
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/po/confirm"
+    const updateUrl = `${process.env.REACT_APP_API}/po/confirm`
     return fetch(updateUrl, {
         method: 'POST',
         headers: {
@@ -211,7 +211,7 @@ function confirmByManagerAPI(action) {
 }
 function updateProductPurchaseOrderAPI(action) {
     
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/update"
+    const updateUrl = `${process.env.REACT_APP_API}/purchaseorder/update`
     return fetch(updateUrl, {
         method: 'PUT',
         headers: {

@@ -69,7 +69,7 @@ function App(props) {
     });
   }
   const history = useHistory();
-  function hideProfile(){
+  function hideProfile() {
     profileRef.current.classList.remove("show");
   }
   function toggleActive() {
@@ -200,9 +200,9 @@ function App(props) {
       setHubConnection(hubConnection);
     };
     createHubConnection();
-    return()=>{
-    dispatch({ type: "CLEAN_ALL_STORE" })
-}
+    return () => {
+      dispatch({ type: "CLEAN_ALL_STORE" })
+    }
   }, []);
 
   const closeConnection = async () => {
@@ -316,12 +316,19 @@ function App(props) {
             id="collapseProfile"
           >
             <li
-          
+
               onClick={() => history.push("/homepage/about-my-account")}
               className="item-name"
             >
               My Profile
             </li>
+            {/* <li
+
+              onClick={() => history.push("/homepage/about-software")}
+              className="item-name"
+            >
+              About software
+            </li> */}
             <li
               onClick={() => history.push("/homepage/notification")}
               className="item-name"
@@ -345,7 +352,7 @@ function App(props) {
         </div>
 
         <ul className="nav_list" id="pills-menu-tab">
-          <li className="clicked-menu show-clicked-menu"   onClick={()=>hideProfile()}>
+          <li className="clicked-menu show-clicked-menu" onClick={() => hideProfile()}>
             <Link to="/homepage/dashboard">
               <i className="bx">
                 <img src={dashboardLogo} />
@@ -355,7 +362,7 @@ function App(props) {
             <span className="tooltip">Dashboard</span>
           </li>
           {client.pageAuthorized.includes("PurchaseOrderMenu") ? (
-            <li className="clicked-menu"  onClick={()=>hideProfile()} >
+            <li className="clicked-menu" onClick={() => hideProfile()} >
               <Link to="/homepage/purchase">
                 <i className="bx">
                   <img src={shoppingLogo} />
@@ -368,7 +375,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("GoodsReceipt") ? (
-            <li className="clicked-menu"  onClick={()=>hideProfile()}>
+            <li className="clicked-menu" onClick={() => hideProfile()}>
               <Link to="/homepage/good-receipt">
                 <i className="bx">
                   <img src={importLogo} />
@@ -381,7 +388,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("GoodsIssue") ? (
-            <li className="clicked-menu" onClick={()=>hideProfile()}>
+            <li className="clicked-menu" onClick={() => hideProfile()}>
               <Link to="/homepage/good-issue">
                 <i className="bx">
                   <img src={boxLogo} />
@@ -394,7 +401,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("Stocktake") ? (
-            <li className="clicked-menu" onClick={()=>hideProfile()}>
+            <li className="clicked-menu" onClick={() => hideProfile()}>
               <Link to="/homepage/stock-take">
                 <i className="bx">
                   <img src={shelfLogo} />
@@ -407,7 +414,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("Report") ? (
-            <li className="clicked-menu" onClick={()=>hideProfile()}>
+            <li className="clicked-menu" onClick={() => hideProfile()}>
               <Link to="/homepage/report">
                 <i className="bx">
                   <img src={reportLogo} />
@@ -420,7 +427,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("Product") ? (
-            <li className="clicked-menu" onClick={()=>hideProfile()}>
+            <li className="clicked-menu" onClick={() => hideProfile()}>
               <Link to="/homepage/product">
                 <i className="bx">
                   <img src={productLogo} />
@@ -434,7 +441,7 @@ function App(props) {
           )}
 
           {client.pageAuthorized.includes("Supplier") ? (
-            <li className="clicked-menu" onClick={()=>hideProfile()}>
+            <li className="clicked-menu" onClick={() => hideProfile()}>
               <Link to="/homepage/supplier">
                 <i className="bx">
                   <img src={manufactureLogo} />
@@ -447,7 +454,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("Account") ? (
-            <li className="clicked-menu" onClick={()=>hideProfile()}>
+            <li className="clicked-menu" onClick={() => hideProfile()}>
               <Link to="/homepage/manage-account">
                 <i className="bx">
                   <img src={userLogo} />
@@ -460,7 +467,7 @@ function App(props) {
             ""
           )}
           {client.pageAuthorized.includes("PurchaseRequistion") ? (
-            <li className="clicked-menu" onClick={()=>hideProfile()}>
+            <li className="clicked-menu" onClick={() => hideProfile()}>
               <Link to="/homepage/sale-man">
                 <i className="bx">
                   <img src={salemanLogo} />
@@ -543,25 +550,28 @@ const mapStateToProps = (state) => ({
 
 function Logout(props) {
   const dispatch = useDispatch();
-  const logout = async () => {
+  const logout = () => {
     // let isLogout = false
-    await Swal.fire({
-      title: "Are you sure",
-      text: "Do you want to logout?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: " #d33",
-      confirmButtonText: "Confirm",
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        dispatch({ type: "LOGOUT_REQUESTING" });
-      }
-    });
-    // if(isLogout)
-  
+    //  Swal.fire({
+    //   title: "Are you sure",
+    //   text: "Do you want to logout?",
+    //   icon: "question",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#3085d6",
+    //   cancelButtonColor: " #d33",
+    //   confirmButtonText: "Confirm",
+    //   reverseButtons: true,
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+
+
+
+    //   }
+    // });
+    dispatch({ type: "LOGOUT_REQUESTING" });
     props.closeConnection();
+    // if(isLogout)
+
     // props.hubConnection.stop();
   };
 

@@ -23,3 +23,7 @@
     resize: none;
     height: 200px;
 }
+.mail-content-css p{
+    margin-bottom: 0;
+    padding: 0;
+}

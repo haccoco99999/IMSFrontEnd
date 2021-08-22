@@ -7,7 +7,7 @@ import { GET_VALUE_DASHBOARD_ERROR, GET_VALUE_DASHBOARD_REQUESTING, GET_VALUE_DA
 // const updateUrl=`${process.env.REACT_APP_API_URL}/api/pricequote/all`
 
 function getDataDashboadAPI(action){
-    return fetch("http://imspublicapi.herokuapp.com/api/report/dashboarddata", {
+    return fetch(`${process.env.REACT_APP_API}/report/dashboarddata`, {
         method: 'GET',
         headers:{
             "Authorization": "Bearer " + action.token,

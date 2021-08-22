@@ -43,7 +43,7 @@ function getAllGoodIssueAPI(action) {
     });
 }
 function updateGoodIssueAPI(action) {
-  const url = "https://imspublicapi.herokuapp.com/api/goodsissue/update"
+  const url = `${process.env.REACT_APP_API}/goodsissue/update`
   console.log(action.data)
   return fetch(url, {
     method: "PUT",
@@ -64,7 +64,7 @@ function updateGoodIssueAPI(action) {
     });
 }
 function createGoodIssueAPI(action) {
-  const url = "https://imspublicapi.herokuapp.com/api/goodsissue/create"
+  const url = `${process.env.REACT_APP_API}/goodsissue/create`
 
   return fetch(url, {
     method: "POST",
@@ -84,7 +84,7 @@ function createGoodIssueAPI(action) {
     });
 }
 function rejectGoodIssueDetaiAPI(action) {
-  const url = "https://imspublicapi.herokuapp.com/api/goodsissue/reject"
+  const url = `${process.env.REACT_APP_API}/goodsissue/reject`
 
   return fetch(url, {
     method: "PUT",

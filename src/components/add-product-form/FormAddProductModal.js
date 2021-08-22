@@ -57,7 +57,7 @@ export default function FormAddProductModal(props) {
   
   async function getListProduct(keySearch) {
     const updateUrl =
-      "https://imspublicapi.herokuapp.com/api/product/search?SearchQuery=" +
+      `${process.env.REACT_APP_API}/product/search?SearchQuery=` +
       keySearch;
 
     let json = await fetch(updateUrl, {
@@ -90,7 +90,7 @@ export default function FormAddProductModal(props) {
   console.log(listGroupNameProduct);
   async function getListProductVariant(productId, index) {
     const updateUrl =
-      "https://imspublicapi.herokuapp.com/api/product/" + productId;
+      `${process.env.REACT_APP_API}/product/` + productId;
 
     let json = await fetch(updateUrl, {
       method: "GET",

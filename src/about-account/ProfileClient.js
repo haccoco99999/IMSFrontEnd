@@ -55,6 +55,10 @@ export default function ProfileClient() {
 
     if (!form.checkValidity() || !checkValidDate) {
       form.classList.add("was-validated");
+      if(!checkValidDate){
+        date.classList.add("is-invalid")
+
+      }
     }
     else {
 
@@ -113,7 +117,7 @@ export default function ProfileClient() {
     if (updateProfileClientStatus.requesting) {
       Swal.fire({
         title: 'Updating!',
-        html: 'Watting...',
+        html: 'Waiting...',
         timerProgressBar: true,
         didOpen: () => {
           Swal.showLoading()

@@ -24,8 +24,8 @@ import {
   UPDATE_AVATAR_ACC,
 } from "./constants";
 
-function createProduct(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/registration";
+function createProduct(action) { 
+  const url = `${process.env.REACT_APP_API}/registration`;
 
   return fetch(url, {
     method: "POST",
@@ -46,7 +46,7 @@ function createProduct(action) {
 }
 
 function checkDuplicateAPI(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/dupcheck/accountemail";
+  const url = `${process.env.REACT_APP_API}/dupcheck/accountemail`;
 
   return fetch(url, {
     method: "POST",
@@ -81,7 +81,7 @@ function uploadImgAPI(action) {
     });
 }
 function uploadAvatarImgAPI(action) {
-  const url = "http://imspublicapi.herokuapp.com/api/accountedit/image";
+  const url = `${process.env.REACT_APP_API}/accountedit/image`;
 
   return fetch(url, {
     method: "PUT",
@@ -102,7 +102,7 @@ function uploadAvatarImgAPI(action) {
 }
 function updateUserAccountAPI(action) {
   console.log(action.data)
-  const url = "https://imspublicapi.herokuapp.com/api/user/edit";
+  const url = `${process.env.REACT_APP_API}/user/edit`;
 
   return fetch(url, {
     method: "PUT",
@@ -122,7 +122,7 @@ function updateUserAccountAPI(action) {
     });
 }
 function getUserAccountDetailAPI(action) {
-  const url = "https://imspublicapi.herokuapp.com/api/users/" + action.userID;
+  const url = `${process.env.REACT_APP_API}/users/` + action.userID;
   console.log(action.token)
   return fetch(url, {
     method: "GET",
@@ -142,7 +142,7 @@ function getUserAccountDetailAPI(action) {
     });
 }
 function setActiveAccountAPI(action) {
-  const url = 'http://imspublicapi.herokuapp.com/api/deactivate'
+  const url = `${process.env.REACT_APP_API}/deactivate`
   return fetch(url, {
     method: "PUT",
     headers: {
@@ -190,7 +190,9 @@ function* CreateAccountFlow(action) {
 function* updateUserAccountFlow(action) {
   try {
     let json = yield call(updateUserAccountAPI, action);
-    yield put({ type: UPDATE_DETAIL_ACC_SUCCESS, json });
+    yield put({ type: UPDATE_DETAIL_ACC_SUCCESS });
+    yield put({ type: GET_DETAIL_ACC_SUCCESS, json });
+
   } catch (error) {
     yield put({ type: UPDATE_DETAIL_ACC_ERR });
   }
@@ -234,6 +236,7 @@ function* updateImageFlow(action) {
     }
     else {
       yield put({ type: UPDATE_AVATAR_ACC, json });
+      
     }
 
     yield put({ type: UPDATE_IMAGE_SUCCESS });

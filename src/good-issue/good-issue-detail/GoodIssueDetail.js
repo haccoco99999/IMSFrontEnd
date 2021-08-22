@@ -216,7 +216,7 @@ export default function DetailGoodIssue() {
             ]
 
         }
-        else if (status === "Packing" &&  GoodIssueDetail.infoGoodIssueDetail.isShipping === false) {
+        else if (status === "Packing" && GoodIssueDetail.infoGoodIssueDetail.isShipping === false) {
             return [
                 {
                     isShow: true,
@@ -625,37 +625,46 @@ export default function DetailGoodIssue() {
 
 
                             /> : ""}
-                            <div className="col-md-9">
-                                {status === "IssueRequisition" ?
-                                    <div className="info-detai-receipt">
+
+
+
+
+                            <div >
+                             
+                                <li class="list-group-item">
+                                    <div className="row g-3 justify-content-between me-3">
+                                        <div className="col-4">
+
+                                        {status === "IssueRequisition" ?
+                                    <>
                                         <p className="fw-bold">Created by: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.fullname}</span></p>
                                         <div>
                                             <p className="fw-bold">Email : <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.email}</span></p>
                                             <p className="fw-bold">Phone No: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.phoneNumber}</span></p>
                                         </div>
 
-                                    </div>
+                                    </>
                                     : ""}
 
-                                <div className="info-detai-receipt">
-                                    <p className="fw-bold">Customer : <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.customerName}</span></p>
-                                    <div>
-                                        {/* <p>Email : <span>{ }</span></p> */}
-                                        <p className="fw-bold">Phone No: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.customerPhoneNumber}</span></p>
+
+                                            <p className="fw-bold">Customer : <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.customerName}</span></p>
+                                            <div>
+                                                <p className="fw-bold">Phone No: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.customerPhoneNumber}</span></p>
+                                            </div>
+                                            <p className="fw-bold">Delivery Address: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.deliveryAddress}</span></p>
+                                            <p className="fw-bold">Delivery Method: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.deliverMethod}</span></p>
+
+                                        </div>
+                                        <div className="col-4">
+                                            <p className="fw-bold">Created Date: <span className="fw-normal">{moment(GoodIssueDetail.infoGoodIssueDetail.createdDate).add(7, "h").format("DD-MM-YYYY ")}</span></p>
+                                            <p className="fw-bold">Delivery Date: <span className="fw-normal">{moment(GoodIssueDetail.infoGoodIssueDetail.deliveryDate).add(7, "h").format("DD-MM-YYYY ")}</span></p>
+
+                                        </div>
                                     </div>
-
-                                </div>
-                                <div className="info-detai-receipt">
-                                    <p className="fw-bold">Created Date: <span className="fw-normal">{moment(GoodIssueDetail.infoGoodIssueDetail.createdDate).add(7, "h").format("DD-MM-YYYY ")}</span></p>
-                                    <p className="fw-bold">Delivery Date: <span className="fw-normal">{moment(GoodIssueDetail.infoGoodIssueDetail.deliveryDate).add(7, "h").format("DD-MM-YYYY ")}</span></p>
+                                </li>
 
 
-                                </div>
-                                <div className="info-detai-receipt">
-                                    <p className="fw-bold">Delivery Address: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.deliveryAddress}</span></p>
-                                    <p className="fw-bold">Delivery Method: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.deliverMethod}</span></p>
 
-                                </div>
 
                             </div>
 
