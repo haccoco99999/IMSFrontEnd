@@ -232,7 +232,7 @@ export default function CreateSupplier() {
                         onChange={handleChangeValue}
                         pattern="((09|03|07|08|05|028|024)+([0-9]{8})\b)"
                         required
-                        placeholder="0903321332"
+                        placeholder="Input phone number"
                         // aria-describedby="passwordHelpInline"
                       />
                       <div class="invalid-feedback">
