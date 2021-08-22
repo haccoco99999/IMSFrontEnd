@@ -279,8 +279,10 @@ export default function CreateAccount() {
   //   token: state.client.token,
   // }));
   const dispatch = useDispatch()
-  function onchangeInputInfoAccount(event) {
+  // function changeRoleUpdate(event){
 
+  // }
+  function onchangeInputInfoAccount(event) {
     if (statusUser === "EDITUSER") {
       Swal.fire({
         title: "Are you sure",
@@ -304,13 +306,27 @@ export default function CreateAccount() {
             profileImageLink: infoAccountState.profileImageLink,
 
           }
-
           dispatch(updateUserAccountDetail({ data: data, token: token }))
         }
       });
 
 
     }
+
+    const date = document.getElementById("dateOfBirth");
+
+    if (event.target.name === "dateOfBirth" && moment().diff(moment(event.target.value), "years") >= 15) {
+      console.log("valid")
+      date.classList.add("is-valid")
+      date.classList.remove("is-invalid")
+    }
+    else if (event.target.name === "dateOfBirth" && moment().diff(moment(event.target.value), "years") < 15) {
+      console.log("invalid")
+      date.classList.add("is-invalid")
+      date.classList.remove("is-valid")
+
+    }
+
     setInfoAccountState(state => ({
       ...state, [event.target.name]: event.target.value
     }))
@@ -322,11 +338,16 @@ export default function CreateAccount() {
   function createAccountInfo() {
 
 
-
+    let checkValidDate = false
+    const date = document.getElementById("dateOfBirth");
     const form = document.getElementById("checkValidProfile");
-
-    if (!form.checkValidity() || base64Img === "" || !isvalidPassword.isValidNewPassword || !isvalidPassword.isConfirmPassword) {
+    const formRole = document.getElementById("checkValidProfileRole");
+    if (moment().diff(moment(infoAccountState.dateOfBirth), "years") >= 15) {
+      checkValidDate = true
+    }
+    if (!form.checkValidity() || !formRole.checkValidity() || base64Img === "" || !isvalidPassword.isValidNewPassword || !isvalidPassword.isConfirmPassword || !checkValidDate) {
       form.classList.add("was-validated");
+      formRole.classList.add("was-validated");
       if (!isvalidPassword.isValidNewPassword || !isvalidPassword.isConfirmPassword) {
         newPassword.current.value = ""
         confirmPassword.current.value = ""
@@ -337,8 +358,8 @@ export default function CreateAccount() {
         Swal.fire({
           icon: 'error',
           title: 'Set your avatar',
-         
-          
+
+
         })
       }
 
@@ -362,7 +383,8 @@ export default function CreateAccount() {
         }
         console.log(data)
         dispatch(CreateAccountAction({ data: data, token: token, formData: formData }));
-
+        date.classList.remove("is-invalid")
+        date.classList.remove("is-valid")
         form.classList.remove("was-validated");
 
       }
@@ -571,7 +593,7 @@ export default function CreateAccount() {
                       </div>
                     </div>
                   </form> : statusUser === "CREATEUSER" ?
-                    <form novalidate id="checkValidProfile" className="needs-validation">
+                    <><form novalidate id="checkValidProfile" className="needs-validation">
 
                       <div class="mb-3 row">
                         <label for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
@@ -617,35 +639,37 @@ export default function CreateAccount() {
 
                         </div>
                       </div>
+                    </form>
                       <div class="mb-3 row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Birthdate:</label>
+                        <label class="col-sm-2 col-form-label">Birthdate:</label>
                         <div class="col-sm-10">
 
-                          <input type="date" onChange={onchangeInputInfoAccount} required disabled={eventPage.isShowEdit} name="dateOfBirth" value={moment(infoAccountState.dateOfBirth).format("YYYY-MM-DD")}
+                          <input type="date" onChange={onchangeInputInfoAccount} id="dateOfBirth" required disabled={eventPage.isShowEdit} name="dateOfBirth" value={moment(infoAccountState.dateOfBirth).format("YYYY-MM-DD")}
                             class="form-control" aria-describedby="helpId" />
                           <div class="invalid-feedback">
-                            Please set a birthdate!
+                            Age must be minimum of 15 years!
                           </div>
 
                         </div>
                       </div>
-                      <div class="mb-3 row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Select Role:</label>
-                        <div class="col-sm-10">
-                          <select onChange={onchangeInputInfoAccount} required value={infoAccountState.roleID} class="form-control" name="roleID" id="">
-                            {statusUser === "CREATEUSER" ? <option value="" disabled selected>  -- No Selected --  </option> : ""}
-                            <option value="IMS_MN" disabled={infoAccountState.roleID === "IMS_MN"} >Manager</option>
-                            <option value="IMS_AC" disabled={infoAccountState.roleID === "IMS_AC"} >Accountant</option>
-                            <option value="IMS_SK" disabled={infoAccountState.roleID === "IMS_SK"}>StockKeeper</option>
-                            <option value="IMS_SM" disabled={infoAccountState.roleID === "IMS_SM"} >Saleman</option>
+                      <form novalidate id="checkValidProfileRole" className="needs-validation">
+                        <div class="mb-3 row">
+                          <label for="inputPassword" class="col-sm-2 col-form-label">Select Role:</label>
+                          <div class="col-sm-10">
+                            <select onChange={onchangeInputInfoAccount} required value={infoAccountState.roleID} class="form-control" name="roleID" id="">
+                              {statusUser === "CREATEUSER" ? <option value="" disabled selected>  -- No Selected --  </option> : ""}
+                              <option value="IMS_MN" disabled={infoAccountState.roleID === "IMS_MN"} >Manager</option>
+                              <option value="IMS_AC" disabled={infoAccountState.roleID === "IMS_AC"} >Accountant</option>
+                              <option value="IMS_SK" disabled={infoAccountState.roleID === "IMS_SK"}>StockKeeper</option>
+                              <option value="IMS_SM" disabled={infoAccountState.roleID === "IMS_SM"} >Saleman</option>
 
-                          </select>
-                          <div class="invalid-feedback">
-                            Please select role!
+                            </select>
+                            <div class="invalid-feedback">
+                              Please select role!
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </form> : <TableLoading />}
+                      </form> </> : <TableLoading />}
 
 
 

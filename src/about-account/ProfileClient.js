@@ -24,8 +24,21 @@ export default function ProfileClient() {
   let [isUpdateProfile, setIsUpdateProfile] = useState(false)
   let [infoProfile, setInfoProfile] = useState(infoProfileStore)
   const [isChangePassword, setIsChangePassword] = useState(false)
-
+  const isValidBirthdate = useState(false)
   function onChangeValueProfile(event) {
+    const date = document.getElementById("dateOfBirth");
+
+    if (event.target.name === "dateOfBirth" && moment().diff(moment(event.target.value), "years") >= 15) {
+      console.log("valid")
+      date.classList.add("is-valid")
+      date.classList.remove("is-invalid")
+    }
+    else if (event.target.name === "dateOfBirth" && moment().diff(moment(event.target.value), "years") < 15) {
+      console.log("invalid")
+      date.classList.add("is-invalid")
+      date.classList.remove("is-valid")
+
+    }
     setInfoProfile({ ...infoProfile, [event.target.name]: event.target.value })
   }
   function cancelUpdate() {
@@ -33,14 +46,18 @@ export default function ProfileClient() {
     setIsEditProfile(false);
   }
   function saveUpdate(event) {
-
-
+    let checkValidDate = false
+    const date = document.getElementById("dateOfBirth");
     const form = document.getElementById("valid-form-update-profile");
-    if (!form.checkValidity()) {
-      form.classList.add("was-validated");
+    if (moment().diff(moment(infoProfile.dateOfBirth), "years") >= 15) {
+      checkValidDate = true
+    }
 
+    if (!form.checkValidity() || !checkValidDate) {
+      form.classList.add("was-validated");
     }
     else {
+
 
 
       Swal.fire({
@@ -63,6 +80,8 @@ export default function ProfileClient() {
           };
           dispatch(updateRequest({ token: infoProfileStore.token, dataUpdate: dataUpdate }))
           form.classList.remove("was-validated");
+          date.classList.remove("is-invalid")
+          date.classList.remove("is-valid")
           setIsEditProfile(false);
         }
       });
@@ -276,20 +295,25 @@ export default function ProfileClient() {
                     Phone Number is invalid!
                   </div>
                 </div>
-                <div class="form-group form-group-profile-client">
-                  <label for="">Birthdate</label>
 
-                  <input value={moment(infoProfile.dateOfBirth).format("YYYY-MM-DD")} onChange={onChangeValueProfile} required
-                    class="form-control" type="date" name="dateOfBirth" id="" placeholder="" disabled={!isEditProfile} />
-                  <div class="invalid-feedback">
-                    Birthdate is invalid!
-                  </div>
-                </div>
 
-                {isEditProfile ? "" : <button type="button" class="btn btn-sm btn-primary" onClick={() => setIsEditProfile(true)}>Edit</button>}
-                {isEditProfile ? <button type="button" onClick={() => { cancelUpdate() }} class="btn btn-sm btn-primary btn-danger me-2">Cancel</button> : ""}
-                {isEditProfile ? <button type="button" onClick={() => { saveUpdate() }} class="btn btn-sm btn-primary btn-success">Update</button> : ""}
+
+
+
               </form>
+              <div class="form-group form-group-profile-client">
+                <label for="">Birthdate</label>
+
+                <input value={moment(infoProfile.dateOfBirth).format("YYYY-MM-DD")} onChange={onChangeValueProfile}
+                  class="form-control" type="date" name="dateOfBirth" id="dateOfBirth" placeholder="" disabled={!isEditProfile} />
+                <div class="invalid-feedback">
+
+                  Age must be minimum of 15 years!
+                </div>
+              </div>
+              {isEditProfile ? "" : <button type="button" class="btn btn-sm btn-primary" onClick={() => setIsEditProfile(true)}>Edit</button>}
+              {isEditProfile ? <button type="button" onClick={() => { cancelUpdate() }} class="btn btn-sm btn-primary btn-danger me-2">Cancel</button> : ""}
+              {isEditProfile ? <button type="button" onClick={() => { saveUpdate() }} class="btn btn-sm btn-primary btn-success">Update</button> : ""}
             </div>
 
           </div>
