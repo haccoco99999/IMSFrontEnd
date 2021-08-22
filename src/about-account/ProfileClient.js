@@ -244,7 +244,7 @@ export default function ProfileClient() {
 
             <div className="col-sm-7 edit-profile-client">
               <div className="col-12 title-profile-client">
-                <h5>Edit Profile</h5>
+                <h5>Profile Info:</h5>
               </div>
               <div>
                 <div class="profile-pic">

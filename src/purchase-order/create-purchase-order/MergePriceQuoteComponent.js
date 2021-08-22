@@ -124,7 +124,7 @@ export default function MergePriceQuote(props) {
                       <div>
                         <div class="form-check">
                           <input class="form-check-input" type="checkbox" checked={order.isChecked} onChange={(e) => selectPriceQuote(e, index, order.haveProduct, order.orderId)} />
-                          <label class="form-check-label" data-bs-toggle="collapse" data-bs-target={"#collapsediv" + index} onClick={() => !order.haveProduct ? getListProdcutOrder(order.orderId, index) : null}  >{order.orderId}</label>
+                          <label class="form-check-label pointer" data-bs-toggle="collapse" data-bs-target={"#collapsediv" + index} onClick={() => !order.haveProduct ? getListProdcutOrder(order.orderId, index) : null}  >{order.orderId}</label>
                         </div>
 
                         <div id={"collapsediv" + index} class="collapse">

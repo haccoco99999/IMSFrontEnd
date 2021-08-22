@@ -1218,8 +1218,7 @@ export default function PurchaseOrderConfirm() {
     function clickShowPreviewSendMail() {
 
 
-
-        if ((mailDescription !== "<p></p>" || mailDescription !== "") && supplier.id !== undefined) {
+        if ((mailDescription.trim()  !== "<p></p>" || mailDescription !== "") && supplier.id !== undefined) {
 
             setEventPage((state) => ({
                 ...state, isPreview: !state.isPreview
@@ -1348,6 +1347,7 @@ export default function PurchaseOrderConfirm() {
     }
 
     function changeMailContent(contentEmail) {
+      
         setMailDescription(contentEmail)
     }
 
@@ -1653,7 +1653,7 @@ export default function PurchaseOrderConfirm() {
                                         <table className="table">
                                             <tbody> {mergedOrderIdLists.map((order, index) => (<tr>
                                                 <td>{order.purchaseOrderId}</td>
-                                                <td>{order.createdBy}</td>
+                                                <td>{ moment(order.createdBy).add(7, "h").format("DD-MM-YYYY")}</td>
                                                 <td>{order.createdDate}</td>
 
                                             </tr>))}

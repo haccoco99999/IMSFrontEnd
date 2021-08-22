@@ -95,7 +95,7 @@ export default function NotificationComponents(props) {
                 <a key={index} onClick={() => redirectDetail(item)} className="list-group-item btn list-group-item-action" aria-current="true">
                   <i class="bi bi-chat-left-quote"></i>
                   <div class="d-flex w-100 justify-content-between">
-                    <p class="mb-1">{item.message}</p>
+                    <p class="mb-1">{item.message.split("at:")[0]}</p>
                     <small>{moment().diff(moment(item.createdDate), "days") === 0 ? moment().diff(moment(item.createdDate), "h") + " hours ago" : moment().diff(moment(item.createdDate), "days") + " days ago"}</small>
                   </div>
 

@@ -166,7 +166,7 @@ export default function CompanyInfo() {
 
             <div className="col-sm-7 edit-profile-client">
               <div className="col-12 title-profile-client">
-                <h5>Edit Company Info:</h5>
+                <h5>Company Info:</h5>
               </div>
               <div>
                 <div class="profile-pic">

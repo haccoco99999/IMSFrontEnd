@@ -40,20 +40,20 @@ const reducer = function loginReducer(state = initalState, action) {
                 successful: false,
             }
         case LOGIN_ERROR:
-            // console.log(action.json)
-            // let meessage = ""
-            // if (action.json.verbose === null) {
-            //     meessage = "Username or password is not correct"
-            // }
-            // else if (action.json.verbose === "User access has been denied by system") {
-            //     meessage = "User access has been denied by system"
-            // }
-            // else {
-            //     meessage = "Please check your connection"
-            // }
+            console.log(action.messages)
+            let meessage = ""
+            if (action.messages === null) {
+                meessage = "Username or password is not correct"
+            }
+            else if (action.messages === "User access has been denied by system") {
+                meessage = "User access has been denied by system"
+            }
+            else {
+                meessage = "Please check your connection"
+            }
             return {
                 errors: true,
-                messages: "Username or password is not correct",
+                messages: meessage,
                 requesting: false,
                 successful: false,
             }

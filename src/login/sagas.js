@@ -78,9 +78,11 @@ function* loginFlow (action) {
   
   
   } catch (error) {
-
+    let messages
+    messages=  yield call (() => error.then(json =>  json.verbose))
+      // console.log(messages)
     // error.response.then(response => response.json).then(json => console.log(json))
-    yield put({ type: LOGIN_ERROR, error })
+    yield put({ type: LOGIN_ERROR, messages })
   } finally {
     if (yield cancelled()) {
       history.push('/login')

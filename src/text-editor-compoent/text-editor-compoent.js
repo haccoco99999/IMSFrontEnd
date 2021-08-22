@@ -30,7 +30,6 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
     
     },[props.contentEmail])
 
-     console.log(editorState)
     
     
   function  onEditorStateChange(editorState){
@@ -54,7 +53,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
               editorClassName="demo-editor"
               toolbarClassName="toolbar-class"
               toolbar={{
-                options: ['history','fontFamily','fontSize' ,'inline','textAlign','list'  ],
+                options: ['history','fontSize' ,'inline','textAlign','list'  ],
                 textAlign:{
                     options:['left', 'center', 'right']
                 },

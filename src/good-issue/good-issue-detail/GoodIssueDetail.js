@@ -216,7 +216,7 @@ export default function DetailGoodIssue() {
             ]
 
         }
-        else if (status === "Packing" && pageAuthorized.includes(status) && GoodIssueDetail.infoGoodIssueDetail.isShipping === false) {
+        else if (status === "Packing" &&  GoodIssueDetail.infoGoodIssueDetail.isShipping === false) {
             return [
                 {
                     isShow: true,
