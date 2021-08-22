@@ -1,4 +1,4 @@
-const  electron = require("electron");
+const electron = require("electron");
 // Module to control application life.
 const app = electron.app;
 const path = require('path');
@@ -14,8 +14,10 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     icon: path.join(__dirname, "/../public/iconApp.png"),
-    width: 1150,
+    width: 1060,
     height: 900,
+    minHeight: 800,
+    minWidth: 1024,
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
@@ -30,7 +32,7 @@ function createWindow() {
       protocol: "file:",
       slashes: true,
     });
-    mainWindow.setMenu(null)
+  mainWindow.setMenu(null)
   mainWindow.loadURL(startUrl);
   // Open the DevTools.
   mainWindow.webContents.openDevTools();

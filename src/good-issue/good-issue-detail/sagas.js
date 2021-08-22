@@ -144,7 +144,7 @@ function* getGoodIssueDetailFlow(action) {
   }
 }
 function* rejectGoodIssueDetailFlow(action) {
-    console.log("ok da chayj r")
+    
   try {
     let json = yield call(rejectGoodIssueDetaiAPI, action);
     yield put({ type: REJECT_GOOD_ISSUE_SUCCESS });

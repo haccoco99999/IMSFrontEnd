@@ -19,7 +19,7 @@ export default function PreviewSendMail(props) {
     const doc = new jsPDF();
     function print() {
 
-
+        
         doc.autoTable({
             styles: {},
             pageBreak: 'avoid',

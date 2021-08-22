@@ -300,7 +300,7 @@ export function PurchaseOrderFilter(props) {
                                         class="form-control" name="ToCreatedDate" id="" aria-describedby="helpId" placeholder="To date" />
                                 </div>
                             </div>
-                            <div className="row">
+                            {/* <div className="row">
                                 <label for="">Confirmed Date:</label>
                                 <div class="form-group col-md-6" >
 
@@ -314,7 +314,7 @@ export function PurchaseOrderFilter(props) {
                                         onChange={props.onChangeValueFilter} value={props.filter.ToConfirmedDate}
                                         class="form-control" name="ToConfirmedDate" id="" aria-describedby="helpId" placeholder="To date" />
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="row">
                                 <label for="">Modified Date:</label>
                                 <div class="form-group col-md-6" >

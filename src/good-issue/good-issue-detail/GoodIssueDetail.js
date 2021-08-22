@@ -330,8 +330,8 @@ export default function DetailGoodIssue() {
             body: [
 
                 ['Order #' + GoodIssueDetail.infoGoodIssueDetail.id],
-                ['Created Date: ' + GoodIssueDetail.infoGoodIssueDetail.createdDate],
-                ['Delivery Date: ' + GoodIssueDetail.infoGoodIssueDetail.deliveryDate],
+                ['Created Date: ' + moment(GoodIssueDetail.infoGoodIssueDetail.createdDate).add(7, "h").format("DD-MM-YYYY")],
+                ['Delivery Date: ' + moment(GoodIssueDetail.infoGoodIssueDetail.deliveryDate).add(7, "h").format("DD-MM-YYYY")],
                 ['Delivery Method: ' + GoodIssueDetail.infoGoodIssueDetail.deliverMethod],
 
 
@@ -382,7 +382,6 @@ export default function DetailGoodIssue() {
         })
 
 
-        doc.addImage(textToBase64QRCode(GoodIssueDetail.infoGoodIssueDetail.id), 'png', 150, 20, 40, 40,);
 
 
 
@@ -407,11 +406,12 @@ export default function DetailGoodIssue() {
             body:
                 listGoodIssueProducts.map(product => product),
         })
-        var finalY = doc.lastAutoTable.finalY + 5 || 10
+        var finalY = doc.lastAutoTable.finalY + 20 || 10
 
 
-        var finalY = doc.lastAutoTable.finalY || 10
-        console.log(finalY)
+        // var finalY = doc.lastAutoTable.finalY || 10
+        doc.addImage(textToBase64QRCode(GoodIssueDetail.infoGoodIssueDetail.id), 'png', 10, finalY, 60, 60,);
+
         doc.setFontSize(11)
         doc.text("For questions concerning this invoice, please contact", 105, doc.internal.pageSize.height - 10, "center")
         doc.text(`${companyInfo.phoneNumber} Email: imssystemmail@gmail.com`, 105, doc.internal.pageSize.height - 5, "center")
@@ -508,7 +508,9 @@ export default function DetailGoodIssue() {
                         <div className="ps-3">
                             <div class="ms-2 me-auto">
                                 <div class="fw-bold">Location: {packageItem.locationName}   <span class="badge text-danger fs-5"><i class="bi bi-geo-alt-fill"></i></span></div>
-                                Barcode Location: {packageItem.locationBar} Quantity: {packageItem.quantity}
+                                {/* <strong>Barcode location:</strong> {packageItem.locationBar}  */}
+                                <div>  <strong>PackageId: </strong>{packageItem.packageId} </div>
+                                <div>  <strong>Quantity: </strong> {packageItem.quantity} </div>
                             </div>
 
                         </div>
@@ -621,30 +623,31 @@ export default function DetailGoodIssue() {
                                 phoneNumber={infoRejectOrder.phoneNumber}
                                 email={infoRejectOrder.email}
                                 reason={infoRejectOrder.reason}
-                                date={moment(infoRejectOrder.createdDate).add(7, "h").format("DD-MM-YYYY HH:mm")}
+                                
+                                date={moment(infoRejectOrder.createdDate).add(7, "h").format("DD-MM-YYYY")}
 
 
                             /> : ""}
 
-
+                       
 
 
                             <div >
-                             
+
                                 <li class="list-group-item">
                                     <div className="row g-3 justify-content-between me-3">
                                         <div className="col-4">
 
-                                        {status === "IssueRequisition" ?
-                                    <>
-                                        <p className="fw-bold">Created by: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.fullname}</span></p>
-                                        <div>
-                                            <p className="fw-bold">Email : <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.email}</span></p>
-                                            <p className="fw-bold">Phone No: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.phoneNumber}</span></p>
-                                        </div>
+                                            {status === "IssueRequisition" ?
+                                                <>
+                                                    <p className="fw-bold">Created by: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.fullname}</span></p>
+                                                    <div>
+                                                        <p className="fw-bold">Email : <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.email}</span></p>
+                                                        <p className="fw-bold">Phone No: <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.infoCreater.phoneNumber}</span></p>
+                                                    </div>
 
-                                    </>
-                                    : ""}
+                                                </>
+                                                : ""}
 
 
                                             <p className="fw-bold">Customer : <span className="fw-normal">{GoodIssueDetail.infoGoodIssueDetail.customerName}</span></p>

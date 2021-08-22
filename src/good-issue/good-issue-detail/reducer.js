@@ -104,6 +104,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
                 locationName: packageItem.packageToGet.location.locationName,
                 locationBar: packageItem.packageToGet.location.locationBarcode,
                 quantity: packageItem.quantityToGet,
+                packageId: packageItem.packageToGet.id,
 
 
               }
