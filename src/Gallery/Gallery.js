@@ -117,8 +117,9 @@ export function GalleryGoodIssue(props) {
                 <div className="pointer container-box-order" >
                     <div className="box-order" onClick={(e) => props.clickGoodIssueRequisition(quote)}>
                         <h4 className="priceQuoteOrderNumber">No.{quote.id}</h4>
-                        <p>Deadline:  <span>{moment(quote.deadline).format("DD-MM-YYYY")}</span></p>
-                        <p>Created date: {moment(quote.createdDate).format("DD-MM-YYYY")}</p>
+                        <p>Delivery Date:  <span>{moment(quote.deliveryDate).format("DD-MM-YYYY")}</span></p>
+                        <p>Delivery Method:  <span>{quote.deliveryMethod}</span></p>
+                        <p>Created Date: {moment(quote.createdDate).format("DD-MM-YYYY")}</p>
                         {/* <p>Vender: {quote.supplierName}</p>
                         <p>{quote.totalPrice} Product</p> */}
                     </div>
