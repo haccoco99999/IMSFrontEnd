@@ -124,7 +124,7 @@ export default function PurchaseOrderConfirm() {
                 type: Type.TEXT,
 
             },
-            editable: eventPage.isShowEdit && purchaseOrderDataGlobal.status === "PriceQuote",
+            editable: eventPage.isShowEdit,
             formatter: (cellContent, row, rowIndex) => {
                 return (
                     <div>
