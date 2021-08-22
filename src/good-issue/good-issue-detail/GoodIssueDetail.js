@@ -337,7 +337,7 @@ export default function DetailGoodIssue() {
             body: [
 
                 ['Order #' + GoodIssueDetail.infoGoodIssueDetail.id],
-                ['Created Date: ' + moment(GoodIssueDetail.infoGoodIssueDetail.createdDate).add(7, "h").format("DD-MM-YYYY")],
+                ['Created Date: ' + moment().format("DD-MM-YYYY")],
                 ['Delivery Date: ' + moment(GoodIssueDetail.infoGoodIssueDetail.deliveryDate).add(7, "h").format("DD-MM-YYYY")],
                 ['Delivery Method: ' + GoodIssueDetail.infoGoodIssueDetail.deliverMethod],
 
