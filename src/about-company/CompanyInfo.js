@@ -86,7 +86,7 @@ export default function CompanyInfo() {
     if (companyInfoStatus.requesting) {
       Swal.fire({
         title: 'Updating!',
-        html: 'Watting...',
+        html: 'Waiting...',
         timerProgressBar: true,
         didOpen: () => {
           Swal.showLoading()

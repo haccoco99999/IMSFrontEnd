@@ -15,7 +15,7 @@ export default function MergePriceQuote(props) {
      props.mergedRequisitionIds.forEach(element => {
       query +="&IgnoreOrderIds=" +element
     });
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/search?HideMerged=true&Statuses=Requisition"+query
+    const updateUrl = `${process.env.REACT_APP_API}/purchaseorder/search?HideMerged=true&Statuses=Requisition`+query
 
     let json = await fetch(updateUrl, {
 
@@ -47,7 +47,7 @@ export default function MergePriceQuote(props) {
   }
 
   async function getListProdcutOrder(orderId, index) {
-    const updateUrl = "https://imspublicapi.herokuapp.com/api/purchaseorder/number/" + orderId
+    const updateUrl = `${process.env.REACT_APP_API}/purchaseorder/number/` + orderId
 
     let json = await fetch(updateUrl, {
 

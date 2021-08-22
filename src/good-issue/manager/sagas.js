@@ -9,7 +9,7 @@ GET_ALL_GOOD_ISSUE_REQUISITION_SUCCESS,GET_ALL_GOOD_ISSUE_REQUISITION_REQUESTING
 
 
 function getAllGoodIssueAPI(action) {
-  const url = `https://imspublicapi.herokuapp.com/api/goodsissue/search?${action.filter}`;
+  const url = `${process.env.REACT_APP_API}/goodsissue/search?${action.filter}`;
 
   return fetch(url, {
     method: "GET",
@@ -29,7 +29,7 @@ function getAllGoodIssueAPI(action) {
     });
 }
 function getAllGoodIssueRequisitionAPI(action) {
-  const url = "https://imspublicapi.herokuapp.com/api/goodsissue/search?CurrentPage=1&SizePerPage=99&Statuses=IssueRequisition";
+  const url = `${process.env.REACT_APP_API}/goodsissue/search?CurrentPage=1&SizePerPage=99&Statuses=IssueRequisition`;
 
   return fetch(url, {
     method: "GET",

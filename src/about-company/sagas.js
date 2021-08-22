@@ -24,7 +24,7 @@ function uploadImgAPI(action) {
 }
 function updateCompanyAPI(aciton) {
 
-    return fetch("http://imspublicapi.herokuapp.com/api/company", {
+    return fetch(`${process.env.REACT_APP_API}/company`, {
         method: 'PUT',
         headers: {
             "Authorization": "Bearer " + aciton.token,

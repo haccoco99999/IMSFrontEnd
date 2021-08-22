@@ -480,7 +480,7 @@ export default function ProductDetails() {
                     <div className="col-4">
                       {" "}
                       <p>
-                        <strong>Name:</strong>{" "}
+                        <strong>Name: </strong>{" "}
                         {isDisabled ? (
                           productDetails.name
                         ) : (
@@ -524,7 +524,7 @@ export default function ProductDetails() {
                     </div>
                     <div className="col-4">
                       <p>
-                        <strong>Category:</strong>{" "}
+                        <strong>Category: </strong>{" "}
                         {isDisabled ? (
                           categoryDtails.categoryName
                         ) : (

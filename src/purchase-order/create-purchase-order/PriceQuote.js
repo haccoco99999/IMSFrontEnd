@@ -1170,7 +1170,7 @@ export default function PurchaseOrderConfirm() {
                     mergedRequisitionIds: [
                         ...mergedRequisitionIds.filter(id => id !== purchaseOrderDataGlobal.orderId)
                     ],
-                    deadline: "2021-07-11T05:37:29.052Z",
+                    deadline: purchaseOrderDataGlobal.deadline,
                     mailDescription: mailDescription,
                     orderItemInfos: listProductPurchaseOrder.map(product => {
                         return {
@@ -1217,8 +1217,8 @@ export default function PurchaseOrderConfirm() {
     }
     function clickShowPreviewSendMail() {
 
-
-        if ((mailDescription.trim()  !== "<p></p>" || mailDescription !== "") && supplier.id !== undefined) {
+        console.log(mailDescription.trim() === "<p></p>" )
+        if ((mailDescription.trim()  !== "<p></p>") && supplier.id !== undefined) {
 
             setEventPage((state) => ({
                 ...state, isPreview: !state.isPreview
@@ -1774,7 +1774,7 @@ function SelectSupplier(props) {
     const { token } = useSelector(state => ({
         token: state.client.token
     }))
-    const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/suppliers/search';
+    const SEARCH_URI = `${process.env.REACT_APP_API}/suppliers/search`;
     const [listSupplier, setListSupplier] = useState([])
     const [selected, setSelected] = useState({})
 

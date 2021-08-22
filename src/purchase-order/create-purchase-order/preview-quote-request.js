@@ -144,10 +144,11 @@ export default function PreviewSendMail(props) {
                             <input type="text"
                                 class="form-control" name="" id="" aria-describedby="helpId" placeholder="" value={`Price Quote Request From ${companyInfo.companyName} ${moment().format("DD-MM-YYYY")}`} disabled />
                         </div> */}
-
+    
                         <div class="form-group">
                             <label for="">Mail Content:</label>
-                            <div dangerouslySetInnerHTML={{ __html: `${html}` }} />
+                            
+                            <div className="mail-content-css border bg-light mb-2" dangerouslySetInnerHTML={{ __html: `${html}` }} />
                         </div>
 
                         <iframe width="100%" height="800" class="embed-responsive-item" src={print() + "#toolbar=0"}></iframe>

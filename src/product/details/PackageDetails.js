@@ -149,24 +149,24 @@ export default function PackageDetails() {
                         <strong>Supplier ID:</strong> {supplierDetailsStore.id}
                       </p> */}
                       <p>
-                        <strong>Received From:</strong>{" "}
+                        <strong>Received From: </strong>{" "}
                         {supplierDetailsStore.supplierName}
                       </p>
                       <p>
-                        <strong>Seller Name:</strong>{" "}
+                        <strong>Seller Name: </strong>{" "}
                         {supplierDetailsStore.salePersonName}
                       </p>
                     </div>
                     <div className="col-4">
                       <p>
-                        <strong>Email:</strong> {supplierDetailsStore.email}
+                        <strong>Email: </strong> {supplierDetailsStore.email}
                       </p>
                       <p>
-                        <strong>Phone:</strong>{" "}
+                        <strong>Phone: </strong>{" "}
                         {supplierDetailsStore.phoneNumber}
                       </p>
                       <p>
-                        <strong>Address:</strong> {supplierDetailsStore.address}
+                        <strong>Address: </strong> {supplierDetailsStore.address}
                       </p>
                     </div>
                   </div>
@@ -176,15 +176,15 @@ export default function PackageDetails() {
                   <div className="row g-3 justify-content-between me-3">
                     <div className="col-4">
                       <p>
-                        <strong>Location ID:</strong>
+                        <strong>Location ID: </strong>
                         {locationStore.id}
                       </p>
                       <p>
-                        <strong>Location Barcode:</strong>
+                        <strong>Location Barcode: </strong>
                         {locationStore.locationBarcode}
                       </p>
                       <p>
-                        <strong>Location Name:</strong>
+                        <strong>Location Name: </strong>
                         {locationStore.locationName}
                       </p>
                     </div>

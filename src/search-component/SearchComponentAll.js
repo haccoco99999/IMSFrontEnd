@@ -596,7 +596,7 @@ export function SelectSupplier(props) {
   const { token } = useSelector((state) => ({
     token: state.client.token
   }))
-  const SEARCH_URI = 'https://imspublicapi.herokuapp.com/api/suppliers/search';
+  const SEARCH_URI = `${process.env.REACT_APP_API}/suppliers/search`;
   const [listSupplier, setListSupplier] = useState([])
   const [selected, setSelected] = useState({})
 

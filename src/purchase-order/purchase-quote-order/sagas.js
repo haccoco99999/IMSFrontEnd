@@ -4,7 +4,7 @@ import handleApiErrors from '../../auth/api-errors'
 function searchPurchaseOrder(action){
 
   
-    const updateUrl=`https://imspublicapi.herokuapp.com/api/purchaseorder/search?` +action.filter
+    const updateUrl=`${process.env.REACT_APP_API}/purchaseorder/search?` +action.filter
    
   
     return fetch(updateUrl, {
@@ -26,7 +26,7 @@ function searchPurchaseOrder(action){
 
 function getListPriceQuoteAPI(action){
 
-    const updateUrl="https://imspublicapi.herokuapp.com/api/purchaseorder/search?Statuses=PriceQuote&Statuses=Requisition&HideMerged=true"
+    const updateUrl=`${process.env.REACT_APP_API}/purchaseorder/search?Statuses=PriceQuote&Statuses=Requisition&HideMerged=true`
 
     return fetch(updateUrl, {
         

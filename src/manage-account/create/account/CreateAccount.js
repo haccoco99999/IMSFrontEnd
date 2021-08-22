@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './create-account.css'
-import RoleManagerAction from "../../manager/role-manager/action";
 import { CreateAccountAction, getUserAccountDetail, setActiveAccountAction, updateUserAccountDetail, uploadAvatarImg } from './action';
 import { useDispatch, useSelector } from 'react-redux';
 import NavigationBar from '../../../components/navbar/navbar-component';
 import { useHistory, useLocation } from 'react-router-dom';
 import { CREATE_ACC_CLEAN, GET_DETAIL_ACC_CLEAN, SET_ACTIVE_ACC_CLEAN, UPDATE_DETAIL_ACC_CLEAN, UPDATE_IMAGE_CLEAN } from './constants';
 import Swal from 'sweetalert2'
-import { ChangePasswordAccountManagerCompoent, ChangePasswordCompoent } from '../../../components/change-password/ChangePasswordComponent';
 import { TableLoading } from '../../../components/loading/loading-component';
 import moment from 'moment';
 export default function CreateAccount() {
@@ -44,13 +42,7 @@ export default function CreateAccount() {
   }));
 
   const [infoAccountState, setInfoAccountState] = useState({ ...infoDetailAccountStore })
-  // password: "dellDell123*",
-  // email: "",
-  // roleId: "",
-  // fullName: "",
-  // phoneNumber: "",
-  // address: "",
-  // dateOfBirth: ""
+ 
   const location = useLocation()
   const [statusUser, setStatusUser] = useState("")
   useEffect(() => {
@@ -279,39 +271,26 @@ export default function CreateAccount() {
   //   token: state.client.token,
   // }));
   const dispatch = useDispatch()
-  // function changeRoleUpdate(event){
-
-  // }
-  function onchangeInputInfoAccount(event) {
+  async function  changeRoleUpdate(event){
+    console.log(event.target.value)
     if (statusUser === "EDITUSER") {
-      Swal.fire({
-        title: "Are you sure",
-        text: "Do you want to save?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: " #d33",
-        confirmButtonText: "Confirm",
-        reverseButtons: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          let data = {
-            userId: infoAccountState.userID,
-            email: infoAccountState.email,
-            phoneNumber: infoAccountState.phoneNumber,
-            address: infoAccountState.address,
-            roleId: event.target.value,
-            dateOfBirth: infoAccountState.dateOfBirth,
-            fullname: infoAccountState.fullname,
-            profileImageLink: infoAccountState.profileImageLink,
+      let data = {
+        userId: infoAccountState.userID,
+        email: infoAccountState.email,
+        phoneNumber: infoAccountState.phoneNumber,
+        address: infoAccountState.address,
+        roleId: event.target.value,
+        dateOfBirth: infoAccountState.dateOfBirth,
+        fullname: infoAccountState.fullname,
+        profileImageLink: infoAccountState.profileImageLink,
 
-          }
-          dispatch(updateUserAccountDetail({ data: data, token: token }))
-        }
-      });
-
-
+      }
+      console.log(event.target.value)
+      dispatch(updateUserAccountDetail({ data: data, token: token }))
     }
+  }
+  function onchangeInputInfoAccount(event) {
+   
 
     const date = document.getElementById("dateOfBirth");
 
@@ -579,7 +558,7 @@ export default function CreateAccount() {
                     <div class="mb-3 row">
                       <label for="inputPassword" class="col-sm-2 col-form-label">Select Role:</label>
                       <div class="col-sm-10">
-                        <select onChange={onchangeInputInfoAccount} required value={infoAccountState.roleID} class="form-control" name="roleID" id="">
+                        <select onChange={changeRoleUpdate} required value={infoAccountState.roleID} class="form-control" name="roleID" id="">
                           {statusUser === "CREATEUSER" ? <option value="" disabled selected>  -- No Selected --  </option> : ""}
                           <option value="IMS_MN" disabled={infoAccountState.roleID === "IMS_MN"} >Manager</option>
                           <option value="IMS_AC" disabled={infoAccountState.roleID === "IMS_AC"} >Accountant</option>
