@@ -97,18 +97,24 @@ export default function PurchaseRequisitionManager() {
             <span class="badge bg-warning text-dark">Waiting to accept</span>
           );
       },
-    
+      align: (cell, row, rowIndex, colIndex) => {
+        return 'left';
+
+      },
     },
     {
       dataField: "createdByName",
       text: "Created By",
       hidden: true,
-    
+      align: (cell, row, rowIndex, colIndex) => {
+        return 'left';
+
+      },
     },
     {
       dataField: "createdDate",
       text: "Created Date",
-      align: "right",
+     
       formatter: (cellContent, row, rowIndex) => {
         return <span>{moment(row.createdDate).format("DD-MM-YYYY")}</span>;
       },
@@ -116,7 +122,7 @@ export default function PurchaseRequisitionManager() {
     {
       dataField: "modifiedDate",
       text: "Modified Date",
-      align: "right",
+      
       formatter: (cellContent, row, rowIndex) => {
         return <span>{moment(row.modifiedDate).format("DD-MM-YYYY")}</span>;
       },
