@@ -168,29 +168,29 @@ export default function StocktakeDetailsComponent() {
       formatter: (cellContent, row, rowIndex) =>
         (listCheckedItems[rowIndex].note = row.note),
     },
-    {
-      dataField: "pkgId",
-      text: "Action",
-      formatter: (cellContent, row, rowIndex) => (
-        // <div>
+    // {
+    //   dataField: "pkgId",
+    //   text: "Action",
+    //   formatter: (cellContent, row, rowIndex) => (
+    //     // <div>
 
-        //   <button
-        //     type="button"
-        //     className="btn btn-danger"
-        //     onClick={() => clickDeleteCheckItems(rowIndex)}
-        //   >
-        //     Delete
-        //   </button>
-        // </div>
+    //     //   <button
+    //     //     type="button"
+    //     //     className="btn btn-danger"
+    //     //     onClick={() => clickDeleteCheckItems(rowIndex)}
+    //     //   >
+    //     //     Delete
+    //     //   </button>
+    //     // </div>
 
-        <div
-          className="text-danger btn"
-          onClick={() => clickDeleteCheckItems(rowIndex)}
-        >
-          <i class="bi bi-trash"></i>
-        </div>
-      ),
-    },
+    //     <div
+    //       className="text-danger btn"
+    //       onClick={() => clickDeleteCheckItems(rowIndex)}
+    //     >
+    //       <i class="bi bi-trash"></i>
+    //     </div>
+    //   ),
+    // },
   ];
 
   const columnsNotProgressing = [
