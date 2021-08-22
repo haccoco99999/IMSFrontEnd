@@ -41,7 +41,7 @@ export default function DetailGoodIssue() {
     const [classStatus, setClassStatus] = useState("")
     const [status, setStatus] = useState("")
     const dispatch = useDispatch()
-    console.log(status)
+    const [nameStatus, setNameStatus] = useState("")
     useEffect(() => {
 
         dispatch(getDetailGoodIssue({ issueId: location.state.id, token: token }))
@@ -60,14 +60,18 @@ export default function DetailGoodIssue() {
     useEffect(() => {
 
         if (status === "IssueRequisition") {
+            setNameStatus("Issue Requisition")
             setClassStatus("bg-secondary");
         } else if (status === "Packing") {
+            setNameStatus("Packing")
 
             setClassStatus("bg-warning");
         } else if (status === "Completed") {
+            setNameStatus("Completed")
 
             setClassStatus("bg-success");
         } else if (status === "Shipping" || status === "Cancel") {
+            setNameStatus("Shipping")
 
             setClassStatus("bg-danger");
         } else {
@@ -242,10 +246,13 @@ export default function DetailGoodIssue() {
         }
     }
 
-    const columns = [{
+    const columns = [
+       
+        {
         dataField: 'sku',
         text: 'SKU'
-    }, {
+    },
+     {
         dataField: 'nameProduct',
         text: 'Product Name'
     }, {
@@ -526,8 +533,8 @@ export default function DetailGoodIssue() {
 
             </div>
         ),
-        expanded: status === "Packing" ? listGoodIssueProducts.map(item => item.sku) : [],
-        nonExpandable: status !== "Packing" ? listGoodIssueProducts.map(item => item.sku) : []
+        expanded: status === "Packing" ? listGoodIssueProducts.map(item => item.productId) : [],
+        nonExpandable: status !== "Packing" ? listGoodIssueProducts.map(item => item.productId) : []
         // expandHeaderColumnRenderer: ({ isAnyExpands }) => {
         //     if (isAnyExpands) {
         //         return <b>-</b>;
@@ -600,7 +607,7 @@ export default function DetailGoodIssue() {
                 titleBar={GoodIssueDetail.infoGoodIssueDetail.id}
                 actionGoBack={backPage}
                 classStatus={classStatus}
-                status={status}
+                status={nameStatus}
 
                 currentPage={"Detail Good Issue"}
                 home={"Goods Issue"}
@@ -700,7 +707,7 @@ export default function DetailGoodIssue() {
                         <div class="card-body">
 
                             <BootstrapTable
-                                keyField='sku'
+                                keyField='productId'
                                 data={listGoodIssueProducts}
                                 columns={columns}
                                 expandRow={expandRow}

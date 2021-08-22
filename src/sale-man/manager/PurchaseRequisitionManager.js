@@ -231,7 +231,7 @@ export default function PurchaseRequisitionManager() {
                 filterString += item[0] + "=Done&"
               }
               else if (status.key === 6) {
-                filterString += item[0] + `=PQCanceled&${item[0]}=RequisitionCanceled&${item[0]}=POCanceled`
+                filterString += item[0] + `=PQCanceled&${item[0]}=RequisitionCanceled&${item[0]}=POCanceled&`
               }
             })
           }
@@ -262,7 +262,7 @@ export default function PurchaseRequisitionManager() {
                 filterString += item[0] + "=Done&"
               }
               else if (status.key === 6) {
-                filterString += item[0] + `=PQCanceled&${item[0]}=RequisitionCanceled&${item[0]}=POCanceled`
+                filterString += item[0] + `=PQCanceled&${item[0]}=RequisitionCanceled&${item[0]}=POCanceled&`
               }
             })
           }

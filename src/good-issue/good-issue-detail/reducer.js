@@ -30,7 +30,7 @@ const initalGoodIssueDetailState = {
     deliveryDate: "",
     deliverMethod: "",
     createdDate: "",
-    deliveryAddress:"",
+    deliveryAddress: "",
     status: "",
     infoCreater: {
       fullname: "",
@@ -73,7 +73,7 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
           transaction = element
         }
         if (element.userTransactionActionType === 4) {
-          
+
           infoRejectOrder = {
             createdDate: element.date,
             name: element.applicationUser.fullname,
@@ -86,19 +86,34 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
         }
 
       })
-   
+
       let listProducts
+
+
       if (action.json.productPackageFIFO !== undefined) {
-        listProducts = action.json.productPackageFIFO.map(item => {
+
+        let listProductsRaw = [];
+        let listOrderId = []
+        action.json.productPackageFIFO.forEach((item) => {
+          if (!listOrderId.includes(item.orderItem.id)) {
+            listOrderId.push(item.orderItem.id)
+            listProductsRaw.push(item);
+          }
+        });
+
+
+
+        listProducts = listProductsRaw.map(item => {
           let checkQuantity = 0
           return {
+            productId: item.orderItem.id,
             discountAmount: item.orderItem.discountAmount,
             sku: item.orderItem.productVariant.sku,
             quantity: item.orderItem.orderQuantity,
             price: item.orderItem.price,
             nameProduct: item.orderItem.productVariant.name,
             listPackages: item.packagesAndQuantitiesToGet.map(packageItem => {
-              checkQuantity+= packageItem.quantityToGet
+              checkQuantity += packageItem.quantityToGet
               return {
 
                 locationName: packageItem.packageToGet.location.locationName,
@@ -126,13 +141,13 @@ export const DetailGoodIssue = function getDetailGoodIssue(state = initalGoodIss
         })
       }
       let isShipping = true
-     
-      listProducts.forEach((product) =>{
-        if(product.quantity > product.totalPackages ){
+
+      listProducts.forEach((product) => {
+        if (product.quantity > product.totalPackages) {
           isShipping = false
         }
       })
-   
+
       return {
         requesting: false,
         successful: true,

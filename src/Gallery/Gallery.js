@@ -54,7 +54,7 @@ class Gallery extends React.Component {
                     responsive={responsive}>
                     {this.props.listData.map((quote, index) =>
                         <div className=" container-box-order pointer" >
-                            <div className="box-order" style={{background: moment(moment(quote.deadline).add(7, "h").format("MM-DD-YYYY")).diff(moment(), "days") <=2 ? "#ffd91dde":""}} onClick={(e) => this.props.clickQuote(quote)}>
+                            <div className="box-order" style={{background: moment(moment(quote.deadline).add(7, "h").format("MM-DD-YYYY")).diff(moment(), "days") <=1 ? "#ffd91dde":""}} onClick={(e) => this.props.clickQuote(quote)}>
                                 <h4 className="priceQuoteOrderNumber m-0">No.{quote.id}</h4>
                                 {/* {console.log(moment(moment(quote.deadline).add(7, "h").format("MM-DD-YYYY")).diff(moment(), "days") )} */}
                                 <p>Deadline:  <span>{moment(quote.deadline).add(7, "h").format("DD-MM-YYYY")}</span></p>

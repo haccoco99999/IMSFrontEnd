@@ -726,6 +726,7 @@ export default function PurchaseRequisitionDetails() {
                             class="form-control"
                             value={moment(deadline).format("YYYY-MM-DD")}
                             onChange={onChangeDeadline}
+                            min={moment().add(2, 'd').format("YYYY-MM-DD")}
                           />
                         </div>
 
