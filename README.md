@@ -18,7 +18,7 @@ Project is organized following Redux architecture.
 * Management of accounts for authorized role
 * Real time notification with SignalR
 * Report visualized with Google Data Studio (disabled for billing purpose)
-* 
+
 ## Install
 
 ## Getting Started with Create React App
