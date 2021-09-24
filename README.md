@@ -1,4 +1,27 @@
-# Getting Started with Create React App
+# Inventory Management System - Frontend
+## Overview
+Designed by Nguyen Viet Danh, created by Phan Phu Hung and Nguyen Hoang Quang Huy. A frontend project built in React JS and Electron JS for FPT Final Capstone project 2021: Inventory Management System.
+## Architecture 
+Project is organized following Redux architecture.
+## Tech stack
+* Electron JS 
+* React JS
+* Bootstrap 5
+* SignalR
+
+## Feature
+* Role based management for specified roles: Manager, Accountant, SalePerson, StockKeeper
+  Optimize searching with Elasticsearch
+* Management of Inbound and Outbound order: Requisition Order, PriceQuote Order, Purchase       Order, GoodsReceipt Order, StockTake Order, GoodsIssue Order
+* Management of Products for creating, updating properties
+* Management of Location (assume single shelf location with no constraint on maximum storage     threshold) for stock taking purpose
+* Management of accounts for authorized role
+* Real time notification with SignalR
+* Report visualized with Google Data Studio (disabled for billing purpose)
+* 
+## Install
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
